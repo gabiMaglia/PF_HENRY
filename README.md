@@ -2,4 +2,4 @@
 
 esto es un cambio de prueba.
 
-esto es una cambio de prueba de Pablo Scherpa.
+esto es una cambio de prueba de Gabriel Olivares.
