@@ -2,4 +2,20 @@
 
 esto es un cambio de prueba.
 
+<<<<<<< HEAD
 esto es una cambio de prueba de Pablo Scherpa.
+=======
+<<<<<<< HEAD
+esto es una cambio de prueba de Pablo Scherpa.
+
+probando nueva rama....
+=======
+esto es una cambio de prueba de Gabriel Olivares.
+djskahgfjkdsgfkjasdgjkfdsakfjsa
+<<<<<<< HEAD
+>>>>>>> ee18466127b40123c000a6620011901a65217690
+=======
+
+Holi soy Marian queriendo pushear otra vez
+>>>>>>> mariangel
+>>>>>>> a10f714bfa8db65d7d2e5b1a73cffa16947bf042
