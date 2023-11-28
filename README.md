@@ -25,6 +25,11 @@ hola esto es un cambio de valentin!!
 >>>>>>> a10f714bfa8db65d7d2e5b1a73cffa16947bf042
 
 hola soy valentin!
+<<<<<<< HEAD
+>>>>>>> valentin
+=======
+
+2do cambio
 >>>>>>> valentin
 
 Cambio hecho por Gabriel
