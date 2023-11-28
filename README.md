@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PF_HENRY
 
 esto es un cambio de prueba.
@@ -37,3 +38,5 @@ hola soy valentin!
 2do cambio
 >>>>>>> valentin
 >>>>>>> b1670686165a3892dee50511544c4c14563f1029
+=======
+>>>>>>> b357d83feea1dd7e255ea3b6035582811cc2ec33
