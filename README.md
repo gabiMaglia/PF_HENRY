@@ -36,7 +36,12 @@ hola soy valentin!
 
 2do cambio
 >>>>>>> valentin
+<<<<<<< HEAD
 >>>>>>> b1670686165a3892dee50511544c4c14563f1029
 
 
 ortra vez estoy probando
+=======
+
+Cambio hecho por Gabriel
+>>>>>>> b3d856f4bd2a4588f0236d13e3c7b27478c54fa1
