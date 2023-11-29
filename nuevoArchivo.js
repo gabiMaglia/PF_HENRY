@@ -5,3 +5,7 @@ const suma = (a, b) => {
 const resta = (a, b) => {
   return a - b;
 };
+
+const multiplicacion = (a, b) => {
+  return a * b;
+};
