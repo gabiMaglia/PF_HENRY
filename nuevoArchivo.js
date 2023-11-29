@@ -9,3 +9,7 @@ const resta = (a, b) => {
 const multiplicacion = (a, b) => {
   return a * b;
 };
+
+const dividir = (a, b) => {
+  return a / b;
+};
