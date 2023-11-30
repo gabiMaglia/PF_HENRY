@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const LandigPage = () => {
   return (
-    <div>LandigPage</div>
-  )
-}
+    <>
+      <div>LandigPage</div>
+    </>
+  );
+};
 
-export default LandigPage
+export default LandigPage;
