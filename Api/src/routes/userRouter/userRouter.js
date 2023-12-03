@@ -12,7 +12,7 @@ const useRouter = Router();
 useRouter.get("/", getUsersHandler);
 useRouter.get("/:id", getUserByIdHandler);
 useRouter.post("/", postUserHandler);
-useRouter.put("/", editUserHandler);
-useRouter.delete("/", deleteUserHandler);
+useRouter.put("/:id", editUserHandler);
+useRouter.delete("/:id", deleteUserHandler);
 
 module.exports = useRouter;
