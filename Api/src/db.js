@@ -1,8 +1,11 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
-
-
+const UserModel = require('./models/userModels/User')
+const UserCredentialsModel = require('./models/userModels/UserCredentials')
+const UserRoleModel = require('./models/userModels/UserRole')
+const UserAddressModel = require('./models/userModels/UserAddress')
+const ServiceStatusModel =require('./models/ServiceModels/Service_status')
 
 const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
@@ -13,6 +16,39 @@ const sequelize = new Sequelize(
     native: false,
   }
 );
+
+// INICIALISAMOS LOS MODELOS
+UserModel(sequelize)
+UserCredentialsModel(sequelize)
+UserRoleModel(sequelize)
+UserAddressModel(sequelize)
+ServiceStatusModel(sequelize)
+
+// En sequelize.models están todos los modelos importados como propiedades
+// Para relacionarlos hacemos un destructuring
+const {
+  User,
+  UserRole,
+  UserAddress,
+  UserCredentials
+  
+} = sequelize.models;
+
+// RELACIONES
+
+User.hasOne(UserCredentials, {
+  onDelete: "CASCADE",
+});
+UserCredentials.belongsTo(User);
+
+User.hasOne(UserAddress, {
+  onDelete: "CASCADE",
+});
+UserAddress.belongsTo(User);
+
+User.belongsTo(UserRole);
+UserRole.hasMany(User);
+
 
 
 module.exports = {
