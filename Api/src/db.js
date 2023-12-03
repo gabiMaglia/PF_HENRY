@@ -5,7 +5,7 @@ const UserModel = require('./models/userModels/User')
 const UserCredentialsModel = require('./models/userModels/UserCredentials')
 const UserRoleModel = require('./models/userModels/UserRole')
 const UserAddressModel = require('./models/userModels/UserAddress')
-
+const ServiceStatusModel =require('./models/ServiceModels/Service_status')
 
 const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
@@ -22,6 +22,7 @@ UserModel(sequelize)
 UserCredentialsModel(sequelize)
 UserRoleModel(sequelize)
 UserAddressModel(sequelize)
+ServiceStatusModel(sequelize)
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
