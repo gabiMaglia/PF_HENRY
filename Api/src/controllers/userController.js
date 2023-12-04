@@ -4,7 +4,7 @@ const getAllUsers = async () => {
   console.log("soyTodos");
 };
 const getUserById = async (id) => {
-  console.log("soyUnUser");
+  console.log(`soy un user ${id}`);
 };
 const postUser = async (body) => {
   console.log("postUser");
