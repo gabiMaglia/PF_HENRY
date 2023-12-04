@@ -67,8 +67,8 @@ User.hasOne(UserAddress, {
 UserAddress.belongsTo(User);
 
 User.belongsTo(UserRole);
-
 UserRole.hasMany(User);
+
 
 //RELACIONES PRODUCTS
 
