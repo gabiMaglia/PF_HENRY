@@ -11,12 +11,12 @@ const ProductModel = require("./models/productModels/Product");
 const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
 const ProductCategoryModel = require("./models/productModels/ProductCategory");
-const ProductImgModel = require("./models/productModels/ProductImg");
+const ProductImageModel = require("./models/productModels/ProductImg");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pf_henry`,
   {
     logging: true,
     native: false,
@@ -36,7 +36,7 @@ ProductModel(sequelize);
 ProductBrandModel(sequelize);
 ProductStockModel(sequelize);
 ProductCategoryModel(sequelize);
-ProductImgModel(sequelize);
+ProductImageModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
@@ -72,11 +72,11 @@ UserRole.hasMany(User);
 
 //RELACIONES PRODUCTS
 
-Product.belongsTo(ProductBrand);
-ProductBrand.hasMany(Product);
+Product.belongsToMany(ProductBrand, { through: "ProductProductBrand" });
+ProductBrand.belongsToMany(Product, { through: "ProductProductBrand" });
 
-Product.belongsToMany(ProductCategory);
-ProductCategory.belongsToMany(Product);
+Product.belongsToMany(ProductCategory, { through: "ProductProductCategory" });
+ProductCategory.belongsToMany(Product, { through: "ProductProductCategory" });
 
 Product.hasMany(ProductImg);
 ProductImg.belongsTo(Product);
@@ -102,7 +102,6 @@ Service.hasOne(User, {
     role_name: "technician",
   },
 });
-
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
