@@ -60,4 +60,14 @@ const deleteProduct = async (id) => {
   console.log(`borro el producto con id ${id}`);
 };
 
-module.exports = { postProduct, getAllProducts, updateProduct, deleteProduct };
+const getProductById = async (id) => {
+  console.log(`este es el producto ${id}`);
+};
+
+module.exports = {
+  postProduct,
+  getAllProducts,
+  updateProduct,
+  deleteProduct,
+  getProductById,
+};

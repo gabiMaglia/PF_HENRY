@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   postProductHandler,
   getProductsHandler,
+  getProductByIdHandler,
   updateProductHandler,
   deleteProductHandler,
 } = require("../../handlers/productHandlers");
@@ -9,6 +10,7 @@ const {
 const productRouter = Router();
 
 productRouter.get("/", getProductsHandler);
+productRouter.get("/:id", getProductByIdHandler);
 productRouter.post("/", postProductHandler);
 productRouter.put("/:id", updateProductHandler);
 productRouter.delete("/:id", deleteProductHandler);

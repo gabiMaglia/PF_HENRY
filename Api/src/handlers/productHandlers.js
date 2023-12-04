@@ -78,9 +78,19 @@ const deleteProductHandler = async (req, res) => {
   }
 };
 
+const getProductByIdHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    res.status(200).send(`product ${id} details`);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   postProductHandler,
   getProductsHandler,
   updateProductHandler,
   deleteProductHandler,
+  getProductByIdHandler,
 };
