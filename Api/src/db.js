@@ -16,9 +16,9 @@ const ProductImageModel = require("./models/productModels/ProductImg");
 const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pf_henry`,
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
   {
-    logging: true,
+    logging: false,
     native: false,
   }
 );
@@ -49,7 +49,7 @@ const {
   ProductBrand,
   ProductStock,
   ProductCategory,
-  ProductImg,
+  ProductImage,
   Service,
   Service_status,
 } = sequelize.models;
@@ -78,8 +78,8 @@ ProductBrand.belongsToMany(Product, { through: "ProductProductBrand" });
 Product.belongsToMany(ProductCategory, { through: "ProductProductCategory" });
 ProductCategory.belongsToMany(Product, { through: "ProductProductCategory" });
 
-Product.hasMany(ProductImg);
-ProductImg.belongsTo(Product);
+Product.hasMany(ProductImage);
+ProductImage.belongsTo(Product);
 
 Product.hasOne(ProductStock);
 ProductStock.belongsTo(Product);
