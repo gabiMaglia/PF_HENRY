@@ -1,5 +1,10 @@
 const { Product } = require("../db");
 
+//getProducts
+const getAllProducts = async () => {
+  console.log("traigo todos los produscts");
+};
+
 const postProduct = async ({
   name,
   description,
@@ -47,4 +52,12 @@ const postProduct = async ({
   }
 };
 
-module.exports = { postProduct };
+const updateProduct = async () => {
+  console.log("actualizo los products");
+};
+
+const deleteProduct = async (id) => {
+  console.log(`borro el producto con id ${id}`);
+};
+
+module.exports = { postProduct, getAllProducts, updateProduct, deleteProduct };
