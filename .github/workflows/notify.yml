@@ -11,7 +11,7 @@ jobs:
 
     env:
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      SLACK_CHANNEL: PH-Henry | Grupo 06  # Puedes cambiar 'general' al nombre de tu canal de Slack
+      SLACK_CHANNEL: PF-Henry | Grupo 06  # Puedes cambiar 'general' al nombre de tu canal de Slack
 
     steps:
       - name: Checkout repository
