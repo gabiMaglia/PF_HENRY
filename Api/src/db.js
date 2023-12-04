@@ -52,6 +52,7 @@ User.belongsTo(UserRole);
 
 UserRole.hasMany(User);
 //service relations
+Service.hasOne(Service_status);
 Service.hasOne(User, {
   as: "Client",
   foreignKey: "userId",
@@ -59,10 +60,6 @@ Service.hasOne(User, {
   scope: {
     role_name: "client",
   },
-  onDelete: "CASCADE",
-});
-Service.hasOne(Service_status, {
-  onDelete: "CASCADE",
 });
 Service.hasOne(User, {
   as: "Technician",
@@ -71,7 +68,6 @@ Service.hasOne(User, {
   scope: {
     role_name: "technician",
   },
-  onDelete: "CASCADE",
 });
 
 module.exports = {
