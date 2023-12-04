@@ -86,7 +86,8 @@ ProductStock.belongsTo(Product);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
-Service.hasOne(User, {
+Service_status.belongsTo(Service);
+Service.belongsTo(User, {
   as: "Client",
   foreignKey: "userId",
   constraints: false,
@@ -94,7 +95,7 @@ Service.hasOne(User, {
     role_name: "client",
   },
 });
-Service.hasOne(User, {
+Service.belongsTo(User, {
   as: "Technician",
   foreignKey: "technicianId",
   constraints: false,

@@ -15,5 +15,14 @@ module.exports = (sequelize) => {
     product_income_date: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    userId: { 
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    technicianId: {
+      type: DataTypes.UUID,
+      allowNull: true,
     }})
+
 }
