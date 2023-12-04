@@ -6,6 +6,7 @@ const UserCredentialsModel = require("./models/userModels/UserCredentials");
 const UserRoleModel = require("./models/userModels/UserRole");
 const UserAddressModel = require("./models/userModels/UserAddress");
 const ServiceStatusModel = require("./models/ServiceModels/Service_status");
+const ServiceModel = require("./models/ServiceModels/Service");
 const ProductModel = require("./models/productModels/Product");
 const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
@@ -28,6 +29,7 @@ UserCredentialsModel(sequelize);
 UserRoleModel(sequelize);
 UserAddressModel(sequelize);
 ServiceStatusModel(sequelize);
+ServiceModel(sequelize);
 
 // INICIALIZAMOS LOS MODELOS PRODUCT
 ProductModel(sequelize);
@@ -48,6 +50,8 @@ const {
   ProductStock,
   ProductCategory,
   ProductImg,
+  Service,
+  Service_status,
 } = sequelize.models;
 
 // RELACIONES USER
@@ -63,6 +67,7 @@ User.hasOne(UserAddress, {
 UserAddress.belongsTo(User);
 
 User.belongsTo(UserRole);
+
 UserRole.hasMany(User);
 
 //RELACIONES PRODUCTS
@@ -78,6 +83,26 @@ ProductImg.belongsTo(Product);
 
 Product.hasOne(ProductStock);
 ProductStock.belongsTo(Product);
+
+//RELACIONES SERVICE
+Service.hasOne(Service_status);
+Service.hasOne(User, {
+  as: "Client",
+  foreignKey: "userId",
+  constraints: false,
+  scope: {
+    role_name: "client",
+  },
+});
+Service.hasOne(User, {
+  as: "Technician",
+  foreignKey: "technicianId",
+  constraints: false,
+  scope: {
+    role_name: "technician",
+  },
+});
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
