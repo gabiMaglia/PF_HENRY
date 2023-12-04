@@ -1,8 +1,6 @@
-const {
-  postDriver,
-} = require("../controllers/productControllers/productController");
+const { postProduct } = require("../controllers/productController");
 
-//Post driver
+//Post Product
 const postProductHandler = async (req, res) => {
   const {
     name,
@@ -29,7 +27,7 @@ const postProductHandler = async (req, res) => {
     ) {
       return res.status(400).json({ error: "Missing required data..." });
     }
-    const newProduct = await postDriver({
+    const newProduct = await postProduct({
       name,
       description,
       price,
@@ -51,4 +49,5 @@ const postProductHandler = async (req, res) => {
 
 module.exports = {
   postProductHandler,
+  getProductsHandler,
 };
