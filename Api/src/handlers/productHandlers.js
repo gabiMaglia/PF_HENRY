@@ -72,7 +72,7 @@ const updateProductHandler = async (id) => {
 const deleteProductHandler = async (id) => {
   const { id } = req.params;
   try {
-    res.status(200).send(`product ${id} deleted`);
+    res.status(200).send(`product ${id} deleted successfully`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
