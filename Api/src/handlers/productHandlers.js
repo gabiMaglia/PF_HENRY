@@ -60,7 +60,7 @@ const getProductsHandler = (req, res) => {
   }
 };
 
-const updateProductHandler = async (id) => {
+const updateProductHandler = async (req, res) => {
   const { id } = req.params;
   try {
     res.status(200).send(`product ${id} updated`);
@@ -69,7 +69,7 @@ const updateProductHandler = async (id) => {
   }
 };
 
-const deleteProductHandler = async (id) => {
+const deleteProductHandler = async (req, res) => {
   const { id } = req.params;
   try {
     res.status(200).send(`product ${id} deleted successfully`);
