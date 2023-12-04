@@ -6,11 +6,11 @@ const UserCredentialsModel = require("./models/userModels/UserCredentials");
 const UserRoleModel = require("./models/userModels/UserRole");
 const UserAddressModel = require("./models/userModels/UserAddress");
 const ServiceStatusModel = require("./models/ServiceModels/Service_status");
-const Product = require("./models/productModels/Product");
-const ProductBrand = require("./models/productModels/ProductBrand");
-const ProductStock = require("./models/productModels/ProductStock");
-const ProductCategory = require("./models/productModels/ProductCategory");
-const ProductImg = require("./models/productModels/ProductImg");
+const ProductModel = require("./models/productModels/Product");
+const ProductBrandModel = require("./models/productModels/ProductBrand");
+const ProductStockModel = require("./models/productModels/ProductStock");
+const ProductCategoryModel = require("./models/productModels/ProductCategory");
+const ProductImgModel = require("./models/productModels/ProductImg");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
@@ -30,11 +30,11 @@ UserAddressModel(sequelize);
 ServiceStatusModel(sequelize);
 
 // INICIALIZAMOS LOS MODELOS PRODUCT
-Product(sequelize);
-ProductBrand(sequelize);
-ProductStock(sequelize);
-ProductCategory(sequelize);
-ProductImg(sequelize);
+ProductModel(sequelize);
+ProductBrandModel(sequelize);
+ProductStockModel(sequelize);
+ProductCategoryModel(sequelize);
+ProductImgModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
