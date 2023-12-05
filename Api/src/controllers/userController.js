@@ -12,7 +12,18 @@ const getUserById = async (id) => {
   return user;
 };
 
-const postUser = async ( name, surname, birthdate, dni, email, telephone, image, userCredentials, userAddress, roles ) => {
+const postUser = async (
+  name,
+  surname,
+  birthdate,
+  dni,
+  email,
+  telephone,
+  image,
+  userCredentials,
+  userAddress,
+  roles
+) => {
   // UserOBJ
   const newUser = await User.create({
     name,
@@ -24,18 +35,25 @@ const postUser = async ( name, surname, birthdate, dni, email, telephone, image,
     image,
   });
   
-  
   // UserCredentials
-  let { username, password} = userCredentials
-  const newUserCredentials =  await newUser.createUserCredential({
+  console.log(userCredentials)
+  let { username, password } = userCredentials;
+  const newUserCredentials = await newUser.createUserCredential({
     username,
-    password : await bcrypt.hash(password, 8)
-  }) 
-  newUserCredentials.id = newUser.id
-  await newUserCredentials.save()
+    password: await bcrypt.hash(password, 8),
+  });
+  newUserCredentials.id = newUser.id;
+  await newUserCredentials.save();
   
   // UserAddress
-  const { country = "", state = "", city = "", street= "", number = "", zipCode = "" } = userAddress;
+  const {
+    country = "",
+    state = "",
+    city = "",
+    street = "",
+    number = "",
+    zipCode = "",
+  } = userAddress;
   const newUserAddress = await newUser.createUserAddress({
     country,
     state,
@@ -44,23 +62,18 @@ const postUser = async ( name, surname, birthdate, dni, email, telephone, image,
     number,
     zipCode,
   });
-  newUserAddress.id = newUser.id
-  await newUserAddress.save()
-  
-  // UserRoles
-  const {role} = roles
-  
+  newUserAddress.id = newUser.id;
+  await newUserAddress.save();
 
+  // UserRoles
+  // const { role } = roles;
 
   const completeUser = User.findByPk(newUser.id, {
-    include: [UserAddress, UserCredentials]
-  })
+    include: [UserAddress, UserCredentials],
+  });
 
   return completeUser;
 };
-
-
-
 
 const editUserById = async (id, body) => {
   console.log("editUserbyId");

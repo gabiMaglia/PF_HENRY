@@ -32,7 +32,6 @@ const postUserHandler = async (req, res) => {
   const { name, surname, birthdate, dni, email, telephone, image, userCredentials, userAddress, roles } = req.body
   try {
 
-
     if (
       !name ||
       !surname ||
@@ -44,7 +43,7 @@ const postUserHandler = async (req, res) => {
     ) {
       return res.status(400).json({ error: "Missing required data..." });
     }
-    const response = await postUser(name, surname, birthdate, dni, email, telephone, image, userAddress, roles);
+    const response = await postUser(name, surname, birthdate, dni, email, telephone, image, userCredentials, userAddress, roles);
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -71,7 +70,7 @@ const editUserAddressHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-const editUserCredemtialsHandler = async (req, res) => {
+const editUserCredentialsHandler = async (req, res) => {
   const { userCredentials } = req.body
   const { id } = req.params;
   try {
@@ -99,6 +98,6 @@ module.exports = {
   postUserHandler,
   editUserHandler,
   editUserAddressHandler,
-  editUserCredemtialsHandler,
+  editUserCredentialsHandler,
   deleteUserHandler,
 };
