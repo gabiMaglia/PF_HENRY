@@ -66,7 +66,7 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-User.belongsTo(UserRole);
+User.belongsTo(UserRole, { foreignKey: 'rolId' });
 UserRole.hasMany(User);
 
 

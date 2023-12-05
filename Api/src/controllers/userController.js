@@ -12,9 +12,8 @@ const getUserById = async (id) => {
   return user;
 };
 
-const postUser = async (body) => {
+const postUser = async ( name, surname, birthdate, dni, email, telephone, image, userCredentials, userAddress, roles ) => {
   // UserOBJ
-  const { name, surname, birthdate, dni, email, telephone, image = "" } = body;
   const newUser = await User.create({
     name,
     surname,
@@ -27,7 +26,7 @@ const postUser = async (body) => {
   
   
   // UserCredentials
-  let { username, password} = body.userCredentials
+  let { username, password} = userCredentials
   const newUserCredentials =  await newUser.createUserCredential({
     username,
     password : await bcrypt.hash(password, 8)
@@ -36,7 +35,7 @@ const postUser = async (body) => {
   await newUserCredentials.save()
   
   // UserAddress
-  const { country, state, city, street, number, zipCode } = body.userAddress;
+  const { country = "", state = "", city = "", street= "", number = "", zipCode = "" } = userAddress;
   const newUserAddress = await newUser.createUserAddress({
     country,
     state,
@@ -49,7 +48,7 @@ const postUser = async (body) => {
   await newUserAddress.save()
   
   // UserRoles
-  const {role} = body
+  const {role} = roles
   
 
 

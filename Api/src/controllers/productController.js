@@ -33,6 +33,7 @@ const postProduct = async ({
       { transaction }
     );
 
+
     if (categoryIds && images && brandIds && stock) {
       const productBrandPromises = brandIds.map((brandId) =>
         newProduct.setProductBrand(brandId, { transaction })
@@ -52,6 +53,17 @@ const postProduct = async ({
         ...productImgPromises,
         newProduct.setProductStock(stock, { transaction }),
       ]);
+
+    // { transaction } asegura que esta operación esté incluida en la transacción. Si algo sale
+    // mal después de este punto, esta operación se revertirá durante el rollback de la transacción.
+    if (category && images && brand && stock) {
+      //Cuando estableces una relación de muchos a muchos entre dos modelos en Sequelize, se crea
+      //automáticamente un método set seguido del nombre del modelo en plural para esa relación.
+      await newProduct.setProductBrand(brand, { transaction });
+      await newProduct.addProductCategories(category, { transaction });
+      await newProduct.setProductStock(stock, { transaction });
+      await newProduct.addProductImgs(images, { transaction });
+
     }
 
     await transaction.commit();
