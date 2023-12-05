@@ -2,7 +2,8 @@ const { Product } = require("../db");
 
 //getProducts
 const getAllProducts = async () => {
-  console.log("traigo todos los produscts");
+  const products = Product.findAll();
+  return products;
 };
 
 const postProduct = async ({
@@ -12,13 +13,13 @@ const postProduct = async ({
   warranty,
   is_deleted,
   stock,
-  category,
+  categoryIds,
   images,
-  brand,
+  brandIds,
   soldCount,
 }) => {
   const transaction = await conn.transaction();
-  //transaction se convierte en un objeto que representa la transacción en curso.
+
   try {
     const newProduct = await Product.create(
       {
@@ -31,6 +32,28 @@ const postProduct = async ({
       },
       { transaction }
     );
+
+
+    if (categoryIds && images && brandIds && stock) {
+      const productBrandPromises = brandIds.map((brandId) =>
+        newProduct.setProductBrand(brandId, { transaction })
+      );
+
+      const productCategoryPromises = categoryIds.map((categoryId) =>
+        newProduct.addProductCategories(categoryId, { transaction })
+      );
+
+      const productImgPromises = images.map((image) =>
+        newProduct.addProductImgs(image, { transaction })
+      );
+
+      await Promise.all([
+        ...productBrandPromises,
+        ...productCategoryPromises,
+        ...productImgPromises,
+        newProduct.setProductStock(stock, { transaction }),
+      ]);
+
     // { transaction } asegura que esta operación esté incluida en la transacción. Si algo sale
     // mal después de este punto, esta operación se revertirá durante el rollback de la transacción.
     if (category && images && brand && stock) {
@@ -40,10 +63,9 @@ const postProduct = async ({
       await newProduct.addProductCategories(category, { transaction });
       await newProduct.setProductStock(stock, { transaction });
       await newProduct.addProductImgs(images, { transaction });
-    }
-    //teams, { transaction } asegura que esta operación esté incluida en la transacción.
 
-    //la transacción se confirma
+    }
+
     await transaction.commit();
     return newProduct;
   } catch (error) {
@@ -52,16 +74,46 @@ const postProduct = async ({
   }
 };
 
-const updateProduct = async () => {
-  console.log("actualizo los products");
+const updateProduct = async (id) => {
+  try {
+    const updatedProduct = await Product.update({ id }, req.body, {
+      new: true,
+    });
+    res.json(updatedProduct);
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const deleteProduct = async (id) => {
-  console.log(`borro el producto con id ${id}`);
+  try {
+    const deletedProduct = await Product.delete({ id }, req.body, {
+      deleted: true,
+    });
+    return deletedProduct;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 const getProductById = async (id) => {
-  console.log(`este es el producto ${id}`);
+  try {
+    const product = await Product.findByPk(id, {
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    return product;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = {
