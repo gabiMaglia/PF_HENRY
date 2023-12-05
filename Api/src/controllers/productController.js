@@ -32,7 +32,7 @@ const postProduct = async ({
       { transaction }
     );
     // { transaction } asegura que esta operación esté incluida en la transacción. Si algo sale
-    //mal después de este punto, esta operación se revertirá durante el rollback de la transacción.
+    // mal después de este punto, esta operación se revertirá durante el rollback de la transacción.
     if (category && images && brand && stock) {
       //Cuando estableces una relación de muchos a muchos entre dos modelos en Sequelize, se crea
       //automáticamente un método set seguido del nombre del modelo en plural para esa relación.
