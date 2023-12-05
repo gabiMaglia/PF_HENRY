@@ -9,7 +9,10 @@ const {
 const getUsersHandler = async (req, res) => {
   try {
     const response = await getAllUsers();
-    if (response.length === 0) return res.status(404).send('No hay usuarios registrados en la base de datos')
+    if (response.length === 0)
+      return res
+        .status(404)
+        .send("No hay usuarios registrados en la base de datos");
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
