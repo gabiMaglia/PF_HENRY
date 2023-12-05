@@ -50,6 +50,7 @@ const postUserHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+
 const editUserHandler = async (req, res) => {
   const { name, surname, birthdate, dni, email, telephone, image, userAddress, roles, userCredentials } = req.body
   const { id } = req.params;
@@ -60,6 +61,28 @@ const editUserHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+const editUserAddressHandler = async (req, res) => {
+  const { userAddress} = req.body
+  const { id } = req.params;
+  try {
+    const response = await editUserById(id, req.body);
+    res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+const editUserCredemtialsHandler = async (req, res) => {
+  const { userCredentials } = req.body
+  const { id } = req.params;
+  try {
+    const response = await editUserById(id, req.body);
+    res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+
 const deleteUserHandler = async (req, res) => {
   const { id } = req.params;
   try {
@@ -75,5 +98,7 @@ module.exports = {
   getUserByIdHandler,
   postUserHandler,
   editUserHandler,
+  editUserAddressHandler,
+  editUserCredemtialsHandler,
   deleteUserHandler,
 };
