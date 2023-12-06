@@ -44,14 +44,14 @@ const FooterComponents = () => {
 
   const boxStyle = {
     backgroundColor: "#000",
-    width: "100vw",
+    width: "100%",
     height: "300px",
     display: "flex",
     padding: "20px 180px",
   };
 
   const boxStyleOne = {
-    width: "100vw",
+    width: "100%",
     display: "flex",
   };
 
