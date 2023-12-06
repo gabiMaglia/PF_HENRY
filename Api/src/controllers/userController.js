@@ -162,7 +162,7 @@ const editUserById = async (
   await user.setRole(userRole, { as: "role" });
 
   const updatedUser = await User.findByPk(id, {
-    include: [UserAddress,  { model: UserRole, as: "role" }],
+    include: [UserAddress, { model: UserRole, as: "role" }],
   });
 
   return updatedUser;
@@ -196,14 +196,13 @@ const editUserCredentials = async (id, username, password) => {
     username,
     password: await bcrypt.hash(password, 8),
   });
-
+  
   const updatedCredentials = await UserCredentials.findOne({
     where: { UserId: id },
   });
 
   return updatedCredentials;
 };
-
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
   if (!user?.name) {
