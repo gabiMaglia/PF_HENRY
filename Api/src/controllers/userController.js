@@ -23,8 +23,14 @@ const getAllRoles = async () => {
 };
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    include: [UserRole, UserAddress, UserCredentials],
+    include: [{ model: UserRole, as: "role" }, UserAddress, UserCredentials],
   });
+  if (!user) {
+    return {
+      error: true,
+      response: `No se encontro el usuario`,
+    };
+  }
   return user;
 };
 
@@ -107,10 +113,29 @@ const postUser = async (
   return completeUser;
 };
 
-const editUserById = async (id, body) => {
-  try {
-  } catch (error) {}
+const editUserById = async (
+  id,
+  name,
+  surname,
+  birthdate,
+  dni,
+  email,
+  telephone,
+  image,
+  userCredentials,
+  userAddress,
+  roles
+) => {
+  console.log(id)
+  const user = await User.findByPk(id)
+  console.log(user)
+  await user.update( {name:name, surname:surname, birthdate:birthdate, dni:dni, email:email, telephone:telephone, image:image});
+  const updatedUser = await User.findByPk(id, {
+    include: [UserAddress, UserCredentials, { model: UserRole, as: "role" }],
+  });
+  return updatedUser
 };
+
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
   if (!user?.name) {

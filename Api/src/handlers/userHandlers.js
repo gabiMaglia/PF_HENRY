@@ -34,7 +34,7 @@ const getUserByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await getUserById(id);
-    if (!response) return res.status(404).send("User not found");
+    if (response.error) return res.status(404).json(response.response);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -83,6 +83,7 @@ const postUserHandler = async (req, res) => {
   }
 };
 const createRolesHandler = async (req, res) => {
+  console.log("llego")
   const { role_name } = req.body;
   if (!role_name)
     return res.status(400).json({ error: "Missing required data..." });
