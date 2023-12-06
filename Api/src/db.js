@@ -69,7 +69,6 @@ UserAddress.belongsTo(User);
 User.belongsTo(UserRole);
 UserRole.hasMany(User);
 
-
 //RELACIONES PRODUCTS
 
 Product.belongsToMany(ProductBrand, { through: "ProductProductBrand" });

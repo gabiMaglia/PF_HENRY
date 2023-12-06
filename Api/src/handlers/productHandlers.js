@@ -1,3 +1,5 @@
+const { Product } = require("../db");
+
 const {
   getAllProducts,
   postProduct,
@@ -13,10 +15,11 @@ const postProductHandler = async (req, res) => {
     description,
     price,
     warranty,
+    is_deleted,
     stock,
-    category,
+    categoryName,
     images,
-    brand,
+    brandName,
     soldCount,
   } = req.body;
 
@@ -25,9 +28,10 @@ const postProductHandler = async (req, res) => {
       !name ||
       !description ||
       !price ||
-      !warranty ||
+      !is_deleted ||
       !stock ||
-      !category ||
+      !categoryName ||
+      !brandName ||
       !images ||
       !soldCount
     ) {
@@ -38,10 +42,11 @@ const postProductHandler = async (req, res) => {
       description,
       price,
       warranty,
+      is_deleted,
       stock,
-      category,
+      categoryName,
       images,
-      brand,
+      brandName,
       soldCount,
     });
 
@@ -55,7 +60,7 @@ const postProductHandler = async (req, res) => {
 
 const getProductsHandler = async (req, res) => {
   try {
-    const allProducts = getAllProducts();
+    const allProducts = await getAllProducts();
     res.status(200).json(allProducts);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -64,10 +69,13 @@ const getProductsHandler = async (req, res) => {
 
 const updateProductHandler = async (req, res) => {
   const { id } = req.params;
+  const updatedData = req.body;
+
   try {
-    res.status(200).send(`product ${id} updated`);
+    const updatedProduct = await updateProduct(id, updatedData);
+    res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -75,7 +83,7 @@ const deleteProductHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedProduct = await deleteProduct(id);
-    res.status(200).json(`${deletedProduct.name} was deleted successfully`);
+    res.status(200).json(`Product deleted successfully`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -84,7 +92,7 @@ const deleteProductHandler = async (req, res) => {
 const getProductByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = getProductById(id);
+    const product = await getProductById(id);
     if (product) {
       res.status(200).json(product);
     } else {

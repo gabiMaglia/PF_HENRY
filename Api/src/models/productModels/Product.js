@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    sold: {
+    soldCount: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

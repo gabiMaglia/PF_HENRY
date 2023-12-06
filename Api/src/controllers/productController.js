@@ -1,11 +1,24 @@
-const { Product } = require("../db");
+const {
+  Product,
+  ProductBrand,
+  ProductCategory,
+  ProductImage,
+  ProductStock,
+} = require("../db");
+
+const { conn } = require("../db");
 
 //getProducts
 const getAllProducts = async () => {
-  const products = Product.findAll();
-  return products;
+  try {
+    const allProducts = Product.findAll();
+    return allProducts;
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
+//postProducts
 const postProduct = async ({
   name,
   description,
@@ -13,14 +26,15 @@ const postProduct = async ({
   warranty,
   is_deleted,
   stock,
-  categoryIds,
+  categoryName,
   images,
-  brandIds,
+  brandName,
   soldCount,
 }) => {
   const transaction = await conn.transaction();
 
   try {
+    // Crear el producto
     const newProduct = await Product.create(
       {
         name,
@@ -33,52 +47,97 @@ const postProduct = async ({
       { transaction }
     );
 
-    if (categoryIds && images && brandIds && stock) {
-      const productBrandPromises = brandIds.map((brandId) =>
-        newProduct.setProductBrand(brandId, { transaction })
+    if (categoryName && images && brandName && stock) {
+      // Crear o encontrar la marca
+      const [brand, createdBrand] = await ProductBrand.findOrCreate({
+        where: { name: brandName },
+        transaction,
+      });
+
+      // Asociar la marca al producto usando la tabla intermedia
+      await newProduct.addProductBrand(brand, {
+        through: "ProductProductBrand",
+        transaction,
+      });
+
+      // Crear o encontrar las categorías
+      const categoryPromises = categoryName.map(async (categoryName) => {
+        const [category, createdCategory] = await ProductCategory.findOrCreate({
+          where: { name: categoryName },
+          transaction,
+        });
+
+        // Asociar la categoría al producto
+        await newProduct.addProductCategory(category, { transaction });
+      });
+
+      // Esperar a que se resuelvan todas las promesas de categoría
+      await Promise.all(categoryPromises);
+
+      // Crear las imágenes asociadas al producto
+      const imagePromises = images.map(async (imageUrl) => {
+        const newImage = await ProductImage.create(
+          { adress: imageUrl },
+          { transaction }
+        );
+        // Asociar la imagen al producto
+        await newProduct.addProductImage(newImage, { transaction });
+      });
+
+      // Esperar a que se resuelvan todas las promesas de imágenes
+      await Promise.all(imagePromises);
+
+      // Crear el stock asociado al producto
+      const newStock = await ProductStock.create(
+        { amount: stock }, // Utiliza "amount" en lugar de "quantity"
+        { transaction }
       );
 
-      const productCategoryPromises = categoryIds.map((categoryId) =>
-        newProduct.addProductCategories(categoryId, { transaction })
-      );
-
-      const productImgPromises = images.map((image) =>
-        newProduct.addProductImgs(image, { transaction })
-      );
-
-      await Promise.all([
-        ...productBrandPromises,
-        ...productCategoryPromises,
-        ...productImgPromises,
-        newProduct.setProductStock(stock, { transaction }),
-      ]);
+      // Asociar el stock al producto
+      await newProduct.setProductStock(newStock, { transaction });
     }
 
+    // Confirmar la transacción
     await transaction.commit();
+
     return newProduct;
   } catch (error) {
+    // Revertir la transacción en caso de error
     await transaction.rollback();
     throw error;
   }
 };
 
-const updateProduct = async (id) => {
+const updateProduct = async (id, updatedData) => {
   try {
-    const updatedProduct = await Product.update({ id }, req.body, {
-      new: true,
-    });
-    res.json(updatedProduct);
+    const productToUpdate = await Product.findByPk(id);
+
+    if (!productToUpdate) {
+      throw new Error("Producto no encontrado");
+    }
+
+    await productToUpdate.update(updatedData);
+
+    return productToUpdate;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
 
 const deleteProduct = async (id) => {
   try {
-    const deletedProduct = await Product.delete({ id }, req.body, {
-      deleted: true,
+    // Consultar el producto antes de eliminarlo
+    const productToDelete = await Product.findByPk(id);
+
+    // Eliminar el producto
+    const deletedProduct = await Product.destroy({
+      where: {
+        id: id,
+      },
     });
-    return deletedProduct;
+
+    // Retornar el producto eliminado
+    return { productToDelete, deleted: true };
   } catch (error) {
     throw new Error(error);
   }
@@ -97,8 +156,9 @@ const getProductById = async (id) => {
 
     if (!product) {
       throw new Error("Product not found");
+    } else {
+      return product;
     }
-    return product;
   } catch (error) {
     console.error(error);
   }
