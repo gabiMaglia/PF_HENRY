@@ -56,7 +56,6 @@ const {
 
 // RELACIONES USER
 
-
 User.hasOne(UserCredentials, {
   onDelete: "CASCADE",
 });
@@ -67,9 +66,8 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-
-User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role' });
-UserRole.hasMany(User, { foreignKey: 'rolId', as: 'users' });
+User.belongsTo(UserRole, { foreignKey: "rolId", as: "role" });
+UserRole.hasMany(User, { foreignKey: "rolId", as: "users" });
 
 //RELACIONES PRODUCTS
 
@@ -87,23 +85,20 @@ ProductStock.belongsTo(Product);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
-Service.hasOne(User, {
+Service.belongsTo(User, {
   as: "Client",
-  foreignKey: "userId",
   constraints: false,
   scope: {
-    role_name: "client",
+    rolId: "id_del_rol_cliente",
   },
 });
-Service.hasOne(User, {
+Service.belongsTo(User, {
   as: "Technician",
-  foreignKey: "technicianId",
   constraints: false,
   scope: {
-    role_name: "technician",
+    rolId: "id_del_rol_tecnico",
   },
 });
-
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize, // para importart la conexión { conn } = require('./db.js');

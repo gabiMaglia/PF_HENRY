@@ -43,3 +43,35 @@ Edit user cred byid "localhost:3001/user_credentials/:id"   Edita las credencial
 Edit user espera el mismo objeto salvo las credenciales, cualquier datos e puede obviar,
 si no llega en la query sera autocompletado por la info del objeto alojado en la base de datos
 
+
+
+ruta de servicios
+añadir un modelo a servicio tecnico "localhost:3001/service/add" se completaria por medio de un form
+actualizar el diagnostico tecnico "localhost:3001/service/updateTech/:id" el id seria el id del status
+actualizar el diagnostico final "localhost:3001/service/updateFinal/:id"  el id seria el id del status
+confirmar la reparacion "localhost:3001/service/confirm/:id"  el id seria el id del status
+confirmar que la reparacion se termino "localhost:3001/service/finish/:id"  el id seria el id del status
+
+{POST SERVICE EXPECTED OBJECT}
+
+{
+ "product_model":"samsung a23",
+    "product_income_date": "6/12/2023",
+    "user_diagnosis":"el equipo no enciende",
+    "clientId":"fc628cb4-f316-4ffe-8da6-6cc263faf1ec",
+    "technicianId":"21c3ef9e-e8ba-4528-b605-b0ba2ead3158"
+	
+}
+{PUT SERVICE STATUS EXPECTED OBJECT}
+{
+
+"technical_diagnosis":"Se debe cambiar la bateria"
+	
+}
+
+en caso de querer cambiar el confirm repair o finish repair
+{
+
+"confirm_repair":true // o false depende de lo que quieran
+
+}
