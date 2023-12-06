@@ -1,12 +1,13 @@
+
 // const { Product } = require("../db");
 
-// //getProducts
+// getProducts
 // const getAllProducts = async () => {
 //   const products = Product.findAll();
 //   return products;
 // };
 
-// const postProduct = async ({
+// const postProduct = async (
 //   name,
 //   description,
 //   price,
@@ -125,3 +126,4 @@
 //   deleteProduct,
 //   getProductById,
 // };
+
