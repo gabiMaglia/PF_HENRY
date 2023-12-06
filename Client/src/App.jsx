@@ -10,7 +10,6 @@ import Footer from "./views/Footer/Footer.views";
 
 import PATHROUTES from "./helpers/pathRoute";
 
-
 function App() {
   return (
     <>

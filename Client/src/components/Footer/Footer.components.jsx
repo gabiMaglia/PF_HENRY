@@ -1,5 +1,8 @@
+import { Link } from "react-router-dom"
 import { Container, Typography, Box } from "@mui/material";
 import { AccessTimeFilled, Room, Email, Phone, Copyright, Inventory, SupportAgent, Help, Language } from '@mui/icons-material';
+
+import PATHROUTE from "../../helpers/pathRoute"
 
 const FooterComponents = () => {
   const sectionInformation = [{
@@ -15,10 +18,10 @@ const FooterComponents = () => {
   const sectionPages = [{
     title: "PAGINAS",
     items: [
-      { icon: Language, text: "INICIO" },
-      { icon: Inventory, text: "PRODUCTOS" },
-      { icon: SupportAgent, text: "SOPORTE" },
-      { icon: Help, text: "PREGUNTAS FRECUENTES" },
+      { icon: Language, text: "INICIO", link: PATHROUTE.HOME },
+      { icon: Inventory, text: "PRODUCTOS", link: PATHROUTE.PRODUCTS },
+      { icon: SupportAgent, text: "SOPORTE", link: PATHROUTE.SUPPORT },
+      { icon: Help, text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
     ]
   }];
 
@@ -78,7 +81,9 @@ const FooterComponents = () => {
                 <Typography variant="h5" sx={{ fontWeight: "800", marginBottom: "25px" }}>{section.title}</Typography>
                 {section.items.map((item, i) => (
                   <Box key={i} sx={{ display: "flex", marginBottom: "10px" }}>
-                    <Typography sx={{ marginRight: "10px" }}>{item.text}</Typography>
+                    <Link to={item.link} style={{ textDecoration: "none" }}>
+                      <Typography sx={{ marginRight: "10px", color: "#fff" }}>{item.text}</Typography>
+                    </Link>
                     {item.icon && <item.icon sx={{ color: "#fd611a" }} />}
                   </Box>
                 ))}
