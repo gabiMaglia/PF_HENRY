@@ -9,9 +9,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 
-const pages = ["INICIOS", "PRODUCTOS", "SOPORTE", "PREGUNTAS FRECUENTES"];
+const pages = ["INICIO", "PRODUCTOS", "SOPORTE", "PREGUNTAS FRECUENTES"];
 
-function ResponsiveAppBar() {
+const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -92,5 +92,5 @@ function ResponsiveAppBar() {
       </Toolbar>
     </AppBar>
   );
-}
-export default ResponsiveAppBar;
+};
+export default NavBar;
