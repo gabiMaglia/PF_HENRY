@@ -66,7 +66,7 @@ const Dropdown = () => {
 
                 {items.map((item, index) => (
                     <Paper key={index} style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", width: "50vw", margin: "15px auto", cursor: "pointer" }}>
-                        <Typography variant="h6" onClick={() => handleItemClick(index)} sx={{ padding: "20px", fontWeight: "800", textTransform: "uppercase", "&:hover": { color: "#fd611a" }, color: openIndex === index ? "#fd611a" : "", }}>
+                        <Typography variant="h6" onClick={() => handleItemClick(index)} sx={{ display: "flex", alignItems: "center", padding: "20px", fontWeight: "800", textTransform: "uppercase", "&:hover": { color: "#fd611a" }, color: openIndex === index ? "#fd611a" : "", }}>
                             {openIndex === index ? <ArrowDropDown /> : <ArrowRight />} {item.title}
                         </Typography>
                         <Collapse in={openIndex === index}>
