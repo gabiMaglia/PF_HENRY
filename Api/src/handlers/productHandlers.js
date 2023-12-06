@@ -1,8 +1,11 @@
+const { Product } = require("../db");
+
 const {
   getAllProducts,
   postProduct,
   updateProduct,
   deleteProduct,
+  getProductById,
 } = require("../controllers/productController");
 
 //Post Product
@@ -12,10 +15,11 @@ const postProductHandler = async (req, res) => {
     description,
     price,
     warranty,
+    is_deleted,
     stock,
-    category,
+    categoryName,
     images,
-    brand,
+    brandName,
     soldCount,
   } = req.body;
 
@@ -24,9 +28,10 @@ const postProductHandler = async (req, res) => {
       !name ||
       !description ||
       !price ||
-      !warranty ||
+      !is_deleted ||
       !stock ||
-      !category ||
+      !categoryName ||
+      !brandName ||
       !images ||
       !soldCount
     ) {
@@ -37,10 +42,11 @@ const postProductHandler = async (req, res) => {
       description,
       price,
       warranty,
+      is_deleted,
       stock,
-      category,
+      categoryName,
       images,
-      brand,
+      brandName,
       soldCount,
     });
 
@@ -52,36 +58,50 @@ const postProductHandler = async (req, res) => {
   }
 };
 
-const getProductsHandler = (req, res) => {
+//GET ALL PRODUCTS
+const getProductsHandler = async (req, res) => {
   try {
-    res.status(200).send("show all");
+    const allProducts = await getAllProducts();
+    res.status(200).json(allProducts);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+//UPDATE PRODUCTS
 const updateProductHandler = async (req, res) => {
   const { id } = req.params;
+  const updatedData = req.body;
+
   try {
-    res.status(200).send(`product ${id} updated`);
+    const updatedProduct = await updateProduct(id, updatedData);
+    res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
+//DELETE
 const deleteProductHandler = async (req, res) => {
   const { id } = req.params;
   try {
-    res.status(200).send(`product ${id} deleted successfully`);
+    const deletedProduct = await deleteProduct(id);
+    res.status(200).json(`Product deleted successfully`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+//GET BY ID
 const getProductByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
-    res.status(200).send(`product ${id} details`);
+    const product = await getProductById(id);
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(404).json({ error: `Product ${id} was not found.` });
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
