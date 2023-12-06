@@ -1,10 +1,12 @@
+import { Box, Typography } from "@mui/material"
+import DropdownComponent from "../../components/Dropdown/Dropdown.component"
 
-const QuestionsView= () => {
+const QuestionsView = () => {
   return (
     <>
-    <div>   
-        <h1>DESDE PREGUNTAS FRECUENTES</h1>
-    </div>
+      <Box>
+        <DropdownComponent />
+      </Box>
     </>
   )
 }
