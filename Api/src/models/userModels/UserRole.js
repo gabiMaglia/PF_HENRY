@@ -10,11 +10,11 @@ module.exports = (sequelize) => {
     },
     role_name: {
       type: DataTypes.ENUM,
-      values: ['admin', 'technician', 'custommer'],
+      values: ['admin', 'technician', 'customer'],
       allowNull: false,
     },
   });
 
 
-
+  
 };
