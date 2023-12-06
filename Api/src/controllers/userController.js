@@ -3,10 +3,22 @@ const bcrypt = require("bcrypt");
 
 const getAllUsers = async () => {
   const user = await User.findAll();
+  if (user.length === 0) {
+    return {
+      error: true,
+      response: `No se encontraron usuarios`,
+    };
+  }
   return user;
 };
 const getAllRoles = async () => {
   const roles = await UserRole.findAll();
+  if (roles.length === 0) {
+    return {
+      error: true,
+      response: `No se encontraron roles`,
+    };
+  }
   return roles;
 };
 const getUserById = async (id) => {
@@ -96,7 +108,8 @@ const postUser = async (
 };
 
 const editUserById = async (id, body) => {
-  console.log("editUserbyId");
+  try {
+  } catch (error) {}
 };
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
