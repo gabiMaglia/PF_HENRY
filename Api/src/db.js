@@ -67,13 +67,9 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-// UserRole.create({role_name : "admin"})
-// UserRole.create({role_name : "custommer"})
-// UserRole.create({role_name : "technician"})
 
-
-User.belongsTo(UserRole, { foreignKey: 'rolId' });
-UserRole.hasMany(User);
+User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role' });
+UserRole.hasMany(User, { foreignKey: 'rolId', as: 'users' });
 
 //RELACIONES PRODUCTS
 

@@ -2,14 +2,38 @@ const { User, UserRole, UserAddress, UserCredentials } = require("../db.js");
 const bcrypt = require("bcrypt");
 
 const getAllUsers = async () => {
-  const user = User.findAll();
+  const user = await User.findAll();
+  if (user.length === 0) {
+    return {
+      error: true,
+      response: `No se encontraron usuarios`,
+    };
+  }
   return user;
 };
+const getAllRoles = async () => {
+  const roles = await UserRole.findAll();
+  if (roles.length === 0) {
+    return {
+      error: true,
+      response: `No se encontraron roles`,
+    };
+  }
+  return roles;
+};
 const getUserById = async (id) => {
-  const user = User.findByPk(id, {
+  const user = await User.findByPk(id, {
     include: [UserRole, UserAddress, UserCredentials],
   });
   return user;
+};
+
+const ceateRole = async (role_name) => {
+  const role = await UserRole.findOrCreate({
+    where: { role_name },
+    defaults: { role_name },
+  });
+  return role[0];
 };
 
 const postUser = async (
@@ -34,9 +58,9 @@ const postUser = async (
     telephone,
     image,
   });
-  
+
   // UserCredentials
-  console.log(userCredentials)
+  console.log(userCredentials);
   let { username, password } = userCredentials;
   const newUserCredentials = await newUser.createUserCredential({
     username,
@@ -44,7 +68,7 @@ const postUser = async (
   });
   newUserCredentials.id = newUser.id;
   await newUserCredentials.save();
-  
+
   // UserAddress
   const {
     country = "",
@@ -54,6 +78,7 @@ const postUser = async (
     number = "",
     zipCode = "",
   } = userAddress;
+
   const newUserAddress = await newUser.createUserAddress({
     country,
     state,
@@ -66,17 +91,25 @@ const postUser = async (
   await newUserAddress.save();
 
   // UserRoles
-  // const { role } = roles;
+  console.log(roles);
+  const role_name = roles;
+  const [userRole] = await UserRole.findOrCreate({
+    where: { role_name },
+    defaults: { role_name },
+  });
 
-  const completeUser = User.findByPk(newUser.id, {
-    include: [UserAddress, UserCredentials],
+  await newUser.setRole(userRole, { as: "role" });
+
+  const completeUser = await User.findByPk(newUser.id, {
+    include: [UserAddress, UserCredentials, { model: UserRole, as: "role" }],
   });
 
   return completeUser;
 };
 
 const editUserById = async (id, body) => {
-  console.log("editUserbyId");
+  try {
+  } catch (error) {}
 };
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
@@ -86,7 +119,7 @@ const deleteUserById = async (id) => {
       response: `No se encontro ningun usuario con ese id`,
     };
   } else {
-    await User.destroy({
+    await await User.destroy({
       where: { id: id },
       force: true,
     });
@@ -96,8 +129,10 @@ const deleteUserById = async (id) => {
 
 module.exports = {
   getAllUsers,
+  getAllRoles,
   getUserById,
   editUserById,
+  ceateRole,
   postUser,
   deleteUserById,
 };

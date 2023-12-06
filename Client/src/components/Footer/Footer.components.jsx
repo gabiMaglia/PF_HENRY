@@ -1,5 +1,5 @@
 import { Container, Typography, Box } from "@mui/material";
-import { AccessTimeFilled, Room, Email, Phone, Copyright, Inventory, SupportAgent, ShoppingCart, Language } from '@mui/icons-material';
+import { AccessTimeFilled, Room, Email, Phone, Copyright, Inventory, SupportAgent, Help, Language } from '@mui/icons-material';
 
 const FooterComponents = () => {
   const sectionInformation = [{
@@ -17,8 +17,8 @@ const FooterComponents = () => {
     items: [
       { icon: Language, text: "INICIO" },
       { icon: Inventory, text: "PRODUCTOS" },
-      { icon: ShoppingCart, text: "TIENDA" },
       { icon: SupportAgent, text: "SOPORTE" },
+      { icon: Help, text: "PREGUNTAS FRECUENTES" },
     ]
   }];
 
