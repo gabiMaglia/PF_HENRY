@@ -125,13 +125,13 @@ const editUserById = async (
   const user = await User.findByPk(id);
 
   await user.update({
-    name: name,
-    surname: surname,
-    birthdate: birthdate,
-    dni: dni,
-    email: email,
-    telephone: telephone,
-    image: image,
+    name: name || user.name,
+    surname: surname || user.surname,
+    birthdate: birthdate || user.birthdate,
+    dni: dni || user.dni,
+    email: email || user.email,
+    telephone: telephone || user.telephone,
+    image: image || user.image,
   });
 
   // ADDRESS UPDATE
@@ -141,12 +141,12 @@ const editUserById = async (
     where: { UserId: user.id },
   });
   await _userAddress.update({
-    country: country,
-    state: state,
-    city: city,
-    street: street,
-    number: number,
-    zipCode: zipCode,
+    country: country || _userAddress.country ,
+    state: state || _userAddress.state,
+    city: city || _userAddress.city,
+    street: street || _userAddress.street,
+    number: number || _userAddress.number,
+    zipCode: zipCode || _userAddress.zipCode,
   });
   // ROL Update
   const role_name = role;
