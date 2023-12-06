@@ -1,0 +1,9 @@
+
+Get all users     "localhost:3001/users/"      Trae todos los usuaiors sin direccion ni credenciales ni roles
+Get user by id    "localhost:3001/users/:id"   Trae un usuaio completo
+Post user         "localhost:3001/users/"      Crea usuario nuevo
+Put user          "localhost:3001/users/:id"   Modifica usuario por id
+Delete user by id "localhost:3001/users/:id"   Elimina usuario por id
+
+Get all Roles     "localhost:3001/user_role"      Trae todos los Roles disponibles ni credenciales ni roles
+

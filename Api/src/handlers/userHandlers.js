@@ -5,6 +5,7 @@ const {
   ceateRole,
   postUser,
   editUserById,
+  editUserCredentials,
   deleteUserById,
 } = require("../controllers/userController");
 
@@ -83,7 +84,6 @@ const postUserHandler = async (req, res) => {
   }
 };
 const createRolesHandler = async (req, res) => {
-  console.log("llego")
   const { role_name } = req.body;
   if (!role_name)
     return res.status(400).json({ error: "Missing required data..." });
@@ -95,7 +95,7 @@ const createRolesHandler = async (req, res) => {
   }
 };
 
-const editUserHandler = async (req, res) => {
+const editUserByIdHandler = async (req, res) => {
   const {
     name,
     surname,
@@ -109,6 +109,7 @@ const editUserHandler = async (req, res) => {
     userCredentials,
   } = req.body;
   const { id } = req.params;
+
   try {
     const response = await editUserById(
       id,
@@ -128,16 +129,7 @@ const editUserHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-const editUserAddressHandler = async (req, res) => {
-  const { userAddress } = req.body;
-  const { id } = req.params;
-  try {
-    const response = await editUserById(id, userAddress);
-    res.status(200).json(response);
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
-};
+
 const editUserCredentialsHandler = async (req, res) => {
   const { userCredentials } = req.body;
   const { id } = req.params;
@@ -164,8 +156,7 @@ module.exports = {
   getUserByIdHandler,
   postUserHandler,
   createRolesHandler,
-  editUserHandler,
-  editUserAddressHandler,
+  editUserByIdHandler,
   editUserCredentialsHandler,
   deleteUserHandler,
 };

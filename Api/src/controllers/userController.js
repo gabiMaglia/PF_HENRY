@@ -33,7 +33,6 @@ const getUserById = async (id) => {
   }
   return user;
 };
-
 const ceateRole = async (role_name) => {
   const role = await UserRole.findOrCreate({
     where: { role_name },
@@ -41,7 +40,6 @@ const ceateRole = async (role_name) => {
   });
   return role[0];
 };
-
 const postUser = async (
   name,
   surname,
@@ -66,7 +64,7 @@ const postUser = async (
   });
 
   // UserCredentials
-  console.log(userCredentials);
+
   let { username, password } = userCredentials;
   const newUserCredentials = await newUser.createUserCredential({
     username,
@@ -97,7 +95,7 @@ const postUser = async (
   await newUserAddress.save();
 
   // UserRoles
-  console.log(roles);
+
   const role_name = roles;
   const [userRole] = await UserRole.findOrCreate({
     where: { role_name },
@@ -112,7 +110,6 @@ const postUser = async (
 
   return completeUser;
 };
-
 const editUserById = async (
   id,
   name,
@@ -122,19 +119,42 @@ const editUserById = async (
   email,
   telephone,
   image,
-  userCredentials,
   userAddress,
   roles
 ) => {
-  console.log(id)
-  const user = await User.findByPk(id)
-  console.log(user)
-  await user.update( {name:name, surname:surname, birthdate:birthdate, dni:dni, email:email, telephone:telephone, image:image});
+  const user = await User.findByPk(id);
+  await user.update({
+    name: name,
+    surname: surname,
+    birthdate: birthdate,
+    dni: dni,
+    email: email,
+    telephone: telephone,
+    image: image,
+  });
+  // ADDRESS UPDATE
+  
+  const { country, state, city, street, number, zipCode } = userAddress;
+
+  const _userAddress = await UserAddress.findOne({
+    where: { UserId: user.id },
+  });
+  await _userAddress.update({
+    country: country,
+    state: state,
+    city: city,
+    street: street,
+    number: number,
+    zipCode: zipCode,
+  });
+
   const updatedUser = await User.findByPk(id, {
     include: [UserAddress, UserCredentials, { model: UserRole, as: "role" }],
   });
-  return updatedUser
+  return updatedUser;
 };
+
+const editUserCredentials = async () => {};
 
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
@@ -156,8 +176,9 @@ module.exports = {
   getAllUsers,
   getAllRoles,
   getUserById,
-  editUserById,
   ceateRole,
   postUser,
+  editUserById,
+  editUserCredentials,
   deleteUserById,
 };

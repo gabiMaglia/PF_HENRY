@@ -3,7 +3,7 @@ const {
   getUsersHandler,
   getUserByIdHandler,
   postUserHandler,
-  editUserHandler,
+  editUserByIdHandler,
   deleteUserHandler,
 } = require("../../handlers/userHandlers");
 
@@ -12,7 +12,7 @@ const useRouter = Router();
 useRouter.get("/", getUsersHandler);
 useRouter.get("/:id", getUserByIdHandler);
 useRouter.post("/", postUserHandler);
-useRouter.put("/:id", editUserHandler);
+useRouter.put("/:id", editUserByIdHandler);
 useRouter.delete("/:id", deleteUserHandler);
 
 module.exports = useRouter;
