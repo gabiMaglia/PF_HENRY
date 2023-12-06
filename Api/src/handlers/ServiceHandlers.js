@@ -12,19 +12,19 @@ const addServiceHandler = async (req, res) => {
     product_model,
     product_income_date,
     user_diagnosis,
-    clientId,
     technicianId,
+    ClientId,
   } = req.body;
   try {
     const newService = await addServiceController(
       product_model,
       product_income_date,
       user_diagnosis,
-      clientId,
+      ClientId,
       technicianId
     );
     if (!newService) {
-      return res.status(404).json({ error: error.message });
+      return res.status(404).json({ hola:'hola' });
     }
     res.status(200).json(newService);
   } catch (error) {
