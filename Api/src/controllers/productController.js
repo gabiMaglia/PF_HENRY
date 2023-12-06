@@ -34,7 +34,6 @@ const postProduct = async ({
   const transaction = await conn.transaction();
 
   try {
-    // Crear el producto
     const newProduct = await Product.create(
       {
         name,
@@ -48,56 +47,45 @@ const postProduct = async ({
     );
 
     if (categoryName && images && brandName && stock) {
-      // Crear o encontrar la marca
       const [brand, createdBrand] = await ProductBrand.findOrCreate({
         where: { name: brandName },
         transaction,
       });
 
-      // Asociar la marca al producto usando la tabla intermedia
       await newProduct.addProductBrand(brand, {
         through: "ProductProductBrand",
         transaction,
       });
 
-      // Crear o encontrar las categorías
       const categoryPromises = categoryName.map(async (categoryName) => {
         const [category, createdCategory] = await ProductCategory.findOrCreate({
           where: { name: categoryName },
           transaction,
         });
 
-        // Asociar la categoría al producto
         await newProduct.addProductCategory(category, { transaction });
       });
 
-      // Esperar a que se resuelvan todas las promesas de categoría
       await Promise.all(categoryPromises);
 
-      // Crear las imágenes asociadas al producto
       const imagePromises = images.map(async (imageUrl) => {
         const newImage = await ProductImage.create(
           { adress: imageUrl },
           { transaction }
         );
-        // Asociar la imagen al producto
         await newProduct.addProductImage(newImage, { transaction });
       });
 
-      // Esperar a que se resuelvan todas las promesas de imágenes
       await Promise.all(imagePromises);
 
-      // Crear el stock asociado al producto
       const newStock = await ProductStock.create(
-        { amount: stock }, // Utiliza "amount" en lugar de "quantity"
+        { amount: stock },
         { transaction }
       );
 
-      // Asociar el stock al producto
       await newProduct.setProductStock(newStock, { transaction });
     }
 
-    // Confirmar la transacción
     await transaction.commit();
 
     return newProduct;
@@ -108,35 +96,67 @@ const postProduct = async ({
   }
 };
 
-const updateProduct = async (id, updatedData) => {
+// const updateProduct = async (id, updatedData) => {
+//   try {
+//     const productToUpdate = await Product.findByPk(id);
+
+//     if (!productToUpdate) {
+//       throw new Error("Producto no encontrado");
+//     }
+
+//     await productToUpdate.update(updatedData);
+
+//     return productToUpdate;
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// };
+
+const updateProduct = async (productId, updateData) => {
   try {
-    const productToUpdate = await Product.findByPk(id);
+    const productToUpdate = await Product.findByPk(productId, {
+      include: [ProductStock, ProductBrand, ProductImage, ProductCategory],
+    });
 
     if (!productToUpdate) {
       throw new Error("Producto no encontrado");
     }
 
-    await productToUpdate.update(updatedData);
+    if (updateData.ProductStock) {
+      await productToUpdate.ProductStock.update(updateData.ProductStock);
+    }
+
+    if (updateData.ProductBrand) {
+      await productToUpdate.ProductBrands[0].update(updateData.ProductBrand);
+    }
+
+    if (updateData.ProductImage) {
+      await productToUpdate.ProductImage.update(updateData.ProductImage);
+    }
+
+    if (updateData.ProductCategory) {
+      await productToUpdate.ProductCategory.update(updateData.ProductCategory);
+    }
+
+    await productToUpdate.update(updateData);
 
     return productToUpdate;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 };
 
+//DELETE PRODUCT
 const deleteProduct = async (id) => {
   try {
-    // Consultar el producto antes de eliminarlo
     const productToDelete = await Product.findByPk(id);
 
-    // Eliminar el producto
     const deletedProduct = await Product.destroy({
       where: {
         id: id,
       },
     });
 
-    // Retornar el producto eliminado
     return { productToDelete, deleted: true };
   } catch (error) {
     throw new Error(error);

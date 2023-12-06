@@ -58,6 +58,7 @@ const postProductHandler = async (req, res) => {
   }
 };
 
+//GET ALL PRODUCTS
 const getProductsHandler = async (req, res) => {
   try {
     const allProducts = await getAllProducts();
@@ -67,6 +68,7 @@ const getProductsHandler = async (req, res) => {
   }
 };
 
+//UPDATE PRODUCTS
 const updateProductHandler = async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
@@ -79,6 +81,7 @@ const updateProductHandler = async (req, res) => {
   }
 };
 
+//DELETE
 const deleteProductHandler = async (req, res) => {
   const { id } = req.params;
   try {
@@ -89,6 +92,7 @@ const deleteProductHandler = async (req, res) => {
   }
 };
 
+//GET BY ID
 const getProductByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
