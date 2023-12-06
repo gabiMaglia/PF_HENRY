@@ -120,9 +120,10 @@ const editUserById = async (
   telephone,
   image,
   userAddress,
-  roles
+  role
 ) => {
   const user = await User.findByPk(id);
+
   await user.update({
     name: name,
     surname: surname,
@@ -132,8 +133,8 @@ const editUserById = async (
     telephone: telephone,
     image: image,
   });
+
   // ADDRESS UPDATE
-  
   const { country, state, city, street, number, zipCode } = userAddress;
 
   const _userAddress = await UserAddress.findOne({
@@ -147,10 +148,20 @@ const editUserById = async (
     number: number,
     zipCode: zipCode,
   });
+  // ROL Update
+  const role_name = role;
+  
+  const [userRole] = await UserRole.findOrCreate({
+    where: { role_name },
+    defaults: { role_name },
+  });
+  await user.setRole(userRole, { as: "role" });
+  
 
   const updatedUser = await User.findByPk(id, {
     include: [UserAddress, UserCredentials, { model: UserRole, as: "role" }],
   });
+
   return updatedUser;
 };
 

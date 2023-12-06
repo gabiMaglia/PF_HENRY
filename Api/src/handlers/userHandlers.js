@@ -105,11 +105,11 @@ const editUserByIdHandler = async (req, res) => {
     telephone,
     image,
     userAddress,
-    roles,
+    role,
     userCredentials,
   } = req.body;
   const { id } = req.params;
-
+  console.log(role)
   try {
     const response = await editUserById(
       id,
@@ -121,7 +121,7 @@ const editUserByIdHandler = async (req, res) => {
       telephone,
       image,
       userAddress,
-      roles,
+      role,
       userCredentials
     );
     res.status(200).json(response);
