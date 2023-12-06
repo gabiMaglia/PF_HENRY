@@ -8,7 +8,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PATHROUTE from "../../helpers/pathRoute";
 
 const NavBar = () => {
@@ -18,6 +18,8 @@ const NavBar = () => {
     { text: "SOPORTE", link: PATHROUTE.SUPPORT },
     { text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
   ];
+
+  const { pathname } = useLocation();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -89,7 +91,7 @@ const NavBar = () => {
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: "black",
+                  color: pathname === item.link ? "white" : "black",
                   display: "block",
                   fontSize: 20,
                   fontWeight: 800,
