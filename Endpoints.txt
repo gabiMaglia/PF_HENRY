@@ -1,10 +1,42 @@
+//////USER ENDPOINTS
+Get all users       "localhost:3001/users/"      Trae todos los usuaiors sin direccion ni credenciales ni roles
+Get user by id      "localhost:3001/users/:id"   Trae un usuaio completo
+Post user           "localhost:3001/users/"      Crea usuario nuevo
+Put user            "localhost:3001/users/:id"   Modifica usuario por id
+Delete user by id   "localhost:3001/users/:id"   Elimina usuario por id
+/////USER_ROLES ENDPOINTS
+Get all Roles       "localhost:3001/user_role"          Trae todos los Roles disponibles 
+Create new Role     "localhost:3001/user_role/create"   Edita Role de un usuario  / expects { role_name : "roleName"}
+/////USER_CREDENTIALS ENDPOINTS
+Get user cred byid  "localhost:3001/user_credentials/:id"  Trae las credenciales de un usuario
+Edit user cred byid "localhost:3001/user_credentials/:id   Edita las credenciales de un usuario / expects { username : "username", password : "password"}
 
-Get all users     "localhost:3001/users/"      Trae todos los usuaiors sin direccion ni credenciales ni roles
-Get user by id    "localhost:3001/users/:id"   Trae un usuaio completo
-Post user         "localhost:3001/users/"      Crea usuario nuevo
-Put user          "localhost:3001/users/:id"   Modifica usuario por id
-Delete user by id "localhost:3001/users/:id"   Elimina usuario por id
 
-Get all Roles     "localhost:3001/user_role"          Trae todos los Roles disponibles ni credenciales ni roles
-Create new Role   "localhost:3001/user_role/create"   Trae todos los Roles disponibles ni credenciales ni roles
 
+/////////////////////////////////////////////////////////////
+{POST USER EXPECTED OBJECT}
+ {
+    "name" : "gabriel" ,
+    "surname": "fdsafa",
+    "birthdate":"16/03/1987",
+    "dni": "327258971",
+    "email": "gab.madsfdsglia@gmail.com",
+    "telephone": "341587398",
+    "image"   : "",
+    "role":"admin",
+    "userAddress" : {
+        "country": "Argentina", 
+        "state" : "Santa Fe", 
+        "city": "Rosario",
+        "street": "Arenales", 
+        "number": 329,
+        "zipCode": 2152
+    },
+    "userCredentials": {
+        "username" : "gabriefdslsk",
+        "password" : "lala1234"   
+    }
+    
+}
+Edit user espera el mismo objeto salvo las credenciales, cualquier datos e puede obviar,
+si no llega en la query sera autocompletado por la info del objeto alojado en la base de datos

@@ -1,11 +1,12 @@
 const { Router } = require("express");
 const {
- editUserCredentialsHandler
+  getUserCredentialsHandler,
+  editUserCredentialsHandler,
 } = require("../../handlers/userHandlers");
 
 const useRouter = Router();
 
+useRouter.get("/:id", getUserCredentialsHandler);
 useRouter.put("/:id", editUserCredentialsHandler);
-
 
 module.exports = useRouter;

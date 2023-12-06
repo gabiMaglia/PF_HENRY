@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const {
   getRolesHandler,
-
   createRolesHandler,
 } = require("../../handlers/userHandlers");
 

@@ -10,9 +10,10 @@ const mainRouter = Router();
 mainRouter.use("/user", userRoutes);
 mainRouter.use("/user_role", userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
-
+// ProductRoute
 mainRouter.use("/products", productRouter);
 
+// ServicesRoute
 mainRouter.use('/service',serviceRouter)
 
 module.exports = mainRouter;
