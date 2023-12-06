@@ -8,10 +8,17 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-
-const pages = ["INICIO", "PRODUCTOS", "SOPORTE", "PREGUNTAS FRECUENTES"];
+import { Link } from "react-router-dom";
+import PATHROUTE from "../../helpers/pathRoute";
 
 const NavBar = () => {
+  const navPages = [
+    { text: "INICIO", link: PATHROUTE.HOME },
+    { text: "PRODUCTOS", link: PATHROUTE.PRODUCTS },
+    { text: "SOPORTE", link: PATHROUTE.SUPPORT },
+    { text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
+  ];
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -30,7 +37,7 @@ const NavBar = () => {
       }}
     >
       <Toolbar disableGutters>
-        <Box sx={{ flexGrow: 1, display: { xs: "flex", sm: "none" } }}>
+        <Box sx={{ flexGrow: 1, display: { sm: "flex", md: "none" } }}>
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -59,9 +66,11 @@ const NavBar = () => {
               display: { xs: "block", md: "none" },
             }}
           >
-            {pages.map((page) => (
-              <MenuItem key={page} onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">{page}</Typography>
+            {navPages.map((item, i) => (
+              <MenuItem key={i} onClick={handleCloseNavMenu}>
+                <Link to={item.link} style={{ textDecoration: "none" }}>
+                  <Typography textAlign="center">{item.text}</Typography>
+                </Link>
               </MenuItem>
             ))}
           </Menu>
@@ -69,24 +78,26 @@ const NavBar = () => {
         <Box
           sx={{
             flexGrow: 1,
-            display: { xs: "none", sm: "flex" },
+            display: { xs: "none", md: "flex" },
             justifyContent: "space-evenly",
           }}
         >
-          {pages.map((page) => (
-            <Button
-              key={page}
-              onClick={handleCloseNavMenu}
-              sx={{
-                my: 2,
-                color: "black",
-                display: "block",
-                fontSize: 20,
-                fontWeight: 800,
-              }}
-            >
-              {page}
-            </Button>
+          {navPages.map((item, i) => (
+            <Link key={i} to={item.link} style={{ textDecoration: "none" }}>
+              <Button
+                key={i}
+                onClick={handleCloseNavMenu}
+                sx={{
+                  my: 2,
+                  color: "black",
+                  display: "block",
+                  fontSize: 20,
+                  fontWeight: 800,
+                }}
+              >
+                {item.text}
+              </Button>
+            </Link>
           ))}
         </Box>
       </Toolbar>
