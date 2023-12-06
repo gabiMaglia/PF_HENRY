@@ -105,7 +105,7 @@ const postUser = async (
   await newUser.setRole(userRole, { as: "role" });
 
   const completeUser = await User.findByPk(newUser.id, {
-    include: [UserAddress, UserCredentials, { model: UserRole, as: "role" }],
+    include: [UserAddress, { model: UserRole, as: "role" }],
   });
 
   return completeUser;
@@ -162,13 +162,13 @@ const editUserById = async (
   await user.setRole(userRole, { as: "role" });
 
   const updatedUser = await User.findByPk(id, {
-    include: [UserAddress,  { model: UserRole, as: "role" }],
+    include: [UserAddress, { model: UserRole, as: "role" }],
   });
 
   return updatedUser;
 };
 const getUserCredentials = async (id) => {
-  const _userCredentials = UserCredentials.findOne({
+  const _userCredentials = await UserCredentials.findOne({
     where: { UserId: id },
   });
   if (!_userCredentials) {
@@ -192,7 +192,7 @@ const editUserCredentials = async (id, username, password) => {
       response: `No se encontraron las credenciales requeridas`,
     };
   }
-  _userCredentials.update({
+  await _userCredentials.update({
     username,
     password: await bcrypt.hash(password, 8),
   });
@@ -203,7 +203,6 @@ const editUserCredentials = async (id, username, password) => {
 
   return updatedCredentials;
 };
-
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
   if (!user?.name) {
