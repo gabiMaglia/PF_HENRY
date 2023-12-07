@@ -1,10 +1,9 @@
+import SupportComponent from "../../components/Support/Support.component"
 
-const SupportView= () => {
+const SupportView = () => {
   return (
     <>
-    <div>   
-        <h1>DESDE SOPORTE</h1>
-    </div>
+      <SupportComponent />
     </>
   )
 }
