@@ -5,7 +5,7 @@ import { styled } from "@mui/system";
 const ProductCard = styled(Card)({
   maxWidth: 270,
   maxHeight: 500,
-  margin: 6,
+  margin: 0,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -18,6 +18,7 @@ const ProductCard = styled(Card)({
 });
 
 const ProductMedia = styled(CardMedia)({
+  padding: 10,
   height: 150,
   width: 150,
   objectFit: "cover",
@@ -25,16 +26,23 @@ const ProductMedia = styled(CardMedia)({
 });
 
 const ProductPrice = styled(Typography)({
-  color: "orange",
+  color: "#fd611a",
   fontWeight: "bold",
   marginTop: "auto",
+  fontSize: 28,
 });
 
 const HomeProduct = ({ product }) => {
   const { name, price, image } = product;
 
   return (
-    <ProductCard>
+    <ProductCard
+      sx={{
+        display: "flex",
+        padding: 0,
+        margin: 0.2,
+      }}
+    >
       <ProductMedia component="img" alt={name} src={image} />
       <CardContent>
         <Typography
