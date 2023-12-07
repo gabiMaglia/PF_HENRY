@@ -6,7 +6,11 @@ const productRouter = require("./productRouter/productRouter");
 const serviceRouter = require("./serviceRouter/serviceRouter");
 const brandRouter = require("./productRouter/productBrandRouter");
 const categoryRouter = require("./productRouter/productCategoryRouter");
+
 const stockRouter = require("./productRouter/productStockRouter");
+
+const imageRouter = require("./productRouter/productImagesRouter");
+
 const mainRouter = Router();
 
 // UserRoutes
@@ -18,7 +22,11 @@ mainRouter.use("/user_credentials", userCredentialsRoutes);
 mainRouter.use("/product", productRouter);
 mainRouter.use("/brand", brandRouter);
 mainRouter.use("/category", categoryRouter);
+
 mainRouter.use("/stock", stockRouter);
+
+mainRouter.use("/image", imageRouter);
+
 
 // ServicesRoute
 mainRouter.use("/service", serviceRouter);
