@@ -18,6 +18,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
   {
+    ssl: 'require',
     logging: false,
     native: false,
   }
@@ -56,6 +57,7 @@ const {
 
 // RELACIONES USER
 
+
 User.hasOne(UserCredentials, {
   onDelete: "CASCADE",
 });
@@ -66,8 +68,9 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-User.belongsTo(UserRole, { foreignKey: "rolId", as: "role" });
-UserRole.hasMany(User, { foreignKey: "rolId", as: "users" });
+
+User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role'});
+UserRole.hasMany(User, { foreignKey: 'rolId', as: 'users' });
 
 //RELACIONES PRODUCTS
 
@@ -85,20 +88,23 @@ ProductStock.belongsTo(Product);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
-Service.belongsTo(User, {
+Service.hasOne(User, {
   as: "Client",
+  foreignKey: "userId",
   constraints: false,
   scope: {
-    rolId: "id_del_rol_cliente",
+    role_name: "client",
   },
 });
-Service.belongsTo(User, {
+Service.hasOne(User, {
   as: "Technician",
+  foreignKey: "technicianId",
   constraints: false,
   scope: {
-    rolId: "id_del_rol_tecnico",
+    role_name: "technician",
   },
 });
+
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize, // para importart la conexión { conn } = require('./db.js');
