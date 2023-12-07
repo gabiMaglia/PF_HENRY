@@ -20,12 +20,12 @@ const sequelize = new Sequelize(
  
   {
     dialect: 'postgres',
-    // dialectOptions: {
-    //   ssl: {
-    //     require: true,
-    //     rejectUnauthorized: false, // Puedes ajustar esto según tus necesidades de seguridad
-    //   },
-    // },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // Puedes ajustar esto según tus necesidades de seguridad
+      },
+    },
     logging: false,
   }
 );
