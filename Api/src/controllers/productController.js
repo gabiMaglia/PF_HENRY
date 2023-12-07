@@ -151,11 +151,7 @@ const deleteProduct = async (id) => {
   try {
     const productToDelete = await Product.findByPk(id);
 
-    const deletedProduct = await Product.destroy({
-      where: {
-        id: id,
-      },
-    });
+    await productToDelete.destroy();
 
     return { productToDelete, deleted: true };
   } catch (error) {

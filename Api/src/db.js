@@ -56,7 +56,6 @@ const {
 
 // RELACIONES USER
 
-
 User.hasOne(UserCredentials, {
   onDelete: "CASCADE",
 });
@@ -67,9 +66,8 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-
-User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role' });
-UserRole.hasMany(User, { foreignKey: 'rolId', as: 'users' });
+User.belongsTo(UserRole, { foreignKey: "rolId", as: "role" });
+UserRole.hasMany(User, { foreignKey: "rolId", as: "users" });
 
 //RELACIONES PRODUCTS
 
