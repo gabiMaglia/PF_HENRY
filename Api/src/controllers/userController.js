@@ -6,27 +6,31 @@ const getAllUsers = async () => {
   if (user.length === 0) {
     return {
       error: true,
-      response: `No se encontraron usuarios`,
+      response: `Users not found`,
     };
   }
   return user;
 };
-const getUsersByRole = async(role) => {
-  const userRole = await UserRole.findOne({
-    where: {role_name : role}
-  })
-  console.log(userRole[0])
- const users = await User.findAll({
-    where: {rolId : userRole}
- })
- return users
-}
+const getUsersByRole = async (role) => {
+  const data = await UserRole.findOne({
+    where: { role_name: role },
+  });
+  
+  if (!data)
+    return { error: true, response: `There are no users whit the ${role} role` }
+  ;
+  const users = await User.findAll({
+    where: { rolId: data.dataValues.id },
+  });
+
+  return users;
+};
 const getAllRoles = async () => {
   const roles = await UserRole.findAll();
   if (roles.length === 0) {
     return {
       error: true,
-      response: `No se encontraron roles`,
+      response: `Users not found`,
     };
   }
   return roles;
@@ -38,7 +42,7 @@ const getUserById = async (id) => {
   if (!user) {
     return {
       error: true,
-      response: `No se encontro el usuario`,
+      response: `User not found`,
     };
   }
   return user;
@@ -184,7 +188,7 @@ const getUserCredentials = async (id) => {
   if (!_userCredentials) {
     return {
       error: true,
-      response: `No se encontraron las credenciales requeridas`,
+      response: `Wrong user id`,
     };
   }
   return _userCredentials;
@@ -199,7 +203,7 @@ const editUserCredentials = async (id, username, password) => {
   if (!_userCredentials) {
     return {
       error: true,
-      response: `No se encontraron las credenciales requeridas`,
+      response: `Wrong user id`,
     };
   }
   await _userCredentials.update({
