@@ -7,6 +7,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import carrito from "./carrito-de-compras.png";
+import LoginModal from "../LoginModal/LoginModal.component";
 
 const Img = styled("img")({
   width: 160,
@@ -20,6 +21,7 @@ const Logo = styled("img")({
 
 export default function SearchAppBar() {
   const [input, setInput] = useState("");
+
   const handleChange = (event) => {
     setInput(event.target.value);
   };
@@ -30,13 +32,16 @@ export default function SearchAppBar() {
         mt: 2,
         mb: 2,
         flexGrow: 1,
-        display: 'flex',
-        flexDirection: {xs: 'column', lg:'row'},
+        display: "flex",
+        flexDirection: { xs: "column", lg: "row" },
         alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <Img src={img} alt="Logotipo" />
+      <Img
+        src={img}
+        alt="Logotipo"
+      />
       <Box
         sx={{
           padding: (0.2, 0.2, 0.2, 0.2),
@@ -54,7 +59,7 @@ export default function SearchAppBar() {
           placeholder=" Buscador"
           onChange={handleChange}
           sx={{
-            width: {xs: 300, sm: 500, xl: 800},
+            width: { xs: 300, sm: 500, xl: 800 },
             fontSize: 20,
             color: "black",
             ml: 1,
@@ -91,6 +96,7 @@ export default function SearchAppBar() {
       <Box>
         <Logo src={carrito} />
       </Box>
+      <LoginModal />
     </Box>
   );
 }
