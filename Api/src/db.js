@@ -11,7 +11,7 @@ const ProductModel = require("./models/productModels/Product");
 const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
 const ProductCategoryModel = require("./models/productModels/ProductCategory");
-const ProductImageModel = require("./models/productModels/ProductImg");
+const ProductImageModel = require("./models/productModels/ProductImage");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
