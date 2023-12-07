@@ -11,6 +11,16 @@ const getAllUsers = async () => {
   }
   return user;
 };
+const getUsersByRole = async(role) => {
+  const userRole = await UserRole.findOne({
+    where: {role_name : role}
+  })
+  console.log(userRole[0])
+ const users = await User.findAll({
+    where: {rolId : userRole}
+ })
+ return users
+}
 const getAllRoles = async () => {
   const roles = await UserRole.findAll();
   if (roles.length === 0) {
@@ -221,6 +231,7 @@ const deleteUserById = async (id) => {
 
 module.exports = {
   getAllUsers,
+  getUsersByRole,
   getAllRoles,
   getUserById,
   ceateRole,

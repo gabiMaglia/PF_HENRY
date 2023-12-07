@@ -1,5 +1,6 @@
 const {
   getAllUsers,
+  getUsersByRole,
   getAllRoles,
   getUserById,
   ceateRole,
@@ -15,11 +16,25 @@ const getUsersHandler = async (req, res) => {
     const response = await getAllUsers();
     if (response.error)
       return res.status(404).json(response.response);
-    res.status(200).json(response);
+    return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
   }
 };
+
+const getUsersByRoleHandler = async (req, res) => {
+  const { role } = req.params
+  
+  try {
+    const response = getUsersByRole(role)
+    if (response.error)
+    return res.status(404).json(response.response);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+    
+}
 
 const getRolesHandler = async (req, res) => {
   try {
@@ -167,6 +182,7 @@ const deleteUserHandler = async (req, res) => {
 
 module.exports = {
   getUsersHandler,
+  getUsersByRoleHandler,
   getRolesHandler,
   getUserByIdHandler,
   postUserHandler,
