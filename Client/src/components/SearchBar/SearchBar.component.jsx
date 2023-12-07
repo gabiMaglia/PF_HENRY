@@ -22,6 +22,8 @@ const Logo = styled("img")({
 export default function SearchAppBar() {
   const [input, setInput] = useState("");
 
+  const [loginModalIsOpen, setLoginMododalIsOpen] = useState(false);
+
   const handleChange = (event) => {
     setInput(event.target.value);
   };
@@ -89,6 +91,9 @@ export default function SearchAppBar() {
           sx={{
             color: "white",
           }}
+          onClick={() => {
+            setLoginMododalIsOpen(true);
+          }}
         >
           INICIAR SESIÓN
         </Button>
@@ -96,7 +101,10 @@ export default function SearchAppBar() {
       <Box>
         <Logo src={carrito} />
       </Box>
-      <LoginModal />
+      <LoginModal
+        isOpen={loginModalIsOpen}
+        closeModal={setLoginMododalIsOpen}
+      />
     </Box>
   );
 }

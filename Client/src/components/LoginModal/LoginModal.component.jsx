@@ -6,10 +6,13 @@ import {
   TextField,
   Typography,
   FormControl,
+  CardMedia,
 } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const LoginModal = () => {
-  const style = {
+const LoginModal = ({ isOpen, closeModal }) => {
+  // Estilos del contenedor principal
+  const boxModalStyle = {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -19,79 +22,180 @@ const LoginModal = () => {
     boxShadow: 24,
     p: 4,
     textAlign: "center",
+    borderRadius: "1em",
   };
 
+  // Estilos generales de los botones
+  const boxButtonStyle = {
+    borderRadius: 2,
+    backgroundColor: "#fd611a",
+    width: "30%",
+    height: "10%",
+    mb: "1em",
+    mt: ".5em",
+  };
+
+  // Estado para el manejo del formulario de inicio de sesión
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
 
+  // Función para manejar el cambio de estado del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
-    console.log({ ...user, [name]: value });
   };
 
-  const handleClick = () => {
+  // Función para manejar la verificación del email
+  const emailVerification = () => {
     setIsEmailVerified(true);
+  };
+
+  // Función para renderizar los botones
+  const renderButton = (text, functionOnClick) => {
+    return (
+      <Box sx={boxButtonStyle}>
+        <Button
+          color="inherit"
+          fullWidth
+          sx={{ color: "white" }}
+          onClick={functionOnClick}
+        >
+          {text}
+        </Button>
+      </Box>
+    );
+  };
+
+  // Reseteo del modal
+  const resetModal = () => {
+    setIsEmailVerified(false);
+    setUser({
+      email: "",
+      password: "",
+    });
   };
 
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   return (
-    <>
-      <Modal
-        open={true}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography variant="h5">Iniciar sesión</Typography>
-          {!isEmailVerified ? (
-            <FormControl
-              fullWidth
-              sx={{ alignItems: "center", textAlign: "center" }}
+    <Modal
+      open={isOpen}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      onClose={() => {
+        closeModal(false);
+      }}
+    >
+      <Box sx={boxModalStyle}>
+        {!isEmailVerified ? (
+          <FormControl
+            fullWidth
+            sx={{ alignItems: "center", textAlign: "center" }}
+          >
+            <Typography
+              variant="h4"
+              sx={{ mb: 4 }}
             >
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={user.email}
-                onChange={handleChange}
-                name="email"
-              />
-              <Button
-                variant="contained"
-                sx={{ width: "20%" }}
-                onClick={handleClick}
-              >
-                Continuar
-              </Button>
-            </FormControl>
-          ) : (
-            <FormControl
-              fullWidth
-              sx={{ alignItems: "center", textAlign: "center" }}
+              Iniciar sesión
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ color: "#fd611a" }}
             >
-              <TextField
-                name="password"
-                type="password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-                value={user.password}
-                onChange={handleChange}
-                margin="normal"
-              />
-              <Button variant="contained">Iniciar sesión</Button>
-            </FormControl>
-          )}
-          <Typography>No tienes cuenta, registrate</Typography>
-          <Button variant="contained">Registrarse</Button>
-        </Box>
-      </Modal>
-    </>
+              Para continuar ingresá tu email
+            </Typography>
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={user.email}
+              onChange={handleChange}
+              name="email"
+            />
+            {renderButton("Continuar", emailVerification)}
+            <Typography
+              variant="h5"
+              sx={{ mb: ".5em" }}
+            >
+              O
+            </Typography>
+            <Typography variant="body1">Inicia sesion con: </Typography>
+            <CardMedia
+              sx={{
+                maxWidth: "2.5em",
+                maxHeight: "2.5em",
+                mt: ".5em",
+                mb: "2em",
+              }}
+              component="img"
+              alt="Google"
+              image="/icons/googleIcon.png"
+            />
+            <Typography>No tienes cuenta? Regístrate.</Typography>
+
+            {renderButton("Registrarse", emailVerification)}
+          </FormControl>
+        ) : (
+          <FormControl
+            fullWidth
+            sx={{
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <Button
+              sx={{
+                color: "black",
+                width: "0.1em",
+                height: ".1em",
+                position: "fixed",
+                top: "3em",
+                left: "1em",
+              }}
+              onClick={resetModal}
+            >
+              <ArrowBackIosIcon />
+            </Button>
+            <Typography
+              variant="h4"
+              sx={{
+                flexGrow: 1,
+                mb: 4,
+              }}
+            >
+              Iniciar sesión
+            </Typography>
+
+            <Typography
+              variant="subtitle1"
+              sx={{ backgroundColor: "grey", p: ".5em", borderRadius: "3em" }}
+            >
+              {user.email}
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ color: "#fd611a", mt: "2em" }}
+            >
+              Ingresá tu contraseña
+            </Typography>
+            <TextField
+              name="password"
+              type="password"
+              label="Password"
+              variant="outlined"
+              fullWidth
+              value={user.password}
+              onChange={handleChange}
+              margin="normal"
+            />
+            {renderButton("Iniciar sesion", emailVerification)}
+          </FormControl>
+        )}
+      </Box>
+    </Modal>
   );
 };
 
