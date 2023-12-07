@@ -2,6 +2,8 @@ import { useState } from "react";
 
 export const useLocalStorage = (key, initialValue) => {
 
+    // se utiliza como un useState pero en vez de guardar valores en el estado del componente
+    // lo hace en el localStorage
 
   const [storedValue, setStoredValue] = useState(() => {
     try {
