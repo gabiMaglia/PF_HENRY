@@ -23,15 +23,27 @@ const updateBrand = async (id, updateData) => {
     const BrandToUpdate = await ProductBrand.findByPk(id);
 
     if (!BrandToUpdate) {
-      throw new Error("Producto no encontrado");
-    } else {
-      console.log("Brand before update:", BrandToUpdate.toJSON());
-      await BrandToUpdate.update(updateData);
-      console.log("Brand after update:", BrandToUpdate.toJSON());
-      return BrandToUpdate;
+      throw new Error(`Brand with ID:${id} was not found`);
     }
+
+    if (updateData.name) {
+      const existingBrand = await ProductBrand.findOne({
+        where: { name: updateData.name },
+      });
+
+      if (existingBrand && existingBrand.id !== id) {
+        throw new Error(
+          "There is already a brand with that name. Please try a different one."
+        );
+      }
+    }
+
+    await BrandToUpdate.update(updateData);
+
+    const updatedBrand = await ProductBrand.findByPk(id);
+
+    return updatedBrand;
   } catch (error) {
-    console.error("Error updating brand:", error);
     throw error;
   }
 };
