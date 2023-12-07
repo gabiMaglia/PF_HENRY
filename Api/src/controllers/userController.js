@@ -12,13 +12,13 @@ const getAllUsers = async () => {
   return user;
 };
 const getUsersByRole = async(role) => {
-  const userRole = await UserRole.findOne({
+  const {dataValues} = await UserRole.findOne({
     where: {role_name : role}
   })
-  console.log(userRole[0])
- const users = await User.findAll({
-    where: {rolId : userRole}
- })
+  const users = await User.findAll({
+    where: {rolId : dataValues.id}
+  })
+  console.log(users)
  return users
 }
 const getAllRoles = async () => {

@@ -26,7 +26,7 @@ const getUsersByRoleHandler = async (req, res) => {
   const { role } = req.params
   
   try {
-    const response = getUsersByRole(role)
+    const response = await getUsersByRole(role)
     if (response.error)
     return res.status(404).json(response.response);
     return res.status(200).json(response);

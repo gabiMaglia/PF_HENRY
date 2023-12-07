@@ -15,6 +15,7 @@ useRouter.get("/:id", getUserByIdHandler);
 useRouter.post("/", postUserHandler);
 useRouter.put("/:id", editUserByIdHandler);
 useRouter.delete("/:id", deleteUserHandler);
-useRouter.get("/byRole/:role", getUsersByRoleHandler)
+
+useRouter.get("/by_role/:role", getUsersByRoleHandler)
 
 module.exports = useRouter;
