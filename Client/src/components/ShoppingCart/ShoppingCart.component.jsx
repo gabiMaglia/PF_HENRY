@@ -1,47 +1,29 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import React from "react";
+import { TextField } from "@mui/material";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
-const ShoppingCart = () => {
-  const [productos, setProductos] = useState([]);
-
-  useEffect(() => {
-    // Simula la carga de productos desde el archivo JSON local
-    import("../../DataBase/bdd.json")
-      .then((data) => setProductos(data.productos))
-      .catch((error) => console.error("Error al cargar productos", error));
-  }, []);
+// Este componente representa un carrito de compras cuyo estado se almacena en el localStorage y se actualiza mediante
+// eventos de cambio.
+export default function ShoppingCart() {
+  // Se utiliza el hook useLocalStorage para manejar el estado de una variable llamada text.
+  // El estado inicial de text es obtenido del almacenamiento local localStorage utilizando la clave 'text'.
+  // Si no hay ningún valor almacenado para 'text', se utiliza el valor por defecto una cadena vacía.
+  const [text, setText] = useLocalStorage("text", "");
+  // Cuando se llama a esta función, se obtiene el nuevo valor del texto del evento (event.target.value)
+  // y se actualiza el estado de text utilizando la función setText.
+  const handleTextChange = (event) => {
+    setText(event.target.value);
+  };
 
   return (
-    <Paper style={{ padding: "20px", maxWidth: "600px", margin: "20px auto" }}>
-      <Typography variant="h5" gutterBottom>
-        Carrito de Compras
-      </Typography>
-      <List>
-        {productos && productos.length > 0 ? (
-          productos.map((producto) => (
-            <ListItem key={producto.id}>
-              <ListItemText
-                primary={producto.nombre}
-                secondary={`Precio: $${producto.precio}`}
-              />
-              <Button variant="contained" color="primary">
-                Agregar al carrito
-              </Button>
-            </ListItem>
-          ))
-        ) : (
-          <Typography variant="body1">Cargando productos...</Typography>
-        )}
-      </List>
-    </Paper>
+    <TextField
+      label="Shopping Cart" // Se proporciona un texto descriptivo sobre el propósito del campo.
+      multiline // Utilizamos multiline para permitir múltiples líneas en el TextField.
+      rows={4}
+      variant="outlined" // borde alrededor del campo de texto.
+      fullWidth
+      value={text}
+      onChange={handleTextChange}
+    />
   );
-};
-
-export default ShoppingCart;
+}
