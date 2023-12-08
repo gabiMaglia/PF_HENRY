@@ -99,17 +99,11 @@ Service.hasOne(User, {
   as: "Client",
   foreignKey: "userId",
   constraints: false,
-  scope: {
-    role_name: "client",
-  },
 });
 Service.hasOne(User, {
   as: "Technician",
   foreignKey: "technicianId",
   constraints: false,
-  scope: {
-    role_name: "technician",
-  },
 });
 
 module.exports = {
