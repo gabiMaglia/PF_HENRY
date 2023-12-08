@@ -40,12 +40,12 @@ const Carousel = () => {
 
   return (
     <div>
-      <Card sx={{ height: "250px" }}>
+      <Card sx={{ height: "280px" }}>
         <CardMedia
           component="img"
           alt={carouselData[activeIndex].title}
           width="100%"
-          height="100%"
+          height="auto"
           image={carouselData[activeIndex].imageUrl}
         />
         <CardContent>
