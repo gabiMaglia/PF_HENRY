@@ -1,4 +1,6 @@
 require("dotenv").config();
+const isProduction = process.env.NODE_ENV === 'production';
+
 const { Sequelize } = require("sequelize");
 
 const UserModel = require("./models/userModels/User");
@@ -17,10 +19,13 @@ const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
+ 
   {
-    ssl: 'require',
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
+    },
     logging: false,
-    native: false,
   }
 );
 
@@ -70,7 +75,7 @@ UserAddress.belongsTo(User);
 
 
 User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role'});
-UserRole.hasMany(User, { foreignKey: 'rolId', as: 'users' });
+
 
 //RELACIONES PRODUCTS
 
