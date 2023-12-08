@@ -7,6 +7,7 @@ import {
   Typography,
   FormControl,
   CardMedia,
+  FormHelperText,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -36,13 +37,13 @@ const LoginModal = ({ isOpen, closeModal }) => {
     width: "30%",
     height: "10%",
     mb: "1em",
-    mt: ".5em",
+    mt: "1em",
   };
 
   // Estado para el manejo del formulario de inicio de sesión
   const [user, setUser] = useState({
     email: "",
-    password: [],
+    password: "",
   });
 
   const [errors, setErrors] = useState({
@@ -55,7 +56,6 @@ const LoginModal = ({ isOpen, closeModal }) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
     userLoginValidate({ ...user, [name]: value }, setErrors);
-    console.log(errors);
   };
 
   // Función para manejar la verificación del email
@@ -113,6 +113,10 @@ const LoginModal = ({ isOpen, closeModal }) => {
     setUser({
       email: "",
       password: "",
+    });
+    setErrors({
+      email: "El email es requerido",
+      password: "La contraseña es requerida",
     });
   };
 
@@ -223,11 +227,11 @@ const LoginModal = ({ isOpen, closeModal }) => {
               Ingresá tu contraseña
             </Typography>
             <TextField
-              error={Boolean(errors.password)}
-              helperText={errors.password}
+              error={errors.password}
               name="password"
               type="password"
               label="Password"
+              helperText={errors.password}
               variant="outlined"
               fullWidth
               value={user.password}
