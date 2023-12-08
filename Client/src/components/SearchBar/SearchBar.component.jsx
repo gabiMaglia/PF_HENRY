@@ -43,6 +43,7 @@ export default function SearchAppBar() {
       <Img src={img} alt="Logotipo" />
       <Box
         sx={{
+          mt: { xs: 2 },
           border: 2,
           borderRadius: 2,
           borderTopRightRadius: 50,
@@ -84,31 +85,33 @@ export default function SearchAppBar() {
           />
         </Button>
       </Box>
-      <Box
-        sx={{
-          flexGrow: 0,
-          maxWidth: "xl",
-          ml: 4,
-          mr: 4,
-          borderRadius: 2,
-          backgroundColor: "#fd611a",
-        }}
-      >
-        <Button
-          startIcon={<AccountBoxIcon />}
-          color="inherit"
+      <Box sx={{ display: "flex", flexDirection: "row", mt: { xs: 2 } }}>
+        <Box
           sx={{
-            color: "white",
-          }}
-          onClick={() => {
-            setLoginMododalIsOpen(true);
+            flexGrow: 0,
+            maxWidth: "xl",
+            ml: 4,
+            mr: 4,
+            borderRadius: 2,
+            backgroundColor: "#fd611a",
           }}
         >
-          INICIAR SESIÓN
-        </Button>
-      </Box>
-      <Box>
-        <Logo src={carrito} />
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              setLoginMododalIsOpen(true);
+            }}
+          >
+            INICIAR SESIÓN
+          </Button>
+        </Box>
+        <Box>
+          <Logo src={carrito} />
+        </Box>
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
