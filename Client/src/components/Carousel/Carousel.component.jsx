@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 
+// Implementacion del Carusel
+
 const carouselData = [
   {
     imageUrl: imagen,
@@ -44,9 +46,9 @@ const Carousel = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       handleNext();
-    }, 3000); // Cambia la imagen cada 3 segundos (ajusta según tus necesidades)
+    }, 3000); // Cambia la imagen cada 3 segundos.
 
-    return () => clearInterval(intervalId); // Limpia el intervalo cuando el componente se desmonta
+    return () => clearInterval(intervalId); // Limpia el intervalo cuando el componente se desmonta.
   }, [activeIndex]);
 
   return (
