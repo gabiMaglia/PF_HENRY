@@ -95,15 +95,22 @@ ProductStock.belongsTo(Product);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
-Service.hasOne(User, {
+Service.belongsTo(User, {
   as: "Client",
   foreignKey: "userId",
-  constraints: false,
 });
-Service.hasOne(User, {
+User.hasMany(Service, {
+  as: "ClientServices",
+  foreignKey: "userId",
+});
+
+Service.belongsTo(User, {
   as: "Technician",
   foreignKey: "technicianId",
-  constraints: false,
+});
+User.hasMany(Service, {
+  as: "TechnicianServices",
+  foreignKey: "technicianId",
 });
 
 module.exports = {

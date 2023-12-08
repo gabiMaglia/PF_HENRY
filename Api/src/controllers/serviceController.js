@@ -16,46 +16,47 @@ const addServiceController = async (
   ) {
     return "faltan datos";
   } else {
-    const newService = await Service.create({
-      product_model,
-      product_income_date,
-    });
+  
 
     const clientObj = await User.findByPk(ClientId);
     const technicianObj = await User.findByPk(technicianId);
-    if( !clientObj && !technicianObj ){
+    if( !clientObj || !technicianObj ){
      throw new Error('id no valido')
   
     }
     const rolTech=await UserRole.findByPk(technicianObj.rolId)
     const rolCust=await UserRole.findByPk(clientObj.rolId)
+    console.log(rolCust.role_name)
+
     if (rolCust.role_name==="customer") {
-      await newService.setTechnician(clientObj);
+      if (rolTech.role_name==="technician") {
+        const newService = await Service.create({
+          product_model,
+          product_income_date,
+        });  
+        await newService.setTechnician(technicianObj);
+        await newService.setClient(clientObj);
+    
+        const newServiceStatus = await Service_status.create({
+          user_diagnosis,
+          technical_diagnosis: "pending",
+          final_diagnosis: "pending",
+          confirm_repair: false,
+          reparir_finish: false,
+          ServiceId: newService.id,
+        });
+        const createdService = await Service.findByPk(newService.id, {
+          include: [Service_status]
+        });
+    
+        return createdService;
+      }else{
+        throw new Error('There is no technician with that ID')
+      }
     }else{
       throw new Error('There is no customer with that ID')
     }
-    if (rolTech.role_name==="technician") {
-      await newService.setTechnician(technicianObj);
-    }else{
-      throw new Error('There is no technician with that ID')
-    }
-
-    
-  
-    const newServiceStatus = await Service_status.create({
-      user_diagnosis,
-      technical_diagnosis: "pending",
-      final_diagnosis: "pending",
-      confirm_repair: false,
-      reparir_finish: false,
-      ServiceId: newService.id,
-    });
-    const createdService = await Service.findByPk(newService.id, {
-      include: [Service_status]
-    });
-
-    return createdService;
-};
+}
 }
 const UpdateTechDiagnosisController = async (id, technical_diagnosis) => {
   const serviceStatus = await Service_status.findOne({

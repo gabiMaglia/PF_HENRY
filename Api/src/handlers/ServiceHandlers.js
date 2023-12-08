@@ -25,7 +25,7 @@ const addServiceHandler = async (req, res) => {
       technicianId
     );
     if (!newService) {
-      return res.status(404).json({ hola: "hola" });
+      return res.status(404).json({ error:error.message });
     }
     res.status(200).json(newService);
   } catch (error) {
