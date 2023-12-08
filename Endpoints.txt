@@ -1,3 +1,16 @@
+//////AUTH ENDPOINTS
+
+
+login          'localhost:3001/login' /  espera => {"username": "gabrielsk" "password": "lallala"} retorna {
+    
+    "tokenSession": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYTM1YmNkNy04MGEzLTQyNjctYjc2Yy1lZGRmODY0OWVhNzIiLCJ1c2VybmFtZSI6ImdhYnJpZWxzayIsImlhdCI6MTcwMjAxMjUyOCwiZXhwIjoxNzAyMDE2MTI4fQ.GT2hINxFUPhgA86YWjAfm9lu9sO3eImM30WWB_Bw2R4",
+    "userId": "0a35bcd7-80a3-4267-b76c-eddf8649ea72",
+    "login": true
+
+}
+Luego hay que mandar ese token en los headers de la peticion con tipo de autorizacion
+Bearer Token
+    
 //////USER ENDPOINTS
 
 Get all users       "localhost:3001/users/"      Trae todos los usuaiors sin direccion ni credenciales ni roles
@@ -13,8 +26,8 @@ Create new Role     "localhost:3001/user_role/create"   Edita Role de un usuario
 
 /////USER_CREDENTIALS ENDPOINTS
 
-Get user cred byid  "localhost:3001/user_credentials/:id"  Trae las credenciales de un usuario
-Edit user cred byid "localhost:3001/user_credentials/:id"   Edita las credenciales de un usuario / expects { username : "username", password : "password"}
+Get user cred by  id  "localhost:3001/user_credentials/:id"  Trae las credenciales de un usuario
+Edit user cred by id "localhost:3001/user_credentials/:id"   Edita las credenciales de un usuario / expects { username : "username", password : "password"}
 
 /////////////////////////////////////////////////////////////
 {POST USER EXPECTED OBJECT}
@@ -40,12 +53,12 @@ Edit user cred byid "localhost:3001/user_credentials/:id"   Edita las credencial
         "password" : "lala1234"   
     }
 }
+
 Edit user espera el mismo objeto salvo las credenciales, cualquier datos e puede obviar,
 si no llega en la query sera autocompletado por la info del objeto alojado en la base de datos
 
+Ruta de servicios
 
-
-ruta de servicios
 añadir un modelo a servicio tecnico "localhost:3001/service/add" se completaria por medio de un form
 actualizar el diagnostico tecnico "localhost:3001/service/updateTech/:id" el id seria el id del status
 actualizar el diagnostico final "localhost:3001/service/updateFinal/:id"  el id seria el id del status

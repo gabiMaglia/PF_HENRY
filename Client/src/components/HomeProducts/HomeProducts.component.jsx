@@ -1,21 +1,29 @@
 import React from "react";
 import HomeCard from "../HomeProduct/HomeProduct.component";
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 const HomeProducts = ({ products }) => {
+  // Tomar los primeros 6 productos
+  const homeProducts = products.slice(0, 6);
+
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        marginBottom: 5,
-        gap: 1,
-      }}
-    >
-      {products.map((product) => (
-        <HomeCard key={product.id} product={product} />
-      ))}
+    <Container>
+      <Typography paddingLeft={8} margin={2} fontWeight={"bold"}>
+        ÚLTIMAS NOVEDADES
+      </Typography>
+      <Container
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          marginBottom: 5,
+          gap: 1,
+        }}
+      >
+        {homeProducts.map((product) => (
+          <HomeCard key={product.id} product={product} />
+        ))}
+      </Container>
     </Container>
   );
 };

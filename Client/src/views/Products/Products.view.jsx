@@ -1,12 +1,13 @@
+import Products from "../../components/Products/Products.componet";
 
-const ProductsView= () => {
+const ProductsView = () => {
   return (
     <>
-    <div>   
-        <h1>DESDE PRODUCTOS</h1>
-    </div>
+      <div>
+        <Products />
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default ProductsView
+export default ProductsView;

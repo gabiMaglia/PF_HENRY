@@ -9,13 +9,21 @@ const getAllCategories = async () => {
   }
 };
 
+const getCategoriesWithProducts = async (categoryName) => {
+  const category = await ProductCategory.findOne({
+    where: { name: categoryName },
+  });
+
+  if (category) {
+    const categoryWithProducts = await category.getProducts();
+    return categoryWithProducts;
+  }
+};
+
 const getCategoryById = async (id) => {
   const Category = await ProductCategory.findByPk(id);
-  if (!Category) {
-    throw new Error("Category not found");
-  } else {
-    return Category;
-  }
+
+  return Category;
 };
 
 const updateCategory = async (id, updateData) => {
@@ -28,7 +36,7 @@ const updateCategory = async (id, updateData) => {
 
     console.log("Current category:", CategoryToUpdate.toJSON());
 
-    // Verificar si el nuevo nombre ya existe en la tabla
+    // Verificar si el nuevo nombre ya existe en la tabla para no repetir
     if (updateData.name) {
       const existingCategory = await ProductCategory.findOne({
         where: { name: updateData.name },
@@ -68,4 +76,5 @@ module.exports = {
   getAllCategories,
   getCategoryById,
   updateCategory,
+  getCategoriesWithProducts,
 };

@@ -35,11 +35,16 @@ const NavBar = () => {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "#fd611a",
+        height: 45,
       }}
     >
-      <Toolbar disableGutters>
-        <Box sx={{ flexGrow: 1, display: { sm: "flex", md: "none" } }}>
+      <Toolbar disableGutters sx={{ backgroundColor: "#fd611a" }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: { sm: "flex", md: "none" },
+          }}
+        >
           <IconButton
             size="large"
             aria-label="account of current user"
@@ -82,6 +87,7 @@ const NavBar = () => {
             flexGrow: 1,
             display: { xs: "none", md: "flex" },
             justifyContent: "space-evenly",
+            height: 40,
           }}
         >
           {navPages.map((item, i) => (
@@ -90,10 +96,10 @@ const NavBar = () => {
                 key={i}
                 onClick={handleCloseNavMenu}
                 sx={{
+                  height: 10,
                   my: 2,
                   color: pathname === item.link ? "white" : "black",
-                  display: "block",
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: 800,
                 }}
               >

@@ -11,11 +11,7 @@ const getAllBrands = async () => {
 
 const getBrandById = async (id) => {
   const brand = await ProductBrand.findByPk(id);
-  if (!brand) {
-    throw new Error("Product not found");
-  } else {
-    return brand;
-  }
+  return brand;
 };
 
 const updateBrand = async (id, updateData) => {
@@ -60,9 +56,21 @@ const deleteBrand = async (id) => {
   }
 };
 
+//FILTRADO DE BRAND POR NAME
+const getBrandWithProducts = async (brandName) => {
+  const brand = await ProductBrand.findOne({
+    where: { name: brandName },
+  });
+  if (brand) {
+    const brandWithProducts = await brand.getProducts();
+    return brandWithProducts;
+  }
+};
+
 module.exports = {
   deleteBrand,
   getAllBrands,
   getBrandById,
   updateBrand,
+  getBrandWithProducts,
 };

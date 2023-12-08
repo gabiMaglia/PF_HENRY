@@ -1,4 +1,6 @@
 require("dotenv").config();
+const isProduction = process.env.NODE_ENV === "production";
+
 const { Sequelize } = require("sequelize");
 
 const UserModel = require("./models/userModels/User");
@@ -13,14 +15,18 @@ const ProductStockModel = require("./models/productModels/ProductStock");
 const ProductCategoryModel = require("./models/productModels/ProductCategory");
 const ProductImageModel = require("./models/productModels/ProductImage");
 
-const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
+const koyebDb = process.env.KOYEB_DB;
+const localDb = process.env.LOCAL_DB;
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
+  isProduction ? koyebDb : localDb,
+
   {
-    ssl: 'require',
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
+    },
     logging: false,
-    native: false,
   }
 );
 
@@ -57,7 +63,6 @@ const {
 
 // RELACIONES USER
 
-
 User.hasOne(UserCredentials, {
   onDelete: "CASCADE",
 });
@@ -68,13 +73,14 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-
-User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role'});
-UserRole.hasMany(User, { foreignKey: 'rolId', as: 'users' });
+User.belongsTo(UserRole, { foreignKey: "rolId", as: "role" });
 
 //RELACIONES PRODUCTS
 
-Product.belongsToMany(ProductBrand, { through: "ProductProductBrand" });
+Product.belongsToMany(ProductBrand, {
+  through: "ProductProductBrand",
+  onDelete: "CASCADE",
+});
 ProductBrand.belongsToMany(Product, { through: "ProductProductBrand" });
 
 Product.belongsToMany(ProductCategory, { through: "ProductProductCategory" });
@@ -83,26 +89,29 @@ ProductCategory.belongsToMany(Product, { through: "ProductProductCategory" });
 Product.hasMany(ProductImage);
 ProductImage.belongsTo(Product);
 
-Product.hasOne(ProductStock);
+Product.hasOne(ProductStock, {
+  onDelete: "CASCADE",
+});
 ProductStock.belongsTo(Product);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
-Service.hasOne(User, {
+Service.belongsTo(User, {
   as: "Client",
   foreignKey: "userId",
-  constraints: false,
-  scope: {
-    role_name: "client",
-  },
 });
-Service.hasOne(User, {
+User.hasMany(Service, {
+  as: "ClientServices",
+  foreignKey: "userId",
+});
+
+Service.belongsTo(User, {
   as: "Technician",
   foreignKey: "technicianId",
-  constraints: false,
-  scope: {
-    role_name: "technician",
-  },
+});
+User.hasMany(Service, {
+  as: "TechnicianServices",
+  foreignKey: "technicianId",
 });
 
 module.exports = {

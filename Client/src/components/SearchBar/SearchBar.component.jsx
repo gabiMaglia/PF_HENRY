@@ -1,17 +1,17 @@
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
-import img from "./logo.jpeg";
+import img from "/icons/logo.jpeg";
 import { Input } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import carrito from "./carrito-de-compras.png";
+import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
 
 const Img = styled("img")({
-  width: 160,
-  height: 160,
+  width: 140,
+  height: 140,
 });
 
 const Logo = styled("img")({
@@ -40,15 +40,14 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      <Img
-        src={img}
-        alt="Logotipo"
-      />
+      <Img src={img} alt="Logotipo" />
       <Box
         sx={{
-          padding: (0.2, 0.2, 0.2, 0.2),
+          mt: { xs: 2 },
           border: 2,
           borderRadius: 2,
+          borderTopRightRadius: 50,
+          borderBottomRightRadius: 50,
           display: "flex",
           alignItems: "center",
           ml: 5,
@@ -68,38 +67,51 @@ export default function SearchAppBar() {
           }}
           disableUnderline
         />
-        <SearchIcon
-          sx={{
-            mr: 2,
-            color: "black",
-          }}
-        />
-      </Box>
-      <Box
-        sx={{
-          flexGrow: 0,
-          maxWidth: "xl",
-          ml: 4,
-          mr: 4,
-          borderRadius: 2,
-          backgroundColor: "#fd611a",
-        }}
-      >
         <Button
-          startIcon={<AccountBoxIcon />}
-          color="inherit"
           sx={{
-            color: "white",
-          }}
-          onClick={() => {
-            setLoginMododalIsOpen(true);
+            height: 40,
+            textAlign: "center",
+            backgroundColor: "black",
+            borderTopRightRadius: 50,
+            borderBottomRightRadius: 50,
+            "&:hover": { backgroundColor: "#fd611a" },
           }}
         >
-          INICIAR SESIÓN
+          <SearchIcon
+            sx={{
+              color: "white",
+              "&:hover": { color: "black" },
+            }}
+          />
         </Button>
       </Box>
-      <Box>
-        <Logo src={carrito} />
+      <Box sx={{ display: "flex", flexDirection: "row", mt: { xs: 2 } }}>
+        <Box
+          sx={{
+            flexGrow: 0,
+            maxWidth: "xl",
+            ml: 4,
+            mr: 4,
+            borderRadius: 2,
+            backgroundColor: "#fd611a",
+          }}
+        >
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              setLoginMododalIsOpen(true);
+            }}
+          >
+            INICIAR SESIÓN
+          </Button>
+        </Box>
+        <Box>
+          <Logo src={carrito} />
+        </Box>
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}

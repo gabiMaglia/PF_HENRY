@@ -1,7 +1,7 @@
 import React from "react";
 import HomeProducts from "../HomeProducts/HomeProducts.component";
+import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
 import data from "../../dataBase/bdd.json";
-import { Typography } from "@mui/material";
 
 const HomeComponent = () => {
   const { products } = data;
@@ -9,9 +9,7 @@ const HomeComponent = () => {
   return (
     <>
       <div>
-        <Typography paddingLeft={8} margin={2} fontWeight={"bold"}>
-          ÚLTIMAS NOVEDADES
-        </Typography>
+        <CarouselTop />
         <HomeProducts products={products} />
       </div>
     </>

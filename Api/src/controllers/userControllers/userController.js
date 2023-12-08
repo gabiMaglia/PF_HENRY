@@ -1,4 +1,5 @@
-const { User, UserRole, UserAddress, UserCredentials } = require("../db.js");
+const { User, UserRole, UserAddress, UserCredentials } = require("../../db.js");
+
 const bcrypt = require("bcrypt");
 
 const getAllUsers = async () => {
@@ -11,30 +12,6 @@ const getAllUsers = async () => {
   }
   return user;
 };
-const getUsersByRole = async (role) => {
-  const data = await UserRole.findOne({
-    where: { role_name: role },
-  });
-  
-  if (!data)
-    return { error: true, response: `There are no users whit the ${role} role` }
-  ;
-  const users = await User.findAll({
-    where: { rolId: data.dataValues.id },
-  });
-
-  return users;
-};
-const getAllRoles = async () => {
-  const roles = await UserRole.findAll();
-  if (roles.length === 0) {
-    return {
-      error: true,
-      response: `Users not found`,
-    };
-  }
-  return roles;
-};
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
     include: [{ model: UserRole, as: "role" }, UserAddress],
@@ -46,13 +23,6 @@ const getUserById = async (id) => {
     };
   }
   return user;
-};
-const ceateRole = async (role_name) => {
-  const role = await UserRole.findOrCreate({
-    where: { role_name },
-    defaults: { role_name },
-  });
-  return role[0];
 };
 const postUser = async (
   name,
@@ -181,42 +151,7 @@ const editUserById = async (
 
   return updatedUser;
 };
-const getUserCredentials = async (id) => {
-  const _userCredentials = await UserCredentials.findOne({
-    where: { UserId: id },
-  });
-  if (!_userCredentials) {
-    return {
-      error: true,
-      response: `Wrong user id`,
-    };
-  }
-  return _userCredentials;
-};
-const editUserCredentials = async (id, username, password) => {
-  const _userCredentials = await UserCredentials.findOne({
-    where: { UserId: id },
-  });
-  console.log(username, password);
-  console.log(_userCredentials);
 
-  if (!_userCredentials) {
-    return {
-      error: true,
-      response: `Wrong user id`,
-    };
-  }
-  await _userCredentials.update({
-    username,
-    password: await bcrypt.hash(password, 8),
-  });
-
-  const updatedCredentials = await UserCredentials.findOne({
-    where: { UserId: id },
-  });
-
-  return updatedCredentials;
-};
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
   if (!user?.name) {
@@ -235,13 +170,8 @@ const deleteUserById = async (id) => {
 
 module.exports = {
   getAllUsers,
-  getUsersByRole,
-  getAllRoles,
   getUserById,
-  ceateRole,
   postUser,
   editUserById,
-  getUserCredentials,
-  editUserCredentials,
   deleteUserById,
 };
