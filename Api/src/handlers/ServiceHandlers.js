@@ -6,6 +6,7 @@ const {
   updateConfirmRepairController,
   updateRepairFinishController,
   getAllServicesController,
+  getServiceByIdController,
 } = require("../controllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
@@ -102,18 +103,35 @@ const updateRepairFinish = async (req, res) => {
 const getAllServices = async (req, res) => {
   try {
     const servicios = await getAllServicesController();
-    
+    if(servicios.error){
+    return res.status(404).json({ error: servicios.response });
+
+    }
     return res.status(200).json(servicios);
 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+const getServiceById=async(req,res)=>{
+  const {id}=req.params
+  try {
+    const response =await getServiceByIdController(id)
+
+    return res.status(200).json(response);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+  }
+}
 module.exports = {
   addServiceHandler,
   updateRepairFinish,
   updateConfirmRepair,
   UpdateFinalDiagnosis,
   UpdateTechDiagnosis,
-  getAllServices
+  getAllServices,
+  getServiceById
 };
