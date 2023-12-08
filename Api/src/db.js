@@ -1,4 +1,6 @@
 require("dotenv").config();
+const isProduction = process.env.NODE_ENV === 'production';
+
 const { Sequelize } = require("sequelize");
 
 const UserModel = require("./models/userModels/User");
@@ -21,10 +23,7 @@ const sequelize = new Sequelize(
   {
     dialect: 'postgres',
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false, // Puedes ajustar esto según tus necesidades de seguridad
-      },
+      ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
     },
     logging: false,
   }
