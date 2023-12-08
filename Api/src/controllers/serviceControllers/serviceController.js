@@ -1,3 +1,4 @@
+const transporter=require('../../config/mailer')
 const { Service, Service_status, User, UserRole } = require("../../db");
 
 const addServiceController = async (
@@ -48,7 +49,15 @@ const addServiceController = async (
         const createdService = await Service.findByPk(newService.id, {
           include: [Service_status],
         });
-
+          //envio del mail
+          await transporter.sendMail({
+            from: '"aviso de ingreso 👻" <henryvalentin689@gmail.com>', // sender address
+            to: clientObj.email, // list of receivers
+            subject: "ingreso a servicio ✔", // Subject line
+            text: `su equipo fue registrado en nuestro sistema el dia ${product_income_date}`, // plain text body
+          });
+        
+        //corta envio
         return createdService;
       } else {
         return {
