@@ -19,7 +19,8 @@ const mainRouter = Router();
 // auth
 mainRouter.post('/login', loginHandler)
 // UserRoutes
-mainRouter.use("/user", checkAuthToken, userRoutes);
+// , checkAuthToken
+mainRouter.use("/user", userRoutes);
 mainRouter.use("/user_role", userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 
