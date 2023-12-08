@@ -15,10 +15,11 @@ const ProductStockModel = require("./models/productModels/ProductStock");
 const ProductCategoryModel = require("./models/productModels/ProductCategory");
 const ProductImageModel = require("./models/productModels/ProductImage");
 
-const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
+const koyebDb = process.env.KOYEB_DB;
+const localDb = process.env.LOCAL_DB;
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
+  isProduction ? koyebDb : localDb,
 
   {
     dialect: "postgres",
