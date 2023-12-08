@@ -6,6 +6,7 @@ import { Input } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
 import { useState } from "react";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
 
@@ -22,10 +23,17 @@ const Logo = styled("img")({
 export default function SearchAppBar() {
   const [input, setInput] = useState("");
 
+  const [savedInput, setSavedInput] = useLocalStorage("savedInput", "");
+
   const [loginModalIsOpen, setLoginMododalIsOpen] = useState(false);
 
   const handleChange = (event) => {
     setInput(event.target.value);
+  };
+
+  const handleSearch = () => {
+    // Perform search or any other action with the input value
+    console.log("Searching for:", input);
   };
 
   return (
@@ -68,6 +76,7 @@ export default function SearchAppBar() {
           disableUnderline
         />
         <Button
+          onClick={handleSearch}
           sx={{
             height: 40,
             textAlign: "center",
