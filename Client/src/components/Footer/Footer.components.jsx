@@ -1,47 +1,13 @@
+//HOOKS
 import { Link } from "react-router-dom";
+//MATERIAL UI
 import { Container, Typography, Box } from "@mui/material";
-import {
-  AccessTimeFilled,
-  Room,
-  Email,
-  Phone,
-  Copyright,
-  Inventory,
-  SupportAgent,
-  Help,
-  Language,
-} from "@mui/icons-material";
-
+import { Copyright } from "@mui/icons-material";
+//HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
+import { sectionInformation, sectionPages } from "../../utils/objectsTexts";
 
 const FooterComponents = () => {
-  const sectionInformation = [
-    {
-      title: "INFORMACION",
-      items: [
-        { icon: Phone, text: "+54 11 2256-8888" },
-        { icon: Room, text: "Calle Falsa 123 - Buenos Aires" },
-        { icon: Email, text: "contacto@hypermegared.com.ar" },
-        {
-          icon: AccessTimeFilled,
-          text: "Lunes a Viernes: 10 a 14hs y 17 a 20hs | Sábados: 10 a 14hs.",
-        },
-      ],
-    },
-  ];
-
-  const sectionPages = [
-    {
-      title: "PAGINAS",
-      items: [
-        { icon: Language, text: "INICIO", link: PATHROUTE.HOME },
-        { icon: Inventory, text: "PRODUCTOS", link: PATHROUTE.PRODUCTS },
-        { icon: SupportAgent, text: "SOPORTE", link: PATHROUTE.SUPPORT },
-        { icon: Help, text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
-      ],
-    },
-  ];
-
   const boxStyle = {
     backgroundColor: "#000",
     width: "100%",
@@ -77,8 +43,11 @@ const FooterComponents = () => {
 
   return (
     <>
+      {/* BOX FOOTER */}
       <Box style={boxStyle}>
+        {/* BOX SECCIONES */}
         <Box style={boxStyleOne}>
+          {/* SECCION INFORMACION */}
           {sectionInformation.map((section, index) => (
             <Container key={index}>
               <Box style={boxStyleTwo}>
@@ -101,6 +70,9 @@ const FooterComponents = () => {
               </Box>
             </Container>
           ))}
+          {/* CIERRE SECCION INFORMACION */}
+
+          {/* SECCION PAGINAS */}
           {sectionPages.map((section, index) => (
             <Container key={index}>
               <Box style={boxStyleThree}>
@@ -123,8 +95,13 @@ const FooterComponents = () => {
               </Box>
             </Container>
           ))}
+          {/* CIERRE SECCION PAGINAS */}
         </Box>
+        {/* CIERRE BOX SECCIONES */}
       </Box>
+      {/* CIERRE BOX FOOTER */}
+
+      {/* BOX COPYRIGHT */}
       <Box style={boxStyleCopyright}>
         <Box sx={{ display: "flex" }}>
           <Copyright sx={{ color: "#fd611a", marginRight: "10px" }} />
@@ -134,6 +111,7 @@ const FooterComponents = () => {
           </Typography>
         </Box>
       </Box>
+      {/* CIERRE BOX COPYRIGHT */}
     </>
   );
 };
