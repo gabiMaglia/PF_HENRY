@@ -30,8 +30,8 @@ export default function SearchAppBar() {
         mt: 2,
         mb: 2,
         flexGrow: 1,
-        display: 'flex',
-        flexDirection: {xs: 'column', lg:'row'},
+        display: "flex",
+        flexDirection: { xs: "column", lg: "row" },
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -39,9 +39,10 @@ export default function SearchAppBar() {
       <Img src={img} alt="Logotipo" />
       <Box
         sx={{
-          padding: (0.2, 0.2, 0.2, 0.2),
           border: 2,
           borderRadius: 2,
+          borderTopRightRadius: 50,
+          borderBottomRightRadius: 50,
           display: "flex",
           alignItems: "center",
           ml: 5,
@@ -54,19 +55,30 @@ export default function SearchAppBar() {
           placeholder=" Buscador"
           onChange={handleChange}
           sx={{
-            width: {xs: 300, sm: 500, xl: 800},
+            width: { xs: 300, sm: 500, xl: 800 },
             fontSize: 20,
             color: "black",
             ml: 1,
           }}
           disableUnderline
         />
-        <SearchIcon
+        <Button
           sx={{
-            mr: 2,
-            color: "black",
+            height: 40,
+            textAlign: "center",
+            backgroundColor: "black",
+            borderTopRightRadius: 50,
+            borderBottomRightRadius: 50,
+            "&:hover": { backgroundColor: "#fd611a" },
           }}
-        />
+        >
+          <SearchIcon
+            sx={{
+              color: "white",
+              "&:hover": { color: "black" },
+            }}
+          />
+        </Button>
       </Box>
       <Box
         sx={{
