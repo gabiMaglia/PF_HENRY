@@ -1,6 +1,7 @@
 import React from "react";
 import HomeProducts from "../HomeProducts/HomeProducts.component";
-import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
+import CarouselBottomComponent from "../../components/CarouselBottom/CarouselBottom.component";
+import CarouselTopComponent from "../../components/CarouselTop/CarouselTop.component";
 import data from "../../dataBase/bdd.json";
 
 const HomeComponent = () => {
@@ -9,8 +10,9 @@ const HomeComponent = () => {
   return (
     <>
       <div>
-        <CarouselTop />
+        <CarouselTopComponent />
         <HomeProducts products={products} />
+        <CarouselBottomComponent />
       </div>
     </>
   );

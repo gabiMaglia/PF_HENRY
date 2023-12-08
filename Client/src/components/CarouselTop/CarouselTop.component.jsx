@@ -23,7 +23,7 @@ const carouselData = [
   },
 ];
 
-const Carousel = () => {
+const CarouselTopComponent = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleNext = () => {
@@ -61,4 +61,4 @@ const Carousel = () => {
   );
 };
 
-export default Carousel;
+export default CarouselTopComponent;
