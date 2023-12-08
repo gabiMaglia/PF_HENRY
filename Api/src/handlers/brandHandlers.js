@@ -3,6 +3,7 @@ const {
   getBrandById,
   deleteBrand,
   updateBrand,
+  getBrandWithProducts,
 } = require("../controllers/brandController");
 
 const getAllBrandsHandler = async (req, res) => {
@@ -49,9 +50,26 @@ const deleteBrandHandler = async (req, res) => {
   }
 };
 
+//FILTRADO DE PRODUCTS POR BRAND NAME
+const getBrandWithProductsHandler = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const brandProducts = await getBrandWithProducts(name);
+    if (!brandProducts) {
+      res.status(400).json({ error: `Brand with name: ${name} was not found` });
+    } else {
+      res.status(200).json(brandProducts);
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllBrandsHandler,
   getBrandByIdHandler,
   updateBrandHandler,
   deleteBrandHandler,
+  getBrandWithProductsHandler,
 };

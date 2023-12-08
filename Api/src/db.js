@@ -1,5 +1,5 @@
 require("dotenv").config();
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 
 const { Sequelize } = require("sequelize");
 
@@ -19,9 +19,9 @@ const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
- 
+
   {
-    dialect: 'postgres',
+    dialect: "postgres",
     dialectOptions: {
       ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
     },
@@ -62,7 +62,6 @@ const {
 
 // RELACIONES USER
 
-
 User.hasOne(UserCredentials, {
   onDelete: "CASCADE",
 });
@@ -73,13 +72,14 @@ User.hasOne(UserAddress, {
 });
 UserAddress.belongsTo(User);
 
-
-User.belongsTo(UserRole, { foreignKey: 'rolId', as: 'role'});
-
+User.belongsTo(UserRole, { foreignKey: "rolId", as: "role" });
 
 //RELACIONES PRODUCTS
 
-Product.belongsToMany(ProductBrand, { through: "ProductProductBrand" });
+Product.belongsToMany(ProductBrand, {
+  through: "ProductProductBrand",
+  onDelete: "CASCADE",
+});
 ProductBrand.belongsToMany(Product, { through: "ProductProductBrand" });
 
 Product.belongsToMany(ProductCategory, { through: "ProductProductCategory" });
@@ -88,7 +88,9 @@ ProductCategory.belongsToMany(Product, { through: "ProductProductCategory" });
 Product.hasMany(ProductImage);
 ProductImage.belongsTo(Product);
 
-Product.hasOne(ProductStock);
+Product.hasOne(ProductStock, {
+  onDelete: "CASCADE",
+});
 ProductStock.belongsTo(Product);
 
 //RELACIONES SERVICE
