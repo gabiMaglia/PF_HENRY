@@ -1,4 +1,4 @@
-const { ProductImage } = require("../db");
+const { ProductImage } = require("../../db");
 
 const getAllImages = async () => {
   const allImages = await ProductImage.findAll();

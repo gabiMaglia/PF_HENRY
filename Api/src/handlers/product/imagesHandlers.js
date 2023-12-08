@@ -3,7 +3,7 @@ const {
   getImageById,
   deleteImage,
   updateImage,
-} = require("../controllers/imageController");
+} = require("../../controllers/prodcut/imageController");
 
 const getAllImagesHandler = async (req, res) => {
   try {
