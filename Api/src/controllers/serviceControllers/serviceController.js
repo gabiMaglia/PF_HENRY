@@ -19,7 +19,10 @@ const addServiceController = async (
     const clientObj = await User.findByPk(ClientId);
     const technicianObj = await User.findByPk(technicianId);
     if (!clientObj || !technicianObj) {
-      throw new Error("id no valido");
+      return {
+        error: true,
+        response: "id no valido",
+      };
     }
     const rolTech = await UserRole.findByPk(technicianObj.rolId);
     const rolCust = await UserRole.findByPk(clientObj.rolId);
@@ -48,19 +51,32 @@ const addServiceController = async (
 
         return createdService;
       } else {
-        throw new Error("There is no technician with that ID");
+        return {
+          error: true,
+          response: `There is no technician with that ID`,
+        }
       }
     } else {
-      throw new Error("There is no customer with that ID");
+      return {
+        error: true,
+        response: `There is no customer with that ID`,
+      }
     }
   }
 };
 const updateServiceStatusController = async (id, field, value) => {
   const serviceStatus = await Service_status.findOne({ where: { id } });
   if (!serviceStatus) {
-    throw new Error("status not found");
+    return {
+      error: true,
+      response: `status not found`,
+    }
   }
-  if (value === true || field === 'technical_diagnosis' || field === 'final_diagnosis') {
+  if (
+    value === true ||
+    field === "technical_diagnosis" ||
+    field === "final_diagnosis"
+  ) {
     serviceStatus[field] = value;
     await serviceStatus.save();
     const service = await Service.findOne({
@@ -69,17 +85,20 @@ const updateServiceStatusController = async (id, field, value) => {
     });
     return service;
   } else {
-    throw new Error("no se modifico el status");
+    return {
+      error: true,
+      response: `no se modifico el status`,
+    }
   }
 };
 
 const getAllServicesController = async () => {
   const services = await Service.findAll();
-  console.log(services)
+  console.log(services);
   if (services.length === 0) {
     return {
-      error:true,
-      response:'error service not found'
+      error: true,
+      response: "error service not found",
     };
   }
   const arrayOfServices = await Promise.all(
@@ -95,7 +114,10 @@ const getAllServicesController = async () => {
 const getServiceByIdController = async (id) => {
   const service = await Service.findByPk(id);
   if (!service) {
-    throw new Error("service not found");
+    return {
+      error: true,
+      response: `service not found`,
+    }
   }
   return service;
 };

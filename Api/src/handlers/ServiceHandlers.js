@@ -22,6 +22,10 @@ const addServiceHandler = async (req, res) => {
       ClientId,
       technicianId
     );
+    if (newService.error) {
+      return res.status(404).send(newService.response);
+    }
+
     if (!newService) {
       return res.status(404).json({ error: error.message });
     }
@@ -40,6 +44,9 @@ const updateServiceStatus = async (req, res) => {
       field,
       value
     );
+    if (updatedService.error) {
+      return res.status(404).send(updatedService.response);
+    }
     if (!updatedService) {
       return res.status(404).json({ error: "no se modifico el status" });
     }
@@ -64,7 +71,9 @@ const getServiceById = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await getServiceByIdController(id);
-
+    if (response.error) {
+      return res.status(404).send(response.response);
+    }
     return res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ error: error.message });
