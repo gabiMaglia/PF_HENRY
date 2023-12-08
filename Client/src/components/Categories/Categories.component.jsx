@@ -44,8 +44,8 @@ const FiltersSorting = () => {
   });
 
   const CategorieMedia = styled(CardMedia)({
-    height: 90,
-    width: 90,
+    height: 50,
+    width: 50,
     objectFit: "cover",
     margin: "auto",
   });
@@ -61,8 +61,9 @@ const FiltersSorting = () => {
         sx={{
           mt: 2,
           display: "grid",
-          gridTemplateColumns: "repeat(6,1fr)",
+          gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
           flexDirection: "row",
+          ml: 10,
         }}
       >
         {categories.map((categorie) => (
@@ -74,8 +75,8 @@ const FiltersSorting = () => {
               flexDirection: "column",
               textAlign: "center",
               backgroundColor: "#fd611a",
-              width: 150,
-              height: 150,
+              width: 90,
+              height: 90,
               mt: 2,
               "&:hover": { color: "black", backgroundColor: "#fd611a" },
             }}
@@ -90,7 +91,7 @@ const FiltersSorting = () => {
                 backgroundColor: "#fd611a",
               }}
             ></CategorieMedia>
-            <Typography sx={{ color: "black", fontSize: 16, fontWeight: 700 }}>
+            <Typography sx={{ color: "black", fontSize: 10, fontWeight: 700 }}>
               {categorie.name}
             </Typography>
           </Button>
@@ -99,7 +100,7 @@ const FiltersSorting = () => {
       <Box>
         <FormControl
           sx={{
-            m: 5,
+            mt: 2,
             display: "flex",
             flexDirection: "row",
             textAlign: "center",

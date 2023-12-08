@@ -5,10 +5,9 @@ const ProductBox = ({ products }) => {
   return (
     <Container
       sx={{
-        display: "flex",
+        display: "grid",
+        gridTemplateColumns: { md: "repeat(2,1fr)", lg: "repeat(4,1fr)" },
         flexDirection: "row",
-        flexWrap: "wrap",
-        marginBottom: 5,
         gap: 1,
       }}
     >
@@ -24,7 +23,6 @@ const ProductBox = ({ products }) => {
             variant="contained"
             sx={{
               maxWidth: 270,
-              mt: 1,
               backgroundColor: "#fd611a",
               color: "black",
               transition: "transform 0.3s",

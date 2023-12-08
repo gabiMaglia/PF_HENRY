@@ -7,7 +7,15 @@ const Products = () => {
   const { products } = data;
 
   return (
-    <Box>
+    <Box
+      sx={{
+        justifyContent: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        mb: 4,
+      }}
+    >
       <FiltersSorting />
       <ProductBox products={products} />
     </Box>
