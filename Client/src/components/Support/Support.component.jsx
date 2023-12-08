@@ -133,7 +133,7 @@ const SupportComponent = () => {
             flexDirection: "column",
             justifyContent: "center",
             padding: "50px",
-            margin: "50px",
+            marginBottom: "50px",
           }}
         >
           <TextField
@@ -214,7 +214,6 @@ const SupportComponent = () => {
             display: "flex",
             justifyContent: "center",
             padding: "50px",
-            margin: "50px",
           }}
         >
           {textSupport.map((item, index) => (
