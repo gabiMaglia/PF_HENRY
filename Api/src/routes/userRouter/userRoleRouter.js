@@ -2,7 +2,7 @@ const { Router } = require("express");
 const {
   getRolesHandler,
   createRolesHandler,
-} = require("../../handlers/userHandlers");
+} = require("../../handlers/userHandlers/userHandlers");
 
 const useRouter = Router();
 
