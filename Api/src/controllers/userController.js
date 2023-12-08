@@ -1,4 +1,5 @@
 const { User, UserRole, UserAddress, UserCredentials } = require("../db.js");
+
 const bcrypt = require("bcrypt");
 
 const getAllUsers = async () => {
