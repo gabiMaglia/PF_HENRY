@@ -1,4 +1,4 @@
-const { Service, Service_status, User, UserRole } = require("../db");
+const { Service, Service_status, User, UserRole } = require("../../db");
 
 const addServiceController = async (
   product_model,
@@ -19,7 +19,10 @@ const addServiceController = async (
     const clientObj = await User.findByPk(ClientId);
     const technicianObj = await User.findByPk(technicianId);
     if (!clientObj || !technicianObj) {
-      throw new Error("id no valido");
+      return {
+        error: true,
+        response: "id no valido",
+      };
     }
     const rolTech = await UserRole.findByPk(technicianObj.rolId);
     const rolCust = await UserRole.findByPk(clientObj.rolId);
@@ -48,54 +51,33 @@ const addServiceController = async (
 
         return createdService;
       } else {
-        throw new Error("There is no technician with that ID");
+        return {
+          error: true,
+          response: `There is no technician with that ID`,
+        }
       }
     } else {
-      throw new Error("There is no customer with that ID");
+      return {
+        error: true,
+        response: `There is no customer with that ID`,
+      }
     }
   }
 };
-const UpdateTechDiagnosisController = async (id, technical_diagnosis) => {
-  const serviceStatus = await Service_status.findOne({
-    where: { id },
-  });
-  if (!serviceStatus) {
-    throw new Error("status not found");
-  }
-  serviceStatus.technical_diagnosis = technical_diagnosis;
-  await serviceStatus.save();
-
-  const service = await Service.findOne({
-    where: { id: serviceStatus.ServiceId },
-    include: [Service_status],
-  });
-
-  return service;
-};
-const UpdateFinalDiagnosisController = async (id, final_diagnosis) => {
-  const serviceStatus = await Service_status.findOne({
-    where: { id },
-  });
-  if (!serviceStatus) {
-    throw new Error("status not found");
-  }
-  serviceStatus.final_diagnosis = final_diagnosis;
-  await serviceStatus.save();
-
-  const service = await Service.findOne({
-    where: { id: serviceStatus.ServiceId },
-    include: [Service_status],
-  });
-
-  return service;
-};
-const updateConfirmRepairController = async (id, confirm_repair) => {
+const updateServiceStatusController = async (id, field, value) => {
   const serviceStatus = await Service_status.findOne({ where: { id } });
   if (!serviceStatus) {
-    throw new Error("status not found");
+    return {
+      error: true,
+      response: `status not found`,
+    }
   }
-  if (confirm_repair === true) {
-    serviceStatus.confirm_repair === confirm_repair;
+  if (
+    value === true ||
+    field === "technical_diagnosis" ||
+    field === "final_diagnosis"
+  ) {
+    serviceStatus[field] = value;
     await serviceStatus.save();
     const service = await Service.findOne({
       where: { id: serviceStatus.ServiceId },
@@ -103,34 +85,20 @@ const updateConfirmRepairController = async (id, confirm_repair) => {
     });
     return service;
   } else {
-    throw new Error("no se modifico el status");
-  }
-};
-const updateRepairFinishController = async (id, reparir_finish) => {
-  const serviceStatus = await Service_status.findOne({ where: { id } });
-  if (!serviceStatus) {
-    throw new Error("status not found");
-  }
-  if (reparir_finish === true) {
-    serviceStatus.reparir_finish === reparir_finish;
-    await serviceStatus.save();
-    const service = await Service.findOne({
-      where: { id: serviceStatus.ServiceId },
-      include: [Service_status],
-    });
-    return service;
-  } else {
-    throw new Error("no se modifico el status");
+    return {
+      error: true,
+      response: `no se modifico el status`,
+    }
   }
 };
 
 const getAllServicesController = async () => {
   const services = await Service.findAll();
-  console.log(services)
+  console.log(services);
   if (services.length === 0) {
     return {
-      error:true,
-      response:'error service not found'
+      error: true,
+      response: "error service not found",
     };
   }
   const arrayOfServices = await Promise.all(
@@ -146,16 +114,16 @@ const getAllServicesController = async () => {
 const getServiceByIdController = async (id) => {
   const service = await Service.findByPk(id);
   if (!service) {
-    throw new Error("service not found");
+    return {
+      error: true,
+      response: `service not found`,
+    }
   }
   return service;
 };
 module.exports = {
   addServiceController,
-  UpdateTechDiagnosisController,
-  UpdateFinalDiagnosisController,
-  updateConfirmRepairController,
-  updateRepairFinishController,
+  updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
 };

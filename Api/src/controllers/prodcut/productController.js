@@ -4,9 +4,9 @@ const {
   ProductCategory,
   ProductImage,
   ProductStock,
-} = require("../db");
+} = require("../../db");
 
-const { conn } = require("../db");
+const { conn } = require("../../db");
 
 //getProducts
 const getAllProducts = async () => {
@@ -180,10 +180,23 @@ const getProductById = async (id) => {
   }
 };
 
+const searchByName = async (name) => {
+  const product = await Product.findAll({
+    where: {
+      name: name,
+    },
+  });
+
+  if (product) {
+    return product;
+  }
+};
+
 module.exports = {
   postProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
   getProductById,
+  searchByName,
 };
