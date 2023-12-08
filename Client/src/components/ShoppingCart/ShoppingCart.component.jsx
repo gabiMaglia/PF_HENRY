@@ -1,47 +1,23 @@
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Typography,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import React from "react";
+import { TextField } from "@mui/material";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
-const ShoppingCart = () => {
-  const [productos, setProductos] = useState([]);
+export default function ShoppingCart() {
+  const [text, setText] = useLocalStorage("text", "");
 
-  useEffect(() => {
-    // Simula la carga de productos desde el archivo JSON local
-    import("../../DataBase/bdd.json")
-      .then((data) => setProductos(data.productos))
-      .catch((error) => console.error("Error al cargar productos", error));
-  }, []);
+  const handleTextChange = (event) => {
+    setText(event.target.value);
+  };
 
   return (
-    <Paper style={{ padding: "20px", maxWidth: "600px", margin: "20px auto" }}>
-      <Typography variant="h5" gutterBottom>
-        Carrito de Compras
-      </Typography>
-      <List>
-        {productos && productos.length > 0 ? (
-          productos.map((producto) => (
-            <ListItem key={producto.id}>
-              <ListItemText
-                primary={producto.nombre}
-                secondary={`Precio: $${producto.precio}`}
-              />
-              <Button variant="contained" color="primary">
-                Agregar al carrito
-              </Button>
-            </ListItem>
-          ))
-        ) : (
-          <Typography variant="body1">Cargando productos...</Typography>
-        )}
-      </List>
-    </Paper>
+    <TextField
+      label="Shopping Cart" // Se proporciona un texto descriptivo sobre el propósito del campo.
+      multiline // Utilizamos multiline para permitir múltiples líneas en el TextField.
+      rows={4}
+      variant="outlined" // borde alrededor del campo de texto.
+      fullWidth
+      value={text}
+      onChange={handleTextChange}
+    />
   );
-};
-
-export default ShoppingCart;
+}
