@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import imagen from "../../assets/BF.jpg";
-import imagen1 from "../../assets/descuento.jpg";
-import imagen2 from "../../assets/HS.jpg";
+import imagen from "/carousel/carousel-1.png"
+import imagen2 from "/carousel/carousel-2.png"
+import imagen3 from "/carousel/carousel-3.png"
+
 import {
-  Button,
   Card,
   CardContent,
   CardMedia,
@@ -11,33 +11,20 @@ import {
 } from "@mui/material";
 
 // Implementacion del Carusel
-
 const carouselData = [
   {
     imageUrl: imagen,
-    height: "100%",
-    width: "100%",
-  },
-  {
-    imageUrl: imagen1,
-    height: "100%",
-    width: "100%",
   },
   {
     imageUrl: imagen2,
-    height: "100%",
-    width: "100%",
+  },
+  {
+    imageUrl: imagen3,
   },
 ];
 
 const Carousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const handlePrev = () => {
-    setActiveIndex(
-      (prevIndex) => (prevIndex - 1 + carouselData.length) % carouselData.length
-    );
-  };
 
   const handleNext = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % carouselData.length);
@@ -53,12 +40,12 @@ const Carousel = () => {
 
   return (
     <div>
-      <Card>
+      <Card sx={{ height: "250px" }}>
         <CardMedia
           component="img"
           alt={carouselData[activeIndex].title}
-          height="240px"
           width="100%"
+          height="100%"
           image={carouselData[activeIndex].imageUrl}
         />
         <CardContent>
