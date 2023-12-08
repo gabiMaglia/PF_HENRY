@@ -9,7 +9,7 @@ const {
   editUserCredentials,
   getUserCredentials,
   deleteUserById,
-} = require("../controllers/userController");
+} = require("../../controllers/userControllers/userController");
 
 const getUsersHandler = async (req, res) => {
   try {
