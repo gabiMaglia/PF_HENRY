@@ -1,4 +1,4 @@
-const { Product } = require("../db");
+const { Product } = require("../../db");
 
 const {
   getAllProducts,
@@ -6,7 +6,8 @@ const {
   updateProduct,
   deleteProduct,
   getProductById,
-} = require("../controllers/productController");
+  searchByName,
+} = require("../../controllers/prodcut/productController");
 
 //Post Product
 const postProductHandler = async (req, res) => {
@@ -72,7 +73,6 @@ const getProductsHandler = async (req, res) => {
 const updateProductHandler = async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
-
   try {
     const updatedProduct = await updateProduct(id, updatedData);
     res.status(200).json(updatedProduct);
@@ -107,10 +107,26 @@ const getProductByIdHandler = async (req, res) => {
   }
 };
 
+//SEARCH BAR
+const searchByNameHandler = async (req, res) => {
+  const name = req.query;
+  try {
+    const results = await searchByName(name);
+    if (results) {
+      res.status(200).json(results);
+    } else {
+      res.status(404).json({ error: `No products found` });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   postProductHandler,
   getProductsHandler,
   updateProductHandler,
   deleteProductHandler,
   getProductByIdHandler,
+  searchByNameHandler,
 };

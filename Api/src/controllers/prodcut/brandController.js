@@ -1,4 +1,4 @@
-const { ProductBrand } = require("../db");
+const { ProductBrand } = require("../../db");
 
 const getAllBrands = async () => {
   const allBrands = await ProductBrand.findAll();
