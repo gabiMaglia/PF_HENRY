@@ -1,4 +1,4 @@
-const { Service, Service_status,User } = require("../db");
+const { Service, Service_status,User,UserRole } = require("../db");
 
 const addServiceController = async (
   product_model,
@@ -16,34 +16,47 @@ const addServiceController = async (
   ) {
     return "faltan datos";
   } else {
-    const newService = await Service.create({
-      product_model,
-      product_income_date,
-    });
+  
 
-    const client = await User.findByPk(ClientId);
-    const technician = await User.findByPk(technicianId);
-    if (client) {
-      await newService.setClient(client);
+    const clientObj = await User.findByPk(ClientId);
+    const technicianObj = await User.findByPk(technicianId);
+    if( !clientObj || !technicianObj ){
+     throw new Error('id no valido')
+  
     }
-    if (technician) {
-      await newService.setTechnician(technician);
+    const rolTech=await UserRole.findByPk(technicianObj.rolId)
+    const rolCust=await UserRole.findByPk(clientObj.rolId)
+    console.log(rolCust.role_name)
+
+    if (rolCust.role_name==="customer") {
+      if (rolTech.role_name==="technician") {
+        const newService = await Service.create({
+          product_model,
+          product_income_date,
+        });  
+        await newService.setTechnician(technicianObj);
+        await newService.setClient(clientObj);
+    
+        const newServiceStatus = await Service_status.create({
+          user_diagnosis,
+          technical_diagnosis: "pending",
+          final_diagnosis: "pending",
+          confirm_repair: false,
+          reparir_finish: false,
+          ServiceId: newService.id,
+        });
+        const createdService = await Service.findByPk(newService.id, {
+          include: [Service_status]
+        });
+    
+        return createdService;
+      }else{
+        throw new Error('There is no technician with that ID')
+      }
+    }else{
+      throw new Error('There is no customer with that ID')
     }
-
-    const newServiceStatus = await Service_status.create({
-      user_diagnosis,
-      technical_diagnosis: "pending",
-      final_diagnosis: "pending",
-      confirm_repair: false,
-      reparir_finish: false,
-      ServiceId: newService.id,
-    });
-    const createdService = await Service.findByPk(newService.id, {
-      include: [Service_status]
-    });
-
-    return createdService;
-};
+}
 }
 const UpdateTechDiagnosisController = async (id, technical_diagnosis) => {
   const serviceStatus = await Service_status.findOne({
@@ -114,10 +127,27 @@ const updateRepairFinishController = async (id, reparir_finish) => {
   }
 };
 
+
+const getAllServicesController = async () => {
+  const services = await Service.findAll();
+  if(services.length === 0){
+    throw new Error('services not found')
+  }
+  const arrayOfServices = await Promise.all(
+    services.map(async (service) => {
+      return await Service.findByPk(service.id, {
+        include: [Service_status],
+      });
+    })
+  );
+  return arrayOfServices;
+};
+
 module.exports={
   addServiceController,
   UpdateTechDiagnosisController,
   UpdateFinalDiagnosisController,
   updateConfirmRepairController,
   updateRepairFinishController,
+  getAllServicesController
 }
