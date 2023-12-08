@@ -46,9 +46,10 @@ export default function SearchAppBar() {
       />
       <Box
         sx={{
-          padding: (0.2, 0.2, 0.2, 0.2),
           border: 2,
           borderRadius: 2,
+          borderTopRightRadius: 50,
+          borderBottomRightRadius: 50,
           display: "flex",
           alignItems: "center",
           ml: 5,
@@ -68,12 +69,23 @@ export default function SearchAppBar() {
           }}
           disableUnderline
         />
-        <SearchIcon
+        <Button
           sx={{
-            mr: 2,
-            color: "black",
+            height: 40,
+            textAlign: "center",
+            backgroundColor: "black",
+            borderTopRightRadius: 50,
+            borderBottomRightRadius: 50,
+            "&:hover": { backgroundColor: "#fd611a" },
           }}
-        />
+        >
+          <SearchIcon
+            sx={{
+              color: "white",
+              "&:hover": { color: "black" },
+            }}
+          />
+        </Button>
       </Box>
       <Box
         sx={{

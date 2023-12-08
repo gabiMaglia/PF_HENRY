@@ -1,4 +1,6 @@
 const { Router } = require("express");
+const {loginHandler} = require('../handlers/authHandler')
+
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
 const userCredentialsRoutes = require("./userRouter/userCredentialsRouter");
@@ -8,10 +10,12 @@ const brandRouter = require("./productRouter/productBrandRouter");
 const categoryRouter = require("./productRouter/productCategoryRouter");
 
 const stockRouter = require("./productRouter/productStockRouter");
-
+ 
 const imageRouter = require("./productRouter/productImagesRouter");
 
 const mainRouter = Router();
+
+mainRouter.post('/login', loginHandler)
 
 // UserRoutes
 mainRouter.use("/user", userRoutes);

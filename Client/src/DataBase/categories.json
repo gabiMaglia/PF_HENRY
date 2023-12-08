@@ -1,0 +1,66 @@
+{
+    
+    "categories": [
+      {
+        "id": 1,
+        "name": "Auriculares",
+        "image":"/categories/auriculares.png"
+      },
+      {
+        "id": 2,
+        "name": "Cooler",
+        "image":"/categories/cooler.png"
+      },
+      {
+            "id": 3,
+            "name": "Disco Rigido",
+            "image":"/categories/disco-rigido.png"
+      },
+      {
+        "id": 4,
+        "name": "Memoria Ram",
+        "image":"/categories/memoria-ram.png"
+      },
+      {
+        "id": 5,
+        "name": "Gabinete",
+        "image":"/categories/gabinete.png"
+      },
+      {
+        "id": 6,
+        "name": "Monitor",
+        "image":"/categories/monitor.png"
+      },
+      {
+        "id": 7,
+        "name": "Mother",
+        "image":"/categories/mother.png"
+      },
+      {
+        "id": 8,
+        "name": "Mouse",
+        "image":"/categories/mouse.png"
+      },
+      {
+        "id": 9,
+        "name": "Placa de video",
+        "image":"/categories/placa-video.png"
+      },
+      {
+        "id": 10,
+        "name": "Procesador",
+        "image":"/categories/procesador.png"
+      },
+      {
+        "id": 11,
+        "name": "teclado",
+        "image":"/categories/teclado.png"
+      },
+      {
+        "id": 12,
+        "name": "Ssd",
+        "image":"/categories/ssd.png"
+      }
+    ]
+  }
+  
