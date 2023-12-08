@@ -4,7 +4,7 @@ const {
   getStockByIdHandler,
   deleteStockHandler,
   updateStockHandler,
-} = require("../../handlers/stockHandler");
+} = require("../../handlers/product/stockHandler");
 
 const stockRouter = Router();
 
