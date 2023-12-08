@@ -1,8 +1,7 @@
-const { User, UserRole, UserAddress, UserCredentials } = require("../../db.js");
-
+const { User, UserRole, UserAddress } = require("../../db.js");
 const bcrypt = require("bcrypt");
 
-const getAllUsers = async () => {
+const getAllUsers    = async () => {
   const user = await User.findAll();
   if (user.length === 0) {
     return {
@@ -12,7 +11,7 @@ const getAllUsers = async () => {
   }
   return user;
 };
-const getUserById = async (id) => {
+const getUserById    = async (id) => {
   const user = await User.findByPk(id, {
     include: [{ model: UserRole, as: "role" }, UserAddress],
   });
@@ -24,7 +23,7 @@ const getUserById = async (id) => {
   }
   return user;
 };
-const postUser = async (
+const postUser       = async (
   name,
   surname,
   birthdate,
@@ -94,7 +93,7 @@ const postUser = async (
 
   return completeUser;
 };
-const editUserById = async (
+const editUserById   = async (
   id,
   name,
   surname,
@@ -151,7 +150,6 @@ const editUserById = async (
 
   return updatedUser;
 };
-
 const deleteUserById = async (id) => {
   const user = await User.findByPk(id);
   if (!user?.name) {
@@ -167,7 +165,6 @@ const deleteUserById = async (id) => {
     return { response: `Eliminaste correctamente al usuario ${user.name}` };
   }
 };
-
 module.exports = {
   getAllUsers,
   getUserById,

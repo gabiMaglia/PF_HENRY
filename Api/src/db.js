@@ -20,7 +20,6 @@ const localDb = process.env.LOCAL_DB;
 
 const sequelize = new Sequelize(
   isProduction ? koyebDb : localDb,
-
   {
     dialect: "postgres",
     dialectOptions: {
