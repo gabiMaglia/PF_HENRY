@@ -18,7 +18,6 @@ const imageRouter = require("./productRouter/productImagesRouter");
 const mainRouter = Router();
 // auth
 mainRouter.post('/login', loginHandler)
-
 // UserRoutes
 mainRouter.use("/user", checkAuthToken, userRoutes);
 mainRouter.use("/user_role", userRoleRoutes);

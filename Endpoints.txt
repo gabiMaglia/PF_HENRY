@@ -59,11 +59,11 @@ si no llega en la query sera autocompletado por la info del objeto alojado en la
 
 Ruta de servicios
 
-añadir un modelo a servicio tecnico "localhost:3001/service/add" se completaria por medio de un form
-actualizar el diagnostico tecnico "localhost:3001/service/updateTech/:id" el id seria el id del status
-actualizar el diagnostico final "localhost:3001/service/updateFinal/:id"  el id seria el id del status
-confirmar la reparacion "localhost:3001/service/confirm/:id"  el id seria el id del status
-confirmar que la reparacion se termino "localhost:3001/service/finish/:id"  el id seria el id del status
+añadir un modelo a servicio tecnico "localhost:3001/service" se completaria por medio de un form
+actualizar un status de servicio tecnico es una peticion put a "localhost:3001/service/:id(debe ser el id del status)" y 
+dependiendo de lo que se le ponga como field va a actualizar uno o otro estado. 
+para traer todos los servicios es una request get a "localhost:3001/service"
+para traer por id es a "localhost:3001/service/:id(debe ser el id del servicio)"
 
 {POST SERVICE EXPECTED OBJECT}
 
@@ -77,14 +77,12 @@ confirmar que la reparacion se termino "localhost:3001/service/finish/:id"  el i
 }
 {PUT SERVICE STATUS EXPECTED OBJECT}
 {
-
-"technical_diagnosis":"Se debe cambiar la bateria"
-	
+"field":"final_diagnosis",
+	"value":"se modifico la bateria"
 }
 
 en caso de querer cambiar el confirm repair o finish repair
 {
-
-"confirm_repair":true // o false depende de lo que quieran
-
+"field":"confirm_repair",
+	"value":true
 }
