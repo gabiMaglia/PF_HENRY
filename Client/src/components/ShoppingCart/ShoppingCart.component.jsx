@@ -13,7 +13,7 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     // Simula la carga de productos desde el archivo JSON local
-    import("../../../DataBase/bdd.json")
+    import("../../DataBase/bdd.json")
       .then((data) => setProductos(data.productos))
       .catch((error) => console.error("Error al cargar productos", error));
   }, []);

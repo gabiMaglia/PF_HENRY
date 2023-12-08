@@ -8,7 +8,6 @@ import Support from "./views/Support/Support.view";
 import Questions from "./views/Questions/Questions.view";
 import Footer from "./views/Footer/Footer.views";
 import Carousel from "./components/Carousel/Carousel.component";
-import ShoppingCart from "./components/ShoppingCart/ShoppingCart.component";
 
 import PATHROUTES from "./helpers/pathRoute";
 
@@ -19,10 +18,6 @@ function App() {
         <SearchBar />
         <NavBar />
         <Carousel />
-        <div>
-          <h1>Mi Tienda</h1>
-          <ShoppingCart />
-        </div>
         <Routes>
           <Route path={PATHROUTES.HOME} element={<Home />} />
           <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
