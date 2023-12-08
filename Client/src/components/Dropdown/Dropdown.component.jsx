@@ -1,6 +1,9 @@
+//HOOKS
 import { useState } from "react";
+//MATERIAL UI
 import { Typography, Box, Collapse, Paper } from "@mui/material";
 import { ArrowRight, ArrowDropDown } from "@mui/icons-material";
+//UTILS
 import { itemsQuestions } from "../../utils/objectsTexts";
 
 const DropdownItem = ({ title, content }) => (
@@ -17,14 +20,17 @@ const DropdownItem = ({ title, content }) => (
 );
 
 const Dropdown = () => {
+  //ESTADOS
   const [openIndex, setOpenIndex] = useState(null);
-
+  
+  //HANDLES
   const handleItemClick = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
     <>
+      {/* BOX TITULO */}
       <Box
         sx={{
           backgroundColor: "#000",
@@ -42,6 +48,9 @@ const Dropdown = () => {
           Preguntas Frecuentes
         </Typography>
       </Box>
+      {/* CIERRE BOX TITULO */}
+
+      {/* BOX DROPDOWN */}
       <Box sx={{ padding: "100px" }}>
         {itemsQuestions.map((item, index) => (
           <Paper
@@ -77,6 +86,7 @@ const Dropdown = () => {
           </Paper>
         ))}
       </Box>
+      {/* CIERRE BOX DROPDOWN */}
     </>
   );
 };

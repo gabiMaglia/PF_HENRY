@@ -1,21 +1,29 @@
+//HOOKS
 import { useState } from "react";
+//MATERIAL UI
 import { Box, TextField, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import Textarea from "@mui/joy/Textarea";
+//SWEET ALERT
+import Swal from "sweetalert2";
+//HELPERS
 import {
   validateName,
   validatePhone,
   validateEmail,
   validateArea,
 } from "../../helpers/supportValidateForm";
+//UTILS
 import { textSupport } from "../../utils/objectsTexts";
-import Textarea from "@mui/joy/Textarea";
 
 const SupportComponent = () => {
+  // ESTADOS
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
 
+  //MANEJO DE ERRORES
   const [errorName, setErrorName] = useState({
     error: false,
     message: "",
@@ -33,68 +41,62 @@ const SupportComponent = () => {
     message: "",
   });
 
+  //HANDLES CHANGES
+  const handleChangeName = (value) => {
+    setName(value);
+    setErrorName({
+      error: !validateName(value),
+      message: "El nombre debe tener al menos 3 caracteres",
+    });
+  };
+  const handleChangePhone = (value) => {
+    setPhone(value);
+    setErrorPhone({
+      error: !validatePhone(value),
+      message: "El teléfono debe tener 10 dígitos",
+    });
+  };
+  const handleChangeEmail = (value) => {
+    setEmail(value);
+    setErrorEmail({
+      error: !validateEmail(value),
+      message: "El correo electrónico no es válido",
+    });
+  };
+  const handleChangeArea = (value) => {
+    setArea(value);
+    setErrorArea({
+      error: !validateArea(value),
+      message: "El mensaje debe tener al menos 10 caracteres",
+    });
+  };
+
+  //HANDLE SUBMIT
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let isValid = true;
-
-    if (!validateName(name)) {
-      setErrorName({
-        error: true,
-        message: "El nombre debe tener al menos 3 caracteres",
+    if (
+      !validateName(name) ||
+      !validatePhone(phone) ||
+      !validateEmail(email) ||
+      !validateArea(area)
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Hay errores en el formulario. Por favor reviselo.",
       });
-      isValid = false;
-    } else {
-      setErrorName({
-        error: false,
-        message: "",
-      });
+      return;
     }
-    if (!validatePhone(phone)) {
-      setErrorPhone({
-        error: true,
-        message: "El teléfono debe tener 10 dígitos",
-      });
-      isValid = false;
-    } else {
-      setErrorPhone({
-        error: false,
-        message: "",
-      });
-    }
-    if (!validateEmail(email)) {
-      setErrorEmail({
-        error: true,
-        message: "El correo electrónico no es válido",
-      });
-      isValid = false;
-    } else {
-      setErrorEmail({
-        error: false,
-        message: "",
-      });
-    }
-    if (!validateArea(area)) {
-      setErrorArea({
-        error: true,
-        message: "El mensaje debe contener al entre 30 y 150 caracteres",
-      });
-      isValid = false;
-    } else {
-      setErrorArea({
-        error: false,
-        message: "",
-      });
-    }
-
-    if (isValid) {
-      setName("");
-      setPhone("");
-      setEmail("");
-      setArea("");
-
-      alert("Mensaje enviado correctamente");
-    }
+    Swal.fire({
+      icon: "success",
+      title: "Mensaje Enviado",
+      text: "Responderemos a la brevedad.",
+    });
+    setName("");
+    setPhone("");
+    setEmail("");
+    setArea("");
   };
 
   return (
@@ -143,7 +145,7 @@ const SupportComponent = () => {
             error={errorName.error}
             helperText={errorName.message}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => handleChangeName(e.target.value)}
           />
           <TextField
             id="phone"
@@ -154,7 +156,7 @@ const SupportComponent = () => {
             error={errorPhone.error}
             helperText={errorPhone.message}
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => handleChangePhone(e.target.value)}
             sx={{ margin: "20px 0" }}
           />
           <TextField
@@ -166,7 +168,7 @@ const SupportComponent = () => {
             error={errorEmail.error}
             helperText={errorEmail.message}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleChangeEmail(e.target.value)}
           />
           <Textarea
             disabled={false}
@@ -177,11 +179,15 @@ const SupportComponent = () => {
             error={errorArea.error}
             placeholder="Ejemplo: Tengo un CPU que no enciende. Queda la pantalla negra."
             value={area}
-            onChange={(e) => setArea(e.target.value)}
+            onChange={(e) => handleChangeArea(e.target.value)}
             sx={{ margin: "20px 0" }}
           />
           {errorArea.error && (
-            <Typography variant="body2" color="error" sx={{ margin: "-15px 0 25px 15px", fontSize: "12px" }}>
+            <Typography
+              variant="body2"
+              color="error"
+              sx={{ margin: "-15px 0 25px 15px", fontSize: "12px" }}
+            >
               {errorArea.message}
             </Typography>
           )}
