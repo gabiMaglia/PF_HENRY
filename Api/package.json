@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon -L",
+    "trace": "node --trace-warnings",
     "test": "jest -w ./tests/**/*.spec.js"
   },
   "author": "Henry",

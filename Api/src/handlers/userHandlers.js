@@ -14,8 +14,7 @@ const {
 const getUsersHandler = async (req, res) => {
   try {
     const response = await getAllUsers();
-    if (response.error)
-      return res.status(404).json(response.response);
+    if (response.error) return res.status(404).json(response.response);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -23,24 +22,21 @@ const getUsersHandler = async (req, res) => {
 };
 
 const getUsersByRoleHandler = async (req, res) => {
-  const { role } = req.params
-  
+  const { role } = req.params;
+
   try {
-    const response = await getUsersByRole(role)
-    if (response.error)
-    return res.status(404).json(response.response);
+    const response = await getUsersByRole(role);
+    if (response.error) return res.status(404).json(response.response);
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
   }
-    
-}
+};
 
 const getRolesHandler = async (req, res) => {
   try {
     const response = await getAllRoles();
-    if (response.error)
-      return res.status(404).json(response.response);
+    if (response.error) return res.status(404).json(response.response);
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -140,8 +136,7 @@ const editUserByIdHandler = async (req, res) => {
       role,
       userCredentials
     );
-    if (response.error)
-      return res.status(404).json(response.response);
+    if (response.error) return res.status(404).json(response.response);
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -151,20 +146,18 @@ const getUserCredentialsHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await getUserCredentials(id);
-    if (response.error)
-    return res.status(404).json(response.response);
+    if (response.error) return res.status(404).json(response.response);
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
   }
-}
+};
 const editUserCredentialsHandler = async (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
   try {
     const response = await editUserCredentials(id, username, password);
-    if (response.error)
-    return res.status(404).json(response.response);
+    if (response.error) return res.status(404).json(response.response);
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
