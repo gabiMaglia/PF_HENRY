@@ -15,10 +15,10 @@ const ProductStockModel = require("./models/productModels/ProductStock");
 const ProductCategoryModel = require("./models/productModels/ProductCategory");
 const ProductImageModel = require("./models/productModels/ProductImage");
 
-const { DATABASE_USER, DATABASE_PASSWORD, DATABASE_HOST, DATABASE_NAME } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, BDD } = process.env;
 
 const sequelize = new Sequelize(
-  `postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}/${DATABASE_NAME}`,
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${BDD}`,
 
   {
     dialect: "postgres",
