@@ -1,17 +1,17 @@
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
-import img from "./logo.jpeg";
+import img from "/icons/logo.jpeg";
 import { Input } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import carrito from "./carrito-de-compras.png";
+import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
 
 const Img = styled("img")({
-  width: 160,
-  height: 160,
+  width: 140,
+  height: 140,
 });
 
 const Logo = styled("img")({
@@ -40,10 +40,7 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      <Img
-        src={img}
-        alt="Logotipo"
-      />
+      <Img src={img} alt="Logotipo" />
       <Box
         sx={{
           border: 2,
