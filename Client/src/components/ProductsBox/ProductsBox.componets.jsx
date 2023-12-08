@@ -1,7 +1,12 @@
 import HomeProduct from "../HomeProduct/HomeProduct.component";
 import { Box, Button, Container } from "@mui/material";
 
-const ProductBox = ({ products }) => {
+const ProductBox = ({ products, currentPage, productsPerPage }) => {
+  const startIndex = (currentPage - 1) * productsPerPage;
+
+  const endIndex = startIndex + productsPerPage;
+
+  const currentProducts = products.slice(startIndex, endIndex);
   return (
     <Container
       sx={{
@@ -11,7 +16,7 @@ const ProductBox = ({ products }) => {
         gap: 1,
       }}
     >
-      {products.map((product) => (
+      {currentProducts.map((product) => (
         <Box
           display="flex"
           flexDirection="column"
