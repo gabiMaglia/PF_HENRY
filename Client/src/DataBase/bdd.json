@@ -7,7 +7,11 @@
         "price": 20.99,
         "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
         "warranty": "3 años",
-        "image":"/products/1657835109152_img.png"
+        "image":[
+          "/products/1657835109152_img.png",
+          "/products/1657851327701_img.png",
+          "/products/1658084192936_img.png"
+        ]
       },
       {
         "id": 2,
@@ -15,7 +19,11 @@
         "price": 30.50,
         "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
         "warranty": "1 año",
-        "image":"/products/1657835158754_img.png"
+        "image":[
+          "/products/1657835158754_img.png",
+          "/products/1658087082308_img.png",
+          "/products/1658087021345_img.png"
+        ]
       },
       {
         "id": 3,
@@ -27,14 +35,6 @@
       },
       {
         "id": 4,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "warranty": "3 años",
-        "image":"/products/1658089708829_img.png"
-      },
-      {
-        "id": 5,
         "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
         "price": 60,
         "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
@@ -83,6 +83,14 @@
       },
       {
         "id": 10,
+        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+        "price": 60,
+        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+        "warranty": "3 años",
+        "image":"/products/1658089708829_img.png"
+      },
+      {
+        "id": 1,
         "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
         "price": 60,
         "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",

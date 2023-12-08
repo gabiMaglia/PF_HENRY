@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
@@ -33,31 +34,34 @@ const ProductPrice = styled(Typography)({
 });
 
 const HomeProduct = ({ product }) => {
-  const { name, price, image } = product;
+  const { id, name, price, image } = product;
 
   return (
-    <ProductCard
-      sx={{
-        display: "flex",
-        padding: 0,
-        m: 3,
-      }}
-    >
-      <ProductMedia component="img" alt={name} src={image} />
-      <CardContent>
-        <Typography
-          variant="h6"
-          component="div"
-          color="textPrimary"
-          align="center"
-        >
-          {name}
-        </Typography>
-      </CardContent>
-      <ProductPrice variant="subtitle1" align="center">
-        ${price}
-      </ProductPrice>
-    </ProductCard>
+    <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
+      <ProductCard
+        sx={{
+          display: "flex",
+          padding: 0,
+          m: 3,
+          cursor: "pointer", // Agrega un cursor para indicar que es un enlace
+        }}
+      >
+        <ProductMedia component="img" alt={name} src={image} />
+        <CardContent>
+          <Typography
+            variant="h6"
+            component="div"
+            color="textPrimary"
+            align="center"
+          >
+            {name}
+          </Typography>
+        </CardContent>
+        <ProductPrice variant="subtitle1" align="center">
+          ${price}
+        </ProductPrice>
+      </ProductCard>
+    </Link>
   );
 };
 
