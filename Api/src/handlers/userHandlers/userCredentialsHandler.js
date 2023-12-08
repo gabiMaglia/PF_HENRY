@@ -2,8 +2,6 @@ const {
     editUserCredentials,
     getUserCredentials,
   } = require("../../controllers/userControllers/userCredentialsController");
-  
-
 const getUserCredentialsHandler = async (req, res) => {
     const { id } = req.params;
     try {
@@ -25,7 +23,6 @@ const getUserCredentialsHandler = async (req, res) => {
       return res.status(500).json(error.message);
     }
   };
-
   module.exports = {
     getUserCredentialsHandler,
     editUserCredentialsHandler,
