@@ -8,11 +8,15 @@ import {
   FormControl,
   CardMedia,
 } from "@mui/material";
+import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import "./alertStyles.min.css";
+import userLoginValidate from "../../helpers/userLoginValidate";
 
 const LoginModal = ({ isOpen, closeModal }) => {
   // Estilos del contenedor principal
   const boxModalStyle = {
+    zIndex: 2,
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -38,18 +42,53 @@ const LoginModal = ({ isOpen, closeModal }) => {
   // Estado para el manejo del formulario de inicio de sesión
   const [user, setUser] = useState({
     email: "",
-    password: "",
+    password: [],
+  });
+
+  const [errors, setErrors] = useState({
+    email: "El email es requerido",
+    password: "La contraseña es requerida",
   });
 
   // Función para manejar el cambio de estado del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
+    userLoginValidate({ ...user, [name]: value }, setErrors);
+    console.log(errors);
   };
 
   // Función para manejar la verificación del email
   const emailVerification = () => {
-    setIsEmailVerified(true);
+    if (!errors.email) {
+      setIsEmailVerified(true);
+    } else {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Email invalido",
+        text: errors.email,
+      });
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!errors.password) {
+      //Funcionalidad en caso de inicio correcto
+    } else {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Contraseña invalida",
+        text: errors.password,
+      });
+    }
   };
 
   // Función para renderizar los botones
@@ -108,6 +147,8 @@ const LoginModal = ({ isOpen, closeModal }) => {
             </Typography>
             <TextField
               label="Email"
+              error={Boolean(errors.email)}
+              helperText={errors.email}
               variant="outlined"
               fullWidth
               margin="normal"
@@ -136,7 +177,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
             />
             <Typography>No tienes cuenta? Regístrate.</Typography>
 
-            {renderButton("Registrarse", emailVerification)}
+            {renderButton("Registrarse", () => {})}
           </FormControl>
         ) : (
           <FormControl
@@ -182,6 +223,8 @@ const LoginModal = ({ isOpen, closeModal }) => {
               Ingresá tu contraseña
             </Typography>
             <TextField
+              error={Boolean(errors.password)}
+              helperText={errors.password}
               name="password"
               type="password"
               label="Password"
@@ -191,7 +234,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
               onChange={handleChange}
               margin="normal"
             />
-            {renderButton("Iniciar sesion", emailVerification)}
+            {renderButton("Iniciar sesion", handleSubmit)}
           </FormControl>
         )}
       </Box>
