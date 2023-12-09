@@ -1,9 +1,9 @@
 const { Router } = require("express");
-
-const {loginHandler} = require('../handlers/authHandler')
-
-const {checkAuthToken, checkRoleAuthToken} = require('../middlewares/tokenAuthMiddlewares')
-
+const {
+  checkAuthToken,
+  checkRoleAuthToken,
+} = require("../middlewares/tokenAuthMiddlewares");
+const accountRouter = require("./userRouter/accountRouter");
 // USER ROUTERS
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
@@ -18,23 +18,19 @@ const imageRouter = require("./productRouter/productImagesRouter");
 const serviceRouter = require("./serviceRouter/serviceRouter");
 
 const mainRouter = Router();
+
 // auth
-mainRouter.post('/login', loginHandler)
+mainRouter.use("/account", accountRouter);
 // UserRoutes
-
 mainRouter.use("/user", userRoutes);
-mainRouter.use("/user_role", checkRoleAuthToken(['admin']), userRoleRoutes);
+mainRouter.use("/user_role", checkRoleAuthToken(["admin"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
-
 // ProductRoute
 mainRouter.use("/product", productRouter);
 mainRouter.use("/brand", brandRouter);
 mainRouter.use("/category", categoryRouter);
-
 mainRouter.use("/stock", stockRouter);
-
 mainRouter.use("/image", imageRouter);
-
 
 // ServicesRoute
 mainRouter.use("/service", serviceRouter);
