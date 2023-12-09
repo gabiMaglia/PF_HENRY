@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const url = import.meta.env.VITE_BACK_URL;
 
 export const GetAllProduct = async () => {
@@ -56,3 +57,4 @@ export const getBrandProducts = async () => {
         return { error: searchProduct };
     }
 }
+
