@@ -12,6 +12,22 @@ const getAllUsers = async () => {
   }
   return user;
 };
+
+const getUserByDni = async (dni) => {
+  const user = await User.findOne({
+    where: { dni: dni },
+    include: [{ model: UserRole, as: "role" }, UserAddress],
+  });
+
+  if (!user) {
+    return {
+      error: true,
+      response: `Users not found`,
+    };
+  }
+  return user;
+};
+
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
     include: [{ model: UserRole, as: "role" }, UserAddress],
@@ -45,7 +61,7 @@ const postUser = async (
     email,
     telephone,
     image,
-    isActive : true
+    isActive: true,
   });
 
   // UserCredentials
@@ -156,6 +172,7 @@ const editUserById = async (
 module.exports = {
   getAllUsers,
   getUserById,
+  getUserByDni,
   postUser,
   editUserById,
 };

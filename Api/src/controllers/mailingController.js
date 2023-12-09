@@ -7,6 +7,7 @@ const supportMailController = async (
   content,
   destinationEmail
 ) => {
+  console.log(userEmail)
   return transporter
     .sendMail({
       from: userEmail,
