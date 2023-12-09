@@ -14,7 +14,12 @@ const supportMailController = async (
       subject: `Consulta de soporte de ${name}`,
       html: `<p>${content}</p>  <b>mi numero de telefono es ${phone}</b>`,
     })
-    .then(() => userEmail);
+    .then(() => {
+      return {
+        succes: true,
+        response: `Su consulta fue enviada correctamente`,
+      };
+    });
 };
 
 module.exports = { supportMailController };

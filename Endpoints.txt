@@ -1,7 +1,8 @@
 //////AUTH ENDPOINTS
 
-useRouter.post('account//signin', signInHandler)                    espera lo mismo que post user|
+useRouter.post('account/signin', signInHandler)                    espera lo mismo que post user|
 useRouter.get('account/confirm/:token', confirmAccountHandler)     espera token de confirmacion |   
+
 
 login          'localhost:3001/account/login' /  espera => {"username": "gabrielsk" "password": "lallala"} retorna {
     
