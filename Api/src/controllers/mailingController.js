@@ -12,7 +12,7 @@ const supportMailController = async (
       from: userEmail,
       to: destinationEmail,
       subject: `Consulta de soporte de ${name}`,
-      html: `<p>${content}</p>  <b>mi numero de telefono es ${phone}</b>`,
+      html: `<p>${content}</p>  <b>mi numero de telefono es ${phone} y mi correo es ${userEmail}</b>`,
     })
     .then(() => userEmail);
 };
