@@ -85,7 +85,7 @@ const sectionInformation = [
     items: [
       { icon: Phone, text: "+54 11 2256-8888" },
       { icon: Room, text: "Calle Falsa 123 - Buenos Aires" },
-      { icon: Email, text: "contacto@hypermegared.com.ar" },
+      { icon: Email, text: "hypermegared.it@gmail.com" },
       {
         icon: AccessTimeFilled,
         text: "Lunes a Viernes: 10 a 14hs y 17 a 20hs | Sábados: 10 a 14hs.",

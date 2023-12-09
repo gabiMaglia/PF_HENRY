@@ -1,18 +1,22 @@
+//HOOKS
 import { Routes, Route } from "react-router-dom";
-
-import SearchBar from "./views/SearchBar/SearchBar.view";
-import NavBar from "./views/NavBar/NavBar.view";
+//COMPONENTS
+import SearchBar from "./components/SearchBar/SearchBar.component";
+import NavBar from "./components/NavBar/NavBar.component";
+import Footer from "./components/Footer/Footer.components";
+//VIEWS
 import Home from "./views/Home/Home.view";
 import Products from "./views/Products/Products.view";
 import Support from "./views/Support/Support.view";
 import Questions from "./views/Questions/Questions.view";
-import Footer from "./views/Footer/Footer.views";
 import Detail from "./views/Detail/Detail.view";
-import PRODUCTS from "./DataBase/bdd.json";
-
+//DB
+import PRODUCTS from "./dataBase/bdd.json";
+//HELPERS
 import PATHROUTES from "./helpers/pathRoute";
 
-function App() {
+const App = () => {
+
   return (
     <>
       <div>
@@ -23,12 +27,15 @@ function App() {
           <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
           <Route path={PATHROUTES.SUPPORT} element={<Support />} />
           <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
-          <Route path="/product/:id" element={<Detail products={PRODUCTS} />} />
+          <Route
+            path={PATHROUTES.DETAIL}
+            element={<Detail products={PRODUCTS} />}
+          />
         </Routes>
         <Footer />
       </div>
     </>
   );
-}
+};
 
 export default App;

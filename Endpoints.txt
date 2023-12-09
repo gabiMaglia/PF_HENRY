@@ -1,7 +1,10 @@
 //////AUTH ENDPOINTS
 
+useRouter.post('account/signin', signInHandler)                    espera lo mismo que post user|
+useRouter.get('account/confirm/:token', confirmAccountHandler)     espera token de confirmacion |   
 
-login          'localhost:3001/login' /  espera => {"username": "gabrielsk" "password": "lallala"} retorna {
+
+login          'localhost:3001/account/login' /  espera => {"username": "gabrielsk" "password": "lallala"} retorna {
     
     "tokenSession": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYTM1YmNkNy04MGEzLTQyNjctYjc2Yy1lZGRmODY0OWVhNzIiLCJ1c2VybmFtZSI6ImdhYnJpZWxzayIsImlhdCI6MTcwMjAxMjUyOCwiZXhwIjoxNzAyMDE2MTI4fQ.GT2hINxFUPhgA86YWjAfm9lu9sO3eImM30WWB_Bw2R4",
     "userId": "0a35bcd7-80a3-4267-b76c-eddf8649ea72",
@@ -10,7 +13,10 @@ login          'localhost:3001/login' /  espera => {"username": "gabrielsk" "pas
 }
 Luego hay que mandar ese token en los headers de la peticion con tipo de autorizacion
 Bearer Token
-    
+//MAILING ENDPOINTS
+
+Send support mail http://localhost:3001/mailer/support_mail expects {name, phone, eamail, content}
+
 //////USER ENDPOINTS
 
 Get all users       "localhost:3001/users/"      Trae todos los usuaiors sin direccion ni credenciales ni roles
@@ -21,8 +27,9 @@ Delete user by id   "localhost:3001/users/:id"   Elimina usuario por id
 
 /////USER_ROLES ENDPOINTS
 
-Get all Roles       "localhost:3001/user_role"          Trae todos los Roles disponibles 
-Create new Role     "localhost:3001/user_role/create"   Edita Role de un usuario  / expects { role_name : "roleName"}
+Get all Roles       "localhost:3001/user_role"                        Trae todos los Roles disponibles 
+Get users by Roles  "localhost:3001/user_role/by_role/"role"          Trae todos los usuarios con un determinado Rol 
+Create new Role     "localhost:3001/user_role/create"                 Edita Role de un usuario  / expects { role_name : "roleName"}
 
 /////USER_CREDENTIALS ENDPOINTS
 
@@ -59,11 +66,11 @@ si no llega en la query sera autocompletado por la info del objeto alojado en la
 
 Ruta de servicios
 
-añadir un modelo a servicio tecnico "localhost:3001/service/add" se completaria por medio de un form
-actualizar el diagnostico tecnico "localhost:3001/service/updateTech/:id" el id seria el id del status
-actualizar el diagnostico final "localhost:3001/service/updateFinal/:id"  el id seria el id del status
-confirmar la reparacion "localhost:3001/service/confirm/:id"  el id seria el id del status
-confirmar que la reparacion se termino "localhost:3001/service/finish/:id"  el id seria el id del status
+añadir un modelo a servicio tecnico "localhost:3001/service" se completaria por medio de un form
+actualizar un status de servicio tecnico es una peticion put a "localhost:3001/service/:id(debe ser el id del status)" y 
+dependiendo de lo que se le ponga como field va a actualizar uno o otro estado. 
+para traer todos los servicios es una request get a "localhost:3001/service"
+para traer por id es a "localhost:3001/service/:id(debe ser el id del servicio)"
 
 {POST SERVICE EXPECTED OBJECT}
 
@@ -77,14 +84,25 @@ confirmar que la reparacion se termino "localhost:3001/service/finish/:id"  el i
 }
 {PUT SERVICE STATUS EXPECTED OBJECT}
 {
-
-"technical_diagnosis":"Se debe cambiar la bateria"
-	
+"field":"final_diagnosis",
+	"value":"se modifico la bateria"
 }
 
 en caso de querer cambiar el confirm repair o finish repair
 {
-
-"confirm_repair":true // o false depende de lo que quieran
-
+"field":"confirm_repair",
+	"value":true
 }
+
+
+//////USER ENDPOINTS
+
+Get all product       "localhost:3001/product/"      Trae todos los product 
+Get product by id     "localhost:3001/product/:id"   Trae un product completo con brand y categorias asociadas
+Post product           "localhost:3001/product/"      Crea product nuevo
+Put product            "localhost:3001/product/:id"   Modifica product por id 
+Delete product by id   "localhost:3001/product/:id"   Elimina product por id
+
+///FILTRADOS
+
+ getBrandWithProductsHandler     "localhost:3001/brand/filter/:name"    trae a todos los productos que pertenezcan a esa brand. ej: "localhost:3001/brand/filter/ASSER"

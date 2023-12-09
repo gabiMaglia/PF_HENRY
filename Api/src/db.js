@@ -18,17 +18,13 @@ const ProductImageModel = require("./models/productModels/ProductImage");
 const koyebDb = process.env.KOYEB_DB;
 const localDb = process.env.LOCAL_DB;
 
-const sequelize = new Sequelize(
-  isProduction ? koyebDb : localDb,
-
-  {
-    dialect: "postgres",
-    dialectOptions: {
-      ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
-    },
-    logging: false,
-  }
-);
+const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
+  },
+  logging: false,
+});
 
 // INICIALIZAMOS LOS MODELOS USER
 UserModel(sequelize);

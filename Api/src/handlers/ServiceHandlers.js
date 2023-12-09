@@ -1,13 +1,10 @@
 const { Service, Service_status } = require("../db");
 const {
   addServiceController,
-  UpdateTechDiagnosisController,
-  UpdateFinalDiagnosisController,
-  updateConfirmRepairController,
-  updateRepairFinishController,
+  updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
-} = require("../controllers/serviceController");
+} = require("../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
   const {
@@ -25,8 +22,12 @@ const addServiceHandler = async (req, res) => {
       ClientId,
       technicianId
     );
+    if (newService.error) {
+      return res.status(404).send(newService.response);
+    }
+
     if (!newService) {
-      return res.status(404).json({ error:error.message });
+      return res.status(404).json({ error: error.message });
     }
     res.status(200).json(newService);
   } catch (error) {
@@ -34,104 +35,53 @@ const addServiceHandler = async (req, res) => {
   }
 };
 
-const UpdateTechDiagnosis = async (req, res) => {
+const updateServiceStatus = async (req, res) => {
   const { id } = req.params;
-  const { technical_diagnosis } = req.body;
+  const { field, value } = req.body;
   try {
-    const UpdateTechDiagnosis = await UpdateTechDiagnosisController(
+    const updatedService = await updateServiceStatusController(
       id,
-      technical_diagnosis
+      field,
+      value
     );
-    if (!UpdateTechDiagnosis) {
-      return res.status(404).json({ error: error.message });
+    if (updatedService.error) {
+      return res.status(404).send(updatedService.response);
     }
-
-    return res.status(200).json(UpdateTechDiagnosis);
+    if (!updatedService) {
+      return res.status(404).json({ error: "no se modifico el status" });
+    }
+    return res.status(200).json(updatedService);
   } catch (error) {
     return res.status(500).json({ error: error.message });
-  }
-};
-const UpdateFinalDiagnosis = async (req, res) => {
-  const { id } = req.params;
-  const { final_diagnosis } = req.body;
-  try {
-    const UpdatefinDiagnosis = await UpdateFinalDiagnosisController(
-      id,
-      final_diagnosis
-    );
-    if (!UpdatefinDiagnosis) {
-      return res.status(404).json({ error: error.message });
-    }
-
-    return res.status(200).json(UpdatefinDiagnosis);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-const updateConfirmRepair = async (req, res) => {
-  const { id } = req.params;
-  const { confirm_repair } = req.body;
-  try {
-    const UpdateConfirm = await updateConfirmRepairController(
-      id,
-      confirm_repair
-    );
-    if (!UpdateConfirm) {
-      return res.status(404).json({ error: "no se confirmo reparacion" });
-    }
-    return res.status(200).json({ UpdateConfirm });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-const updateRepairFinish = async (req, res) => {
-  const { id } = req.params;
-  const { reparir_finish } = req.body;
-  try {
-    const reparirFinish = await updateRepairFinishController(
-      id,
-      reparir_finish
-    );
-    if (!reparirFinish) {
-      return res.status(404).json({ error: error.message });
-    }
-    return res.status(200).json({ reparirFinish });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 };
 const getAllServices = async (req, res) => {
   try {
     const servicios = await getAllServicesController();
-    if(servicios.error){
-    return res.status(404).json({ error: servicios.response });
-
+    if (servicios.error) {
+      return res.status(404).send(servicios.response);
     }
     return res.status(200).json(servicios);
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-const getServiceById=async(req,res)=>{
-  const {id}=req.params
+const getServiceById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const response =await getServiceByIdController(id)
-
+    const response = await getServiceByIdController(id);
+    if (response.error) {
+      return res.status(404).send(response.response);
+    }
     return res.status(200).json(response);
-
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
-}
+};
 module.exports = {
   addServiceHandler,
-  updateRepairFinish,
-  updateConfirmRepair,
-  UpdateFinalDiagnosis,
-  UpdateTechDiagnosis,
+  updateServiceStatus,
   getAllServices,
-  getServiceById
+  getServiceById,
 };

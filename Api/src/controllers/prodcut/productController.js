@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const {
   Product,
   ProductBrand,
@@ -180,15 +181,29 @@ const getProductById = async (id) => {
   }
 };
 
+//SEARCH BAR
 const searchByName = async (name) => {
-  const product = await Product.findAll({
-    where: {
-      name: name,
-    },
-  });
+  try {
+    const products = await Product.findAll({
+      where: {
+        [Op.or]: [
+          {
+            name: {
+              [Op.like]: `%${name}%`,
+            },
+          },
+          {
+            description: {
+              [Op.like]: `%${name}%`,
+            },
+          },
+        ],
+      },
+    });
 
-  if (product) {
-    return product;
+    return products;
+  } catch (error) {
+    throw new Error(`Error en la búsqueda: ${error.message}`);
   }
 };
 
