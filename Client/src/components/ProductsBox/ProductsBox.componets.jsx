@@ -1,12 +1,23 @@
+import React, { useState } from "react";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 import HomeProduct from "../HomeProduct/HomeProduct.component";
 import { Box, Button, Container } from "@mui/material";
 
 const ProductBox = ({ products, currentPage, productsPerPage }) => {
+  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
+
   const startIndex = (currentPage - 1) * productsPerPage;
 
   const endIndex = startIndex + productsPerPage;
 
   const currentProducts = products.slice(startIndex, endIndex);
+
+  const handleAddToCart = (product) => {
+    // Agrega el producto al carrito
+    setCartItems([...cartItems, product]);
+    console.log("Producto agregado al carrito:", product);
+  };
+
   return (
     <Container
       sx={{
@@ -37,6 +48,7 @@ const ProductBox = ({ products, currentPage, productsPerPage }) => {
                 color: "white",
               },
             }}
+            onClick={() => handleAddToCart(product)}
           >
             AGREGAR AL CARRITO
           </Button>

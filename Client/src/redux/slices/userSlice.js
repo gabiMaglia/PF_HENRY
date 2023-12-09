@@ -39,6 +39,6 @@ const userSlice = createSlice({
 // export const { addUser } = userSlice.actions; //Opcion declaracion y exportacion al mismo tiempo
 
 const addUser = userSlice.actions.addUser; //Declaracion addUser
-
 export { addUser }//Exportacion addUser
+
 export default userSlice.reducer;
