@@ -21,8 +21,9 @@ Delete user by id   "localhost:3001/users/:id"   Elimina usuario por id
 
 /////USER_ROLES ENDPOINTS
 
-Get all Roles       "localhost:3001/user_role"          Trae todos los Roles disponibles 
-Create new Role     "localhost:3001/user_role/create"   Edita Role de un usuario  / expects { role_name : "roleName"}
+Get all Roles       "localhost:3001/user_role"                        Trae todos los Roles disponibles 
+Get users by Roles  "localhost:3001/user_role/by_role/"role"          Trae todos los usuarios con un determinado Rol 
+Create new Role     "localhost:3001/user_role/create"                 Edita Role de un usuario  / expects { role_name : "roleName"}
 
 /////USER_CREDENTIALS ENDPOINTS
 

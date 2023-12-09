@@ -1,27 +1,29 @@
 const { Router } = require("express");
+
 const {loginHandler} = require('../handlers/authHandler')
 
-const {checkAuthToken} = require('../controllers/authController')
+const {checkAuthToken, checkRoleAuthToken} = require('../middlewares/tokenAuthMiddlewares')
 
+// USER ROUTERS
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
 const userCredentialsRoutes = require("./userRouter/userCredentialsRouter");
+// PRODUCT ROUTERS
 const productRouter = require("./productRouter/productRouter");
-const serviceRouter = require("./serviceRouter/serviceRouter");
 const brandRouter = require("./productRouter/productBrandRouter");
 const categoryRouter = require("./productRouter/productCategoryRouter");
-
 const stockRouter = require("./productRouter/productStockRouter");
- 
 const imageRouter = require("./productRouter/productImagesRouter");
+// SERVICES ROUTERS
+const serviceRouter = require("./serviceRouter/serviceRouter");
 
 const mainRouter = Router();
 // auth
 mainRouter.post('/login', loginHandler)
 // UserRoutes
-// , checkAuthToken
+
 mainRouter.use("/user", userRoutes);
-mainRouter.use("/user_role", userRoleRoutes);
+mainRouter.use("/user_role", checkRoleAuthToken(['admin']), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 
 // ProductRoute
