@@ -1,10 +1,10 @@
 require("dotenv").config();
+const { sendConfirmationEmail } = require("../utils/sendConfirmationEmail.js");
 const {tokenSign} = require('../jwt/tokenGenerator.js')
 const {UserAddress, UserCredentials, User, UserRole } = require("../db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { sendConfirmationEmail } = require("../utils/sendConfirmationEmail.js");
 
 const confirmAccountController = async (token ) => {
   const tokenDecode = jwt.verify(token, process.env.SECRET)
@@ -16,7 +16,7 @@ const confirmAccountController = async (token ) => {
   }
   else {
    const user = await User.findByPk(tokenDecode.userID)
-   user.update({isActive: true})
+   user.update({isActive: true, isVerified:true})
    console.log(user.name)
    return {
     response: user.name
@@ -92,8 +92,8 @@ const registerUser = async ( name,
   const completeUser = await User.findByPk(newUser.id, {
     include: [UserAddress, { model: UserRole, as: "role" }],
   });
+  sendConfirmationEmail(process.env.EMAIL_MAILER, email, newUser.id, process.env.SECRET, process.env.API_URL)
 
-  sendConfirmationEmail('gab.maglia@gmail.com', 'gab.maglia@gmail.com', newUser.id, process.env.SECRET, 'localhost:3001'  )
   return completeUser;
 };
 

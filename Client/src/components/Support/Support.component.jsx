@@ -1,5 +1,6 @@
 //HOOKS
 import { useState } from "react";
+import axios from "axios";
 //MATERIAL UI
 import { Box, TextField, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
@@ -72,7 +73,7 @@ const SupportComponent = () => {
   };
 
   //HANDLE SUBMIT
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -88,16 +89,41 @@ const SupportComponent = () => {
       });
       return;
     }
-    Swal.fire({
-      icon: "success",
-      title: "Mensaje Enviado",
-      text: "Responderemos a la brevedad.",
-    });
-    setName("");
-    setPhone("");
-    setEmail("");
-    setArea("");
-  };
+
+    try {
+      const { data } = await axios.post('http://localhost:3001/mailer/support_mail', {
+        name,
+        phone,
+        email,
+        content: area,
+      });
+
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Mensaje Enviado",
+          text: "Responderemos a la brevedad.",
+        });
+        setName("");
+        setPhone("");
+        setEmail("");
+        setArea("");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.response || "Hubo un error en el servidor.",
+        });
+      }
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Hubo un error al enviar el formulario.",
+      });
+    }    
+  }; 
 
   return (
     <>
@@ -171,6 +197,7 @@ const SupportComponent = () => {
             onChange={(e) => handleChangeEmail(e.target.value)}
           />
           <Textarea
+            id="contenet"
             disabled={false}
             minRows={4}
             size="lg"

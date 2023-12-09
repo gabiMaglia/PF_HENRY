@@ -139,9 +139,15 @@ const Detail = () => {
   }
 
   const { name, price, description, warranty, image } = product;
+  const [cartItems, setCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(
     image && image.length > 0 ? image[0] : null
   );
+
+  const handleAddToCart = () => {
+    setCartItems([...cartItems, product]);
+    console.log("Producto agregado al carrito:", product);
+  };
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const fontSizeName = isLargeScreen ? 32 : 24;
@@ -259,7 +265,7 @@ const Detail = () => {
             <CustomButton
               variant="contained"
               size="large"
-              onClick={() => handleAddToCart(product)}
+              onClick={handleAddToCart}
             >
               Agregar al Carrito
             </CustomButton>

@@ -9,12 +9,11 @@ const sendConfirmationEmail = async (adminEmail, userEmail, userID, token, gatew
         to: userEmail,
         subject: 'Confirm your account to log in!',
         html :`<p>Please confirm your email <a href="${confirmationUrl}">Confirm</a></p>
-               <p> If you are having any troubles whit the link click here 
+               <p> If you are having any troubles whit the link click here
                <b>${confirmationUrl}</b> </p>`
-        
+
     }).then(()=> userEmail)
 
 }
-
 
 module.exports = {sendConfirmationEmail}
