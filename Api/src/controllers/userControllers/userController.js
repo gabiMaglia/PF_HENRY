@@ -1,6 +1,7 @@
-const { User, UserRole, UserAddress } = require("../../db.js");
-
+require("dotenv").config();
 const bcrypt = require("bcrypt");
+const { User, UserRole, UserAddress } = require("../../db.js");
+const { sendConfirmationEmail } = require("../../utils/sendConfirmationEmail.js");
 
 const getAllUsers = async () => {
   const user = await User.findAll();
@@ -129,6 +130,18 @@ const editUserById = async (
       error: true,
       response: `No se encontro el usuario requerido `,
     };
+  const isEmailDifferent = email !== user.email;
+
+  if (email !== '' && isEmailDifferent) {
+   await sendConfirmationEmail(
+      process.env.EMAIL_MAILER,
+      email,
+      user.id,
+      process.env.SECRET,
+      process.env.API_URL
+    );
+    await user.update({isVerified: false})
+  }
   await user.update({
     name: name || user.name,
     surname: surname || user.surname,
