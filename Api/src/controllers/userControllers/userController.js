@@ -1,6 +1,7 @@
-const { User, UserRole, UserAddress } = require("../../db.js");
-
+require("dotenv").config();
 const bcrypt = require("bcrypt");
+const { User, UserRole, UserAddress } = require("../../db.js");
+const { sendConfirmationEmail } = require("../../utils/sendConfirmationEmail.js");
 
 const getAllUsers = async () => {
   const user = await User.findAll();
@@ -12,6 +13,22 @@ const getAllUsers = async () => {
   }
   return user;
 };
+
+const getUserByDni = async (dni) => {
+  const user = await User.findOne({
+    where: { dni: dni },
+    include: [{ model: UserRole, as: "role" }, UserAddress],
+  });
+
+  if (!user) {
+    return {
+      error: true,
+      response: `Users not found`,
+    };
+  }
+  return user;
+};
+
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
     include: [{ model: UserRole, as: "role" }, UserAddress],
@@ -45,7 +62,7 @@ const postUser = async (
     email,
     telephone,
     image,
-    isActive : true
+    isActive: true,
   });
 
   // UserCredentials
@@ -113,6 +130,18 @@ const editUserById = async (
       error: true,
       response: `No se encontro el usuario requerido `,
     };
+  const isEmailDifferent = email !== user.email;
+
+  if (email !== '' && isEmailDifferent) {
+   await sendConfirmationEmail(
+      process.env.EMAIL_MAILER,
+      email,
+      user.id,
+      process.env.SECRET,
+      process.env.API_URL
+    );
+    await user.update({isVerified: false})
+  }
   await user.update({
     name: name || user.name,
     surname: surname || user.surname,
@@ -156,6 +185,7 @@ const editUserById = async (
 module.exports = {
   getAllUsers,
   getUserById,
+  getUserByDni,
   postUser,
   editUserById,
 };

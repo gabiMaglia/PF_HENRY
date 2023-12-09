@@ -3,18 +3,24 @@ const transporter = require("./../config/mailer");
 const supportMailController = async (
   name,
   phone,
-  userEmail,
+  email,
   content,
   destinationEmail
 ) => {
+  console.log(email)
   return transporter
     .sendMail({
-      from: userEmail,
+      from: email,
       to: destinationEmail,
       subject: `Consulta de soporte de ${name}`,
-      html: `<p>${content}</p>  <b>mi numero de telefono es ${phone}</b>`,
+      html: `<p>${content}</p>  <b>mi numero de telefono es ${phone} y mi correo es ${email}</b>`,
     })
-    .then(() => userEmail);
+    .then(() => {
+      return {
+        success: true,
+        response: `Su consulta fue enviada correctamente`,
+      };
+    });
 };
 
 module.exports = { supportMailController };
