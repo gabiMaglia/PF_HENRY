@@ -16,7 +16,6 @@ import PRODUCTS from "./dataBase/bdd.json";
 import PATHROUTES from "./helpers/pathRoute";
 
 const App = () => {
-
   return (
     <>
       <div>

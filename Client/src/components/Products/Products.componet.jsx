@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.componets";
-import data from "../../dataBase/bdd.json";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useSelector } from "react-redux";
 
 const Products = () => {
   const theme = createTheme({
@@ -16,7 +16,8 @@ const Products = () => {
       },
     },
   });
-  const { products } = data;
+  const { products } = useSelector((state) => state.product);
+
   const cardsPage = 8;
 
   const pageCount = Math.ceil(products?.length / cardsPage);
