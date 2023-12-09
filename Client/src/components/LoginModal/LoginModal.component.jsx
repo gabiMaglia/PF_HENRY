@@ -12,7 +12,7 @@ import {
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import "./alertStyles.min.css";
-import userLoginValidate from "../../helpers/userLoginValidate";
+import { userLoginValidate } from "../../helpers/userValidate";
 
 const LoginModal = ({ isOpen, closeModal }) => {
   // Estilos del contenedor principal
