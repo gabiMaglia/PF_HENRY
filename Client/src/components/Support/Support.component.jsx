@@ -171,6 +171,7 @@ const SupportComponent = () => {
             onChange={(e) => handleChangeEmail(e.target.value)}
           />
           <Textarea
+            id="contenet"
             disabled={false}
             minRows={4}
             size="lg"
