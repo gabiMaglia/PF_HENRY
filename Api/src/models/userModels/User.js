@@ -14,25 +14,25 @@ module.exports = (sequelize) => {
     },
     surname: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     birthdate: {
       type: DataTypes.STRING,
       allowNull: true,
     },
     dni: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
       isEmail: true,
+      unique: true,
     },
     telephone: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     image: {
       type: DataTypes.STRING,

@@ -8,6 +8,8 @@ const accountRouter = require("./userRouter/accountRouter");
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
 const userCredentialsRoutes = require("./userRouter/userCredentialsRouter");
+// MAIL ROUTERS
+const mailRouter = require('./mailingRouter/mailRouter')
 // PRODUCT ROUTERS
 const productRouter = require("./productRouter/productRouter");
 const brandRouter = require("./productRouter/productBrandRouter");
@@ -26,6 +28,8 @@ mainRouter.use("/account", accountRouter);
 mainRouter.use("/user", userRoutes);
 mainRouter.use("/user_role", checkRoleAuthToken(["admin"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
+// MailingRoute
+mainRouter.use('/mailer/', mailRouter )
 // ProductRoute
 mainRouter.use("/product", productRouter);
 mainRouter.use("/brand", brandRouter);
