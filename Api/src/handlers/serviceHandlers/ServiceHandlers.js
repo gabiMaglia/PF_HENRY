@@ -1,10 +1,10 @@
-const { Service, Service_status } = require("../db");
+const { Service, Service_status } = require("../../db");
 const {
   addServiceController,
   updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
-} = require("../controllers/serviceControllers/serviceController");
+} = require("../../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
   const {
