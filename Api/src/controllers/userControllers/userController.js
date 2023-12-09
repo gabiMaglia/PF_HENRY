@@ -1,4 +1,4 @@
-const { User, UserRole, UserAddress, UserCredentials } = require("../../db.js");
+const { User, UserRole, UserAddress } = require("../../db.js");
 
 const bcrypt = require("bcrypt");
 
@@ -45,6 +45,7 @@ const postUser = async (
     email,
     telephone,
     image,
+    isActive : true
   });
 
   // UserCredentials
@@ -152,26 +153,9 @@ const editUserById = async (
   return updatedUser;
 };
 
-const deleteUserById = async (id) => {
-  const user = await User.findByPk(id);
-  if (!user?.name) {
-    return {
-      error: true,
-      response: `No se encontro ningun usuario con ese id`,
-    };
-  } else {
-    await await User.destroy({
-      where: { id: id },
-      force: true,
-    });
-    return { response: `Eliminaste correctamente al usuario ${user.name}` };
-  }
-};
-
 module.exports = {
   getAllUsers,
   getUserById,
   postUser,
   editUserById,
-  deleteUserById,
 };
