@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
@@ -5,7 +6,6 @@ import img from "/icons/logo.jpeg";
 import { Input } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
-import { useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
@@ -18,22 +18,27 @@ const Img = styled("img")({
 const Logo = styled("img")({
   width: 30,
   height: 30,
+  position: "relative",
 });
 
 export default function SearchAppBar() {
   const [input, setInput] = useState("");
 
-  const [savedInput, setSavedInput] = useLocalStorage("savedInput", "");
+  // Estado del carrito manejado por useLocalStorage
+  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
   const [loginModalIsOpen, setLoginMododalIsOpen] = useState(false);
+
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleChange = (event) => {
     setInput(event.target.value);
   };
 
-  const handleSearch = () => {
-    // Perform search or any other action with the input value
-    console.log("Searching for:", input);
+  const handleCartButtonClick = () => {
+    // Aquí puedes realizar la acción deseada al hacer clic en el carrito
+    // Por ejemplo, mostrar un modal del carrito
+    setLoginModalIsOpen(true);
   };
 
   return (
@@ -48,7 +53,31 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      <Img src={img} alt="Logotipo" />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "pointer",
+        }}
+        onClick={handleCartButtonClick}
+      >
+        <Img src={img} alt="Logotipo" />
+        {cartItemCount > 0 && (
+          <span
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "50%",
+              padding: "2px 5px",
+            }}
+          >
+            {cartItemCount}
+          </span>
+        )}
+      </Box>
       <Box
         sx={{
           mt: { xs: 2 },
@@ -76,7 +105,7 @@ export default function SearchAppBar() {
           disableUnderline
         />
         <Button
-          onClick={handleSearch}
+          onClick={handleCartButtonClick}
           sx={{
             height: 40,
             textAlign: "center",
@@ -124,7 +153,7 @@ export default function SearchAppBar() {
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
-        closeModal={setLoginMododalIsOpen}
+        closeModal={() => setLoginModalIsOpen(false)}
       />
     </Box>
   );
