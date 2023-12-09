@@ -3,9 +3,6 @@ const {
   getUserById,
   postUser,
   editUserById,
-  editUserCredentials,
-  getUserCredentials,
-  deleteUserById,
 } = require("../../controllers/userControllers/userController");
 
 const getUsersHandler = async (req, res) => {
@@ -106,20 +103,10 @@ const editUserByIdHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-const deleteUserHandler = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const response = await deleteUserById(id);
-    res.status(200).json(response);
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
-};
 
 module.exports = {
   getUsersHandler,
   getUserByIdHandler,
   postUserHandler,
   editUserByIdHandler,
-  deleteUserHandler,
 };
