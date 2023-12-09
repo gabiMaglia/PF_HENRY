@@ -100,3 +100,30 @@ Delete product by id   "localhost:3001/product/:id"   Elimina product por id
 ///FILTRADOS
 
  getBrandWithProductsHandler     "localhost:3001/brand/filter/:name"    trae a todos los productos que pertenezcan a esa brand. ej: "localhost:3001/brand/filter/ASSER"
+
+
+{POST PRODUCT EXPECTED OBJECT}
+
+{
+  "name": "Laptop I2000",
+  "price": "13200.00",
+  "description": "holis que se yo ",
+"warranty": "2028-01-11",
+  "is_deleted": "false",
+  "soldCount": "88",
+  "stock": "345",
+  "categoryName": ["computadora", "laptop"],
+  "brandName": "Lenovo",
+  "images": ["imffa0.png", "fff.png"]  //pueden ser url de internet
+}
+
+
+{PUT PRODUCT EXPECTED OBJECT}
+
+
+{
+    "propiedad": "nuevoValor"
+    "otraPropiedad": "nuevoValor"
+} 
+
+No es necesario reescribir todas las propiedades
