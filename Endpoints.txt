@@ -87,3 +87,16 @@ en caso de querer cambiar el confirm repair o finish repair
 "field":"confirm_repair",
 	"value":true
 }
+
+
+//////USER ENDPOINTS
+
+Get all product       "localhost:3001/product/"      Trae todos los product 
+Get product by id     "localhost:3001/product/:id"   Trae un product completo con brand y categorias asociadas
+Post product           "localhost:3001/product/"      Crea product nuevo
+Put product            "localhost:3001/product/:id"   Modifica product por id 
+Delete product by id   "localhost:3001/product/:id"   Elimina product por id
+
+///FILTRADOS
+
+ getBrandWithProductsHandler     "localhost:3001/brand/filter/:name"    trae a todos los productos que pertenezcan a esa brand. ej: "localhost:3001/brand/filter/ASSER"
