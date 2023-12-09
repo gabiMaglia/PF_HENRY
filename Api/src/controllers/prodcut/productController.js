@@ -196,12 +196,12 @@ const searchByName = async (name) => {
         [Op.or]: [
           {
             name: {
-              [Op.like]: `%${name}%`,
+              [Op.iLike]: `%${name}%`,
             },
           },
           {
             description: {
-              [Op.like]: `%${name}%`,
+              [Op.iLike]: `%${name}%`,
             },
           },
         ],
