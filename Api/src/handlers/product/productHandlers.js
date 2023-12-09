@@ -112,7 +112,7 @@ const searchByNameHandler = async (req, res) => {
   const name = req.query.name;
   try {
     const results = await searchByName(name);
-    if (results && results.length > 0) {
+    if (results.length > 0) {
       res.status(200).json(results);
     } else {
       res.status(404).json({ error: `No products found` });
