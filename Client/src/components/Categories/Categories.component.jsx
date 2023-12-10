@@ -56,12 +56,22 @@ const FiltersSorting = () => {
   });
 
   return (
-    <Container sx={{ display: "flex", flexDirection: "column" }}>
-      <CardMedia
-        padding="20px"
+    <Container
+      maxWidth="2200px"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Container
+        maxWidth="2200px"
         height="auto"
-        width="100%"
-        sx={{ backgroundColor: "black" }}
+        sx={{
+          backgroundColor: "black",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
         <Box
           sx={{
@@ -69,10 +79,9 @@ const FiltersSorting = () => {
             display: "grid",
             gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
             flexDirection: "row",
-            ml: 10,
+            ml: { xs: 1, lg: 10 },
             mb: 2,
-            backgroundColor: "back",
-            width: "100%",
+            width: "80%",
           }}
         >
           {categories.map((categorie) => (
@@ -108,7 +117,7 @@ const FiltersSorting = () => {
             </Button>
           ))}
         </Box>
-      </CardMedia>
+      </Container>
       <Box display="flex" flexDirection="row">
         <FormControl
           sx={{
