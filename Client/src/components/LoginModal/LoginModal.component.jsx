@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 
@@ -33,6 +34,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
   const boxButtonStyle = {
     borderRadius: 2,
     backgroundColor: "#fd611a",
+    minWidth: "100px",
     width: "30%",
     height: "10%",
     mb: "1em",
@@ -131,6 +133,26 @@ const LoginModal = ({ isOpen, closeModal }) => {
       }}
     >
       <Box sx={boxModalStyle}>
+        <Button
+          sx={{
+            padding: "0px",
+            color: "black",
+            width: ".01px",
+            height: ".01px",
+          }}
+        >
+          <CancelIcon
+            sx={{
+              position: "fixed",
+              top: ".5em",
+              right: ".5em",
+            }}
+            onClick={() => {
+              closeModal(false);
+            }}
+          />
+        </Button>
+
         {!isUsernameVerified ? (
           <FormControl
             fullWidth
@@ -192,12 +214,13 @@ const LoginModal = ({ isOpen, closeModal }) => {
           >
             <Button
               sx={{
+                padding: "0px",
                 color: "black",
-                width: "0.1em",
-                height: ".1em",
                 position: "fixed",
-                top: "3em",
-                left: "1em",
+                width: ".01px",
+                height: ".01px",
+                top: "1.8em",
+                left: ".5em",
               }}
               onClick={resetModal}
             >
