@@ -227,7 +227,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
               Ingresá tu contraseña
             </Typography>
             <TextField
-              error={errors.password}
+              error={Boolean(errors.password)}
               name="password"
               type="password"
               label="Password"

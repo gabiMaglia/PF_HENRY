@@ -36,7 +36,7 @@ export default function SearchAppBar() {
   // Estado del carrito manejado por useLocalStorage
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
-  const [loginModalIsOpen, setLoginMododalIsOpen] = useState(false);
+  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
   const [cartItemCount, setCartItemCount] = useState(0);
 
@@ -70,7 +70,10 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
+        <Img
+          src={img}
+          alt="Logotipo"
+        />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -153,7 +156,7 @@ export default function SearchAppBar() {
               color: "white",
             }}
             onClick={() => {
-              setLoginMododalIsOpen(true);
+              setLoginModalIsOpen(true);
             }}
           >
             INICIAR SESIÓN
