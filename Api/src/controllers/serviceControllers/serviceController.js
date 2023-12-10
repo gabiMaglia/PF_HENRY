@@ -130,10 +130,22 @@ const getServiceByIdController = async (id) => {
   }
   return service;
 };
-
+const getServiceByClient=async(id)=>{
+  const Services=await Service.findAll({
+    where:{userId:id}
+  })
+  if (Services.length === 0) {
+    return {
+      error: true,
+      response: `service not found`,
+    };
+  }
+  return Services
+}
 module.exports = {
   addServiceController,
   updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
+  getServiceByClient
 };
