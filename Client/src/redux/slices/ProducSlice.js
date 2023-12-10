@@ -19,10 +19,13 @@ const productSlice = createSlice({
     getProductById: (state, action) => {
       state.productById = action.payload;
     },
+    search: (state, action) => {
+        state.products = action.payload;
+    }
   },
 });
 
-export const { getProducts, getProductById } = productSlice.actions;
+export const { getProducts, getProductById, search } = productSlice.actions;
 
 export default productSlice.reducer;
 
@@ -46,3 +49,12 @@ export const fetchProductById = (id) => (dispatch) => {
       console.error("Error fetching product by ID:", error);
     });
 };
+
+export const fechSearch = (name) => (dispatch) => {
+    axios
+      .get(`${url}/search?name=${name}`)
+      .then((response) => {
+        dispatch(search(response.data));
+      })
+      .catch((error) => console.log(error));
+  };
