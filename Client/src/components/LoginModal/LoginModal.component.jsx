@@ -18,7 +18,6 @@ import { userLoginValidate } from "../../helpers/userValidate";
 const LoginModal = ({ isOpen, closeModal }) => {
   // Estilos del contenedor principal
   const boxModalStyle = {
-    zIndex: 2,
     position: "absolute",
     top: "50%",
     left: "50%",

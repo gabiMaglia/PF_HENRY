@@ -11,6 +11,7 @@ import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
 import { fechSearch } from "../../redux/slices/ProducSlice";
 import { useDispatch } from "react-redux";
+import RegisterModal from "../RegisterModal/RegisterModal.component";
 
 const Img = styled("img")({
   width: 140,
@@ -170,6 +171,7 @@ export default function SearchAppBar() {
         isOpen={loginModalIsOpen}
         closeModal={() => setLoginModalIsOpen(false)}
       />
+      <RegisterModal />
     </Box>
   );
 }
