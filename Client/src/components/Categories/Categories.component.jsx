@@ -57,52 +57,63 @@ const FiltersSorting = () => {
 
   return (
     <Container sx={{ display: "flex", flexDirection: "column" }}>
-      <Box
-        sx={{
-          mt: 2,
-          display: "grid",
-          gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
-          flexDirection: "row",
-          ml: 10,
-        }}
+      <CardMedia
+        padding="20px"
+        height="auto"
+        width="100%"
+        sx={{ backgroundColor: "black" }}
       >
-        {categories.map((categorie) => (
-          <Button
-            key={categorie.id}
-            sx={{
-              padding: (1, 1, 1, 1),
-              display: "flex",
-              flexDirection: "column",
-              textAlign: "center",
-              backgroundColor: "#fd611a",
-              width: 90,
-              height: 90,
-              mt: 2,
-              "&:hover": { color: "black", backgroundColor: "#fd611a" },
-            }}
-          >
-            <CategorieMedia
-              component="img"
-              src={categorie.image}
-              alt={categorie.name}
+        <Box
+          sx={{
+            mt: 2,
+            display: "grid",
+            gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
+            flexDirection: "row",
+            ml: 10,
+            mb: 2,
+            backgroundColor: "back",
+            width: "100%",
+          }}
+        >
+          {categories.map((categorie) => (
+            <Button
+              key={categorie.id}
               sx={{
+                padding: (1, 1, 1, 1),
                 display: "flex",
-                flexWrap: "wrap",
+                flexDirection: "column",
+                textAlign: "center",
                 backgroundColor: "#fd611a",
+                width: 90,
+                height: 90,
+                mt: 2,
+                "&:hover": { color: "black", backgroundColor: "#fd611a" },
               }}
-            ></CategorieMedia>
-            <Typography sx={{ color: "black", fontSize: 10, fontWeight: 700 }}>
-              {categorie.name}
-            </Typography>
-          </Button>
-        ))}
-      </Box>
-      <Box>
+            >
+              <CategorieMedia
+                component="img"
+                src={categorie.image}
+                alt={categorie.name}
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  backgroundColor: "#fd611a",
+                }}
+              ></CategorieMedia>
+              <Typography
+                sx={{ color: "black", fontSize: 10, fontWeight: 700 }}
+              >
+                {categorie.name}
+              </Typography>
+            </Button>
+          ))}
+        </Box>
+      </CardMedia>
+      <Box display="flex" flexDirection="row">
         <FormControl
           sx={{
             mt: 2,
             display: "flex",
-            flexDirection: "row",
             textAlign: "center",
             justifyContent: "center",
           }}
@@ -117,6 +128,16 @@ const FiltersSorting = () => {
               </Options>
             ))}
           </Selects>
+        </FormControl>
+        <FormControl
+          sx={{
+            mt: 2,
+            display: "flex",
+            flexDirection: "row",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
           <Selects value={op2} onChange={handleCosto}>
             <Options value="default" disabled>
               Precio
