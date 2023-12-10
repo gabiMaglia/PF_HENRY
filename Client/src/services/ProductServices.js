@@ -2,10 +2,10 @@ import axios from "axios";
 
 const url = import.meta.env.VITE_BACK_URL;
 
-export const GetAllProduct = async () => {
+export const getAllProduct = async () => {
     try {
-        const GetProduct = await axios.get(`${url}/product/`);
-        return GetProduct;
+        const GetProduct = await axios.get(`${url}/product/`)
+        return GetProduct
       } catch ({ GetProduct }) {
         return { error: GetProduct };
       }
