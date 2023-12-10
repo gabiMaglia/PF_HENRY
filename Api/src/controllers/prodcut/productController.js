@@ -12,7 +12,14 @@ const { conn } = require("../../db");
 //getProducts
 const getAllProducts = async () => {
   try {
-    const allProducts = Product.findAll();
+    const allProducts = Product.findAll({
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
     return allProducts;
   } catch (error) {
     console.log(error.message);
@@ -189,16 +196,22 @@ const searchByName = async (name) => {
         [Op.or]: [
           {
             name: {
-              [Op.like]: `%${name}%`,
+              [Op.iLike]: `%${name}%`,
             },
           },
           {
             description: {
-              [Op.like]: `%${name}%`,
+              [Op.iLike]: `%${name}%`,
             },
           },
         ],
       },
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
     });
 
     return products;

@@ -34,9 +34,12 @@ const ProductPrice = styled(Typography)({
 });
 
 const HomeProduct = ({ product }) => {
-  const { id, name, price, image } = product;
+  const { id, name, price, ProductImages } = product;
 
-  const imageUrl = image && image.length > 0 ? image[0] : null;
+  const imageUrl =
+    ProductImages[0].adress && ProductImages[0].adress.length > 0
+      ? ProductImages[0].adress
+      : null;
 
   return (
     <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>

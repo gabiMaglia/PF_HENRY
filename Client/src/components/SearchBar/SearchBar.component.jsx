@@ -9,6 +9,8 @@ import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
+import { fechSearch } from "../../redux/slices/ProducSlice";
+import { useDispatch } from "react-redux";
 
 const Img = styled("img")({
   width: 140,
@@ -22,12 +24,19 @@ const Logo = styled("img")({
 });
 
 export default function SearchAppBar() {
+  const dispatch = useDispatch();
   const [input, setInput] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(fechSearch(input));
+    setInput("");
+  };
 
   // Estado del carrito manejado por useLocalStorage
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
-  const [loginModalIsOpen, setLoginMododalIsOpen] = useState(false);
+  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
 
   const [cartItemCount, setCartItemCount] = useState(0);
 
@@ -61,7 +70,10 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
+        <Img
+          src={img}
+          alt="Logotipo"
+        />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -78,51 +90,54 @@ export default function SearchAppBar() {
           </span>
         )}
       </Box>
-      <Box
-        sx={{
-          mt: { xs: 2 },
-          border: 2,
-          borderRadius: 2,
-          borderTopRightRadius: 50,
-          borderBottomRightRadius: 50,
-          display: "flex",
-          alignItems: "center",
-          ml: 5,
-          mr: 5,
-        }}
-      >
-        <Input
-          type="text"
-          value={input}
-          placeholder=" Buscador"
-          onChange={handleChange}
+      <form onSubmit={handleSubmit}>
+        <Box
           sx={{
-            width: { xs: 300, sm: 500, xl: 800 },
-            fontSize: 20,
-            color: "black",
-            ml: 1,
-          }}
-          disableUnderline
-        />
-        <Button
-          onClick={handleCartButtonClick}
-          sx={{
-            height: 40,
-            textAlign: "center",
-            backgroundColor: "black",
+            mt: { xs: 2 },
+            border: 2,
+            borderRadius: 2,
             borderTopRightRadius: 50,
             borderBottomRightRadius: 50,
-            "&:hover": { backgroundColor: "#fd611a" },
+            display: "flex",
+            alignItems: "center",
+            ml: 5,
+            mr: 5,
           }}
         >
-          <SearchIcon
+          <Input
+            type="text"
+            value={input}
+            placeholder=" Buscador"
+            onChange={handleChange}
             sx={{
-              color: "white",
-              "&:hover": { color: "black" },
+              width: { xs: 300, sm: 500, xl: 800 },
+              fontSize: 20,
+              color: "black",
+              ml: 1,
             }}
+            disableUnderline
           />
-        </Button>
-      </Box>
+          <Button
+            type="submit"
+            onClick={handleCartButtonClick}
+            sx={{
+              height: 40,
+              textAlign: "center",
+              backgroundColor: "black",
+              borderTopRightRadius: 50,
+              borderBottomRightRadius: 50,
+              "&:hover": { backgroundColor: "#fd611a" },
+            }}
+          >
+            <SearchIcon
+              sx={{
+                color: "white",
+                "&:hover": { color: "black" },
+              }}
+            />
+          </Button>
+        </Box>
+      </form>
       <Box sx={{ display: "flex", flexDirection: "row", mt: { xs: 2 } }}>
         <Box
           sx={{
@@ -141,7 +156,7 @@ export default function SearchAppBar() {
               color: "white",
             }}
             onClick={() => {
-              setLoginMododalIsOpen(true);
+              setLoginModalIsOpen(true);
             }}
           >
             INICIAR SESIÓN
