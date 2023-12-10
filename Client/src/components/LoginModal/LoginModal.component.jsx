@@ -7,6 +7,7 @@ import {
   Typography,
   FormControl,
   CardMedia,
+  Divider,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -182,12 +183,17 @@ const LoginModal = ({ isOpen, closeModal }) => {
               name="username"
             />
             {renderButton("Continuar", usernameVerification)}
-            <Typography
-              variant="h5"
-              sx={{ mb: ".5em" }}
+            <Divider
+              sx={{
+                width: "100%",
+                color: "black",
+                mb: ".5em",
+                fontWeight: "600",
+              }}
             >
               O
-            </Typography>
+            </Divider>
+
             <Typography variant="body1">Inicia sesion con: </Typography>
             <CardMedia
               sx={{
