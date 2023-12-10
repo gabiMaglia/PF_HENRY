@@ -17,12 +17,32 @@ import {
 //UTILS
 import { textSupport } from "../../utils/objectsTexts";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const SupportComponent = () => {
   // ESTADOS
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
+  const [postRequest, setPostRequest] = useState(null);
+
+  //SOLICITUD POST
+  const postDataRequest = async () => {
+    try {
+      const { data } = await axios.post(`${backendUrl}/mailer/support_mail`, {
+        name,
+        phone,
+        email,
+        content: area,
+      });
+      setPostRequest(data);
+      return data;
+    } catch (error) {
+      console.log("Error al enviar el formulario", error);
+      throw error;
+    }
+  };
 
   //MANEJO DE ERRORES
   const [errorName, setErrorName] = useState({
@@ -71,11 +91,10 @@ const SupportComponent = () => {
       message: "El mensaje debe tener al menos 10 caracteres",
     });
   };
-
+  
   //HANDLE SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (
       !validateName(name) ||
       !validatePhone(phone) ||
@@ -91,14 +110,9 @@ const SupportComponent = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:3001/mailer/support_mail', {
-        name,
-        phone,
-        email,
-        content: area,
-      });
+      const postData = await postDataRequest();
 
-      if (data.success) {
+      if (postData.success) {
         Swal.fire({
           icon: "success",
           title: "Mensaje Enviado",
@@ -108,22 +122,24 @@ const SupportComponent = () => {
         setPhone("");
         setEmail("");
         setArea("");
+        setPostRequest(null);
       } else {
+        const errorMsg = postRequest?.response;
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: data.response || "Hubo un error en el servidor.",
+          text: errorMsg || "Hubo un error en el servidor.",
         });
       }
     } catch (error) {
-      console.error('Error al enviar formulario:', error);
+      console.error("Error al enviar formulario:", error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Hubo un error al enviar el formulario.",
       });
-    }    
-  }; 
+    }
+  };
 
   return (
     <>
