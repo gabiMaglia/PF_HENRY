@@ -82,7 +82,8 @@ const confirmAddressValidate = (address, confirmAddress) => {
 
 // Validacion de nombre de usuario
 const usernameValidate = (username) => {
-  const { regexContainSpaces } = constsUserValidations;
+  const { regexContainSpaces, minCantCharUsername, maxCantCharUsername } =
+    constsUserValidations;
   let usernameError = "";
   if (!username) {
     usernameError = "El nombre de usuario es requerido";
@@ -177,11 +178,11 @@ const dniValidate = (dni) => {
 // Validacion de información de usuario para inicio de sesion
 export const userLoginValidate = (values, setErrors) => {
   const errors = {
-    email: "",
+    username: "",
     address: "",
   };
 
-  errors.email = emailValidate(values.email);
+  errors.username = usernameValidate(values.username);
 
   if (!values.address) {
     errors.address = "La contraseña es requerida";
