@@ -5,6 +5,7 @@ const {
   getAllServicesController,
   getServiceByIdController,
   getServiceByClient,
+  getServiceByModel,
 } = require("../../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
@@ -57,14 +58,27 @@ const updateServiceStatus = async (req, res) => {
   }
 };
 const getAllServices = async (req, res) => {
-  try {
-    const servicios = await getAllServicesController();
-    if (servicios.error) {
-      return res.status(404).send(servicios.response);
+  const { model } = req.query;
+  if (!model) {
+    try {
+      const servicios = await getAllServicesController();
+      if (servicios.error) {
+        return res.status(404).send(servicios.response);
+      }
+      return res.status(200).json(servicios);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    return res.status(200).json(servicios);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  }else{
+    try {
+      const servicios = await getServiceByModel(model);
+      if (servicios.error) {
+        return res.status(404).send(servicios.response);
+      }
+      return res.status(200).json(servicios);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   }
 };
 
@@ -80,24 +94,24 @@ const getServiceById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const getServiceByClientid=async(req,res)=>{
-  const { id } = req.params
+const getServiceByClientid = async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const Services=await getServiceByClient(id)
+    const Services = await getServiceByClient(id);
     if (Services.error) {
       return res.status(404).send(Services.response);
     }
     return res.status(200).json(Services);
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
-}
+};
+
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
   getAllServices,
   getServiceById,
-  getServiceByClientid
+  getServiceByClientid,
 };
