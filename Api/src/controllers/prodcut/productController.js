@@ -206,6 +206,12 @@ const searchByName = async (name) => {
           },
         ],
       },
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
     });
 
     return products;
