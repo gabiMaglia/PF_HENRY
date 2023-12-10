@@ -3,11 +3,13 @@ import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.componets";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fechAllProducts } from "../../redux/slices/ProducSlice";
 
 const Products = () => {
+  const dispatch = useDispatch();
   const theme = createTheme({
     palette: {
       primary: {
@@ -17,6 +19,11 @@ const Products = () => {
     },
   });
   const { products } = useSelector((state) => state.product);
+  console.log(products, "view products");
+
+  useEffect(() => {
+    dispatch(fechAllProducts());
+  }, []);
 
   const cardsPage = 8;
 
