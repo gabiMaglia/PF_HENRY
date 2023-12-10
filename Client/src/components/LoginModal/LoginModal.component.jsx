@@ -45,7 +45,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
     address: "",
   });
 
-  const [isEmailVerified, setIsUsernameVerified] = useState(false);
+  const [isUsernameVerified, setIsUsernameVerified] = useState(false);
 
   const [errors, setErrors] = useState({
     username: "El nombre de usuario es requerido",
@@ -59,7 +59,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
     userLoginValidate({ ...user, [name]: value }, setErrors);
   };
 
-  // Función para manejar la verificación del email
+  // Función para manejar la verificación del nombre de usuario
   const usernameVerification = () => {
     if (!errors.username) {
       setIsUsernameVerified(true);
@@ -71,7 +71,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
         },
         icon: "error",
         title: "Nombre de usuario invalido",
-        text: errors.email,
+        text: errors.username,
       });
     }
   };
@@ -131,7 +131,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
       }}
     >
       <Box sx={boxModalStyle}>
-        {!isEmailVerified ? (
+        {!isUsernameVerified ? (
           <FormControl
             fullWidth
             sx={{ alignItems: "center", textAlign: "center" }}
