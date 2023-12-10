@@ -9,6 +9,7 @@ import {
   styled,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -17,131 +18,41 @@ const CustomButton = styled(Button)({
     backgroundColor: "#cc4c14",
   },
 });
-
+import { fetchProductById } from "../../redux/slices/ProducSlice";
 const Detail = () => {
-  // Base de datos de productos
-  const productsData = {
-    products: [
-      {
-        id: 1,
-        name: "Gabinete Antec N292 MESH RGB Vidrio Templado",
-        price: 20.99,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: [
-          "/products/1657835109152_img.png",
-          "/products/1657851327701_img.png",
-          "/products/1658084192936_img.png",
-        ],
-      },
-      {
-        id: 2,
-        name: "Placa de Video ASUS GeForce GTX 1660 SUPER 6GB DDR6",
-        price: 30.5,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "1 año",
-        image: [
-          "/products/1657835158754_img.png",
-          "/products/1658087082308_img.png",
-          "/products/1658087021345_img.png",
-        ],
-      },
-      {
-        id: 3,
-        name: "Auriculares Redragon Scylla H901 PC | PS4 | Switch | XBOX",
-        price: 40,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "6 meses",
-        image: ["/products/1657848918807_img.png"],
-      },
-      {
-        id: 4,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 5,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 6,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 7,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 8,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 9,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 10,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-      {
-        id: 11,
-        name: "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        price: 60,
-        description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        warranty: "3 años",
-        image: ["/products/1658089708829_img.png"],
-      },
-    ],
-  };
   const { id } = useParams();
-  const product = productsData.products.find((p) => p.id.toString() === id);
+const dispatch = useDispatch();
+const { productById } = useSelector((state) => state.product);
 
-  if (!productsData.products || productsData.products.length === 0) {
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      await dispatch(fetchProductById(id));
+    } catch (error) {
+      console.log({ error: error.message });
+    }
+  };
+
+  fetchData();
+}, [dispatch, id]);
+
+
+
+  if (!productById) {
     return <div>Cargando...</div>;
   }
 
-  const { name, price, description, warranty, image } = product;
+  const { name, price, description, warranty, image } = productById;
+  const [cartItems, setCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(
     image && image.length > 0 ? image[0] : null
   );
+
+  const handleAddToCart = () => {
+    setCartItems([...cartItems, productById]);
+    console.log("Producto agregado al carrito:", productById);
+  };
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const fontSizeName = isLargeScreen ? 32 : 24;
@@ -151,9 +62,9 @@ const Detail = () => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
+  
     window.addEventListener("resize", handleResize);
-
+  
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -259,7 +170,7 @@ const Detail = () => {
             <CustomButton
               variant="contained"
               size="large"
-              onClick={() => handleAddToCart(product)}
+              onClick={handleAddToCart}
             >
               Agregar al Carrito
             </CustomButton>

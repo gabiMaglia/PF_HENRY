@@ -1,10 +1,11 @@
-const { Service, Service_status } = require("../db");
+const { Service, Service_status } = require("../../db");
 const {
   addServiceController,
   updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
-} = require("../controllers/serviceControllers/serviceController");
+  getServiceByClient,
+} = require("../../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
   const {
@@ -79,9 +80,24 @@ const getServiceById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getServiceByClientid=async(req,res)=>{
+  const { id } = req.params
+
+  try {
+    const Services=await getServiceByClient(id)
+    if (Services.error) {
+      return res.status(404).send(Services.response);
+    }
+    return res.status(200).json(Services);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+  }
+}
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
   getAllServices,
   getServiceById,
+  getServiceByClientid
 };

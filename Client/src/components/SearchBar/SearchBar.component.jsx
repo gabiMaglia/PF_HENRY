@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
@@ -5,10 +6,11 @@ import img from "/icons/logo.jpeg";
 import { Input } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
-import { useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
+import { fechSearch } from "../../redux/slices/ProducSlice";
+import { useDispatch } from "react-redux";
 
 const Img = styled("img")({
   width: 140,
@@ -18,22 +20,34 @@ const Img = styled("img")({
 const Logo = styled("img")({
   width: 30,
   height: 30,
+  position: "relative",
 });
 
 export default function SearchAppBar() {
+  const dispatch = useDispatch();
   const [input, setInput] = useState("");
 
-  const [savedInput, setSavedInput] = useLocalStorage("savedInput", "");
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(fechSearch(input));
+    setInput("");
+  };
+
+  // Estado del carrito manejado por useLocalStorage
+  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
   const [loginModalIsOpen, setLoginMododalIsOpen] = useState(false);
+
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleChange = (event) => {
     setInput(event.target.value);
   };
 
-  const handleSearch = () => {
-    // Perform search or any other action with the input value
-    console.log("Searching for:", input);
+  const handleCartButtonClick = () => {
+    // Aquí puedes realizar la acción deseada al hacer clic en el carrito
+    // Por ejemplo, mostrar un modal del carrito
+    setLoginModalIsOpen(true);
   };
 
   return (
@@ -48,52 +62,79 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      <Img src={img} alt="Logotipo" />
       <Box
         sx={{
-          mt: { xs: 2 },
-          border: 2,
-          borderRadius: 2,
-          borderTopRightRadius: 50,
-          borderBottomRightRadius: 50,
           display: "flex",
           alignItems: "center",
-          ml: 5,
-          mr: 5,
+          cursor: "pointer",
         }}
+        onClick={handleCartButtonClick}
       >
-        <Input
-          type="text"
-          value={input}
-          placeholder=" Buscador"
-          onChange={handleChange}
+        <Img src={img} alt="Logotipo" />
+        {cartItemCount > 0 && (
+          <span
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "50%",
+              padding: "2px 5px",
+            }}
+          >
+            {cartItemCount}
+          </span>
+        )}
+      </Box>
+      <form onSubmit={handleSubmit}>
+        <Box
           sx={{
-            width: { xs: 300, sm: 500, xl: 800 },
-            fontSize: 20,
-            color: "black",
-            ml: 1,
-          }}
-          disableUnderline
-        />
-        <Button
-          onClick={handleSearch}
-          sx={{
-            height: 40,
-            textAlign: "center",
-            backgroundColor: "black",
+            mt: { xs: 2 },
+            border: 2,
+            borderRadius: 2,
             borderTopRightRadius: 50,
             borderBottomRightRadius: 50,
-            "&:hover": { backgroundColor: "#fd611a" },
+            display: "flex",
+            alignItems: "center",
+            ml: 5,
+            mr: 5,
           }}
         >
-          <SearchIcon
+          <Input
+            type="text"
+            value={input}
+            placeholder=" Buscador"
+            onChange={handleChange}
             sx={{
-              color: "white",
-              "&:hover": { color: "black" },
+              width: { xs: 300, sm: 500, xl: 800 },
+              fontSize: 20,
+              color: "black",
+              ml: 1,
             }}
+            disableUnderline
           />
-        </Button>
-      </Box>
+          <Button
+            type="submit"
+            onClick={handleCartButtonClick}
+            sx={{
+              height: 40,
+              textAlign: "center",
+              backgroundColor: "black",
+              borderTopRightRadius: 50,
+              borderBottomRightRadius: 50,
+              "&:hover": { backgroundColor: "#fd611a" },
+            }}
+          >
+            <SearchIcon
+              sx={{
+                color: "white",
+                "&:hover": { color: "black" },
+              }}
+            />
+          </Button>
+        </Box>
+      </form>
       <Box sx={{ display: "flex", flexDirection: "row", mt: { xs: 2 } }}>
         <Box
           sx={{
@@ -124,7 +165,7 @@ export default function SearchAppBar() {
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
-        closeModal={setLoginMododalIsOpen}
+        closeModal={() => setLoginModalIsOpen(false)}
       />
     </Box>
   );
