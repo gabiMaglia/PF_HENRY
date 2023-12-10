@@ -7,12 +7,11 @@ import {
   Typography,
   FormControl,
   CardMedia,
-  FormHelperText,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import "./alertStyles.min.css";
-import userLoginValidate from "../../helpers/userLoginValidate";
+import { userLoginValidate } from "../../helpers/userValidate";
 
 const LoginModal = ({ isOpen, closeModal }) => {
   // Estilos del contenedor principal
@@ -42,13 +41,15 @@ const LoginModal = ({ isOpen, closeModal }) => {
 
   // Estado para el manejo del formulario de inicio de sesión
   const [user, setUser] = useState({
-    email: "",
-    password: "",
+    username: "",
+    address: "",
   });
 
+  const [isUsernameVerified, setIsUsernameVerified] = useState(false);
+
   const [errors, setErrors] = useState({
-    email: "El email es requerido",
-    password: "La contraseña es requerida",
+    username: "El nombre de usuario es requerido",
+    address: "La contraseña es requerida",
   });
 
   // Función para manejar el cambio de estado del formulario
@@ -58,10 +59,10 @@ const LoginModal = ({ isOpen, closeModal }) => {
     userLoginValidate({ ...user, [name]: value }, setErrors);
   };
 
-  // Función para manejar la verificación del email
-  const emailVerification = () => {
-    if (!errors.email) {
-      setIsEmailVerified(true);
+  // Función para manejar la verificación del nombre de usuario
+  const usernameVerification = () => {
+    if (!errors.username) {
+      setIsUsernameVerified(true);
     } else {
       Swal.fire({
         allowOutsideClick: false,
@@ -69,14 +70,14 @@ const LoginModal = ({ isOpen, closeModal }) => {
           container: "container",
         },
         icon: "error",
-        title: "Email invalido",
-        text: errors.email,
+        title: "Nombre de usuario invalido",
+        text: errors.username,
       });
     }
   };
 
   const handleSubmit = () => {
-    if (!errors.password) {
+    if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
     } else {
       Swal.fire({
@@ -86,7 +87,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
         },
         icon: "error",
         title: "Contraseña invalida",
-        text: errors.password,
+        text: errors.address,
       });
     }
   };
@@ -109,18 +110,16 @@ const LoginModal = ({ isOpen, closeModal }) => {
 
   // Reseteo del modal
   const resetModal = () => {
-    setIsEmailVerified(false);
+    setIsUsernameVerified(false);
     setUser({
-      email: "",
-      password: "",
+      username: "",
+      address: "",
     });
     setErrors({
-      email: "El email es requerido",
-      password: "La contraseña es requerida",
+      username: "El nombre de usuario es requerido",
+      address: "La contraseña es requerida",
     });
   };
-
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   return (
     <Modal
@@ -132,7 +131,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
       }}
     >
       <Box sx={boxModalStyle}>
-        {!isEmailVerified ? (
+        {!isUsernameVerified ? (
           <FormControl
             fullWidth
             sx={{ alignItems: "center", textAlign: "center" }}
@@ -147,20 +146,20 @@ const LoginModal = ({ isOpen, closeModal }) => {
               variant="body1"
               sx={{ color: "#fd611a" }}
             >
-              Para continuar ingresá tu email
+              Para continuar ingresá tu nombre de usuario
             </Typography>
             <TextField
-              label="Email"
-              error={Boolean(errors.email)}
-              helperText={errors.email}
+              label="Nombre de usuario"
+              error={Boolean(errors.username)}
+              helperText={errors.username}
               variant="outlined"
               fullWidth
               margin="normal"
-              value={user.email}
+              value={user.username}
               onChange={handleChange}
-              name="email"
+              name="username"
             />
-            {renderButton("Continuar", emailVerification)}
+            {renderButton("Continuar", usernameVerification)}
             <Typography
               variant="h5"
               sx={{ mb: ".5em" }}
@@ -218,7 +217,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
               variant="subtitle1"
               sx={{ backgroundColor: "grey", p: ".5em", borderRadius: "3em" }}
             >
-              {user.email}
+              {user.username}
             </Typography>
             <Typography
               variant="body1"
@@ -227,14 +226,14 @@ const LoginModal = ({ isOpen, closeModal }) => {
               Ingresá tu contraseña
             </Typography>
             <TextField
-              error={Boolean(errors.password)}
-              name="password"
+              error={Boolean(errors.address)}
+              name="address"
               type="password"
-              label="Password"
-              helperText={errors.password}
+              label="Contraseña"
+              helperText={errors.address}
               variant="outlined"
               fullWidth
-              value={user.password}
+              value={user.address}
               onChange={handleChange}
               margin="normal"
             />
