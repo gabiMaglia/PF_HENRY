@@ -7,9 +7,11 @@ import {
   Button,
   useMediaQuery,
   styled,
+  CardMedia,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchProductById } from "../../redux/slices/ProducSlice";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -18,43 +20,32 @@ const CustomButton = styled(Button)({
     backgroundColor: "#cc4c14",
   },
 });
-import { fetchProductById } from "../../redux/slices/ProducSlice";
+
+const ProductMedia = styled(CardMedia)({
+  padding: 10,
+  height: 200,
+  width: 200,
+  objectFit: "cover",
+  margin: "auto",
+});
+
 const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { productById } = useSelector((state) => state.product);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        await dispatch(fetchProductById(id));
-      } catch (error) {
-        console.log({ error: error.message });
-      }
+      dispatch(fetchProductById(id));
     };
 
     fetchData();
-
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
   }, [dispatch, id]);
 
-  if (!productById) {
-    return <div>Cargando...</div>;
-  }
-
-  const { name, price, description, warranty, image } = productById;
+  const { name, price, description, warranty, ProductImages } = productById;
   const [cartItems, setCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(
-    image && image.length > 0 ? image[0] : null
+    ProductImages ? ProductImages[0].address : null
   );
 
   const handleAddToCart = () => {
@@ -92,24 +83,25 @@ const Detail = () => {
               spacing: 1,
             }}
           >
-            {image &&
-              image.map((image, index) => (
-                <Container
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <img
-                    src={image}
-                    alt={name}
-                    style={{ width: "120px", cursor: "pointer" }}
-                    onClick={() => setSelectedImage(image)}
-                  />
-                </Container>
-              ))}
+            {ProductImages
+              ? ProductImages.map((image, index) => (
+                  <Container
+                    key={index}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={image.address}
+                      alt={name}
+                      style={{ width: "120px", cursor: "pointer" }}
+                      onClick={() => setSelectedImage(image.address)}
+                    />
+                  </Container>
+                ))
+              : null}
           </Container>
         )}
 
@@ -120,14 +112,9 @@ const Detail = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            paddingTop: isLargeScreen ? 8 : 0,
           }}
         >
-          <img
-            src={selectedImage}
-            alt={name}
-            style={{ width: "100%", maxWidth: "300px" }}
-          />
+          <ProductMedia component="img" alt={name} src={selectedImage} />
         </Container>
 
         {/* Nombre y Precio a la derecha */}
@@ -186,9 +173,9 @@ const Detail = () => {
       {/* Garantía */}
       <Container>
         <Divider sx={{ marginY: 2 }} />
-        <Typography paddingBottom={5}>
-          <strong>Garantía:</strong> {warranty.split('T')[0]}
-        </Typography>
+        {/* <Typography paddingBottom={5}>
+          <strong>Garantía:</strong> {warranty.split("T")[0]}
+        </Typography> */}
       </Container>
     </Container>
   );
