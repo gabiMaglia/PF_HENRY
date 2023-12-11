@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const passport = require("passport");
 const { loginUser } = require("../../../controllers/accountControllers/authController");
+const {UserCredentials, User} = require("../../../db");
 const useRouter = Router();
 
 useRouter.get(
@@ -11,14 +12,17 @@ useRouter.get(
 useRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:3001/users",
-    failureRedirect: "/",
+    // successReturnToOrRedirect: '/',
+    // failureRedirect: "/",
+    passReqToCallback: true
   }),
   async (req, res) => {
-    console.log("ddsadsdsadadsadsadsadsallego")
-    console.log(req)
-    
-    
+    const googleId = req.user._json.sub
+    const authEmail = req.user._json.email
+    const responseLogin = await loginUser(authEmail, googleId)
+
+    res.status(200).json(responseLogin)
+
 
   }
 );

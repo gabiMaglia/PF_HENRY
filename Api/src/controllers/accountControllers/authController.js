@@ -25,8 +25,8 @@ const confirmAccountController = async (token ) => {
 }
 
 const registerUser = async ( userObj ) => {
-  console.log(userObj)
 
+  
   const newUser = await User.create({
     name : userObj.name,
     surname : userObj.surname,
