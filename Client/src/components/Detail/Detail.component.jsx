@@ -9,6 +9,7 @@ import {
   styled,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -131,6 +132,7 @@ const Detail = () => {
       },
     ],
   };
+  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
   const { id } = useParams();
   const product = productsData.products.find((p) => p.id.toString() === id);
 
@@ -146,6 +148,12 @@ const Detail = () => {
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const fontSizeName = isLargeScreen ? 32 : 24;
   const fontSizePrice = isLargeScreen ? 32 : 24;
+
+  const handleAddToCart = () => {
+    // Agrega el producto al carrito
+    setCartItems([...cartItems, product]);
+    console.log("Producto agregado al carrito:", product);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -259,7 +267,7 @@ const Detail = () => {
             <CustomButton
               variant="contained"
               size="large"
-              onClick={() => handleAddToCart(product)}
+              onClick={handleAddToCart}
             >
               Agregar al Carrito
             </CustomButton>
