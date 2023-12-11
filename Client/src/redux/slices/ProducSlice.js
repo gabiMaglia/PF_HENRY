@@ -48,7 +48,7 @@ export const fetchAllProducts = () => async (dispatch) => {
     const response = await axios.get(`${url}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
-    alert ("Producto no existente");
+    console.error("Error")
   }
 };
 
