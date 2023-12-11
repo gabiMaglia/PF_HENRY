@@ -1,6 +1,6 @@
 const {
   filterProducts,
-} = require("../../controllers/prodcut/filterController");
+} = require("../../controllers/productControllers/filterController");
 
 const filterProductsHandler = async (req, res) => {
   const { categoryName, brandName } = req.params;

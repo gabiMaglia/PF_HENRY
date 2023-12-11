@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
   filterProductsHandler,
-} = require("../../handlers/product/filterHandlers");
+} = require("../../handlers/productHandlers/filterHandlers");
 
 const filterRouter = Router();
 
