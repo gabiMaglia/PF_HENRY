@@ -1,4 +1,10 @@
-const { ProductBrand } = require("../../db");
+const {
+  Product,
+  ProductBrand,
+  ProductCategory,
+  ProductImage,
+  ProductStock,
+} = require("../../db");
 
 const getAllBrands = async () => {
   const allBrands = await ProductBrand.findAll();
@@ -58,12 +64,28 @@ const deleteBrand = async (id) => {
 
 //FILTRADO DE BRAND POR NAME
 const getBrandWithProducts = async (brandName) => {
-  const brand = await ProductBrand.findOne({
-    where: { name: brandName },
-  });
-  if (brand) {
-    const brandWithProducts = await brand.getProducts();
+  try {
+    const brand = await ProductBrand.findOne({
+      where: { name: brandName },
+    });
+
+    if (!brand) {
+      throw new Error(`No se encontró la marca con el nombre: ${brandName}`);
+    }
+
+    const brandWithProducts = await brand.getProducts({
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
+
     return brandWithProducts;
+  } catch (error) {
+    console.error(`Error al obtener la marca con productos: ${error.message}`);
+    return { error: error.message };
   }
 };
 

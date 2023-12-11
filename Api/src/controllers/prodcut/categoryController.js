@@ -1,5 +1,9 @@
-const { ProductCategory } = require("../../db");
-
+const {
+  ProductBrand,
+  ProductCategory,
+  ProductImage,
+  ProductStock,
+} = require("../../db");
 const getAllCategories = async () => {
   const allCategories = await ProductCategory.findAll();
   if (allCategories) {
@@ -15,7 +19,14 @@ const getCategoriesWithProducts = async (categoryName) => {
   });
 
   if (category) {
-    const categoryWithProducts = await category.getProducts();
+    const categoryWithProducts = await category.getProducts({
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
     return categoryWithProducts;
   }
 };
