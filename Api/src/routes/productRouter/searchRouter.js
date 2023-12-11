@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
   searchByNameHandler,
-} = require("../../handlers/product/productHandlers");
+} = require("../../handlers/productHandlers/productHandlers");
 
 const searchBarRouter = Router();
 

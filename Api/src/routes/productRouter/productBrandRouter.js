@@ -5,7 +5,7 @@ const {
   deleteBrandHandler,
   updateBrandHandler,
   getBrandWithProductsHandler,
-} = require("../../handlers/product/brandHandlers");
+} = require("../../handlers/productHandlers/brandHandlers");
 
 const brandRouter = Router();
 
