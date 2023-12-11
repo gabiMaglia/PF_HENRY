@@ -1,40 +1,37 @@
 require("dotenv").config();
-const { sendConfirmationEmail } = require("../../utils/sendConfirmationEmail.js");
-const {tokenSign} = require('../../jwt/tokenGenerator.js')
-const {UserAddress, UserCredentials, User, UserRole } = require("../../db.js");
+const {
+  sendConfirmationEmail,
+} = require("../../utils/sendConfirmationEmail.js");
+const { tokenSign } = require("../../jwt/tokenGenerator.js");
+const { UserAddress, UserCredentials, User, UserRole } = require("../../db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
-const confirmAccountController = async (token ) => {
-  const tokenDecode = jwt.verify(token, process.env.SECRET)
+const confirmAccountController = async (token) => {
+  const tokenDecode = jwt.verify(token, process.env.SECRET);
   if (!tokenDecode.userID) {
-   return {
+    return {
       error: true,
       response: "Invalid username or password",
-    }
+    };
+  } else {
+    const user = await User.findByPk(tokenDecode.userID);
+    user.update({ isActive: true, isVerified: true });
+    return {
+      response: `${user.name} succesfully autenticated`,
+    };
   }
-  else {
-   const user = await User.findByPk(tokenDecode.userID)
-   user.update({isActive: true, isVerified:true})
-   console.log(user.name)
-   return {
-    response: user.name
-   }
-  }
-}
+};
 
-const registerUser = async ( userObj ) => {
-
-  
+const registerUser = async (userObj) => {
   const newUser = await User.create({
-    name : userObj.name,
-    surname : userObj.surname,
-    birthdate : userObj.birthdate,
-    dni : userObj.dni,
-    email : userObj.email,
-    telephone : userObj.telephone,
-    image : userObj.image,
+    name: userObj.name,
+    surname: userObj.surname,
+    birthdate: userObj.birthdate,
+    dni: userObj.dni,
+    email: userObj.email,
+    telephone: userObj.telephone,
+    image: userObj.image,
   });
 
   // UserCredentials
@@ -83,8 +80,13 @@ const registerUser = async ( userObj ) => {
     include: [UserAddress, { model: UserRole, as: "role" }],
   });
 
-
-  sendConfirmationEmail(process.env.EMAIL_MAILER, userObj.email, newUser.id, process.env.SECRET, process.env.API_URL)
+  sendConfirmationEmail(
+    process.env.EMAIL_MAILER,
+    userObj.email,
+    newUser.id,
+    process.env.SECRET,
+    process.env.API_URL
+  );
 
   return completeUser;
 };
@@ -104,23 +106,28 @@ const loginUser = async (username, password) => {
     };
   }
   // SI USERNAME Y PASSWORD MACHEAN EN LA DB< EXTRAEMOS EL ROL DEL USUARIO QUE LOGUEA
-  const _user = await User.findByPk(_userCrential.UserId) 
-  const {role_name} = await UserRole.findByPk(_user.rolId)
+
+  const _user = await User.findByPk(_userCrential.UserId);
+  const { role_name } = await UserRole.findByPk(_user.rolId);
+
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
-  const tokenSession = await tokenSign(_user.rolId, _userCrential.username, role_name) 
+
+  const tokenSession = await tokenSign(
+    _user.id,
+    _userCrential.username,
+    role_name
+  );
   // RETORNAMOS AL FRONTEND EL TOKEN EL USUARIO Y EL ROL Y LA VERIFICACION DE MATCH DE PASSWORDS
   return {
-    login:true,
+    login: true,
     tokenSession,
-    userId: _user.rolId,
+    userId: _user.id,
     role_name,
   };
 };
 
-
 module.exports = {
   registerUser,
   loginUser,
- confirmAccountController
-
+  confirmAccountController,
 };

@@ -6,7 +6,8 @@ const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");
 var cors = require("cors");
 const passport = require("passport");
-const passportSetUp = require("./middlewares/googleAuthMiddleware.js");
+// importamos la configuracion de passport 
+require("./middlewares/googleAuthMiddleware.js");
 
 const server = express();
 

@@ -7,7 +7,7 @@ const passport = require("passport");
 const {
   registerUser,
 } = require("../controllers/accountControllers/authController");
-const generateGoogleValidPassword = require("../utils/googlePasswordGenerator");
+
 
 passport.use(
   new GoogleStrategy(
