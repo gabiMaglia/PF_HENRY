@@ -1,11 +1,21 @@
 const express = require("express");
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const morgan = require("morgan");
 const routes = require("./routes/mainRoutes.js");
+const morgan = require("morgan");
 var cors = require("cors");
+const passport = require("passport");
+const passportSetUp = require("./middlewares/googleAuthMiddleware.js");
 
 const server = express();
+
+server.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
 
 server.use(cors());
 
@@ -15,7 +25,8 @@ server.use(express.json());
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 server.use(cookieParser());
-
+server.use(passport.initialize());
+server.use(passport.session());
 server.use("/", routes);
 
 // Error catching endware.

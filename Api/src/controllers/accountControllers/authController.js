@@ -1,7 +1,7 @@
 require("dotenv").config();
-const { sendConfirmationEmail } = require("../utils/sendConfirmationEmail.js");
-const {tokenSign} = require('../jwt/tokenGenerator.js')
-const {UserAddress, UserCredentials, User, UserRole } = require("../db.js");
+const { sendConfirmationEmail } = require("../../utils/sendConfirmationEmail.js");
+const {tokenSign} = require('../../jwt/tokenGenerator.js')
+const {UserAddress, UserCredentials, User, UserRole } = require("../../db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -24,31 +24,22 @@ const confirmAccountController = async (token ) => {
   }
 }
 
-const registerUser = async ( name,
-  surname,
-  birthdate,
-  dni,
-  email,
-  telephone,
-  image,
-  userCredentials,
-  userAddress,
-  roles
-) => {
-  // UserOBJ
+const registerUser = async ( userObj ) => {
+  console.log(userObj)
+
   const newUser = await User.create({
-    name,
-    surname,
-    birthdate,
-    dni,
-    email,
-    telephone,
-    image,
+    name : userObj.name,
+    surname : userObj.surname,
+    birthdate : userObj.birthdate,
+    dni : userObj.dni,
+    email : userObj.email,
+    telephone : userObj.telephone,
+    image : userObj.image,
   });
 
   // UserCredentials
 
-  let { username, password } = userCredentials;
+  let { username, password } = userObj.userCredentials;
   const newUserCredentials = await newUser.createUserCredential({
     username,
     password: await bcrypt.hash(password, 8),
@@ -64,7 +55,7 @@ const registerUser = async ( name,
     street = "",
     number = "",
     zipCode = "",
-  } = userAddress;
+  } = userObj.userAddress;
 
   const newUserAddress = await newUser.createUserAddress({
     country,
@@ -79,7 +70,8 @@ const registerUser = async ( name,
 
   // UserRoles
 
-  const role_name = roles;
+  const role_name = userObj.role;
+
   const [userRole] = await UserRole.findOrCreate({
     where: { role_name },
     defaults: { role_name },
@@ -87,12 +79,12 @@ const registerUser = async ( name,
 
   await newUser.setRole(userRole, { as: "role" });
 
-
-
   const completeUser = await User.findByPk(newUser.id, {
     include: [UserAddress, { model: UserRole, as: "role" }],
   });
-  sendConfirmationEmail(process.env.EMAIL_MAILER, email, newUser.id, process.env.SECRET, process.env.API_URL)
+
+
+  sendConfirmationEmail(process.env.EMAIL_MAILER, userObj.email, newUser.id, process.env.SECRET, process.env.API_URL)
 
   return completeUser;
 };
