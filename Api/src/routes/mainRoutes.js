@@ -1,9 +1,12 @@
 const { Router } = require("express");
+
 const {
   checkAuthToken,
   checkRoleAuthToken,
 } = require("../middlewares/tokenAuthMiddlewares");
-const accountRouter = require("./userRouter/accountRouter");
+// AUTH ROUTERS
+const accountRouter = require("./userRouter/accountRouter/accountRouter");
+const googleRouter = require("./userRouter/accountRouter/googleRoutes");
 // USER ROUTERS
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
@@ -25,9 +28,11 @@ const mainRouter = Router();
 
 // auth
 mainRouter.use("/account", accountRouter);
+mainRouter.use("/auth", googleRouter);
+
 // UserRoutes
 mainRouter.use("/user", userRoutes);
-mainRouter.use("/user_role", checkRoleAuthToken(["admin"]), userRoleRoutes);
+mainRouter.use("/user_role", checkRoleAuthToken(["customer"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);

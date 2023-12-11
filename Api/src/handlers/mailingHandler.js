@@ -12,7 +12,7 @@ const supportMailHandler = async (req, res) => {
       content,
       destinationEmail
     );
-    console.log(email)
+    console.log(email);
     if (response.success) {
       return res.status(200).send(response);
     } else {
