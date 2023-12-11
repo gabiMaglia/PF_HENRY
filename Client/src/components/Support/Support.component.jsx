@@ -22,7 +22,7 @@ import {
 } from "../../helpers/supportValidateForm";
 //UTILS
 import { textSupport } from "../../utils/objectsTexts";
-
+//VARIABLE DE ENTORNO
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const SupportComponent = () => {
