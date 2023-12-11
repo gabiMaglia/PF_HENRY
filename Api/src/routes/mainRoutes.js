@@ -9,7 +9,7 @@ const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
 const userCredentialsRoutes = require("./userRouter/userCredentialsRouter");
 // MAIL ROUTERS
-const mailRouter = require('./mailingRouter/mailRouter')
+const mailRouter = require("./mailingRouter/mailRouter");
 // PRODUCT ROUTERS
 const productRouter = require("./productRouter/productRouter");
 const brandRouter = require("./productRouter/productBrandRouter");
@@ -19,6 +19,7 @@ const imageRouter = require("./productRouter/productImagesRouter");
 const searchBarRouter = require("./productRouter/searchRouter");
 // SERVICES ROUTERS
 const serviceRouter = require("./serviceRouter/serviceRouter");
+const filterRouter = require("./productRouter/filterRouter");
 
 const mainRouter = Router();
 
@@ -29,7 +30,7 @@ mainRouter.use("/user", userRoutes);
 mainRouter.use("/user_role", checkRoleAuthToken(["admin"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 // MailingRoute
-mainRouter.use('/mailer/', mailRouter )
+mainRouter.use("/mailer/", mailRouter);
 // ProductRoute
 mainRouter.use("/product", productRouter);
 mainRouter.use("/brand", brandRouter);
@@ -37,7 +38,7 @@ mainRouter.use("/category", categoryRouter);
 mainRouter.use("/stock", stockRouter);
 mainRouter.use("/image", imageRouter);
 mainRouter.use("/search", searchBarRouter);
-
+mainRouter.use("/filter", filterRouter);
 // ServicesRoute
 mainRouter.use("/service", serviceRouter);
 
