@@ -11,24 +11,24 @@ import { sectionInformation, sectionPages } from "../../utils/objectsTexts";
 const FooterComponents = () => {
   const smallScreen = useMediaQuery("(max-width:850px)");
   const boxStyle = {
-    backgroundColor:"#000",
+    backgroundColor: "#000",
     width: "100%",
-    height: smallScreen ? "600px"  : "350px",
-    display:  "flex",
-    flexDirection:  "column-reverse",
+    height: smallScreen ? "600px" : "350px",
+    display: "flex",
+    flexDirection: "column-reverse",
     justifyContent: smallScreen && "space-evenly",
-    padding: smallScreen ? "0px" : "20px 180px", 
-  }
+    padding: smallScreen ? "0px" : "20px 180px",
+  };
 
   const boxStyleOne = {
     width: "100%", // Ajustado para ser siempre 100%
     display: "flex",
-    flexDirection: smallScreen ? "column" : "row", 
-    justifyContent: "space-between", 
-  }
+    flexDirection: smallScreen ? "column" : "row",
+    justifyContent: "space-between",
+  };
   const boxStyleTwo = {
     color: "#fff",
-    padding:smallScreen?"10px":"30px",
+    padding: smallScreen ? "10px" : "30px",
   };
 
   const boxStyleThree = {
@@ -44,9 +44,8 @@ const FooterComponents = () => {
     display: "flex",
     justifyContent: "center",
     padding: "0 0 30px 0",
-    paddingLeft:smallScreen&&"10px"
+    paddingLeft: smallScreen && "10px",
   };
-
 
   return (
     <>
@@ -61,10 +60,9 @@ const FooterComponents = () => {
                 <Typography
                   variant="h5"
                   sx={{
-                    fontWeight:"800",
+                    fontWeight: "800",
                     marginBottom: "25px",
-                    
-                  }} 
+                  }}
                 >
                   {section.title}
                 </Typography>
@@ -92,15 +90,21 @@ const FooterComponents = () => {
                   sx={{
                     fontWeight: "800",
                     marginBottom: "25px",
-                  
-                  }} 
+                  }}
                 >
                   {section.title}
                 </Typography>
                 {section.items.map((item, i) => (
                   <Box key={i} sx={{ display: "flex", marginBottom: "10px" }}>
                     <Link to={item.link} style={{ textDecoration: "none" }}>
-                      <Typography sx={{ marginRight:"10px", color: "#fff", fontSize:smallScreen&&{xs:13}, marginTop:smallScreen&&"5px" }}>
+                      <Typography
+                        sx={{
+                          marginRight: "10px",
+                          color: "#fff",
+                          fontSize: smallScreen && { xs: 13 },
+                          marginTop: smallScreen && "5px",
+                        }}
+                      >
                         {item.text}
                       </Typography>
                     </Link>
