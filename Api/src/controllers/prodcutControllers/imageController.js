@@ -29,14 +29,14 @@ const updateImage = async (id, updateData) => {
     console.log("Current Image:", imageToUpdate.toJSON());
 
     // Verificar si el nuevo nombre ya existe en la tabla para no repetir
-    if (updateData.adress) {
+    if (updateData.address) {
       const existingImage = await ProductImage.findOne({
-        where: { adress: updateData.adress },
+        where: { address: updateData.address },
       });
 
       if (existingImage && existingImage.id !== id) {
         throw new Error(
-          "There is already a Image with that adress. Please try a different one."
+          "There is already a Image with that address. Please try a different one."
         );
       }
     }
@@ -53,10 +53,10 @@ const updateImage = async (id, updateData) => {
 
 const deleteImage = async (id) => {
   const image = await getImageById(id);
-  if (image.adress) {
+  if (image.address) {
     await image.destroy();
     return {
-      response: `${image.adress} deleted successfully`,
+      response: `${image.address} deleted successfully`,
     };
   } else {
     return image;

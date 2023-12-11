@@ -3,7 +3,7 @@ const {
     loginHandler,
     signInHandler,
     confirmAccountHandler
-} = require("../../handlers/authHandler");
+} = require("../../../handlers/accountHandlers/authHandler");
 
 const useRouter = Router();
 

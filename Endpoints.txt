@@ -114,7 +114,7 @@ Delete product by id   "localhost:3001/product/:id"   Elimina product por id
   "name": "Laptop I2000",
   "price": "13200.00",
   "description": "holis que se yo ",
-"warranty": "2028-01-11",
+  "warranty": "2028-01-11",
   "is_deleted": "false",
   "soldCount": "88",
   "stock": "345",

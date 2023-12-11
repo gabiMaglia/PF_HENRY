@@ -37,8 +37,8 @@ const HomeProduct = ({ product }) => {
   const { id, name, price, ProductImages } = product;
 
   const imageUrl =
-    ProductImages[0].adress && ProductImages[0].adress.length > 0
-      ? ProductImages[0].adress
+    ProductImages[0].address && ProductImages[0].address.length > 0
+      ? ProductImages[0].address
       : null;
 
   return (

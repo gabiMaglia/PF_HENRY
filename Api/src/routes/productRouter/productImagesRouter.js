@@ -4,7 +4,7 @@ const {
   getImageByIdHandler,
   deleteImageHandler,
   updateImageHandler,
-} = require("../../handlers/product/imagesHandlers");
+} = require("../../handlers/productHandlers/imagesHandlers");
 
 const imageRouter = Router();
 
