@@ -40,7 +40,7 @@ const getCategoryByIdHandler = async (req, res) => {
     if (category) {
       res.status(200).json(category);
     } else {
-      res.status(400).json({ error: `Category with ID:${id} was not found` });
+      res.status(400).json({ error: `Category with ID: ${id} was not found` });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -23,7 +23,7 @@ const getCategoriesWithProducts = async (categoryName) => {
       include: [
         { model: ProductBrand, attributes: ["name"] },
         { model: ProductCategory, attributes: ["name"] },
-        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductImage, attributes: ["address"] },
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
