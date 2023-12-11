@@ -64,8 +64,8 @@ const loginHandler = async (req, res) => {
 const confirmAccountHandler = async (req, res) => {
   const { token } = req.params;
   try {
-    await confirmAccountController(token);
-    return res.status(200).send("Email Confirmed");
+    const response = await confirmAccountController(token);
+    return res.status(200).send(response.response);
   } catch (error) {
     return res.status(500).json(error.message);
   }
