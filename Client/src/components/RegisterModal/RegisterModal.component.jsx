@@ -1,5 +1,14 @@
-import { Modal, Box, Typography, FormControl, TextField } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Typography,
+  FormControl,
+  TextField,
+  Button,
+} from "@mui/material";
 import { useState } from "react";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const RegisterModal = () => {
   const [userInfo, setUserInfo] = useState({
@@ -30,10 +39,10 @@ const RegisterModal = () => {
 
   const boxModalStyle = {
     position: "absolute",
-    top: "50%",
+    top: "0",
     left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "70%",
+    transform: "translate(-50%, 0)",
+    width: "50%",
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
@@ -41,14 +50,28 @@ const RegisterModal = () => {
     borderRadius: "1em",
   };
 
+  const boxButtonStyle = {
+    position: "relative",
+    left: "35%",
+    borderRadius: 2,
+    backgroundColor: "#fd611a",
+    minWidth: "100px",
+    width: "30%",
+    height: "20%",
+    mb: "1em",
+    mt: "2em",
+  };
+
   return (
     <Modal
+      sx={{ overflow: "scroll" }}
       open={true}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       onClose={() => {}}
     >
       <Box sx={boxModalStyle}>
+        <CancelIcon sx={{ position: "fixed", top: ".5em", right: ".5em" }} />
         <Typography variant="h4">Registrarse</Typography>
         <Typography
           variant="body1"
@@ -123,6 +146,16 @@ const RegisterModal = () => {
             variant="outlined"
           />
         </FormControl>
+        <Box sx={boxButtonStyle}>
+          <Button
+            color="inherit"
+            fullWidth
+            sx={{ color: "white" }}
+            onClick={() => {}}
+          >
+            Registrarse
+          </Button>
+        </Box>
       </Box>
     </Modal>
   );

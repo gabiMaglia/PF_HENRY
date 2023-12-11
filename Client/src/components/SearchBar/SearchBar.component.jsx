@@ -9,8 +9,9 @@ import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
-import { fechSearch } from "../../redux/slices/ProducSlice";
+import { fetchSearch } from "../../redux/slices/ProducSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 
 const Img = styled("img")({
@@ -25,13 +26,15 @@ const Logo = styled("img")({
 });
 
 export default function SearchAppBar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(fechSearch(input));
+    dispatch(fetchSearch(input));
     setInput("");
+    navigate("/products");
   };
 
   // Estado del carrito manejado por useLocalStorage
@@ -91,54 +94,52 @@ export default function SearchAppBar() {
           </span>
         )}
       </Box>
-      <form onSubmit={handleSubmit}>
-        <Box
+      <Box
+        sx={{
+          mt: { xs: 2 },
+          border: 2,
+          borderRadius: 2,
+          borderTopRightRadius: 50,
+          borderBottomRightRadius: 50,
+          display: "flex",
+          alignItems: "center",
+          ml: 5,
+          mr: 5,
+        }}
+      >
+        <Input
+          type="text"
+          value={input}
+          placeholder=" Buscador"
+          onChange={handleChange}
           sx={{
-            mt: { xs: 2 },
-            border: 2,
-            borderRadius: 2,
+            width: { xs: 300, sm: 500, xl: 800 },
+            fontSize: 20,
+            color: "black",
+            ml: 1,
+          }}
+          disableUnderline
+        />
+        <Button
+          type="submit"
+          onClick={handleSubmit}
+          sx={{
+            alignItems: "stretch",
+            height: 40,
+            backgroundColor: "black",
             borderTopRightRadius: 50,
             borderBottomRightRadius: 50,
-            display: "flex",
-            alignItems: "center",
-            ml: 5,
-            mr: 5,
+            "&:hover": { backgroundColor: "#fd611a" },
           }}
         >
-          <Input
-            type="text"
-            value={input}
-            placeholder=" Buscador"
-            onChange={handleChange}
+          <SearchIcon
             sx={{
-              width: { xs: 300, sm: 500, xl: 800 },
-              fontSize: 20,
-              color: "black",
-              ml: 1,
+              color: "white",
+              "&:hover": { color: "black" },
             }}
-            disableUnderline
           />
-          <Button
-            type="submit"
-            onClick={handleCartButtonClick}
-            sx={{
-              height: 40,
-              textAlign: "center",
-              backgroundColor: "black",
-              borderTopRightRadius: 50,
-              borderBottomRightRadius: 50,
-              "&:hover": { backgroundColor: "#fd611a" },
-            }}
-          >
-            <SearchIcon
-              sx={{
-                color: "white",
-                "&:hover": { color: "black" },
-              }}
-            />
-          </Button>
-        </Box>
-      </form>
+        </Button>
+      </Box>
       <Box sx={{ display: "flex", flexDirection: "row", mt: { xs: 2 } }}>
         <Box
           sx={{

@@ -6,7 +6,8 @@ import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { fechAllProducts } from "../../redux/slices/ProducSlice";
+import { fetchAllProducts, fetchSearch } from "../../redux/slices/ProducSlice";
+import { search } from "../../redux/slices/ProducSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -19,11 +20,10 @@ const Products = () => {
     },
   });
   const { products } = useSelector((state) => state.product);
-  console.log(products, "view products");
 
   useEffect(() => {
-    dispatch(fechAllProducts());
-  }, []);
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
 
   const cardsPage = 8;
 
