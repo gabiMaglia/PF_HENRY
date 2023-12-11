@@ -21,11 +21,25 @@ const productSlice = createSlice({
     },
     search: (state, action) => {
         state.products = action.payload;
-    }
+    },
+    orderPrice: (state, action) => {
+      const prodOrder = state.products;
+                const prodSort = (action.payload == "ascending"? prodOrder.sort((a, b) =>{
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    
+                }): (action.payload == "descending")? prodOrder.sort((a, b) =>{
+                    if (a.price > b.price) return 1;
+                    if (a.price < b.price) return -1;
+                    
+                }): prodOrder)
+               state.products = prodSort
+    },
+    
   },
 });
 
-export const { getProducts, getProductById, search } = productSlice.actions;
+export const { getProducts, getProductById, search, orderPrice } = productSlice.actions;
 
 export default productSlice.reducer;
 
