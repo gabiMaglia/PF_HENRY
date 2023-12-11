@@ -12,6 +12,7 @@ import LoginModal from "../LoginModal/LoginModal.component";
 import { fetchSearch } from "../../redux/slices/ProducSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import RegisterModal from "../RegisterModal/RegisterModal.component";
 
 const Img = styled("img")({
   width: 140,
@@ -40,6 +41,7 @@ export default function SearchAppBar() {
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+  const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
 
   const [cartItemCount, setCartItemCount] = useState(0);
 
@@ -73,7 +75,10 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
+        <Img
+          src={img}
+          alt="Logotipo"
+        />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -166,7 +171,12 @@ export default function SearchAppBar() {
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
-        closeModal={() => setLoginModalIsOpen(false)}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
     </Box>
   );

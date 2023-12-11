@@ -1,21 +1,32 @@
 import axios from "axios";
-const url = import.meta.env.VITE_BACK_URL
+const url = import.meta.env.VITE_BACK_URL;
 
-export const getUserCredById = async () => {
-    try {
-        const GetCred = await axios.get(`${url}/user_credentials/:id`);
-        return GetCred;
-      } catch ({ GetCred }) {
-        return { error: GetCred };
-      }
-}
-
-export const editUserCredById = async () => {
-    try {
-        const editCred = await axios.put(`${url}/user_credentials/:id`);
-        return editCred;
-      } catch ({ editCred }) {
-        return { error: editCred };
-      }
-}
-
+export const loginUser = async (username, password) => {
+  try {
+    const loginData = await axios.post(`${url}/account/login`, {
+      username: username,
+      password: password,
+    });
+    return loginData;
+  } catch ({ response }) {
+    return { error: response };
+  }
+};
+export const googleLoginUser = async () => {
+  try {
+    const loginData = await axios.get(`${url}/auth/google`);
+    return loginData;
+  } catch ({ response }) {
+    return { error: response };
+  }
+};
+export const registerUser = async (userObj) => {
+  try {
+    const registerData = await axios.post(`${url}/account/signin`, {
+      userObj,
+    });
+    return registerData;
+  } catch ({ response }) {
+    return { error: response };
+  }
+};

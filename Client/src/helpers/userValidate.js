@@ -31,7 +31,7 @@ const emailValidate = (email) => {
 };
 
 //Validacion de contraseña
-const addressValidate = (password) => {
+const addressValidate = (address) => {
   const {
     minCantCharAddress,
     maxCantCharAddress,
@@ -42,8 +42,9 @@ const addressValidate = (password) => {
   } = constsUserValidations;
 
   const addressErrors = [];
+
   if (!address) {
-    addressError.push("La contraseña es requerida");
+    addressErrors.push("La contraseña es requerida");
   } else {
     address.length < minCantCharAddress &&
       addressErrors.push(
@@ -66,7 +67,7 @@ const addressValidate = (password) => {
     );
   regexContainSpaces.test(address) &&
     addressErrors.push("La contraseña no debe contener espacios");
-  return addressError;
+  return addressErrors;
 };
 
 // Validacion de confirmacion de contraseña
@@ -74,7 +75,7 @@ const confirmAddressValidate = (address, confirmAddress) => {
   let confirmAddressError = "";
   if (!confirmAddress) {
     confirmAddressError = "La confirmación de contraseña es requerida";
-  } else if (confirmPassword !== address) {
+  } else if (confirmAddress !== address) {
     confirmAddressError = "Las contraseñas no coinciden";
   }
   return confirmAddressError;
@@ -128,11 +129,11 @@ const phoneNumberValidate = (phoneNumber) => {
     regexContainSpaces,
     regexContainSpecialCharacters,
   } = constsUserValidations;
-  let phoneNumberError = [];
+  const phoneNumberError = [];
   if (!phoneNumber) {
     phoneNumberError.push("El numero de telefono es requerido");
   } else {
-    regexPhoneNumber.test(phoneNumber) &&
+    !regexPhoneNumber.test(phoneNumber) &&
       phoneNumberError.push("El numero de telefono no es valido");
     regexContainSpaces.test(phoneNumber) &&
       phoneNumberError.push("El numero de telefono no debe contener espacios");
@@ -141,9 +142,11 @@ const phoneNumberValidate = (phoneNumber) => {
         "El numero de telefono no debe contener caracteres especiales"
       );
   }
+
+  return phoneNumberError;
 };
 
-const nameOrSurnameValidate = (name) => {
+const nameValidate = (name) => {
   const { minCantCharName, maxCantCharName, regexContainSpecialCharacters } =
     constsUserValidations;
   let nameError = "";
@@ -159,12 +162,28 @@ const nameOrSurnameValidate = (name) => {
   return nameError;
 };
 
+const surnameValidate = (surname) => {
+  const { minCantCharName, maxCantCharName, regexContainSpecialCharacters } =
+    constsUserValidations;
+  let surnameError = "";
+  if (!surname) {
+    surnameError = "El apellido es requerido";
+  } else if (surname.length < minCantCharName) {
+    surnameError = `El apellido debe contener al menos ${minCantCharName} caracteres`;
+  } else if (surname.length > maxCantCharName) {
+    nameError = `El apellido debe contener máximo ${maxCantCharName} caracteres`;
+  } else if (regexContainSpecialCharacters.test(surname)) {
+    surnameError = "El apellido no puede contener caracteres especiales";
+  }
+  return surnameError;
+};
+
 const dniValidate = (dni) => {
   const { regexDni, regexContainSpecialCharacters, regexContainSpaces } =
     constsUserValidations;
   let dniError = [];
   if (!dni) {
-    dniError = "El dni es requerido";
+    dniError.push("El dni es requerido");
   } else {
     !regexDni.test(dni) && dniError.push("El dni no es valido");
     regexContainSpecialCharacters.test(dni) &&
@@ -176,28 +195,33 @@ const dniValidate = (dni) => {
 };
 
 // Validacion de información de usuario para inicio de sesion
-export const userLoginValidate = (values, setErrors) => {
+export const userLoginValidate = (values, setErrors, antErrors) => {
+  const { username, address } = values;
+
   const errors = {
-    username: "",
-    address: "",
+    ...antErrors,
   };
 
-  errors.username = usernameValidate(values.username);
+  username !== undefined
+    ? (errors.username = usernameValidate(values.username))
+    : "";
 
-  if (!values.address) {
-    errors.address = "La contraseña es requerida";
+  if (address !== undefined) {
+    !address
+      ? (errors.address = "La contraseña es requerida")
+      : (errors.address = "");
   }
 
   setErrors(errors);
 };
 
 // Validación de información de usuario para registro
-export const userRegisterValidate = (values, setErrors) => {
+export const userRegisterValidate = (values, setErrors, antErrors) => {
   const {
     email,
     address,
     confirmAddress,
-    userName,
+    username,
     phoneNumberAreaCode,
     phoneNumber,
     name,
@@ -206,39 +230,33 @@ export const userRegisterValidate = (values, setErrors) => {
   } = values;
 
   const errors = {
-    email: "",
-    address: [],
-    confirmAddress: "",
-    userName: "",
-    phoneNumberAreaCode: [],
-    phoneNumber: [],
-    name: "",
-    surname: "",
-    dni: [],
+    ...antErrors,
   };
 
-  email ? (errors.email = emailValidate(email)) : "";
+  email !== undefined ? (errors.email = emailValidate(email)) : "";
 
-  address ? (errors.address = addressValidate(address)) : "";
+  address !== undefined ? (errors.address = addressValidate(address)) : "";
 
-  confirmAddress
+  confirmAddress !== undefined
     ? (errors.confirmAddress = confirmAddressValidate(address, confirmAddress))
     : "";
 
-  userName ? (errors.userName = usernameValidate(userName)) : "";
+  username !== undefined ? (errors.username = usernameValidate(username)) : "";
 
-  phoneNumberAreaCode
+  phoneNumberAreaCode !== undefined
     ? (errors.phoneNumberAreaCode =
         phoneNumberAreaCodeValidate(phoneNumberAreaCode))
     : "";
 
-  phoneNumber ? (errors.phoneNumber = phoneNumberValidate(phoneNumber)) : "";
+  phoneNumber !== undefined
+    ? (errors.phoneNumber = phoneNumberValidate(phoneNumber))
+    : "";
 
-  name ? (errors.name = nameOrSurnameValidate(name)) : "";
+  name !== undefined ? (errors.name = nameValidate(name)) : "";
 
-  surname ? (errors.surname = nameOrSurnameValidate(surname)) : "";
+  surname !== undefined ? (errors.surname = surnameValidate(surname)) : "";
 
-  dni ? (errors.dni = dniValidate(dni)) : "";
+  dni !== undefined ? (errors.dni = dniValidate(dni)) : "";
 
   setErrors(errors);
 };
