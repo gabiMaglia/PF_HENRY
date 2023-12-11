@@ -15,7 +15,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 
-const LoginModal = ({ isOpen, closeModal }) => {
+const LoginModal = ({
+  isOpen,
+  setLoginModalIsOpen,
+  setRegisterModalIsOpen,
+}) => {
   // Estilos del contenedor principal
   const boxModalStyle = {
     position: "absolute",
@@ -58,7 +62,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
-    userLoginValidate({ ...user, [name]: value }, setErrors);
+    userLoginValidate({ [name]: value }, setErrors, errors);
   };
 
   // Función para manejar la verificación del nombre de usuario
@@ -129,7 +133,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       onClose={() => {
-        closeModal(false);
+        setLoginModalIsOpen(false);
       }}
     >
       <Box sx={boxModalStyle}>
@@ -148,7 +152,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
               right: ".5em",
             }}
             onClick={() => {
-              closeModal(false);
+              setLoginModalIsOpen(false);
             }}
           />
         </Button>
@@ -207,7 +211,10 @@ const LoginModal = ({ isOpen, closeModal }) => {
             />
             <Typography>No tienes cuenta? Regístrate.</Typography>
 
-            {renderButton("Registrarse", () => {})}
+            {renderButton("Registrarse", () => {
+              setLoginModalIsOpen(false);
+              setRegisterModalIsOpen(true);
+            })}
           </FormControl>
         ) : (
           <FormControl

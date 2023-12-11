@@ -41,6 +41,7 @@ export default function SearchAppBar() {
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+  const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
 
   const [cartItemCount, setCartItemCount] = useState(0);
 
@@ -170,9 +171,13 @@ export default function SearchAppBar() {
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
-        closeModal={() => setLoginModalIsOpen(false)}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
-      <RegisterModal />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
     </Box>
   );
 }
