@@ -3,7 +3,7 @@ const {
   getStockById,
   deleteStock,
   updateStock,
-} = require("../../controllers/prodcut/stockController");
+} = require("../../controllers/prodcutControllers/stockController");
 
 const getAllStockHandler = async (req, res) => {
   try {

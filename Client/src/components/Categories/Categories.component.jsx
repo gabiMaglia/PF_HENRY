@@ -5,8 +5,11 @@ import Select from "@mui/material/Select";
 import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import data from "../../DataBase/categories.json";
+import { orderPrice } from "../../redux/slices/ProducSlice";
+import { useDispatch } from "react-redux";
 
 const FiltersSorting = () => {
+  const dispatch = useDispatch();
   const { categories } = data;
   const marcas = ["Asus", "Nvidia", "Intel", "Steelseries", "Razer"];
   const [op1, setOp1] = useState("default");
@@ -16,6 +19,8 @@ const FiltersSorting = () => {
     setOp1(e.target.value);
   };
   const handleCosto = (e) => {
+    dispatch(orderPrice(e.target.value));
+    console.log(orderPrice(e.target.value));
     setOp2(e.target.value);
   };
 
@@ -56,12 +61,22 @@ const FiltersSorting = () => {
   });
 
   return (
-    <Container sx={{ display: "flex", flexDirection: "column" }}>
-      <CardMedia
-        padding="20px"
+    <Container
+      maxWidth="2200px"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Container
+        maxWidth="2200px"
         height="auto"
-        width="100%"
-        sx={{ backgroundColor: "black" }}
+        sx={{
+          backgroundColor: "black",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
         <Box
           sx={{
@@ -69,10 +84,9 @@ const FiltersSorting = () => {
             display: "grid",
             gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
             flexDirection: "row",
-            ml: 10,
+            ml: { xs: 1, lg: 10 },
             mb: 2,
-            backgroundColor: "back",
-            width: "100%",
+            width: "80%",
           }}
         >
           {categories.map((categorie) => (
@@ -108,7 +122,7 @@ const FiltersSorting = () => {
             </Button>
           ))}
         </Box>
-      </CardMedia>
+      </Container>
       <Box display="flex" flexDirection="row">
         <FormControl
           sx={{

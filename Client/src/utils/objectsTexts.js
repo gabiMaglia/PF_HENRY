@@ -24,7 +24,7 @@ const itemsQuestions = [
   {
     title: "¿Como realizo una compra?",
     content: [
-      "Siempre recomendamos comunicarse preferentemente por WhatsApp para poder brindar una atención más personalizada.",
+      "Siempre recomendamos comunicarse preferentemente por <a href='https://wa.me/+5491132069043' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>WhatsApp</a> para poder brindar una atención más personalizada.",
       "Igualmente podés realizar la compra de un producto utilizando nuestro CARRITO DE COMPRAS desde esta misma pagina.",
     ],
   },
@@ -83,7 +83,7 @@ const sectionInformation = [
   {
     title: "INFORMACION",
     items: [
-      { icon: Phone, text: "+54 11 2256-8888" },
+      { icon: Phone, text: "+549 11 3206-9043" },
       { icon: Room, text: "Calle Falsa 123 - Buenos Aires" },
       { icon: Email, text: "hypermegared.it@gmail.com" },
       {

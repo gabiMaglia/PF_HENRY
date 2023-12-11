@@ -7,7 +7,7 @@ const {
   deleteProduct,
   getProductById,
   searchByName,
-} = require("../../controllers/prodcut/productController");
+} = require("../../controllers/prodcutControllers/productController");
 
 //Post Product
 const postProductHandler = async (req, res) => {

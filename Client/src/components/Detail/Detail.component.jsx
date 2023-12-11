@@ -21,23 +21,31 @@ const CustomButton = styled(Button)({
 import { fetchProductById } from "../../redux/slices/ProducSlice";
 const Detail = () => {
   const { id } = useParams();
-const dispatch = useDispatch();
-const { productById } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  const { productById } = useSelector((state) => state.product);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchProductById(id));
+      } catch (error) {
+        console.log({ error: error.message });
+      }
+    };
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      await dispatch(fetchProductById(id));
-    } catch (error) {
-      console.log({ error: error.message });
-    }
-  };
+    fetchData();
 
-  fetchData();
-}, [dispatch, id]);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
 
+    window.addEventListener("resize", handleResize);
 
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [dispatch, id]);
 
   if (!productById) {
     return <div>Cargando...</div>;
@@ -57,18 +65,6 @@ useEffect(() => {
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const fontSizeName = isLargeScreen ? 32 : 24;
   const fontSizePrice = isLargeScreen ? 32 : 24;
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-  
-    window.addEventListener("resize", handleResize);
-  
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <Container
@@ -191,7 +187,7 @@ useEffect(() => {
       <Container>
         <Divider sx={{ marginY: 2 }} />
         <Typography paddingBottom={5}>
-          <strong>Garantía:</strong> {warranty}
+          <strong>Garantía:</strong> {warranty.split('T')[0]}
         </Typography>
       </Container>
     </Container>

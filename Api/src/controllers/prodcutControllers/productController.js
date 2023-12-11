@@ -16,7 +16,7 @@ const getAllProducts = async () => {
       include: [
         { model: ProductBrand, attributes: ["name"] },
         { model: ProductCategory, attributes: ["name"] },
-        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductImage, attributes: ["address"] },
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
@@ -78,7 +78,7 @@ const postProduct = async ({
 
       const imagePromises = images.map(async (imageUrl) => {
         const newImage = await ProductImage.create(
-          { adress: imageUrl },
+          { address: imageUrl },
           { transaction }
         );
         await newProduct.addProductImage(newImage, { transaction });
@@ -173,7 +173,7 @@ const getProductById = async (id) => {
       include: [
         { model: ProductBrand, attributes: ["name"] },
         { model: ProductCategory, attributes: ["name"] },
-        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductImage, attributes: ["address"] },
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
@@ -209,7 +209,7 @@ const searchByName = async (name) => {
       include: [
         { model: ProductBrand, attributes: ["name"] },
         { model: ProductCategory, attributes: ["name"] },
-        { model: ProductImage, attributes: ["adress"] },
+        { model: ProductImage, attributes: ["address"] },
         { model: ProductStock, attributes: ["amount"] },
       ],
     });

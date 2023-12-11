@@ -21,40 +21,51 @@ const productSlice = createSlice({
     },
     search: (state, action) => {
         state.products = action.payload;
-    }
+    },
+    orderPrice: (state, action) => {
+      const prodOrder = state.products;
+                const prodSort = (action.payload == "ascending"? prodOrder.sort((a, b) =>{
+                    if (a.price < b.price) return 1;
+                    if (a.price > b.price) return -1;
+                    
+                }): (action.payload == "descending")? prodOrder.sort((a, b) =>{
+                    if (a.price > b.price) return 1;
+                    if (a.price < b.price) return -1;
+                    
+                }): prodOrder)
+               state.products = prodSort
+    },
+    
   },
 });
 
-export const { getProducts, getProductById, search } = productSlice.actions;
+export const { getProducts, getProductById, search, orderPrice } = productSlice.actions;
 
 export default productSlice.reducer;
 
-export const fechAllProducts = () => (dispatch) => {
-  axios
-    .get(`${url}/product/`)
-    .then((response) => {
-      dispatch(getProducts(response.data));
-    })
-    .catch((error) => console.log(error));
+export const fetchAllProducts = () => async (dispatch) => {
+  try {
+    const response = await axios.get(`${url}/product/`);
+    dispatch(getProducts(response.data));
+  } catch (error) {
+    console.error("Error")
+  }
 };
 
-export const fetchProductById = (id) => (dispatch) => {
-  axios
-    .get(`${url}/product/${id}`)
-    .then((response) => {
-      console.log("Response from fetchProductById:", response.data);
-      dispatch(getProductById(response.data));
-    })
-    .catch((error) => {
-      console.error("Error fetching product by ID:", error);
-    });
+export const fetchProductById = (id) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${url}/product/${id}`);
+    dispatch(getProductById(response.data));
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+  }
 };
 
-export const fechSearch = (name) => (dispatch) => {
-    axios
-      .get(`${url}/search?name=${name}`)
-      .then((response) => {
-        dispatch(search(response.data));
-      })
-      .catch((error) => console.log(error));
-  };
+export const fetchSearch = (name) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${url}/search?name=${name}`);
+    dispatch(search(response.data));
+  } catch (error) {
+    alert ("Producto no existente");
+  }
+};

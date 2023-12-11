@@ -12,7 +12,8 @@ const DropdownItem = ({ title, content }) => (
     {content.map((paragraph, index) => (
       <Box key={index} sx={{ padding: "10px", margin: "0 20px" }}>
         <Typography sx={{ fontWeight: "600", fontSize: "16px" }}>
-          {paragraph}
+          {/* {paragraph} */}
+          <span dangerouslySetInnerHTML={{ __html: paragraph }} />
         </Typography>
       </Box>
     ))}

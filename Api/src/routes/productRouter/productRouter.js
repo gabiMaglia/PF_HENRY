@@ -6,7 +6,7 @@ const {
   updateProductHandler,
   deleteProductHandler,
   searchByNameHandler,
-} = require("../../handlers/product/productHandlers");
+} = require("../../handlers/productHandlers/productHandlers");
 
 const productRouter = Router();
 

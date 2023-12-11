@@ -2,7 +2,13 @@
 import { useState } from "react";
 import axios from "axios";
 //MATERIAL UI
-import { Box, TextField, Typography, Button } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Textarea from "@mui/joy/Textarea";
 //SWEET ALERT
@@ -16,6 +22,8 @@ import {
 } from "../../helpers/supportValidateForm";
 //UTILS
 import { textSupport } from "../../utils/objectsTexts";
+//VARIABLE DE ENTORNO
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const SupportComponent = () => {
   // ESTADOS
@@ -23,6 +31,26 @@ const SupportComponent = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [area, setArea] = useState("");
+  const [postRequest, setPostRequest] = useState(null);
+  const [formComplete, setFormComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  //SOLICITUD POST
+  const postDataRequest = async () => {
+    try {
+      const { data } = await axios.post(`${backendUrl}/mailer/support_mail`, {
+        name,
+        phone,
+        email,
+        content: area,
+      });
+      setPostRequest(data);
+      return data;
+    } catch (error) {
+      console.log("Error al enviar el formulario", error);
+      throw error;
+    }
+  };
 
   //MANEJO DE ERRORES
   const [errorName, setErrorName] = useState({
@@ -49,6 +77,7 @@ const SupportComponent = () => {
       error: !validateName(value),
       message: "El nombre debe tener al menos 3 caracteres",
     });
+    updateFormComplete();
   };
   const handleChangePhone = (value) => {
     setPhone(value);
@@ -56,6 +85,7 @@ const SupportComponent = () => {
       error: !validatePhone(value),
       message: "El teléfono debe tener 10 dígitos",
     });
+    updateFormComplete();
   };
   const handleChangeEmail = (value) => {
     setEmail(value);
@@ -63,6 +93,7 @@ const SupportComponent = () => {
       error: !validateEmail(value),
       message: "El correo electrónico no es válido",
     });
+    updateFormComplete();
   };
   const handleChangeArea = (value) => {
     setArea(value);
@@ -70,6 +101,15 @@ const SupportComponent = () => {
       error: !validateArea(value),
       message: "El mensaje debe tener al menos 10 caracteres",
     });
+    updateFormComplete();
+  };
+  const updateFormComplete = () => {
+    setFormComplete(
+      validateName(name) &&
+        validatePhone(phone) &&
+        validateEmail(email) &&
+        validateArea(area)
+    );
   };
 
   //HANDLE SUBMIT
@@ -91,14 +131,11 @@ const SupportComponent = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:3001/mailer/support_mail', {
-        name,
-        phone,
-        email,
-        content: area,
-      });
+      setIsLoading(true);
+      
+      const postData = await postDataRequest();
 
-      if (data.success) {
+      if (postData.success) {
         Swal.fire({
           icon: "success",
           title: "Mensaje Enviado",
@@ -108,22 +145,27 @@ const SupportComponent = () => {
         setPhone("");
         setEmail("");
         setArea("");
+        setPostRequest(null);
+        setFormComplete(false);
       } else {
+        const errorMsg = postRequest?.response;
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: data.response || "Hubo un error en el servidor.",
+          text: errorMsg || "Hubo un error en el servidor.",
         });
       }
     } catch (error) {
-      console.error('Error al enviar formulario:', error);
+      console.error("Error al enviar formulario:", error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Hubo un error al enviar el formulario.",
       });
-    }    
-  }; 
+    }finally{
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -221,6 +263,7 @@ const SupportComponent = () => {
           <Button
             variant="contained"
             type="submit"
+            disabled={!formComplete || isLoading}
             sx={{
               backgroundColor: "#fd611a",
               padding: "12px 0",
@@ -229,7 +272,7 @@ const SupportComponent = () => {
             }}
             endIcon={<SendIcon />}
           >
-            Enviar
+            {isLoading ? <CircularProgress size={24} color="inherit" /> : "Enviar"}
           </Button>
         </Box>
         {/* CIERRE BOX FORM */}
