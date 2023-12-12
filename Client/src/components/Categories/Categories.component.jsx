@@ -2,19 +2,30 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Button, CardMedia, Container, Typography, MenuItem, FormControl, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardMedia,
+  Container,
+  Typography,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 import styled from "@emotion/styled";
 //DATA BASE
 import data from "../../DataBase/categories.json";
 //UTILS
-import { brands } from "../../utils/objectsTexts"
+import { brands } from "../../utils/objectsTexts";
 //REDUCERS
 import {
+  fetchAllProducts,
   fetchProductsByCategory,
   filterByCategory,
   fetchProductsByBrand,
   filterByBrand,
   orderPrice,
+  resetState
 } from "../../redux/slices/ProductSlice";
 
 const FiltersSorting = () => {
@@ -47,8 +58,12 @@ const FiltersSorting = () => {
   const clearFilters = () => {
     setSelectedBrand("default");
     setSelectedPrice("default");
+  
+    dispatch(filterByCategory("all"));
+    dispatch(filterByBrand("default"));
+    dispatch(resetState());
   };
-
+  
   const Selects = styled(Select)({
     width: 400,
     height: 40,
@@ -174,7 +189,9 @@ const FiltersSorting = () => {
             <Options value="descending">Menor precio</Options>
           </Selects>
 
-          <Buttons variant="contained" onClick={handleFilterBrand}>Filtrar</Buttons>
+          <Buttons variant="contained" onClick={handleFilterBrand}>
+            Filtrar
+          </Buttons>
           <Buttons variant="outlined" onClick={clearFilters}>
             Limpiar
           </Buttons>
