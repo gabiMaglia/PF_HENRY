@@ -16,7 +16,7 @@ const signInHandler = async (req, res) => {
     userCredentials,
     userAddress,
     role = "custommer",
-  } = req.body;
+  } = req.body.userObj;
   try {
     if (
       !name ||

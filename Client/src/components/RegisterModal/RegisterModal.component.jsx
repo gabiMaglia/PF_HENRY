@@ -11,6 +11,7 @@ import { useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { userRegisterValidate } from "../../helpers/userValidate";
 import Swal from "sweetalert2";
+import { registerUser } from "../../services/AuthServices";
 
 const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
   const [userInfo, setUserInfo] = useState({
@@ -24,7 +25,6 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
     surname: "",
     dni: "",
     birthdate: "",
-    role: "customer",
   });
 
   const [errorsUser, setErrorsUser] = useState({
@@ -91,7 +91,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     userRegisterValidate(userInfo, setErrorsUser);
     if (
       !errorsUser.email &&
@@ -105,6 +105,22 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       errorsUser.dni.length === 0
     ) {
       // A realizar en caso de registro exitoso
+      const userInfoForRequest = {
+        email: userInfo.email,
+        name: userInfo.name,
+        surname: userInfo.surname,
+        birthdate: userInfo.birthdate,
+        dni: userInfo.dni,
+        telephone: userInfo.phoneNumberAreaCode + userInfo.phoneNumber,
+        role: "customer",
+        userCredentials: {
+          username: userInfo.username,
+          password: userInfo.address,
+        },
+        userAddress: {},
+      };
+      const response = await registerUser(userInfoForRequest);
+      console.log(response);
     } else {
       Swal.fire({
         allowOutsideClick: false,
@@ -150,7 +166,6 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       surname: "",
       dni: "",
       birthdate: "",
-      role: "customer",
     });
     setErrorsUser({
       email: "",
