@@ -318,7 +318,7 @@ const SupportComponent = () => {
             <Box key={index}>
               <Typography
                 variant="h5"
-                sx={{ marginBottom: "10px", fontWeight: "bold" }}
+                sx={{ marginBottom: "10px", fontWeight: "bold", textAlign: "center" }}
               >
                 {item.title}
               </Typography>
