@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = import.meta.env.VITE_BACK_URL;
+const url = import.meta.env.VITE_BACKEND_URL;
 
 export const getAllUsers = async () => {
   try {
