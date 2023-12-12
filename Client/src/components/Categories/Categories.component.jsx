@@ -10,7 +10,7 @@ import {
   fetchProductsByCategory,
   filterByCategory,
   orderPrice,
-} from "../../redux/slices/ProducSlice";
+} from "../../redux/slices/ProductSlice";
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();

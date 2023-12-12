@@ -44,11 +44,11 @@ const productSlice = createSlice({
 
       console.log("Categoría seleccionada:", categoryName);
       if (categoryName === "all") {
-        state.filteredProducts = state.allProducts;
+        state.filteredProducts = state.products;
       } else {
         console.log("Filtrando por categoría:", categoryName);
-        state.filteredProducts = state.allProducts.filter(
-          (product) => product.category === categoryName
+        state.filteredProducts = state.products.filter(
+          (product) => product.ProductCategories[0].name === categoryName
         );
       }
     },
