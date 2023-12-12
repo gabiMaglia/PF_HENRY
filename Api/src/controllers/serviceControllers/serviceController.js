@@ -157,7 +157,7 @@ const getServiceByIdController = async (id) => {
   }
   return service;
 };
-const getServiceByClient = async (id) => {
+const getServiceByClientController = async (id) => {
   const Services = await Service.findAll({
     where: { userId: id },
   });
@@ -170,7 +170,7 @@ const getServiceByClient = async (id) => {
   return Services;
 };
 
-const getServiceByModel = async (model) => {
+const getServiceByModelController = async (model) => {
   const Services = await Service.findAll({
     where: sequelize.where(
       sequelize.fn("lower", sequelize.col("product_model")),
@@ -185,11 +185,33 @@ const getServiceByModel = async (model) => {
   }
   return Services;
 };
+const filterServicesByStatusController=async(status,value)=>{
+
+  console.log(status)
+  const serviceStatuses = await Service_status.findAll()
+  let arrayOfServices = [];
+  for (let serviceStatus of serviceStatuses) {
+    if(serviceStatus[status] === value){
+      const service = await Service.findByPk(serviceStatus.ServiceId, {
+        include: [Service_status],
+      });
+      arrayOfServices.push(service);
+    }
+  }
+  if(arrayOfServices.length === 0){
+    return {
+      error: true,
+      response: `service not found`,
+    };
+  }
+  return arrayOfServices;
+}
 module.exports = {
   addServiceController,
   updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
-  getServiceByClient,
-  getServiceByModel,
+  getServiceByClientController,
+  getServiceByModelController,
+  filterServicesByStatusController,
 };
