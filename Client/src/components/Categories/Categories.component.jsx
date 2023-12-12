@@ -6,7 +6,11 @@ import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import data from "../../DataBase/categories.json";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsByCategory, filterByCategory, orderPrice } from "../../redux/slices/ProducSlice";
+import {
+  fetchProductsByCategory,
+  filterByCategory,
+  orderPrice,
+} from "../../redux/slices/ProducSlice";
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();
@@ -14,13 +18,13 @@ const FiltersSorting = () => {
   const { categories } = data;
   const [op1, setOp1] = useState("default");
   const [op2, setOp2] = useState("default");
-  
+
   const marcas = ["Asus", "Nvidia", "Intel", "Steelseries", "Razer"];
 
   const handleCategoryClick = async (categoryName) => {
     await dispatch(fetchProductsByCategory(categoryName));
     dispatch(filterByCategory(categoryName));
-    console.log("Filtered products:", products); 
+    console.log("Filtered products:", products);
   };
 
   const handleMarca = (e) => {
@@ -69,14 +73,7 @@ const FiltersSorting = () => {
   });
 
   return (
-    <Container
-      maxWidth="2200px"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <>
       <Container
         maxWidth="2200px"
         height="auto"
@@ -175,7 +172,7 @@ const FiltersSorting = () => {
           </Buttons>
         </FormControl>
       </Box>
-    </Container>
+    </>
   );
 };
 
