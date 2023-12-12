@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-const url = "http://localhost:3001";
+const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 const initialState = {
   products: [],
   allProducts: [],
   productById: {},
-  filteredProducts: [],
+  filteredProductsByCategory: [],
+  filteredProductsByBrand: [],
   inputName:"",
 };
 
@@ -46,12 +47,21 @@ const productSlice = createSlice({
     },
     filterByCategory: (state, action) => {
       const categoryName = action.payload;
-
       if (categoryName === "all") {
-        state.filteredProducts = state.products;
+        state.filteredProductsByCategory = state.products;
       } else {
-        state.filteredProducts = state.products.filter(
+        state.filteredProductsByCategory = state.products.filter(
           (product) => product.ProductCategories[0].name === categoryName
+        );
+      }
+    },
+    filterByBrand: (state, action) => {
+      const brandName = action.payload;
+      if (brandName === "default") {
+        state.filteredProductsByBrand = state.products;
+      } else {
+        state.filteredProductsByBrand = state.products.filter(
+          (product) => product.ProductBrands[0].name === brandName
         );
       }
     },
@@ -64,6 +74,7 @@ export const {
   search,
   orderPrice,
   filterByCategory,
+  filterByBrand,
   changeInput,
 } = productSlice.actions;
 
@@ -71,7 +82,7 @@ export default productSlice.reducer;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${url}/product/`);
+    const response = await axios.get(`${urlBack}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
     console.error("Error");
@@ -80,7 +91,7 @@ export const fetchAllProducts = () => async (dispatch) => {
 
 export const fetchProductById = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`${url}/product/${id}`);
+    const response = await axios.get(`${urlBack}/product/${id}`);
     dispatch(getProductById(response.data));
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -89,7 +100,7 @@ export const fetchProductById = (id) => async (dispatch) => {
 
 export const fetchSearch = (name) => async (dispatch) => {
   try {
-    const response = await axios.get(`${url}/search?name=${name}`);
+    const response = await axios.get(`${urlBack}/search?name=${name}`);
     dispatch(search(response.data));
   } catch (error) {
     alert("Producto no existente");
@@ -98,10 +109,19 @@ export const fetchSearch = (name) => async (dispatch) => {
 
 export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
-    const response = await axios.get(`${url}/category/filter/${category}`);
+    const response = await axios.get(`${urlBack}/category/filter/${category}`);
     dispatch(filterByCategory(response.data));
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
+  }
+};
+
+export const fetchProductsByBrand = (brand) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${urlBack}/brand/filter/${brand}`);
+    dispatch(filterByBrand(response.data));
+  } catch (error) {
+    console.error("Error al buscar productos por marca:", error);
   }
 };
 
