@@ -14,6 +14,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
+import { loginUser } from "../../services/AuthServices";
 
 const LoginModal = ({
   isOpen,
@@ -82,9 +83,11 @@ const LoginModal = ({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
+      const response = await loginUser(user.username, user.address)
+      console.log(response)
     } else {
       Swal.fire({
         allowOutsideClick: false,

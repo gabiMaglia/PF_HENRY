@@ -6,11 +6,12 @@ import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts, fetchSearch } from "../../redux/slices/ProducSlice";
-import { search } from "../../redux/slices/ProducSlice";
+import { fetchAllProducts, fetchSearch, search } from "../../redux/slices/ProducSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
+  const { products, filteredProducts } = useSelector((state) => state.product);
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -19,20 +20,23 @@ const Products = () => {
       },
     },
   });
-  const { products } = useSelector((state) => state.product);
-
-  useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, [dispatch]);
 
   const cardsPage = 8;
+  
+  const productsToDisplay = filteredProducts.length > 0 ? filteredProducts : products;
 
-  const pageCount = Math.ceil(products?.length / cardsPage);
+  const pageCount = Math.ceil(productsToDisplay?.length / cardsPage);
+  // const pageCount = Math.ceil(products?.length / cardsPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,7 +52,8 @@ const Products = () => {
         <FiltersSorting />
 
         <ProductBox
-          products={products}
+          products={productsToDisplay}
+          // products={products}
           currentPage={currentPage}
           productsPerPage={cardsPage}
         />
