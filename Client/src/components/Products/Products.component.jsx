@@ -12,9 +12,12 @@ import { fetchAllProducts, fetchSearch } from "../../redux/slices/ProductSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products, filteredProductsByCategory, filteredProductsByBrand, inputName } = useSelector(
-    (state) => state.product
-  );
+  const {
+    products,
+    filteredProductsByCategory,
+    filteredProductsByBrand,
+    inputName,
+  } = useSelector((state) => state.product);
 
   const theme = createTheme({
     palette: {
@@ -25,7 +28,7 @@ const Products = () => {
     },
   });
 
-  const cardsPage = 8;
+  const cardsPage = 9;
 
   let productsToDisplay = products;
 

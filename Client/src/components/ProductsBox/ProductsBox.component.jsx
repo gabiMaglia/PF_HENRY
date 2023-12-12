@@ -21,9 +21,10 @@ const ProductBox = ({ products, currentPage, productsPerPage }) => {
     <Container
       sx={{
         display: "grid",
-        gridTemplateColumns: { md: "repeat(2,1fr)", lg: "repeat(4,1fr)" },
+        gridTemplateColumns: { md: "repeat(1,1fr)", lg: "repeat(3,1fr)" },
         flexDirection: "row",
         gap: 1,
+        mt: 2,
       }}
     >
       {currentProducts.map((product) => (

@@ -127,7 +127,7 @@ const FiltersSorting = () => {
                 backgroundColor: "#fd611a",
                 width: 90,
                 height: 90,
-                ml: { xs: 3 },
+                ml: { xs: 3, lg: -2.1 },
                 mt: 2,
                 "&:hover": { color: "black", backgroundColor: "#fd611a" },
               }}
