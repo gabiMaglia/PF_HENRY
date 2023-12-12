@@ -24,7 +24,6 @@ const FiltersSorting = () => {
   const handleCategoryClick = async (categoryName) => {
     await dispatch(fetchProductsByCategory(categoryName));
     dispatch(filterByCategory(categoryName));
-    console.log("Filtered products:", products);
   };
 
   const handleMarca = (e) => {
@@ -32,7 +31,6 @@ const FiltersSorting = () => {
   };
   const handleCosto = (e) => {
     dispatch(orderPrice(e.target.value));
-    console.log(orderPrice(e.target.value));
     setOp2(e.target.value);
   };
 

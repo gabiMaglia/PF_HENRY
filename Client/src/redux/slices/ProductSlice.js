@@ -42,11 +42,9 @@ const productSlice = createSlice({
     filterByCategory: (state, action) => {
       const categoryName = action.payload;
 
-      console.log("Categoría seleccionada:", categoryName);
       if (categoryName === "all") {
         state.filteredProducts = state.products;
       } else {
-        console.log("Filtrando por categoría:", categoryName);
         state.filteredProducts = state.products.filter(
           (product) => product.ProductCategories[0].name === categoryName
         );
