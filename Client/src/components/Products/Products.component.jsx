@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import FiltersSorting from "../Categories/Categories.component";
-import ProductBox from "../ProductsBox/ProductsBox.componets";
+import ProductBox from "../ProductsBox/ProductsBox.component";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts, fetchSearch, search } from "../../redux/slices/ProducSlice";
+import { fetchAllProducts } from "../../redux/slices/ProductSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -22,11 +22,11 @@ const Products = () => {
   });
 
   const cardsPage = 8;
-  
-  const productsToDisplay = filteredProducts.length > 0 ? filteredProducts : products;
+
+  const productsToDisplay =
+    filteredProducts.length > 0 ? filteredProducts : products;
 
   const pageCount = Math.ceil(productsToDisplay?.length / cardsPage);
-  // const pageCount = Math.ceil(products?.length / cardsPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (event, value) => {
@@ -36,7 +36,6 @@ const Products = () => {
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
-  
 
   return (
     <ThemeProvider theme={theme}>
@@ -53,7 +52,6 @@ const Products = () => {
 
         <ProductBox
           products={productsToDisplay}
-          // products={products}
           currentPage={currentPage}
           productsPerPage={cardsPage}
         />

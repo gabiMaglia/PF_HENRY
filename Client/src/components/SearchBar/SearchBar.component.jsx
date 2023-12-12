@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
-import { fetchSearch } from "../../redux/slices/ProducSlice";
+import { fetchSearch } from "../../redux/slices/ProductSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
@@ -75,10 +75,7 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img
-          src={img}
-          alt="Logotipo"
-        />
+        <Img src={img} alt="Logotipo" />
         {cartItemCount > 0 && (
           <span
             style={{

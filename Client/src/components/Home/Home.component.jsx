@@ -3,7 +3,7 @@ import HomeProducts from "../HomeProducts/HomeProducts.component";
 import CarouselBottomComponent from "../../components/CarouselBottom/CarouselBottom.component";
 import CarouselTopComponent from "../../components/CarouselTop/CarouselTop.component";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts } from "../../redux/slices/ProducSlice";
+import { fetchAllProducts } from "../../redux/slices/ProductSlice";
 
 const HomeComponent = () => {
   const dispatch = useDispatch();
