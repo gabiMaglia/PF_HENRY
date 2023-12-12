@@ -105,6 +105,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       errorsUser.dni.length === 0
     ) {
       // A realizar en caso de registro exitoso
+
       const userInfoForRequest = {
         email: userInfo.email,
         name: userInfo.name,
