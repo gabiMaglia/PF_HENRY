@@ -60,7 +60,7 @@ const addServiceController = async (
           subject: "ingreso a servicio ✔", 
           html: `su equipo se ingreso a nuestro sistema el dia ${date}<br><br>
           <div style="background: linear-gradient(30deg, white, orange 50%, white , orange 50%, black 100%); padding: 20px; text-align: center;">
-            <h2 style="color: #000;">hyper mega red</h2>
+            <h2 style="color: #000; font-weight: bold;">hyper mega red</h2>
             <p style="color:#FFFFFF; font-size:large;">Gracias por usar nuestro servicio.</p>
           </div>`, 
         });
