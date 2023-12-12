@@ -1,7 +1,7 @@
 const constsUserValidations = {
   regexEmail: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
   minCantCharUsername: 3,
-  maxCantCharUsername: 20,
+  maxCantCharUsername: 40,
   minCantCharAddress: 8,
   maxCantCharAddress: 20,
   regexContainNumber: /\d/,
