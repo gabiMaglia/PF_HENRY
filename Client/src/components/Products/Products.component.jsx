@@ -1,16 +1,20 @@
-import { Box } from "@mui/material";
+//HOOKS
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+//MATERIAL UI
+import { Box, Pagination } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Stack from "@mui/material/Stack";
+//COMPONENTS
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import { useEffect, useState } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useDispatch, useSelector } from "react-redux";
+//REDUCERS
 import { fetchAllProducts } from "../../redux/slices/ProductSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products, filteredProducts } = useSelector((state) => state.product);
+  const { products, filteredProductsByCategory, filteredProductsByBrand } =
+    useSelector((state) => state.product);
 
   const theme = createTheme({
     palette: {
@@ -23,8 +27,14 @@ const Products = () => {
 
   const cardsPage = 8;
 
-  const productsToDisplay =
-    filteredProducts.length > 0 ? filteredProducts : products;
+  let productsToDisplay = products;
+
+  if (filteredProductsByCategory.length > 0) {
+    productsToDisplay = filteredProductsByCategory;
+  }
+  if (filteredProductsByBrand.length > 0) {
+    productsToDisplay = filteredProductsByBrand;
+  }
 
   const pageCount = Math.ceil(productsToDisplay?.length / cardsPage);
   const [currentPage, setCurrentPage] = useState(1);

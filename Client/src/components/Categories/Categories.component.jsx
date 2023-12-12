@@ -1,14 +1,28 @@
+//HOOKS
 import { useState, useEffect } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
-import styled from "@emotion/styled";
-import data from "../../DataBase/categories.json";
 import { useDispatch, useSelector } from "react-redux";
+//MATERIAL UI
+import Select from "@mui/material/Select";
+import {
+  Box,
+  Button,
+  CardMedia,
+  Container,
+  Typography,
+  FormControl,
+  MenuItem,
+} from "@mui/material";
+import styled from "@emotion/styled";
+//DATA BASE
+import data from "../../DataBase/categories.json";
+//UTILS
+import { brands } from "../../utils/objectsTexts";
+//REDUCERS
 import {
   fetchProductsByCategory,
   filterByCategory,
+  fetchProductsByBrand,
+  filterByBrand,
   orderPrice,
 } from "../../redux/slices/ProductSlice";
 
@@ -16,27 +30,32 @@ const FiltersSorting = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
   const { categories } = data;
-  const [op1, setOp1] = useState("default");
-  const [op2, setOp2] = useState("default");
-
-  const marcas = ["Asus", "Nvidia", "Intel", "Steelseries", "Razer"];
+  const [selectedBrand, setSelectedBrand] = useState("default");
+  const [selectedPrice, setSelectedPrice] = useState("default");
 
   const handleCategoryClick = async (categoryName) => {
     await dispatch(fetchProductsByCategory(categoryName));
     dispatch(filterByCategory(categoryName));
   };
 
-  const handleMarca = (e) => {
-    setOp1(e.target.value);
+  const handleBrandChange = (e) => {
+    setSelectedBrand(e.target.value);
   };
-  const handleCosto = (e) => {
+
+  const handlePriceChange = (e) => {
     dispatch(orderPrice(e.target.value));
-    setOp2(e.target.value);
+    setSelectedPrice(e.target.value);
+  };
+
+  const handleFilter = async () => {
+    await dispatch(fetchProductsByBrand(selectedBrand));
+    dispatch(filterByBrand(selectedBrand));
+    dispatch(orderPrice(selectedPrice));
   };
 
   const clearFilters = () => {
-    setOp1("default");
-    setOp2("default");
+    setSelectedBrand("default");
+    setSelectedPrice("default");
   };
 
   const Selects = styled(Select)({
@@ -136,13 +155,13 @@ const FiltersSorting = () => {
             justifyContent: "center",
           }}
         >
-          <Selects value={op1} onChange={handleMarca}>
+          <Selects value={selectedBrand} onChange={handleBrandChange}>
             <Options value="default" disabled>
               Marca
             </Options>
-            {marcas.map((marca, i) => (
-              <Options key={i} value={marca}>
-                {marca}
+            {brands.map((brand, i) => (
+              <Options /*key={i}*/ key={brand} value={brand}>
+                {brand}
               </Options>
             ))}
           </Selects>
@@ -156,7 +175,7 @@ const FiltersSorting = () => {
             justifyContent: "center",
           }}
         >
-          <Selects value={op2} onChange={handleCosto}>
+          <Selects value={selectedPrice} onChange={handlePriceChange}>
             <Options value="default" disabled>
               Precio
             </Options>
@@ -164,7 +183,9 @@ const FiltersSorting = () => {
             <Options value="descending">Menor precio</Options>
           </Selects>
 
-          <Buttons variant="contained">Filtrar</Buttons>
+          <Buttons variant="contained" onClick={handleFilter}>
+            Filtrar
+          </Buttons>
           <Buttons variant="outlined" onClick={clearFilters}>
             Limpiar
           </Buttons>

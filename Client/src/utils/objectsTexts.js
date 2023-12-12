@@ -106,4 +106,21 @@ const sectionPages = [
   },
 ];
 
-export { itemsQuestions, textSupport, sectionInformation, sectionPages };
+const brands = [
+  "Amd",
+  "Antec",
+  "Asus",
+  "Cooler Master",
+  "Genius",
+  "Hyper",
+  "Intel",
+  "Lg",
+  "Logitech",
+  "Msi",
+  "Nvidia",
+  "Sony",
+  "Samsung",
+  "Ryzen",
+];
+
+export { itemsQuestions, textSupport, sectionInformation, sectionPages, brands };

@@ -6,7 +6,8 @@ const initialState = {
   products: [],
   allProducts: [],
   productById: {},
-  filteredProducts: [],
+  filteredProductsByCategory: [],
+  filteredProductsByBrand: [],
 };
 
 const productSlice = createSlice({
@@ -41,12 +42,21 @@ const productSlice = createSlice({
     },
     filterByCategory: (state, action) => {
       const categoryName = action.payload;
-
       if (categoryName === "all") {
-        state.filteredProducts = state.products;
+        state.filteredProductsByCategory = state.products;
       } else {
-        state.filteredProducts = state.products.filter(
+        state.filteredProductsByCategory = state.products.filter(
           (product) => product.ProductCategories[0].name === categoryName
+        );
+      }
+    },
+    filterByBrand: (state, action) => {
+      const brandName = action.payload;
+      if (brandName === "default") {
+        state.filteredProductsByBrand = state.products;
+      } else {
+        state.filteredProductsByBrand = state.products.filter(
+          (product) => product.ProductBrands[0].name == brandName
         );
       }
     },
@@ -59,6 +69,7 @@ export const {
   search,
   orderPrice,
   filterByCategory,
+  filterByBrand,
 } = productSlice.actions;
 
 export default productSlice.reducer;
@@ -96,5 +107,15 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
     dispatch(filterByCategory(response.data));
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
+  }
+};
+
+export const fetchProductsByBrand = (brand) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${url}/brand/filter/${brand}`);
+    console.log("probando:", response.data)
+    dispatch(filterByBrand(response.data));
+  } catch (error) {
+    console.error("Error al buscar productos por marca:", error);
   }
 };
