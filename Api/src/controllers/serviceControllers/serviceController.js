@@ -1,5 +1,9 @@
+const transporter = require("../../config/mailer");
 const { Service, Service_status, User, UserRole } = require("../../db");
-
+const { Op } = require("sequelize");
+const sequelize = require("sequelize");
+require("dotenv").config();
+const destinationEmail = process.env.EMAIL_MAILER;
 const addServiceController = async (
   product_model,
   product_income_date,
@@ -49,18 +53,27 @@ const addServiceController = async (
           include: [Service_status],
         });
 
+        //envio del mail
+        await transporter.sendMail({
+          from: `"aviso de ingreso 👻"  ${destinationEmail}`, // sender address
+          to: clientObj.email, // list of receivers
+          subject: "ingreso a servicio ✔", // Subject line
+          text: `su equipo fue registrado en nuestro sistema el dia ${newService.createdAt}`, // plain text body
+        });
+
+        //corta envio
         return createdService;
       } else {
         return {
           error: true,
           response: `There is no technician with that ID`,
-        }
+        };
       }
     } else {
       return {
         error: true,
         response: `There is no customer with that ID`,
-      }
+      };
     }
   }
 };
@@ -70,7 +83,7 @@ const updateServiceStatusController = async (id, field, value) => {
     return {
       error: true,
       response: `status not found`,
-    }
+    };
   }
   if (
     value === true ||
@@ -83,18 +96,25 @@ const updateServiceStatusController = async (id, field, value) => {
       where: { id: serviceStatus.ServiceId },
       include: [Service_status],
     });
+    const clientObj = await User.findByPk(service.userId);
+
+    await transporter.sendMail({
+      from: `"aviso de actualizacion de estado 👻"  ${destinationEmail}`, // sender address
+      to: clientObj.email, // list of receivers
+      subject: "actualizacion de estado✔", // Subject line
+      text: `se modifico el estado de su equipo ${service.product_model} a ${field}:${value}`, // plain text body
+    });
     return service;
   } else {
     return {
       error: true,
       response: `no se modifico el status`,
-    }
+    };
   }
 };
 
 const getAllServicesController = async () => {
   const services = await Service.findAll();
-  console.log(services);
   if (services.length === 0) {
     return {
       error: true,
@@ -117,13 +137,43 @@ const getServiceByIdController = async (id) => {
     return {
       error: true,
       response: `service not found`,
-    }
+    };
   }
   return service;
+};
+const getServiceByClient = async (id) => {
+  const Services = await Service.findAll({
+    where: { userId: id },
+  });
+  if (Services.length === 0) {
+    return {
+      error: true,
+      response: `service not found`,
+    };
+  }
+  return Services;
+};
+
+const getServiceByModel = async (model) => {
+  const Services = await Service.findAll({
+    where: sequelize.where(
+      sequelize.fn('lower', sequelize.col('product_model')),
+      { [Op.like]: '%' + model.toLowerCase() + '%' }
+    )
+  });
+  if (Services.length === 0) {
+    return {
+      error: true,
+      response: `service not found`,
+    };
+  }
+  return Services;
 };
 module.exports = {
   addServiceController,
   updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
+  getServiceByClient,
+  getServiceByModel,
 };

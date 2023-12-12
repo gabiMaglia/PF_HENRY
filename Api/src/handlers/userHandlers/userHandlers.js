@@ -3,9 +3,7 @@ const {
   getUserById,
   postUser,
   editUserById,
-  editUserCredentials,
-  getUserCredentials,
-  deleteUserById,
+  getUserByDni
 } = require("../../controllers/userControllers/userController");
 
 const getUsersHandler = async (req, res) => {
@@ -17,11 +15,20 @@ const getUsersHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-
 const getUserByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await getUserById(id);
+    if (response.error) return res.status(404).json(response.response);
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+const getUserByDniHandler = async (req, res) => {
+  const { dni } = req.params;
+  try {
+    const response = await getUserByDni(dni);
     if (response.error) return res.status(404).json(response.response);
     return res.status(200).json(response);
   } catch (error) {
@@ -70,7 +77,6 @@ const postUserHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-
 const editUserByIdHandler = async (req, res) => {
   const {
     name,
@@ -106,20 +112,11 @@ const editUserByIdHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-const deleteUserHandler = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const response = await deleteUserById(id);
-    res.status(200).json(response);
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
-};
 
 module.exports = {
   getUsersHandler,
   getUserByIdHandler,
   postUserHandler,
   editUserByIdHandler,
-  deleteUserHandler,
+  getUserByDniHandler
 };

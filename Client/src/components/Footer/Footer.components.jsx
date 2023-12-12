@@ -3,24 +3,28 @@ import { Link } from "react-router-dom";
 //MATERIAL UI
 import { Container, Typography, Box } from "@mui/material";
 import { Copyright } from "@mui/icons-material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 //HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
 import { sectionInformation, sectionPages } from "../../utils/objectsTexts";
 
 const FooterComponents = () => {
+  const smallScreen = useMediaQuery("(max-width:768px)");
   const boxStyle = {
     backgroundColor: "#000",
     width: "100%",
-    height: "300px",
+    height: smallScreen ? "600px" : "350px",
     display: "flex",
-    padding: "20px 180px",
+    flexDirection: "column",
+    justifyContent: smallScreen && "space-evenly",
   };
 
   const boxStyleOne = {
     width: "100%",
     display: "flex",
+    flexDirection: smallScreen ? "column" : "row",
+    justifyContent: "space-between",
   };
-
   const boxStyleTwo = {
     color: "#fff",
     padding: "30px",
@@ -30,7 +34,7 @@ const FooterComponents = () => {
     color: "#fff",
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-end",
+    alignItems: smallScreen ? "flex-start" : "flex-end",
     padding: "30px",
   };
 
@@ -39,6 +43,7 @@ const FooterComponents = () => {
     display: "flex",
     justifyContent: "center",
     padding: "0 0 30px 0",
+    paddingLeft: smallScreen && "10px",
   };
 
   return (
@@ -53,7 +58,10 @@ const FooterComponents = () => {
               <Box style={boxStyleTwo}>
                 <Typography
                   variant="h5"
-                  sx={{ fontWeight: "800", marginBottom: "25px" }}
+                  sx={{
+                    fontWeight: "800",
+                    marginBottom: "25px",
+                  }}
                 >
                   {section.title}
                 </Typography>
@@ -78,14 +86,24 @@ const FooterComponents = () => {
               <Box style={boxStyleThree}>
                 <Typography
                   variant="h5"
-                  sx={{ fontWeight: "800", marginBottom: "25px" }}
+                  sx={{
+                    fontWeight: "800",
+                    marginBottom: "25px",
+                  }}
                 >
                   {section.title}
                 </Typography>
                 {section.items.map((item, i) => (
                   <Box key={i} sx={{ display: "flex", marginBottom: "10px" }}>
                     <Link to={item.link} style={{ textDecoration: "none" }}>
-                      <Typography sx={{ marginRight: "10px", color: "#fff" }}>
+                      <Typography
+                        sx={{
+                          marginRight: "10px",
+                          color: "#fff",
+                          fontSize: smallScreen && { xs: 13 },
+                          marginTop: smallScreen && "5px",
+                        }}
+                      >
                         {item.text}
                       </Typography>
                     </Link>
@@ -115,5 +133,4 @@ const FooterComponents = () => {
     </>
   );
 };
-
 export default FooterComponents;

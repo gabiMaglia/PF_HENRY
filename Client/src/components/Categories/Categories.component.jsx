@@ -1,31 +1,70 @@
+//HOOKS
 import { useState } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+//MATERIAL UI
+import {
+  Box,
+  Button,
+  CardMedia,
+  Container,
+  Typography,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 import styled from "@emotion/styled";
+//DATA BASE
 import data from "../../DataBase/categories.json";
+//UTILS
+import { brands } from "../../utils/objectsTexts";
+//REDUCERS
+import {
+  fetchAllProducts,
+  fetchProductsByCategory,
+  filterByCategory,
+  fetchProductsByBrand,
+  filterByBrand,
+  orderPrice,
+  resetState,
+} from "../../redux/slices/ProductSlice";
 
 const FiltersSorting = () => {
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.product);
   const { categories } = data;
-  const marcas = ["Asus", "Nvidia", "Intel", "Steelseries", "Razer"];
-  const [op1, setOp1] = useState("default");
-  const [op2, setOp2] = useState("default");
+  const [selectedBrand, setSelectedBrand] = useState("default");
+  const [selectedPrice, setSelectedPrice] = useState("default");
 
-  const handleMarca = (e) => {
-    setOp1(e.target.value);
+  const handleCategoryClick = async (categoryName) => {
+    await dispatch(fetchProductsByCategory(categoryName));
+    dispatch(filterByCategory(categoryName));
   };
-  const handleCosto = (e) => {
-    setOp2(e.target.value);
+
+  const handleSelectBrand = (e) => {
+    setSelectedBrand(e.target.value);
+  };
+
+  const handleFilterBrand = async () => {
+    await dispatch(fetchProductsByBrand(selectedBrand));
+    dispatch(filterByBrand(selectedBrand));
+    dispatch(orderPrice(selectedPrice));
+  };
+
+  const handleOrderPrice = (e) => {
+    dispatch(orderPrice(e.target.value));
+    setSelectedPrice(e.target.value);
   };
 
   const clearFilters = () => {
-    setOp1("default");
-    setOp2("default");
+    setSelectedBrand("default");
+    setSelectedPrice("default");
+
+    dispatch(filterByCategory("all"));
+    dispatch(filterByBrand("default"));
+    dispatch(resetState());
   };
 
   const Selects = styled(Select)({
-    width: 400,
     height: 40,
     marginRight: 20,
     borderRadius: 10,
@@ -56,82 +95,127 @@ const FiltersSorting = () => {
   });
 
   return (
-    <Container sx={{ display: "flex", flexDirection: "column" }}>
-      <Box
+    <>
+      <Container
+        maxWidth="2200px"
+        height="auto"
         sx={{
-          mt: 2,
-          display: "grid",
-          gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
-          flexDirection: "row",
-          ml: 10,
+          backgroundColor: "black",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        {categories.map((categorie) => (
-          <Button
-            key={categorie.id}
-            sx={{
-              padding: (1, 1, 1, 1),
-              display: "flex",
-              flexDirection: "column",
-              textAlign: "center",
-              backgroundColor: "#fd611a",
-              width: 90,
-              height: 90,
-              mt: 2,
-              "&:hover": { color: "black", backgroundColor: "#fd611a" },
-            }}
-          >
-            <CategorieMedia
-              component="img"
-              src={categorie.image}
-              alt={categorie.name}
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                backgroundColor: "#fd611a",
-              }}
-            ></CategorieMedia>
-            <Typography sx={{ color: "black", fontSize: 10, fontWeight: 700 }}>
-              {categorie.name}
-            </Typography>
-          </Button>
-        ))}
-      </Box>
-      <Box>
-        <FormControl
+        <Box
           sx={{
             mt: 2,
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
             flexDirection: "row",
-            textAlign: "center",
-            justifyContent: "center",
+            ml: { xs: 1, lg: 10 },
+            mb: 2,
+            width: { xs: "100%", md: "80%", lg: "60%", xl: "50%" },
           }}
         >
-          <Selects value={op1} onChange={handleMarca}>
-            <Options value="default" disabled>
-              Marca
-            </Options>
-            {marcas.map((marca, i) => (
-              <Options key={i} value={marca}>
-                {marca}
+          {categories.map((categorie) => (
+            <Button
+              key={categorie.id}
+              sx={{
+                padding: (1, 1, 1, 1),
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "center",
+                backgroundColor: "#fd611a",
+                width: 90,
+                height: 90,
+                ml: { xs: 3, lg: -2.1 },
+                mt: 2,
+                "&:hover": { color: "black", backgroundColor: "#fd611a" },
+              }}
+              onClick={() => handleCategoryClick(categorie.name)}
+            >
+              <CategorieMedia
+                component="img"
+                src={categorie.image}
+                alt={categorie.name}
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  backgroundColor: "#fd611a",
+                }}
+              ></CategorieMedia>
+              <Typography
+                sx={{ color: "black", fontSize: 10, fontWeight: 700 }}
+              >
+                {categorie.name}
+              </Typography>
+            </Button>
+          ))}
+        </Box>
+      </Container>
+      <Box display="flex" alignItems="center">
+        <Box display="flex" sx={{ flexDirection: { xs: "column", lg: "row" } }}>
+          <FormControl
+            sx={{
+              mt: 2,
+              display: "flex",
+              textAlign: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Selects
+              value={selectedBrand}
+              onChange={handleSelectBrand}
+              sx={{ width: { xs: 200, lg: 400 } }}
+            >
+              <Options value="default" disabled>
+                Marca
               </Options>
-            ))}
-          </Selects>
-          <Selects value={op2} onChange={handleCosto}>
-            <Options value="default" disabled>
-              Precio
-            </Options>
-            <Options value="ascending">Mayor precio</Options>
-            <Options value="descending">Menor precio</Options>
-          </Selects>
-
-          <Buttons variant="contained">Filtrar</Buttons>
-          <Buttons variant="outlined" onClick={clearFilters}>
+              {brands.map((brand, i) => (
+                <Options key={brand} value={brand}>
+                  {brand}
+                </Options>
+              ))}
+            </Selects>
+          </FormControl>
+          <FormControl
+            sx={{
+              mt: 2,
+              display: "flex",
+              flexDirection: "row",
+              textAlign: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Selects
+              value={selectedPrice}
+              onChange={handleOrderPrice}
+              sx={{ width: { xs: 200, lg: 400 } }}
+            >
+              <Options value="default" disabled>
+                Precio
+              </Options>
+              <Options value="ascending">Mayor precio</Options>
+              <Options value="descending">Menor precio</Options>
+            </Selects>
+          </FormControl>
+        </Box>
+        <Box
+          display="flex"
+          sx={{ flexDirection: { xs: "column", lg: "row" }, mr: { xs: 4 } }}
+        >
+          <Buttons
+            variant="contained"
+            onClick={handleFilterBrand}
+            sx={{ mt: 2 }}
+          >
+            Filtrar
+          </Buttons>
+          <Buttons variant="outlined" onClick={clearFilters} sx={{ mt: 2 }}>
             Limpiar
           </Buttons>
-        </FormControl>
+        </Box>
       </Box>
-    </Container>
+    </>
   );
 };
 

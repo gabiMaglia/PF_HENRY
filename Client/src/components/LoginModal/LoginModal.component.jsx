@@ -7,17 +7,64 @@ import {
   Typography,
   FormControl,
   CardMedia,
-  FormHelperText,
+  Divider,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
-import userLoginValidate from "../../helpers/userLoginValidate";
+import { userLoginValidate } from "../../helpers/userValidate";
+import { googleLoginUser, loginUser } from "../../services/AuthServices";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
-const LoginModal = ({ isOpen, closeModal }) => {
+export const loginManagement = async (
+  username,
+  address,
+  setTokenAuthSesion
+) => {
+  const response = await loginUser(username, address);
+  const { error, data } = response;
+  if (error) {
+    Swal.fire({
+      allowOutsideClick: false,
+      customClass: {
+        container: "container",
+      },
+      icon: "error",
+      title: "Fallo en el inicio de sesion",
+      text: "Contraseña o usuario invalido",
+    });
+  } else if (data) {
+    Swal.fire({
+      allowOutsideClick: false,
+      customClass: {
+        container: "container",
+      },
+      icon: "success",
+      title: "Inicio de sesion correcto",
+      confirmButtonColor: "#fd611a",
+    }).then((result) => {
+      // Verifica si se hizo clic en Aceptar
+      if (result.isConfirmed) {
+        window.location.reload();
+      }
+    });
+  }
+  setTokenAuthSesion(data);
+};
+
+const LoginModal = ({
+  isOpen,
+  setLoginModalIsOpen,
+  setRegisterModalIsOpen,
+}) => {
+  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
+    "authToken",
+    {}
+  );
+
   // Estilos del contenedor principal
   const boxModalStyle = {
-    zIndex: 2,
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -34,6 +81,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
   const boxButtonStyle = {
     borderRadius: 2,
     backgroundColor: "#fd611a",
+    minWidth: "100px",
     width: "30%",
     height: "10%",
     mb: "1em",
@@ -42,26 +90,29 @@ const LoginModal = ({ isOpen, closeModal }) => {
 
   // Estado para el manejo del formulario de inicio de sesión
   const [user, setUser] = useState({
-    email: "",
-    password: "",
+    username: "",
+    address: "",
   });
 
+  const [isUsernameVerified, setIsUsernameVerified] = useState(false);
+
   const [errors, setErrors] = useState({
-    email: "El email es requerido",
-    password: "La contraseña es requerida",
+    username: "",
+    address: "",
   });
 
   // Función para manejar el cambio de estado del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
-    userLoginValidate({ ...user, [name]: value }, setErrors);
+    userLoginValidate({ [name]: value }, setErrors, errors);
   };
 
-  // Función para manejar la verificación del email
-  const emailVerification = () => {
-    if (!errors.email) {
-      setIsEmailVerified(true);
+  // Función para manejar la verificación del nombre de usuario
+  const usernameVerification = () => {
+    userLoginValidate({ username: user.username }, setErrors, errors);
+    if (!errors.username && user.username.length !== 0) {
+      setIsUsernameVerified(true);
     } else {
       Swal.fire({
         allowOutsideClick: false,
@@ -69,15 +120,19 @@ const LoginModal = ({ isOpen, closeModal }) => {
           container: "container",
         },
         icon: "error",
-        title: "Email invalido",
-        text: errors.email,
+        title: "Nombre de usuario invalido",
+        text: errors.username,
       });
     }
   };
 
-  const handleSubmit = () => {
-    if (!errors.password) {
+  const handleSubmit = async () => {
+    userLoginValidate({ address: user.address }, setErrors, errors);
+    if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
+      loginManagement(user.username, user.address, setTokenAuthSesion);
+      resetModal();
+      setLoginModalIsOpen(false);
     } else {
       Swal.fire({
         allowOutsideClick: false,
@@ -86,7 +141,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
         },
         icon: "error",
         title: "Contraseña invalida",
-        text: errors.password,
+        text: errors.address,
       });
     }
   };
@@ -109,18 +164,19 @@ const LoginModal = ({ isOpen, closeModal }) => {
 
   // Reseteo del modal
   const resetModal = () => {
-    setIsEmailVerified(false);
+    setIsUsernameVerified(false);
     setUser({
-      email: "",
-      password: "",
+      username: "",
+      address: "",
     });
     setErrors({
-      email: "El email es requerido",
-      password: "La contraseña es requerida",
+      username: "",
+      address: "",
     });
   };
-
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const googleAuth = () => {
+    googleLoginUser();
+  };
 
   return (
     <Modal
@@ -128,11 +184,31 @@ const LoginModal = ({ isOpen, closeModal }) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       onClose={() => {
-        closeModal(false);
+        setLoginModalIsOpen(false);
       }}
     >
       <Box sx={boxModalStyle}>
-        {!isEmailVerified ? (
+        <Button
+          sx={{
+            padding: "0px",
+            color: "black",
+            width: ".01px",
+            height: ".01px",
+          }}
+        >
+          <CancelIcon
+            sx={{
+              position: "fixed",
+              top: ".5em",
+              right: ".5em",
+            }}
+            onClick={() => {
+              setLoginModalIsOpen(false);
+            }}
+          />
+        </Button>
+
+        {!isUsernameVerified ? (
           <FormControl
             fullWidth
             sx={{ alignItems: "center", textAlign: "center" }}
@@ -147,29 +223,36 @@ const LoginModal = ({ isOpen, closeModal }) => {
               variant="body1"
               sx={{ color: "#fd611a" }}
             >
-              Para continuar ingresá tu email
+              Para continuar ingresá tu nombre de usuario
             </Typography>
             <TextField
-              label="Email"
-              error={Boolean(errors.email)}
-              helperText={errors.email}
+              label="Nombre de usuario"
+              error={Boolean(errors.username)}
+              helperText={errors.username}
               variant="outlined"
               fullWidth
               margin="normal"
-              value={user.email}
+              value={user.username}
               onChange={handleChange}
-              name="email"
+              name="username"
             />
-            {renderButton("Continuar", emailVerification)}
-            <Typography
-              variant="h5"
-              sx={{ mb: ".5em" }}
+            {renderButton("Continuar", usernameVerification)}
+            <Divider
+              sx={{
+                width: "100%",
+                color: "black",
+                mb: ".5em",
+                fontWeight: "600",
+              }}
             >
               O
-            </Typography>
+            </Divider>
+
             <Typography variant="body1">Inicia sesion con: </Typography>
             <CardMedia
+              onClick={googleAuth}
               sx={{
+                cursor: "pointer",
                 maxWidth: "2.5em",
                 maxHeight: "2.5em",
                 mt: ".5em",
@@ -181,7 +264,10 @@ const LoginModal = ({ isOpen, closeModal }) => {
             />
             <Typography>No tienes cuenta? Regístrate.</Typography>
 
-            {renderButton("Registrarse", () => {})}
+            {renderButton("Registrarse", () => {
+              setLoginModalIsOpen(false);
+              setRegisterModalIsOpen(true);
+            })}
           </FormControl>
         ) : (
           <FormControl
@@ -193,12 +279,13 @@ const LoginModal = ({ isOpen, closeModal }) => {
           >
             <Button
               sx={{
+                padding: "0px",
                 color: "black",
-                width: "0.1em",
-                height: ".1em",
                 position: "fixed",
-                top: "3em",
-                left: "1em",
+                width: ".01px",
+                height: ".01px",
+                top: "1.8em",
+                left: ".5em",
               }}
               onClick={resetModal}
             >
@@ -218,7 +305,7 @@ const LoginModal = ({ isOpen, closeModal }) => {
               variant="subtitle1"
               sx={{ backgroundColor: "grey", p: ".5em", borderRadius: "3em" }}
             >
-              {user.email}
+              {user.username}
             </Typography>
             <Typography
               variant="body1"
@@ -227,14 +314,14 @@ const LoginModal = ({ isOpen, closeModal }) => {
               Ingresá tu contraseña
             </Typography>
             <TextField
-              error={errors.password}
-              name="password"
+              error={Boolean(errors.address)}
+              name="address"
               type="password"
-              label="Password"
-              helperText={errors.password}
+              label="Contraseña"
+              helperText={errors.address}
               variant="outlined"
               fullWidth
-              value={user.password}
+              value={user.address}
               onChange={handleChange}
               margin="normal"
             />

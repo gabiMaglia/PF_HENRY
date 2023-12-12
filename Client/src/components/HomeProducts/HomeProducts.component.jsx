@@ -2,9 +2,9 @@ import React from "react";
 import HomeCard from "../HomeProduct/HomeProduct.component";
 import { Container, Typography } from "@mui/material";
 
-const HomeProducts = ({ products }) => {
+const HomeProducts = ({ allProducts }) => {
   // Tomar los primeros 6 productos
-  const homeProducts = products.slice(0, 6);
+  const homeProducts = allProducts.slice(0, 6);
 
   return (
     <Container>
