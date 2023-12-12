@@ -26,8 +26,8 @@ export const googleLoginUser = async () => {
     window.addEventListener("message", (event)=> {
       if(event.origin === `${url}`) {
         if (event.data) {
-          localStorage.setItem("user", JSON.stringify(event.data))
-          popup?.close
+          localStorage.setItem("data", JSON.stringify(event.data))
+          popup.close()
         }
       }
     })
