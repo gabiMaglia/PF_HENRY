@@ -9,33 +9,32 @@ import PATHROUTE from "../../helpers/pathRoute";
 import { sectionInformation, sectionPages } from "../../utils/objectsTexts";
 
 const FooterComponents = () => {
-  const smallScreen = useMediaQuery("(max-width:850px)");
+  const smallScreen = useMediaQuery("(max-width:768px)");
   const boxStyle = {
     backgroundColor: "#000",
     width: "100%",
     height: smallScreen ? "600px" : "350px",
     display: "flex",
-    flexDirection: "column-reverse",
+    flexDirection: "column",
     justifyContent: smallScreen && "space-evenly",
-    padding: smallScreen ? "0px" : "20px 180px",
   };
 
   const boxStyleOne = {
-    width: "100%", // Ajustado para ser siempre 100%
+    width: "100%",
     display: "flex",
     flexDirection: smallScreen ? "column" : "row",
     justifyContent: "space-between",
   };
   const boxStyleTwo = {
     color: "#fff",
-    padding: smallScreen ? "10px" : "30px",
+    padding: "30px",
   };
 
   const boxStyleThree = {
     color: "#fff",
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-end",
+    alignItems: smallScreen ? "flex-start" : "flex-end",
     padding: "30px",
   };
 
