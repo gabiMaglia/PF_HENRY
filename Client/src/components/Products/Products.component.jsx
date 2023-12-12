@@ -27,7 +27,6 @@ const Products = () => {
     filteredProducts.length > 0 ? filteredProducts : products;
 
   const pageCount = Math.ceil(productsToDisplay?.length / cardsPage);
-  // const pageCount = Math.ceil(products?.length / cardsPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (event, value) => {
@@ -53,7 +52,6 @@ const Products = () => {
 
         <ProductBox
           products={productsToDisplay}
-          // products={products}
           currentPage={currentPage}
           productsPerPage={cardsPage}
         />
