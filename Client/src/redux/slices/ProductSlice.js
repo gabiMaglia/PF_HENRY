@@ -65,6 +65,12 @@ const productSlice = createSlice({
         );
       }
     },
+    resetState: (state, action) => {
+      state.products = state.allProducts;
+      state.filteredProductsByCategory = [];
+      state.filteredProductsByBrand = [];
+      state.inputName = "";
+    },
   },
 });
 
@@ -76,6 +82,7 @@ export const {
   filterByCategory,
   filterByBrand,
   changeInput,
+  resetState
 } = productSlice.actions;
 
 export default productSlice.reducer;
