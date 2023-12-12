@@ -5,7 +5,7 @@ const url = "http://localhost:3001";
 const initialState = {
   products: [],
   allProducts: [],
-  productById: null,
+  productById: {},
   filteredProducts: [],
 };
 
