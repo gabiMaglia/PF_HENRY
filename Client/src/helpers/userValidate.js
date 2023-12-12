@@ -10,7 +10,7 @@ const constsUserValidations = {
   regexContainSpaces: /\s/,
   regexContainSpecialCharacters: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
   regexPhoneNumberAreaCode: /^\d{3,5}$/,
-  regexPhoneNumber: /^\d{5,7}$/,
+  regexPhoneNumber: /^\d{5,8}$/,
   minCantCharName: 3,
   maxCantCharName: 20,
   minCantCharLastName: 3,
