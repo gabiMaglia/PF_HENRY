@@ -107,7 +107,11 @@ const updateServiceStatusController = async (id, field, value) => {
       from: `"aviso de actualizacion de estado 👻"  ${destinationEmail}`, // sender address
       to: clientObj.email, // list of receivers
       subject: "actualizacion de estado✔", // Subject line
-      text: `se modifico el estado de su equipo ${service.product_model} a ${field}:${value}`, // plain text body
+      html: `se modifico el estado de su equipo ${service.product_model} a ${field}:${value}<br><br>
+      <div style="background: linear-gradient(30deg, white, orange 50%, white , orange 50%, black 100%); padding: 20px; text-align: center;">
+        <h2 style="color: #000;">hyper mega red</h2>
+        <p style="color:#FFFFFF; font-size:large;">Gracias por usar nuestro servicio.</p>
+      </div>`, // plain text body
     });
     return service;
   } else {
