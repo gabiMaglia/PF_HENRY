@@ -15,6 +15,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { loginUser } from "../../services/AuthServices";
+import { googleLoginUser, loginUser } from "../../services/AuthServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 
 export const loginManagement = async (
@@ -174,7 +175,9 @@ const LoginModal = ({
       address: "",
     });
   };
-
+  const googleAuth = () => {
+    googleLoginUser();
+  };
   return (
     <Modal
       open={isOpen}
@@ -247,7 +250,9 @@ const LoginModal = ({
 
             <Typography variant="body1">Inicia sesion con: </Typography>
             <CardMedia
+              onClick={googleAuth}
               sx={{
+                cursor: "pointer",
                 maxWidth: "2.5em",
                 maxHeight: "2.5em",
                 mt: ".5em",
