@@ -31,6 +31,11 @@ export default function SearchAppBar() {
   // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
 
+  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
+    "authToken",
+    {}
+  );
+
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate("/products");
@@ -75,7 +80,10 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
+        <Img
+          src={img}
+          alt="Logotipo"
+        />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -149,18 +157,33 @@ export default function SearchAppBar() {
             backgroundColor: "#fd611a",
           }}
         >
-          <Button
-            startIcon={<AccountBoxIcon />}
-            color="inherit"
-            sx={{
-              color: "white",
-            }}
-            onClick={() => {
-              setLoginModalIsOpen(true);
-            }}
-          >
-            INICIAR SESIÓN
-          </Button>
+          {tokenAuthSesion.login !== true ? (
+            <Button
+              startIcon={<AccountBoxIcon />}
+              color="inherit"
+              sx={{
+                color: "white",
+              }}
+              onClick={() => {
+                setLoginModalIsOpen(true);
+              }}
+            >
+              INICIAR SESIÓN
+            </Button>
+          ) : (
+            <Button
+              startIcon={<AccountBoxIcon />}
+              color="inherit"
+              sx={{
+                color: "white",
+              }}
+              onClick={() => {
+                setTokenAuthSesion({});
+              }}
+            >
+              CERRAR SESIÓN
+            </Button>
+          )}
         </Box>
         <Box>
           <Logo src={carrito} />
