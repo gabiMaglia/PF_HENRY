@@ -7,7 +7,14 @@ const HomeProducts = ({ allProducts }) => {
   const homeProducts = allProducts.slice(0, 6);
 
   return (
-    <Container>
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
       <Typography paddingLeft={8} margin={2} fontWeight={"bold"}>
         ÚLTIMAS NOVEDADES
       </Typography>
