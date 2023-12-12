@@ -15,8 +15,13 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { loginUser } from "../../services/AuthServices";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
-export const loginManagement = async (username, address) => {
+export const loginManagement = async (
+  username,
+  address,
+  setTokenAuthSesion
+) => {
   const response = await loginUser(username, address);
   const { error, data } = response;
   if (error) {
@@ -30,7 +35,6 @@ export const loginManagement = async (username, address) => {
       text: "Contraseña o usuario invalido",
     });
   } else if (data) {
-    console.log(response);
     Swal.fire({
       allowOutsideClick: false,
       customClass: {
@@ -39,8 +43,14 @@ export const loginManagement = async (username, address) => {
       icon: "success",
       title: "Inicio de sesion correcto",
       confirmButtonColor: "#fd611a",
+    }).then((result) => {
+      // Verifica si se hizo clic en Aceptar
+      if (result.isConfirmed) {
+        window.location.reload();
+      }
     });
   }
+  setTokenAuthSesion(data);
 };
 
 const LoginModal = ({
@@ -48,6 +58,11 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
+  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
+    "authToken",
+    {}
+  );
+
   // Estilos del contenedor principal
   const boxModalStyle = {
     position: "absolute",
@@ -115,7 +130,9 @@ const LoginModal = ({
     userLoginValidate({ address: user.address }, setErrors, errors);
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
-      loginManagement(user.username, user.address);
+      loginManagement(user.username, user.address, setTokenAuthSesion);
+      resetModal();
+      setLoginModalIsOpen(false);
     } else {
       Swal.fire({
         allowOutsideClick: false,

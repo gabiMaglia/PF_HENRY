@@ -3,7 +3,7 @@ import { useState } from "react";
 // Este enlace simplifica el proceso de administración del estado en un componente de React mientras persiste ese
 // estado en el almacenamiento local del navegador.
 export function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoresdValue] = useState(() => {
+  const [storedValue, setStoredValue] = useState(() => {
     // UseState: inicializa el estado (storedValue) con el
     // resultado de una función.
     try {
@@ -17,7 +17,7 @@ export function useLocalStorage(key, initialValue) {
   // Esta funcion, actualiza el estado del componente storedValue con el nuevo valor usando setStoredValue.
   const setValue = (value) => {
     try {
-      setStoresdValue(value);
+      setStoredValue(value);
       // Almacena el nuevo valor en el almacenamiento local del navegador utilizando el archivo key.
       // El valor se codifica en JSON antes del almacenamiento.
       window.localStorage.setItem(key, JSON.stringify(value));
