@@ -4,8 +4,9 @@ const {
   updateServiceStatusController,
   getAllServicesController,
   getServiceByIdController,
-  getServiceByClient,
-  getServiceByModel,
+  getServiceByClientController,
+  getServiceByModelController,
+  filterServicesByStatusController,
 } = require("../../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
@@ -69,9 +70,9 @@ const getAllServices = async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  }else{
+  } else {
     try {
-      const servicios = await getServiceByModel(model);
+      const servicios = await getServiceByModelController(model);
       if (servicios.error) {
         return res.status(404).send(servicios.response);
       }
@@ -98,7 +99,7 @@ const getServiceByClientid = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const Services = await getServiceByClient(id);
+    const Services = await getServiceByClientController(id);
     if (Services.error) {
       return res.status(404).send(Services.response);
     }
@@ -107,11 +108,24 @@ const getServiceByClientid = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
+const filterServiceByStatus=async(req,res)=>{
+  const {status,value}=req.body
+  try {
+    const services=await filterServicesByStatusController(status,value)
+    if (services.error) {
+      return res.status(404).json(services.response);
+    }
+    res.status(200).json(services)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+  }
+}
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
   getAllServices,
   getServiceById,
   getServiceByClientid,
+  filterServiceByStatus
 };
