@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import SearchIcon from "@mui/icons-material/Search";
 import img from "/icons/logo.jpeg";
-import { Input } from "@mui/material";
+import { Input, Typography } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
@@ -13,6 +13,7 @@ import { fetchChage, fetchSearch } from "../../redux/slices/ProductSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
+import { getUserById } from "../../services/UserServices";
 
 const Img = styled("img")({
   width: 140,
@@ -35,6 +36,18 @@ export default function SearchAppBar() {
     "authToken",
     {}
   );
+
+  const [username, setUsername] = useLocalStorage("userInfo", {
+    name: "",
+    surname: "",
+  });
+
+  const getUserInfo = async (token) => {
+    const { userId } = token;
+    const response = await getUserById(userId);
+    const { name, surname } = response;
+    setUsername({ name: name, surname: surname });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -59,6 +72,10 @@ export default function SearchAppBar() {
     // Por ejemplo, mostrar un modal del carrito
     setLoginModalIsOpen(true);
   };
+
+  useEffect(() => {
+    getUserInfo(tokenAuthSesion);
+  }, [tokenAuthSesion]);
 
   return (
     <Box
@@ -146,7 +163,20 @@ export default function SearchAppBar() {
           />
         </Button>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "row", mt: { xs: 2 } }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          mt: { xs: 2 },
+          alignItems: "center",
+        }}
+      >
+        <Box>
+          <Logo src={carrito} />
+        </Box>
+        <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
+          {username.name} <br /> {username.surname}
+        </Typography>
         <Box
           sx={{
             flexGrow: 0,
@@ -184,9 +214,6 @@ export default function SearchAppBar() {
               CERRAR SESIÓN
             </Button>
           )}
-        </Box>
-        <Box>
-          <Logo src={carrito} />
         </Box>
       </Box>
       <LoginModal
