@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Box, Button, CardMedia, Container, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import data from "../../DataBase/categories.json";
-import { orderPrice } from "../../redux/slices/ProducSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsByCategory, filterByCategory, orderPrice } from "../../redux/slices/ProducSlice";
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.product);
   const { categories } = data;
-  const marcas = ["Asus", "Nvidia", "Intel", "Steelseries", "Razer"];
   const [op1, setOp1] = useState("default");
   const [op2, setOp2] = useState("default");
+  
+  const marcas = ["Asus", "Nvidia", "Intel", "Steelseries", "Razer"];
+
+  const handleCategoryClick = async (categoryName) => {
+    await dispatch(fetchProductsByCategory(categoryName));
+    dispatch(filterByCategory(categoryName));
+    console.log("Filtered products:", products); 
+  };
 
   const handleMarca = (e) => {
     setOp1(e.target.value);
@@ -103,6 +111,7 @@ const FiltersSorting = () => {
                 mt: 2,
                 "&:hover": { color: "black", backgroundColor: "#fd611a" },
               }}
+              onClick={() => handleCategoryClick(categorie.name)}
             >
               <CategorieMedia
                 component="img"
