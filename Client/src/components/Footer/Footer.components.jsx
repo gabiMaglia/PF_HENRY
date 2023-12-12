@@ -17,6 +17,7 @@ const FooterComponents = () => {
     display: "flex",
     flexDirection: "column",
     justifyContent: smallScreen && "space-evenly",
+    alignItems: "center",
   };
 
   const boxStyleOne = {
@@ -24,17 +25,22 @@ const FooterComponents = () => {
     display: "flex",
     flexDirection: smallScreen ? "column" : "row",
     justifyContent: "space-between",
+    alignItems: "center",
   };
   const boxStyleTwo = {
     color: "#fff",
-    padding: "30px",
+    padding: { xs: 0, lg: 30 },
+    display: "flex",
+    flexDirection: "column",
+    alignItems: smallScreen ? "center" : "flex-start",
+    justifyContent: { xs: "center" },
   };
 
   const boxStyleThree = {
     color: "#fff",
     display: "flex",
     flexDirection: "column",
-    alignItems: smallScreen ? "flex-start" : "flex-end",
+    alignItems: smallScreen ? "center" : "flex-end",
     padding: "30px",
   };
 
@@ -65,16 +71,24 @@ const FooterComponents = () => {
                 >
                   {section.title}
                 </Typography>
-                {section.items.map((item, i) => (
-                  <Box key={i} sx={{ display: "flex", marginBottom: "10px" }}>
-                    {item.icon && (
-                      <item.icon
-                        sx={{ color: "#fd611a", marginRight: "10px" }}
-                      />
-                    )}
-                    <Typography>{item.text}</Typography>
-                  </Box>
-                ))}
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  {section.items.map((item, i) => (
+                    <Box
+                      key={i}
+                      sx={{
+                        display: "flex",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      {item.icon && (
+                        <item.icon
+                          sx={{ color: "#fd611a", marginRight: "10px" }}
+                        />
+                      )}
+                      <Typography>{item.text}</Typography>
+                    </Box>
+                  ))}
+                </Box>
               </Box>
             </Container>
           ))}
@@ -94,7 +108,14 @@ const FooterComponents = () => {
                   {section.title}
                 </Typography>
                 {section.items.map((item, i) => (
-                  <Box key={i} sx={{ display: "flex", marginBottom: "10px" }}>
+                  <Box
+                    key={i}
+                    sx={{
+                      display: "flex",
+                      marginBottom: "10px",
+                      flexDirection: "row-reverse",
+                    }}
+                  >
                     <Link to={item.link} style={{ textDecoration: "none" }}>
                       <Typography
                         sx={{
