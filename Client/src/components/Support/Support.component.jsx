@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Textarea from "@mui/joy/Textarea";
@@ -132,7 +133,7 @@ const SupportComponent = () => {
 
     try {
       setIsLoading(true);
-      
+
       const postData = await postDataRequest();
 
       if (postData.success) {
@@ -162,7 +163,7 @@ const SupportComponent = () => {
         title: "Oops...",
         text: "Hubo un error al enviar el formulario.",
       });
-    }finally{
+    } finally {
       setIsLoading(false);
     }
   };
@@ -190,7 +191,17 @@ const SupportComponent = () => {
       {/* CIERRE BOX TITULO SOPORTE */}
 
       {/* BOX FORM Y CAJA TEXTO */}
-      <Box sx={{ display: "flex", justifyContent: "center", margin: "0 auto" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "0 auto",
+          "@media (max-width: 768px)": {
+            display: "flex",
+            flexDirection: "column",
+          },
+        }}
+      >
         {/* BOX FORM */}
         <Box
           component="form"
@@ -202,6 +213,13 @@ const SupportComponent = () => {
             justifyContent: "center",
             padding: "50px",
             marginBottom: "50px",
+
+            "@media (max-width: 768px)": {
+              width: "100%",
+              marginBottom: "-10px",
+              marginTop: "10px",
+              order: "2"
+            },
           }}
         >
           <TextField
@@ -272,7 +290,11 @@ const SupportComponent = () => {
             }}
             endIcon={<SendIcon />}
           >
-            {isLoading ? <CircularProgress size={24} color="inherit" /> : "Enviar"}
+            {isLoading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Enviar"
+            )}
           </Button>
         </Box>
         {/* CIERRE BOX FORM */}
@@ -284,6 +306,12 @@ const SupportComponent = () => {
             display: "flex",
             justifyContent: "center",
             padding: "50px",
+
+            "@media (max-width: 768px)": {
+              width: "100%",
+              textAlign: "justify",
+              borderBottom: "1px solid #000",
+            },
           }}
         >
           {textSupport.map((item, index) => (
@@ -295,7 +323,13 @@ const SupportComponent = () => {
                 {item.title}
               </Typography>
               {item.content.map((paragraph, pIndex) => (
-                <Typography key={pIndex} sx={{ marginBottom: "10px" }}>
+                <Typography
+                  key={pIndex}
+                  sx={{
+                    marginBottom: "10px",
+                    "@media (max-width: 480px)": { margin: "20px 0" },
+                  }}
+                >
                   {paragraph.text && <span>{paragraph.text}</span>}
                   {paragraph.textOne && (
                     <span style={{ fontWeight: "bold" }}>
