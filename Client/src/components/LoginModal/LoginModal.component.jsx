@@ -14,7 +14,6 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
-import { loginUser } from "../../services/AuthServices";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 
@@ -178,6 +177,7 @@ const LoginModal = ({
   const googleAuth = () => {
     googleLoginUser();
   };
+
   return (
     <Modal
       open={isOpen}

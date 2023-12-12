@@ -1,9 +1,6 @@
 import axios from "axios";
-<<<<<<< HEAD
-const url = import.meta.env.VITE_BACKEND_URL;
-=======
-const url = import.meta.env.VITE_BACK_URL || "http://localhost:3001" ;
->>>>>>> 42026b82c6b9398debc341cb66324f4756bd4bc2
+
+const url = import.meta.env.VITE_BACK_URL || "http://localhost:3001";
 
 export const loginUser = async (username, password) => {
   try {
@@ -18,27 +15,33 @@ export const loginUser = async (username, password) => {
 };
 export const googleLoginUser = async () => {
   try {
-    const popup = window.open(`${url}/auth/google`, "targetWindow", `toolbar=no,
+    const popup = window.open(
+      `${url}/auth/google`,
+      "targetWindow",
+      `toolbar=no,
     location=no,
     status=no,
     menubar=no,
     scrollbars=yes,
     resizable=yes,
     width=620,
-    height=700` )
-    
-    window.addEventListener("message", (event)=> {
-      if(event.origin === `${url}`) {
+    height=700`
+    );
+
+    window.addEventListener("message", (event) => {
+      if (event.origin === `${url}`) {
         if (event.data) {
-          localStorage.setItem("data", JSON.stringify(event.data))
-          popup.close()
+          localStorage.setItem("authToken", JSON.stringify(event.data));
+          window.location.reload();
+          popup.close();
         }
       }
-    })
+    });
   } catch ({ response }) {
     return { error: response };
   }
 };
+
 export const registerUser = async (userObj) => {
   try {
     const registerData = await axios.post(`${url}/account/signin`, {
