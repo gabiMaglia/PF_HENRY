@@ -55,8 +55,8 @@ const LoginModal = ({
   const [isUsernameVerified, setIsUsernameVerified] = useState(false);
 
   const [errors, setErrors] = useState({
-    username: "El nombre de usuario es requerido",
-    address: "La contraseña es requerida",
+    username: "",
+    address: "",
   });
 
   // Función para manejar el cambio de estado del formulario
@@ -68,7 +68,8 @@ const LoginModal = ({
 
   // Función para manejar la verificación del nombre de usuario
   const usernameVerification = () => {
-    if (!errors.username) {
+    userLoginValidate({ username: user.username }, setErrors, errors);
+    if (!errors.username && user.username.length !== 0) {
       setIsUsernameVerified(true);
     } else {
       Swal.fire({
@@ -84,10 +85,10 @@ const LoginModal = ({
   };
 
   const handleSubmit = async () => {
+    userLoginValidate({ address: user.address }, setErrors, errors);
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
-      const response = await loginUser(user.username, user.address)
-      console.log(response)
+      const response = await loginUser(user.username, user.address);
     } else {
       Swal.fire({
         allowOutsideClick: false,
@@ -125,8 +126,8 @@ const LoginModal = ({
       address: "",
     });
     setErrors({
-      username: "El nombre de usuario es requerido",
-      address: "La contraseña es requerida",
+      username: "",
+      address: "",
     });
   };
 

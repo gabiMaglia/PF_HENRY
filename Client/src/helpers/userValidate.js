@@ -54,14 +54,14 @@ const addressValidate = (address) => {
       addressErrors.push(
         `La contraseña debe contener máximo ${maxCantCharAddress} caracteres`
       );
-    regexContainNumber.test(address) &&
+    !regexContainNumber.test(address) &&
       addressErrors.push("La contaseña debe contener al menos un número");
   }
-  regexContainUpperCase.test(address) &&
+  !regexContainUpperCase.test(address) &&
     addressErrors.push(
       "La contraseña debe contener al menos una letra mayúscula"
     );
-  regexContainLowerCase.test(address) &&
+  !regexContainLowerCase.test(address) &&
     addressErrors.push(
       "La contraseña debe contener al menos una letra minúscula"
     );
@@ -109,7 +109,7 @@ const phoneNumberAreaCodeValidate = (phoneNumberAreaCode) => {
   if (!phoneNumberAreaCode) {
     phoneNumberAreaCodeError.push("El codigo de area es requerido");
   } else {
-    regexPhoneNumberAreaCode.test(phoneNumberAreaCode) &&
+    !regexPhoneNumberAreaCode.test(phoneNumberAreaCode) &&
       phoneNumberAreaCodeError.push("El codigo de area no es valido");
     regexContainSpaces.test(phoneNumberAreaCode) &&
       phoneNumberAreaCodeError.push(
@@ -171,7 +171,7 @@ const surnameValidate = (surname) => {
   } else if (surname.length < minCantCharName) {
     surnameError = `El apellido debe contener al menos ${minCantCharName} caracteres`;
   } else if (surname.length > maxCantCharName) {
-    nameError = `El apellido debe contener máximo ${maxCantCharName} caracteres`;
+    surnameError = `El apellido debe contener máximo ${maxCantCharName} caracteres`;
   } else if (regexContainSpecialCharacters.test(surname)) {
     surnameError = "El apellido no puede contener caracteres especiales";
   }
@@ -202,9 +202,7 @@ export const userLoginValidate = (values, setErrors, antErrors) => {
     ...antErrors,
   };
 
-  username !== undefined
-    ? (errors.username = usernameValidate(values.username))
-    : "";
+  username !== undefined ? (errors.username = usernameValidate(username)) : "";
 
   if (address !== undefined) {
     !address

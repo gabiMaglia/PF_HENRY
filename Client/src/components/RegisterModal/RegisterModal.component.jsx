@@ -68,19 +68,38 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUserInfo({ ...userInfo, [name]: value });
-    userRegisterValidate({ [name]: value }, setErrorsUser, errorsUser);
+    if (name === "confirmAddress") {
+      userRegisterValidate(
+        {
+          address: userInfo.address,
+          [name]: value,
+        },
+        setErrorsUser,
+        errorsUser
+      );
+    } else if (name === "address") {
+      userRegisterValidate(
+        {
+          confirmAddress: userInfo.confirmAddress,
+          [name]: value,
+        },
+        setErrorsUser,
+        errorsUser
+      );
+    } else {
+      userRegisterValidate({ [name]: value }, setErrorsUser, errorsUser);
+    }
   };
 
   const handleSubmit = () => {
     userRegisterValidate(userInfo, setErrorsUser);
-
     if (
       !errorsUser.email &&
       errorsUser.address.length === 0 &&
       !errorsUser.confirmAddress &&
       !errorsUser.username &&
       errorsUser.phoneNumberAreaCode.length === 0 &&
-      !errorsUser.phoneNumber.length === 0 &&
+      errorsUser.phoneNumber.length === 0 &&
       !errorsUser.name &&
       !errorsUser.surname &&
       errorsUser.dni.length === 0
@@ -95,32 +114,24 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
         icon: "error",
         title: "Error/es en el formulario",
         html: `<div>          
-        ${errorsUser.email ? "Revise el email" : ""}</li>
-        <br/>
-        ${errorsUser.address.length > 0 ? "Revise la contraseña" : ""}
-        <br/>
+        ${errorsUser.email ? "Revise el email <br/>" : ""}</li>
+      
+        ${errorsUser.address.length > 0 ? "Revise la contraseña <br/>" : ""}
         ${
           errorsUser.confirmAddress
-            ? "Revise la confirmación de la contraseña"
+            ? "Revise la confirmación de la contraseña <br/>"
             : ""
         }
-        <br/>
-        ${errorsUser.username ? "Revise el nombre de usuario" : ""}
-        <br/>
+        ${errorsUser.username ? "Revise el nombre de usuario <br/>" : ""}
         ${
           errorsUser.phoneNumberAreaCode.length > 0
-            ? "Revise el codigo de area"
+            ? "Revise el codigo de area <br/>"
             : ""
         }
-        <br/>
-        ${errorsUser.phoneNumber.length > 0 ? "Revise el telefono" : ""}
-        <br/>
-        ${errorsUser.name ? "Revise el nombre" : ""}
-        <br/>
-        ${errorsUser.surname ? "Revise el apellido" : ""}
-        <br/>
-        ${errorsUser.dni.length > 0 ? `Revise el DNI` : ""}
-        <br/>
+        ${errorsUser.phoneNumber.length > 0 ? "Revise el telefono <br/>" : ""}
+        ${errorsUser.name ? "Revise el nombre <br/>" : ""}
+        ${errorsUser.surname ? "Revise el apellido <br/>" : ""}
+        ${errorsUser.dni.length > 0 ? `Revise el DNI <br/>` : ""}
         <div>`,
       });
     }
@@ -160,6 +171,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       open={isOpen}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      onClose={resetModal}
     >
       <Box sx={boxModalStyle}>
         <Button
@@ -255,6 +267,9 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
               name="birthdate"
               onChange={handleChange}
               value={userInfo.birthdate}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </Box>
           <Box sx={{ width: "100%" }}>
