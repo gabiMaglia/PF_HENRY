@@ -23,7 +23,7 @@ const DropdownItem = ({ title, content }) => (
 const Dropdown = () => {
   //ESTADOS
   const [openIndex, setOpenIndex] = useState(null);
-  
+
   //HANDLES
   const handleItemClick = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -44,7 +44,14 @@ const Dropdown = () => {
       >
         <Typography
           variant="h4"
-          sx={{ color: "#fff", textTransform: "uppercase", fontWeight: "800" }}
+          sx={{
+            color: "#fff",
+            textTransform: "uppercase",
+            fontWeight: "800",
+            "@media (max-width: 480px)": {
+              transform: "scale(.8)",
+            },
+          }}
         >
           Preguntas Frecuentes
         </Typography>
@@ -52,17 +59,33 @@ const Dropdown = () => {
       {/* CIERRE BOX TITULO */}
 
       {/* BOX DROPDOWN */}
-      <Box sx={{ padding: "100px" }}>
+      <Box
+        sx={{
+          padding: "100px",
+          "@media (max-width: 768px)": {
+            padding: "50px 0px",
+          },
+          "@media (max-width: 480px)": {
+            padding: "50px",
+          },
+        }}
+      >
         {itemsQuestions.map((item, index) => (
           <Paper
             key={index}
-            style={{
+            sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "flex-start",
-              width: "50vw",
+              justifyContent: "center",
+              width: "50%",
               margin: "15px auto",
               cursor: "pointer",
+              "@media (max-width: 768px)": {
+                width: "75%",
+              },
+              "@media (max-width: 480px)": {
+                width: "100%",
+              },
             }}
           >
             <Typography
