@@ -52,13 +52,14 @@ const addServiceController = async (
         const createdService = await Service.findByPk(newService.id, {
           include: [Service_status],
         });
-
+        const date = new Date(newService.createdAt).toISOString().split("T")[0];
+        console.log(date);
         //envio del mail
         await transporter.sendMail({
           from: `"aviso de ingreso 👻"  ${destinationEmail}`, // sender address
           to: clientObj.email, // list of receivers
           subject: "ingreso a servicio ✔", // Subject line
-          text: `su equipo fue registrado en nuestro sistema el dia ${newService.createdAt}`, // plain text body
+          text: `su equipo fue registrado en nuestro sistema el dia ${date}`, // plain text body
         });
 
         //corta envio
