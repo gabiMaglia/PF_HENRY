@@ -89,6 +89,27 @@ const LoginModal = ({
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
       const response = await loginUser(user.username, user.address);
+      const { error, data } = response;
+      if (error) {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "error",
+          title: "Fallo en el inicio de sesion",
+          text: "Contraseña o usuario invalido",
+        });
+      } else if (data) {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "success",
+          title: "Inicio de sesion correcto",
+        });
+      }
     } else {
       Swal.fire({
         allowOutsideClick: false,
