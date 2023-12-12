@@ -114,6 +114,14 @@ const updateServiceStatusController = async (id, field, value) => {
       </div>`, // plain text body
     });
     return service;
+  } else if (
+    (value !== true && field !== "final_diagnosis") ||
+    (value !== true && field !== "technical_diagnosis")
+  ) {
+    return {
+      error: true,
+      response: `el valor debe ser true o false`,
+    };
   } else {
     return {
       error: true,
@@ -166,9 +174,9 @@ const getServiceByClient = async (id) => {
 const getServiceByModel = async (model) => {
   const Services = await Service.findAll({
     where: sequelize.where(
-      sequelize.fn('lower', sequelize.col('product_model')),
-      { [Op.like]: '%' + model.toLowerCase() + '%' }
-    )
+      sequelize.fn("lower", sequelize.col("product_model")),
+      { [Op.like]: "%" + model.toLowerCase() + "%" }
+    ),
   });
   if (Services.length === 0) {
     return {
