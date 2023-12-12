@@ -4,8 +4,8 @@ import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
 const ProductCard = styled(Card)({
-  maxWidth: 270,
-  maxHeight: 500,
+  width: 300,
+  height: 350,
   margin: 0,
   display: "flex",
   flexDirection: "column",
@@ -19,9 +19,9 @@ const ProductCard = styled(Card)({
 });
 
 const ProductMedia = styled(CardMedia)({
-  padding: 10,
-  height: 150,
-  width: 150,
+  padding: 24,
+  height: 200,
+  width: 200,
   objectFit: "cover",
   margin: "auto",
 });
@@ -30,6 +30,7 @@ const ProductPrice = styled(Typography)({
   color: "#fd611a",
   fontWeight: "bold",
   marginTop: "auto",
+  marginBottom: 24,
   fontSize: 28,
 });
 
@@ -47,7 +48,7 @@ const HomeProduct = ({ product }) => {
         sx={{
           display: "flex",
           padding: 0,
-          m: 3,
+          m: 1,
           cursor: "pointer",
         }}
       >
