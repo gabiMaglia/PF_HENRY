@@ -202,9 +202,7 @@ export const userLoginValidate = (values, setErrors, antErrors) => {
     ...antErrors,
   };
 
-  username !== undefined
-    ? (errors.username = usernameValidate(values.username))
-    : "";
+  username !== undefined ? (errors.username = usernameValidate(username)) : "";
 
   if (address !== undefined) {
     !address

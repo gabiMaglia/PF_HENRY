@@ -135,7 +135,6 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
         <div>`,
       });
     }
-    console.log(errorsUser);
   };
 
   const resetModal = () => {
@@ -172,6 +171,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       open={isOpen}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      onClose={resetModal}
     >
       <Box sx={boxModalStyle}>
         <Button
