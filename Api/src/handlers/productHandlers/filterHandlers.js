@@ -1,5 +1,7 @@
 const {
   filterProducts,
+  orderSoldCount,
+  orderPrice,
 } = require("../../controllers/prodcutControllers/filterController");
 
 const filterProductsHandler = async (req, res) => {
@@ -23,4 +25,26 @@ const filterProductsHandler = async (req, res) => {
   }
 };
 
-module.exports = { filterProductsHandler };
+const orderSoldCountHandler = async (req, res) => {
+  try {
+    const destacados = await orderSoldCount();
+    res.status(200).json({ destacados });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const orderByPriceHandler = async (req, res) => {
+  const { price } = req.query;
+  try {
+    const orderedProducts = await orderPrice(price);
+    res.status(200).json({ orderedProducts });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+module.exports = {
+  filterProductsHandler,
+  orderSoldCountHandler,
+  orderByPriceHandler,
+};
