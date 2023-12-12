@@ -7,6 +7,7 @@ const initialState = {
   allProducts: [],
   productById: {},
   filteredProducts: [],
+  inputName:"",
 };
 
 const productSlice = createSlice({
@@ -22,6 +23,10 @@ const productSlice = createSlice({
     },
     search: (state, action) => {
       state.products = action.payload;
+      state.inputName = "";
+    },
+    changeInput: (state, action) => {
+      state.inputName = action.payload
     },
     orderPrice: (state, action) => {
       const prodOrder = state.products;
@@ -59,6 +64,7 @@ export const {
   search,
   orderPrice,
   filterByCategory,
+  changeInput,
 } = productSlice.actions;
 
 export default productSlice.reducer;
@@ -98,3 +104,11 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
     console.error("Error al buscar productos por categoría:", error);
   }
 };
+
+export const fetchChage = (inputValue) => async (dispatch) => {
+     try {
+      dispatch(changeInput(inputValue))
+     } catch (error) {
+      console.log("error")
+     }
+}

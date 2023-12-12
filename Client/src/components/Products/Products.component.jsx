@@ -6,11 +6,13 @@ import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts } from "../../redux/slices/ProductSlice";
+import { fetchAllProducts, fetchSearch } from "../../redux/slices/ProductSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products, filteredProducts } = useSelector((state) => state.product);
+  const { products, filteredProducts, inputName } = useSelector(
+    (state) => state.product
+  );
 
   const theme = createTheme({
     palette: {
@@ -34,7 +36,9 @@ const Products = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchAllProducts());
+    inputName !== ""
+      ? dispatch(fetchSearch(inputName))
+      : dispatch(fetchAllProducts());
   }, [dispatch]);
 
   return (

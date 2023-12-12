@@ -9,8 +9,8 @@ import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import carrito from "/icons/carrito-de-compras.png";
 import LoginModal from "../LoginModal/LoginModal.component";
-import { fetchSearch } from "../../redux/slices/ProductSlice";
-import { useDispatch } from "react-redux";
+import { fetchChage, fetchSearch } from "../../redux/slices/ProductSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 
@@ -28,13 +28,13 @@ const Logo = styled("img")({
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [input, setInput] = useState("");
+  // const [input, setInput] = useState("");
+  const { inputName } = useSelector((state) => state.product);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(fetchSearch(input));
-    setInput("");
     navigate("/products");
+    dispatch(fetchSearch(inputName));
   };
 
   // Estado del carrito manejado por useLocalStorage
@@ -46,7 +46,7 @@ export default function SearchAppBar() {
   const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleChange = (event) => {
-    setInput(event.target.value);
+    dispatch(fetchChage(event.target.value));
   };
 
   const handleCartButtonClick = () => {
@@ -107,7 +107,7 @@ export default function SearchAppBar() {
       >
         <Input
           type="text"
-          value={input}
+          value={inputName}
           placeholder=" Buscador"
           onChange={handleChange}
           sx={{
