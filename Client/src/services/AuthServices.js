@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = import.meta.env.VITE_BACK_URL;
+const url = import.meta.env.VITE_BACK_URL || "http://localhost:3001" ;
 
 export const loginUser = async (username, password) => {
   try {
@@ -14,8 +14,23 @@ export const loginUser = async (username, password) => {
 };
 export const googleLoginUser = async () => {
   try {
-    const loginData = await axios.get(`${url}/auth/google`);
-    return loginData;
+    const popup = window.open(`${url}/auth/google`, "targetWindow", `toolbar=no,
+    location=no,
+    status=no,
+    menubar=no,
+    scrollbars=yes,
+    resizable=yes,
+    width=620,
+    height=700` )
+    
+    window.addEventListener("message", (event)=> {
+      if(event.origin === `${url}`) {
+        if (event.data) {
+          localStorage.setItem("user", JSON.stringify(event.data))
+          popup?.close
+        }
+      }
+    })
   } catch ({ response }) {
     return { error: response };
   }
