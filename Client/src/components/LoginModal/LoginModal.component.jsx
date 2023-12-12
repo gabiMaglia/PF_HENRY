@@ -16,6 +16,33 @@ import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { loginUser } from "../../services/AuthServices";
 
+export const loginManagement = async (username, address) => {
+  const response = await loginUser(username, address);
+  const { error, data } = response;
+  if (error) {
+    Swal.fire({
+      allowOutsideClick: false,
+      customClass: {
+        container: "container",
+      },
+      icon: "error",
+      title: "Fallo en el inicio de sesion",
+      text: "Contraseña o usuario invalido",
+    });
+  } else if (data) {
+    console.log(response);
+    Swal.fire({
+      allowOutsideClick: false,
+      customClass: {
+        container: "container",
+      },
+      icon: "success",
+      title: "Inicio de sesion correcto",
+      confirmButtonColor: "#fd611a",
+    });
+  }
+};
+
 const LoginModal = ({
   isOpen,
   setLoginModalIsOpen,
@@ -88,28 +115,7 @@ const LoginModal = ({
     userLoginValidate({ address: user.address }, setErrors, errors);
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
-      const response = await loginUser(user.username, user.address);
-      const { error, data } = response;
-      if (error) {
-        Swal.fire({
-          allowOutsideClick: false,
-          customClass: {
-            container: "container",
-          },
-          icon: "error",
-          title: "Fallo en el inicio de sesion",
-          text: "Contraseña o usuario invalido",
-        });
-      } else if (data) {
-        Swal.fire({
-          allowOutsideClick: false,
-          customClass: {
-            container: "container",
-          },
-          icon: "success",
-          title: "Inicio de sesion correcto",
-        });
-      }
+      loginManagement(user.username, user.address);
     } else {
       Swal.fire({
         allowOutsideClick: false,

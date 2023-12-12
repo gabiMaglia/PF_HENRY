@@ -12,6 +12,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { userRegisterValidate } from "../../helpers/userValidate";
 import Swal from "sweetalert2";
 import { registerUser } from "../../services/AuthServices";
+import { loginManagement } from "../LoginModal/LoginModal.component";
 
 const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
   const [userInfo, setUserInfo] = useState({
@@ -121,7 +122,40 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
         userAddress: {},
       };
       const response = await registerUser(userInfoForRequest);
-      console.log(response);
+      const { data, error } = response;
+      if (error) {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "error",
+          title: "Falla en el registro",
+          text: "Por favor intentelo denuevo",
+        });
+      } else {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "success",
+          title: "Registro exitoso",
+          confirmButtonText: "Iniciar sesión",
+          confirmButtonColor: "#fd611a",
+          showCancelButton: true,
+          cancelButtonText: "Volver al menu principal",
+          cancelButtonColor: "red",
+        }).then((result) => {
+          // Verifica si se hizo clic en Aceptar
+          if (result.isConfirmed) {
+            loginManagement(userInfo.username, userInfo.address);
+            resetModal();
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            resetModal();
+          }
+        });
+      }
     } else {
       Swal.fire({
         allowOutsideClick: false,
