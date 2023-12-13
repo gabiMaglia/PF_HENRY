@@ -1,5 +1,5 @@
 import React from "react";
-import HomeCard from "../HomeProduct/HomeProduct.component";
+import CardProduct from "../ProductCard/ProductCard.component";
 import { Container, Typography } from "@mui/material";
 
 const HomeProducts = ({ allProducts }) => {
@@ -28,7 +28,7 @@ const HomeProducts = ({ allProducts }) => {
         }}
       >
         {homeProducts.map((product) => (
-          <HomeCard key={product.id} product={product} />
+          <CardProduct key={product.id} product={product} />
         ))}
       </Container>
     </Container>

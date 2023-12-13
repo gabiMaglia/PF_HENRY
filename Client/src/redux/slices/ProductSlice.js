@@ -1,36 +1,71 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-const urlBack = import.meta.env.VITE_BACKEND_URL;
+
 
 const initialState = {
-  products: [],
+  allProductsBackup: [],
   allProducts: [],
+  productsToShow: [],
   productById: {},
   filteredProductsByCategory: [],
   filteredProductsByBrand: [],
   inputName:"",
+  totalPages: 0,
+  currentPage: 0,
 };
 
+const PRODUCT_PER_PAGE = 9;
 const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
     getProducts: (state, action) => {
+      state.allProductsBackup = action.payload;
       state.allProducts = action.payload;
-      state.products = action.payload;
+      state.productsToShow = action.payload.slice(0, PRODUCT_PER_PAGE);
+      state.totalPages = Math.ceil(action.payload.length/PRODUCT_PER_PAGE);
     },
     getProductById: (state, action) => {
       state.productById = action.payload;
     },
+     nextPage: (state, action) => {
+      const nextPage = state.currentPage + 1;
+      if (nextPage >= state.totalPages) {
+        const startIndex = 0;
+        const endIndex = PRODUCT_PER_PAGE;
+     state.currentPage = 0
+     state.productsToShow = state.allProducts.slice(startIndex, endIndex)
+    }else {
+        const startIndex = nextPage * PRODUCT_PER_PAGE;
+        const endIndex = startIndex + PRODUCT_PER_PAGE;
+        state.currentPage= nextPage
+        state.productsToShow= state.allProducts.slice(startIndex, endIndex) 
+      }},
+    prevPage: (state, action) => {
+      const prevPage = state.currentPage - 1;
+      if (prevPage >= 0) {
+        const startIndex = prevPage * PRODUCT_PER_PAGE;
+        const endIndex = startIndex + PRODUCT_PER_PAGE;
+        state.currentPage = state.currentPage - 1
+        state.productsToShow = state.allProducts.slice(startIndex, endIndex)
+        }else {
+        const lastPage = state.totalPages - 1;
+        const startIndex = lastPage * PRODUCT_PER_PAGE;
+        const endIndex = startIndex + PRODUCT_PER_PAGE;
+        state.currentPage= lastPage
+        state.productsToShow= state.allProducts.slice(startIndex, endIndex)
+        
+      }},
     search: (state, action) => {
-      state.products = action.payload;
+      state.productsToShow = action.payload;
       state.inputName = "";
+      state.currentPage= 0
+      state.totalPages = Math.ceil(action.payload.length/PRODUCT_PER_PAGE);
     },
     changeInput: (state, action) => {
       state.inputName = action.payload
     },
     orderPrice: (state, action) => {
-      const prodOrder = state.products;
+      const prodOrder = state.productsToShow;
       const prodSort =
         action.payload == "ascending"
           ? prodOrder.sort((a, b) => {
@@ -43,32 +78,34 @@ const productSlice = createSlice({
               if (a.price < b.price) return -1;
             })
           : prodOrder;
-      state.products = prodSort;
+      state.productsToShow = prodSort;
     },
-    filterByCategory: (state, action) => {
-      const categoryName = action.payload;
-      if (categoryName === "all") {
-        state.filteredProductsByCategory = state.products;
-      } else {
-        state.filteredProductsByCategory = state.products.filter(
-          (product) => product.ProductCategories[0].name === categoryName
-        );
-      }
-    },
+      filterByCategory: (state, action) => {
+        const categoryName = action.payload;
+        state.productsToShow = state.allProducts.filter(
+            (product) => product.ProductCategories[0].name === categoryName
+          );
+          state.allProductsBackup = state.productsToShow
+          state.currentPage= 0
+          state.totalPages = Math.ceil(state.productsToShow.length/9); 
+        
+      },
     filterByBrand: (state, action) => {
       const brandName = action.payload;
-      if (brandName === "default") {
-        state.filteredProductsByBrand = state.products;
-      } else {
-        state.filteredProductsByBrand = state.products.filter(
+      console.log(brandName)
+      console.log(state.allProductsBackup, "estado all")
+      state.productsToShow = state.allProductsBackup.filter(
           (product) => product.ProductBrands[0].name === brandName
-        );
-      }
+        ); 
+        console.log(state.productsToShow, "estado")
+        state.currentPage= 0
+        state.totalPages = Math.ceil(state.productsToShow.length/9); 
     },
+    
     resetState: (state, action) => {
-      state.products = state.allProducts;
-      state.filteredProductsByCategory = [];
-      state.filteredProductsByBrand = [];
+      state.allProductsBackup= state.allProducts
+      state.productsToShow = state.allProductsBackup.slice(0, PRODUCT_PER_PAGE);
+      state.totalPages = Math.ceil(state.allProductsBackup.length/PRODUCT_PER_PAGE);
       state.inputName = "";
     },
   },
@@ -82,60 +119,10 @@ export const {
   filterByCategory,
   filterByBrand,
   changeInput,
-  resetState
+  resetState,
+  prevPage,
+  nextPage,
 } = productSlice.actions;
 
 export default productSlice.reducer;
 
-export const fetchAllProducts = () => async (dispatch) => {
-  try {
-    const response = await axios.get(`${urlBack}/product/`);
-    dispatch(getProducts(response.data));
-  } catch (error) {
-    console.error("Error");
-  }
-};
-
-export const fetchProductById = (id) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${urlBack}/product/${id}`);
-    dispatch(getProductById(response.data));
-  } catch (error) {
-    console.error("Error fetching product by ID:", error);
-  }
-};
-
-export const fetchSearch = (name) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${urlBack}/search?name=${name}`);
-    dispatch(search(response.data));
-  } catch (error) {
-    alert("Producto no existente");
-  }
-};
-
-export const fetchProductsByCategory = (category) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${urlBack}/category/filter/${category}`);
-    dispatch(filterByCategory(response.data));
-  } catch (error) {
-    console.error("Error al buscar productos por categoría:", error);
-  }
-};
-
-export const fetchProductsByBrand = (brand) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${urlBack}/brand/filter/${brand}`);
-    dispatch(filterByBrand(response.data));
-  } catch (error) {
-    console.error("Error al buscar productos por marca:", error);
-  }
-};
-
-export const fetchChage = (inputValue) => async (dispatch) => {
-     try {
-      dispatch(changeInput(inputValue))
-     } catch (error) {
-      console.log("error")
-     }
-}

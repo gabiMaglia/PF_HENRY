@@ -34,7 +34,7 @@ const ProductPrice = styled(Typography)({
   fontSize: 28,
 });
 
-const HomeProduct = ({ product }) => {
+const CardProduct = ({ product }) => {
   const { id, name, price, ProductImages } = product;
 
   const imageUrl =
@@ -71,4 +71,4 @@ const HomeProduct = ({ product }) => {
   );
 };
 
-export default HomeProduct;
+export default CardProduct;

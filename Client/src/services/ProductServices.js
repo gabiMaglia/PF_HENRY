@@ -1,57 +1,57 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+const urlBack = import.meta.env.VITE_BACKEND_URL;
+import { search, getProductById, getProducts, filterByCategory, filterByBrand, changeInput } from "../redux/slices/ProductSlice";
 
-const url = import.meta.env.VITE_BACKEND_URL;
-
-export const getAllProduct = async () => {
+export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const GetProduct = await axios.get(`${url}/product/`);
-    return GetProduct;
-  } catch ({ GetProduct }) {
-    return { error: GetProduct };
+    const response = await axios.get(`${urlBack}/product/`);
+    dispatch(getProducts(response.data));
+  } catch (error) {
+    console.error("Error");
   }
 };
 
-export const GetById = async () => {
+export const fetchProductById = (id) => async (dispatch) => {
   try {
-    const GetId = await axios.get(`${url}/product/:id`);
-    return GetId;
-  } catch ({ GetId }) {
-    return { error: GetId };
+    const response = await axios.get(`${urlBack}/product/${id}`);
+    dispatch(getProductById(response.data));
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
   }
 };
 
-export const PostProduct = async () => {
+export const fetchSearch = (name) => async (dispatch) => {
   try {
-    const PostProd = await axios.post(`${url}/product/`);
-    return PostProd;
-  } catch ({ PostProd }) {
-    return { error: PostProd };
+    const response = await axios.get(`${urlBack}/search?name=${name}`);
+    dispatch(search(response.data));
+  } catch (error) {
+    Swal.fire("Producto no existente", '', 'error')
   }
 };
 
-export const PutProduct = async () => {
+export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
-    const PutProduct = await axios.put(`${url}/product/:id`);
-    return PutProduct;
-  } catch ({ PutProduct }) {
-    return { error: PutProduct };
+    const response = await axios.get(`${urlBack}/category/filter/${category}`);
+    dispatch(filterByCategory(response.data));
+  } catch (error) {
+    console.error("Error al buscar productos por categoría:", error);
   }
 };
 
-export const DeleteProduct = async () => {
+export const fetchProductsByBrand = (brand) => async (dispatch) => {
   try {
-    const Delete = await axios.delete(`${url}/product/:id`);
-    return Delete;
-  } catch ({ Delete }) {
-    return { error: Delete };
+    const response = await axios.get(`${urlBack}/brand/filter/${brand}`);
+    dispatch(filterByBrand(response.data));
+  } catch (error) {
+    console.error("Error al buscar productos por marca:", error);
   }
 };
 
-export const getBrandProducts = async () => {
-  try {
-    const searchProduct = await axios.get(`${url}/brand/filter/:name`);
-    return searchProduct;
-  } catch ({ searchProduct }) {
-    return { error: searchProduct };
-  }
-};
+export const fetchChage = (inputValue) => async (dispatch) => {
+     try {
+      dispatch(changeInput(inputValue))
+     } catch (error) {
+      console.log("error")
+     }
+}
