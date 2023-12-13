@@ -11,7 +11,7 @@ const HomeProducts = ({ allProducts }) => {
       sx={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
         flexDirection: "column",
       }}
     >
@@ -25,6 +25,10 @@ const HomeProducts = ({ allProducts }) => {
           flexWrap: "wrap",
           marginBottom: 5,
           gap: 1,
+          [`@media (max-width:1100px)`]: {
+            flexDirection: "column",
+            alignItems: "center",
+          },
         }}
       >
         {homeProducts.map((product) => (
