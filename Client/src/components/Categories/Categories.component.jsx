@@ -19,18 +19,18 @@ import data from "../../DataBase/categories.json";
 import { brands } from "../../utils/objectsTexts";
 //REDUCERS
 import {
-  fetchAllProducts,
   fetchProductsByCategory,
-  filterByCategory,
   fetchProductsByBrand,
-  filterByBrand,
-  orderPrice,
+} from "../../services/ProductServices";
+import {
   resetState,
+  orderPrice,
+  filterByBrand,
+  filterByCategory,
 } from "../../redux/slices/ProductSlice";
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
   const { categories } = data;
   const [selectedBrand, setSelectedBrand] = useState("default");
   const [selectedPrice, setSelectedPrice] = useState("default");
