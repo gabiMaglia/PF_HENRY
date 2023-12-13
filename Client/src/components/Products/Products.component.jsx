@@ -8,16 +8,20 @@ import { Box, Pagination, Stack } from "@mui/material";
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
 //REDUCERS
-import { fetchAllProducts, fetchSearch } from "../../redux/slices/ProductSlice";
+import { fetchSearch, fetchAllProducts } from "../../services/ProductServices";
+import { nextPage } from "../../redux/slices/ProductSlice";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const {
-    products,
-    filteredProductsByCategory,
-    filteredProductsByBrand,
-    inputName,
-  } = useSelector((state) => state.product);
+  const { productsToShow, inputName, totalPages, currentPage } = useSelector(
+    (state) => state.product
+  );
+
+  useEffect(() => {
+    inputName !== ""
+      ? dispatch(fetchSearch(inputName))
+      : dispatch(fetchAllProducts());
+  }, [dispatch]);
 
   const theme = createTheme({
     palette: {
@@ -28,29 +32,11 @@ const Products = () => {
     },
   });
 
-  const cardsPage = 9;
-
-  let productsToDisplay = products;
-
-  if (filteredProductsByCategory.length > 0) {
-    productsToDisplay = filteredProductsByCategory;
-  }
-  if (filteredProductsByBrand.length > 0) {
-    productsToDisplay = filteredProductsByBrand;
-  }
-
-  const pageCount = Math.ceil(productsToDisplay?.length / cardsPage);
-  const [currentPage, setCurrentPage] = useState(1);
+  console.log(productsToShow, "all");
 
   const handlePageChange = (event, value) => {
-    setCurrentPage(value);
+    dispatch(nextPage(value - 1));
   };
-
-  useEffect(() => {
-    inputName !== ""
-      ? dispatch(fetchSearch(inputName))
-      : dispatch(fetchAllProducts());
-  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -65,19 +51,15 @@ const Products = () => {
       >
         <FiltersSorting />
 
-        <ProductBox
-          products={productsToDisplay}
-          currentPage={currentPage}
-          productsPerPage={cardsPage}
-        />
+        <ProductBox products={productsToShow} />
 
         <Stack spacing={2} sx={{ mt: 3 }}>
           <Pagination
             variant="outlined"
             shape="rounded"
             color="primary"
-            count={pageCount}
-            page={currentPage}
+            count={totalPages}
+            page={currentPage + 1}
             onChange={handlePageChange}
             sx={{ color: "black" }}
           />

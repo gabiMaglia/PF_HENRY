@@ -1,15 +1,14 @@
+import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
-import HomeProduct from "../HomeProduct/HomeProduct.component";
-import { Box, Button, Container } from "@mui/material";
+import CardProduct from "../ProductCard/ProductCard.component";
+import { Box, Button, Container, Typography } from "@mui/material";
 
-const ProductBox = ({ products, currentPage, productsPerPage }) => {
+const ProductBox = ({ products }) => {
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
-  const startIndex = (currentPage - 1) * productsPerPage;
+  const { productsToShow } = useSelector((state) => state.product);
 
-  const endIndex = startIndex + productsPerPage;
-
-  const currentProducts = products.slice(startIndex, endIndex);
+  const isThereAnyProducts = productsToShow.length === 0;
 
   const handleAddToCart = (product) => {
     // Agrega el producto al carrito
@@ -27,33 +26,39 @@ const ProductBox = ({ products, currentPage, productsPerPage }) => {
         mt: 2,
       }}
     >
-      {currentProducts.map((product) => (
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          key={product.id}
-        >
-          <HomeProduct product={product} />
-          <Button
-            variant="contained"
-            sx={{
-              maxWidth: 270,
-              backgroundColor: "#fd611a",
-              color: "black",
-              transition: "transform 0.3s",
-              "&:hover": {
-                transform: "scale(1.05)",
-                backgroundColor: "#fd611a",
-                color: "white",
-              },
-            }}
-            onClick={() => handleAddToCart(product)}
+      {isThereAnyProducts ? (
+        <Typography>
+          No se encontro ningun producto relacionado con su busqueda
+        </Typography>
+      ) : (
+        products.map((product) => (
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            key={product.id}
           >
-            AGREGAR AL CARRITO
-          </Button>
-        </Box>
-      ))}
+            <CardProduct product={product} />
+            <Button
+              variant="contained"
+              sx={{
+                maxWidth: 270,
+                backgroundColor: "#fd611a",
+                color: "black",
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  backgroundColor: "#fd611a",
+                  color: "white",
+                },
+              }}
+              onClick={() => handleAddToCart(product)}
+            >
+              AGREGAR AL CARRITO
+            </Button>
+          </Box>
+        ))
+      )}
     </Container>
   );
 };

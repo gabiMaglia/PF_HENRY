@@ -12,7 +12,8 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProductById, resetState } from "../../redux/slices/ProductSlice";
+import { resetState } from "../../redux/slices/ProductSlice";
+import { fetchProductById } from "../../services/ProductServices";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
