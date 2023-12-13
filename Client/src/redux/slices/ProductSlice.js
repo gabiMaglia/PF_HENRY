@@ -65,7 +65,7 @@ const productSlice = createSlice({
       state.inputName = action.payload
     },
     orderPrice: (state, action) => {
-      const prodOrder = state.products;
+      const prodOrder = state.productsToShow;
       const prodSort =
         action.payload == "ascending"
           ? prodOrder.sort((a, b) => {
@@ -78,7 +78,7 @@ const productSlice = createSlice({
               if (a.price < b.price) return -1;
             })
           : prodOrder;
-      state.products = prodSort;
+      state.productsToShow = prodSort;
     },
       filterByCategory: (state, action) => {
         const categoryName = action.payload;
