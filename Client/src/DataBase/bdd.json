@@ -1,91 +1,91 @@
 {
     
-    "products": [
-      {
-        "id": 1,
-        "name": "Gabinete Antec N292 MESH RGB Vidrio Templado",
-        "price": 20.99,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":[
-          "/products/1657835109152_img.png",
-          "/products/1657851327701_img.png",
-          "/products/1658084192936_img.png"
+        "products": [
+          {
+            "id": 1,
+            "name": "Gabinete Antec N292 MESH RGB Vidrio Templado",
+            "price": 20.99,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":[
+              "/products/1657835109152_img.png",
+              "/products/1657851327701_img.png",
+              "/products/1658084192936_img.png"
+            ]
+          },
+          {
+            "id": 2,
+            "name": "Placa de Video ASUS GeForce GTX 1660 SUPER 6GB DDR6",
+            "price": 30.50,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":[
+              "/products/1657835158754_img.png",
+              "/products/1658087082308_img.png",
+              "/products/1658087021345_img.png"
+            ]
+          },
+          {
+            "id": 3,
+            "name": "Auriculares Redragon Scylla H901 PC | PS4 | Switch | XBOX",
+            "price": 40,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1657848918807_img.png"]
+          },
+          {
+            "id": 4,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 5,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 6,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 7,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 8,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 9,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 10,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          },
+          {
+            "id": 11,
+            "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
+            "price": 60,
+            "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
+            "image":["/products/1658089708829_img.png"]
+          }
         ]
-      },
-      {
-        "id": 2,
-        "name": "Placa de Video ASUS GeForce GTX 1660 SUPER 6GB DDR6",
-        "price": 30.50,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":[
-          "/products/1657835158754_img.png",
-          "/products/1658087082308_img.png",
-          "/products/1658087021345_img.png"
-        ]
-      },
-      {
-        "id": 3,
-        "name": "Auriculares Redragon Scylla H901 PC | PS4 | Switch | XBOX",
-        "price": 40,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1657848918807_img.png"]
-      },
-      {
-        "id": 4,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 5,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 6,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 7,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 8,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 9,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 10,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
-      },
-      {
-        "id": 11,
-        "name": "Mouse Wesdar Cerberus x4 Black Rainbow 2400DPI",
-        "price": 60,
-        "description":"Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit mollitia iusto maxime temporibus ea cupiditate corporis quos optio cumque necessitatibus autem at consequuntur nam eligendi repellat alias itaque, odio modi.",
-        "image":["/products/1658089708829_img.png"]
       }
-    ]
-  }
   
