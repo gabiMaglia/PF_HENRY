@@ -5,20 +5,14 @@ const {
 } = require("../../controllers/prodcutControllers/filterController");
 
 const filterProductsHandler = async (req, res) => {
-  const { categoryName, brandName } = req.params;
-
+  const { category, brand } = req.query;
   try {
-    if (categoryName) {
-      const filteredProducts = await filterProducts(categoryName);
-      res.status(200).json(filteredProducts);
-    } else if (categoryName && brandName) {
-      const filteredProducts = await filterProducts(categoryName, brandName);
-      res.status(200).json(filteredProducts);
-    } else if (brandName) {
-      const filteredProducts = await filterProducts(brandName);
-      res.status(200).json(filteredProducts);
+    const response = await filterProducts(category, brand);
+
+    if (response.length === 0) {
+      res.status(404).json({ message: "No se encontraron productos." });
     } else {
-      res.status(400).json({ error: error.message });
+      res.status(200).json(response);
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
