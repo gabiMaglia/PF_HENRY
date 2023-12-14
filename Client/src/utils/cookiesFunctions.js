@@ -5,12 +5,14 @@ const AUTHDATA_COOKIE_NAME = "authData";
 
 // Funciones para manejar las cookies para el token
 export const setAuthDataCookie = (authData) => {
-  const serialized = JSON.stringify(authData);
-  Cookies.set(AUTHDATA_COOKIE_NAME, serialized, {
-    expires: 1,
-    sameSite: "None",
-    secure: true,
-  });
+  if (authData !== undefined) {
+    const serialized = JSON.stringify(authData);
+    Cookies.set(AUTHDATA_COOKIE_NAME, serialized, {
+      expires: 1,
+      sameSite: "None",
+      secure: true,
+    });
+  }
 };
 
 export const getAuthDataCookie = () => {
