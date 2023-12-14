@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import SearchBar from "./components/SearchBar/SearchBar.component";
 import NavBar from "./components/NavBar/NavBar.component";
 import Footer from "./components/Footer/Footer.components";
+import ButtonScrollTopComponent from "./components/ButtonScrollTop/ButtonScrollTop.component";
 //VIEWS
 import Home from "./views/Home/Home.view";
 import Products from "./views/Products/Products.view";
@@ -20,21 +21,22 @@ import PATHROUTES from "./helpers/pathRoute";
 const App = () => {
   return (
     <>
-        <Box>
-          <SearchBar />
-          <NavBar />
-          <Routes>
-            <Route path={PATHROUTES.HOME} element={<Home />} />
-            <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
-            <Route path={PATHROUTES.SUPPORT} element={<Support />} />
-            <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
-            <Route
-              path={PATHROUTES.DETAIL}
-              element={<Detail products={PRODUCTS} />}
-            />
-          </Routes>
-          <Footer />
-        </Box>
+      <Box>
+        <SearchBar />
+        <NavBar />
+        <Routes>
+          <Route path={PATHROUTES.HOME} element={<Home />} />
+          <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
+          <Route path={PATHROUTES.SUPPORT} element={<Support />} />
+          <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
+          <Route
+            path={PATHROUTES.DETAIL}
+            element={<Detail products={PRODUCTS} />}
+          />
+        </Routes>
+        <ButtonScrollTopComponent />
+        <Footer />
+      </Box>
     </>
   );
 };
