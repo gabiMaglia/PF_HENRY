@@ -12,6 +12,7 @@ import Products from "./views/Products/Products.view";
 import Support from "./views/Support/Support.view";
 import Questions from "./views/Questions/Questions.view";
 import Detail from "./views/Detail/Detail.view";
+import ShoppingCartView from "./views/ShoppingCart/ShoppingCart.view";
 //MATREIAL UI
 import { Box } from "@mui/material";
 //DB
@@ -30,6 +31,7 @@ const App = () => {
           <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
           <Route path={PATHROUTES.SUPPORT} element={<Support />} />
           <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
+          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCartView />} />
           <Route
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}

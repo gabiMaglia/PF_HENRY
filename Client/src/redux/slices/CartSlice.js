@@ -16,7 +16,8 @@ const cartSlice = createSlice({
       state.items.push(action.payload);
     },
     checkout: (state) => {
-      state.items = [];
+      //   state.items = [];
+      state;
     },
   },
 });

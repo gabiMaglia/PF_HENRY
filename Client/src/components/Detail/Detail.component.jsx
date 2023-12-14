@@ -10,7 +10,7 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetState } from "../../redux/slices/ProductSlice";
 import { fetchProductById } from "../../services/ProductServices";
@@ -45,6 +45,7 @@ const ThumbnailContainer = styled(Container)({
 const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { productById, isLoading } = useSelector((state) => state.product);
   const [cartItems, setCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -95,8 +96,11 @@ const Detail = () => {
   }, [productById]);
 
   const handleAddToCart = () => {
-    setCartItems([...cartItems, productById]);
-    console.log("Product added to cart for ID:", productById.id);
+    if (productById && productById.id) {
+      setCartItems([...cartItems, productById]);
+      console.log("Product added to cart for ID:", productById.id);
+      navigate("/shoppingcart");
+    }
   };
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
