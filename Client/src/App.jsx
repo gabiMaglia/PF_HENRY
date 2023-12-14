@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 //COMPONENTS
 import SearchBar from "./components/SearchBar/SearchBar.component";
 import NavBar from "./components/NavBar/NavBar.component";
-import Footer from "./components/Footer/Footer.components";
+import Footer from "./components/Footer/Footer.component";
 import WhatsAppComponent from "./components/WhatsApp/WhatsApp.component";
 import ButtonScrollTopComponent from "./components/ButtonScrollTop/ButtonScrollTop.component";
 //VIEWS
