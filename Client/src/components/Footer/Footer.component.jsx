@@ -14,7 +14,7 @@ const FooterComponents = () => {
   const boxStyle = {
     backgroundColor: "#000",
     width: "100%",
-    height: smallScreen ? "600px" : "250px",
+    height: smallScreen ? "750px" : "250px",
     display: "flex",
     flexDirection: "column",
     justifyContent: smallScreen && "space-evenly",
@@ -30,9 +30,9 @@ const FooterComponents = () => {
     marginBottom: "-30px",
   };
   const boxStyleTwo = {
-    margin:"20px 0 0 20px",
+    margin: smallScreen?"20px": "20px 0 0 20px",
     color: "#fff",
-    padding: { xs: 0, lg: 30 },
+    padding: "20px 0 0 0",
     display: "flex",
     flexDirection: "column",
     alignItems: smallScreen ? "center" : "flex-start",
@@ -40,11 +40,12 @@ const FooterComponents = () => {
   };
 
   const boxStyleThree = {
+    margin: smallScreen?"20px": "20px 0 0 20px",
     color: "#fff",
     display: "flex",
     flexDirection: "column",
-    alignItems: smallScreen ? "center" : "flex-end",
-    padding: "30px",
+    alignItems:  "center",
+    padding: "20px",
   };
 
   const boxStyleCopyright = {
@@ -96,7 +97,9 @@ const FooterComponents = () => {
             </Container>
           ))}
           {/* CIERRE SECCION INFORMACION */}
-
+          <Container>
+            <MapContainer />
+          </Container>
           {/* SECCION PAGINAS */}
           {sectionPages.map((section, index) => (
             <Container key={index}>
@@ -137,9 +140,7 @@ const FooterComponents = () => {
               </Box>
             </Container>
           ))}
-          <Container>
-            <MapContainer />
-          </Container>
+
           {/* CIERRE SECCION PAGINAS */}
         </Box>
         {/* CIERRE BOX SECCIONES */}
