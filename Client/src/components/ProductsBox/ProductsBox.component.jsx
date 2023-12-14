@@ -3,6 +3,7 @@ import { useLocalStorage } from "../../Hook/useLocalStorage";
 import CardProduct from "../ProductCard/ProductCard.component";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 
 const ProductBox = ({ products }) => {
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
@@ -10,11 +11,13 @@ const ProductBox = ({ products }) => {
   const { productsToShow } = useSelector((state) => state.product);
 
   const isThereAnyProducts = productsToShow.length === 0;
+  const navigate = useNavigate();
 
   const handleAddToCart = (product) => {
     // Agrega el producto al carrito
     setCartItems([...cartItems, product]);
     console.log("Producto agregado al carrito:", product);
+    navigate("/carrito");
   };
 
   return (
