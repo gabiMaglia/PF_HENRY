@@ -1,5 +1,6 @@
 //HOOKS
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 //MATERIAL UI
 import { Card, Box } from "@mui/material";
 //IMAGES - CAROUSEL
@@ -38,6 +39,7 @@ const carouselData = [
 ];
 
 const CarouselTopComponent = () => {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleNext = () => {
@@ -51,21 +53,21 @@ const CarouselTopComponent = () => {
     switch (activeIndex) {
       case 0:
         productUrl =
-          "http://localhost:5173/product/22a6c046-bdb5-416c-9fe5-8c7fdac8e8cf";
+          "/product/22a6c046-bdb5-416c-9fe5-8c7fdac8e8cf";
         break;
       case 1:
         productUrl =
-          "http://localhost:5173/product/1664bf89-90f1-43ad-9bfb-575d5c9d0385";
+          "/product/1664bf89-90f1-43ad-9bfb-575d5c9d0385";
         break;
       case 2:
         productUrl =
-          "http://localhost:5173/product/65cdc8f9-c39f-4115-84cc-f2ae42d15da1";
+          "/product/65cdc8f9-c39f-4115-84cc-f2ae42d15da1";
         break;
       default:
         break;
     }
     if (productUrl) {
-      window.location.href = productUrl;
+      navigate(productUrl);
     }
   };
 
@@ -79,7 +81,6 @@ const CarouselTopComponent = () => {
   return (
     <Box sx={{ paddingTop: "10px" }}>
       <a
-        href="#"
         onClick={handleImageClick}
       >
         <Card
