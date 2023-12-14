@@ -1,6 +1,5 @@
 //HOOKS
 import { Routes, Route } from "react-router-dom";
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 //COMPONENTS
 import SearchBar from "./components/SearchBar/SearchBar.component";
 import NavBar from "./components/NavBar/NavBar.component";
@@ -18,15 +17,9 @@ import PRODUCTS from "./dataBase/bdd.json";
 //HELPERS
 import PATHROUTES from "./helpers/pathRoute";
 
-const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
-
 const App = () => {
   return (
     <>
-      <GoogleReCaptchaProvider
-        reCaptchaKey={reCaptchaKey}
-        language="es"
-      >
         <Box>
           <SearchBar />
           <NavBar />
@@ -42,7 +35,6 @@ const App = () => {
           </Routes>
           <Footer />
         </Box>
-      </GoogleReCaptchaProvider>
     </>
   );
 };

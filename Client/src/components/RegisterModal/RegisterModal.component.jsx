@@ -1,3 +1,7 @@
+//HOOKS
+import { useState } from "react";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+//MATERIAL UI
 import {
   Modal,
   Box,
@@ -7,12 +11,17 @@ import {
   Button,
   FormHelperText,
 } from "@mui/material";
-import { useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { userRegisterValidate } from "../../helpers/userValidate";
-import Swal from "sweetalert2";
-import { registerUser } from "../../services/AuthServices";
+//COMPONENTS
 import { loginManagement } from "../LoginModal/LoginModal.component";
+//HELPERS
+import { userRegisterValidate } from "../../helpers/userValidate";
+//REDUX
+import { registerUser } from "../../services/AuthServices";
+//SWEET ALERT
+import Swal from "sweetalert2";
+
+const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
 const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
   const [userInfo, setUserInfo] = useState({
@@ -238,210 +247,194 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           />
         </Button>
         <Typography variant="h4">Registrarse</Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: "#fd611a", mt: ".5em" }}
-        >
+        <Typography variant="body1" sx={{ color: "#fd611a", mt: ".5em" }}>
           Para crear una cuenta ingresá tus datos
         </Typography>
-        <FormControl
-          onSubmit={handleSubmit}
-          fullWidth
-          sx={{
-            maxWidth: "100%",
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "1em",
-            mt: "2em",
-          }}
-        >
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Nombre/s"
-              variant="outlined"
-              name="name"
-              onChange={handleChange}
-              value={userInfo.name}
-              error={Boolean(errorsUser.name)}
-            />
-            <FormHelperText
-              sx={{ fontSize: ".6em" }}
-              error={true}
-            >
-              {errorsUser.name}
-            </FormHelperText>
-          </Box>
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Apellido/s"
-              variant="outlined"
-              name="surname"
-              onChange={handleChange}
-              value={userInfo.surname}
-              error={Boolean(errorsUser.surname)}
-            />
-            <FormHelperText
-              error={true}
-              sx={{ fontSize: "0.6em" }}
-            >
-              {errorsUser.surname}
-            </FormHelperText>
-          </Box>
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Nombre de usuario"
-              variant="outlined"
-              name="username"
-              onChange={handleChange}
-              value={userInfo.username}
-              error={Boolean(errorsUser.username)}
-            />
-            <FormHelperText
-              error={true}
-              sx={{ fontSize: "0.6em" }}
-            >
-              {errorsUser.username}
-            </FormHelperText>
-          </Box>
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Fecha de nacimiento"
-              type="date"
-              variant="outlined"
-              name="birthdate"
-              onChange={handleChange}
-              value={userInfo.birthdate}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Box>
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="DNI"
-              type="number"
-              variant="outlined"
-              name="dni"
-              onChange={handleChange}
-              value={userInfo.dni}
-              error={errorsUser.dni.length > 0}
-            />
-            {errorsUser.dni.map((error, key) => {
-              return (
-                <FormHelperText
-                  sx={{ fontSize: ".6em" }}
-                  key={key}
-                  error={true}
-                >
-                  {error}
-                </FormHelperText>
-              );
-            })}
-          </Box>
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Contraseña"
-              variant="outlined"
-              type="password"
-              name="address"
-              onChange={handleChange}
-              value={userInfo.address}
-              error={errorsUser.address.length > 0}
-            />
-            {errorsUser.address.map((error, key) => {
-              return (
-                <FormHelperText
-                  sx={{ fontSize: ".6em" }}
-                  key={key}
-                  error={true}
-                >
-                  {error}
-                </FormHelperText>
-              );
-            })}
-          </Box>
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Confirmación de contraseña"
-              variant="outlined"
-              type="password"
-              name="confirmAddress"
-              onChange={handleChange}
-              value={userInfo.confirmAddress}
-              error={Boolean(errorsUser.confirmAddress)}
-            />
-            <FormHelperText
-              sx={{ fontSize: ".6em" }}
-              error={true}
-            >
-              {errorsUser.confirmAddress}
-            </FormHelperText>
-          </Box>
-          <Box sx={{ width: "100%" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Email"
-              variant="outlined"
-              name="email"
-              onChange={handleChange}
-              value={userInfo.email}
-              helperText={errorsUser.email}
-              error={Boolean(errorsUser.email)}
-            />
-          </Box>
-          <Box sx={{ minWidth: "100px", flex: "1/3" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Codigo de area"
-              variant="outlined"
-              name="phoneNumberAreaCode"
-              onChange={handleChange}
-              value={userInfo.phoneNumberAreaCode}
-              error={errorsUser.phoneNumberAreaCode.length > 0}
-            />
-            {errorsUser.phoneNumberAreaCode.map((error, key) => {
-              return (
-                <FormHelperText
-                  sx={{ fontSize: "0.6em" }}
-                  key={key}
-                  error={true}
-                >
-                  {error}
-                </FormHelperText>
-              );
-            })}
-          </Box>
-          <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
-            <TextField
-              sx={{ width: "100%" }}
-              label="Numero de telefono"
-              variant="outlined"
-              name="phoneNumber"
-              onChange={handleChange}
-              value={userInfo.phoneNumber}
-              error={errorsUser.phoneNumber.length > 0}
-            />
-            {errorsUser.phoneNumber.map((error, key) => {
-              return (
-                <FormHelperText
-                  key={key}
-                  error={true}
-                >
-                  {error}
-                </FormHelperText>
-              );
-            })}
-          </Box>
-        </FormControl>
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
+          <FormControl
+            onSubmit={handleSubmit}
+            fullWidth
+            sx={{
+              maxWidth: "100%",
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "1em",
+              mt: "2em",
+            }}
+          >
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Nombre/s"
+                variant="outlined"
+                name="name"
+                onChange={handleChange}
+                value={userInfo.name}
+                error={Boolean(errorsUser.name)}
+              />
+              <FormHelperText sx={{ fontSize: ".6em" }} error={true}>
+                {errorsUser.name}
+              </FormHelperText>
+            </Box>
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Apellido/s"
+                variant="outlined"
+                name="surname"
+                onChange={handleChange}
+                value={userInfo.surname}
+                error={Boolean(errorsUser.surname)}
+              />
+              <FormHelperText error={true} sx={{ fontSize: "0.6em" }}>
+                {errorsUser.surname}
+              </FormHelperText>
+            </Box>
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Nombre de usuario"
+                variant="outlined"
+                name="username"
+                onChange={handleChange}
+                value={userInfo.username}
+                error={Boolean(errorsUser.username)}
+              />
+              <FormHelperText error={true} sx={{ fontSize: "0.6em" }}>
+                {errorsUser.username}
+              </FormHelperText>
+            </Box>
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Fecha de nacimiento"
+                type="date"
+                variant="outlined"
+                name="birthdate"
+                onChange={handleChange}
+                value={userInfo.birthdate}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="DNI"
+                type="number"
+                variant="outlined"
+                name="dni"
+                onChange={handleChange}
+                value={userInfo.dni}
+                error={errorsUser.dni.length > 0}
+              />
+              {errorsUser.dni.map((error, key) => {
+                return (
+                  <FormHelperText
+                    sx={{ fontSize: ".6em" }}
+                    key={key}
+                    error={true}
+                  >
+                    {error}
+                  </FormHelperText>
+                );
+              })}
+            </Box>
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Contraseña"
+                variant="outlined"
+                type="password"
+                name="address"
+                onChange={handleChange}
+                value={userInfo.address}
+                error={errorsUser.address.length > 0}
+              />
+              {errorsUser.address.map((error, key) => {
+                return (
+                  <FormHelperText
+                    sx={{ fontSize: ".6em" }}
+                    key={key}
+                    error={true}
+                  >
+                    {error}
+                  </FormHelperText>
+                );
+              })}
+            </Box>
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Confirmación de contraseña"
+                variant="outlined"
+                type="password"
+                name="confirmAddress"
+                onChange={handleChange}
+                value={userInfo.confirmAddress}
+                error={Boolean(errorsUser.confirmAddress)}
+              />
+              <FormHelperText sx={{ fontSize: ".6em" }} error={true}>
+                {errorsUser.confirmAddress}
+              </FormHelperText>
+            </Box>
+            <Box sx={{ width: "100%" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Email"
+                variant="outlined"
+                name="email"
+                onChange={handleChange}
+                value={userInfo.email}
+                helperText={errorsUser.email}
+                error={Boolean(errorsUser.email)}
+              />
+            </Box>
+            <Box sx={{ minWidth: "100px", flex: "1/3" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Codigo de area"
+                variant="outlined"
+                name="phoneNumberAreaCode"
+                onChange={handleChange}
+                value={userInfo.phoneNumberAreaCode}
+                error={errorsUser.phoneNumberAreaCode.length > 0}
+              />
+              {errorsUser.phoneNumberAreaCode.map((error, key) => {
+                return (
+                  <FormHelperText
+                    sx={{ fontSize: "0.6em" }}
+                    key={key}
+                    error={true}
+                  >
+                    {error}
+                  </FormHelperText>
+                );
+              })}
+            </Box>
+            <Box sx={{ minWidth: "100px", flexGrow: "1" }}>
+              <TextField
+                sx={{ width: "100%" }}
+                label="Numero de telefono"
+                variant="outlined"
+                name="phoneNumber"
+                onChange={handleChange}
+                value={userInfo.phoneNumber}
+                error={errorsUser.phoneNumber.length > 0}
+              />
+              {errorsUser.phoneNumber.map((error, key) => {
+                return (
+                  <FormHelperText key={key} error={true}>
+                    {error}
+                  </FormHelperText>
+                );
+              })}
+            </Box>
+          </FormControl>
+        </GoogleReCaptchaProvider>
         <Box sx={boxButtonStyle}>
           <Button
             onClick={handleSubmit}

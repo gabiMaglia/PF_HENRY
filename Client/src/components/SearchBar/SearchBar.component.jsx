@@ -1,23 +1,26 @@
+//HOOKS
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import SearchIcon from "@mui/icons-material/Search";
-import img from "/icons/logo.jpeg";
-import { Input, Typography } from "@mui/material";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
-import carrito from "/icons/carrito-de-compras.png";
-import LoginModal from "../LoginModal/LoginModal.component";
-import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+//MATERIAL UI
+import { Input, Typography, Box, Button, styled } from "@mui/material";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SearchIcon from "@mui/icons-material/Search";
+//COMPONENTS
+import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
+//REDUX
+import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
+//UTILS
 import {
   getAuthDataCookie,
   removeAuthDataCookie,
 } from "../../utils/cookiesFunctions";
+//IMAGES - ICONS
+import img from "/icons/logo.jpeg";
+import carrito from "/icons/carrito-de-compras.png";
 
 const Img = styled("img")({
   width: 140,
@@ -144,10 +147,7 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img
-          src={img}
-          alt="Logotipo"
-        />
+        <Img src={img} alt="Logotipo" />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -226,15 +226,15 @@ export default function SearchAppBar() {
         </Typography>
         {renderLoginOrLogoutButton()}
       </Box>
-      <LoginModal
-        isOpen={loginModalIsOpen}
-        setLoginModalIsOpen={setLoginModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
-      <RegisterModal
-        isOpen={registerModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
+        <LoginModal
+          isOpen={loginModalIsOpen}
+          setLoginModalIsOpen={setLoginModalIsOpen}
+          setRegisterModalIsOpen={setRegisterModalIsOpen}
+        />
+        <RegisterModal
+          isOpen={registerModalIsOpen}
+          setRegisterModalIsOpen={setRegisterModalIsOpen}
+        />
     </Box>
   );
 }
