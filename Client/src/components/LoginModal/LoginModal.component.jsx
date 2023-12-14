@@ -119,6 +119,10 @@ const LoginModal = ({
       });
     }
   };
+  const googleAuth = () => {
+    googleLoginUser();
+  };
+
 
   const handleSubmit = async () => {
     userLoginValidate({ address: user.address }, setErrors, errors);
@@ -167,9 +171,6 @@ const LoginModal = ({
       username: "",
       address: "",
     });
-  };
-  const googleAuth = () => {
-    googleLoginUser();
   };
 
   return (
