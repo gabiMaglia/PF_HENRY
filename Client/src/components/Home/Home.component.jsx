@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import HomeProducts from "../HomeProducts/HomeProducts.component";
 import CarouselBottomComponent from "../../components/CarouselBottom/CarouselBottom.component";
 import CarouselTopComponent from "../../components/CarouselTop/CarouselTop.component";
-import WhatsAppComponent from "../WhatsApp/WhatsApp.component";
 //REDUX
 import { fetchAllProducts } from "../../services/ProductServices";
 
@@ -23,7 +22,6 @@ const HomeComponent = () => {
         <CarouselTopComponent />
         <HomeProducts allProducts={allProducts} />
         <CarouselBottomComponent />
-        <WhatsAppComponent />
       </div>
     </>
   );
