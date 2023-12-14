@@ -13,7 +13,7 @@ const FooterComponents = () => {
   const boxStyle = {
     backgroundColor: "#000",
     width: "100%",
-    height: smallScreen ? "600px" : "350px",
+    height: smallScreen ? "600px" : "250px",
     display: "flex",
     flexDirection: "column",
     justifyContent: smallScreen && "space-evenly",
@@ -26,8 +26,10 @@ const FooterComponents = () => {
     flexDirection: smallScreen ? "column" : "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom:"-30px",
   };
   const boxStyleTwo = {
+
     color: "#fff",
     padding: { xs: 0, lg: 30 },
     display: "flex",
@@ -50,6 +52,7 @@ const FooterComponents = () => {
     justifyContent: "center",
     padding: "0 0 30px 0",
     paddingLeft: smallScreen && "10px",
+
   };
 
   return (
