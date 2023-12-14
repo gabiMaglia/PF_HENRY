@@ -7,6 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 //HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
 import { sectionInformation, sectionPages } from "../../utils/objectsTexts";
+import MapContainer from "../Map/Map.component";
 
 const FooterComponents = () => {
   const smallScreen = useMediaQuery("(max-width:768px)");
@@ -26,10 +27,10 @@ const FooterComponents = () => {
     flexDirection: smallScreen ? "column" : "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom:"-30px",
+    marginBottom: "-30px",
   };
   const boxStyleTwo = {
-
+    margin:"20px 0 0 20px",
     color: "#fff",
     padding: { xs: 0, lg: 30 },
     display: "flex",
@@ -52,7 +53,6 @@ const FooterComponents = () => {
     justifyContent: "center",
     padding: "0 0 30px 0",
     paddingLeft: smallScreen && "10px",
-
   };
 
   return (
@@ -137,6 +137,9 @@ const FooterComponents = () => {
               </Box>
             </Container>
           ))}
+          <Container>
+            <MapContainer />
+          </Container>
           {/* CIERRE SECCION PAGINAS */}
         </Box>
         {/* CIERRE BOX SECCIONES */}
