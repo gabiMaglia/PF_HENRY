@@ -1,19 +1,26 @@
+//HOOKS
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import SearchIcon from "@mui/icons-material/Search";
-import img from "/icons/logo.jpeg";
-import { Input, Typography } from "@mui/material";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import Button from "@mui/material/Button";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
-import carrito from "/icons/carrito-de-compras.png";
-import LoginModal from "../LoginModal/LoginModal.component";
-import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+//MATERIAL UI
+import { Input, Typography, Box, Button, styled } from "@mui/material";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SearchIcon from "@mui/icons-material/Search";
+//COMPONENTS
+import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
+//REDUX
+import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
+//UTILS
+import {
+  getAuthDataCookie,
+  removeAuthDataCookie,
+} from "../../utils/cookiesFunctions";
+//IMAGES - ICONS
+import img from "/icons/logo.jpeg";
+import carrito from "/icons/carrito-de-compras.png";
 
 const Img = styled("img")({
   width: 140,
@@ -32,21 +39,17 @@ export default function SearchAppBar() {
   // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
 
-  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
-    "authToken",
-    {}
-  );
-
-  const [username, setUsername] = useLocalStorage("userInfo", {
-    name: "",
-    surname: "",
-  });
+  const [user, setUser] = useState({ name: "", surname: "" });
 
   const getUserInfo = async (token) => {
-    const { userId } = token;
-    const response = await getUserById(userId);
-    const { name, surname } = response;
-    setUsername({ name: name, surname: surname });
+    if (token !== undefined) {
+      const { userId } = token;
+      if (userId !== undefined) {
+        const response = await getUserById(userId);
+        const { name, surname } = response;
+        setUser({ name: name, surname: surname });
+      }
+    }
   };
 
   const handleSubmit = (event) => {
@@ -74,8 +77,55 @@ export default function SearchAppBar() {
   };
 
   useEffect(() => {
-    getUserInfo(tokenAuthSesion);
-  }, [tokenAuthSesion]);
+    const userToken = getAuthDataCookie();
+    getUserInfo(userToken);
+  }, []);
+
+  const renderLoginOrLogoutButton = () => {
+    const token = getAuthDataCookie();
+
+    return (
+      <Box
+        sx={{
+          flexGrow: 0,
+          maxWidth: "xl",
+          ml: 4,
+          mr: 4,
+          borderRadius: 2,
+          backgroundColor: "#fd611a",
+        }}
+      >
+        {token === null || token === undefined ? (
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              setLoginModalIsOpen(true);
+            }}
+          >
+            INICIAR SESIÓN
+          </Button>
+        ) : (
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              removeAuthDataCookie();
+              window.location.reload();
+            }}
+          >
+            CERRAR SESIÓN
+          </Button>
+        )}
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -172,56 +222,19 @@ export default function SearchAppBar() {
           <Logo src={carrito} />
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
-          {username.name} <br /> {username.surname}
+          {user.name} <br /> {user.surname}
         </Typography>
-        <Box
-          sx={{
-            flexGrow: 0,
-            maxWidth: "xl",
-            ml: 4,
-            mr: 4,
-            borderRadius: 2,
-            backgroundColor: "#fd611a",
-          }}
-        >
-          {tokenAuthSesion.login !== true ? (
-            <Button
-              startIcon={<AccountBoxIcon />}
-              color="inherit"
-              sx={{
-                color: "white",
-              }}
-              onClick={() => {
-                setLoginModalIsOpen(true);
-              }}
-            >
-              INICIAR SESIÓN
-            </Button>
-          ) : (
-            <Button
-              startIcon={<AccountBoxIcon />}
-              color="inherit"
-              sx={{
-                color: "white",
-              }}
-              onClick={() => {
-                setTokenAuthSesion({});
-              }}
-            >
-              CERRAR SESIÓN
-            </Button>
-          )}
-        </Box>
+        {renderLoginOrLogoutButton()}
       </Box>
-      <LoginModal
-        isOpen={loginModalIsOpen}
-        setLoginModalIsOpen={setLoginModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
-      <RegisterModal
-        isOpen={registerModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
+        <LoginModal
+          isOpen={loginModalIsOpen}
+          setLoginModalIsOpen={setLoginModalIsOpen}
+          setRegisterModalIsOpen={setRegisterModalIsOpen}
+        />
+        <RegisterModal
+          isOpen={registerModalIsOpen}
+          setRegisterModalIsOpen={setRegisterModalIsOpen}
+        />
     </Box>
   );
 }

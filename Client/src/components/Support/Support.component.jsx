@@ -1,5 +1,6 @@
 //HOOKS
 import { useState } from "react";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import axios from "axios";
 //MATERIAL UI
 import {
@@ -25,6 +26,7 @@ import {
 import { textSupport } from "../../utils/objectsTexts";
 //VARIABLE DE ENTORNO
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
 const SupportComponent = () => {
   // ESTADOS
@@ -202,102 +204,104 @@ const SupportComponent = () => {
           },
         }}
       >
-        {/* BOX FORM */}
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            width: "40%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            padding: "50px",
-            marginBottom: "50px",
-
-            "@media (max-width: 768px)": {
-              width: "100%",
-              marginBottom: "-10px",
-              marginTop: "10px",
-              order: "2"
-            },
-          }}
-        >
-          <TextField
-            id="name"
-            label="Nombre"
-            type="string"
-            variant="outlined"
-            required={true}
-            error={errorName.error}
-            helperText={errorName.message}
-            value={name}
-            onChange={(e) => handleChangeName(e.target.value)}
-          />
-          <TextField
-            id="phone"
-            label="Teléfono"
-            type="phone"
-            variant="outlined"
-            required={true}
-            error={errorPhone.error}
-            helperText={errorPhone.message}
-            value={phone}
-            onChange={(e) => handleChangePhone(e.target.value)}
-            sx={{ margin: "20px 0" }}
-          />
-          <TextField
-            id="email"
-            label="Correo Electrónico"
-            type="email"
-            variant="outlined"
-            required={true}
-            error={errorEmail.error}
-            helperText={errorEmail.message}
-            value={email}
-            onChange={(e) => handleChangeEmail(e.target.value)}
-          />
-          <Textarea
-            id="contenet"
-            disabled={false}
-            minRows={4}
-            size="lg"
-            variant="outlined"
-            required={true}
-            error={errorArea.error}
-            placeholder="Ejemplo: Tengo un CPU que no enciende. Queda la pantalla negra."
-            value={area}
-            onChange={(e) => handleChangeArea(e.target.value)}
-            sx={{ margin: "20px 0" }}
-          />
-          {errorArea.error && (
-            <Typography
-              variant="body2"
-              color="error"
-              sx={{ margin: "-15px 0 25px 15px", fontSize: "12px" }}
-            >
-              {errorArea.message}
-            </Typography>
-          )}
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={!formComplete || isLoading}
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
+          {/* BOX FORM */}
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
-              backgroundColor: "#fd611a",
-              padding: "12px 0",
-              "&:hover": { backgroundColor: "#000" },
-              fontSize: "18px",
+              width: "40%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              padding: "50px",
+              marginBottom: "50px",
+
+              "@media (max-width: 768px)": {
+                width: "100%",
+                marginBottom: "-10px",
+                marginTop: "10px",
+                order: "2",
+              },
             }}
-            endIcon={<SendIcon />}
           >
-            {isLoading ? (
-              <CircularProgress size={24} color="inherit" />
-            ) : (
-              "Enviar"
+            <TextField
+              id="name"
+              label="Nombre"
+              type="string"
+              variant="outlined"
+              required={true}
+              error={errorName.error}
+              helperText={errorName.message}
+              value={name}
+              onChange={(e) => handleChangeName(e.target.value)}
+            />
+            <TextField
+              id="phone"
+              label="Teléfono"
+              type="phone"
+              variant="outlined"
+              required={true}
+              error={errorPhone.error}
+              helperText={errorPhone.message}
+              value={phone}
+              onChange={(e) => handleChangePhone(e.target.value)}
+              sx={{ margin: "20px 0" }}
+            />
+            <TextField
+              id="email"
+              label="Correo Electrónico"
+              type="email"
+              variant="outlined"
+              required={true}
+              error={errorEmail.error}
+              helperText={errorEmail.message}
+              value={email}
+              onChange={(e) => handleChangeEmail(e.target.value)}
+            />
+            <Textarea
+              id="contenet"
+              disabled={false}
+              minRows={4}
+              size="lg"
+              variant="outlined"
+              required={true}
+              error={errorArea.error}
+              placeholder="Ejemplo: Tengo un CPU que no enciende. Queda la pantalla negra."
+              value={area}
+              onChange={(e) => handleChangeArea(e.target.value)}
+              sx={{ margin: "20px 0" }}
+            />
+            {errorArea.error && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ margin: "-15px 0 25px 15px", fontSize: "12px" }}
+              >
+                {errorArea.message}
+              </Typography>
             )}
-          </Button>
-        </Box>
-        {/* CIERRE BOX FORM */}
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={!formComplete || isLoading}
+              sx={{
+                backgroundColor: "#fd611a",
+                padding: "12px 0",
+                "&:hover": { backgroundColor: "#000" },
+                fontSize: "18px",
+              }}
+              endIcon={<SendIcon />}
+            >
+              {isLoading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Enviar"
+              )}
+            </Button>
+          </Box>
+          {/* CIERRE BOX FORM */}
+        </GoogleReCaptchaProvider>
 
         {/* BOX CAJA TEXTO */}
         <Box
@@ -318,7 +322,11 @@ const SupportComponent = () => {
             <Box key={index}>
               <Typography
                 variant="h5"
-                sx={{ marginBottom: "10px", fontWeight: "bold", textAlign: "center" }}
+                sx={{
+                  marginBottom: "10px",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
               >
                 {item.title}
               </Typography>

@@ -9,85 +9,52 @@ const {
 const filterProducts = async (categoryName, brandName) => {
   const filterConditions = {};
 
-  if (categoryName) {
-    filterConditions.category = categoryName;
-    const category = await ProductCategory.findOne({
-      where: { name: categoryName },
-    });
-
-    if (category) {
-      const categoryWithProducts = await category.getProducts({
-        include: [
-          { model: ProductBrand, attributes: ["name"] },
-          { model: ProductCategory, attributes: ["name"] },
-          { model: ProductImage, attributes: ["address"] },
-          { model: ProductStock, attributes: ["amount"] },
-        ],
-      });
-      return categoryWithProducts;
-    }
-  }
-
-  if (categoryName && brandName) {
-    filterConditions.category = categoryName;
-    filterConditions.brand = brandName;
-
-    const category = await ProductCategory.findOne({
-      where: { name: categoryName },
-    });
-
-    const brand = await ProductBrand.findOne({
-      where: { name: brandName },
-    });
-
-    if (category && brand) {
-      const categoryWithProducts = await category.getProducts({
-        include: [
-          { model: ProductBrand, attributes: ["name"] },
-          { model: ProductCategory, attributes: ["name"] },
-          { model: ProductImage, attributes: ["address"] },
-          { model: ProductStock, attributes: ["amount"] },
-        ],
-      });
-      const bothFilters = categoryWithProducts.filter(
-        (product) => product.ProductBrands.name === brandName
-      );
-
-      return bothFilters;
-    }
-  }
-
   if (brandName) {
-    filterConditions.brand = brandName;
     const brand = await ProductBrand.findOne({
       where: { name: brandName },
     });
 
     if (brand) {
-      const brandWithProducts = await brand.getProducts({
-        include: [
-          { model: ProductBrand, attributes: ["name"] },
-          { model: ProductCategory, attributes: ["name"] },
-          { model: ProductImage, attributes: ["address"] },
-          { model: ProductStock, attributes: ["amount"] },
-        ],
-      });
-      return brandWithProducts;
+      filterConditions.brandId = brand.id;
     }
   }
 
-  // Fetch products based on the filtering conditions
-  const filteredProducts = await Product.findAll({
-    where: filterConditions,
-    include: [
-      { model: ProductBrand, attributes: ["name"] },
-      { model: ProductCategory, attributes: ["name"] },
-      { model: ProductImage, attributes: ["address"] },
-      { model: ProductStock, attributes: ["amount"] },
-    ],
-  });
+  if (categoryName) {
+    const category = await ProductCategory.findOne({
+      where: { name: categoryName },
+    });
 
-  return filteredProducts;
+    if (category) {
+      filterConditions.categoryId = category.id;
+    }
+  }
+
+  try {
+    const allProducts = await Product.findAll({
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["address"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
+
+    const filteredProducts = allProducts.filter((product) => {
+      const hasCategory = product.ProductCategories.some(
+        (category) => category.ProductCategoryId === filterConditions.categoryId
+      );
+      const hasBrand = product.ProductBrands.some(
+        (brand) => brand.ProductBrandId === filterConditions.brandId
+      );
+
+      return hasCategory && hasBrand;
+    });
+
+    return filteredProducts;
+  } catch (error) {
+    console.error("Error al filtrar productos:", error);
+    throw error;
+  }
 };
 
 //ORDENAMIENTOS

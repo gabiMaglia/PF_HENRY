@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import {
   Box,
   Button,
@@ -15,13 +16,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { setAuthDataCookie } from "../../utils/cookiesFunctions";
 
-export const loginManagement = async (
-  username,
-  address,
-  setTokenAuthSesion
-) => {
+const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
+
+export const loginManagement = async (username, address) => {
   const response = await loginUser(username, address);
   const { error, data } = response;
   if (error) {
@@ -50,7 +49,7 @@ export const loginManagement = async (
       }
     });
   }
-  setTokenAuthSesion(data);
+  setAuthDataCookie(data);
 };
 
 const LoginModal = ({
@@ -58,11 +57,6 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
-  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
-    "authToken",
-    {}
-  );
-
   // Estilos del contenedor principal
   const boxModalStyle = {
     position: "absolute",
@@ -130,7 +124,7 @@ const LoginModal = ({
     userLoginValidate({ address: user.address }, setErrors, errors);
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
-      loginManagement(user.username, user.address, setTokenAuthSesion);
+      loginManagement(user.username, user.address);
       resetModal();
       setLoginModalIsOpen(false);
     } else {
@@ -208,126 +202,122 @@ const LoginModal = ({
           />
         </Button>
 
-        {!isUsernameVerified ? (
-          <FormControl
-            fullWidth
-            sx={{ alignItems: "center", textAlign: "center" }}
-          >
-            <Typography
-              variant="h4"
-              sx={{ mb: 4 }}
-            >
-              Iniciar sesión
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: "#fd611a" }}
-            >
-              Para continuar ingresá tu nombre de usuario
-            </Typography>
-            <TextField
-              label="Nombre de usuario"
-              error={Boolean(errors.username)}
-              helperText={errors.username}
-              variant="outlined"
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
+          {!isUsernameVerified ? (
+            <FormControl
               fullWidth
-              margin="normal"
-              value={user.username}
-              onChange={handleChange}
-              name="username"
-            />
-            {renderButton("Continuar", usernameVerification)}
-            <Divider
               sx={{
-                width: "100%",
-                color: "black",
-                mb: ".5em",
-                fontWeight: "600",
+                alignItems: "center",
+                textAlign: "center",
               }}
             >
-              O
-            </Divider>
+              <Typography variant="h4" sx={{ mb: 4 }}>
+                Iniciar sesión
+              </Typography>
+              <Typography variant="body1" sx={{ color: "#fd611a" }}>
+                Para continuar ingresá tu nombre de usuario
+              </Typography>
+              <TextField
+                label="Nombre de usuario"
+                error={Boolean(errors.username)}
+                helperText={errors.username}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={user.username}
+                onChange={handleChange}
+                name="username"
+              />
+              {renderButton("Continuar", usernameVerification)}
+              <Divider
+                sx={{
+                  width: "100%",
+                  color: "black",
+                  mb: ".5em",
+                  fontWeight: "600",
+                }}
+              >
+                O
+              </Divider>
 
-            <Typography variant="body1">Inicia sesion con: </Typography>
-            <CardMedia
-              onClick={googleAuth}
-              sx={{
-                cursor: "pointer",
-                maxWidth: "2.5em",
-                maxHeight: "2.5em",
-                mt: ".5em",
-                mb: "2em",
-              }}
-              component="img"
-              alt="Google"
-              image="/icons/googleIcon.png"
-            />
-            <Typography>No tienes cuenta? Regístrate.</Typography>
+              <Typography variant="body1">Inicia sesion con: </Typography>
+              <CardMedia
+                onClick={googleAuth}
+                sx={{
+                  cursor: "pointer",
+                  maxWidth: "2.5em",
+                  maxHeight: "2.5em",
+                  mt: ".5em",
+                  mb: "2em",
+                }}
+                component="img"
+                alt="Google"
+                image="/icons/googleIcon.png"
+              />
+              <Typography>No tienes cuenta? Regístrate.</Typography>
 
-            {renderButton("Registrarse", () => {
-              setLoginModalIsOpen(false);
-              setRegisterModalIsOpen(true);
-            })}
-          </FormControl>
-        ) : (
-          <FormControl
-            fullWidth
-            sx={{
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
-            <Button
-              sx={{
-                padding: "0px",
-                color: "black",
-                position: "fixed",
-                width: ".01px",
-                height: ".01px",
-                top: "1.8em",
-                left: ".5em",
-              }}
-              onClick={resetModal}
-            >
-              <ArrowBackIosIcon />
-            </Button>
-            <Typography
-              variant="h4"
-              sx={{
-                flexGrow: 1,
-                mb: 4,
-              }}
-            >
-              Iniciar sesión
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              sx={{ backgroundColor: "grey", p: ".5em", borderRadius: "3em" }}
-            >
-              {user.username}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: "#fd611a", mt: "2em" }}
-            >
-              Ingresá tu contraseña
-            </Typography>
-            <TextField
-              error={Boolean(errors.address)}
-              name="address"
-              type="password"
-              label="Contraseña"
-              helperText={errors.address}
-              variant="outlined"
+              {renderButton("Registrarse", () => {
+                setLoginModalIsOpen(false);
+                setRegisterModalIsOpen(true);
+              })}
+            </FormControl>
+          ) : (
+            <FormControl
               fullWidth
-              value={user.address}
-              onChange={handleChange}
-              margin="normal"
-            />
-            {renderButton("Iniciar sesion", handleSubmit)}
-          </FormControl>
-        )}
+              sx={{
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Button
+                sx={{
+                  padding: "0px",
+                  color: "black",
+                  position: "fixed",
+                  width: ".01px",
+                  height: ".01px",
+                  top: "1.8em",
+                  left: ".5em",
+                }}
+                onClick={resetModal}
+              >
+                <ArrowBackIosIcon />
+              </Button>
+              <Typography
+                variant="h4"
+                sx={{
+                  flexGrow: 1,
+                  mb: 4,
+                }}
+              >
+                Iniciar sesión
+              </Typography>
+
+              <Typography
+                variant="subtitle1"
+                sx={{ backgroundColor: "grey", p: ".5em", borderRadius: "3em" }}
+              >
+                {user.username}
+              </Typography>
+              <Typography variant="body1" sx={{ color: "#fd611a", mt: "2em" }}>
+                Ingresá tu contraseña
+              </Typography>
+              <TextField
+                error={Boolean(errors.address)}
+                name="address"
+                type="password"
+                label="Contraseña"
+                helperText={errors.address}
+                variant="outlined"
+                fullWidth
+                value={user.address}
+                onChange={handleChange}
+                margin="normal"
+              />
+              {renderButton("Iniciar sesion", handleSubmit)}
+            </FormControl>
+          )}
+        </GoogleReCaptchaProvider>
       </Box>
     </Modal>
   );

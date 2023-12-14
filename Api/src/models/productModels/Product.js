@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     warranty: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     is_deleted: {

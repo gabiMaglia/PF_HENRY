@@ -32,8 +32,6 @@ const Products = () => {
     },
   });
 
-  console.log(productsToShow, "all");
-
   const handlePageChange = (event, value) => {
     dispatch(nextPage(value - 1));
   };
@@ -53,7 +51,10 @@ const Products = () => {
 
         <ProductBox products={productsToShow} />
 
-        <Stack spacing={2} sx={{ mt: 3 }}>
+        <Stack
+          spacing={2}
+          sx={{ mt: 3 }}
+        >
           <Pagination
             variant="outlined"
             shape="rounded"
