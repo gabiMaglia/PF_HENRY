@@ -101,7 +101,6 @@ const sectionPages = [
     items: [
       { icon: Facebook, text: "FACEBOOK", link: '#' },
       { icon: Instagram, text: "INSTAGRAM", link: '#'  },
-      { icon: LinkedIn, text: "LINKEDIN", link: '#' },
       { icon: YouTube, text: "YOUTUBE", link: '#' },
       { icon: Twitter, text: "TWITTER", link: '#'  },
     ],
