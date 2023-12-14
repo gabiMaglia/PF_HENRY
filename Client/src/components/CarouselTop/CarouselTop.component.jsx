@@ -79,7 +79,7 @@ const CarouselTopComponent = () => {
   }, [activeIndex]);
 
   return (
-    <Box sx={{ paddingTop: "10px" }}>
+    <Box sx={{ paddingTop: "10px", cursor: "pointer" }}>
       <a
         onClick={handleImageClick}
       >
