@@ -13,14 +13,8 @@ import { userRegisterValidate } from "../../helpers/userValidate";
 import Swal from "sweetalert2";
 import { registerUser } from "../../services/AuthServices";
 import { loginManagement } from "../LoginModal/LoginModal.component";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
 
 const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
-  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
-    "authToken",
-    {}
-  );
-
   const [userInfo, setUserInfo] = useState({
     email: "",
     address: "",
@@ -129,7 +123,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       };
       const response = await registerUser(userInfoForRequest);
       const { data, error } = response;
-      if (error) {
+      if (error || !data) {
         Swal.fire({
           allowOutsideClick: false,
           customClass: {
@@ -155,11 +149,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
         }).then((result) => {
           // Verifica si se hizo clic en Aceptar
           if (result.isConfirmed) {
-            loginManagement(
-              userInfo.username,
-              userInfo.address,
-              setTokenAuthSesion
-            );
+            loginManagement(userInfo.username, userInfo.address);
             resetModal();
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             resetModal();

@@ -14,6 +14,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import { getUserById } from "../../services/UserServices";
+import {
+  getAuthDataCookie,
+  removeAuthDataCookie,
+} from "../../utils/cookiesFunctions";
 
 const Img = styled("img")({
   width: 140,
@@ -32,21 +36,17 @@ export default function SearchAppBar() {
   // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
 
-  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
-    "authToken",
-    {}
-  );
-
-  const [username, setUsername] = useLocalStorage("userInfo", {
-    name: "",
-    surname: "",
-  });
+  const [user, setUser] = useState({ name: "", surname: "" });
 
   const getUserInfo = async (token) => {
-    const { userId } = token;
-    const response = await getUserById(userId);
-    const { name, surname } = response;
-    setUsername({ name: name, surname: surname });
+    if (token !== undefined) {
+      const { userId } = token;
+      if (userId !== undefined) {
+        const response = await getUserById(userId);
+        const { name, surname } = response;
+        setUser({ name: name, surname: surname });
+      }
+    }
   };
 
   const handleSubmit = (event) => {
@@ -74,8 +74,55 @@ export default function SearchAppBar() {
   };
 
   useEffect(() => {
-    getUserInfo(tokenAuthSesion);
-  }, [tokenAuthSesion]);
+    const userToken = getAuthDataCookie();
+    getUserInfo(userToken);
+  }, []);
+
+  const renderLoginOrLogoutButton = () => {
+    const token = getAuthDataCookie();
+
+    return (
+      <Box
+        sx={{
+          flexGrow: 0,
+          maxWidth: "xl",
+          ml: 4,
+          mr: 4,
+          borderRadius: 2,
+          backgroundColor: "#fd611a",
+        }}
+      >
+        {token === null || token === undefined ? (
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              setLoginModalIsOpen(true);
+            }}
+          >
+            INICIAR SESIÓN
+          </Button>
+        ) : (
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={() => {
+              removeAuthDataCookie();
+              window.location.reload();
+            }}
+          >
+            CERRAR SESIÓN
+          </Button>
+        )}
+      </Box>
+    );
+  };
 
   return (
     <Box
@@ -97,7 +144,10 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
+        <Img
+          src={img}
+          alt="Logotipo"
+        />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -172,46 +222,9 @@ export default function SearchAppBar() {
           <Logo src={carrito} />
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
-          {username.name} <br /> {username.surname}
+          {user.name} <br /> {user.surname}
         </Typography>
-        <Box
-          sx={{
-            flexGrow: 0,
-            maxWidth: "xl",
-            ml: 4,
-            mr: 4,
-            borderRadius: 2,
-            backgroundColor: "#fd611a",
-          }}
-        >
-          {tokenAuthSesion.login !== true ? (
-            <Button
-              startIcon={<AccountBoxIcon />}
-              color="inherit"
-              sx={{
-                color: "white",
-              }}
-              onClick={() => {
-                setLoginModalIsOpen(true);
-              }}
-            >
-              INICIAR SESIÓN
-            </Button>
-          ) : (
-            <Button
-              startIcon={<AccountBoxIcon />}
-              color="inherit"
-              sx={{
-                color: "white",
-              }}
-              onClick={() => {
-                setTokenAuthSesion({});
-              }}
-            >
-              CERRAR SESIÓN
-            </Button>
-          )}
-        </Box>
+        {renderLoginOrLogoutButton()}
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}

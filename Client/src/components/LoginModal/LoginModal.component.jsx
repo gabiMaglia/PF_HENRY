@@ -15,13 +15,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { setAuthDataCookie } from "../../utils/cookiesFunctions";
 
-export const loginManagement = async (
-  username,
-  address,
-  setTokenAuthSesion
-) => {
+export const loginManagement = async (username, address) => {
   const response = await loginUser(username, address);
   const { error, data } = response;
   if (error) {
@@ -50,7 +46,7 @@ export const loginManagement = async (
       }
     });
   }
-  setTokenAuthSesion(data);
+  setAuthDataCookie(data);
 };
 
 const LoginModal = ({
@@ -58,11 +54,6 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
-  const [tokenAuthSesion, setTokenAuthSesion] = useLocalStorage(
-    "authToken",
-    {}
-  );
-
   // Estilos del contenedor principal
   const boxModalStyle = {
     position: "absolute",
@@ -130,7 +121,7 @@ const LoginModal = ({
     userLoginValidate({ address: user.address }, setErrors, errors);
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
-      loginManagement(user.username, user.address, setTokenAuthSesion);
+      loginManagement(user.username, user.address);
       resetModal();
       setLoginModalIsOpen(false);
     } else {
