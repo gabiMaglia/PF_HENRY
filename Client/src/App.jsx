@@ -11,7 +11,8 @@ import Products from "./views/Products/Products.view";
 import Support from "./views/Support/Support.view";
 import Questions from "./views/Questions/Questions.view";
 import Detail from "./views/Detail/Detail.view";
-//MATREIAL UI
+import ShoppingCartView from "./views/ShoppingCart/ShoppingCart.view";
+//MATERIAL UI
 import { Box } from "@mui/material";
 //DB
 import PRODUCTS from "./dataBase/bdd.json";
@@ -29,6 +30,7 @@ const App = () => {
           <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
           <Route path={PATHROUTES.SUPPORT} element={<Support />} />
           <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
+          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCartView />} />
           <Route
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}

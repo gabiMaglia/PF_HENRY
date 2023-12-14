@@ -24,7 +24,7 @@ export default function ShoppingCart() {
 
   const handleCheckout = () => {
     dispatch(checkout());
-    navigate("/confirmacion");
+    navigate("/carrito");
   };
 
   return (
