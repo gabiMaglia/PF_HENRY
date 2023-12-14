@@ -1,6 +1,9 @@
 import React from "react";
 import { TextField } from "@mui/material";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, checkout, selectCartItems } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 // Este componente representa un carrito de compras cuyo estado se almacena en el localStorage y se actualiza mediante
 // eventos de cambio.
@@ -11,19 +14,48 @@ export default function ShoppingCart() {
   const [text, setText] = useLocalStorage("text", "");
   // Cuando se llama a esta función, se obtiene el nuevo valor del texto del evento (event.target.value)
   // y se actualiza el estado de text utilizando la función setText.
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const cartItems = useSelector(selectCartItems);
+
   const handleTextChange = (event) => {
     setText(event.target.value);
   };
 
+  const handleCheckout = () => {
+    dispatch(checkout());
+    navigate("/confirmacion");
+  };
+
   return (
-    <TextField
-      label="Shopping Cart" // Se proporciona un texto descriptivo sobre el propósito del campo.
-      multiline // Utilizamos multiline para permitir múltiples líneas en el TextField.
-      rows={4}
-      variant="outlined" // borde alrededor del campo de texto.
-      fullWidth
-      value={text}
-      onChange={handleTextChange}
-    />
+    <div>
+      <TextField
+        label="Shopping Cart"
+        multiline
+        rows={4}
+        variant="outlined"
+        fullWidth
+        value={text}
+        onChange={handleTextChange}
+      />
+      <Button
+        onClick={() => dispatch(addItem(text))}
+        variant="contained"
+        color="primary"
+      >
+        Add to Cart
+      </Button>
+      <Button onClick={handleCheckout} variant="contained" color="primary">
+        Checkout
+      </Button>
+      <div>
+        <h2>Cart Items:</h2>
+        <ul>
+          {cartItems.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
