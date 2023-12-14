@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setAuthDataCookie } from "../utils/cookiesFunctions";
 
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
@@ -31,7 +32,7 @@ export const googleLoginUser = async () => {
     window.addEventListener("message", (event) => {
       if (event.origin === `${url}`) {
         if (event.data) {
-          localStorage.setItem("authToken", JSON.stringify(event.data));
+          setAuthDataCookie(JSON.stringify(event.data));
           window.location.reload();
           popup.close();
         }
