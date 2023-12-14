@@ -4,10 +4,11 @@ import {
   Room,
   Email,
   Phone,
-  Inventory,
-  SupportAgent,
-  Help,
-  Language,
+  Facebook,
+  Instagram,
+  LinkedIn,
+  YouTube,
+  Twitter,
 } from "@mui/icons-material";
 
 //HELPERS
@@ -96,12 +97,13 @@ const sectionInformation = [
 
 const sectionPages = [
   {
-    title: "PAGINAS",
+    title: "SEGUINOS EN",
     items: [
-      { icon: Language, text: "INICIO", link: PATHROUTE.HOME },
-      { icon: Inventory, text: "PRODUCTOS", link: PATHROUTE.PRODUCTS },
-      { icon: SupportAgent, text: "SOPORTE", link: PATHROUTE.SUPPORT },
-      { icon: Help, text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
+      { icon: Facebook, text: "FACEBOOK", link: '#' },
+      { icon: Instagram, text: "INSTAGRAM", link: '#'  },
+      { icon: LinkedIn, text: "LINKEDIN", link: '#' },
+      { icon: YouTube, text: "YOUTUBE", link: '#' },
+      { icon: Twitter, text: "TWITTER", link: '#'  },
     ],
   },
 ];
@@ -123,4 +125,10 @@ const brands = [
   "Sony",
 ];
 
-export { itemsQuestions, textSupport, sectionInformation, sectionPages, brands };
+export {
+  itemsQuestions,
+  textSupport,
+  sectionInformation,
+  sectionPages,
+  brands,
+};
