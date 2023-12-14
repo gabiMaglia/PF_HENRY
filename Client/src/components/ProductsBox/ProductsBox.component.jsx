@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import CardProduct from "../ProductCard/ProductCard.component";
 import { Box, Button, Container, Typography } from "@mui/material";
+import { red } from "@mui/material/colors";
 
 const ProductBox = ({ products }) => {
   const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
@@ -22,12 +23,22 @@ const ProductBox = ({ products }) => {
         display: "grid",
         gridTemplateColumns: { md: "repeat(1,1fr)", lg: "repeat(3,1fr)" },
         flexDirection: "row",
-        gap: 1,
+        gap: 4,
         mt: 2,
       }}
     >
       {isThereAnyProducts ? (
-        <Typography>
+        <Typography
+          sx={{
+            display: "grid",
+            gridColumnStart: 1,
+            gridColumnEnd: 4,
+            alignItems: "center",
+            fontSize: 18,
+            fontWeight: 700,
+            color: "red",
+          }}
+        >
           No se encontro ningun producto relacionado con su busqueda
         </Typography>
       ) : (
