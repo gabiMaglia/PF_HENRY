@@ -48,40 +48,47 @@ const Detail = () => {
   const { productById, isLoading } = useSelector((state) => state.product);
   const [cartItems, setCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(true); // Nuevo estado de carga
 
   const fetchData = async () => {
     try {
-      console.log("Fetch product data...");
+      console.log(`Fetching product data for ID: ${id}`);
       await dispatch(fetchProductById(id));
-      console.log("Product data");
+      console.log(`Product data for ID: ${id} received`);
     } catch (error) {
-      console.log("Error fetch product:", error);
+      console.log(`Error fetching product for ID ${id}:`, error);
     }
   };
 
   useEffect(() => {
     const fetchDataAsync = async () => {
+      console.log("Cleaning up previous data for ID:", productById.id);
+      dispatch(resetState());
+
       console.log("fetchDataAsync...");
-      await fetchData();
-      console.log("fetchDataAsync completado.");
+      try {
+        // Agregar verificación de id antes de cargar los datos
+        if (id !== productById.id) {
+          await fetchData();
+        }
+      } catch (error) {
+        console.error("Error in fetchDataAsync:", error);
+      } finally {
+        setLoading(false); // Actualizar el estado de carga al completar
+        console.log("fetchDataAsync completed for ID:", id);
+      }
     };
 
     fetchDataAsync();
-
-    return () => {
-      console.log("Cleaning up...");
-      dispatch(resetState());
-      console.log("Cleanup completado.");
-    };
-  }, [dispatch, id]);
+  }, [dispatch, id, productById]);
 
   useEffect(() => {
     const setInitialImage = () => {
-      console.log("seteando imagen inicial");
+      console.log("Setting initial image for ID:", productById.id);
       if (productById && productById.ProductImages) {
         setSelectedImage(productById.ProductImages[0].address);
       }
-      console.log("imagen inicial seteada.");
+      console.log("Initial image set for ID:", productById.id);
     };
 
     setInitialImage();
@@ -89,13 +96,13 @@ const Detail = () => {
 
   const handleAddToCart = () => {
     setCartItems([...cartItems, productById]);
-    console.log("Producto agregado al carrito:", productById);
+    console.log("Product added to cart for ID:", productById.id);
   };
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(max-width:500px)");
 
-  if (isLoading || !productById) {
+  if (loading || isLoading || !productById) {
     return (
       <Container
         sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}
