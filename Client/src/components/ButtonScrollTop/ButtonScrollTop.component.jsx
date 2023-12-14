@@ -1,7 +1,8 @@
 //HOOKS
 import { useState, useEffect } from "react";
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+//MATERIAL UI
 import { Box, Button } from "@mui/material";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const ButtonScrollTopComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,7 +29,7 @@ return () => {
   return (
     <>
       <Box
-        sx={{ position: "fixed", bottom: "50px", left: "50px", zIndex: 1000, display: isVisible ? "block" : "none" }}
+        sx={{ position: "fixed", bottom: "50px", left: "60px", zIndex: 1000, display: isVisible ? "block" : "none" }}
       >
         <Button
           variant="contained"
