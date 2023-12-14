@@ -32,7 +32,7 @@ export const googleLoginUser = async () => {
     window.addEventListener("message", (event) => {
       if (event.origin === `${url}`) {
         if (event.data) {
-          setAuthDataCookie(JSON.stringify(event.data));
+          setAuthDataCookie(event.data);
           window.location.reload();
           popup.close();
         }
