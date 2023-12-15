@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 //MATERIAL UI
 import { Input, Typography, Box, Button, styled } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -18,6 +18,7 @@ import { getUserById } from "../../services/UserServices";
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
+import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.jpeg";
 import carrito from "/icons/carrito-de-compras.png";
@@ -32,6 +33,7 @@ export default function SearchAppBar() {
     width: 30,
     height: 30,
     position: "relative",
+    cursor: "pointer",
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -58,13 +60,8 @@ export default function SearchAppBar() {
     dispatch(fetchSearch(inputName));
   };
 
-  // Estado del carrito manejado por useLocalStorage
-  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
-
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
-
-  const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleChange = (event) => {
     dispatch(fetchChage(event.target.value));
@@ -117,6 +114,10 @@ export default function SearchAppBar() {
     );
   };
 
+  const handleLogoClick = () => {
+    navigate("/shoppingcart");
+  };
+
   return (
     <Box
       sx={{
@@ -135,6 +136,7 @@ export default function SearchAppBar() {
           alignItems: "center",
           cursor: "pointer",
         }}
+        onClick={handleCartButtonClick}
       >
         <Img
           src={img}
@@ -214,7 +216,10 @@ export default function SearchAppBar() {
         }}
       >
         <Box>
-          <Logo src={carrito} />
+          <Logo
+            src={carrito}
+            onClick={handleLogoClick}
+          />
         </Box>
         <Box
           sx={{
@@ -228,6 +233,15 @@ export default function SearchAppBar() {
           {renderLoginOrLogoutButton()}
         </Box>
       </Box>
+      <LoginModal
+        isOpen={loginModalIsOpen}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
       <LoginModal
         isOpen={loginModalIsOpen}
         setLoginModalIsOpen={setLoginModalIsOpen}
