@@ -25,20 +25,20 @@ import PATHROUTES from "../../helpers/pathRoute";
 import img from "/icons/logo.jpeg";
 import carrito from "/icons/carrito-de-compras.png";
 
-const Img = styled("img")({
-  width: 140,
-  height: 140,
-});
-
-const Logo = styled("img")({
-  width: 30,
-  height: 30,
-  position: "relative",
-});
-
 export default function SearchAppBar() {
+  const Img = styled("img")({
+    width: 140,
+    height: 140,
+  });
+
+  const Logo = styled("img")({
+    width: 30,
+    height: 30,
+    position: "relative",
+  });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
 

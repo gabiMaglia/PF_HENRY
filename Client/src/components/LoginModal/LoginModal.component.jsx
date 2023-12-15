@@ -16,47 +16,60 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
-import { setAuthDataCookie } from "../../utils/cookiesFunctions";
-
+import { useDispatch } from "react-redux";
+import { logUser } from "../../redux/slices/userSlice";
+import { getUserById } from "../../services/UserServices";
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
-
-export const loginManagement = async (username, address) => {
-  const response = await loginUser(username, address);
-  const { error, data } = response;
-  if (error) {
-    Swal.fire({
-      allowOutsideClick: false,
-      customClass: {
-        container: "container",
-      },
-      icon: "error",
-      title: "Fallo en el inicio de sesion",
-      text: "Contraseña o usuario invalido",
-    });
-  } else if (data) {
-    Swal.fire({
-      allowOutsideClick: false,
-      customClass: {
-        container: "container",
-      },
-      icon: "success",
-      title: "Inicio de sesion correcto",
-      confirmButtonColor: "#fd611a",
-    }).then((result) => {
-      // Verifica si se hizo clic en Aceptar
-      if (result.isConfirmed) {
-        setAuthDataCookie(data);
-        window.location.reload();
-      }
-    });
-  }
-};
 
 const LoginModal = ({
   isOpen,
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
+  const dispatch = useDispatch();
+
+  const handledispatch = async (userId) => {
+    getUserById(userId).then((data) => {
+      dispatch(logUser({ userObject: data }));
+    });
+  };
+
+  const loginManagement = async (username, address) => {
+    let response;
+    if (!username || !address) {
+      response = await googleLoginUser();
+    } else {
+      response = await loginUser(username, address);
+    }
+    const { error, data } = response;
+    if (error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Fallo en el inicio de sesion",
+        text: "Contraseña o usuario invalido",
+      });
+    } else if (data) {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "success",
+        title: "Inicio de sesion correcto",
+        confirmButtonColor: "#fd611a",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handledispatch(data.userId);
+          setLoginModalIsOpen(false)
+        }
+      });
+    }
+  };
+
   // Estilos del contenedor principal
   const boxModalStyle = {
     position: "absolute",
@@ -119,10 +132,6 @@ const LoginModal = ({
       });
     }
   };
-  const googleAuth = () => {
-    googleLoginUser();
-  };
-
 
   const handleSubmit = async () => {
     userLoginValidate({ address: user.address }, setErrors, errors);
@@ -159,7 +168,6 @@ const LoginModal = ({
       </Box>
     );
   };
-
   // Reseteo del modal
   const resetModal = () => {
     setIsUsernameVerified(false);
@@ -203,10 +211,7 @@ const LoginModal = ({
           />
         </Button>
 
-        <GoogleReCaptchaProvider
-          reCaptchaKey={reCaptchaKey}
-          language="es"
-        >
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
           {!isUsernameVerified ? (
             <FormControl
               fullWidth
@@ -215,16 +220,10 @@ const LoginModal = ({
                 textAlign: "center",
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{ mb: 4 }}
-              >
+              <Typography variant="h4" sx={{ mb: 4 }}>
                 Iniciar sesión
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "#fd611a" }}
-              >
+              <Typography variant="body1" sx={{ color: "#fd611a" }}>
                 Para continuar ingresá tu nombre de usuario
               </Typography>
               <TextField
@@ -252,7 +251,7 @@ const LoginModal = ({
 
               <Typography variant="body1">Inicia sesion con: </Typography>
               <CardMedia
-                onClick={googleAuth}
+                onClick={loginManagement}
                 sx={{
                   cursor: "pointer",
                   maxWidth: "2.5em",
@@ -309,10 +308,7 @@ const LoginModal = ({
               >
                 {user.username}
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "#fd611a", mt: "2em" }}
-              >
+              <Typography variant="body1" sx={{ color: "#fd611a", mt: "2em" }}>
                 Ingresá tu contraseña
               </Typography>
               <TextField
