@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
-import UserMenu from "../UserMenu/UserModal.component";
+import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
@@ -229,10 +229,22 @@ export default function SearchAppBar() {
         <Box>
           <Logo src={carrito} />
         </Box>
-        <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
-          {user.name} <br /> {user.surname}
-        </Typography>
-        {renderLoginOrLogoutButton()}
+        {/* {renderLoginOrLogoutButton()} */}
+        <Box
+          sx={{
+            position: "absolute",
+            display: "flex",
+            flexDirection: "arrow",
+            right: "1em",
+          }}
+        >
+          <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
+            {user.name} <br /> {user.surname}
+          </Typography>
+
+          {/* Menu de usuario */}
+          <UserMenu />
+        </Box>
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
@@ -243,7 +255,6 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
-      <PanelModal />
     </Box>
   );
 }
