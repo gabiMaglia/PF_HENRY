@@ -4,7 +4,7 @@ const {
   deleteCategory,
   updateCategory,
   getCategoriesWithProducts,
-} = require("../../controllers/prodcutControllers/categoryController");
+} = require("../../controllers/productControllers/categoryController");
 
 const getAllCategoriesHandler = async (req, res) => {
   try {

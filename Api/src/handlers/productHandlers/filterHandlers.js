@@ -2,7 +2,7 @@ const {
   filterProducts,
   orderSoldCount,
   orderPrice,
-} = require("../../controllers/prodcutControllers/filterController");
+} = require("../../controllers/productControllers/filterController");
 
 const filterProductsHandler = async (req, res) => {
   const { category, brand } = req.query;
