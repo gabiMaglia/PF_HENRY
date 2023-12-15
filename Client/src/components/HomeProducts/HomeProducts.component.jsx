@@ -10,12 +10,12 @@ const HomeProducts = ({ allProducts }) => {
     <Container
       sx={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-around",
         alignItems: "flex-start",
         flexDirection: "column",
       }}
     >
-      <Typography paddingLeft={8} margin={2} fontWeight={"bold"}>
+      <Typography paddingLeft={8} margin={2} fontWeight={"bold"} fontSize={24}>
         ÚLTIMAS NOVEDADES
       </Typography>
       <Container
@@ -23,6 +23,7 @@ const HomeProducts = ({ allProducts }) => {
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
+          justifyContent: "space-around",
           marginBottom: 5,
           gap: 1,
           [`@media (max-width:1100px)`]: {
