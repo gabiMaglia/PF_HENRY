@@ -16,6 +16,9 @@ import {
   HomeRepairService,
 } from "@mui/icons-material";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import PATHROUTES from "../../helpers/pathRoute";
+import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -31,12 +34,27 @@ const UserMenu = () => {
 
   return (
     <Box sx={{ mr: "1em" }}>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
         <Tooltip title="Panel de usuario">
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
+            sx={{
+              ml: 2,
+              display: "flex",
+              flexDirection: "column",
+              alignContent: "center",
+              [`@media (max-width:1200px)`]: {
+                flexDirection: "row-reverse",
+                gap: "1em",
+              },
+            }}
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
@@ -44,6 +62,9 @@ const UserMenu = () => {
             <Avatar sx={{ width: 32, height: 32, backgroundColor: "#fd611a" }}>
               M
             </Avatar>
+            <Typography sx={{ maxWidth: "8em", textAlign: "center" }}>
+              Martín <br /> Galiotti Martinez
+            </Typography>
           </IconButton>
         </Tooltip>
       </Box>
@@ -72,7 +93,7 @@ const UserMenu = () => {
               flexDirection: "column",
               position: "absolute",
               top: 0,
-              right: 14,
+              right: 60,
               width: 10,
               height: 10,
               bgcolor: "background.paper",
@@ -85,66 +106,82 @@ const UserMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Typography sx={{ textAlign: "center", mb: "1em", color: "#fd611a" }}>
-          Nombre Apellido <br />
-          Apellido
-        </Typography>
-
-        <MenuItem
-          onClick={handleClose}
-          sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+        <Link
+          style={{ textDecoration: "none", color: "inherit" }}
+          to={PATHROUTES.PROFILE}
         >
-          <Avatar sx={{ backgroundColor: "#fd611a" }}>M</Avatar>
-          <Typography>
-            Mi <br />
-            cuenta
-          </Typography>
-        </MenuItem>
+          <MenuItem
+            onClick={handleClose}
+            sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+          >
+            <Avatar sx={{ backgroundColor: "#fd611a" }}>M</Avatar>
+            <Typography>
+              Mi <br />
+              cuenta
+            </Typography>
+          </MenuItem>
+        </Link>
+        <Divider />
+        <Link
+          style={{ textDecoration: "none", color: "inherit" }}
+          to={PATHROUTES.SHOPINGS}
+        >
+          <MenuItem
+            sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+            onClick={handleClose}
+          >
+            <ListItemIcon>
+              <LocalShipping sx={{ color: "black" }} />
+            </ListItemIcon>
+            <Typography>
+              Mis
+              <br /> compras
+            </Typography>
+          </MenuItem>
+        </Link>
+        <Divider />
+        <Link
+          style={{ textDecoration: "none", color: "inherit" }}
+          to={PATHROUTES.WISHLIST}
+        >
+          <MenuItem
+            sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+            onClick={handleClose}
+          >
+            <ListItemIcon>
+              <Bookmark sx={{ color: "black" }} />
+            </ListItemIcon>
+            <Typography>
+              Lista de <br /> deseos
+            </Typography>
+          </MenuItem>
+        </Link>
+        <Divider />
+        <Link
+          style={{ textDecoration: "none", color: "inherit" }}
+          to={PATHROUTES.PRODUCTSERVIS}
+        >
+          <MenuItem
+            sx={{ textAlign: "center", justifyContent: "space-evenly" }}
+            onClick={handleClose}
+          >
+            <ListItemIcon>
+              <HomeRepairService sx={{ color: "black" }} />
+            </ListItemIcon>
+            <Typography>
+              Productos <br />
+              en servicio
+            </Typography>
+          </MenuItem>
+        </Link>
         <Divider />
 
         <MenuItem
           sx={{ justifyContent: "space-evenly", textAlign: "center" }}
-          onClick={handleClose}
-        >
-          <ListItemIcon>
-            <LocalShipping sx={{ color: "black" }} />
-          </ListItemIcon>
-          <Typography>
-            Mis
-            <br /> compras
-          </Typography>
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          sx={{ justifyContent: "space-evenly", textAlign: "center" }}
-          onClick={handleClose}
-        >
-          <ListItemIcon>
-            <Bookmark sx={{ color: "black" }} />
-          </ListItemIcon>
-          <Typography>
-            Lista de <br /> deseos
-          </Typography>
-        </MenuItem>
-        <Divider />
-
-        <MenuItem
-          sx={{ textAlign: "center", justifyContent: "space-evenly" }}
-          onClick={handleClose}
-        >
-          <ListItemIcon>
-            <HomeRepairService sx={{ color: "black" }} />
-          </ListItemIcon>
-          <Typography>
-            Productos <br />
-            en servicio
-          </Typography>
-        </MenuItem>
-        <Divider />
-
-        <MenuItem
-          sx={{ justifyContent: "space-evenly", textAlign: "center" }}
-          onClick={handleClose}
+          onClick={() => {
+            removeAuthDataCookie();
+            window.location.reload();
+          }}
         >
           <ListItemIcon>
             <Logout sx={{ color: "black" }} />

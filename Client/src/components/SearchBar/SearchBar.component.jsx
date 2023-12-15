@@ -15,10 +15,7 @@ import UserMenu from "../UserMenu/UserMenu.component";
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
 //UTILS
-import {
-  getAuthDataCookie,
-  removeAuthDataCookie,
-} from "../../utils/cookiesFunctions";
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
@@ -38,7 +35,7 @@ export default function SearchAppBar() {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
 
@@ -88,43 +85,33 @@ export default function SearchAppBar() {
     const token = getAuthDataCookie();
 
     return (
-      <Box
-        sx={{
-          flexGrow: 0,
-          maxWidth: "xl",
-          ml: 4,
-          mr: 4,
-          borderRadius: 2,
-          backgroundColor: "#fd611a",
-        }}
-      >
+      <Box sx={{}}>
         {token === null || token === undefined ? (
-          <Button
-            startIcon={<AccountBoxIcon />}
-            color="inherit"
+          <Box
             sx={{
-              color: "white",
-            }}
-            onClick={() => {
-              setLoginModalIsOpen(true);
+              flexGrow: 0,
+              maxWidth: "xl",
+              ml: 4,
+              mr: 4,
+              borderRadius: 2,
+              backgroundColor: "#fd611a",
             }}
           >
-            INICIAR SESIÓN
-          </Button>
+            <Button
+              startIcon={<AccountBoxIcon />}
+              color="inherit"
+              sx={{
+                color: "white",
+              }}
+              onClick={() => {
+                setLoginModalIsOpen(true);
+              }}
+            >
+              INICIAR SESIÓN
+            </Button>
+          </Box>
         ) : (
-          <Button
-            startIcon={<AccountBoxIcon />}
-            color="inherit"
-            sx={{
-              color: "white",
-            }}
-            onClick={() => {
-              removeAuthDataCookie();
-              window.location.reload();
-            }}
-          >
-            CERRAR SESIÓN
-          </Button>
+          <UserMenu />
         )}
       </Box>
     );
@@ -229,21 +216,16 @@ export default function SearchAppBar() {
         <Box>
           <Logo src={carrito} />
         </Box>
-        {/* {renderLoginOrLogoutButton()} */}
         <Box
           sx={{
             position: "absolute",
             display: "flex",
-            flexDirection: "arrow",
+            flexDirection: "column",
             right: "1em",
+            alignItems: "center",
           }}
         >
-          <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
-            {user.name} <br /> {user.surname}
-          </Typography>
-
-          {/* Menu de usuario */}
-          <UserMenu />
+          {renderLoginOrLogoutButton()}
         </Box>
       </Box>
       <LoginModal
