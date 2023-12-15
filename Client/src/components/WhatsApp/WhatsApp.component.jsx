@@ -14,7 +14,14 @@ const WhatsAppComponent = () => {
   return (
     <>
       <Box
-        sx={{ position: "fixed", bottom: "75px", right: "75px", zIndex: 1000 }}
+        sx={{
+          position: "fixed",
+          bottom: "75px",
+          right: "75px",
+          zIndex: 1000,
+          "@media (max-width: 1140px)": { bottom: "30px", right: "75px" },
+          "@media (max-width: 768px)": { bottom: "100px", right: "30px" },
+        }}
       >
         <Button
           variant="contained"
