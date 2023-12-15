@@ -19,6 +19,8 @@ import {
   getAuthDataCookie,
   removeAuthDataCookie,
 } from "../../utils/cookiesFunctions";
+//HELPERS
+import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.jpeg";
 import carrito from "/icons/carrito-de-compras.png";
@@ -55,7 +57,7 @@ export default function SearchAppBar() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/products");
+    navigate(PATHROUTES.PRODUCTS);
     dispatch(fetchSearch(inputName));
   };
 
@@ -146,11 +148,13 @@ export default function SearchAppBar() {
           alignItems: "center",
           cursor: "pointer",
         }}
-        onClick={handleCartButtonClick}
       >
         <Img
           src={img}
           alt="Logotipo"
+          onClick={() => {
+            navigate(PATHROUTES.HOME);
+          }}
         />
         {cartItemCount > 0 && (
           <span

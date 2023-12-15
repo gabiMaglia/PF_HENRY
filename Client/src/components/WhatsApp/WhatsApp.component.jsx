@@ -1,5 +1,6 @@
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+//MATERIAL UI
 import { Box, Button } from "@mui/material";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const WhatsAppComponent = () => {
   const phoneNumber = "+5491132069043";
@@ -9,11 +10,11 @@ const WhatsAppComponent = () => {
     const url = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(url, "_blank");
   };
-  
+
   return (
     <>
       <Box
-        sx={{ position: "fixed", bottom: "50px", right: "50px", zIndex: 1000 }}
+        sx={{ position: "fixed", bottom: "75px", right: "75px", zIndex: 1000 }}
       >
         <Button
           variant="contained"
@@ -23,7 +24,7 @@ const WhatsAppComponent = () => {
             width: "50px",
             borderRadius: "50%",
             backgroundColor: "#25d366",
-            "&:hover": { backgroundColor: "#075354" },
+            "&:hover": { backgroundColor: "#075E54" },
           }}
         >
           <WhatsAppIcon sx={{ fontSize: "50px" }} />
