@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 //MATERIAL UI
 import { Input, Typography, Box, Button, styled } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -31,6 +31,7 @@ const Logo = styled("img")({
   width: 30,
   height: 30,
   position: "relative",
+  cursor: "pointer",
 });
 
 export default function SearchAppBar() {
@@ -127,6 +128,10 @@ export default function SearchAppBar() {
     );
   };
 
+  const handleLogoClick = () => {
+    navigate("/shoppingcart");
+  };
+
   return (
     <Box
       sx={{
@@ -139,31 +144,33 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-        onClick={handleCartButtonClick}
-      >
-        <Img src={img} alt="Logotipo" />
-        {cartItemCount > 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              backgroundColor: "red",
-              color: "white",
-              borderRadius: "50%",
-              padding: "2px 5px",
-            }}
-          >
-            {cartItemCount}
-          </span>
-        )}
-      </Box>
+      <Link to="/shoppingcart" style={{ textDecoration: "none" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={handleLogoClick}
+        >
+          <Img src={img} alt="Logotipo" />
+          {cartItemCount > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                backgroundColor: "red",
+                color: "white",
+                borderRadius: "50%",
+                padding: "2px 5px",
+              }}
+            >
+              {cartItemCount}
+            </span>
+          )}
+        </Box>
+      </Link>
       <Box
         sx={{
           mt: { xs: 2 },
@@ -226,15 +233,15 @@ export default function SearchAppBar() {
         </Typography>
         {renderLoginOrLogoutButton()}
       </Box>
-        <LoginModal
-          isOpen={loginModalIsOpen}
-          setLoginModalIsOpen={setLoginModalIsOpen}
-          setRegisterModalIsOpen={setRegisterModalIsOpen}
-        />
-        <RegisterModal
-          isOpen={registerModalIsOpen}
-          setRegisterModalIsOpen={setRegisterModalIsOpen}
-        />
+      <LoginModal
+        isOpen={loginModalIsOpen}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
     </Box>
   );
 }
