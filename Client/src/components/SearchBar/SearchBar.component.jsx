@@ -10,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
+import UserMenu from "../UserMenu/UserModal.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
@@ -147,7 +148,10 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
+        <Img
+          src={img}
+          alt="Logotipo"
+        />
         {cartItemCount > 0 && (
           <span
             style={{
@@ -226,15 +230,16 @@ export default function SearchAppBar() {
         </Typography>
         {renderLoginOrLogoutButton()}
       </Box>
-        <LoginModal
-          isOpen={loginModalIsOpen}
-          setLoginModalIsOpen={setLoginModalIsOpen}
-          setRegisterModalIsOpen={setRegisterModalIsOpen}
-        />
-        <RegisterModal
-          isOpen={registerModalIsOpen}
-          setRegisterModalIsOpen={setRegisterModalIsOpen}
-        />
+      <LoginModal
+        isOpen={loginModalIsOpen}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <PanelModal />
     </Box>
   );
 }
