@@ -5,6 +5,6 @@ const {
 
 const mercadoPagoRouter = Router();
 
-mercadoPagoRouter.get("/", mercadoPagoHandler);
+mercadoPagoRouter.post("/", mercadoPagoHandler);
 
 module.exports = mercadoPagoRouter;
