@@ -39,8 +39,6 @@ const userSlice = createSlice({
       state.userAddress.street = UserAddress.street;
       state.userAddress.number = UserAddress.number;
       state.userAddress.zipCode = UserAddress.zipCode;
-
-      console.log(state.name)
     },
     logoutUser: (state, action ) => {
 
@@ -58,7 +56,6 @@ const userSlice = createSlice({
       state.userAddress.number = "";
       state.userAddress.zipCode ="";
 
-      console.log(state.name)
     },
   },
 });
