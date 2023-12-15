@@ -62,13 +62,8 @@ export default function SearchAppBar() {
     dispatch(fetchSearch(inputName));
   };
 
-  // Estado del carrito manejado por useLocalStorage
-  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
-
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
-
-  const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleChange = (event) => {
     dispatch(fetchChage(event.target.value));
@@ -162,21 +157,6 @@ export default function SearchAppBar() {
             navigate(PATHROUTES.HOME);
           }}
         />
-        {cartItemCount > 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              backgroundColor: "red",
-              color: "white",
-              borderRadius: "50%",
-              padding: "2px 5px",
-            }}
-          >
-            {cartItemCount}
-          </span>
-        )}
       </Box>
       <Box
         sx={{
@@ -233,7 +213,7 @@ export default function SearchAppBar() {
         }}
       >
         <Box>
-          <Logo src={carrito} />
+          <Logo src={carrito} onClick={handleLogoClick} />
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
           {user.name} <br /> {user.surname}
