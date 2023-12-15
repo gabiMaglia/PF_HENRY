@@ -35,6 +35,7 @@ const ButtonScrollTopComponent = () => {
           left: "60px",
           zIndex: 1000,
           display: isVisible ? "block" : "none",
+          "@media (max-width: 1140px)":{ left: "25px", bottom: "30px" },
         }}
       >
         <Button

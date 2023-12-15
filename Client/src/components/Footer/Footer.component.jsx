@@ -6,66 +6,47 @@ import { Copyright } from "@mui/icons-material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 //HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
-import { sectionInformation, sectionPages } from "../../utils/objectsTexts";
+import { sectionInformation, sectionSocial } from "../../utils/objectsTexts";
 import MapContainer from "../Map/Map.component";
 
-const FooterComponents = () => {
-  const smallScreen = useMediaQuery("(max-width:768px)");
-  const boxStyle = {
-    backgroundColor: "#000",
-    width: "100%",
-    height: smallScreen ? "750px" : "250px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: smallScreen && "space-evenly",
-    alignItems: "center",
-  };
-
-  const boxStyleOne = {
-    width: "100%",
-    display: "flex",
-    flexDirection: smallScreen ? "column" : "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "-30px",
-  };
-  const boxStyleTwo = {
-    margin: smallScreen?"20px": "20px 0 0 20px",
-    color: "#fff",
-    padding: "20px 0 0 0",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: smallScreen ? "center" : "flex-start",
-    justifyContent: { xs: "center" },
-  };
-
-  const boxStyleThree = {
-    margin: smallScreen?"20px": "20px 0 0 20px",
-    color: "#fff",
-    display: "flex",
-    flexDirection: "column",
-    alignItems:  "center",
-    padding: "20px",
-  };
-
-  const boxStyleCopyright = {
-    backgroundColor: "#000",
-    display: "flex",
-    justifyContent: "center",
-    padding: "0 0 30px 0",
-    paddingLeft: smallScreen && "10px",
-  };
+const FooterComponent = () => {
+  // const smallScreen = useMediaQuery("(max-width:768px)");
 
   return (
     <>
       {/* BOX FOOTER */}
-      <Box style={boxStyle}>
+      <Box sx={{ backgroundColor: "#000" }}>
         {/* BOX SECCIONES */}
-        <Box style={boxStyleOne}>
+        <Box
+          sx={{
+            width: "80%",
+            margin: "auto",
+            display: "flex",
+            "@media (max-width: 1140px)": {
+              width: "100%",
+              padding: "0 50px"
+            },
+            "@media (max-width: 768px)": {
+              width: "100%",
+              flexDirection: "column",
+            },
+          }}
+        >
           {/* SECCION INFORMACION */}
           {sectionInformation.map((section, index) => (
             <Container key={index}>
-              <Box style={boxStyleTwo}>
+              <Box
+                sx={{
+                  paddingTop: "25px",
+                  color: "#fff",
+                  "@media (max-width: 768px)": {
+                    transform: "scale(.9)"
+                  },
+                  "@media (max-width: 480px)": {
+                    transform: "scale(.8)"
+                  }
+                }}
+              >
                 <Typography
                   variant="h5"
                   sx={{
@@ -97,18 +78,50 @@ const FooterComponents = () => {
             </Container>
           ))}
           {/* CIERRE SECCION INFORMACION */}
+          {/* LOGO EMPRESA */}
           <Container>
-            <MapContainer />
+            <Box
+              sx={{
+                textAlign: "center",
+                paddingTop: "25px",
+                "@media (max-width: 768px)": { display: "none" },
+              }}
+            >
+              <img
+                src="/icons/logo.svg"
+                alt="logo hyper mega red"
+                style={{ width: "200px", height: "auto" }}
+              />
+            </Box>
           </Container>
+          {/* CIERRE LOGO EMPRESA */}
+          {/* <Container>
+            <MapContainer />
+          </Container> */}
           {/* SECCION PAGINAS */}
-          {sectionPages.map((section, index) => (
+          {sectionSocial.map((section, index) => (
             <Container key={index}>
-              <Box style={boxStyleThree}>
+              <Box
+                sx={{
+                  paddingTop: "25px",
+                  color: "#fff",
+                  "@media (max-width: 768px)": {
+                    transform: "scale(.9)"
+                  },
+                  "@media (max-width: 480px)": {
+                    transform: "scale(.8)"
+                  }
+                }}
+              >
                 <Typography
                   variant="h5"
                   sx={{
                     fontWeight: "800",
                     marginBottom: "25px",
+                    textAlign: "end",
+                    "@media (max-width: 768px)": {
+                      textAlign: "start",
+                    },
                   }}
                 >
                   {section.title}
@@ -120,45 +133,97 @@ const FooterComponents = () => {
                       display: "flex",
                       marginBottom: "10px",
                       flexDirection: "row-reverse",
+                      "@media (max-width: 768px)": {
+                        flexDirection: "row",
+                      },
                     }}
                   >
+                    {item.icon && <item.icon sx={{ color: "#fd611a" }} />}
                     <Link to={item.link} style={{ textDecoration: "none" }}>
                       <Typography
                         sx={{
                           marginRight: "10px",
                           color: "#fff",
-                          fontSize: smallScreen && { xs: 13 },
-                          marginTop: smallScreen && "5px",
+                          "@media (max-width: 768px)": {
+                            marginLeft: "10px",
+                          },
                         }}
                       >
                         {item.text}
                       </Typography>
                     </Link>
-                    {item.icon && <item.icon sx={{ color: "#fd611a" }} />}
                   </Box>
                 ))}
               </Box>
             </Container>
           ))}
-
           {/* CIERRE SECCION PAGINAS */}
         </Box>
         {/* CIERRE BOX SECCIONES */}
+
+        {/* BOX COPYRIGHT */}
+        <Box sx={{ width: "80%", margin: "auto" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              textAlign: "center",
+              padding: "25px",
+            }}
+          >
+            <Copyright sx={{ color: "#fd611a", marginRight: "10px", "@media(max-width: 480px)":{ margin: "0 -10px 0 25px" } }} />
+            <Typography sx={{ color: "#787373", fontWeight: "500", "@media (max-width: 480px)": { fontSize: "12px" } }}>
+              2023 | Todos los derechos reservados. | Desarrollado por Grupo 06
+              PF - Henry.
+            </Typography>
+          </Box>
+        </Box>
+        {/* CIERRE BOX COPYRIGHT */}
       </Box>
       {/* CIERRE BOX FOOTER */}
-
-      {/* BOX COPYRIGHT */}
-      <Box style={boxStyleCopyright}>
-        <Box sx={{ display: "flex" }}>
-          <Copyright sx={{ color: "#fd611a", marginRight: "10px" }} />
-          <Typography sx={{ color: "#787373", fontWeight: "500" }}>
-            2023 | Todos los derechos reservados. | Desarrollado por Grupo 06 PF
-            - Henry.
-          </Typography>
-        </Box>
-      </Box>
-      {/* CIERRE BOX COPYRIGHT */}
     </>
   );
 };
-export default FooterComponents;
+export default FooterComponent;
+
+// import { Box } from "@mui/material";
+
+// const FooterComponent = () => {
+//   return (
+//     <>
+//       {/* BOX GENERAL */}
+//       <Box sx={{ backgroundColor: "#000", height: "100px", width: "100%" }}>
+//         {/* BOX INFO */}
+//         <Box
+//           sx={{
+//             backgroundColor: "red",
+//             height: "80%",
+//             width: "80%",
+//             margin: "auto",
+//           }}
+//         >
+//           <Box></Box>
+//           <Box></Box>
+//           <Box></Box>
+//         </Box>
+//         {/* CIERRE BOX INFO */}
+//         {/* BOX COPYRIGHT */}
+//         <Box
+//           sx={{
+//             backgroundColor: "green",
+//             height: "80%",
+//             width: "80%",
+//             margin: "auto",
+//           }}
+//         >
+//           <Box></Box>
+//           <Box></Box>
+//         </Box>
+//         {/* CIERRE BOX COPYRIGHT */}
+//       </Box>
+//       {/* CIERRE BOX GENERAL */}
+//     </>
+//   );
+// };
+
+// export default FooterComponent;
