@@ -31,7 +31,7 @@ const getUserByDni = async (dni) => {
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
-    include: [{ model: UserRole, as: "role" }, UserAddress],
+    include: [UserAddress],
   });
   if (!user) {
     return {
