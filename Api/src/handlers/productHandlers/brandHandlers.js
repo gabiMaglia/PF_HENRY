@@ -4,7 +4,7 @@ const {
   deleteBrand,
   updateBrand,
   getBrandWithProducts,
-} = require("../../controllers/prodcutControllers/brandController");
+} = require("../../controllers/productControllers/brandController");
 
 const getAllBrandsHandler = async (req, res) => {
   try {
