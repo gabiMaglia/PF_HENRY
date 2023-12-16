@@ -11,12 +11,11 @@ import { addItem } from "../../redux/slices/CartSlice";
 
 const ProductBox = ({ products }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { productsToShow } = useSelector((state) => state.product);
   // const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
-  const { productsToShow } = useSelector((state) => state.product);
-
   const isThereAnyProducts = productsToShow.length === 0;
-  const navigate = useNavigate();
 
   const handleAddToCart = (product) => {
     // Agrega el producto al carrito
@@ -50,7 +49,7 @@ const ProductBox = ({ products }) => {
           No se encontro ningun producto relacionado con su busqueda
         </Typography>
       ) : (
-        products.map((product) => (
+        productsToShow.map((product) => (
           <Box
             display="flex"
             flexDirection="column"

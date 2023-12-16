@@ -1,7 +1,7 @@
 //HOOKS
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
 
 const ProductCard = styled(Card)({
@@ -36,6 +36,7 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
+  const navigate = useNavigate();
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
@@ -48,8 +49,13 @@ const CardProduct = ({ product }) => {
       ? ProductImages[0].address
       : null;
 
+  const handleCategoryClick = (e) => {
+    e.stopPropagation();
+    navigate(`/products/filters/${categoryName}`);
+  };
+
   return (
-    <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
+    <>
       <ProductCard
         sx={{
           display: "flex",
@@ -59,30 +65,48 @@ const CardProduct = ({ product }) => {
         }}
       >
         {categoryName && (
-          <Typography variant="subtitle2" sx={{ paddingTop: "20px" }}>
-            <span style={{ fontWeight: "700", color: "#fd611a", textTransform: "uppercase" }}>
+          <Typography
+            variant="subtitle2"
+            onClick={handleCategoryClick}
+            sx={{ paddingTop: "20px", zIndex: "1000" }}
+          >
+            <span
+              style={{
+                fontWeight: "700",
+                color: "#fd611a",
+                textTransform: "uppercase",
+              }}
+            >
               categoria:
             </span>{" "}
             {categoryName}
           </Typography>
         )}
-        <ProductMedia component="img" alt={name} src={imageUrl} />
-        <CardContent>
-          <Typography
-            variant="h6"
-            component="div"
-            color="textPrimary"
-            align="center"
-            sx={{ marginTop: "-20px" }}
-          >
-            {name}
-          </Typography>
-        </CardContent>
-        <ProductPrice variant="subtitle1" align="center" sx={{ fontWeight: "900" }}>
-          ${price}
-        </ProductPrice>
+        <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
+          <Box>
+            <ProductMedia component="img" alt={name} src={imageUrl} />
+            <CardContent>
+              <Typography
+                variant="h6"
+                component="div"
+                color="textPrimary"
+                align="center"
+                sx={{ marginTop: "-20px" }}
+              >
+                {name}
+              </Typography>
+            </CardContent>
+            <ProductPrice
+              variant="subtitle1"
+              align="center"
+              sx={{ fontWeight: "900" }}
+            >
+              ${price}
+            </ProductPrice>
+          </Box>
+        </Link>
       </ProductCard>
-    </Link>
+    </>
   );
 };
 
