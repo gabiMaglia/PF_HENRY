@@ -18,7 +18,7 @@ import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
-import img from "/icons/logo.jpeg";
+import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
 
 export default function SearchAppBar() {
@@ -112,8 +112,8 @@ export default function SearchAppBar() {
     );
   };
 
-  const handleLogoClick = () => {
-    navigate("/shoppingcart");
+  const handleCartClick = () => {
+    navigate(PATHROUTES.SHOPCART);
   };
 
   return (
@@ -217,7 +217,7 @@ export default function SearchAppBar() {
           <Logo
             src={carrito}
             onClick={handleLogoClick}
-          />
+          />{" "}
         </Box>
         <Box
           sx={{
@@ -231,15 +231,6 @@ export default function SearchAppBar() {
           {renderLoginOrLogoutButton()}
         </Box>
       </Box>
-      <LoginModal
-        isOpen={loginModalIsOpen}
-        setLoginModalIsOpen={setLoginModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
-      <RegisterModal
-        isOpen={registerModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
       <LoginModal
         isOpen={loginModalIsOpen}
         setLoginModalIsOpen={setLoginModalIsOpen}
