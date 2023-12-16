@@ -10,7 +10,12 @@ import { sectionInformation, sectionSocial } from "../../utils/objectsTexts";
 import MapContainer from "../Map/Map.component";
 
 const FooterComponent = () => {
-  // const smallScreen = useMediaQuery("(max-width:768px)");
+  const handleImageTop = ()=>{
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
 
   return (
     <>
@@ -24,7 +29,7 @@ const FooterComponent = () => {
             display: "flex",
             "@media (max-width: 1140px)": {
               width: "100%",
-              padding: "0 50px"
+              padding: "0 50px",
             },
             "@media (max-width: 768px)": {
               width: "100%",
@@ -40,11 +45,11 @@ const FooterComponent = () => {
                   paddingTop: "25px",
                   color: "#fff",
                   "@media (max-width: 768px)": {
-                    transform: "scale(.9)"
+                    transform: "scale(.9)",
                   },
                   "@media (max-width: 480px)": {
-                    transform: "scale(.8)"
-                  }
+                    transform: "scale(.8)",
+                  },
                 }}
               >
                 <Typography
@@ -83,14 +88,15 @@ const FooterComponent = () => {
             <Box
               sx={{
                 textAlign: "center",
-                paddingTop: "25px",
+                paddingTop: "50px",
                 "@media (max-width: 768px)": { display: "none" },
               }}
             >
               <img
                 src="/icons/logo.svg"
                 alt="logo hyper mega red"
-                style={{ width: "200px", height: "auto" }}
+                style={{ width: "150px", height: "auto", cursor: "pointer" }}
+                onClick={handleImageTop}
               />
             </Box>
           </Container>
@@ -106,11 +112,11 @@ const FooterComponent = () => {
                   paddingTop: "25px",
                   color: "#fff",
                   "@media (max-width: 768px)": {
-                    transform: "scale(.9)"
+                    transform: "scale(.9)",
                   },
                   "@media (max-width: 480px)": {
-                    transform: "scale(.8)"
-                  }
+                    transform: "scale(.8)",
+                  },
                 }}
               >
                 <Typography
@@ -171,8 +177,20 @@ const FooterComponent = () => {
               padding: "25px",
             }}
           >
-            <Copyright sx={{ color: "#fd611a", marginRight: "10px", "@media(max-width: 480px)":{ margin: "0 -10px 0 25px" } }} />
-            <Typography sx={{ color: "#787373", fontWeight: "500", "@media (max-width: 480px)": { fontSize: "12px" } }}>
+            <Copyright
+              sx={{
+                color: "#fd611a",
+                marginRight: "10px",
+                "@media(max-width: 480px)": { margin: "0 -10px 0 25px" },
+              }}
+            />
+            <Typography
+              sx={{
+                color: "#787373",
+                fontWeight: "500",
+                "@media (max-width: 480px)": { fontSize: "12px" },
+              }}
+            >
               2023 | Todos los derechos reservados. | Desarrollado por Grupo 06
               PF - Henry.
             </Typography>
