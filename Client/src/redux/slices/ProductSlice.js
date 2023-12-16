@@ -13,7 +13,7 @@ const initialState = {
   currentPage: 0,
 };
 
-const PRODUCT_PER_PAGE = 9;
+const PRODUCT_PER_PAGE = 12;
 const productSlice = createSlice({
   name: "product",
   initialState,

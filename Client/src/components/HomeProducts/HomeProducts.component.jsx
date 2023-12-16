@@ -3,8 +3,8 @@ import CardProduct from "../ProductCard/ProductCard.component";
 import { Container, Typography } from "@mui/material";
 
 const HomeProducts = ({ allProducts }) => {
-  // Tomar los primeros 6 productos
-  const homeProducts = allProducts.slice(0, 6);
+  // Tomar los primeros 9 productos
+  const homeProducts = allProducts.slice(0, 9);
 
   return (
     <Container
