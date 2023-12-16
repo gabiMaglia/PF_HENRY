@@ -1,7 +1,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-const urlBack = import.meta.env.VITE_BACKEND_URL;
 import { search, getProductById, getProducts, filterByCategory, filterByBrand, changeInput } from "../redux/slices/ProductSlice";
+
+const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
