@@ -1,5 +1,6 @@
-import React from "react";
+//HOOKS
 import { Link } from "react-router-dom";
+//MATREIAL UI
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
@@ -20,8 +21,8 @@ const ProductCard = styled(Card)({
 
 const ProductMedia = styled(CardMedia)({
   padding: 24,
-  height: 200,
-  width: 200,
+  height: 180,
+  width: 180,
   objectFit: "cover",
   margin: "auto",
 });
@@ -35,7 +36,12 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
-  const { id, name, price, ProductImages } = product;
+  const { id, name, price, ProductImages, ProductCategories } = product;
+
+  const categoryName =
+    ProductCategories[0].name && ProductCategories[0].name.length > 0
+      ? ProductCategories[0].name
+      : null;
 
   const imageUrl =
     ProductImages[0].address && ProductImages[0].address.length > 0
@@ -52,6 +58,14 @@ const CardProduct = ({ product }) => {
           cursor: "pointer",
         }}
       >
+        {categoryName && (
+          <Typography variant="subtitle2" sx={{ paddingTop: "20px" }}>
+            <span style={{ fontWeight: "700", color: "#fd611a", textTransform: "uppercase" }}>
+              categoria:
+            </span>{" "}
+            {categoryName}
+          </Typography>
+        )}
         <ProductMedia component="img" alt={name} src={imageUrl} />
         <CardContent>
           <Typography
@@ -59,11 +73,12 @@ const CardProduct = ({ product }) => {
             component="div"
             color="textPrimary"
             align="center"
+            sx={{ marginTop: "-20px" }}
           >
             {name}
           </Typography>
         </CardContent>
-        <ProductPrice variant="subtitle1" align="center">
+        <ProductPrice variant="subtitle1" align="center" sx={{ fontWeight: "900" }}>
           ${price}
         </ProductPrice>
       </ProductCard>
