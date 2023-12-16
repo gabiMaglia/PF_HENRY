@@ -112,10 +112,10 @@ const UserMenu = () => {
         >
           <MenuItem
             onClick={handleClose}
-            sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+            sx={{ justifyContent: "center", textAlign: "center" }}
           >
             <Avatar sx={{ backgroundColor: "#fd611a" }}>M</Avatar>
-            <Typography>
+            <Typography sx={{ width: "6em" }}>
               Mi <br />
               cuenta
             </Typography>
@@ -127,13 +127,13 @@ const UserMenu = () => {
           to={PATHROUTES.SHOPINGS}
         >
           <MenuItem
-            sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+            sx={{ justifyContent: "center", textAlign: "center" }}
             onClick={handleClose}
           >
             <ListItemIcon>
               <LocalShipping sx={{ color: "black" }} />
             </ListItemIcon>
-            <Typography>
+            <Typography sx={{ width: "6em" }}>
               Mis
               <br /> compras
             </Typography>
@@ -145,13 +145,13 @@ const UserMenu = () => {
           to={PATHROUTES.WISHLIST}
         >
           <MenuItem
-            sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+            sx={{ justifyContent: "center", textAlign: "center" }}
             onClick={handleClose}
           >
             <ListItemIcon>
               <Bookmark sx={{ color: "black" }} />
             </ListItemIcon>
-            <Typography>
+            <Typography sx={{ width: "6em" }}>
               Lista de <br /> deseos
             </Typography>
           </MenuItem>
@@ -162,13 +162,16 @@ const UserMenu = () => {
           to={PATHROUTES.PRODUCTSERVIS}
         >
           <MenuItem
-            sx={{ textAlign: "center", justifyContent: "space-evenly" }}
+            sx={{
+              textAlign: "center",
+              justifyContent: "center",
+            }}
             onClick={handleClose}
           >
             <ListItemIcon>
               <HomeRepairService sx={{ color: "black" }} />
             </ListItemIcon>
-            <Typography>
+            <Typography sx={{ width: "6em" }}>
               Productos <br />
               en servicio
             </Typography>
@@ -177,7 +180,7 @@ const UserMenu = () => {
         <Divider />
 
         <MenuItem
-          sx={{ justifyContent: "space-evenly", textAlign: "center" }}
+          sx={{ justifyContent: "center", textAlign: "center" }}
           onClick={() => {
             removeAuthDataCookie();
             window.location.reload();
@@ -186,7 +189,7 @@ const UserMenu = () => {
           <ListItemIcon>
             <Logout sx={{ color: "black" }} />
           </ListItemIcon>
-          <Typography>
+          <Typography sx={{ width: "6em" }}>
             Cerrar <br />
             sesión
           </Typography>

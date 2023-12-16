@@ -1,6 +1,5 @@
 //HOOKS
 import React, { useEffect, useState } from "react";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 //MATERIAL UI
@@ -17,7 +16,6 @@ import { getUserById } from "../../services/UserServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
-import PATHROUTES from "../../helpers/pathRoute";
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.jpeg";
@@ -145,7 +143,7 @@ export default function SearchAppBar() {
             navigate(PATHROUTES.HOME);
           }}
         />
-        {cartItemCount > 0 && (
+        {/* {cartItemCount > 0 && (
           <span
             style={{
               position: "absolute",
@@ -159,7 +157,7 @@ export default function SearchAppBar() {
           >
             {cartItemCount}
           </span>
-        )}
+        )} */}
       </Box>
       <Box
         sx={{
