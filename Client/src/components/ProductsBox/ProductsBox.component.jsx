@@ -1,9 +1,12 @@
+//HOOKS
 import { useSelector, useDispatch } from "react-redux";
-// import { useLocalStorage } from "../../Hook/useLocalStorage";
-import CardProduct from "../ProductCard/ProductCard.component";
-import { Box, Button, Container, Typography } from "@mui/material";
-import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
+// import { useLocalStorage } from "../../Hook/useLocalStorage";
+//MATERIAL UI
+import { Box, Button, Container, Typography } from "@mui/material";
+//COMPONENTS
+import CardProduct from "../ProductCard/ProductCard.component";
+//REDUX
 import { addItem } from "../../redux/slices/CartSlice";
 
 const ProductBox = ({ products }) => {
@@ -26,7 +29,7 @@ const ProductBox = ({ products }) => {
     <Container
       sx={{
         display: "grid",
-        gridTemplateColumns: { md: "repeat(1,1fr)", lg: "repeat(3,1fr)" },
+        gridTemplateColumns: { md: "repeat(1, 1fr)", lg: "repeat(3, 1fr)" },
         flexDirection: "row",
         gap: 4,
         mt: 2,

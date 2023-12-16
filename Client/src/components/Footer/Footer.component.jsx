@@ -7,7 +7,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 //HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
 import { sectionInformation, sectionSocial } from "../../utils/objectsTexts";
-import MapContainer from "../Map/Map.component";
 
 const FooterComponent = () => {
   const handleImageTop = ()=>{
@@ -101,9 +100,7 @@ const FooterComponent = () => {
             </Box>
           </Container>
           {/* CIERRE LOGO EMPRESA */}
-          {/* <Container>
-            <MapContainer />
-          </Container> */}
+          
           {/* SECCION PAGINAS */}
           {sectionSocial.map((section, index) => (
             <Container key={index}>
