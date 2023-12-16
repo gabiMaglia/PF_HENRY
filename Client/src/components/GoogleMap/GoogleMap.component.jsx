@@ -1,9 +1,6 @@
-import React from "react";
 import { CardMedia } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const MapContainer = () => {
-  // const smallScreen = useMediaQuery("(max-width:768px)");
 
   return (
     <CardMedia
@@ -13,10 +10,10 @@ const MapContainer = () => {
       sx={{
         borderRadius: "10px",
         border: "none",
-        backgroundColor: "red",
-        width: "50%",
+        width: "90vw",
         height: "300px",
-        margin: "0 auto 50px auto"
+        margin: "0 auto 50px auto",
+        boxShadow: "0 0 15px rgba(0, 0, 0, 0.7)",
       }}
     />
   );

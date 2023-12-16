@@ -46,7 +46,6 @@ const CarouselBottomComponent = () => {
         sx={{
           margin: "0 auto",
           width: "100%",
-          // maxWidth: "1000px",
           padding: "10px",
         }}
       >
