@@ -21,7 +21,7 @@ import {
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
-import img from "/icons/logo.jpeg";
+import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
 
 export default function SearchAppBar() {
@@ -126,8 +126,8 @@ export default function SearchAppBar() {
     );
   };
 
-  const handleLogoClick = () => {
-    navigate("/shoppingcart");
+  const handleCartClick = () => {
+    navigate(PATHROUTES.SHOPCART);
   };
 
   return (
@@ -213,7 +213,7 @@ export default function SearchAppBar() {
         }}
       >
         <Box>
-          <Logo src={carrito} onClick={handleLogoClick} />
+          <Logo src={carrito} onClick={handleCartClick} />
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
           {user.name} <br /> {user.surname}
