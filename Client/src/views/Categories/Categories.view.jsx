@@ -1,31 +1,31 @@
 //HOOKS
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 //MATERIAL UI
 import { Typography } from "@mui/material";
 //COMPONENTS
-import ProductBox from "../../components/ProductsBox/ProductsBox.component";
 //REDUX
+
+const backUrl = import.meta.env.VITE_BACKEND_URL;
 
 const CategoriesView = () => {
   const { categoryName } = useParams();
   const [categoryProducts, setCategoryProducts] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3001/category/filter/${categoryName}`
-        );
-        const data = await response.json();
-        console.log("Category Products:", data);
-        setCategoryProducts(data);
-      } catch (error) {
-        console.error("Error fetching category products", error);
-      }
-    };
+  const fectData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${backUrl}/category/filter/${categoryName}`
+      );
+      setCategoryProducts(data);
+    } catch (error) {
+      console.log(error, "Error al obtener los productos de la categoría");
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fectData();
   }, [categoryName]);
 
   return (
@@ -34,12 +34,11 @@ const CategoriesView = () => {
         Productos de la categoría: {categoryName}
       </Typography>
 
-      {/* {categoryProducts.map((product) => (
+      {categoryProducts.map((product) => (
         <div key={product.id}>
           <p>{product.name}</p>
         </div>
-      ))} */}
-      <ProductBox products={categoryProducts} />
+      ))}
     </div>
   );
 };
