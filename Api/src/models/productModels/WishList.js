@@ -1,13 +1,10 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("Wishlist", {
+  sequelize.define("WishList", {
     id: {
       type: DataTypes.UUID,
-      autoIncrement: true,
       primaryKey: true,
     },
   });
 };
-
-const { DataTypes } = require("sequelize");
