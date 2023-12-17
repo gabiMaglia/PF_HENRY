@@ -7,16 +7,6 @@ import { styled } from "@mui/system";
 const ProductCard = styled(Card)({
   width: 300,
   height: 350,
-  margin: 0,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "space-between",
-  boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
-  transition: "transform 0.3s",
-  "&:hover": {
-    transform: "scale(1.05)",
-  },
 });
 
 const ProductMedia = styled(CardMedia)({
@@ -58,10 +48,19 @@ const CardProduct = ({ product }) => {
     <>
       <ProductCard
         sx={{
-          display: "flex",
-          padding: 0,
           m: 1,
+          padding: 0,
+          margin: 0,
+          display: "flex",
           cursor: "pointer",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-between",
+          boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+          transition: "transform 0.3s",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
         }}
       >
         {categoryName && (

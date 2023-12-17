@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 //MATERIAL UI
 import { Box, Button, Container, Typography } from "@mui/material";
 //COMPONENTS
-import CardProduct from "../ProductCard/ProductCard.component";
+import ProductCard from "../ProductCard/ProductCard.component";
 //REDUX
 import { addItem } from "../../redux/slices/CartSlice";
 
-const ProductBox = ({ products }) => {
+const ProductBox = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { productsToShow } = useSelector((state) => state.product);
@@ -56,7 +56,7 @@ const ProductBox = ({ products }) => {
             alignItems="center"
             key={product.id}
           >
-            <CardProduct product={product} />
+            <ProductCard product={product} />
             <Button
               variant="contained"
               sx={{
@@ -64,6 +64,7 @@ const ProductBox = ({ products }) => {
                 backgroundColor: "#fd611a",
                 color: "black",
                 transition: "transform 0.3s",
+                marginTop: "10px",
                 "&:hover": {
                   transform: "scale(1.05)",
                   backgroundColor: "#fd611a",

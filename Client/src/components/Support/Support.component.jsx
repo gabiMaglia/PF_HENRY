@@ -185,7 +185,7 @@ const SupportComponent = () => {
       >
         <Typography
           variant="h4"
-          sx={{ color: "#fff", textTransform: "uppercase", fontWeight: "800" }}
+          sx={{ color: "#fff", textTransform: "uppercase", fontWeight: "900" }}
         >
           Soporte
         </Typography>
