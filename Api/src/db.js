@@ -36,7 +36,7 @@ UserRoleModel(sequelize);
 UserAddressModel(sequelize);
 ServiceStatusModel(sequelize);
 ServiceModel(sequelize);
-UserWishListModel(sequelize);
+WishListModel(sequelize);
 
 // INICIALIZAMOS LOS MODELOS PRODUCT
 ProductModel(sequelize);
@@ -44,8 +44,8 @@ ProductBrandModel(sequelize);
 ProductStockModel(sequelize);
 ProductCategoryModel(sequelize);
 ProductImageModel(sequelize);
-ProductCartModel(sequelize);
-ProductOrderModel(sequelize);
+CartModel(sequelize);
+OrderModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
@@ -115,7 +115,6 @@ Product.belongsToMany(Cart, { through: "CartProduct" });
 
 Order.belongsTo(Cart);
 Cart.hasOne(Order);
-
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
 Service.belongsTo(User, {
@@ -137,6 +136,6 @@ User.hasMany(Service, {
 });
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize, // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models,
+  conn: sequelize,
 };
