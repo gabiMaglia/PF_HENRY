@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Button } from "@mui/material";
-// import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addItem,
@@ -9,19 +8,28 @@ import {
 } from "../../redux/slices/CartSlice";
 import { useNavigate } from "react-router-dom";
 
-// Este componente representa un carrito de compras cuyo estado se almacena en el localStorage y se actualiza mediante
-// eventos de cambio.
 export default function ShoppingCart() {
-  // Se utiliza el hook useLocalStorage para manejar el estado de una variable llamada text.
-  // El estado inicial de text es obtenido del almacenamiento local localStorage utilizando la clave 'text'.
-  // Si no hay ningún valor almacenado para 'text', se utiliza el valor por defecto una cadena vacía.
-  const [text, setText] = React.useState("");
-  // Cuando se llama a esta función, se obtiene el nuevo valor del texto del evento (event.target.value)
-  // y se actualiza el estado de text utilizando la función setText.
+  const [text, setText] = useState("");
+  const [saveToLocal, setSaveToLocal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(selectCartItems);
-  console.log(cartItems);
+
+  // Cargar datos del localStorage al montar el componente
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    console.log("Productos cargados al montar:", storedCartItems);
+    if (storedCartItems.length > 0) {
+      dispatch(checkout(storedCartItems));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Guardar datos en localStorage cada vez que el carrito se actualiza
+    if (cartItems.length > 0 && saveToLocal) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems, saveToLocal]);
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -35,11 +43,26 @@ export default function ShoppingCart() {
     };
 
     dispatch(addItem(newProduct));
+
+    // Guardar en localStorage si saveToLocal es verdadero
+    if (saveToLocal) {
+      const localStorageCartItems =
+        JSON.parse(localStorage.getItem("cartItems")) || [];
+      localStorageCartItems.push(newProduct);
+      localStorage.setItem("cartItems", JSON.stringify(localStorageCartItems));
+    }
+
     setText("");
   };
 
   const handleCheckout = () => {
     dispatch(checkout());
+
+    // Actualizar el estado local del carrito al realizar el checkout
+    if (cartItems.length > 0 && saveToLocal) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+
     navigate("/shoppingcart");
   };
 
@@ -68,6 +91,14 @@ export default function ShoppingCart() {
       <Button onClick={handleCheckout} variant="contained" color="primary">
         Checkout
       </Button>
+      <label>
+        Save to Local Storage
+        <input
+          type="checkbox"
+          checked={saveToLocal}
+          onChange={() => setSaveToLocal(!saveToLocal)}
+        />
+      </label>
       <div>
         <h2>Cart Items:</h2>
         <ul>
