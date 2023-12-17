@@ -14,6 +14,9 @@ const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
 const ProductCategoryModel = require("./models/productModels/ProductCategory");
 const ProductImageModel = require("./models/productModels/ProductImage");
+const WishListModel = require("./models/productModels/WishList");
+const CartModel = require("./models/productModels/Cart");
+const OrderModel = require("./models/productModels/Order");
 
 const koyebDb = process.env.KOYEB_DB;
 const localDb = process.env.LOCAL_DB;
@@ -33,6 +36,7 @@ UserRoleModel(sequelize);
 UserAddressModel(sequelize);
 ServiceStatusModel(sequelize);
 ServiceModel(sequelize);
+UserWishListModel(sequelize);
 
 // INICIALIZAMOS LOS MODELOS PRODUCT
 ProductModel(sequelize);
@@ -40,6 +44,8 @@ ProductBrandModel(sequelize);
 ProductStockModel(sequelize);
 ProductCategoryModel(sequelize);
 ProductImageModel(sequelize);
+ProductCartModel(sequelize);
+ProductOrderModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
@@ -55,6 +61,9 @@ const {
   ProductImage,
   Service,
   Service_status,
+  WishList,
+  Cart,
+  Order,
 } = sequelize.models;
 
 // RELACIONES USER
@@ -89,6 +98,23 @@ Product.hasOne(ProductStock, {
   onDelete: "CASCADE",
 });
 ProductStock.belongsTo(Product);
+
+//WISH LIST
+User.hasOne(WishList);
+WishList.belongsTo(User);
+
+WishList.belongsToMany(Product, { through: "WishlistProduct" });
+Product.belongsToMany(WishList, { through: "WishlistProduct" });
+
+//CART
+Cart.belongsTo(User);
+User.hasOne(Cart);
+
+Cart.belongsToMany(Product, { through: "CartProduct" });
+Product.belongsToMany(Cart, { through: "CartProduct" });
+
+Order.belongsTo(Cart);
+Cart.hasOne(Order);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
