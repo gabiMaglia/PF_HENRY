@@ -69,11 +69,13 @@ export default function SearchAppBar() {
     dispatch(fetchChage(event.target.value));
   };
 
-  const handleCartButtonClick = () => {
-    // Aquí puedes realizar la acción deseada al hacer clic en el carrito
-    // Por ejemplo, mostrar un modal del carrito
-    setLoginModalIsOpen(true);
+  const handleCartClick = () => {
+    navigate(PATHROUTES.SHOPCART);
   };
+
+  // const handleCartButtonClick = () => {
+  //   setLoginModalIsOpen(true);
+  // };
 
   useEffect(() => {
     const userToken = getAuthDataCookie();
@@ -126,10 +128,6 @@ export default function SearchAppBar() {
     );
   };
 
-  const handleCartClick = () => {
-    navigate(PATHROUTES.SHOPCART);
-  };
-
   return (
     <Box
       sx={{
@@ -148,7 +146,6 @@ export default function SearchAppBar() {
           alignItems: "center",
           cursor: "pointer",
         }}
-        onClick={handleCartButtonClick}
       >
         <Img
           src={img}
