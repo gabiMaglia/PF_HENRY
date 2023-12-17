@@ -38,6 +38,8 @@ export default function ShoppingCart() {
     setText("");
   };
 
+  const [saveToLocal, setSaveToLocal] = React.useState(false);
+
   const handleCheckout = () => {
     dispatch(checkout());
     navigate("/shoppingcart");
