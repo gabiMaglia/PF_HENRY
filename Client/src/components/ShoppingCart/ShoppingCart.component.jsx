@@ -1,72 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { TextField, Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
 import {
-  addItem,
-  checkout,
-  selectCartItems,
-} from "../../redux/slices/CartSlice";
-import { useNavigate } from "react-router-dom";
+  TextField,
+  Container,
+  Box,
+  Typography,
+  CardMedia,
+  styled,
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../../redux/slices/CartSlice";
+
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
 export default function ShoppingCart() {
-  const [text, setText] = useState("");
-  const [saveToLocal, setSaveToLocal] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const cartItems = useSelector(selectCartItems);
 
-  // Cargar datos del localStorage al montar el componente
-  useEffect(() => {
-    const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    console.log("Productos cargados al montar:", storedCartItems);
-    if (storedCartItems.length > 0) {
-      dispatch(checkout(storedCartItems));
-    }
-  }, [dispatch]);
+  const { items } = useSelector((state) => state.cart);
+  console.log(items, "items");
 
   useEffect(() => {
-    // Guardar datos en localStorage cada vez que el carrito se actualiza
-    if (cartItems.length > 0 && saveToLocal) {
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    }
-  }, [cartItems, saveToLocal]);
+    dispatch(addItem());
+    initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
+  }, []);
 
-  const handleTextChange = (event) => {
-    setText(event.target.value);
-  };
+  const ProductMedia = styled(CardMedia)({
+    padding: 24,
+    height: 200,
+    width: 200,
+    objectFit: "cover",
+    margin: "auto",
+  });
 
-  const handleAddToCart = () => {
-    const newProduct = {
-      id: cartItems.length + 1,
-      name: text,
-      price: 10,
-    };
-
-    dispatch(addItem(newProduct));
-
-    // Guardar en localStorage si saveToLocal es verdadero
-    if (saveToLocal) {
-      const localStorageCartItems =
-        JSON.parse(localStorage.getItem("cartItems")) || [];
-      localStorageCartItems.push(newProduct);
-      localStorage.setItem("cartItems", JSON.stringify(localStorageCartItems));
-    }
-
-    setText("");
-  };
-
-  const handleCheckout = () => {
-    dispatch(checkout());
-
-    // Actualizar el estado local del carrito al realizar el checkout
-    if (cartItems.length > 0 && saveToLocal) {
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    }
-
-    navigate("/shoppingcart");
-  };
-
-  if (cartItems.length === 0) {
+  if (items.length === 0) {
     return (
       <div>
         <h1>Loading...</h1>
@@ -75,40 +40,28 @@ export default function ShoppingCart() {
   }
 
   return (
-    <div>
-      <TextField
-        label="Shopping Cart"
-        multiline
-        rows={4}
-        variant="outlined"
-        fullWidth
-        value={text}
-        onChange={handleTextChange}
-      />
-      <Button onClick={handleAddToCart} variant="contained" color="primary">
-        Add to Cart
-      </Button>
-      <Button onClick={handleCheckout} variant="contained" color="primary">
-        Checkout
-      </Button>
-      <label>
-        Save to Local Storage
-        <input
-          type="checkbox"
-          checked={saveToLocal}
-          onChange={() => setSaveToLocal(!saveToLocal)}
-        />
-      </label>
-      <div>
-        <h2>Cart Items:</h2>
-        <ul>
-          {cartItems.map((item) => (
-            <li key={item.id}>
-              {item.name} - ${item.price}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <Container xs={{ display: "flex", flexDirection: "column" }}>
+      <Typography component="h2">Cart Items:</Typography>
+      <Box display="flex" flexDirection="column">
+        {items.map((item) => (
+          <Box key={item.id} display="flex" flexDirection="row">
+            <ProductMedia
+              component="img"
+              alt={item.name}
+              src={item.ProductImages[0].address}
+            />
+            <Typography>{item.name}</Typography>
+            <Typography>Precio: ${item.price * item.count}</Typography>
+            <TextField
+              label="Cantidad"
+              variant="outlined"
+              type="number"
+              value={item.count}
+            />
+          </Box>
+        ))}
+      </Box>
+      <Wallet initialization={{ preferenceId: "" }} />
+    </Container>
   );
 }

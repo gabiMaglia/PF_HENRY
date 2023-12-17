@@ -9,15 +9,13 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action) => {
-      state.items.push(action.payload);
-    },
-    checkout: (state) => {
-      state.items = [];
+      const storedProducts = JSON.parse(window.localStorage.getItem("storedProducts"));
+      state.items = Object.values(storedProducts).map((product) => ({ ...product }));
     },
   },
 });
 
-export const { addItem, checkout } = cartSlice.actions;
-export const selectCartItems = (state) => state.cart.items;
+export const { addItem, cartItem } = cartSlice.actions;
+
 
 export default cartSlice.reducer;
