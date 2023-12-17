@@ -1,19 +1,21 @@
+//HOOKS
 import { useSelector, useDispatch } from "react-redux";
-// import { useLocalStorage } from "../../Hook/useLocalStorage";
-import CardProduct from "../ProductCard/ProductCard.component";
-import { Box, Button, Container, Typography } from "@mui/material";
-import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
+// import { useLocalStorage } from "../../Hook/useLocalStorage";
+//MATERIAL UI
+import { Box, Button, Container, Typography } from "@mui/material";
+//COMPONENTS
+import ProductCard from "../ProductCard/ProductCard.component";
+//REDUX
 import { addItem } from "../../redux/slices/CartSlice";
 
-const ProductBox = ({ products }) => {
+const ProductBox = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { productsToShow } = useSelector((state) => state.product);
   // const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
 
-  const { productsToShow } = useSelector((state) => state.product);
-
   const isThereAnyProducts = productsToShow.length === 0;
-  const navigate = useNavigate();
 
   const handleAddToCart = (product) => {
     // Agrega el producto al carrito
@@ -26,7 +28,7 @@ const ProductBox = ({ products }) => {
     <Container
       sx={{
         display: "grid",
-        gridTemplateColumns: { md: "repeat(1,1fr)", lg: "repeat(3,1fr)" },
+        gridTemplateColumns: { md: "repeat(1, 1fr)", lg: "repeat(3, 1fr)" },
         flexDirection: "row",
         gap: 4,
         mt: 2,
@@ -47,14 +49,14 @@ const ProductBox = ({ products }) => {
           No se encontro ningun producto relacionado con su busqueda
         </Typography>
       ) : (
-        products.map((product) => (
+        productsToShow.map((product) => (
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
             key={product.id}
           >
-            <CardProduct product={product} />
+            <ProductCard product={product} />
             <Button
               variant="contained"
               sx={{
@@ -62,6 +64,7 @@ const ProductBox = ({ products }) => {
                 backgroundColor: "#fd611a",
                 color: "black",
                 transition: "transform 0.3s",
+                marginTop: "10px",
                 "&:hover": {
                   transform: "scale(1.05)",
                   backgroundColor: "#fd611a",

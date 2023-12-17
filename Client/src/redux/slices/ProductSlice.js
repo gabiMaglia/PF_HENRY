@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 const initialState = {
   allProductsBackup: [],
   allProducts: [],
@@ -13,7 +12,7 @@ const initialState = {
   currentPage: 0,
 };
 
-const PRODUCT_PER_PAGE = 9;
+const PRODUCT_PER_PAGE = 12;
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -92,12 +91,9 @@ const productSlice = createSlice({
       },
     filterByBrand: (state, action) => {
       const brandName = action.payload;
-      console.log(brandName)
-      console.log(state.allProductsBackup, "estado all")
       state.productsToShow = state.allProductsBackup.filter(
           (product) => product.ProductBrands[0].name === brandName
         ); 
-        console.log(state.productsToShow, "estado")
         state.currentPage= 0
         state.totalPages = Math.ceil(state.productsToShow.length/9); 
     },

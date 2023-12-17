@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 //MATERIAL UI
 import { Input, Typography, Box, Button, styled } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -18,24 +18,28 @@ import {
   getAuthDataCookie,
   removeAuthDataCookie,
 } from "../../utils/cookiesFunctions";
+//HELPERS
+import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
-import img from "/icons/logo.jpeg";
+import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-
-const Img = styled("img")({
-  width: 140,
-  height: 140,
-});
-
-const Logo = styled("img")({
-  width: 30,
-  height: 30,
-  position: "relative",
-});
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const Img = styled("img")({
+    width: 140,
+    height: 140,
+  });
+
+  const Logo = styled("img")({
+    width: 30,
+    height: 30,
+    position: "relative",
+    cursor: "pointer",
+  });
+
   // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
 
@@ -54,17 +58,12 @@ export default function SearchAppBar() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/products");
+    navigate(PATHROUTES.PRODUCTS);
     dispatch(fetchSearch(inputName));
   };
 
-  // Estado del carrito manejado por useLocalStorage
-  const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
-
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
-
-  const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleChange = (event) => {
     dispatch(fetchChage(event.target.value));
@@ -127,6 +126,10 @@ export default function SearchAppBar() {
     );
   };
 
+  const handleCartClick = () => {
+    navigate(PATHROUTES.SHOPCART);
+  };
+
   return (
     <Box
       sx={{
@@ -147,22 +150,13 @@ export default function SearchAppBar() {
         }}
         onClick={handleCartButtonClick}
       >
-        <Img src={img} alt="Logotipo" />
-        {cartItemCount > 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              backgroundColor: "red",
-              color: "white",
-              borderRadius: "50%",
-              padding: "2px 5px",
-            }}
-          >
-            {cartItemCount}
-          </span>
-        )}
+        <Img
+          src={img}
+          alt="Logotipo"
+          onClick={() => {
+            navigate(PATHROUTES.HOME);
+          }}
+        />
       </Box>
       <Box
         sx={{
@@ -219,22 +213,31 @@ export default function SearchAppBar() {
         }}
       >
         <Box>
-          <Logo src={carrito} />
+          <Logo src={carrito} onClick={handleCartClick} />
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
           {user.name} <br /> {user.surname}
         </Typography>
         {renderLoginOrLogoutButton()}
       </Box>
-        <LoginModal
-          isOpen={loginModalIsOpen}
-          setLoginModalIsOpen={setLoginModalIsOpen}
-          setRegisterModalIsOpen={setRegisterModalIsOpen}
-        />
-        <RegisterModal
-          isOpen={registerModalIsOpen}
-          setRegisterModalIsOpen={setRegisterModalIsOpen}
-        />
+      <LoginModal
+        isOpen={loginModalIsOpen}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <LoginModal
+        isOpen={loginModalIsOpen}
+        setLoginModalIsOpen={setLoginModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
+      <RegisterModal
+        isOpen={registerModalIsOpen}
+        setRegisterModalIsOpen={setRegisterModalIsOpen}
+      />
     </Box>
   );
 }

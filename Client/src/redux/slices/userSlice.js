@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  login: false,
   name: "",
   surname: "",
   birthdate: "",
@@ -8,11 +9,13 @@ const initialState = {
   email: "",
   telephone: "",
   image: "",
-  role: "customer",
-  userAddress: {},
-  userCredentials: {
-    username: "",
-    password: "",
+  userAddress: {
+    country: "",
+    state : "",
+    city: "",
+    street: "",
+    number: null,
+    zipCode: null,
   },
 };
 
@@ -20,25 +23,42 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addUser: (state, action) => {
-      const {
-        name,
-        dni,
-        email,
-        userCredentials: { username, password },
-      } = action.payload;
-      state.name = name;
-      state.dni = dni;  
-      state.email = email;
-      state.userCredentials.username = username;
-      state.userCredentials.password = password;
+    logUser: (state, { payload }) => {
+      const { userObject } = payload;
+      const { UserAddress } = userObject;
+      state.login = true
+      state.name = userObject.name;
+      state.surname = userObject.surname;
+      state.birthdate = userObject.birthdate;
+      state.email = userObject.email;
+      state.telephone = userObject.telephone;
+      state.image = userObject.image;
+      state.userAddress.country = UserAddress.country;
+      state.userAddress.state = UserAddress.state;
+      state.userAddress.city = UserAddress.city;
+      state.userAddress.street = UserAddress.street;
+      state.userAddress.number = UserAddress.number;
+      state.userAddress.zipCode = UserAddress.zipCode;
+    },
+    logoutUser: (state, action ) => {
+
+      state.login = false
+      state.name = "";
+      state.surname = "";
+      state.birthdate = "";
+      state.email = "";
+      state.telephone = "";
+      state.image = "";
+      state.userAddress.country = "";
+      state.userAddress.state = "";
+      state.userAddress.city = "";
+      state.userAddress.street ="";
+      state.userAddress.number = "";
+      state.userAddress.zipCode ="";
+
     },
   },
 });
 
-// export const { addUser } = userSlice.actions; //Opcion declaracion y exportacion al mismo tiempo
-
-const addUser = userSlice.actions.addUser; //Declaracion addUser
-export { addUser }//Exportacion addUser
-
+export const { logUser, logoutUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -12,12 +12,10 @@ import {
   FormHelperText,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-//COMPONENTS
-import { loginManagement } from "../LoginModal/LoginModal.component";
 //HELPERS
 import { userRegisterValidate } from "../../helpers/userValidate";
 //REDUX
-import { registerUser } from "../../services/AuthServices";
+import { loginUser, registerUser } from "../../services/AuthServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 
@@ -158,7 +156,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
         }).then((result) => {
           // Verifica si se hizo clic en Aceptar
           if (result.isConfirmed) {
-            loginManagement(userInfo.username, userInfo.address);
+            loginUser(userInfo.username, userInfo.address);
             resetModal();
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             resetModal();

@@ -4,6 +4,7 @@ const PATHROUTES = {
   SUPPORT: "/support",
   QUESTIONS: "/questions",
   DETAIL: "/product/:id",
+  CATEGORIES: "/products/filters/:categoryName",
   SHOPCART: "/shoppingcart",
 };
 

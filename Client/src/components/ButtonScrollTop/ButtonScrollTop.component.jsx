@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 //MATERIAL UI
 import { Box, Button } from "@mui/material";
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 const ButtonScrollTopComponent = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -10,7 +10,7 @@ const ButtonScrollTopComponent = () => {
   const handleScroll = () => {
     const isScrolled = window.scrollY > 400;
     setIsVisible(isScrolled);
-  }
+  };
 
   const handleScrollToTop = () => {
     window.scrollTo({
@@ -18,18 +18,25 @@ const ButtonScrollTopComponent = () => {
       behavior: "smooth",
     });
   };
-  
-useEffect(() => {
-window.addEventListener("scroll", handleScroll);
-return () => {
-  window.removeEventListener("scroll", handleScroll);
-}
-}, [])
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
       <Box
-        sx={{ position: "fixed", bottom: "50px", left: "60px", zIndex: 1000, display: isVisible ? "block" : "none" }}
+        sx={{
+          position: "fixed",
+          bottom: "5px",
+          left: "60px",
+          zIndex: 1000,
+          display: isVisible ? "block" : "none",
+          "@media (max-width: 1140px)":{ left: "25px", bottom: "30px" },
+        }}
       >
         <Button
           variant="contained"
@@ -39,6 +46,7 @@ return () => {
             width: "50px",
             borderRadius: "50%",
             backgroundColor: "#fd611a",
+            transform: "scale(.7)",
             "&:hover": { backgroundColor: "#923807" },
           }}
         >

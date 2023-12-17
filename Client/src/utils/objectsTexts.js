@@ -6,7 +6,6 @@ import {
   Phone,
   Facebook,
   Instagram,
-  LinkedIn,
   YouTube,
   Twitter,
 } from "@mui/icons-material";
@@ -89,13 +88,13 @@ const sectionInformation = [
       { icon: Email, text: "hypermegared.it@gmail.com" },
       {
         icon: AccessTimeFilled,
-        text: "Lunes a Viernes: 10 a 14hs y 17 a 20hs | Sábados: 10 a 14hs.",
+        text: "Lu a Vi: 10 a 14hs y 17 a 20hs | Sa: 10 a 14hs.",
       },
     ],
   },
 ];
 
-const sectionPages = [
+const sectionSocial = [
   {
     title: "SEGUINOS EN",
     items: [
@@ -128,6 +127,6 @@ export {
   itemsQuestions,
   textSupport,
   sectionInformation,
-  sectionPages,
+  sectionSocial,
   brands,
 };

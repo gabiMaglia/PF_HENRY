@@ -9,7 +9,7 @@ const CarouselBottomComponent = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % 12);
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % 21);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -19,7 +19,7 @@ const CarouselBottomComponent = () => {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 1,
     slidesToScroll: 1,
     initialSlide: 0,
     centerMode: true,
@@ -31,6 +31,9 @@ const CarouselBottomComponent = () => {
     <Box
       sx={{
         backgroundColor: "#f5f5f5",
+        "@media (max-width: 1140px)": {
+          height: "100px",
+        },
         "@media (max-width: 768px)": {
           height: "100px",
         },
@@ -42,15 +45,15 @@ const CarouselBottomComponent = () => {
       <Box
         sx={{
           margin: "0 auto",
-          maxWidth: "1100px",
+          width: "100%",
           padding: "10px",
         }}
       >
         <Slider {...settings}>
-          {[...Array(12)].map((_, index) => (
+          {[...Array(21)].map((_, index) => (
             <Box key={index} >
               <img
-                src={`/logos/image${((index + currentSlide) % 15) + 1}.png`}
+                src={`/logos/image${((index + currentSlide) % 21) + 1}.png`}
                 alt={`Brand ${index + 1}`}
                 style={{ width: "80px", height: "80px", margin: "0 60px" }}
               />
