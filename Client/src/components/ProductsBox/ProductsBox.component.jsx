@@ -1,26 +1,22 @@
 //HOOKS
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 //MATERIAL UI
 import { Box, Button, Container, Typography } from "@mui/material";
 //COMPONENTS
-import CardProduct from "../ProductCard/ProductCard.component";
-//REDUX
-import { addItem } from "../../redux/slices/CartSlice";
+import ProductCard from "../ProductCard/ProductCard.component";
 
-const ProductBox = ({ products }) => {
+const ProductBox = () => {
   const dispatch = useDispatch();
-  // const [cartItems, setCartItems] = useLocalStorage("cartItems", []);
-
-  const { productsToShow } = useSelector((state) => state.product);
-
-  const isThereAnyProducts = productsToShow.length === 0;
   const navigate = useNavigate();
+  const [getCounter, setCounter] = useLocalStorage();
+  const { productsToShow } = useSelector((state) => state.product);
+  const isThereAnyProducts = productsToShow.length === 0;
 
   const handleAddToCart = (product) => {
     // Agrega el producto al carrito
-    dispatch(addItem(product));
+    setCounter(product);
     console.log("Producto agregado al carrito:", product);
     navigate("/shoppingcart");
   };
@@ -50,14 +46,14 @@ const ProductBox = ({ products }) => {
           No se encontro ningun producto relacionado con su busqueda
         </Typography>
       ) : (
-        products.map((product) => (
+        productsToShow.map((product) => (
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
             key={product.id}
           >
-            <CardProduct product={product} />
+            <ProductCard product={product} />
             <Button
               variant="contained"
               sx={{
@@ -65,6 +61,7 @@ const ProductBox = ({ products }) => {
                 backgroundColor: "#fd611a",
                 color: "black",
                 transition: "transform 0.3s",
+                marginTop: "10px",
                 "&:hover": {
                   transform: "scale(1.05)",
                   backgroundColor: "#fd611a",

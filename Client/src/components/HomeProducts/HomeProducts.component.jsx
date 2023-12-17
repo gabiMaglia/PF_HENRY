@@ -23,8 +23,8 @@ const HomeProducts = ({ allProducts }) => {
         flexDirection: "column",
       }}
     >
-      <Typography paddingLeft={8} margin={2} fontWeight={"bold"} fontSize={24}>
-        ÚLTIMAS NOVEDADES
+      <Typography paddingLeft={8} margin={2} fontWeight={"bold"} fontSize={24} sx={{ textTransform: "uppercase" }}>
+        Utlimas Novedades
       </Typography>
       <Container
         sx={{
@@ -33,7 +33,7 @@ const HomeProducts = ({ allProducts }) => {
           flexWrap: "wrap",
           justifyContent: "space-around",
           marginBottom: 5,
-          gap: 1,
+          gap: 2,
           [`@media (max-width: 1140px)`]: {
             flexDirection: "column",
             alignItems: "center",

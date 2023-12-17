@@ -91,12 +91,9 @@ const productSlice = createSlice({
       },
     filterByBrand: (state, action) => {
       const brandName = action.payload;
-      console.log(brandName)
-      console.log(state.allProductsBackup, "estado all")
       state.productsToShow = state.allProductsBackup.filter(
           (product) => product.ProductBrands[0].name === brandName
         ); 
-        console.log(state.productsToShow, "estado")
         state.currentPage= 0
         state.totalPages = Math.ceil(state.productsToShow.length/9); 
     },

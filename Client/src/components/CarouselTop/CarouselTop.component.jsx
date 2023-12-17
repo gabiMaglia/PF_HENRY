@@ -86,7 +86,7 @@ const CarouselTopComponent = () => {
         <Card
           sx={{
             width: "100%",
-            height: "280px",
+            height: "260px",
             backgroundImage: `url('${carouselData[activeIndex].desktopImageUrl}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
