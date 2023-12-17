@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {
   TextField,
-  Button,
   Container,
   Box,
   Typography,
@@ -9,21 +8,12 @@ import {
   styled,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, cartItem } from "../../redux/slices/CartSlice";
-import { useNavigate } from "react-router-dom";
-import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { addItem } from "../../redux/slices/CartSlice";
 
-// Este componente representa un carrito de compras cuyo estado se almacena en el localStorage y se actualiza mediante
-// eventos de cambio.
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+
 export default function ShoppingCart() {
-  // Se utiliza el hook useLocalStorage para manejar el estado de una variable llamada text.
-  // El estado inicial de text es obtenido del almacenamiento local localStorage utilizando la clave 'text'.
-  // Si no hay ningún valor almacenado para 'text', se utiliza el valor por defecto una cadena vacía.
-  // Cuando se llama a esta función, se obtiene el nuevo valor del texto del evento (event.target.value)
-  // y se actualiza el estado de text utilizando la función setText.
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { items } = useSelector((state) => state.cart);
   console.log(items, "items");
