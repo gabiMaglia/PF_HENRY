@@ -1,8 +1,10 @@
 //HOOKS
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -27,6 +29,7 @@ const ProductPrice = styled(Typography)({
 
 const CardProduct = ({ product }) => {
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(false)
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
@@ -42,6 +45,11 @@ const CardProduct = ({ product }) => {
   const handleCategoryClick = (e) => {
     e.stopPropagation();
     navigate(`/products/filters/${categoryName}`);
+  };
+
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation(); 
+    setIsFavorite(!isFavorite);
   };
 
   return (
@@ -63,24 +71,36 @@ const CardProduct = ({ product }) => {
           },
         }}
       >
-        {categoryName && (
-          <Typography
-            variant="subtitle2"
-            onClick={handleCategoryClick}
-            sx={{ paddingTop: "20px", zIndex: "1000" }}
-          >
-            <span
-              style={{
-                fontWeight: "700",
-                color: "#fd611a",
-                textTransform: "uppercase",
-              }}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {categoryName && (
+            <Typography
+              variant="subtitle2"
+              onClick={handleCategoryClick}
+              sx={{ paddingTop: "20px", zIndex: "1000" }}
             >
-              categoria:
-            </span>{" "}
-            {categoryName}
-          </Typography>
-        )}
+              <span
+                style={{
+                  fontWeight: "700",
+                  color: "#fd611a",
+                  textTransform: "uppercase",
+                }}
+              >
+                categoria:
+              </span>{" "}
+              {categoryName}
+            </Typography>
+          )}
+          <FavoriteIcon
+          onClick={handleFavoriteClick}
+            sx={{
+              position: "relative",
+              top: "20px",
+              right: "-30px",
+              transform: "translateY(-50%)",
+              color: isFavorite ? "#fd611a" : "gray",
+            }}
+          />
+        </Box>
         <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
           <Box>
             <ProductMedia component="img" alt={name} src={imageUrl} />
