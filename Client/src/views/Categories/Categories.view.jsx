@@ -71,7 +71,7 @@ const CategoriesView = () => {
             flexWrap: "wrap",
             justifyContent: "center",
             padding: "0 50px 50px 50px",
-            gap: "70px",
+            gap: "20px 70px",
             width: "75%",
             margin: "auto",
           }}
