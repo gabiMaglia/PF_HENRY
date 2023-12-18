@@ -8,12 +8,14 @@ import {
   styled,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/slices/CartSlice";
+import { addItem, updateItem } from "../../redux/slices/CartSlice";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
+  const [getProducts, addProductToCart, updateProductCount] = useLocalStorage();
 
   const { items } = useSelector((state) => state.cart);
   console.log(items, "items");
@@ -39,6 +41,14 @@ export default function ShoppingCart() {
     );
   }
 
+  const handleChange = (product, event) => {
+    const newQuantity = parseInt(event.target.value, 10) || 0;
+
+    updateProductCount(product.id, newQuantity);
+
+    dispatch(updateItem({ id: product.id, count: newQuantity }));
+  };
+
   return (
     <Container xs={{ display: "flex", flexDirection: "column" }}>
       <Typography component="h2">Cart Items:</Typography>
@@ -56,7 +66,8 @@ export default function ShoppingCart() {
               label="Cantidad"
               variant="outlined"
               type="number"
-              value={item.count}
+              value={getProducts().find((p) => p.id === item.id)?.count || 0}
+              onChange={(e) => handleChange(item, e)}
             />
           </Box>
         ))}

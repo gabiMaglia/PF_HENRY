@@ -122,7 +122,7 @@ const loginUser = async (username, password) => {
     login: true,
     tokenSession,
     userId: _user.id,
-    role_name,
+    user : `${_user.name} ${_user.surname}`,
   };
 };
 

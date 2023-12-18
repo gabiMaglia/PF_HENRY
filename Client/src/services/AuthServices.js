@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAuthDataCookie } from "../utils/cookiesFunctions";
+import { getAuthDataCookie, setAuthDataCookie } from "../utils/cookiesFunctions";
 
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
@@ -9,10 +9,11 @@ export const loginUser = async (username, password) => {
     const { data } = await axios.post(`${url}/account/login`, {
       username: username,
       password: password,
+    }, {
+      withCredentials: true
     });
     if (data.login) {
-      setAuthDataCookie(data);
-      console.log(data);
+      setAuthDataCookie('authData', data);
       return { error: false, data };
     }
   } catch ({ response }) {

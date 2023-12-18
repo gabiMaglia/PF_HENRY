@@ -20,8 +20,13 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
+import { logoutUser } from "../../redux/slices/userSlice";
 
 export default function SearchAppBar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [cartItemCount, setCartItemCount] = useState(0);
+
   const Img = styled("img")({
     width: 140,
     height: 140,
@@ -36,9 +41,7 @@ export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
-
   const [user, setUser] = useState({ name: "", surname: "" });
 
   const getUserInfo = async (token) => {
@@ -50,6 +53,11 @@ export default function SearchAppBar() {
         setUser({ name: name, surname: surname });
       }
     }
+  };
+
+  const logout = () => {
+    removeAuthDataCookie("authData");
+    dispatch(logoutUser());
   };
 
   const handleSubmit = (event) => {
@@ -69,17 +77,25 @@ export default function SearchAppBar() {
     navigate(PATHROUTES.SHOPCART);
   };
 
-  // const handleCartButtonClick = () => {
-  //   setLoginModalIsOpen(true);
+  const handleAddToCart = () => {
+    // Lógica para agregar productos al carrito
+
+    // Actualizar el estado del contador del carrito de forma atómica
+    setCartItemCount((prevCount) => prevCount + 1);
+  };
+
+  // const updateCartCount = () => {
+  //   // Hacer algo aquí si es necesario
+  //   // Puedes realizar alguna acción adicional después de actualizar el contador
   // };
 
   useEffect(() => {
-    const userToken = getAuthDataCookie();
+    const userToken = getAuthDataCookie("authData");
     getUserInfo(userToken);
   }, []);
 
   const renderLoginOrLogoutButton = () => {
-    const token = getAuthDataCookie();
+    const token = getAuthDataCookie("authData");
 
     return (
       <Box sx={{}}>
@@ -108,7 +124,16 @@ export default function SearchAppBar() {
             </Button>
           </Box>
         ) : (
-          <UserMenu />
+          <Button
+            startIcon={<AccountBoxIcon />}
+            color="inherit"
+            sx={{
+              color: "white",
+            }}
+            onClick={logout}
+          >
+            CERRAR SESIÓN
+          </Button>
         )}
       </Box>
     );
@@ -210,11 +235,37 @@ export default function SearchAppBar() {
           alignItems: "center",
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            position: "relative",
+            ml: "2em",
+          }}
+        >
+          {/* Icono del carrito con contador */}
           <Logo
             src={carrito}
-            // onClick={handleLogoClick}
-          />{" "}
+            onClick={() => {
+              handleAddToCart();
+              handleCartClick();
+            }}
+          />
+
+          {cartItemCount > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                backgroundColor: "red",
+                color: "white",
+                borderRadius: "50%",
+                padding: "0.2em 0.5em",
+                fontSize: "0.8em",
+              }}
+            >
+              {cartItemCount}
+            </span>
+          )}
         </Box>
         <Box
           sx={{

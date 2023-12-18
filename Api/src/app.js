@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
@@ -18,8 +19,8 @@ server.use(session({
   cookie: { secure: true }
 }));
 
-server.use(cors());
-
+server.use(cors({ credentials: true , origin: `http://${process.env.FRONTEND_URL}` }));
+server.use(cookieParser());
 server.name = "API";
 server.use(morgan("dev"));
 server.use(express.json());

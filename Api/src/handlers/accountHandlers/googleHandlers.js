@@ -13,7 +13,11 @@ const googleAuthCallback = async (req, res) => {
     if (responseLogin.error) {
       return res.status(401).json(response.response);
     }
-    // const user = JSON.stringify(req.user)
+    res.cookie('jwt',JSON.stringify(responseLogin.tokenSession), {
+      expire : new Date() + 9999,
+      httpOnly: true,
+      sameSite:'lax'
+    });
     return res.status(200).send(`<!DOCTYPE html>
     <html lang="en">
       <body>
