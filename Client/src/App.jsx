@@ -14,6 +14,7 @@ import Questions from "./views/Questions/Questions.view";
 import Detail from "./views/Detail/Detail.view";
 import Categories from "./views/Categories/Categories.view";
 import ShoppingCartView from "./views/ShoppingCart/ShoppingCart.view";
+import UserProfile from "./views/UserProfile/UserProfile.view";
 //MATREIAL UI
 import { Box } from "@mui/material";
 //DB
@@ -28,12 +29,34 @@ const App = () => {
         <SearchBar />
         <NavBar />
         <Routes>
-          <Route path={PATHROUTES.HOME} element={<Home />} />
-          <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
-          <Route path={PATHROUTES.SUPPORT} element={<Support />} />
-          <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
-          <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
-          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCartView />} />
+          <Route
+            path={PATHROUTES.HOME}
+            element={<Home />}
+          />
+          <Route
+            path={PATHROUTES.PRODUCTS}
+            element={<Products />}
+          />
+          <Route
+            path={PATHROUTES.SUPPORT}
+            element={<Support />}
+          />
+          <Route
+            path={PATHROUTES.QUESTIONS}
+            element={<Questions />}
+          />
+          <Route
+            path={PATHROUTES.CATEGORIES}
+            element={<Categories />}
+          />
+          <Route
+            path={PATHROUTES.SHOPCART}
+            element={<ShoppingCartView />}
+          />
+          <Route
+            path={PATHROUTES.PROFILE}
+            element={<UserProfile />}
+          />
           <Route
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}

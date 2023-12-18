@@ -32,6 +32,28 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
 
+  const items = [
+    {
+      name: "Mi cuenta",
+      icon: (
+        <Avatar
+          sx={{ backgroundColor: "#fd611a", height: "32px", width: "32px" }}
+        >
+          M
+        </Avatar>
+      ),
+      path: PATHROUTES.PROFILE,
+    },
+    { name: "Mis compras", icon: <LocalShipping />, path: PATHROUTES.SHOPINGS },
+    { name: "Lista de deseos", icon: <Bookmark />, path: PATHROUTES.WISHLIST },
+    {
+      name: "Productos en servicio",
+      icon: <HomeRepairService />,
+      path: PATHROUTES.PRODUCTSERVIS,
+    },
+    { name: "Cerrar sesion", icon: <Logout />, action: "logout" },
+  ];
+
   return (
     <Box sx={{ mr: "1em" }}>
       <Box

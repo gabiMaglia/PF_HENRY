@@ -213,7 +213,7 @@ export default function SearchAppBar() {
         <Box>
           <Logo
             src={carrito}
-            onClick={handleLogoClick}
+            // onClick={handleLogoClick}
           />{" "}
         </Box>
         <Box
