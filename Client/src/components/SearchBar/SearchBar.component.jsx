@@ -27,6 +27,7 @@ import carrito from "/icons/carrito-de-compras.png";
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   const Img = styled("img")({
     width: 140,
@@ -73,8 +74,16 @@ export default function SearchAppBar() {
     navigate(PATHROUTES.SHOPCART);
   };
 
-  // const handleCartButtonClick = () => {
-  //   setLoginModalIsOpen(true);
+  const handleAddToCart = () => {
+    // Lógica para agregar productos al carrito
+
+    // Actualizar el estado del contador del carrito de forma atómica
+    setCartItemCount((prevCount) => prevCount + 1);
+  };
+
+  // const updateCartCount = () => {
+  //   // Hacer algo aquí si es necesario
+  //   // Puedes realizar alguna acción adicional después de actualizar el contador
   // };
 
   useEffect(() => {
@@ -209,8 +218,37 @@ export default function SearchAppBar() {
           alignItems: "center",
         }}
       >
-        <Box>
-          <Logo src={carrito} onClick={handleCartClick} />
+        <Box
+          sx={{
+            position: "relative",
+            ml: "2em",
+          }}
+        >
+          {/* Icono del carrito con contador */}
+          <Logo
+            src={carrito}
+            onClick={() => {
+              handleAddToCart();
+              handleCartClick();
+            }}
+          />
+
+          {cartItemCount > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                backgroundColor: "red",
+                color: "white",
+                borderRadius: "50%",
+                padding: "0.2em 0.5em",
+                fontSize: "0.8em",
+              }}
+            >
+              {cartItemCount}
+            </span>
+          )}
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
           {user.name} <br /> {user.surname}
