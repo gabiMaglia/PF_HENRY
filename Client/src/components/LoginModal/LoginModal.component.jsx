@@ -17,7 +17,7 @@ import "./alertStyles.min.css";
 import { userLoginValidate } from "../../helpers/userValidate";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
 import { useDispatch } from "react-redux";
-import { logUser } from "../../redux/slices/userSlice";
+import { logUser } from "../../redux/slices/UserSlice";
 import { getUserById } from "../../services/UserServices";
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -29,7 +29,7 @@ const LoginModal = ({
   const dispatch = useDispatch();
 
   const handledispatch = async (userId) => {
-   await getUserById(userId).then((data) => {
+    await getUserById(userId).then((data) => {
       dispatch(logUser({ userObject: data }));
     });
   };
@@ -52,7 +52,7 @@ const LoginModal = ({
         title: "Fallo en el inicio de sesion",
         text: "Contraseña o usuario invalido",
       });
-    } else  {
+    } else {
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -64,7 +64,7 @@ const LoginModal = ({
       }).then((result) => {
         if (result.isConfirmed) {
           handledispatch(response.data.userId);
-          setLoginModalIsOpen(false)
+          setLoginModalIsOpen(false);
         }
       });
     }
