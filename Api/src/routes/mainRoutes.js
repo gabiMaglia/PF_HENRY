@@ -22,9 +22,10 @@ const imageRouter = require("./productRouter/productImagesRouter");
 const searchBarRouter = require("./productRouter/searchRouter");
 const orderRouter = require("./productRouter/orderRouter");
 const mercadoPagoRouter = require("./pagosRouter/mercadoPagoRouter");
+const filterRouter = require("./productRouter/filterRouter");
+const wishListRouter=require('./productRouter/wishListRouter')
 // SERVICES ROUTERS
 const serviceRouter = require("./serviceRouter/serviceRouter");
-const filterRouter = require("./productRouter/filterRouter");
 
 const mainRouter = Router();
 
@@ -36,6 +37,7 @@ mainRouter.use("/auth", googleRouter);
 mainRouter.use("/user", userRoutes);
 mainRouter.use("/user_role", checkRoleAuthToken(["customer"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
+mainRouter.use("/wishList",)
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);
 // ProductRoute

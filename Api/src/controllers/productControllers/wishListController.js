@@ -1,6 +1,6 @@
 const {WishList,User}=require('../../db')
 
-const getWishList=async()=>{
+const getWishListController=async()=>{
 
         const list=await WishList.findAll()
         if(list.length===0){
@@ -13,4 +13,4 @@ const getWishList=async()=>{
         
 }
 
-module.exports(getWishList)
+module.exports={getWishListController}
