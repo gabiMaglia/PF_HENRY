@@ -25,8 +25,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logUser: (state, { payload }) => {
-      console.log(payload)
-
       const { userObject } = payload;
       const { UserAddress } = userObject;
       state.login = true
@@ -34,6 +32,7 @@ const userSlice = createSlice({
       state.surname = userObject.surname;
       state.birthdate = userObject.birthdate;
       state.email = userObject.email;
+      state.dni = userObject.dni;
       state.telephone = userObject.telephone;
       state.image = userObject.image;
       state.role = userObject.rolId
@@ -51,6 +50,7 @@ const userSlice = createSlice({
       state.surname = "";
       state.birthdate = "";
       state.email = "";
+      state.dni = "";
       state.telephone = "";
       state.image = "";
       state.role = null
