@@ -17,6 +17,7 @@ const ProductImageModel = require("./models/productModels/ProductImage");
 const WishListModel = require("./models/productModels/WishList");
 const CartModel = require("./models/productModels/Cart");
 const OrderModel = require("./models/productModels/Order");
+const ProductCartModel = require("./models/productModels/ProductCart");
 
 const koyebDb = process.env.KOYEB_DB;
 const localDb = process.env.LOCAL_DB;
@@ -46,6 +47,7 @@ ProductCategoryModel(sequelize);
 ProductImageModel(sequelize);
 CartModel(sequelize);
 OrderModel(sequelize);
+ProductCartModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
@@ -64,6 +66,7 @@ const {
   WishList,
   Cart,
   Order,
+  ProductCart,
 } = sequelize.models;
 
 // RELACIONES USER
@@ -110,11 +113,19 @@ Product.belongsToMany(WishList, { through: "WishlistProduct" });
 Cart.belongsTo(User);
 User.hasOne(Cart);
 
-Cart.belongsToMany(Product, { through: "CartProduct" });
-Product.belongsToMany(Cart, { through: "CartProduct" });
+Cart.belongsToMany(Product, {
+  through: "ProductCart",
+  onDelete: "CASCADE",
+});
+
+Product.belongsToMany(Cart, {
+  through: "ProductCart",
+  onDelete: "CASCADE",
+});
 
 Order.belongsTo(Cart);
 Cart.hasOne(Order);
+
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
 Service.belongsTo(User, {
@@ -136,6 +147,6 @@ User.hasMany(Service, {
 });
 
 module.exports = {
-  ...sequelize.models,
-  conn: sequelize,
+  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
+  conn: sequelize, // para importart la conexión { conn } = require('./db.js');
 };
