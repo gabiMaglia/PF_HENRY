@@ -1,8 +1,10 @@
 const { Router } = require("express");
-const {getWishList}=require('../../handlers/productHandlers/wishListHandlers')
+const {
+  getWishList,
+} = require("../../handlers/productHandlers/wishListHandlers");
 
-const useRouter = Router();
+const useRoutes = Router();
 
-useRouter.get("/", getWishList);
+useRoutes.get("/", getWishList);
 
-module.exports = useRouter;
+module.exports = useRoutes;
