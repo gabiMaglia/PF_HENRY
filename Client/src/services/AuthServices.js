@@ -13,7 +13,8 @@ export const loginUser = async (username, password) => {
       withCredentials: true
     });
     if (data.login) {
-      setAuthDataCookie('authData', data);
+      const decodeToken = JSON.parse(atob(data.tokenSession.split('.')[1]))
+      setAuthDataCookie('authData', {...data, userRole : decodeToken.userRole});
       return { error: false, data };
     }
   } catch ({ response }) {

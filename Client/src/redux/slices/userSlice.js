@@ -9,6 +9,7 @@ const initialState = {
   email: "",
   telephone: "",
   image: "",
+  role: null,
   userAddress: {
     country: "",
     state : "",
@@ -31,8 +32,10 @@ const userSlice = createSlice({
       state.surname = userObject.surname;
       state.birthdate = userObject.birthdate;
       state.email = userObject.email;
+      state.dni = userObject.dni;
       state.telephone = userObject.telephone;
       state.image = userObject.image;
+      state.role = userObject.rolId
       state.userAddress.country = UserAddress.country;
       state.userAddress.state = UserAddress.state;
       state.userAddress.city = UserAddress.city;
@@ -47,8 +50,10 @@ const userSlice = createSlice({
       state.surname = "";
       state.birthdate = "";
       state.email = "";
+      state.dni = "";
       state.telephone = "";
       state.image = "";
+      state.role = null
       state.userAddress.country = "";
       state.userAddress.state = "";
       state.userAddress.city = "";

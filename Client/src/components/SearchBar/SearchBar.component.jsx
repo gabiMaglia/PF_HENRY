@@ -40,13 +40,15 @@ export default function SearchAppBar() {
     cursor: "pointer",
   });
 
-  const { login } = useSelector((state) => state.user);
+
+  const { name, surname, login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
 
-  const getUserInfo = async (userId) => {
-    if (userId !== undefined) {
-      const response = await getUserById(userId);
-      dispatch(logUser({ userObject: response }));
+  const getUserInfo = async (token) => {
+    if (token !== undefined) {
+      const response = await getUserById(token.userId);
+      dispatch(logUser({ userObject: {...response, rolId : token.userRole } }));
+
     }
   };
 
@@ -69,21 +71,20 @@ export default function SearchAppBar() {
 
   const handleAddToCart = () => {
     // Lógica para agregar productos al carrito
-
     // Actualizar el estado del contador del carrito de forma atómica
     setCartItemCount((prevCount) => prevCount + 1);
   };
 
   // const updateCartCount = () => {
-  //   // Hacer algo aquí si es necesario
-  //   // Puedes realizar alguna acción adicional después de actualizar el contador
+     // Hacer algo aquí si es necesario
+     // Puedes realizar alguna acción adicional después de actualizar el contador
   // };
 
   useEffect(() => {
     const userToken = getAuthDataCookie("authData");
 
     if (userToken) {
-      getUserInfo(userToken.userId);
+      getUserInfo(userToken);
     }
   }, []);
 
