@@ -21,8 +21,6 @@ import PRODUCTS from "./dataBase/bdd.json";
 //HELPERS
 import PATHROUTES from "./helpers/pathRoute";
 
-
-
 const App = () => {
   
   return (
