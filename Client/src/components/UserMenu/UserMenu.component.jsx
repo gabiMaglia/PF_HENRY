@@ -19,8 +19,18 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PATHROUTES from "../../helpers/pathRoute";
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/slices/userSlice";
+import getFirstLetters from "../../helpers/getFirstLetters";
 
 const UserMenu = () => {
+  const { name, surname } = useSelector((state) => state.user);
+  const initialLetersUsers = {
+    name: getFirstLetters(name),
+    surname: getFirstLetters(surname),
+  };
+  const dispatch = useDispatch();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -28,31 +38,14 @@ const UserMenu = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const logout = () => {
+    removeAuthDataCookie("authData");
+    dispatch(logoutUser());
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const items = [
-    {
-      name: "Mi cuenta",
-      icon: (
-        <Avatar
-          sx={{ backgroundColor: "#fd611a", height: "32px", width: "32px" }}
-        >
-          M
-        </Avatar>
-      ),
-      path: PATHROUTES.PROFILE,
-    },
-    { name: "Mis compras", icon: <LocalShipping />, path: PATHROUTES.SHOPINGS },
-    { name: "Lista de deseos", icon: <Bookmark />, path: PATHROUTES.WISHLIST },
-    {
-      name: "Productos en servicio",
-      icon: <HomeRepairService />,
-      path: PATHROUTES.PRODUCTSERVIS,
-    },
-    { name: "Cerrar sesion", icon: <Logout />, action: "logout" },
-  ];
 
   return (
     <Box sx={{ mr: "1em" }}>
@@ -81,11 +74,24 @@ const UserMenu = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32, backgroundColor: "#fd611a" }}>
-              M
+            <Avatar
+              sx={{
+                width: 45,
+                height: 45,
+                backgroundColor: "#fd611a",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: "bold",
+                  color: "white",
+                }}
+              >
+                {initialLetersUsers.name + initialLetersUsers.surname}
+              </Typography>
             </Avatar>
             <Typography sx={{ maxWidth: "8em", textAlign: "center" }}>
-              Martín <br /> Galiotti Martinez
+              {name} <br /> {surname}
             </Typography>
           </IconButton>
         </Tooltip>
@@ -115,7 +121,7 @@ const UserMenu = () => {
               flexDirection: "column",
               position: "absolute",
               top: 0,
-              right: 60,
+              right: 25,
               width: 10,
               height: 10,
               bgcolor: "background.paper",
@@ -136,7 +142,11 @@ const UserMenu = () => {
             onClick={handleClose}
             sx={{ justifyContent: "center", textAlign: "center" }}
           >
-            <Avatar sx={{ backgroundColor: "#fd611a" }}>M</Avatar>
+            <Avatar sx={{ backgroundColor: "#fd611a" }}>
+              <Typography variant="caption">
+                {initialLetersUsers.name + initialLetersUsers.surname}
+              </Typography>
+            </Avatar>
             <Typography sx={{ width: "6em" }}>
               Mi <br />
               cuenta
@@ -203,10 +213,7 @@ const UserMenu = () => {
 
         <MenuItem
           sx={{ justifyContent: "center", textAlign: "center" }}
-          onClick={() => {
-            removeAuthDataCookie();
-            window.location.reload();
-          }}
+          onClick={logout}
         >
           <ListItemIcon>
             <Logout sx={{ color: "black" }} />

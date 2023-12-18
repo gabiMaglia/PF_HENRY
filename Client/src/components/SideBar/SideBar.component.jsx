@@ -1,10 +1,9 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import { Avatar } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -18,17 +17,32 @@ import {
 } from "@mui/icons-material";
 import PATHROUTES from "../../helpers/pathRoute";
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import getFirstLetters from "../../helpers/getFirstLetters";
 
 const SideBar = () => {
+  const { name, surname } = useSelector((state) => state.user);
+  const initialLetersUsers = {
+    name: getFirstLetters(name),
+    surname: getFirstLetters(surname),
+  };
+
   const items = [
     {
       name: "Mi cuenta",
       icon: (
         <Avatar
-          sx={{ backgroundColor: "#fd611a", height: "32px", width: "32px" }}
+          sx={{ backgroundColor: "#fd611a", height: "40px", width: "40px" }}
         >
-          M
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              color: "white",
+            }}
+          >
+            {initialLetersUsers.name + initialLetersUsers.surname}
+          </Typography>
         </Avatar>
       ),
       path: PATHROUTES.PROFILE,
