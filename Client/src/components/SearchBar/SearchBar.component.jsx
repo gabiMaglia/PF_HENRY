@@ -23,7 +23,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logUser, logoutUser } from "../../redux/slices/userSlice";
+import { logUser, logoutUser } from "../../redux/slices/UserSlice";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
