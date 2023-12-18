@@ -17,7 +17,6 @@ const ProductBox = () => {
     // Agrega el producto al carrito
     setStoredProducts(product);
     console.log("Producto agregado al carrito:", product);
-    navigate("/shoppingcart");
   };
 
   return (
