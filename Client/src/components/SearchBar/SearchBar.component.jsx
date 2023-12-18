@@ -1,5 +1,5 @@
 //HOOKS
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -23,7 +23,8 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logoutUser } from "../../redux/slices/userSlice";
+import { logUser, logoutUser } from "../../redux/slices/userSlice";
+
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -34,34 +35,26 @@ export default function SearchAppBar() {
     width: 140,
     height: 140,
   });
-
   const Logo = styled("img")({
     width: 30,
     height: 30,
     position: "relative",
     cursor: "pointer",
-  });
-
+  }); 
+  const {name, surname, login} = useSelector((state) => state.user)
   const { inputName } = useSelector((state) => state.product);
-  const [user, setUser] = useState({ name: "", surname: "" });
 
-  const getUserInfo = async (token) => {
-    if (token !== undefined) {
-      const { userId } = token;
+  const getUserInfo = async (userId) => {
       if (userId !== undefined) {
         const response = await getUserById(userId);
-        const { name, surname } = response;
-        setUser({ name: name, surname: surname });
-      }
+        console.log(response)
+        dispatch(logUser({userObject :response}))
     }
   };
-
   const logout = () => {
-    removeAuthDataCookie('authData')
-    dispatch(logoutUser())
-  }
-
-
+    removeAuthDataCookie("authData");
+    dispatch(logoutUser());
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate(PATHROUTES.PRODUCTS);
@@ -92,52 +85,11 @@ export default function SearchAppBar() {
   // };
 
   useEffect(() => {
-    const userToken = getAuthDataCookie('authData');
-    getUserInfo(userToken);
+    const userToken = getAuthDataCookie("authData");
+    getUserInfo(userToken.userId);
   }, []);
 
-  const renderLoginOrLogoutButton = () => {
-    const token = getAuthDataCookie('authData');
 
-    return (
-      <Box
-        sx={{
-          flexGrow: 0,
-          maxWidth: "xl",
-          ml: 4,
-          mr: 4,
-          borderRadius: 2,
-          backgroundColor: "#fd611a",
-        }}
-      >
-        {token === null || token === undefined ? (
-          <Button
-            startIcon={<AccountBoxIcon />}
-            color="inherit"
-            sx={{
-              color: "white",
-            }}
-            onClick={() => {
-              setLoginModalIsOpen(true);
-            }}
-          >
-            INICIAR SESIÓN
-          </Button>
-        ) : (
-          <Button
-            startIcon={<AccountBoxIcon />}
-            color="inherit"
-            sx={{
-              color: "white",
-            }}
-            onClick={logout}
-          >
-            CERRAR SESIÓN
-          </Button>
-        )}
-      </Box>
-    );
-  };
 
   return (
     <Box
@@ -253,9 +205,44 @@ export default function SearchAppBar() {
           )}
         </Box>
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
-          {user.name} <br /> {user.surname}
+          {name} <br /> {surname}
         </Typography>
-        {renderLoginOrLogoutButton()}
+        <Box
+          sx={{
+            flexGrow: 0,
+            maxWidth: "xl",
+            ml: 4,
+            mr: 4,
+            borderRadius: 2,
+            backgroundColor: "#fd611a",
+          }}
+        >
+          {login === false ? (
+            <Button
+              startIcon={<AccountBoxIcon />}
+              color="inherit"
+              sx={{
+                color: "white",
+              }}
+              onClick={() => {
+                setLoginModalIsOpen(true);
+              }}
+            >
+              INICIAR SESIÓN
+            </Button>
+          ) : (
+            <Button
+              startIcon={<AccountBoxIcon />}
+              color="inherit"
+              sx={{
+                color: "white",
+              }}
+              onClick={logout}
+            >
+              CERRAR SESIÓN
+            </Button>
+          )}
+        </Box>
       </Box>
       <LoginModal
         isOpen={loginModalIsOpen}
