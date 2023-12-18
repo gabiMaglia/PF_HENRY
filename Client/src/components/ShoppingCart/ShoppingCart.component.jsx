@@ -43,18 +43,25 @@ export default function ShoppingCart() {
 
   const handleChange = (product, event) => {
     const newQuantity = parseInt(event.target.value, 10) || 0;
+    const validQuantity = Math.max(newQuantity, 1);
+    updateProductCount(product.id, validQuantity);
 
-    updateProductCount(product.id, newQuantity);
-
-    dispatch(updateItem({ id: product.id, count: newQuantity }));
+    dispatch(updateItem({ id: product.id, count: validQuantity }));
   };
 
   return (
     <Container xs={{ display: "flex", flexDirection: "column" }}>
       <Typography component="h2">Cart Items:</Typography>
-      <Box display="flex" flexDirection="column">
+      <Box
+        display="flex"
+        flexDirection="column"
+      >
         {items.map((item) => (
-          <Box key={item.id} display="flex" flexDirection="row">
+          <Box
+            key={item.id}
+            display="flex"
+            flexDirection="row"
+          >
             <ProductMedia
               component="img"
               alt={item.name}
@@ -76,3 +83,5 @@ export default function ShoppingCart() {
     </Container>
   );
 }
+
+// const validQuantity = Math.max(newQuantity, 1);

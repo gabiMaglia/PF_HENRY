@@ -17,7 +17,10 @@ import UserMenu from "../UserMenu/UserMenu.component";
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
 //UTILS
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import {
+  getAuthDataCookie,
+  removeAuthDataCookie,
+} from "../../utils/cookiesFunctions";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
@@ -26,6 +29,8 @@ import carrito from "/icons/carrito-de-compras.png";
 import { logUser, logoutUser } from "../../redux/slices/userSlice";
 
 export default function SearchAppBar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [cartItemCount, setCartItemCount] = useState(0);
 
   const Img = styled("img")({
@@ -38,9 +43,6 @@ export default function SearchAppBar() {
     position: "relative",
     cursor: "pointer",
   });
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { name, surname, login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
@@ -94,51 +96,6 @@ export default function SearchAppBar() {
     }
   }, []);
 
-  const renderLoginOrLogoutButton = () => {
-    const token = getAuthDataCookie("authData");
-
-    return (
-      <Box sx={{}}>
-        {token === null || token === undefined ? (
-          <Box
-            sx={{
-              flexGrow: 0,
-              maxWidth: "xl",
-              ml: 4,
-              mr: 4,
-              borderRadius: 2,
-              backgroundColor: "#fd611a",
-            }}
-          >
-            <Button
-              startIcon={<AccountBoxIcon />}
-              color="inherit"
-              sx={{
-                color: "white",
-              }}
-              onClick={() => {
-                setLoginModalIsOpen(true);
-              }}
-            >
-              INICIAR SESIÓN
-            </Button>
-          </Box>
-        ) : (
-          <Button
-            startIcon={<AccountBoxIcon />}
-            color="inherit"
-            sx={{
-              color: "white",
-            }}
-            onClick={logout}
-          >
-            CERRAR SESIÓN
-          </Button>
-        )}
-      </Box>
-    );
-  };
-
   return (
     <Box
       sx={{
@@ -165,21 +122,6 @@ export default function SearchAppBar() {
             navigate(PATHROUTES.HOME);
           }}
         />
-        {/* {cartItemCount > 0 && (
-          <span
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              backgroundColor: "red",
-              color: "white",
-              borderRadius: "50%",
-              padding: "2px 5px",
-            }}
-          >
-            {cartItemCount}
-          </span>
-        )} */}
       </Box>
       <Box
         sx={{
@@ -267,7 +209,6 @@ export default function SearchAppBar() {
             </span>
           )}
         </Box>
-
         <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
           {name} <br /> {surname}
         </Typography>
@@ -308,6 +249,7 @@ export default function SearchAppBar() {
           )}
         </Box>
       </Box>
+
       <LoginModal
         isOpen={loginModalIsOpen}
         setLoginModalIsOpen={setLoginModalIsOpen}
