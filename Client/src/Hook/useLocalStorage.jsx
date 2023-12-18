@@ -48,7 +48,9 @@ export function useLocalStorage() {
     try {
       setStoredProducts((prevProducts) => {
         const updatedProducts = prevProducts.map((product) =>
-          product.id === productId ? { ...product, count: newCount } : product
+          product.id === productId
+            ? { ...product, count: Math.max(1, newCount) }
+            : product
         );
 
         window.localStorage.setItem(

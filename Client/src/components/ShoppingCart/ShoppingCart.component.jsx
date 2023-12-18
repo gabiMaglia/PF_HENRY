@@ -42,11 +42,11 @@ export default function ShoppingCart() {
   }
 
   const handleChange = (product, event) => {
-    const newQuantity = parseInt(event.target.value, 10) || 0;
-    const validQuantity = Math.max(newQuantity, 1);
-    updateProductCount(product.id, validQuantity);
+    const newQuantity = parseInt(event.target.value, 10) || 1;
 
-    dispatch(updateItem({ id: product.id, count: validQuantity }));
+    updateProductCount(product.id, newQuantity);
+
+    dispatch(updateItem({ id: product.id, count: newQuantity }));
   };
 
   return (
@@ -76,5 +76,3 @@ export default function ShoppingCart() {
     </Container>
   );
 }
-
-// const validQuantity = Math.max(newQuantity, 1);
