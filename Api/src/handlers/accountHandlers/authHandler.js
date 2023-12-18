@@ -49,12 +49,16 @@ const signInHandler = async (req, res) => {
 
 const loginHandler = async (req, res) => {
   const { username, password } = req.body;
-
   try {
     const response = await loginUser(username, password);
     if (response.error) {
       return res.status(401).json(response.response);
     }
+    res.cookie('jwt',JSON.stringify(response.tokenSession), {
+      expire : new Date() + 9999,
+      httpOnly: true,
+      sameSite:'lax'
+    });
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);

@@ -1,28 +1,29 @@
 import Cookies from "js-cookie";
 
 // Nombres de las cookies
-const AUTHDATA_COOKIE_NAME = "authData";
+
 
 // Funciones para manejar las cookies para el token
-export const setAuthDataCookie = (authData) => {
-  if (authData !== undefined) {
-    const serialized = JSON.stringify(authData);
-    Cookies.set(AUTHDATA_COOKIE_NAME, serialized, {
+export const setAuthDataCookie = async (cookieName, cookieData) => {
+  
+  if (cookieData !== undefined) {
+    const serialized = JSON.stringify(cookieData);
+    console.log(serialized)
+    Cookies.set(cookieName, serialized, {
       expires: 1,
       sameSite: "None",
       secure: true,
     });
   }
 };
-
-export const getAuthDataCookie = () => {
-  const cookie = Cookies.get(AUTHDATA_COOKIE_NAME);
+export const getAuthDataCookie = (cookieName) => {
+  const cookie = Cookies.get(cookieName);
   if (cookie !== undefined) {
     const deserialized = JSON.parse(cookie);
+    console.log(deserialized)
     return deserialized;
   }
 };
-
-export const removeAuthDataCookie = () => {
-  Cookies.remove(AUTHDATA_COOKIE_NAME);
+export const removeAuthDataCookie = (cookieName) => {
+  Cookies.remove(cookieName);
 };

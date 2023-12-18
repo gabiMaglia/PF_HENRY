@@ -29,7 +29,7 @@ const LoginModal = ({
   const dispatch = useDispatch();
 
   const handledispatch = async (userId) => {
-    getUserById(userId).then((data) => {
+   await getUserById(userId).then((data) => {
       dispatch(logUser({ userObject: data }));
     });
   };
@@ -41,8 +41,8 @@ const LoginModal = ({
     } else {
       response = await loginUser(username, address);
     }
-    const { error, data } = response;
-    if (error) {
+
+    if (response.error) {
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -52,7 +52,7 @@ const LoginModal = ({
         title: "Fallo en el inicio de sesion",
         text: "Contraseña o usuario invalido",
       });
-    } else if (data) {
+    } else  {
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -63,7 +63,7 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
-          handledispatch(data.userId);
+          handledispatch(response.data.userId);
           setLoginModalIsOpen(false)
         }
       });

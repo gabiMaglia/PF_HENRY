@@ -23,6 +23,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
+import { logoutUser } from "../../redux/slices/userSlice";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -41,9 +42,7 @@ export default function SearchAppBar() {
     cursor: "pointer",
   });
 
-  // const [input, setInput] = useState("");
   const { inputName } = useSelector((state) => state.product);
-
   const [user, setUser] = useState({ name: "", surname: "" });
 
   const getUserInfo = async (token) => {
@@ -56,6 +55,12 @@ export default function SearchAppBar() {
       }
     }
   };
+
+  const logout = () => {
+    removeAuthDataCookie('authData')
+    dispatch(logoutUser())
+  }
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -87,12 +92,12 @@ export default function SearchAppBar() {
   // };
 
   useEffect(() => {
-    const userToken = getAuthDataCookie();
+    const userToken = getAuthDataCookie('authData');
     getUserInfo(userToken);
   }, []);
 
   const renderLoginOrLogoutButton = () => {
-    const token = getAuthDataCookie();
+    const token = getAuthDataCookie('authData');
 
     return (
       <Box
@@ -125,10 +130,7 @@ export default function SearchAppBar() {
             sx={{
               color: "white",
             }}
-            onClick={() => {
-              removeAuthDataCookie();
-              window.location.reload();
-            }}
+            onClick={logout}
           >
             CERRAR SESIÓN
           </Button>
