@@ -25,7 +25,6 @@ import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
 import { logUser, logoutUser } from "../../redux/slices/userSlice";
 
-
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,15 +39,15 @@ export default function SearchAppBar() {
     height: 30,
     position: "relative",
     cursor: "pointer",
-  }); 
-  const {name, surname, login} = useSelector((state) => state.user)
+  });
+  const { name, surname, login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (userId) => {
-      if (userId !== undefined) {
-        const response = await getUserById(userId);
-        console.log(response)
-        dispatch(logUser({userObject :response}))
+    if (userId !== undefined) {
+      const response = await getUserById(userId);
+      console.log(response);
+      dispatch(logUser({ userObject: response }));
     }
   };
   const logout = () => {
@@ -86,10 +85,10 @@ export default function SearchAppBar() {
 
   useEffect(() => {
     const userToken = getAuthDataCookie("authData");
-    getUserInfo(userToken.userId);
+    if (userToken) {
+      getUserInfo(userToken.userId);
+    }
   }, []);
-
-
 
   return (
     <Box
