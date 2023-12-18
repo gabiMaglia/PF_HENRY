@@ -52,9 +52,16 @@ export default function ShoppingCart() {
   return (
     <Container xs={{ display: "flex", flexDirection: "column" }}>
       <Typography component="h2">Cart Items:</Typography>
-      <Box display="flex" flexDirection="column">
+      <Box
+        display="flex"
+        flexDirection="column"
+      >
         {items.map((item) => (
-          <Box key={item.id} display="flex" flexDirection="row">
+          <Box
+            key={item.id}
+            display="flex"
+            flexDirection="row"
+          >
             <ProductMedia
               component="img"
               alt={item.name}

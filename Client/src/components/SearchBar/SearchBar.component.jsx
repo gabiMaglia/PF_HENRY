@@ -1,29 +1,28 @@
 //HOOKS
+
 import { useEffect, useState } from "react";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 //MATERIAL UI
-import { Input, Typography, Box, Button, styled } from "@mui/material";
+import { Input, Box, Button, styled } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
+import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
 //UTILS
-import {
-  getAuthDataCookie,
-  removeAuthDataCookie,
-} from "../../utils/cookiesFunctions";
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logUser, logoutUser } from "../../redux/slices/userSlice";
+import { logUser } from "../../redux/slices/userSlice";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -40,20 +39,17 @@ export default function SearchAppBar() {
     position: "relative",
     cursor: "pointer",
   });
-  const { name, surname, login } = useSelector((state) => state.user);
+
+  const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (userId) => {
     if (userId !== undefined) {
       const response = await getUserById(userId);
-      console.log(response);
       dispatch(logUser({ userObject: response }));
     }
   };
-  const logout = () => {
-    removeAuthDataCookie("authData");
-    dispatch(logoutUser());
-  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate(PATHROUTES.PRODUCTS);
@@ -85,6 +81,7 @@ export default function SearchAppBar() {
 
   useEffect(() => {
     const userToken = getAuthDataCookie("authData");
+
     if (userToken) {
       getUserInfo(userToken.userId);
     }
@@ -203,20 +200,18 @@ export default function SearchAppBar() {
             </span>
           )}
         </Box>
-        <Typography sx={{ ml: "2em", maxWidth: "8em", textAlign: "center" }}>
-          {name} <br /> {surname}
-        </Typography>
-        <Box
-          sx={{
-            flexGrow: 0,
-            maxWidth: "xl",
-            ml: 4,
-            mr: 4,
-            borderRadius: 2,
-            backgroundColor: "#fd611a",
-          }}
-        >
-          {login === false ? (
+
+        {login === false ? (
+          <Box
+            sx={{
+              flexGrow: 0,
+              maxWidth: "xl",
+              ml: 4,
+              mr: 4,
+              borderRadius: 2,
+              backgroundColor: "#fd611a",
+            }}
+          >
             <Button
               startIcon={<AccountBoxIcon />}
               color="inherit"
@@ -229,29 +224,21 @@ export default function SearchAppBar() {
             >
               INICIAR SESIÓN
             </Button>
-          ) : (
-            <Button
-              startIcon={<AccountBoxIcon />}
-              color="inherit"
-              sx={{
-                color: "white",
-              }}
-              onClick={logout}
-            >
-              CERRAR SESIÓN
-            </Button>
-          )}
-        </Box>
+          </Box>
+        ) : (
+          <Box
+            sx={{
+              flexGrow: 0,
+              maxWidth: "xl",
+              ml: 4,
+              mr: 4,
+            }}
+          >
+            <UserMenu />
+          </Box>
+        )}
       </Box>
-      <LoginModal
-        isOpen={loginModalIsOpen}
-        setLoginModalIsOpen={setLoginModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
-      <RegisterModal
-        isOpen={registerModalIsOpen}
-        setRegisterModalIsOpen={setRegisterModalIsOpen}
-      />
+
       <LoginModal
         isOpen={loginModalIsOpen}
         setLoginModalIsOpen={setLoginModalIsOpen}
