@@ -20,7 +20,6 @@ export const getAuthDataCookie = (cookieName) => {
   const cookie = Cookies.get(cookieName);
   if (cookie !== undefined) {
     const deserialized = JSON.parse(cookie);
-    console.log(deserialized)
     return deserialized;
   }
 };

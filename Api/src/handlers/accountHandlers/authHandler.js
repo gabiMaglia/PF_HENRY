@@ -55,9 +55,9 @@ const loginHandler = async (req, res) => {
       return res.status(401).json(response.response);
     }
     res.cookie('jwt',JSON.stringify(response.tokenSession), {
-      expire : new Date() + 9999,
-      httpOnly: true,
-      sameSite:'lax'
+      expire: new Date() + 1,
+      httpOnly: false,
+      // sameSite:'none'
     });
     return res.status(200).json(response);
   } catch (error) {
