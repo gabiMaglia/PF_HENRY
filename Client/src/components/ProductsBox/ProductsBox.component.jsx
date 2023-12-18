@@ -8,15 +8,14 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import ProductCard from "../ProductCard/ProductCard.component";
 
 const ProductBox = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [getCounter, setCounter] = useLocalStorage();
+  const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow } = useSelector((state) => state.product);
   const isThereAnyProducts = productsToShow.length === 0;
 
   const handleAddToCart = (product) => {
     // Agrega el producto al carrito
-    setCounter(product);
+    setStoredProducts(product);
     console.log("Producto agregado al carrito:", product);
     navigate("/shoppingcart");
   };
