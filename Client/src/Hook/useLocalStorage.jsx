@@ -44,9 +44,28 @@ export function useLocalStorage() {
     }
   };
 
+  const updateProductCount = (productId, newCount) => {
+    try {
+      setStoredProducts((prevProducts) => {
+        const updatedProducts = prevProducts.map((product) =>
+          product.id === productId ? { ...product, count: newCount } : product
+        );
+
+        window.localStorage.setItem(
+          "storedProducts",
+          JSON.stringify(updatedProducts)
+        );
+
+        return updatedProducts;
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const getProducts = () => {
     return storedProducts || [];
   };
 
-  return [getProducts, addProductToCart];
+  return [getProducts, addProductToCart, updateProductCount];
 }
