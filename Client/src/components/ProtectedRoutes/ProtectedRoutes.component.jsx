@@ -6,7 +6,7 @@ import PATHROUTES from "../../helpers/pathRoute"
 const ProtectedRoutesComponent = ({ element, roleRequired }) => {
     const userData = useSelector((state) => state.user);
     const isLoggedIn = userData.login;
-    const userRole = userData.role;
+    const userRole = userData.rolId;
 
     console.log("Datos del usuario:", userData);
   
