@@ -42,7 +42,7 @@ const App = () => {
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}
           />
-          <Route element={<ProtectedRoutes />}>
+          <Route element={<ProtectedRoutes isLoggedIn={true} />}>
             <Route path={PATHROUTES.PROFILE} element={<UserProfile />} />
             <Route path={PATHROUTES.SHOPINGS} element={<ShoppingProfile />} />
             <Route path={PATHROUTES.WISHLIST} element={<WishListProfile />} />

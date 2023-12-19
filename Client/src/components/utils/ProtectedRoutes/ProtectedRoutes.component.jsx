@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Route, useNavigate } from "react-router-dom";
+import { Route, useNavigate, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import PATHROUTES from "../../../helpers/pathRoute";
@@ -17,7 +17,11 @@ const ProtectedRoutesComponent = ({ element }) => {
     }
   }, [isLoggedIn, navigate]);
 
-  return isLoggedIn ? <Route element={element} /> : null;
+  return isLoggedIn ? (
+    <Route element={element} />
+  ) : (
+    <Navigate to={PATHROUTES.HOME} />
+  );
 };
 
 export default ProtectedRoutesComponent;
