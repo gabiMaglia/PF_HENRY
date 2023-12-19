@@ -14,6 +14,7 @@ export const setAuthDataCookie = async (cookieName, cookieData) => {
     });
   }
 };
+
 export const getAuthDataCookie = (cookieName) => {
   const cookie = Cookies.get(cookieName);
   if (cookie !== undefined) {
