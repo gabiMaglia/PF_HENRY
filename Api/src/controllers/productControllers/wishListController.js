@@ -1,14 +1,8 @@
 const { WishList, User,Product } = require("../../db");
 
-const getWishListController = async () => {
-  const response = await WishList.findAll({ include: [{ model: Product }] });
-  if (response.length === 0) {
-    return {
-      error: true,
-      response: `La lista de deseos está vacía.`,
-    };
-  }
-  return response;
+const getWishListController = async (id) => {
+const List=await WishList.findOne({where:{UserId:id},include: [{ model: Product }]})
+return List
 };
 
 const postwishItemController = async (userId, productId) => {
