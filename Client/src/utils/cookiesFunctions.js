@@ -14,6 +14,7 @@ export const setAuthDataCookie = async (cookieName, cookieData) => {
     });
   }
 };
+
 export const getAuthDataCookie = (cookieName) => {
   const cookie = Cookies.get(cookieName);
   if (cookie !== undefined) {
@@ -21,6 +22,7 @@ export const getAuthDataCookie = (cookieName) => {
     return deserialized;
   }
 };
+
 export const removeAuthDataCookie = (cookieName) => {
   Cookies.remove(cookieName);
 };
