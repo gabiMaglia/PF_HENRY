@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar/NavBar.component";
 import Footer from "./components/Footer/Footer.component";
 import WhatsAppComponent from "./components/WhatsApp/WhatsApp.component";
 import ButtonScrollTopComponent from "./components/ButtonScrollTop/ButtonScrollTop.component";
+import ProtectedRoutesComponent from "./components/ProtectedRoutes/ProtectedRoutes.component";
 //VIEWS
 import Home from "./views/Home/Home.view";
 import Products from "./views/Products/Products.view";
@@ -22,7 +23,6 @@ import PRODUCTS from "./dataBase/bdd.json";
 import PATHROUTES from "./helpers/pathRoute";
 
 const App = () => {
-  
   return (
     <>
       <Box>
@@ -34,7 +34,9 @@ const App = () => {
           <Route path={PATHROUTES.SUPPORT} element={<Support />} />
           <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
           <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
-          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCartView />} />
+          <Route element={<ProtectedRoutesComponent />} >
+            <Route path={PATHROUTES.SHOPCART} element={<ShoppingCartView />} />
+          </Route>
           <Route
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}
