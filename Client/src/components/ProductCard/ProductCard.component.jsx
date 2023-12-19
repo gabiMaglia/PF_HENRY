@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -29,7 +29,7 @@ const ProductPrice = styled(Typography)({
 
 const CardProduct = ({ product }) => {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [isDesired, setIsDesired] = useState(false)
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
@@ -49,7 +49,7 @@ const CardProduct = ({ product }) => {
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation(); 
-    setIsFavorite(!isFavorite);
+    setIsDesired(!isDesired);
   };
 
   return (
@@ -90,14 +90,14 @@ const CardProduct = ({ product }) => {
               {categoryName}
             </Typography>
           )}
-          <FavoriteIcon
+          <BookmarkIcon
           onClick={handleFavoriteClick}
             sx={{
               position: "relative",
               top: "20px",
               right: "-30px",
               transform: "translateY(-50%)",
-              color: isFavorite ? "#fd611a" : "gray",
+              color: isDesired ? "#fd611a" : "gray",
             }}
           />
         </Box>
