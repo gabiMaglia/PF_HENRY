@@ -6,8 +6,11 @@ import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { Box, Button, Container, Typography } from "@mui/material";
 //COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
+// REDUX
+import { addItem } from "../../redux/slices/CartSlice";
 
-const ProductBox = () => {
+const ProductBox = ({ cartItemCount }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow } = useSelector((state) => state.product);
@@ -17,6 +20,9 @@ const ProductBox = () => {
     // Agrega el producto al carrito
     setStoredProducts(product);
     console.log("Producto agregado al carrito:", product);
+
+    // Despacha la acción para agregar el producto al estado del carrito en Redux
+    dispatch(addItem());
   };
 
   return (

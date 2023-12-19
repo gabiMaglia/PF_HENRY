@@ -1,9 +1,9 @@
 //HOOKS
 
 import { useEffect, useState } from "react";
-
+import { connect } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //MATERIAL UI
 import { Input, Box, Button, styled } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -12,9 +12,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
+import ProductBox from "../ProductsBox/ProductsBox.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
+import { addItem } from "../../redux/slices/CartSlice";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
@@ -23,12 +25,15 @@ import PATHROUTES from "../../helpers/pathRoute";
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
 import { logUser } from "../../redux/slices/userSlice";
-import { loginUser } from "../../services/AuthServices";
+// import { loginUser } from "../../services/AuthServices";
+
+const ConnectedProductBox = connect()(ProductBox);
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [cartItemCount, setCartItemCount] = useState(0);
+
+  const cartItemCount = useSelector((state) => state.cart.items.length);
 
   const Img = styled("img")({
     width: 140,
@@ -69,15 +74,13 @@ export default function SearchAppBar() {
   };
 
   const handleAddToCart = () => {
-    // Lógica para agregar productos al carrito
-    // Actualizar el estado del contador del carrito de forma atómica
-    setCartItemCount((prevCount) => prevCount + 1);
+    // Despacha la acción del carrito para agregar el producto
+    dispatch(addItem());
   };
 
-  // const updateCartCount = () => {
-  // Hacer algo aquí si es necesario
-  // Puedes realizar alguna acción adicional después de actualizar el contador
-  // };
+  const updateCartCount = (count) => {
+    setCartItemCount(count);
+  };
 
   useEffect(() => {
     const userToken = getAuthDataCookie("authData");
@@ -174,13 +177,7 @@ export default function SearchAppBar() {
           }}
         >
           {/* Icono del carrito con contador */}
-          <Logo
-            src={carrito}
-            onClick={() => {
-              handleAddToCart();
-              handleCartClick();
-            }}
-          />
+          <Logo src={carrito} onClick={handleCartClick} />
 
           {cartItemCount > 0 && (
             <span
@@ -247,6 +244,7 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
+      {/* <ConnectedProductBox cartItemCount={cartItemCount} /> */}
     </Box>
   );
 }
