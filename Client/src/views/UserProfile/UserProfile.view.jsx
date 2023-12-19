@@ -3,8 +3,12 @@ import SideBar from "../../components/SideBar/SideBar.component";
 import { useSelector } from "react-redux";
 import getFirstLetters from "../../helpers/getFirstLetters";
 import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
 
 const UserProfile = () => {
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [editInfo, setEditInfo] = useState("");
+
   const {
     name,
     surname,
@@ -20,6 +24,10 @@ const UserProfile = () => {
   const initialLetersUsers = {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
+  };
+
+  const handleEditClick = () => {
+    setEditModalIsOpen(true);
   };
 
   const dividerStyle = {
