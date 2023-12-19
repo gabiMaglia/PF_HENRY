@@ -18,6 +18,7 @@ import Categories from "./views/publics/Categories/Categories.view";
 import UserProfile from "./views/privates/UserProfile/UserProfile.view";
 import ShoppingProfile from "./views/privates/ShoppingProfile/ShoppingProfile.view";
 import WishListProfile from "./views/privates/WishListProfile/WishListProfile.view";
+import ProductServicesProfile from "./views/privates/ProductServices/ProductServices.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
 //MATREIAL UI
 import { Box } from "@mui/material";
@@ -46,6 +47,7 @@ const App = () => {
             <Route path={PATHROUTES.PROFILE} element={<UserProfile />} />
             <Route path={PATHROUTES.SHOPINGS} element={<ShoppingProfile />} />
             <Route path={PATHROUTES.WISHLIST} element={<WishListProfile />} />
+            <Route path={PATHROUTES.PRODUCTSERVICES} element={<ProductServicesProfile />} />
             <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
           </Route>
         </Routes>

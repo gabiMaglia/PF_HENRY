@@ -4,20 +4,20 @@ import { useSelector } from "react-redux";
 
 import PATHROUTES from "../../../helpers/pathRoute";
 
-const ProtectedRoutesComponent = ({ element }) => {
-  const userData = useSelector((state) => state.user);
-  const isLoggedIn = userData.login;
+const ProtectedRoutesComponent = ({ canActivate, element }) => {
+  // const userData = useSelector((state) => state.user);
+  // const isLoggedIn = userData.login;
   const navigate = useNavigate();
 
-  console.log("Datos del usuario:", userData);
+  // console.log("Datos del usuario:", userData);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!canActivate) {
       navigate(PATHROUTES.HOME, { replace: true });
     }
-  }, [isLoggedIn, navigate]);
+  }, [canActivate, navigate]);
 
-  return isLoggedIn ? (
+  return canActivate ? (
     <Route element={element} />
   ) : (
     <Navigate to={PATHROUTES.HOME} />
