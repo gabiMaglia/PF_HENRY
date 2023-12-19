@@ -13,6 +13,7 @@ import RegisterModal from "../RegisterModal/RegisterModal.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
+import { logUser, logoutUser } from "../../redux/slices/UserSlice";
 //UTILS
 import {
   getAuthDataCookie,
@@ -23,7 +24,6 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logUser, logoutUser } from "../../redux/slices/UserSlice";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
