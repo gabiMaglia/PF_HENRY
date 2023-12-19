@@ -10,21 +10,29 @@ import {
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, updateItem, removeItem } from "../../redux/slices/CartSlice";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import {
+  addItem,
+  updateItem,
+  removeItem,
+  totalItem,
+} from "../../redux/slices/CartSlice";
 
 // import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
-  const [getProducts] = useLocalStorage();
 
-  const { items } = useSelector((state) => state.cart);
+  const { items, total } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(addItem());
     // initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
   }, []);
+
+  useEffect(() => {
+    dispatch(totalItem());
+  }, [items]);
+
   console.log(items);
   const ProductMedia = styled(CardMedia)({
     padding: 24,
@@ -77,6 +85,7 @@ export default function ShoppingCart() {
             </Button>
           </Box>
         ))}
+        <Typography>Total: ${total}</Typography>
       </Box>
       {/* <Wallet initialization={{ preferenceId: "" }} /> */}
     </Container>

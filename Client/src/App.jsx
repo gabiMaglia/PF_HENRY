@@ -47,7 +47,10 @@ const App = () => {
             <Route path={PATHROUTES.PROFILE} element={<UserProfile />} />
             <Route path={PATHROUTES.SHOPINGS} element={<ShoppingProfile />} />
             <Route path={PATHROUTES.WISHLIST} element={<WishListProfile />} />
-            <Route path={PATHROUTES.PRODUCTSERVICES} element={<ProductServicesProfile />} />
+            <Route
+              path={PATHROUTES.PRODUCTSERVICES}
+              element={<ProductServicesProfile />}
+            />
             <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
           </Route>
         </Routes>
