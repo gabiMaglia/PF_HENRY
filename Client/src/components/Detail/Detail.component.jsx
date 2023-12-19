@@ -243,7 +243,7 @@ const Detail = () => {
       <Container>
         <Divider sx={{ marginY: 2 }} />
       </Container>
-      <CarouselProducts allProducts={allProducts} />{" "}
+      <CarouselProducts allProducts={allProducts} />
     </Container>
   );
 };
