@@ -177,7 +177,7 @@ const UserProfile = () => {
               variant="caption"
               sx={{ mb: ".1em" }}
             >
-              Codigo de area
+              Codigo postal
             </Typography>
             <Typography
               variant="body2"
@@ -185,7 +185,7 @@ const UserProfile = () => {
             >
               {userAddress.zipCode
                 ? userAddress.zipCode
-                : "No se definio un codigo de area"}
+                : "No se definio un codigo postal"}
             </Typography>
             <Divider />
           </Box>
