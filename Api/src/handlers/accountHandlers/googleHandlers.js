@@ -16,8 +16,9 @@ const googleAuthCallback = async (req, res) => {
     res.cookie('jwt',JSON.stringify(responseLogin.tokenSession), {
       expire : new Date() + 1,
       httpOnly: false,
-      sameSite:'none'
+      // sameSite:'none'
     });
+    console.log(responseLogin)
     return res.status(200).send(`<!DOCTYPE html>
     <html lang="en">
       <body>

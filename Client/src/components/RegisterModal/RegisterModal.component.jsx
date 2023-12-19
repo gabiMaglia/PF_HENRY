@@ -31,10 +31,6 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
        dispatch(logUser({ userObject: data }));
      });
    };
-
- 
-
-
   const [userInfo, setUserInfo] = useState({
     email: "",
     address: "",
