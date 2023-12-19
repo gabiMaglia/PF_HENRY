@@ -34,9 +34,7 @@ export default function ShoppingCart() {
 
   if (items.length === 0) {
     return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
+      <Typography component="h2">No hay productos en el carrito</Typography>
     );
   }
 
