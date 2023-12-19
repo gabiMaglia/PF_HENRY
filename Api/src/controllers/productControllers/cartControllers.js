@@ -1,17 +1,21 @@
 const { Product, Cart, User, ProductCart } = require("../../db");
 
-async function postCart(userId, productId, productQuantity, date, cartTotal) {
+async function postCart(userId, productId, productQuantity, date, cartMoney) {
   try {
     const cart = await Cart.create({
       productQuantity,
       date,
-      cartTotal,
+      cartTotal: cartMoney,
       state: "inicializado",
-      UserId: userId,
     });
 
-    const user = await User.findByPk(userId);
-    await user.setCart(cart);
+    if (userId) {
+      const user = await User.findByPk(userId);
+      if (!user) {
+        throw new Error("Usuario no encontrado");
+      }
+      await user.setCart(cart);
+    }
 
     const product = await Product.findByPk(productId);
 
@@ -35,6 +39,10 @@ const getAllCarts = async () => {
             model: ProductCart,
             attributes: ["quantity"],
           },
+        },
+        {
+          model: User,
+          attributes: ["id"],
         },
       ],
     });
@@ -87,19 +95,33 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
 
       if (existingProduct) {
         existingProduct.ProductCart.quantity = productQuantity;
-        await cartToUpdate.update({ cartTotal: cartMoney });
       } else {
-        cartToUpdate.Products.push({
-          id: productId,
-          ProductCart: {
-            quantity: productQuantity,
-          },
+        const product = await Product.findByPk(productId);
+        const addProductResult = await cartToUpdate.addProduct(product, {
+          through: { quantity: productQuantity },
         });
-        await cartToUpdate.update({ cartTotal: cartMoney });
+        console.log("Resultado de agregar producto:", addProductResult);
       }
-      await cartToUpdate.save();
 
-      return cartToUpdate;
+      await cartToUpdate.update({ cartTotal: cartMoney });
+
+      //vuelve a pedir el carrito para que devuelva el carrito actualizado
+      const updatedCart = await Cart.findOne({
+        where: {
+          UserId: userId,
+        },
+        include: [
+          {
+            model: Product,
+            attributes: ["id"],
+            through: {
+              model: ProductCart,
+              attributes: ["quantity"],
+            },
+          },
+        ],
+      });
+      return updatedCart;
     } else {
       return "El usuario no ha generado aun un carrito en la base de datos.";
     }
@@ -109,7 +131,7 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
 };
 
 const getCartById = async (id) => {
-  const cart = await Cart.findeByPk(id, {
+  const cart = await Cart.findByPk(id, {
     include: [
       {
         model: Product,
@@ -129,4 +151,21 @@ const getCartById = async (id) => {
   }
 };
 
-module.exports = { postCart, addToCart, getAllCarts, getCartById };
+const deleteCartById = async (id) => {
+  try {
+    const cartToDelete = await Cart.findByPk(id);
+
+    await cartToDelete.destroy();
+    return { cartToDelete, deleted: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+module.exports = {
+  postCart,
+  addToCart,
+  getAllCarts,
+  getCartById,
+  deleteCartById,
+};
