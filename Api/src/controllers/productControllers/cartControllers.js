@@ -130,6 +130,65 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
   }
 };
 
+const removeFromCart = async (userId, productId, cartMoney) => {
+  try {
+    let cartToUpdate = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
+      include: [
+        {
+          model: Product,
+          attributes: ["id"],
+          through: {
+            model: ProductCart,
+            attributes: ["quantity"],
+          },
+        },
+      ],
+    });
+
+    if (cartToUpdate) {
+      const existingProduct = cartToUpdate.Products.find(
+        (product) => product.id === productId
+      );
+
+      if (existingProduct) {
+        await cartToUpdate.removeProduct(existingProduct);
+        console.log("Producto eliminado del carrito");
+      } else {
+        console.log("El producto no existe en el carrito");
+      }
+
+      await cartToUpdate.update({ cartTotal: cartMoney });
+
+      // Volver a buscar el carrito actualizado
+      const updatedCart = await Cart.findOne({
+        where: {
+          UserId: userId,
+        },
+        include: [
+          {
+            model: Product,
+            attributes: ["id"],
+            through: {
+              model: ProductCart,
+              attributes: ["quantity"],
+            },
+          },
+        ],
+      });
+
+      return updatedCart;
+    } else {
+      return "El usuario no ha generado aun un carrito en la base de datos.";
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error al procesar la solicitud");
+  }
+};
+
 const getCartById = async (id) => {
   const cart = await Cart.findByPk(id, {
     include: [
@@ -168,4 +227,5 @@ module.exports = {
   getAllCarts,
   getCartById,
   deleteCartById,
+  removeFromCart,
 };
