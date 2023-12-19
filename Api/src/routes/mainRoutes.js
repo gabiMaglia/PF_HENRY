@@ -36,12 +36,12 @@ mainRouter.use("/auth", googleRouter);
 
 // UserRoutes
 mainRouter.use("/user", userRoutes);
-mainRouter.use("/user_role", checkRoleAuthToken(["customer"]), userRoleRoutes);
+mainRouter.use("/user_role", checkRoleAuthToken(["admin", "customer"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);
 // ProductRoute
-mainRouter.use("/product", productRouter);
+mainRouter.use("/product",  checkRoleAuthToken(["admin", "customer"]), productRouter);
 mainRouter.use("/brand", brandRouter);
 mainRouter.use("/category", categoryRouter);
 mainRouter.use("/stock", stockRouter);

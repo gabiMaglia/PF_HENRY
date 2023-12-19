@@ -13,7 +13,7 @@ const tokenSign = async (userId, username, userRole) => {
 };
 const verifyToken = async (token) => {
   try {
-    return jwt.verify(token, process.env.SECRET);
+    return jwt.verify(token, SECRET);
   } catch (error) {
     return null;
   }
