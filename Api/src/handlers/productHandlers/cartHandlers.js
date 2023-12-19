@@ -1,13 +1,14 @@
 const {
-  addToCartController,
+  postCart,
   getAllCarts,
+  addToCart,
 } = require("../../controllers/productControllers/cartControllers");
 
 const postCartHandler = async (req, res) => {
   const { userId, productId, productQuantity, date, cartTotal } = req.body;
 
   try {
-    const newCart = await addToCartController(
+    const newCart = await postCart(
       userId,
       productId,
       productQuantity,
@@ -16,7 +17,7 @@ const postCartHandler = async (req, res) => {
     );
 
     if (!newCart) {
-      throw new Error("Error al agregar el producto al carrito");
+      throw new Error(error);
     }
 
     res
@@ -36,7 +37,30 @@ const getAllCartsHandler = async (req, res) => {
   }
 };
 
+const updateCartHandler = async (req, res) => {
+  const { userId, productId, productQuantity, cartMoney } = req.body;
+  try {
+    const updatedCarrito = await addToCart(
+      userId,
+      productId,
+      productQuantity,
+      cartMoney
+    );
+    if (updatedCarrito) {
+      res.status(200).json({
+        message: "Cart updated successfully",
+        updatedCarritoCart: updatedCarrito,
+      });
+    } else {
+      res.status(400).send("not found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   postCartHandler,
   getAllCartsHandler,
+  updateCartHandler,
 };
