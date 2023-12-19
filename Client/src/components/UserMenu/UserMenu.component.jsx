@@ -16,7 +16,7 @@ import {
   HomeRepairService,
 } from "@mui/icons-material";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PATHROUTES from "../../helpers/pathRoute";
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +24,7 @@ import { logoutUser } from "../../redux/slices/userSlice";
 import getFirstLetters from "../../helpers/getFirstLetters";
 
 const UserMenu = () => {
+  const navigate = useNavigate()
   const { name, surname } = useSelector((state) => state.user);
   const initialLetersUsers = {
     name: getFirstLetters(name),
@@ -41,6 +42,7 @@ const UserMenu = () => {
   const logout = () => {
     removeAuthDataCookie("authData");
     removeAuthDataCookie("jwt")
+    navigate('/')
     dispatch(logoutUser());
   };
 
