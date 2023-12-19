@@ -6,24 +6,26 @@ import {
   Typography,
   CardMedia,
   styled,
+  Button,
 } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, updateItem } from "../../redux/slices/CartSlice";
+import { addItem, updateItem, removeItem } from "../../redux/slices/CartSlice";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 
-import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+// import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
-  const [getProducts, addProductToCart, updateProductCount] = useLocalStorage();
+  const [getProducts] = useLocalStorage();
 
   const { items } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(addItem());
-    initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
+    // initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
   }, []);
-
+  console.log(items);
   const ProductMedia = styled(CardMedia)({
     padding: 24,
     height: 200,
@@ -39,26 +41,22 @@ export default function ShoppingCart() {
   }
 
   const handleChange = (product, event) => {
+    console.log(product, "cant");
     const newQuantity = parseInt(event.target.value, 10) || 1;
 
-    updateProductCount(product.id, newQuantity);
-
     dispatch(updateItem({ id: product.id, count: newQuantity }));
+  };
+
+  const handleDelete = (product) => {
+    dispatch(removeItem(product));
   };
 
   return (
     <Container xs={{ display: "flex", flexDirection: "column" }}>
       <Typography component="h2">Cart Items:</Typography>
-      <Box
-        display="flex"
-        flexDirection="column"
-      >
+      <Box display="flex" flexDirection="column">
         {items.map((item) => (
-          <Box
-            key={item.id}
-            display="flex"
-            flexDirection="row"
-          >
+          <Box key={item.id} display="flex" flexDirection="row">
             <ProductMedia
               component="img"
               alt={item.name}
@@ -67,16 +65,20 @@ export default function ShoppingCart() {
             <Typography>{item.name}</Typography>
             <Typography>Precio: ${item.price * item.count}</Typography>
             <TextField
+              id={item.id}
               label="Cantidad"
               variant="outlined"
               type="number"
-              value={getProducts().find((p) => p.id === item.id)?.count || 0}
+              value={item.count}
               onChange={(e) => handleChange(item, e)}
             />
+            <Button onClick={() => handleDelete(item.id)}>
+              <DeleteForeverIcon />
+            </Button>
           </Box>
         ))}
       </Box>
-      <Wallet initialization={{ preferenceId: "" }} />
+      {/* <Wallet initialization={{ preferenceId: "" }} /> */}
     </Container>
   );
 }
