@@ -1,3 +1,8 @@
+//HOOKS
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+//MATERIAL UI
 import {
   Box,
   Avatar,
@@ -15,16 +20,17 @@ import {
   Bookmark,
   HomeRepairService,
 } from "@mui/icons-material";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+//HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
-import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
-import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../../redux/slices/userSlice";
 import getFirstLetters from "../../helpers/getFirstLetters";
+//UTILS
+import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
+//REDUX
+import { logoutUser } from "../../redux/slices/UserSlice";
+
 
 const UserMenu = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { name, surname } = useSelector((state) => state.user);
   const initialLetersUsers = {
     name: getFirstLetters(name),
@@ -41,8 +47,8 @@ const UserMenu = () => {
 
   const logout = () => {
     removeAuthDataCookie("authData");
-    removeAuthDataCookie("jwt")
-    navigate('/')
+    removeAuthDataCookie("jwt");
+    navigate("/");
     dispatch(logoutUser());
   };
 
@@ -194,7 +200,7 @@ const UserMenu = () => {
         <Divider />
         <Link
           style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.PRODUCTSERVIS}
+          to={PATHROUTES.PRODUCTSERVICES}
         >
           <MenuItem
             sx={{

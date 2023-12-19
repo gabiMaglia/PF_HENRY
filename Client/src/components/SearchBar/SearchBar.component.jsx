@@ -1,7 +1,5 @@
 //HOOKS
-
 import { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 //MATERIAL UI
@@ -15,6 +13,8 @@ import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
+import { logUser } from "../../redux/slices/UserSlice";
+import { loginUser } from "../../services/AuthServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
@@ -22,8 +22,6 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logUser } from "../../redux/slices/userSlice";
-import { loginUser } from "../../services/AuthServices";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();

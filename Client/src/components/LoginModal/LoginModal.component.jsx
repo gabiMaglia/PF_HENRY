@@ -1,4 +1,6 @@
+//HOKKS
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import {
   Box,
@@ -13,12 +15,15 @@ import {
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
+//STYLES
 import "./alertStyles.min.css";
+//HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
+//REDUX
+import { logUser } from "../../redux/slices/UserSlice";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
-import { useDispatch } from "react-redux";
-import { logUser } from "../../redux/slices/userSlice";
 import { getUserById } from "../../services/UserServices";
+
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
 const LoginModal = ({

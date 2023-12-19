@@ -1,7 +1,7 @@
 import { Avatar, Box, CardMedia, Divider, Typography } from "@mui/material";
-import SideBar from "../../components/SideBar/SideBar.component";
+import SideBar from "../../../components/SideBar/SideBar.component";
 import { useSelector } from "react-redux";
-import getFirstLetters from "../../helpers/getFirstLetters";
+import getFirstLetters from "../../../helpers/getFirstLetters";
 
 const UserProfile = () => {
   const {

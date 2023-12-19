@@ -52,7 +52,7 @@ const SideBar = () => {
     {
       name: "Productos en servicio",
       icon: <HomeRepairService />,
-      path: PATHROUTES.PRODUCTSERVIS,
+      path: PATHROUTES.PRODUCTSERVICES,
     },
     { name: "Cerrar sesion", icon: <Logout />, action: "logout" },
   ];
