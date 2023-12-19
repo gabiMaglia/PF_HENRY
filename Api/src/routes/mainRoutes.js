@@ -23,9 +23,10 @@ const searchBarRouter = require("./productRouter/searchRouter");
 const orderRouter = require("./productRouter/orderRouter");
 const mercadoPagoRouter = require("./pagosRouter/mercadoPagoRouter");
 const cartRouter = require("./cartRouter/cartRouter");
+const filterRouter = require("./productRouter/filterRouter");
+const WishListRouter=require('./productRouter/wishListRouter')
 // SERVICES ROUTERS
 const serviceRouter = require("./serviceRouter/serviceRouter");
-const filterRouter = require("./productRouter/filterRouter");
 
 const mainRouter = Router();
 
@@ -50,7 +51,7 @@ mainRouter.use("/filter", filterRouter);
 mainRouter.use("/order", orderRouter);
 mainRouter.use("/pagos", mercadoPagoRouter);
 mainRouter.use("/cart", cartRouter);
-
+mainRouter.use('/wishList', WishListRouter)
 // ServicesRoute
 mainRouter.use("/service", serviceRouter);
 

@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  getAuthDataCookie,
   setAuthDataCookie,
 } from "../utils/cookiesFunctions";
 
@@ -45,13 +44,18 @@ export const googleLoginUser = async () => {
         width=620,
         height=700`
     );
-
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
-          setAuthDataCookie(event.data);
+          
+          const decodeToken = JSON.parse(atob(event.data.tokenSession.split(".")[1]));
+          setAuthDataCookie("authData", {
+            ...event.data,
+            userRole: decodeToken.userRole,
+          });
           popup.close();
           resolve({ data: event.data });
+
         }
       });
     });

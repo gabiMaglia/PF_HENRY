@@ -1,22 +1,25 @@
 const {
-  addToCartController,
+  postCart,
   getAllCarts,
+  addToCart,
+  getCartById,
+  deleteCartById,
 } = require("../../controllers/productControllers/cartControllers");
 
 const postCartHandler = async (req, res) => {
-  const { userId, productId, productQuantity, date, cartTotal } = req.body;
+  const { userId, productId, productQuantity, date, cartMoney } = req.body;
 
   try {
-    const newCart = await addToCartController(
+    const newCart = await postCart(
       userId,
       productId,
       productQuantity,
       date,
-      cartTotal
+      cartMoney
     );
 
     if (!newCart) {
-      throw new Error("Error al agregar el producto al carrito");
+      throw new Error(error);
     }
 
     res
@@ -36,7 +39,56 @@ const getAllCartsHandler = async (req, res) => {
   }
 };
 
+const addToCartHandler = async (req, res) => {
+  const { userId, productId, productQuantity, cartMoney } = req.body;
+  try {
+    const updatedCarrito = await addToCart(
+      userId,
+      productId,
+      productQuantity,
+      cartMoney
+    );
+    if (updatedCarrito) {
+      res.status(200).json({
+        message: "Cart updated successfully",
+        updatedCarritoCart: updatedCarrito,
+      });
+    } else {
+      res.status(400).send("not found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const cartByIdHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const cart = await getCartById(id);
+    if (cart) {
+      res.status(200).json(cart);
+    } else {
+      res.status(404).json({ error: `Cart ${id} was not found.` });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const deleteCartHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedCart = await deleteCartById(id);
+    res.status(200).json(`Cart deleted successfully`);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   postCartHandler,
   getAllCartsHandler,
+  addToCartHandler,
+  cartByIdHandler,
+  deleteCartHandler,
 };
