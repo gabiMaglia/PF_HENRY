@@ -1,20 +1,30 @@
 import axios from "axios";
-import { getAuthDataCookie, setAuthDataCookie } from "../utils/cookiesFunctions";
+import {
+  getAuthDataCookie,
+  setAuthDataCookie,
+} from "../utils/cookiesFunctions";
 
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
 export const loginUser = async (username, password) => {
   try {
-    const { data } = await axios.post(`${url}/account/login`, {
-      username: username,
-      password: password,
-    }, {
-      withCredentials: true
-    });
+    const { data } = await axios.post(
+      `${url}/account/login`,
+      {
+        username: username,
+        password: password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
     if (data.login) {
-      const decodeToken = JSON.parse(atob(data.tokenSession.split('.')[1]))
-      setAuthDataCookie('authData', {...data, userRole : decodeToken.userRole});
+      const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
+      setAuthDataCookie("authData", {
+        ...data,
+        userRole: decodeToken.userRole,
+      });
       return { error: false, data };
     }
   } catch ({ response }) {
@@ -54,8 +64,8 @@ export const registerUser = async (userObj) => {
     const registerData = await axios.post(`${url}/account/signin`, {
       userObj,
     });
-    return registerData;
+    return { error: false, data: registerData };
   } catch ({ response }) {
-    return { error: response };
+    return { error: response.data };
   }
 };

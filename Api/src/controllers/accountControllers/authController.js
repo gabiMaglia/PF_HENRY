@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const confirmAccountController = async (token) => {
-  const tokenDecode = jwt.verify(token, process.env.SECRET);
+  const tokenDecode = jwt.verify(token, process.env.JWT_SECRET_KEY);
   if (!tokenDecode.userID) {
     return {
       error: true,
@@ -84,7 +84,7 @@ const registerUser = async (userObj) => {
     process.env.EMAIL_MAILER,
     userObj.email,
     newUser.id,
-    process.env.SECRET,
+    process.env.JWT_SECRET_KEY,
     process.env.API_URL
   );
 

@@ -1,11 +1,12 @@
 import Cookies from "js-cookie";
 
 // Nombres de las cookies
-
 // Funciones para manejar las cookies para el token
+
 export const setAuthDataCookie = async (cookieName, cookieData) => {
   if (cookieData !== undefined) {
     const serialized = JSON.stringify(cookieData);
+   
     Cookies.set(cookieName, serialized, {
       expires: 1,
       sameSite: "None",
