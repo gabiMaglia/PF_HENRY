@@ -1,7 +1,8 @@
 //HOOKS
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //MATERIAL UI
 import { Input, Box, Button, styled } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -13,8 +14,6 @@ import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
-import { logUser } from "../../redux/slices/UserSlice";
-import { loginUser } from "../../services/AuthServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
@@ -22,11 +21,14 @@ import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
+import { logUser } from "../../redux/slices/UserSlice";
+// import { loginUser } from "../../services/AuthServices";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [cartItemCount, setCartItemCount] = useState(0);
+
+  const cartItemCount = useSelector((state) => state.cart.items.length);
 
   const Img = styled("img")({
     width: 140,
@@ -66,15 +68,13 @@ export default function SearchAppBar() {
     navigate(PATHROUTES.SHOPCART);
   };
 
-  const handleAddToCart = () => {
-    // Lógica para agregar productos al carrito
-    // Actualizar el estado del contador del carrito de forma atómica
-    setCartItemCount((prevCount) => prevCount + 1);
-  };
+  // const handleAddToCart = () => {
+  //   // Despacha la acción del carrito para agregar el producto
+  //   dispatch(addItem());
+  // };
 
-  // const updateCartCount = () => {
-  // Hacer algo aquí si es necesario
-  // Puedes realizar alguna acción adicional después de actualizar el contador
+  // const updateCartCount = (count) => {
+  //   setCartItemCount(count);
   // };
 
   useEffect(() => {
@@ -171,26 +171,20 @@ export default function SearchAppBar() {
             ml: "2em",
           }}
         >
-          {/* Icono del carrito con contador */}
-          <Logo
-            src={carrito}
-            onClick={() => {
-              handleAddToCart();
-              handleCartClick();
-            }}
-          />
+          <Logo src={carrito} onClick={handleCartClick} />
 
           {cartItemCount > 0 && (
             <span
               style={{
                 position: "absolute",
-                top: 0,
-                right: 0,
+                top: "0",
+                right: "0",
+                transform: "translate(50%, -50%)",
                 backgroundColor: "red",
                 color: "white",
                 borderRadius: "50%",
                 padding: "0.2em 0.5em",
-                fontSize: "0.8em",
+                fontSize: "0.7em",
               }}
             >
               {cartItemCount}
@@ -245,6 +239,7 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
+      {/* <ConnectedProductBox cartItemCount={cartItemCount} /> */}
     </Box>
   );
 }
