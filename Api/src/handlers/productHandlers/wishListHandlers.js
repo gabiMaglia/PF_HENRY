@@ -1,10 +1,11 @@
 const {
   getWishListController,
+  postwishItemController,
 } = require("../../controllers/productControllers/wishListController");
 
 const getWishList = async (req, res) => {
   try {
-    const list = getWishListController();
+    const list = await getWishListController();
     if (list.error) {
       return res.status(404).json(list.response);
     }
@@ -15,7 +16,21 @@ const getWishList = async (req, res) => {
   }
 };
 
+const addWishItem = async (req, res) => {
+  const { userID, productID } = req.body;
+  try {
+    const response = await postwishItemController(userID, productID);
+    if (response.error) {
+      return res.status(404).json(response.response);
+    }
+    res.status(200).json(response);
 
-module.exports={
-getWishList
-}
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  getWishList,
+  addWishItem
+};
