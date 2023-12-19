@@ -41,7 +41,7 @@ export default function SearchAppBar() {
   });
 
 
-  const { name, surname, login } = useSelector((state) => state.user);
+  const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (token) => {
