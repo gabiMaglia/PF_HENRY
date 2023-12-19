@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       primaryKey: true,
     },
     address: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
