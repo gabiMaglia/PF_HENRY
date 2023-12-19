@@ -1,18 +1,13 @@
 const { Product, Cart, User, ProductCart } = require("../../db");
 
-async function addToCartController(
-  userId,
-  productId,
-  productQuantity,
-  date,
-  cartTotal
-) {
+async function postCart(userId, productId, productQuantity, date, cartTotal) {
   try {
     const cart = await Cart.create({
       productQuantity,
       date,
       cartTotal,
       state: "inicializado",
+      UserId: userId,
     });
 
     const user = await User.findByPk(userId);
@@ -34,10 +29,6 @@ const getAllCarts = async () => {
     const allCarts = await Cart.findAll({
       include: [
         {
-          model: User,
-          attributes: ["id"],
-        },
-        {
           model: Product,
           attributes: ["id"],
           through: {
@@ -55,57 +46,66 @@ const getAllCarts = async () => {
   }
 };
 
-const updateCartController = async (userId, productArray) => {
-  //   let cart = await Cart.findOne({
-  //     where: { userId },
-  //     include: [{ model: Product }],
-  //   });
-
-  //lo sque del add cart
-  let cart = await Cart.findOne({
-    where: { userId },
-    attributes: ["id"],
-    include: [
-      {
-        model: Product,
-        attributes: ["id"],
+const addToCart = async (userId, productId, productQuantity, cartMoney) => {
+  try {
+    let cartToUpdate = await Cart.findOne({
+      where: {
+        UserId: userId,
       },
-      {
-        model: User,
-        attributes: ["id"],
-      },
-    ],
-  });
-  //jejejeje
+      include: [
+        {
+          model: Product,
+          attributes: ["id"],
+          through: {
+            model: ProductCart,
+            attributes: ["quantity"],
+          },
+        },
+      ],
+    });
+    //cartToUpdate = {
+    // 	"id": "358ba97d-78ac-4bf9-bdba-4147efd1340b",
+    // 	"date": "2001-02-23T03:00:00.000Z",
+    // 	"state": "inicializado",
+    // 	"cartTotal": "333.00",
+    // 	"createdAt": "2023-12-19T14:26:00.316Z",
+    // 	"updatedAt": "2023-12-19T14:26:00.316Z",
+    // 	"UserId": "34507c7e-8a68-46fe-9c09-f10ccc36b974",
+    // 	"Products": [
+    // 		{
+    // 			"id": "1eb9a209-9845-4849-a9ac-fe224add6809",
+    // 			"ProductCart": {
+    // 				"quantity": 5
+    // 			}
+    // 		}
+    // 	]
+    // }
+    if (cartToUpdate) {
+      const existingProduct = cartToUpdate.Products.find(
+        (product) => product.id === productId
+      );
 
-  if (!cart) {
-    return res.status(404).json({ error: "El usuario no tiene un carrito" });
+      if (existingProduct) {
+        existingProduct.ProductCart.quantity = productQuantity;
+        await cartToUpdate.update({ cartTotal: cartMoney });
+      } else {
+        cartToUpdate.Products.push({
+          id: productId,
+          ProductCart: {
+            quantity: productQuantity,
+          },
+        });
+        await cartToUpdate.update({ cartTotal: cartMoney });
+      }
+      await cartToUpdate.save();
+
+      return cartToUpdate;
+    } else {
+      return "El usuario no ha generado aun un carrito en la base de datos.";
+    }
+  } catch (error) {
+    console.log(error);
   }
-
-  await cart.setProducts([]);
-
-  for (const productData of productArray) {
-    const { productId, quantity } = productData;
-    const product = await Product.findByPk(productId);
-    await cart.addProduct(product, { through: { quantity } });
-  }
-
-  await cart.update({
-    cartTotal: calculateCartTotal(cart.Products),
-  });
-
-  cart = await Cart.findOne({
-    where: { userId },
-    include: [{ model: Product }],
-  });
-
-  return cart;
 };
 
-function calculateCartTotal(products) {
-  return products.reduce((total, product) => {
-    return total + product.price * product.CartProduct.quantity;
-  }, 0);
-}
-
-module.exports = { addToCartController, updateCartController, getAllCarts };
+module.exports = { postCart, addToCart, getAllCarts };
