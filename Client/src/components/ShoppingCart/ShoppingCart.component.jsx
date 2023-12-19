@@ -18,7 +18,6 @@ export default function ShoppingCart() {
   const [getProducts, addProductToCart, updateProductCount] = useLocalStorage();
 
   const { items } = useSelector((state) => state.cart);
-  console.log(items, "items");
 
   useEffect(() => {
     dispatch(addItem());
@@ -35,9 +34,7 @@ export default function ShoppingCart() {
 
   if (items.length === 0) {
     return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
+      <Typography component="h2">No hay productos en el carrito</Typography>
     );
   }
 

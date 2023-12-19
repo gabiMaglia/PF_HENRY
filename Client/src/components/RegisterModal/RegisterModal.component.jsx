@@ -18,10 +18,19 @@ import { userRegisterValidate } from "../../helpers/userValidate";
 import { loginUser, registerUser } from "../../services/AuthServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
+import { getUserById } from "../../services/UserServices";
+import { logUser } from "../../redux/slices/userSlice";
+import { useDispatch } from "react-redux";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
 const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
+  const dispatch = useDispatch()
+  const handledispatch = async (userId) => {
+    await getUserById(userId).then((data) => {
+       dispatch(logUser({ userObject: data }));
+     });
+   };
   const [userInfo, setUserInfo] = useState({
     email: "",
     address: "",
@@ -130,6 +139,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       };
       const response = await registerUser(userInfoForRequest);
       const { data, error } = response;
+      
       if (error || !data) {
         Swal.fire({
           allowOutsideClick: false,
@@ -138,7 +148,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           },
           icon: "error",
           title: "Falla en el registro",
-          text: "Por favor intentelo denuevo",
+          text: `${response.error}`,
         });
       } else {
         Swal.fire({
@@ -157,9 +167,11 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           // Verifica si se hizo clic en Aceptar
           if (result.isConfirmed) {
             loginUser(userInfo.username, userInfo.address);
+            handledispatch(response.data.data.id)
             resetModal();
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             resetModal();
+            
           }
         });
       }

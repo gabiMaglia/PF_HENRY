@@ -13,7 +13,14 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetState } from "../../redux/slices/ProductSlice";
-import { fetchProductById } from "../../services/ProductServices";
+import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import {
+  fetchProductById,
+  fetchAllProducts,
+} from "../../services/ProductServices";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -50,33 +57,30 @@ const Detail = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
-
-  const fetchData = async () => {
-    try {
-      console.log(`Fetching product data for ID: ${id}`);
-      await dispatch(fetchProductById(id));
-      console.log(`Product data for ID: ${id} received`);
-    } catch (error) {
-      console.log(`Error fetching product for ID ${id}:`, error);
-    }
-  };
+  const { allProducts } = useSelector((state) => state.product);
 
   useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchProductById(id));
+      } catch (error) {}
+    };
+
     const fetchDataAsync = async () => {
-      console.log("Cleaning up previous data for ID:", productById.id);
       dispatch(resetState());
 
-      console.log("fetchDataAsync...");
       try {
-        // Agregar verificación de id antes de cargar los datos
-        if (id !== productById.id) {
+        if (id && id !== productById?.id) {
           await fetchData();
         }
       } catch (error) {
         console.error("Error in fetchDataAsync:", error);
       } finally {
-        setLoading(false); // Actualizar el estado de carga al completar
-        console.log("fetchDataAsync completed for ID:", id);
+        setLoading(false);
       }
     };
 
@@ -85,11 +89,13 @@ const Detail = () => {
 
   useEffect(() => {
     const setInitialImage = () => {
-      console.log("Setting initial image for ID:", productById.id);
-      if (productById && productById.ProductImages) {
+      if (
+        productById &&
+        productById.ProductImages &&
+        productById.ProductImages.length > 0
+      ) {
         setSelectedImage(productById.ProductImages[0].address);
       }
-      console.log("Initial image set for ID:", productById.id);
     };
 
     setInitialImage();
@@ -227,7 +233,6 @@ const Detail = () => {
           </Container>
         </Container>
       </Container>
-
       <Container sx={{ marginTop: 2 }}>
         <Divider sx={{ marginY: 2 }} />
         <Typography fontSize={18} fontWeight={"bold"}>
@@ -235,10 +240,10 @@ const Detail = () => {
         </Typography>
         <Typography>{productById.description}</Typography>
       </Container>
-
       <Container>
         <Divider sx={{ marginY: 2 }} />
       </Container>
+      <CarouselProducts allProducts={allProducts} />
     </Container>
   );
 };

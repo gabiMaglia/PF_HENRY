@@ -63,6 +63,8 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
+          console.log(response)
+          
           handledispatch(response.data.userId);
           setLoginModalIsOpen(false)
         }

@@ -23,6 +23,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
 import { logUser } from "../../redux/slices/userSlice";
+import { loginUser } from "../../services/AuthServices";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -40,15 +41,13 @@ export default function SearchAppBar() {
     cursor: "pointer",
   });
 
-
   const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (token) => {
     if (token !== undefined) {
       const response = await getUserById(token.userId);
-      dispatch(logUser({ userObject: {...response, rolId : token.userRole } }));
-
+      dispatch(logUser({ userObject: { ...response, rolId: token.userRole } }));
     }
   };
 
@@ -76,13 +75,12 @@ export default function SearchAppBar() {
   };
 
   // const updateCartCount = () => {
-     // Hacer algo aquí si es necesario
-     // Puedes realizar alguna acción adicional después de actualizar el contador
+  // Hacer algo aquí si es necesario
+  // Puedes realizar alguna acción adicional después de actualizar el contador
   // };
 
   useEffect(() => {
     const userToken = getAuthDataCookie("authData");
-
     if (userToken) {
       getUserInfo(userToken);
     }
