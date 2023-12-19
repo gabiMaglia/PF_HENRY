@@ -108,4 +108,25 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
   }
 };
 
-module.exports = { postCart, addToCart, getAllCarts };
+const getCartById = async (id) => {
+  const cart = await Cart.findeByPk(id, {
+    include: [
+      {
+        model: Product,
+        attributes: ["id"],
+        through: {
+          model: ProductCart,
+          attributes: ["quantity"],
+        },
+      },
+    ],
+  });
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  } else {
+    return cart;
+  }
+};
+
+module.exports = { postCart, addToCart, getAllCarts, getCartById };
