@@ -18,7 +18,6 @@ export default function ShoppingCart() {
   const [getProducts, addProductToCart, updateProductCount] = useLocalStorage();
 
   const { items } = useSelector((state) => state.cart);
-  console.log(items, "items");
 
   useEffect(() => {
     dispatch(addItem());
