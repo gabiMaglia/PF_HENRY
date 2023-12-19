@@ -22,44 +22,20 @@ import PRODUCTS from "./dataBase/bdd.json";
 //HELPERS
 import PATHROUTES from "./helpers/pathRoute";
 
-
-
 const App = () => {
-  
   return (
     <>
       <Box>
         <SearchBar />
         <NavBar />
         <Routes>
-          <Route
-            path={PATHROUTES.HOME}
-            element={<Home />}
-          />
-          <Route
-            path={PATHROUTES.PRODUCTS}
-            element={<Products />}
-          />
-          <Route
-            path={PATHROUTES.SUPPORT}
-            element={<Support />}
-          />
-          <Route
-            path={PATHROUTES.QUESTIONS}
-            element={<Questions />}
-          />
-          <Route
-            path={PATHROUTES.CATEGORIES}
-            element={<Categories />}
-          />
-          <Route
-            path={PATHROUTES.SHOPCART}
-            element={<ShoppingCartView />}
-          />
-          <Route
-            path={PATHROUTES.PROFILE}
-            element={<UserProfile />}
-          />
+          <Route path={PATHROUTES.HOME} element={<Home />} />
+          <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
+          <Route path={PATHROUTES.SUPPORT} element={<Support />} />
+          <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
+          <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
+          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCartView />} />
+          <Route path={PATHROUTES.PROFILE} element={<UserProfile />} />
           <Route
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}

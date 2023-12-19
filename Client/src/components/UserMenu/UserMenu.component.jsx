@@ -40,6 +40,7 @@ const UserMenu = () => {
 
   const logout = () => {
     removeAuthDataCookie("authData");
+    removeAuthDataCookie("jwt")
     dispatch(logoutUser());
   };
 

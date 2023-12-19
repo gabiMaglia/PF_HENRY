@@ -18,7 +18,7 @@ const googleAuthCallback = async (req, res) => {
       httpOnly: false,
       // sameSite:'none'
     });
-    console.log(responseLogin)
+ 
     return res.status(200).send(`<!DOCTYPE html>
     <html lang="en">
       <body>
