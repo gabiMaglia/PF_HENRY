@@ -1,4 +1,4 @@
-import Detail from "../../components/Detail/Detail.component";
+import Detail from "../../../components/Detail/Detail.component";
 
 const DetailView = () => {
   return (

@@ -200,7 +200,7 @@ const UserMenu = () => {
         <Divider />
         <Link
           style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.PRODUCTSERVIS}
+          to={PATHROUTES.PRODUCTSERVICES}
         >
           <MenuItem
             sx={{
