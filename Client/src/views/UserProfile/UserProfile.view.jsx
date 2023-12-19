@@ -2,6 +2,7 @@ import { Avatar, Box, CardMedia, Divider, Typography } from "@mui/material";
 import SideBar from "../../components/SideBar/SideBar.component";
 import { useSelector } from "react-redux";
 import getFirstLetters from "../../helpers/getFirstLetters";
+import EditIcon from "@mui/icons-material/Edit";
 
 const UserProfile = () => {
   const {
@@ -22,10 +23,17 @@ const UserProfile = () => {
   };
 
   const dividerStyle = {
-    height: ".1em",
+    height: "1px",
     backgroundColor: "black",
-    width: "70%",
+    width: "100%",
     mb: ".5em",
+  };
+
+  const itemBoxStyle = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
   };
 
   return (
@@ -83,110 +91,184 @@ const UserProfile = () => {
                 </Typography>
               </Avatar>
             )}
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              Nombre(s) y apelido(s)
-            </Typography>
-            <Typography
-              variant="h6"
-              sx={{ mb: ".5em" }}
-            >
-              {name && surname
-                ? name + " " + surname
-                : "No se definio un nombre o apellido"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  Nombre(s) y apelido(s)
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ mb: ".5em" }}
+                >
+                  {name && surname
+                    ? name + " " + surname
+                    : "No se definio un nombre o apellido"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider sx={dividerStyle} />
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              Fecha de nacimiento
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mb: ".5em" }}
-            >
-              {birthdate ? birthdate : "No se definio una fecha de nacimiento"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  Fecha de nacimiento
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: ".5em" }}
+                >
+                  {birthdate
+                    ? birthdate
+                    : "No se definio una fecha de nacimiento"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider sx={dividerStyle} />
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              Email
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ mb: ".5em" }}
-            >
-              {email ? email : "No se definio un email"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  Email
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ mb: ".5em" }}
+                >
+                  {email ? email : "No se definio un email"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider sx={dividerStyle} />
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              Numero de telefono
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mb: ".5em" }}
-            >
-              {telephone ? telephone : "No se definio un numero de telefono"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  Numero de telefono
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: ".5em" }}
+                >
+                  {telephone
+                    ? telephone
+                    : "No se definio un numero de telefono"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider sx={dividerStyle} />
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              DNI
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mb: ".5em" }}
-            >
-              {dni ? dni : "No se definio un DNI"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  DNI
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: ".5em" }}
+                >
+                  {dni ? dni : "No se definio un DNI"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider sx={dividerStyle} />
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              Dirección
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mb: ".5em" }}
-            >
-              {userAddress.country &&
-              userAddress.state &&
-              userAddress.city &&
-              userAddress.street &&
-              userAddress.number
-                ? (userAddress.country,
-                  userAddress.state,
-                  userAddress.city,
-                  userAddress.street,
-                  userAddress.number)
-                : "No se definio una dirección"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  Dirección
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: ".5em" }}
+                >
+                  {userAddress.country &&
+                  userAddress.state &&
+                  userAddress.city &&
+                  userAddress.street &&
+                  userAddress.number
+                    ? (userAddress.country,
+                      userAddress.state,
+                      userAddress.city,
+                      userAddress.street,
+                      userAddress.number)
+                    : "No se definio una dirección"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider sx={dividerStyle} />
-            <Typography
-              variant="caption"
-              sx={{ mb: ".1em" }}
-            >
-              Codigo postal
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ mb: "1em" }}
-            >
-              {userAddress.zipCode
-                ? userAddress.zipCode
-                : "No se definio un codigo postal"}
-            </Typography>
+            <Box sx={itemBoxStyle}>
+              <Box sx={{ flexGrow: "1" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ mb: ".1em" }}
+                >
+                  Codigo postal
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: "1em" }}
+                >
+                  {userAddress.zipCode
+                    ? userAddress.zipCode
+                    : "No se definio un codigo postal"}
+                </Typography>
+              </Box>
+              <EditIcon
+                sx={{
+                  cursor: "pointer",
+                  color: "black",
+                }}
+              />
+            </Box>
             <Divider />
           </Box>
         </Box>
