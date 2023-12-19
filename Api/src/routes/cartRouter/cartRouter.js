@@ -4,6 +4,7 @@ const {
   getAllCartsHandler,
   addToCartHandler,
   cartByIdHandler,
+  deleteCartHandler,
 } = require("../../handlers/productHandlers/cartHandlers");
 
 const cartRouter = Router();
@@ -15,5 +16,7 @@ cartRouter.get("/", getAllCartsHandler);
 cartRouter.put("/", addToCartHandler);
 
 cartRouter.get("/:id", cartByIdHandler);
+
+cartRouter.delete("/:id", deleteCartHandler);
 
 module.exports = cartRouter;

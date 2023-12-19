@@ -3,10 +3,11 @@ const {
   getAllCarts,
   addToCart,
   getCartById,
+  deleteCartById,
 } = require("../../controllers/productControllers/cartControllers");
 
 const postCartHandler = async (req, res) => {
-  const { userId, productId, productQuantity, date, cartTotal } = req.body;
+  const { userId, productId, productQuantity, date, cartMoney } = req.body;
 
   try {
     const newCart = await postCart(
@@ -14,7 +15,7 @@ const postCartHandler = async (req, res) => {
       productId,
       productQuantity,
       date,
-      cartTotal
+      cartMoney
     );
 
     if (!newCart) {
@@ -74,9 +75,20 @@ const cartByIdHandler = async (req, res) => {
   }
 };
 
+const deleteCartHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedCart = await deleteCartById(id);
+    res.status(200).json(`Cart deleted successfully`);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   postCartHandler,
   getAllCartsHandler,
   addToCartHandler,
   cartByIdHandler,
+  deleteCartHandler,
 };
