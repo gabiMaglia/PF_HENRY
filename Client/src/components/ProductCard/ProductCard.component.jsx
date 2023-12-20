@@ -29,7 +29,7 @@ const ProductPrice = styled(Typography)({
 
 const CardProduct = ({ product }) => {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
@@ -38,9 +38,7 @@ const CardProduct = ({ product }) => {
       : null;
 
   const imageUrl =
-    ProductImages && ProductImages.length > 0
-      ? ProductImages[0].address
-      : null;
+    ProductImages && ProductImages.length > 0 ? ProductImages[0].address : null;
 
   const handleCategoryClick = (e) => {
     e.stopPropagation();
@@ -48,7 +46,7 @@ const CardProduct = ({ product }) => {
   };
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setIsFavorite(!isFavorite);
   };
 
@@ -66,7 +64,7 @@ const CardProduct = ({ product }) => {
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {categoryName && (
             <Typography
               variant="subtitle2"
@@ -86,7 +84,7 @@ const CardProduct = ({ product }) => {
             </Typography>
           )}
           <FavoriteIcon
-          onClick={handleFavoriteClick}
+            onClick={handleFavoriteClick}
             sx={{
               position: "relative",
               top: "20px",
@@ -98,9 +96,18 @@ const CardProduct = ({ product }) => {
         </Box>
         <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
           <Box>
-            <ProductMedia component="img" alt={name} src={imageUrl} sx={{ cursor: "pointer", transition: "transform 0.3s", "&:hover": {
-            transform: "scale(1.1)",
-          }, }} />
+            <ProductMedia
+              component="img"
+              alt={name}
+              src={imageUrl}
+              sx={{
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                },
+              }}
+            />
             <CardContent>
               <Typography
                 variant="h6"
