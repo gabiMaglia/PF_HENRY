@@ -75,7 +75,13 @@ const orderPrice = async (order) => {
   try {
     const mayusOrder = order.toUpperCase();
     const productsByPrice = await Product.findAll({
-      order: [["price", `${mayusOrder}`]],
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["address"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+      order: [["price", mayusOrder]],
     });
     return productsByPrice;
   } catch (error) {
