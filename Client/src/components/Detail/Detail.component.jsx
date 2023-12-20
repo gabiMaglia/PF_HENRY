@@ -16,7 +16,7 @@ import { resetState } from "../../redux/slices/ProductSlice";
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import { addItem } from "../../redux/slices/CartSlice";
 import {
   fetchProductById,
   fetchAllProducts,
@@ -58,6 +58,8 @@ const Detail = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const { allProducts } = useSelector((state) => state.product);
+
+  const cartItemCount = useSelector((state) => state.cart.items.length);
 
   useEffect(() => {
     dispatch(fetchAllProducts());
@@ -106,6 +108,7 @@ const Detail = () => {
       setCartItems([...cartItems, productById]);
       console.log("Product added to cart for ID:", productById.id);
       navigate("/shoppingcart");
+      dispatch(addItem());
     }
   };
 
@@ -230,6 +233,21 @@ const Detail = () => {
             >
               Agregar al Carrito
             </CustomButton>
+            {/* Muestra el contador de carrito */}
+            {cartItemCount > 0 && (
+              <span
+                style={{
+                  marginLeft: "0.5em",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.2em 0.5em",
+                  fontSize: "0.7em",
+                }}
+              >
+                {cartItemCount}
+              </span>
+            )}
           </Container>
         </Container>
       </Container>
