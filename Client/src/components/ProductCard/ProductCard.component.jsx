@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -83,7 +83,7 @@ const CardProduct = ({ product }) => {
               {categoryName}
             </Typography>
           )}
-          <FavoriteIcon
+          <BookmarkIcon
             onClick={handleFavoriteClick}
             sx={{
               position: "relative",
