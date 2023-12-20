@@ -97,7 +97,6 @@ const productSlice = createSlice({
         state.currentPage= 0
         state.totalPages = Math.ceil(state.productsToShow.length/9); 
     },
-    
     resetState: (state, action) => {
       state.allProductsBackup= state.allProducts
       state.productsToShow = state.allProductsBackup.slice(0, PRODUCT_PER_PAGE);
