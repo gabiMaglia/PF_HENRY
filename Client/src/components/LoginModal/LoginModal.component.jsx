@@ -215,7 +215,10 @@ const LoginModal = ({
           />
         </Button>
 
-        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
+        <GoogleReCaptchaProvider
+          reCaptchaKey={reCaptchaKey}
+          language="es"
+        >
           {!isUsernameVerified ? (
             <FormControl
               fullWidth
@@ -224,10 +227,16 @@ const LoginModal = ({
                 textAlign: "center",
               }}
             >
-              <Typography variant="h4" sx={{ mb: 4 }}>
+              <Typography
+                variant="h4"
+                sx={{ mb: 4 }}
+              >
                 Iniciar sesión
               </Typography>
-              <Typography variant="body1" sx={{ color: "#fd611a" }}>
+              <Typography
+                variant="body1"
+                sx={{ color: "#fd611a" }}
+              >
                 Para continuar ingresá tu nombre de usuario
               </Typography>
               <TextField
@@ -312,7 +321,10 @@ const LoginModal = ({
               >
                 {user.username}
               </Typography>
-              <Typography variant="body1" sx={{ color: "#fd611a", mt: "2em" }}>
+              <Typography
+                variant="body1"
+                sx={{ color: "#fd611a", mt: "2em" }}
+              >
                 Ingresá tu contraseña
               </Typography>
               <TextField
