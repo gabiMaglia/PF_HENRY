@@ -6,7 +6,7 @@ const {
 
 const useRoutes = Router();
 
-useRoutes.get("/", getWishList);
+useRoutes.get("/:id", getWishList);
 useRoutes.post("/", addWishItem);
 
 module.exports = useRoutes;

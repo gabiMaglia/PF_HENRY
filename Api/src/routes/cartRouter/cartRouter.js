@@ -5,6 +5,7 @@ const {
   addToCartHandler,
   cartByIdHandler,
   deleteCartHandler,
+  removeFromCartHandler,
 } = require("../../handlers/productHandlers/cartHandlers");
 
 const cartRouter = Router();
@@ -13,7 +14,9 @@ cartRouter.post("/", postCartHandler);
 
 cartRouter.get("/", getAllCartsHandler);
 
-cartRouter.put("/", addToCartHandler);
+cartRouter.put("/add", addToCartHandler);
+
+cartRouter.put("/remove", removeFromCartHandler);
 
 cartRouter.get("/:id", cartByIdHandler);
 
