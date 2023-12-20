@@ -17,6 +17,8 @@ const Products = () => {
     (state) => state.product
   );
 
+  console.log(productsToShow);
+
   useEffect(() => {
     inputName !== ""
       ? dispatch(fetchSearch(inputName))
@@ -51,10 +53,7 @@ const Products = () => {
 
         <ProductBox products={productsToShow} />
 
-        <Stack
-          spacing={2}
-          sx={{ mt: 3 }}
-        >
+        <Stack spacing={2} sx={{ mt: 3 }}>
           <Pagination
             variant="outlined"
             shape="rounded"

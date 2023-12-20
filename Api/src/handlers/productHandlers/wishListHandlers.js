@@ -4,8 +4,9 @@ const {
 } = require("../../controllers/productControllers/wishListController");
 
 const getWishList = async (req, res) => {
+  const {id}=req.params
   try {
-    const list = await getWishListController();
+    const list = await getWishListController(id);
     if (list.error) {
       return res.status(404).json(list.response);
     }

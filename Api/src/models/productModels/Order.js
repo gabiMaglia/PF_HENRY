@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
     },
     shippingAddress: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     paymentMethod: {
       type: DataTypes.STRING,

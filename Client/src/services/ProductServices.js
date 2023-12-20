@@ -1,6 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { search, getProductById, getProducts, filterByCategory, filterByBrand, changeInput } from "../redux/slices/ProductSlice";
+import { search, getProductById, getProducts, filterByCategory, filterByBrand, changeInput, orderPrice } from "../redux/slices/ProductSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -35,6 +35,7 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/category/filter/${category}`);
     dispatch(filterByCategory(response.data));
+    console.log(response.data, "catego")
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
   }
@@ -56,3 +57,12 @@ export const fetchChage = (inputValue) => async (dispatch) => {
       console.log("error")
      }
 }
+
+export const fetchProductsByOrder = (order) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${urlBack}/order?price=${order}`);
+    dispatch(orderPrice(response.data));
+  } catch (error) {
+    console.error("Error al buscar productos por marca:", error);
+  }
+};
