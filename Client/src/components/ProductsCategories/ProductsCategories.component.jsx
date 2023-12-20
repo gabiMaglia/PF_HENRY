@@ -60,8 +60,6 @@ const ProductsCategoriesComponent = () => {
     fectData();
   }, [categoryName]);
 
-  console.log("categoryProducts:", categoryProducts); 
-
   return (
     <>
       <Box>
@@ -148,8 +146,11 @@ const ProductsCategoriesComponent = () => {
                   <ProductMedia
                     component="img"
                     alt={product.name}
-                    src={product.ProductImages && product.ProductImages.length > 0 ? product.ProductImages[1].address : null}
-                    // src={product.ProductImages[0].address}
+                    src={
+                      product.ProductImages && product.ProductImages.length > 0
+                        ? product.ProductImages[1].address
+                        : null
+                    }
                     sx={{
                       padding: "20px",
                       objectFit: "cover",
