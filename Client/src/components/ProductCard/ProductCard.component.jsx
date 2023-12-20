@@ -94,7 +94,10 @@ const CardProduct = ({ product }) => {
             }}
           />
         </Box>
-        <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
+        <Link
+          to={`/product/${id}`}
+          style={{ textDecoration: "none" }}
+        >
           <Box>
             <ProductMedia
               component="img"
