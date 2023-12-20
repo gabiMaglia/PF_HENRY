@@ -35,8 +35,8 @@ const FiltersSorting = () => {
   const [selectedBrand, setSelectedBrand] = useState("default");
   const [selectedPrice, setSelectedPrice] = useState("default");
 
-  const handleCategoryClick = async (categoryName) => {
-    await dispatch(fetchProductsByCategory(categoryName));
+  const handleCategoryClick = (categoryName) => {
+    dispatch(filterByCategory(categoryName));
   };
 
   const handleSelectBrand = (e) => {
@@ -58,6 +58,7 @@ const FiltersSorting = () => {
     setSelectedBrand("default");
     setSelectedPrice("default");
 
+    dispatch(filterByCategory("all"));
     dispatch(filterByBrand("default"));
     dispatch(resetState());
   };
