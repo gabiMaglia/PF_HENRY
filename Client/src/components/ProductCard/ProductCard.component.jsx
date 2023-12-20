@@ -1,14 +1,17 @@
 //HOOKS
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { fetchAddItemWish,fetchWishList } from "../../services/WishListServices";
+import {
+  fetchAddItemWish,
+  fetchWishList,
+} from "../../services/WishListServices";
 //WISHLIST
-import { getAuthDataCookie } from '../../utils/cookiesFunctions'
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 const ProductCard = styled(Card)({
@@ -33,18 +36,22 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
-  const {userId} = getAuthDataCookie("authData");
-  console.log(userId)
-  const dispatch=useDispatch()
+  const { userId } = getAuthDataCookie("authData");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
-  const WishList=useSelector((state)=>state.WishListSlice)
-  console.log(WishList)
+  const wishlistProducts = useSelector((state) => state.wishlist.products);
+  console.log(wishlistProducts);
 
-  useEffect((dispatch)=>{
-    fetchWishList(userId,dispatch)
-  },[])
+  useEffect(() => {
+    const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
+    setIsFavorite(isProductInWishlist);
+  }, [wishlistProducts, id]);
+
+  useEffect(() => {
+    fetchWishList(userId, dispatch);
+  }, []);
 
   const categoryName =
     ProductCategories && ProductCategories.length > 0
@@ -61,9 +68,8 @@ const CardProduct = ({ product }) => {
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation();
-    console.log(product.id)
-    setIsFavorite(!isFavorite);
-    fetchAddItemWish(dispatch,userId,product.id)
+    // setIsFavorite(!isFavorite);
+    fetchAddItemWish(dispatch, userId, product.id);
   };
 
   return (
