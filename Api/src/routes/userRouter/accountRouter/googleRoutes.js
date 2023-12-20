@@ -11,9 +11,6 @@ useRouter.get(
 useRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    // successReturnToOrRedirect: '/',
-    // failureRedirect: "/",
-    passReqToCallback: true,
   }),
   googleAuthCallback
 );

@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  getAuthDataCookie,
   setAuthDataCookie,
 } from "../utils/cookiesFunctions";
 
@@ -25,8 +24,7 @@ export const loginUser = async (username, password) => {
         ...data,
         userRole: decodeToken.userRole,
       });
-      console.log("Datos de inicio de sesión:", data);
-      console.log("Datos decodificados del token:", decodeToken);
+
       return { error: false, data };
     }
   } catch ({ response }) {
@@ -50,15 +48,15 @@ export const googleLoginUser = async () => {
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
-          
-          const decodeToken = JSON.parse(atob(event.data.tokenSession.split(".")[1]));
+          const decodeToken = JSON.parse(
+            atob(event.data.tokenSession.split(".")[1])
+          );
           setAuthDataCookie("authData", {
             ...event.data,
             userRole: decodeToken.userRole,
           });
           popup.close();
           resolve({ data: event.data });
-
         }
       });
     });

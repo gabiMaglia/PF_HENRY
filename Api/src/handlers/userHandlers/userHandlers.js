@@ -7,6 +7,7 @@ const {
 } = require("../../controllers/userControllers/userController");
 
 const getUsersHandler = async (req, res) => {
+
   try {
     const response = await getAllUsers();
     if (response.error) return res.status(404).json(response.response);

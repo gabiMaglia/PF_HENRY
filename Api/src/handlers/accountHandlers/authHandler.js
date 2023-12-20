@@ -41,6 +41,7 @@ const signInHandler = async (req, res) => {
       userAddress,
       role,
     });
+    console.log('llego')
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -52,9 +53,10 @@ const loginHandler = async (req, res) => {
   try {
     const response = await loginUser(username, password);
     if (response.error) {
+      console.log(response.response)
       return res.status(401).json(response.response);
     }
-    res.cookie('jwt',JSON.stringify(response.tokenSession), {
+    res.cookie('jwt', response.tokenSession, {
       expire: new Date() + 1,
       httpOnly: false,
       // sameSite:'none'
