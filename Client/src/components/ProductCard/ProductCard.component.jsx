@@ -33,12 +33,12 @@ const CardProduct = ({ product }) => {
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
-    ProductCategories[0].name && ProductCategories[0].name.length > 0
+    ProductCategories && ProductCategories.length > 0
       ? ProductCategories[0].name
       : null;
 
   const imageUrl =
-    ProductImages[0].address && ProductImages[0].address.length > 0
+    ProductImages && ProductImages.length > 0
       ? ProductImages[0].address
       : null;
 
