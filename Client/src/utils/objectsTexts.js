@@ -108,6 +108,7 @@ const sectionSocial = [
 
 const brands = [
   "Aero Cool",
+  "Adata",
   "Amd",
   "Antec",
   "Asus",
@@ -121,7 +122,9 @@ const brands = [
   "Nvidia",
   "Ryzen",
   "Samsung",
+  "Seagate",
   "Sony",
+  "T-Force",
   "Western Digital",
 ];
 
