@@ -86,9 +86,7 @@ const EditModal = ({
     } else {
       Swal.fire({
         allowOutsideClick: false,
-        customClass: {
-          container: "container",
-        },
+
         icon: "success",
         title: "Los datos ingresados son validos",
         text: "Estas seguro que quieres modificar la información",
@@ -99,6 +97,7 @@ const EditModal = ({
         cancelButtonColor: "red",
         customClass: {
           container: "container",
+          text: "alertText",
         },
       }).then((result) => {
         // Verifica si se hizo clic en Aceptar
