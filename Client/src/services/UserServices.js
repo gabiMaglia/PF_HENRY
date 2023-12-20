@@ -29,12 +29,38 @@ export const PostUser = async () => {
   }
 };
 
-export const PutUser = async () => {
+export const PutUser = async (id, userRole, data) => {
+  let completeData = {
+    name: null,
+    surname: null,
+    birthdate: null,
+    dni: null,
+    email: "",
+    telephone: null,
+    image: null,
+    role: "customer",
+    userAddress: {
+      country: null,
+      state: null,
+      city: null,
+      street: null,
+      number: null,
+      zipCode: null,
+    },
+    userCredentials: {},
+  };
   try {
-    const PutUser = await axios.put(`${url}/users/:id`);
-    return PutUser;
-  } catch ({ PutUser }) {
-    return { error: PutUser };
+    completeData = { ...completeData, ...data, role: userRole };
+    const putUser = await axios.put(`${url}/user/${id}`, {
+      ...completeData,
+      withCredentials: true,
+    });
+
+    const responseData = putUser.data;
+
+    return responseData;
+  } catch (error) {
+    return error;
   }
 };
 

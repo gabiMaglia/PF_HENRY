@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   Box,
@@ -12,6 +12,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { userEditValidate } from "../../helpers/userValidate";
 import Swal from "sweetalert2";
 import "./alertStyles.min.css";
+import { PutUser } from "../../services/UserServices";
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 
 const EditModal = ({
   isOpen,
@@ -62,6 +64,31 @@ const EditModal = ({
     setErrors([]);
   };
 
+  const handleDispatch = async (data) => {
+    dispatch(logUser({ userObject: data }));
+  };
+
+  const putManagement = async () => {
+    const cookie = getAuthDataCookie("authData");
+    const { userId, userRole } = cookie;
+
+    let response = {};
+
+    if (dataName === "telefono") {
+      response = await PutUser(userId, userRole, {
+        telephone: userData.phoneNumberAreaCode + userData.phoneNumber,
+      });
+    } else if (dataName === "dirección") {
+      response = await PutUser(userId, userRole, {
+        userAddress: { ...userData },
+      });
+    } else {
+      response = await PutUser(userId, userRole, userData);
+    }
+
+    handleDispatch(response);
+  };
+
   const handleSubmit = (e) => {
     const actualErrors = userEditValidate(userData, setErrors, errors);
     let containErrors = false;
@@ -84,32 +111,35 @@ const EditModal = ({
         title: "Error/es en el formulario",
       });
     } else {
-      Swal.fire({
-        allowOutsideClick: false,
-
-        icon: "success",
-        title: "Los datos ingresados son validos",
-        text: "Estas seguro que quieres modificar la información",
-        confirmButtonText: "Modificar",
-        confirmButtonColor: "#fd611a",
-        showCancelButton: true,
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: "red",
-        customClass: {
-          container: "container",
-          text: "alertText",
-        },
-      }).then((result) => {
-        // Verifica si se hizo clic en Aceptar
-        if (result.isConfirmed) {
-          //   loginUser(userInfo.username, userInfo.address);
-          //   handledispatch(response.data.data.id);
-          resetModal();
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          //   resetModal();
-        }
-      });
+      putManagement();
+      resetModal();
     }
+    // Swal.fire({
+    //   allowOutsideClick: false,
+
+    //   icon: "success",
+    //   title: "Los datos ingresados son validos",
+    //   text: "Estas seguro que quieres modificar la información",
+    //   confirmButtonText: "Modificar",
+    //   confirmButtonColor: "#fd611a",
+    //   showCancelButton: true,
+    //   cancelButtonText: "Cancelar",
+    //   cancelButtonColor: "red",
+    //   customClass: {
+    //     container: "container",
+    //     text: "alertText",
+    //   },
+    // }).then((result) => {
+    //   // Verifica si se hizo clic en Aceptar
+    //   if (result.isConfirmed) {
+
+    //     //   loginUser(userInfo.username, userInfo.address);
+    //     //   handledispatch(response.data.data.id);
+
+    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
+    //     //   resetModal();
+    //   }
+    // });
   };
 
   const formRender = () => {

@@ -135,7 +135,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
         surname: userInfo.surname,
         birthdate: userInfo.birthdate,
         dni: userInfo.dni,
-        telephone: userInfo.phoneNumberAreaCode + "-" + userInfo.phoneNumber,
+        telephone: userInfo.phoneNumberAreaCode + userInfo.phoneNumber,
         role: "customer",
         userCredentials: {
           username: userInfo.username,

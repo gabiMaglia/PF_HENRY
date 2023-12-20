@@ -35,6 +35,7 @@ const LoginModal = ({
 
   const handledispatch = async (userId) => {
     await getUserById(userId).then((data) => {
+      console.log(data);
       dispatch(logUser({ userObject: data }));
     });
   };
@@ -48,7 +49,6 @@ const LoginModal = ({
     }
 
     if (response.error) {
-      console.log(response)
       Swal.fire({
         allowOutsideClick: false,
         customClass: {

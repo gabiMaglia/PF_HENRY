@@ -336,6 +336,7 @@ const UserProfile = () => {
 
       {editModalIsOpen ? (
         <EditModal
+          key={editInfo.dataName}
           isOpen={editModalIsOpen}
           setIsOpen={setEditModalIsOpen}
           dataName={editInfo.dataName}
