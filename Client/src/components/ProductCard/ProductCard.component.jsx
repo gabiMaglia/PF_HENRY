@@ -29,18 +29,16 @@ const ProductPrice = styled(Typography)({
 
 const CardProduct = ({ product }) => {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
-    ProductCategories[0].name && ProductCategories[0].name.length > 0
+    ProductCategories && ProductCategories.length > 0
       ? ProductCategories[0].name
       : null;
 
   const imageUrl =
-    ProductImages[0].address && ProductImages[0].address.length > 0
-      ? ProductImages[0].address
-      : null;
+    ProductImages && ProductImages.length > 0 ? ProductImages[0].address : null;
 
   const handleCategoryClick = (e) => {
     e.stopPropagation();
@@ -48,7 +46,7 @@ const CardProduct = ({ product }) => {
   };
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setIsFavorite(!isFavorite);
   };
 
@@ -60,18 +58,13 @@ const CardProduct = ({ product }) => {
           padding: 0,
           margin: 0,
           display: "flex",
-          cursor: "pointer",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
-          transition: "transform 0.3s",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {categoryName && (
             <Typography
               variant="subtitle2"
@@ -91,7 +84,7 @@ const CardProduct = ({ product }) => {
             </Typography>
           )}
           <FavoriteIcon
-          onClick={handleFavoriteClick}
+            onClick={handleFavoriteClick}
             sx={{
               position: "relative",
               top: "20px",
@@ -103,7 +96,18 @@ const CardProduct = ({ product }) => {
         </Box>
         <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
           <Box>
-            <ProductMedia component="img" alt={name} src={imageUrl} />
+            <ProductMedia
+              component="img"
+              alt={name}
+              src={imageUrl}
+              sx={{
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                },
+              }}
+            />
             <CardContent>
               <Typography
                 variant="h6"

@@ -13,10 +13,10 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetState } from "../../redux/slices/ProductSlice";
+import { addItemsToCart } from "../../redux/slices/CartSlice";
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import {
   fetchProductById,
   fetchAllProducts,
@@ -54,10 +54,12 @@ const Detail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { productById, isLoading } = useSelector((state) => state.product);
-  const [cartItems, setCartItems] = useState([]);
+  const [localCartItems, setLocalCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true); // Nuevo estado de carga
   const { allProducts } = useSelector((state) => state.product);
+
+  const cartItemCount = useSelector((state) => state.cart.items.length);
 
   useEffect(() => {
     dispatch(fetchAllProducts());
@@ -103,11 +105,19 @@ const Detail = () => {
 
   const handleAddToCart = () => {
     if (productById && productById.id) {
-      setCartItems([...cartItems, productById]);
-      console.log("Product added to cart for ID:", productById.id);
-      navigate("/shoppingcart");
+      // Agrega el producto al estado local del carrito
+      setLocalCartItems([...localCartItems, productById]);
+      console.log("Product added to local cart for ID:", productById.id);
     }
   };
+
+  useEffect(() => {
+    // Esta función se ejecuta al desmontar el componente
+    return () => {
+      // Despacha la acción para agregar productos al carrito global
+      dispatch(addItemsToCart(localCartItems));
+    };
+  }, [dispatch, localCartItems]);
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(max-width:500px)");
@@ -230,6 +240,34 @@ const Detail = () => {
             >
               Agregar al Carrito
             </CustomButton>
+            {cartItemCount > 0 && (
+              <span
+                style={{
+                  marginLeft: "0.5em",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.2em 0.5em",
+                  fontSize: "0.7em",
+                }}
+              >
+                {cartItemCount}
+              </span>
+            )}
+            {cartItemCount > 0 && (
+              <span
+                style={{
+                  marginLeft: "0.5em",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.2em 0.5em",
+                  fontSize: "0.7em",
+                }}
+              >
+                {cartItemCount}
+              </span>
+            )}
           </Container>
         </Container>
       </Container>

@@ -137,7 +137,7 @@ const editUserById = async (
       process.env.EMAIL_MAILER,
       email,
       user.id,
-      process.env.SECRET,
+      process.env.JWT_SECRET_KEY,
       process.env.API_URL
     );
     await user.update({isVerified: false})

@@ -66,37 +66,38 @@ const productSlice = createSlice({
     orderPrice: (state, action) => {
       const prodOrder = state.productsToShow;
       const prodSort =
-        action.payload == "ascending"
+        action.payload == "desc"
           ? prodOrder.sort((a, b) => {
               if (a.price < b.price) return 1;
               if (a.price > b.price) return -1;
             })
-          : action.payload == "descending"
+          : action.payload == "asc"
           ? prodOrder.sort((a, b) => {
               if (a.price > b.price) return 1;
               if (a.price < b.price) return -1;
             })
           : prodOrder;
       state.productsToShow = prodSort;
+      state.currentPage = 0;
+      state.totalPages = Math.ceil(prodSort.length/PRODUCT_PER_PAGE);
     },
-      filterByCategory: (state, action) => {
-        const categoryName = action.payload;
-        state.productsToShow = state.allProducts.filter(
-            (product) => product.ProductCategories[0].name === categoryName
-          );
-          state.allProductsBackup = state.productsToShow
-          state.currentPage= 0
-          state.totalPages = Math.ceil(state.productsToShow.length/9); 
-        
-      },
-    filterByBrand: (state, action) => {
-      const brandName = action.payload;
-      state.productsToShow = state.allProductsBackup.filter(
-          (product) => product.ProductBrands[0].name === brandName
-        ); 
+    filterByCategory: (state, action) => {
+      const categoryName = action.payload;
+      console.log(action.payload, "paylo cate")
+      state.productsToShow = categoryName
+        state.allProductsBackup = state.productsToShow
         state.currentPage= 0
-        state.totalPages = Math.ceil(state.productsToShow.length/9); 
+        state.totalPages = Math.ceil(state.productsToShow.length/PRODUCT_PER_PAGE); 
+      
     },
+  filterByBrand: (state, action) => {
+    const brandName = action.payload;
+    state.productsToShow = state.allProductsBackup.filter(
+        (product) => product.ProductBrands[0].name === brandName
+      ); 
+      state.currentPage= 0
+      state.totalPages = Math.ceil(state.productsToShow.length/PRODUCT_PER_PAGE); 
+  },
     
     resetState: (state, action) => {
       state.allProductsBackup= state.allProducts

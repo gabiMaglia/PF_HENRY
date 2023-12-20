@@ -19,11 +19,11 @@ Send support mail http://localhost:3001/mailer/support_mail expects {name, phone
 
 //////USER ENDPOINTS
 
-Get all users       "localhost:3001/users/"      Trae todos los usuaiors sin direccion ni credenciales ni roles
-Get user by id      "localhost:3001/users/:id"   Trae un usuaio completo
-Post user           "localhost:3001/users/"      Crea usuario nuevo
-Put user            "localhost:3001/users/:id"   Modifica usuario por id
-Delete user by id   "localhost:3001/users/:id"   Elimina usuario por id
+Get all users       "localhost:3001/user"      Trae todos los usuaiors sin direccion ni credenciales ni roles
+Get user by id      "localhost:3001/user/:id"   Trae un usuaio completo
+Post user           "localhost:3001/user"      Crea usuario nuevo
+Put user            "localhost:3001/user/:id"   Modifica usuario por id
+Delete user by id   "localhost:3001/user/:id"   Elimina usuario por id
 
 /////USER_ROLES ENDPOINTS
 

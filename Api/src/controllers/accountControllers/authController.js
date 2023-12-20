@@ -91,23 +91,48 @@ const registerUser = async (userObj) => {
   return completeUser;
 };
 
-const loginUser = async (username, password) => {
-  const _userCrential = await UserCredentials.findOne({
-    where: { username: username },
-  });
-  const passwordCorrect =
-    _userCrential === null
-      ? false
-      : await bcrypt.compare(password, _userCrential.password);
+const loginUser = async (username, password, googleId) => {
+  console.log({ username, password, googleId });
+
+  let _userCrential;
+  let passwordCorrect;
+
+  if (password) {
+    _userCrential = await UserCredentials.findOne({
+      where: { username: username },
+    });
+    passwordCorrect =
+      _userCrential === null
+        ? false
+        : await bcrypt.compare(password, _userCrential.password);
+  }
+
+  if (googleId) {
+    const user = await User.findOne({
+      where: { email: username },
+    });
+    _userCrential = await UserCredentials.findOne({
+      where: { UserId: user.id },
+    });
+    passwordCorrect = true;
+  }
+
   if (!passwordCorrect) {
     return {
       error: true,
-      response: "Invalid username or password",
+      response: "Usuario o password invalido",
     };
   }
   // SI USERNAME Y PASSWORD MACHEAN EN LA DB< EXTRAEMOS EL ROL DEL USUARIO QUE LOGUEA
-
   const _user = await User.findByPk(_userCrential.UserId);
+  // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
+  if (!_user.isActive) {
+    console.log("llego")
+    return {
+      error: true,
+      response: "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
+    };
+  }
   const { role_name } = await UserRole.findByPk(_user.rolId);
 
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
@@ -122,7 +147,7 @@ const loginUser = async (username, password) => {
     login: true,
     tokenSession,
     userId: _user.id,
-    user : `${_user.name} ${_user.surname}`,
+    user: `${_user.name} ${_user.surname}`,
   };
 };
 

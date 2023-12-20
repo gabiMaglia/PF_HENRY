@@ -94,7 +94,7 @@ ProductBrand.belongsToMany(Product, { through: "ProductProductBrand" });
 Product.belongsToMany(ProductCategory, { through: "ProductProductCategory" });
 ProductCategory.belongsToMany(Product, { through: "ProductProductCategory" });
 
-Product.hasMany(ProductImage);
+Product.hasMany(ProductImage, { onDelete: "CASCADE" });
 ProductImage.belongsTo(Product);
 
 Product.hasOne(ProductStock, {
