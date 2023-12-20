@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
   fetchAddItemWish,
   fetchWishList,
@@ -36,21 +35,26 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
-  const { userId } = getAuthDataCookie("authData");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
   const wishlistProducts = useSelector((state) => state.wishlist.products);
-
-  useEffect(() => {
-    const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
-    setIsFavorite(isProductInWishlist);
-  }, [wishlistProducts, id]);
-
-  useEffect(() => {
-    fetchWishList(userId, dispatch);
-  }, []);
+  const login = useSelector((state) => state.user.login);
+  const { userId } = getAuthDataCookie("authData");
+  if (login) {
+    console.log(wishlistProducts);
+    if (userId) {
+      useEffect(() => {
+        const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
+        setIsFavorite(isProductInWishlist);
+      }, [wishlistProducts, id]);
+      
+      useEffect(() => {
+        fetchWishList(userId, dispatch);
+      }, []);
+    }
+  }
 
   const categoryName =
     ProductCategories && ProductCategories.length > 0
