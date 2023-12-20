@@ -1,4 +1,3 @@
-const { Service, Service_status } = require("../../db");
 const {
   addServiceController,
   updateServiceStatusController,
@@ -26,7 +25,7 @@ const addServiceHandler = async (req, res) => {
       technicianId
     );
     if (newService.error) {
-      return res.status(404).send(newService.response);
+      return res.status(404).json(newService.response);
     }
 
     if (!newService) {
@@ -48,7 +47,7 @@ const updateServiceStatus = async (req, res) => {
       value
     );
     if (updatedService.error) {
-      return res.status(404).send(updatedService.response);
+      return res.status(404).json(updatedService.response);
     }
     if (!updatedService) {
       return res.status(404).json({ error: "no se modifico el status" });
@@ -64,7 +63,7 @@ const getAllServices = async (req, res) => {
     try {
       const servicios = await getAllServicesController();
       if (servicios.error) {
-        return res.status(404).send(servicios.response);
+        return res.status(404).json(servicios.response);
       }
       return res.status(200).json(servicios);
     } catch (error) {
@@ -74,7 +73,7 @@ const getAllServices = async (req, res) => {
     try {
       const servicios = await getServiceByModelController(model);
       if (servicios.error) {
-        return res.status(404).send(servicios.response);
+        return res.status(404).json(servicios.response);
       }
       return res.status(200).json(servicios);
     } catch (error) {
@@ -88,7 +87,7 @@ const getServiceById = async (req, res) => {
   try {
     const response = await getServiceByIdController(id);
     if (response.error) {
-      return res.status(404).send(response.response);
+      return res.status(404).json(response.response);
     }
     return res.status(200).json(response);
   } catch (error) {
@@ -101,7 +100,7 @@ const getServiceByClientid = async (req, res) => {
   try {
     const Services = await getServiceByClientController(id);
     if (Services.error) {
-      return res.status(404).send(Services.response);
+      return res.status(404).json(Services.response);
     }
     return res.status(200).json(Services);
   } catch (error) {

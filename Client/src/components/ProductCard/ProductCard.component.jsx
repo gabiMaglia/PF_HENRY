@@ -29,7 +29,7 @@ const ProductPrice = styled(Typography)({
 
 const CardProduct = ({ product }) => {
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
 
   const categoryName =
@@ -48,7 +48,7 @@ const CardProduct = ({ product }) => {
   };
 
   const handleFavoriteClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setIsFavorite(!isFavorite);
   };
 
@@ -91,7 +91,7 @@ const CardProduct = ({ product }) => {
             </Typography>
           )}
           <FavoriteIcon
-          onClick={handleFavoriteClick}
+            onClick={handleFavoriteClick}
             sx={{
               position: "relative",
               top: "20px",
