@@ -3,7 +3,6 @@ const {
   registerUser,
   confirmAccountController,
 } = require("../../controllers/accountControllers/authController");
-
 const signInHandler = async (req, res) => {
   const {
     name,
@@ -47,13 +46,11 @@ const signInHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-
 const loginHandler = async (req, res) => {
   const { username, password } = req.body;
   try {
     const response = await loginUser(username, password);
     if (response.error) {
-      console.log(response.response)
       return res.status(401).json(response.response);
     }
     res.cookie('jwt', response.tokenSession, {
@@ -66,7 +63,6 @@ const loginHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-
 const confirmAccountHandler = async (req, res) => {
   const { token } = req.params;
   try {
