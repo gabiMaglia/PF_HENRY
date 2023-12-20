@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-const SessionAlert = () => {
+const SessionAlertLogin = () => {
   Swal.fire({
     icon: "info",
     title: "Acceso Privado",
@@ -10,4 +10,14 @@ const SessionAlert = () => {
   });
 };
 
-export default SessionAlert;
+const SessionAlertRole = () => {
+  Swal.fire({
+    icon: "info",
+    title: "Acceso Privado",
+    text: "No tienes permisos para acceder.",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Ok",
+  });
+};
+
+export { SessionAlertLogin, SessionAlertRole };

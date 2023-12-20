@@ -41,6 +41,7 @@ const signInHandler = async (req, res) => {
       userAddress,
       role,
     });
+    console.log('llego')
     res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);

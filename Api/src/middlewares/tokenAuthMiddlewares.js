@@ -20,9 +20,11 @@ const checkAuthToken = async (req, res, next) => {
 // MIDDLEWARE QUE CHEKEA ROL
 const checkRoleAuthToken = (role) => async (req, res, next) => {
   try {
+      console.log("llego")
       const token = req.headers.authorization.split(" ").pop();
       const tokenData = await verifyToken(token);
-    
+      // console.log(role)
+      // console.log(tokenData.userRole)
     if (![].concat(role).includes(tokenData.userRole)) {
       res.status(409);
       res.send({ error: "Not authorized" });

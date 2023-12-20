@@ -91,14 +91,36 @@ const registerUser = async (userObj) => {
   return completeUser;
 };
 
-const loginUser = async (username, password) => {
-  const _userCrential = await UserCredentials.findOne({
-    where: { username: username },
-  });
-  const passwordCorrect =
+const loginUser = async (username, password, googleId) => {
+ 
+  console.log({ username, password, googleId });
+  
+  let _userCrential;
+  let passwordCorrect;
+  
+  if (password !== undefined) {
+   
+    _userCrential = await UserCredentials.findOne({
+      where: { username: username },
+    });
+  }
+  passwordCorrect =
     _userCrential === null
       ? false
       : await bcrypt.compare(password, _userCrential.password);
+
+  if (googleId) {
+    const user = await User.findOne({
+      where:{email:username}
+    })
+
+    _userCrential = await UserCredentials.findOne({
+      where: { UserId: user.id },
+    });
+ 
+  }
+  passwordCorrect = true
+
   if (!passwordCorrect) {
     return {
       error: true,
@@ -122,7 +144,7 @@ const loginUser = async (username, password) => {
     login: true,
     tokenSession,
     userId: _user.id,
-    user : `${_user.name} ${_user.surname}`,
+    user: `${_user.name} ${_user.surname}`,
   };
 };
 

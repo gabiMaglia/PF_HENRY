@@ -20,7 +20,6 @@ server.use(session({
 }));
 
 server.use(cors({ credentials: true , origin: `http://${process.env.FRONTEND_URL}` }));
-server.use(cookieParser());
 server.name = "API";
 server.use(morgan("dev"));
 server.use(express.json());

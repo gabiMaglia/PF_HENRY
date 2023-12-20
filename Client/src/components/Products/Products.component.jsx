@@ -51,10 +51,7 @@ const Products = () => {
 
         <ProductBox products={productsToShow} />
 
-        <Stack
-          spacing={2}
-          sx={{ mt: 3 }}
-        >
+        <Stack spacing={2} sx={{ mt: 3 }}>
           <Pagination
             variant="outlined"
             shape="rounded"

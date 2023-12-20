@@ -4,6 +4,7 @@ const {
   addToCart,
   getCartById,
   deleteCartById,
+  removeFromCart,
 } = require("../../controllers/productControllers/cartControllers");
 
 const postCartHandler = async (req, res) => {
@@ -61,6 +62,23 @@ const addToCartHandler = async (req, res) => {
   }
 };
 
+const removeFromCartHandler = async (req, res) => {
+  const { userId, productId } = req.body;
+  try {
+    const updatedCarrito = await removeFromCart(userId, productId);
+    if (updatedCarrito) {
+      res.status(200).json({
+        message: "Cart updated successfully",
+        updatedCarritoCart: updatedCarrito,
+      });
+    } else {
+      res.status(400).send("not found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const cartByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
@@ -91,4 +109,5 @@ module.exports = {
   addToCartHandler,
   cartByIdHandler,
   deleteCartHandler,
+  removeFromCartHandler,
 };

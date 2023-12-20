@@ -7,11 +7,15 @@ const {
 
 const googleAuthCallback = async (req, res) => {
   try {
+    
     const googleId = req.user._json.sub;
     const authEmail = req.user._json.email;
-    const responseLogin = await loginUser(authEmail, googleId);
+
+    const responseLogin = await loginUser(authEmail, null, googleId);
     if (responseLogin.error) {
-      return res.status(401).json(response.response);
+    
+      return res.status(401).json(responseLogin.response);
+   
     }
     res.cookie('jwt',JSON.stringify(responseLogin.tokenSession), {
       expire : new Date() + 1,
