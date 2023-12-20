@@ -233,7 +233,6 @@ const Detail = () => {
             >
               Agregar al Carrito
             </CustomButton>
-            {/* Muestra el contador de carrito */}
             {cartItemCount > 0 && (
               <span
                 style={{
