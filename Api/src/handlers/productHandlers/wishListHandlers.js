@@ -27,6 +27,7 @@ const addWishItem = async (req, res) => {
     res.status(200).json(response);
 
   } catch (error) {
+    console.log(error.message)
     res.status(400).json({ error: error.message });
   }
 };

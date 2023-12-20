@@ -1,10 +1,14 @@
 //HOOKS
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { fetchAddItemWish,fetchWishList } from "../../services/WishListServices";
+//WISHLIST
+import { getAuthDataCookie } from '../../utils/cookiesFunctions'
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -28,9 +32,18 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
+  const {userId} = getAuthDataCookie("authData");
+  console.log(userId)
+  const dispatch=useDispatch()
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
+  const WishList=useSelector((state)=>state.WishListSlice)
+  console.log(WishList)
+
+  useEffect((dispatch)=>{
+    fetchWishList(userId,dispatch)
+  },[])
 
   const categoryName =
     ProductCategories && ProductCategories.length > 0
@@ -47,7 +60,9 @@ const CardProduct = ({ product }) => {
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation();
+    console.log(product.id)
     setIsFavorite(!isFavorite);
+    fetchAddItemWish(dispatch,userId,product.id)
   };
 
   return (
