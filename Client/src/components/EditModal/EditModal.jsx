@@ -14,6 +14,8 @@ import Swal from "sweetalert2";
 import "./alertStyles.min.css";
 import { PutUser } from "../../services/UserServices";
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { useDispatch } from "react-redux";
+import { logUser } from "../../redux/slices/UserSlice";
 
 const EditModal = ({
   isOpen,
@@ -22,6 +24,8 @@ const EditModal = ({
   previousValue,
   dataList,
 }) => {
+  const dispatch = useDispatch();
+
   const boxModalStyle = {
     position: "absolute",
     top: "50%",
@@ -69,6 +73,16 @@ const EditModal = ({
   };
 
   const putManagement = async () => {
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+      customClass: {
+        container: "container",
+      },
+    });
+    Swal.showLoading();
     const cookie = getAuthDataCookie("authData");
     const { userId, userRole } = cookie;
 
@@ -85,8 +99,31 @@ const EditModal = ({
     } else {
       response = await PutUser(userId, userRole, userData);
     }
+    if (response.status === 200 || response.response.status === 200) {
+      Swal.fire({
+        allowOutsideClick: false,
 
-    handleDispatch(response);
+        icon: "success",
+        title: "Los datos ingresados son validos",
+        text: "Información modificada correctamente",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#fd611a",
+        customClass: {
+          container: "container",
+        },
+      });
+      handleDispatch(response.data);
+    } else {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Fallo en la modificación de los datos",
+        text: `${response.response.data}`,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -114,42 +151,18 @@ const EditModal = ({
       putManagement();
       resetModal();
     }
-    // Swal.fire({
-    //   allowOutsideClick: false,
-
-    //   icon: "success",
-    //   title: "Los datos ingresados son validos",
-    //   text: "Estas seguro que quieres modificar la información",
-    //   confirmButtonText: "Modificar",
-    //   confirmButtonColor: "#fd611a",
-    //   showCancelButton: true,
-    //   cancelButtonText: "Cancelar",
-    //   cancelButtonColor: "red",
-    //   customClass: {
-    //     container: "container",
-    //     text: "alertText",
-    //   },
-    // }).then((result) => {
-    //   // Verifica si se hizo clic en Aceptar
-    //   if (result.isConfirmed) {
-
-    //     //   loginUser(userInfo.username, userInfo.address);
-    //     //   handledispatch(response.data.data.id);
-
-    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //     //   resetModal();
-    //   }
-    // });
   };
 
   const formRender = () => {
     return dataList.map((data) => {
       return (
-        <>
+        <Box
+          key={data.en}
+          sx={{ width: "100%" }}
+        >
           <TextField
             fullWidth
             margin="normal"
-            key={data.en}
             type={
               data.en === "email"
                 ? "email"
@@ -167,7 +180,7 @@ const EditModal = ({
                 ? {
                     shrink: true,
                   }
-                : ""
+                : {}
             }
             name={data.en}
             label={data.es}
@@ -198,7 +211,7 @@ const EditModal = ({
                   );
                 })}
           </FormHelperText>
-        </>
+        </Box>
       );
     });
   };
@@ -228,15 +241,25 @@ const EditModal = ({
             onClick={resetModal}
           />
         </Button>
-        <Typography variant="h6">Editar {dataName}</Typography>
+        <Typography
+          sx={{ mb: ".5em" }}
+          variant="h6"
+        >
+          Editar {dataName}
+        </Typography>
         {typeof previousValue === "object" ? (
           ""
         ) : (
-          <Typography variant="h5">{previousValue}</Typography>
+          <Typography
+            sx={{ mb: ".5em" }}
+            variant="h5"
+          >
+            {previousValue}
+          </Typography>
         )}
         <Typography
           variant="body1"
-          sx={{ color: "#fd611a" }}
+          sx={{ color: "#fd611a", mb: ".3em" }}
         >
           Para continuar ingresá tus datos actualizados
         </Typography>

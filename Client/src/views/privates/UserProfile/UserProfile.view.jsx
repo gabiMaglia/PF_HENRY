@@ -129,7 +129,12 @@ const UserProfile = () => {
               <CardMedia
                 component="img"
                 alt="Imagen de usuario"
-                sx={{ mb: "1em", mt: "2em", width: "3em", height: "3em" }}
+                sx={{
+                  mb: "1em",
+                  mt: "2em",
+                  width: "3em",
+                  height: "3em",
+                }}
                 image={image}
               />
             ) : (
@@ -287,22 +292,23 @@ const UserProfile = () => {
                 >
                   Dirección
                 </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ mb: ".5em" }}
-                >
-                  {userAddress.country &&
-                  userAddress.state &&
-                  userAddress.city &&
-                  userAddress.street &&
-                  userAddress.number
-                    ? (userAddress.country,
-                      userAddress.state,
-                      userAddress.city,
-                      userAddress.street,
-                      userAddress.number)
-                    : "No se definio una dirección"}
-                </Typography>
+
+                {userAddress.country &&
+                userAddress.state &&
+                userAddress.city &&
+                userAddress.street &&
+                userAddress.number ? (
+                  <Typography
+                    variant="body2"
+                    sx={{ mb: ".5em" }}
+                  >
+                    {userAddress.country}, {userAddress.state},{" "}
+                    {userAddress.city}, {userAddress.street},{" "}
+                    {userAddress.number}
+                  </Typography>
+                ) : (
+                  "No se definio una dirección"
+                )}
 
                 <Typography
                   variant="caption"

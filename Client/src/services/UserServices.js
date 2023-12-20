@@ -56,7 +56,7 @@ export const PutUser = async (id, userRole, data) => {
       withCredentials: true,
     });
 
-    const responseData = putUser.data;
+    const responseData = putUser;
 
     return responseData;
   } catch (error) {

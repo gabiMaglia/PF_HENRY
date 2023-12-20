@@ -35,7 +35,6 @@ const LoginModal = ({
 
   const handledispatch = async (userId) => {
     await getUserById(userId).then((data) => {
-      console.log(data);
       dispatch(logUser({ userObject: data }));
     });
   };
