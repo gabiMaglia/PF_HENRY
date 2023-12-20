@@ -47,7 +47,6 @@ const LoginModal = ({
     } else {
       response = await loginUser(username, address);
     }
-
     if (response.error) {
       Swal.fire({
         allowOutsideClick: false,

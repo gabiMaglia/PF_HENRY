@@ -44,7 +44,6 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/category/filter/${category}`);
     dispatch(filterByCategory(response.data));
-    console.log(response.data, "catego");
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
   }
