@@ -6,7 +6,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/`, { withCredentials: true });
+    const response = await axios.get(`${urlBack}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
     console.error("Error");
@@ -15,7 +15,7 @@ export const fetchAllProducts = () => async (dispatch) => {
 
 export const fetchProductById = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/${id}`, { withCredentials: true });
+    const response = await axios.get(`${urlBack}/product/${id}`);
     dispatch(getProductById(response.data));
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -24,7 +24,7 @@ export const fetchProductById = (id) => async (dispatch) => {
 
 export const fetchSearch = (name) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/search?name=${name}`, { withCredentials: true });
+    const response = await axios.get(`${urlBack}/search?name=${name}`);
     dispatch(search(response.data));
   } catch (error) {
     Swal.fire("Producto no existente", '', 'error')
@@ -33,7 +33,7 @@ export const fetchSearch = (name) => async (dispatch) => {
 
 export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/category/filter/${category}`, { withCredentials: true });
+    const response = await axios.get(`${urlBack}/category/filter/${category}`);
     dispatch(filterByCategory(response.data));
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
@@ -42,7 +42,7 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
 
 export const fetchProductsByBrand = (brand) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/brand/filter/${brand}`, { withCredentials: true});
+    const response = await axios.get(`${urlBack}/brand/filter/${brand}`);
     dispatch(filterByBrand(response.data));
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);

@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User } = require("../db");
+const { User, userCredentials } = require("../db");
 
 var GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passport = require("passport");
@@ -18,9 +18,12 @@ passport.use(
       scope: ["profile", "email"],
     },
      async (accessToken, refreshToken, profile, done) => {
+
       const email = profile.emails.find((email) => email.verified === true);
-      const { given_name, family_name, picture } = profile._json;
+      const { given_name, family_name, picture, sub } = profile._json;
+      
       const response = await User.findOne({ where: { email: email.value } })
+      console.log(profile)
         // IF EXITS IN DATABASE
         if (response) {
           done(null, profile);
@@ -30,15 +33,15 @@ passport.use(
             name: given_name,
             surname: family_name,
             birthdate: null,
-            dni: 23131,
+            dni: null,
             email: email.value,
-            telephone: 32121,
+            telephone: null,
             image: picture,
             role: "customer",
             userAddress: {},
             userCredentials: {
               username: email.value,
-              password: profile.id,
+              password: sub,
             },
           });
           done(null, profile);
@@ -51,6 +54,7 @@ passport.use(
 passport.serializeUser((user, done) => {
   done(null, user);
 });
+
 passport.deserializeUser((user, done) => {
   done(null, user);
 });

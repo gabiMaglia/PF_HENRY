@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  getAuthDataCookie,
   setAuthDataCookie,
 } from "../utils/cookiesFunctions";
 
@@ -23,7 +24,7 @@ export const loginUser = async (username, password) => {
       setAuthDataCookie("authData", {
         ...data,
         userRole: decodeToken.userRole,
-      });
+      }); 
       return { error: false, data };
     }
   } catch ({ response }) {
