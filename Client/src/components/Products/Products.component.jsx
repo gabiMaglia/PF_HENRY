@@ -17,8 +17,6 @@ const Products = () => {
     (state) => state.product
   );
 
-  console.log(productsToShow);
-
   useEffect(() => {
     inputName !== ""
       ? dispatch(fetchSearch(inputName))
