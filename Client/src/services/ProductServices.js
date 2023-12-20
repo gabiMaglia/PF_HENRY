@@ -61,9 +61,7 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 export const fetchProductsByOrder = (order) => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/order?price=${order}`);
-    console.log(order)
     dispatch(orderPrice(response.data));
-    console.log(response.data)
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
   }
