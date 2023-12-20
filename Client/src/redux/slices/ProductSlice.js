@@ -83,11 +83,12 @@ const productSlice = createSlice({
     },
     filterByCategory: (state, action) => {
       const categoryName = action.payload;
-      console.log(action.payload, "paylo cate")
-      state.productsToShow = categoryName
+      state.productsToShow = state.allProducts.filter(
+          (product) => product.ProductCategories[0].name === categoryName
+        );
         state.allProductsBackup = state.productsToShow
         state.currentPage= 0
-        state.totalPages = Math.ceil(state.productsToShow.length/PRODUCT_PER_PAGE); 
+        state.totalPages = Math.ceil(state.productsToShow.length/9); 
       
     },
   filterByBrand: (state, action) => {
