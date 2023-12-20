@@ -21,6 +21,7 @@ import { brands } from "../../utils/objectsTexts";
 import {
   fetchProductsByCategory,
   fetchProductsByBrand,
+  fetchProductsByOrder,
 } from "../../services/ProductServices";
 import {
   resetState,
@@ -37,7 +38,6 @@ const FiltersSorting = () => {
 
   const handleCategoryClick = async (categoryName) => {
     await dispatch(fetchProductsByCategory(categoryName));
-    dispatch(filterByCategory(categoryName));
   };
 
   const handleSelectBrand = (e) => {
@@ -50,8 +50,8 @@ const FiltersSorting = () => {
     dispatch(orderPrice(selectedPrice));
   };
 
-  const handleOrderPrice = (e) => {
-    dispatch(orderPrice(e.target.value));
+  const handleOrderPrice = async (e) => {
+    await dispatch(fetchProductsByOrder(e.target.value));
     setSelectedPrice(e.target.value);
   };
 
@@ -59,7 +59,6 @@ const FiltersSorting = () => {
     setSelectedBrand("default");
     setSelectedPrice("default");
 
-    dispatch(filterByCategory("all"));
     dispatch(filterByBrand("default"));
     dispatch(resetState());
   };
@@ -194,8 +193,8 @@ const FiltersSorting = () => {
               <Options value="default" disabled>
                 Precio
               </Options>
-              <Options value="ascending">Mayor precio</Options>
-              <Options value="descending">Menor precio</Options>
+              <Options value="desc">Mayor precio</Options>
+              <Options value="asc">Menor precio</Options>
             </Selects>
           </FormControl>
         </Box>
