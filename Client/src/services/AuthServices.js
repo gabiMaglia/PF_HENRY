@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  getAuthDataCookie,
   setAuthDataCookie,
 } from "../utils/cookiesFunctions";
 

@@ -127,6 +127,7 @@ const loginUser = async (username, password, googleId) => {
   const _user = await User.findByPk(_userCrential.UserId);
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
   if (!_user.isActive) {
+    console.log("llego")
     return {
       error: true,
       response: "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",

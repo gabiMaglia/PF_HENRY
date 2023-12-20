@@ -53,9 +53,10 @@ const loginHandler = async (req, res) => {
   try {
     const response = await loginUser(username, password);
     if (response.error) {
+      console.log(response.response)
       return res.status(401).json(response.response);
     }
-    res.cookie('jwt',JSON.stringify(response.tokenSession), {
+    res.cookie('jwt', response.tokenSession, {
       expire: new Date() + 1,
       httpOnly: false,
       // sameSite:'none'
