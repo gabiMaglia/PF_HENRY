@@ -3,11 +3,10 @@ const {
   getUserById,
   postUser,
   editUserById,
-  getUserByDni
+  getUserByDni,
 } = require("../../controllers/userControllers/userController");
 
 const getUsersHandler = async (req, res) => {
-
   try {
     const response = await getAllUsers();
     if (response.error) return res.status(404).json(response.response);
@@ -107,6 +106,7 @@ const editUserByIdHandler = async (req, res) => {
       role,
       userCredentials
     );
+
     if (response.error) return res.status(404).json(response.response);
     res.status(200).json(response);
   } catch (error) {
@@ -119,5 +119,5 @@ module.exports = {
   getUserByIdHandler,
   postUserHandler,
   editUserByIdHandler,
-  getUserByDniHandler
+  getUserByDniHandler,
 };

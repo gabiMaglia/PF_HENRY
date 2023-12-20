@@ -16,6 +16,8 @@ const constsUserValidations = {
   minCantCharLastName: 3,
   maxCantCharLastName: 20,
   regexDni: /^[1-9]\d{6,7}$/,
+  minCantCharCountry: 3,
+  regexZipCode: /^[A-Z]\d{4}$/i,
 };
 
 // Validación de email
@@ -150,7 +152,7 @@ const nameValidate = (name) => {
   const { minCantCharName, maxCantCharName, regexContainSpecialCharacters } =
     constsUserValidations;
   let nameError = "";
-  if (!name) {
+  if (!name || name === "") {
     nameError = "El nombre es requerido";
   } else if (name.length < minCantCharName) {
     nameError = `El nombre debe contener al menos ${minCantCharName} caracteres`;
@@ -166,7 +168,7 @@ const surnameValidate = (surname) => {
   const { minCantCharName, maxCantCharName, regexContainSpecialCharacters } =
     constsUserValidations;
   let surnameError = "";
-  if (!surname) {
+  if (!surname || surname === "") {
     surnameError = "El apellido es requerido";
   } else if (surname.length < minCantCharName) {
     surnameError = `El apellido debe contener al menos ${minCantCharName} caracteres`;
@@ -192,6 +194,102 @@ const dniValidate = (dni) => {
       dniError.push("El dni no puede contener espacios");
   }
   return dniError;
+};
+
+const countryValidate = (country) => {
+  const { regexContainSpecialCharacters, minCantCharCountry } =
+    constsUserValidations;
+  let countryError = [];
+  if (!country) {
+    countryError.push("El pais es requerido");
+  } else {
+    country.length < minCantCharCountry &&
+      countryError.push(
+        `El pais debe contener al menos ${minCantCharCountry} caracteres`
+      );
+    regexContainSpecialCharacters.test(country) &&
+      countryError.push("El pais no puede contener caracteres especiales");
+  }
+  return countryError;
+};
+
+const stateValidate = (state) => {
+  const { regexContainSpecialCharacters, minCantCharCountry } =
+    constsUserValidations;
+  let stateError = [];
+  if (!state) {
+    stateError.push("El estado es requerido");
+  } else {
+    state.length < minCantCharCountry &&
+      stateError.push(
+        `El estado debe contener al menos ${minCantCharCountry} caracteres`
+      );
+    regexContainSpecialCharacters.test(state) &&
+      stateError.push("El estado no puede contener caracteres especiales");
+  }
+  return stateError;
+};
+
+const cityValidate = (city) => {
+  const { regexContainSpecialCharacters, minCantCharCountry } =
+    constsUserValidations;
+  let cityError = [];
+  if (!city) {
+    cityError.push("La ciudad es requerida");
+  } else {
+    city.length < minCantCharCountry &&
+      cityError.push(
+        `La ciudad debe contener al menos ${minCantCharCountry} caracteres`
+      );
+    regexContainSpecialCharacters.test(city) &&
+      cityError.push("La ciudad no puede contener caracteres especiales");
+  }
+  return cityError;
+};
+
+const streetValidate = (street) => {
+  const { regexContainSpecialCharacters, minCantCharCountry } =
+    constsUserValidations;
+  let streetError = [];
+  if (!street) {
+    streetError.push("La calle es requerida");
+  } else {
+    street.length < minCantCharCountry &&
+      streetError.push(
+        `La calle debe contener al menos ${minCantCharCountry} caracteres`
+      );
+    regexContainSpecialCharacters.test(street) &&
+      streetError.push("La calle no puede contener caracteres especiales");
+  }
+  return streetError;
+};
+
+const numberValidate = (number) => {
+  const { regexContainSpecialCharacters } = constsUserValidations;
+  let numberError = [];
+  if (!number) {
+    numberError.push("El numero es requerido");
+  } else {
+    regexContainSpecialCharacters.test(number) &&
+      numberError.push("El numero no puede contener caracteres especiales");
+  }
+  return numberError;
+};
+
+const zipCodeValidate = (zipCode) => {
+  const { regexContainSpecialCharacters, regexZipCode } = constsUserValidations;
+  let zipCodeError = [];
+  if (!zipCode) {
+    zipCodeError.push("El codigo postal es requerido");
+  } else {
+    !regexZipCode.test(zipCode) &&
+      zipCodeError.push("El codigo postal no es valido");
+    regexContainSpecialCharacters.test(zipCode) &&
+      zipCodeError.push(
+        "El codigo postal no puede contener caracteres especiales"
+      );
+  }
+  return zipCodeError;
 };
 
 // Validacion de información de usuario para inicio de sesion
@@ -257,4 +355,52 @@ export const userRegisterValidate = (values, setErrors, antErrors) => {
   dni !== undefined ? (errors.dni = dniValidate(dni)) : "";
 
   setErrors(errors);
+};
+
+export const userEditValidate = (values, setErrors, antErrors) => {
+  const {
+    name,
+    surname,
+    email,
+    phoneNumberAreaCode,
+    phoneNumber,
+    dni,
+    country,
+    state,
+    city,
+    street,
+    number,
+    zipCode,
+  } = values;
+
+  const errors = {
+    ...antErrors,
+  };
+
+  email !== undefined ? (errors.email = emailValidate(email)) : "";
+
+  phoneNumberAreaCode !== undefined
+    ? (errors.phoneNumberAreaCode =
+        phoneNumberAreaCodeValidate(phoneNumberAreaCode))
+    : "";
+
+  phoneNumber !== undefined
+    ? (errors.phoneNumber = phoneNumberValidate(phoneNumber))
+    : "";
+
+  name !== undefined ? (errors.name = nameValidate(name)) : "";
+
+  surname !== undefined ? (errors.surname = surnameValidate(surname)) : "";
+
+  dni !== undefined ? (errors.dni = dniValidate(dni)) : "";
+
+  country !== undefined ? (errors.country = countryValidate(country)) : "";
+  state !== undefined ? (errors.state = stateValidate(state)) : "";
+  city !== undefined ? (errors.city = cityValidate(city)) : "";
+  street !== undefined ? (errors.street = streetValidate(street)) : "";
+  number !== undefined ? (errors.number = numberValidate(number)) : "";
+  zipCode !== undefined ? (errors.zipCode = zipCodeValidate(zipCode)) : "";
+
+  setErrors(errors);
+  return errors;
 };
