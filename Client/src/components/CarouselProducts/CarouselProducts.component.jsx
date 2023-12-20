@@ -2,30 +2,14 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../ProductCard/ProductCard.component";
 import { Container, Typography } from "@mui/material";
 import Slider from "react-slick";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const CarouselProducts = ({ allProducts }) => {
   const [carouselProducts, setCarouselProducts] = useState([]);
+
   useEffect(() => {
     const randomProducts = allProducts.slice().sort(() => Math.random() - 0.5);
-
     setCarouselProducts(randomProducts);
   }, [allProducts]);
-
-  const CustomArrowForwardIcon = (props) => (
-    <ArrowForwardIcon
-      {...props}
-      sx={{ color: "black", "&:hover": { color: "#fd611a" } }}
-    />
-  );
-
-  const CustomArrowBackIcon = (props) => (
-    <ArrowBackIcon
-      {...props}
-      sx={{ color: "black", "&:hover": { color: "#fd611a" } }}
-    />
-  );
 
   const [settings, setSettings] = useState({
     dots: true,
@@ -52,8 +36,6 @@ const CarouselProducts = ({ allProducts }) => {
         },
       },
     ],
-    nextArrow: <CustomArrowForwardIcon />,
-    prevArrow: <CustomArrowBackIcon />,
   });
 
   return (

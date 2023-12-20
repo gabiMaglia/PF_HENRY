@@ -22,7 +22,7 @@ const HomeComponent = () => {
       <div>
         <CarouselTop />
         <HomeProducts allProducts={allProducts} />
-        <GoogleMap/>
+        <GoogleMap />
         <CarouselBottom />
       </div>
     </>

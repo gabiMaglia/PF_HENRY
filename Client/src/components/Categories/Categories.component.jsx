@@ -35,8 +35,7 @@ const FiltersSorting = () => {
   const [selectedBrand, setSelectedBrand] = useState("default");
   const [selectedPrice, setSelectedPrice] = useState("default");
 
-  const handleCategoryClick = async (categoryName) => {
-    await dispatch(fetchProductsByCategory(categoryName));
+  const handleCategoryClick = (categoryName) => {
     dispatch(filterByCategory(categoryName));
   };
 
@@ -194,8 +193,8 @@ const FiltersSorting = () => {
               <Options value="default" disabled>
                 Precio
               </Options>
-              <Options value="ascending">Mayor precio</Options>
-              <Options value="descending">Menor precio</Options>
+              <Options value="desc">Mayor precio</Options>
+              <Options value="asc">Menor precio</Options>
             </Selects>
           </FormControl>
         </Box>

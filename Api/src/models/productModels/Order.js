@@ -17,9 +17,13 @@ module.exports = (sequelize) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+    cartTotal: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
     shippingAddress: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     paymentMethod: {
       type: DataTypes.STRING,
@@ -36,6 +40,10 @@ module.exports = (sequelize) => {
     customerNotes: {
       type: DataTypes.TEXT,
       allowNull: true,
+    },
+    products: {
+      type: DataTypes.JSONB,
+      allowNull: false,
     },
   });
 };
