@@ -15,8 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetState } from "../../redux/slices/ProductSlice";
 import { addItemsToCart } from "../../redux/slices/CartSlice";
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import {
   fetchProductById,
   fetchAllProducts,
@@ -56,7 +54,7 @@ const Detail = () => {
   const { productById, isLoading } = useSelector((state) => state.product);
   const [localCartItems, setLocalCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(true); // Nuevo estado de carga
+  const [loading, setLoading] = useState(true);
   const { allProducts } = useSelector((state) => state.product);
 
   const cartItemCount = useSelector((state) => state.cart.items.length);
