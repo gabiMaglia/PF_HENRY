@@ -1,13 +1,18 @@
 import { Avatar, Box, CardMedia, Divider, Typography } from "@mui/material";
-import SideBar from "../../components/SideBar/SideBar.component";
+import SideBar from "../../../components/SideBar/SideBar.component";
 import { useSelector } from "react-redux";
-import getFirstLetters from "../../helpers/getFirstLetters";
+import getFirstLetters from "../../../helpers/getFirstLetters";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
+import EditModal from "../../../components/EditModal/EditModal";
 
 const UserProfile = () => {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [editInfo, setEditInfo] = useState("");
+  const [editInfo, setEditInfo] = useState({
+    dataName: "",
+    previousValue: "",
+    dataList: [],
+  });
 
   const {
     name,
@@ -26,7 +31,55 @@ const UserProfile = () => {
     surname: getFirstLetters(surname),
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = (dataName) => {
+    let previousValue = "";
+    let dataList = [];
+    switch (dataName) {
+      case "nombre y apellido":
+        dataList = [
+          { es: "Nombre", en: "name" },
+          { es: "Apellido", en: "surname" },
+        ];
+        previousValue = name + " " + surname;
+        break;
+      case "fecha de nacimiento":
+        dataList = [{ es: "Fecha de nacimiento", en: "birthdate" }];
+        previousValue = birthdate;
+        break;
+      case "email":
+        dataList = [{ es: "Email", en: "email" }];
+        previousValue = email;
+        break;
+      case "telefono":
+        dataList = [
+          { es: "Codigo de area", en: "phoneNumberAreaCode" },
+          { es: "Telefono", en: "phoneNumber" },
+        ];
+        previousValue = telephone;
+        break;
+      case "DNI":
+        dataList = [{ es: "DNI", en: "dni" }];
+        previousValue = dni;
+        break;
+      case "dirección":
+        dataList = [
+          { es: "Pais", en: "country" },
+          { es: "Provincia", en: "state" },
+          { es: "Ciudad", en: "city" },
+          { es: "Calle", en: "street" },
+          { es: "Numero", en: "number" },
+          { es: "Codigo postal", en: "zipCode" },
+        ];
+        previousValue = userAddress;
+        break;
+      default:
+        break;
+    }
+    setEditInfo({
+      dataName: dataName,
+      previousValue: previousValue,
+      dataList: dataList,
+    });
     setEditModalIsOpen(true);
   };
 
@@ -116,11 +169,13 @@ const UserProfile = () => {
                     : "No se definio un nombre o apellido"}
                 </Typography>
               </Box>
+
               <EditIcon
                 sx={{
                   cursor: "pointer",
                   color: "black",
                 }}
+                onClick={() => handleEditClick("nombre y apellido")}
               />
             </Box>
             <Divider sx={dividerStyle} />
@@ -146,6 +201,7 @@ const UserProfile = () => {
                   cursor: "pointer",
                   color: "black",
                 }}
+                onClick={() => handleEditClick("fecha de nacimiento")}
               />
             </Box>
             <Divider sx={dividerStyle} />
@@ -169,6 +225,7 @@ const UserProfile = () => {
                   cursor: "pointer",
                   color: "black",
                 }}
+                onClick={() => handleEditClick("email")}
               />
             </Box>
             <Divider sx={dividerStyle} />
@@ -194,6 +251,7 @@ const UserProfile = () => {
                   cursor: "pointer",
                   color: "black",
                 }}
+                onClick={() => handleEditClick("telefono")}
               />
             </Box>
             <Divider sx={dividerStyle} />
@@ -217,6 +275,7 @@ const UserProfile = () => {
                   cursor: "pointer",
                   color: "black",
                 }}
+                onClick={() => handleEditClick("DNI")}
               />
             </Box>
             <Divider sx={dividerStyle} />
@@ -244,17 +303,7 @@ const UserProfile = () => {
                       userAddress.number)
                     : "No se definio una dirección"}
                 </Typography>
-              </Box>
-              <EditIcon
-                sx={{
-                  cursor: "pointer",
-                  color: "black",
-                }}
-              />
-            </Box>
-            <Divider sx={dividerStyle} />
-            <Box sx={itemBoxStyle}>
-              <Box sx={{ flexGrow: "1" }}>
+
                 <Typography
                   variant="caption"
                   sx={{ mb: ".1em" }}
@@ -275,11 +324,24 @@ const UserProfile = () => {
                   cursor: "pointer",
                   color: "black",
                 }}
+                onClick={() => handleEditClick("dirección")}
               />
             </Box>
             <Divider />
           </Box>
         </Box>
+      ) : (
+        ""
+      )}
+
+      {editModalIsOpen ? (
+        <EditModal
+          isOpen={editModalIsOpen}
+          setIsOpen={setEditModalIsOpen}
+          dataName={editInfo.dataName}
+          previousValue={editInfo.previousValue}
+          dataList={editInfo.dataList}
+        />
       ) : (
         ""
       )}
