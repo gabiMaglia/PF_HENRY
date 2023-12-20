@@ -17,7 +17,6 @@ import { addItemsToCart } from "../../redux/slices/CartSlice";
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { addItem } from "../../redux/slices/CartSlice";
 import {
   fetchProductById,
   fetchAllProducts,
@@ -241,6 +240,20 @@ const Detail = () => {
             >
               Agregar al Carrito
             </CustomButton>
+            {cartItemCount > 0 && (
+              <span
+                style={{
+                  marginLeft: "0.5em",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.2em 0.5em",
+                  fontSize: "0.7em",
+                }}
+              >
+                {cartItemCount}
+              </span>
+            )}
             {cartItemCount > 0 && (
               <span
                 style={{
