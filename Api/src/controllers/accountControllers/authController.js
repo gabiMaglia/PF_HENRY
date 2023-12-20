@@ -124,20 +124,14 @@ const loginUser = async (username, password, googleId) => {
     };
   }
   // SI USERNAME Y PASSWORD MACHEAN EN LA DB< EXTRAEMOS EL ROL DEL USUARIO QUE LOGUEA
-
-
   const _user = await User.findByPk(_userCrential.UserId);
-  console.log(_user)
-  console.log(_user.isActive)
+  // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
   if (!_user.isActive) {
     return {
       error: true,
       response: "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
     };
   }
-
-
-
   const { role_name } = await UserRole.findByPk(_user.rolId);
 
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
