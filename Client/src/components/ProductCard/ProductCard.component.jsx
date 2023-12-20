@@ -60,15 +60,10 @@ const CardProduct = ({ product }) => {
           padding: 0,
           margin: 0,
           display: "flex",
-          cursor: "pointer",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "space-between",
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
-          transition: "transform 0.3s",
-          "&:hover": {
-            transform: "scale(1.05)",
-          },
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -103,7 +98,9 @@ const CardProduct = ({ product }) => {
         </Box>
         <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
           <Box>
-            <ProductMedia component="img" alt={name} src={imageUrl} />
+            <ProductMedia component="img" alt={name} src={imageUrl} sx={{ cursor: "pointer", transition: "transform 0.3s", "&:hover": {
+            transform: "scale(1.1)",
+          }, }} />
             <CardContent>
               <Typography
                 variant="h6"
