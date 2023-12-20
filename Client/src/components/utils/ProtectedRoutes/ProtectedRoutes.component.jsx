@@ -26,7 +26,7 @@ const ProtectedRoutesComponent = ({ redirectPath = "/", allowedRoles= [] }) => {
     return <Navigate to={redirectPath} replace />;
   }
 
-  const userRole = authData.role;
+  const userRole = authData.userRole;
 
   if (!allowedRoles.includes(userRole)) {
     SessionAlertRole();
