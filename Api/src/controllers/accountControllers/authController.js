@@ -92,12 +92,11 @@ const registerUser = async (userObj) => {
 };
 
 const loginUser = async (username, password, googleId) => {
- 
   console.log({ username, password, googleId });
-  
+
   let _userCrential;
   let passwordCorrect;
-  
+
   if (password) {
     _userCrential = await UserCredentials.findOne({
       where: { username: username },
@@ -110,23 +109,35 @@ const loginUser = async (username, password, googleId) => {
 
   if (googleId) {
     const user = await User.findOne({
-      where:{email:username}
-    })
+      where: { email: username },
+    });
     _userCrential = await UserCredentials.findOne({
       where: { UserId: user.id },
     });
-    passwordCorrect = true
+    passwordCorrect = true;
   }
 
   if (!passwordCorrect) {
     return {
       error: true,
-      response: "Invalid username or password",
+      response: "Usuario o password invalido",
     };
   }
   // SI USERNAME Y PASSWORD MACHEAN EN LA DB< EXTRAEMOS EL ROL DEL USUARIO QUE LOGUEA
 
+
   const _user = await User.findByPk(_userCrential.UserId);
+  console.log(_user)
+  console.log(_user.isActive)
+  if (!_user.isActive) {
+    return {
+      error: true,
+      response: "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
+    };
+  }
+
+
+
   const { role_name } = await UserRole.findByPk(_user.rolId);
 
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
