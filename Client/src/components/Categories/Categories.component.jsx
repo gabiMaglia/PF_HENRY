@@ -21,7 +21,6 @@ import { brands } from "../../utils/objectsTexts";
 import {
   fetchProductsByCategory,
   fetchProductsByBrand,
-  fetchProductsByOrder,
 } from "../../services/ProductServices";
 import {
   resetState,
@@ -50,8 +49,8 @@ const FiltersSorting = () => {
     dispatch(orderPrice(selectedPrice));
   };
 
-  const handleOrderPrice = async (e) => {
-    await dispatch(fetchProductsByOrder(e.target.value));
+  const handleOrderPrice = (e) => {
+    dispatch(orderPrice(e.target.value));
     setSelectedPrice(e.target.value);
   };
 
