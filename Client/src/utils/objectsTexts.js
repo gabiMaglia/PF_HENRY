@@ -107,12 +107,13 @@ const sectionSocial = [
 ];
 
 const brands = [
+  "Aero Cool",
   "Amd",
   "Antec",
   "Asus",
   "Cooler Master",
   "Genius",
-  "Hyper",
+  "HyperX",
   "Intel",
   "Lg",
   "Logitech",
@@ -121,6 +122,7 @@ const brands = [
   "Ryzen",
   "Samsung",
   "Sony",
+  "Western Digital",
 ];
 
 export {
