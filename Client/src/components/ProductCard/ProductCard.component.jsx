@@ -42,7 +42,6 @@ const CardProduct = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
   const wishlistProducts = useSelector((state) => state.wishlist.products);
-  console.log(wishlistProducts);
 
   useEffect(() => {
     const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
