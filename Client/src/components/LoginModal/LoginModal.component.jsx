@@ -48,6 +48,7 @@ const LoginModal = ({
     }
 
     if (response.error) {
+      console.log(response)
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -55,7 +56,7 @@ const LoginModal = ({
         },
         icon: "error",
         title: "Fallo en el inicio de sesion",
-        text: "Contraseña o usuario invalido",
+        text: `${response.error.data}`,
       });
     } else {
       Swal.fire({

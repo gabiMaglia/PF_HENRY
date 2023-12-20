@@ -1,12 +1,21 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import { search, getProductById, getProducts, filterByCategory, filterByBrand, changeInput } from "../redux/slices/ProductSlice";
+import {
+  search,
+  getProductById,
+  getProducts,
+  filterByCategory,
+  filterByBrand,
+  changeInput,
+} from "../redux/slices/ProductSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/`);
+    const response = await axios.get(`${urlBack}/product/`, {
+      withCredentials: true,
+    });
     dispatch(getProducts(response.data));
   } catch (error) {
     console.error("Error");
@@ -27,7 +36,7 @@ export const fetchSearch = (name) => async (dispatch) => {
     const response = await axios.get(`${urlBack}/search?name=${name}`);
     dispatch(search(response.data));
   } catch (error) {
-    Swal.fire("Producto no existente", '', 'error')
+    Swal.fire("Producto no existente", "", "error");
   }
 };
 
@@ -35,7 +44,7 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/category/filter/${category}`);
     dispatch(filterByCategory(response.data));
-    console.log(response.data, "catego")
+    console.log(response.data, "catego");
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
   }
@@ -51,12 +60,12 @@ export const fetchProductsByBrand = (brand) => async (dispatch) => {
 };
 
 export const fetchChage = (inputValue) => async (dispatch) => {
-     try {
-      dispatch(changeInput(inputValue))
-     } catch (error) {
-      console.log("error")
-     }
-}
+  try {
+    dispatch(changeInput(inputValue));
+  } catch (error) {
+    console.log("error");
+  }
+};
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
