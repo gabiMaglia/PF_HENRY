@@ -98,28 +98,25 @@ const loginUser = async (username, password, googleId) => {
   let _userCrential;
   let passwordCorrect;
   
-  if (password !== undefined) {
-   
+  if (password) {
     _userCrential = await UserCredentials.findOne({
       where: { username: username },
     });
+    passwordCorrect =
+      _userCrential === null
+        ? false
+        : await bcrypt.compare(password, _userCrential.password);
   }
-  passwordCorrect =
-    _userCrential === null
-      ? false
-      : await bcrypt.compare(password, _userCrential.password);
 
   if (googleId) {
     const user = await User.findOne({
       where:{email:username}
     })
-
     _userCrential = await UserCredentials.findOne({
       where: { UserId: user.id },
     });
- 
+    passwordCorrect = true
   }
-  passwordCorrect = true
 
   if (!passwordCorrect) {
     return {
