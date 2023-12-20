@@ -148,7 +148,7 @@ const ProductsCategoriesComponent = () => {
                     alt={product.name}
                     src={
                       product.ProductImages && product.ProductImages.length > 0
-                        ? product.ProductImages[1].address
+                        ? product.ProductImages[0].address
                         : null
                     }
                     sx={{

@@ -107,20 +107,27 @@ const sectionSocial = [
 ];
 
 const brands = [
+  "Aero Cool",
+  "Adata",
   "Amd",
   "Antec",
   "Asus",
+  "Aureox",
   "Cooler Master",
   "Genius",
-  "Hyper",
+  "HyperX",
   "Intel",
   "Lg",
   "Logitech",
   "Msi",
   "Nvidia",
+  "Raidmax",
   "Ryzen",
   "Samsung",
+  "Seagate",
   "Sony",
+  "T-Force",
+  "Western Digital",
 ];
 
 export {
