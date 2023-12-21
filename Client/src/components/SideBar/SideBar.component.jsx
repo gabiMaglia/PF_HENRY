@@ -63,17 +63,18 @@ const SideBar = () => {
 
   const sideBarBoxStyle = sideBarIsOpen
     ? {
-        minWidth: "9em",
-        maxWidth: "15em",
-        width: "20%",
-        height: "100%",
-        // border: ".1px solid grey",
+        minWidth: "10em",
+        maxWidth: "18em",
+        width: "25%",
+        minHeight: "100%",
+        borderRight: ".1px solid grey",
       }
     : {
         minWidth: "5em",
         maxWidth: "8em",
         width: "5%",
-        height: "100%",
+        minHeight: "100%",
+        borderRight: ".1px solid grey",
       };
 
   const handleMenuClick = () => {
@@ -93,7 +94,7 @@ const SideBar = () => {
         )}
       </ListItemButton>
       <Divider />
-      <List>
+      <List sx={{ pt: "0px" }}>
         {items.map((item) => (
           <Link
             style={{ textDecoration: "none", color: "inherit" }}

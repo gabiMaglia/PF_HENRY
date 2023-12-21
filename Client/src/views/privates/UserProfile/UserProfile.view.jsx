@@ -1,9 +1,9 @@
 import {
   Avatar,
   Box,
-  Button,
   CardMedia,
   Divider,
+  Hidden,
   Typography,
 } from "@mui/material";
 import SideBar from "../../../components/SideBar/SideBar.component";
@@ -14,6 +14,8 @@ import { useState } from "react";
 import EditModal from "../../../components/EditModal/EditModal";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import PATHROUTES from "../../../helpers/pathRoute";
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -116,14 +118,29 @@ const UserProfile = () => {
       }}
     >
       <SideBar />
-      <Button sx={{ width: "15%" }}>
-        <ArrowBackIosIcon
-          sx={{
-            cursor: "pointer",
-            color: "black",
-          }}
-        />
-      </Button>
+      <Box
+        sx={{
+          width: "15%",
+          minHeight: "1vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Hidden mdDown>
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to={PATHROUTES.PRODUCTSERVICES}
+          >
+            <ArrowBackIosIcon
+              sx={{
+                cursor: "pointer",
+                color: "black",
+              }}
+            />
+          </Link>
+        </Hidden>
+      </Box>
       {login ? (
         <Box
           sx={{
@@ -375,14 +392,29 @@ const UserProfile = () => {
       ) : (
         ""
       )}
-      <Button sx={{ width: "15%" }}>
-        <ArrowForwardIosIcon
-          sx={{
-            cursor: "pointer",
-            color: "black",
-          }}
-        />
-      </Button>
+      <Box
+        sx={{
+          width: "15%",
+          minHeight: "1vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Hidden mdDown>
+          <Link
+            style={{ textDecoration: "none", color: "inherit" }}
+            to={PATHROUTES.SHOPINGS}
+          >
+            <ArrowForwardIosIcon
+              sx={{
+                cursor: "pointer",
+                color: "black",
+              }}
+            />
+          </Link>
+        </Hidden>
+      </Box>
     </Box>
   );
 };
