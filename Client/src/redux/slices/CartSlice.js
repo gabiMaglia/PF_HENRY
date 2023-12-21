@@ -61,6 +61,9 @@ const cartSlice = createSlice({
       );
       state.total = totalPrice;
     },
+    idShop: (state, action) => {
+      state.id = action.payload
+    },
   },
   extraReducers: (builder) => {
     // Maneja la acción asyncThunk para agregar productos al carrito
@@ -68,11 +71,6 @@ const cartSlice = createSlice({
       state.items = [...state.items, ...action.payload];
     });
   },
-  idShop: (state, action) => {
-    state.id = action.payload
-    console.log(action.payload, "id")
-  }
-
 });
 
 export const { addItem, updateItem, removeItem, totalItem, idShop } = cartSlice.actions;
