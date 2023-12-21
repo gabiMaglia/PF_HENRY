@@ -26,9 +26,9 @@ export const fetchAddItemWish = async (dispatch, userId, productId) => {
     productID: productId,
   };
   try {
-    const {data} = await axios.post(`${urlBack}/wishlist`, request);
+    const { data } = await axios.post(`${urlBack}/wishlist`, request);
     if (data) {
-        dispatch(addProductToWishlist(data.Products));
+      dispatch(addProductToWishlist(data.Products));
     } else {
       throw new Error("No se pudo añadir el producto a la lista de deseos");
     }

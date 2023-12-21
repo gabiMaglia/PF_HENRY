@@ -8,6 +8,7 @@ import {
   filterByBrand,
   changeInput,
 } from "../redux/slices/ProductSlice";
+import { idShop } from "../redux/slices/CartSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -63,6 +64,19 @@ export const fetchChage = (inputValue) => async (dispatch) => {
     console.log("error");
   }
 };
+
+export const fetchCart = (items) => async (dispatch) => {
+  try {
+    const response = await axios.post(`${urlBack}/pagos/`, items
+    );
+    console.log(response)
+    dispatch(idShop(response))
+  } catch (error) {
+    console.error("Error al buscar productos por marca:", error);
+  }
+};
+
+
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {

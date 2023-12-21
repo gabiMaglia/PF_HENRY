@@ -5,14 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+//REDUX
 import {
   fetchAddItemWish,
   fetchWishList,
 } from "../../services/WishListServices";
-//WISHLIST
+//UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -46,7 +46,7 @@ const CardProduct = ({ product }) => {
   const login = useSelector((state) => state.user.login);
 
   useEffect(() => {
-    if (login&&wishlistProducts) {
+    if (login && wishlistProducts) {
       const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
       setIsDesired(isProductInWishlist);
     }else{
@@ -55,10 +55,10 @@ const CardProduct = ({ product }) => {
   }, [wishlistProducts, id, login]);
 
   useEffect(() => {
-    if (login) {
+    if (login && !wishlistProducts) {
       fetchWishList(userId, dispatch);
     }
-  }, [userId, dispatch, login]);
+  }, [userId, dispatch, login, wishlistProducts]);
 
   const categoryName =
     ProductCategories && ProductCategories.length > 0
@@ -73,7 +73,7 @@ const CardProduct = ({ product }) => {
     navigate(`/products/filters/${categoryName}`);
   };
 
-  const handleFavoriteClick = (e) => {
+  const handleDesiredClick = (e) => {
     e.stopPropagation();
     if (login) {
       fetchAddItemWish(dispatch, userId, product.id);
@@ -113,7 +113,7 @@ const CardProduct = ({ product }) => {
             </Typography>
           )}
           <BookmarkIcon
-            onClick={handleFavoriteClick}
+            onClick={handleDesiredClick}
             sx={{
               position: "relative",
               top: "20px",
