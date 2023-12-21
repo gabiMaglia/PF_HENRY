@@ -55,7 +55,9 @@ export const googleLoginUser = async () => {
             ...event.data,
             userRole: decodeToken.userRole,
           });
-          popup.close();
+          if (window.opener && !window.opener.closed) {
+            window.opener.close();
+          }
           resolve({ data: event.data });
         }
       });

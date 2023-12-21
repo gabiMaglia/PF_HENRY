@@ -46,7 +46,7 @@ const CardProduct = ({ product }) => {
   const login = useSelector((state) => state.user.login);
 
   useEffect(() => {
-    if (login&&wishlistProducts) {
+    if (login && wishlistProducts) {
       const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
       setIsDesired(isProductInWishlist);
     }else{
@@ -73,7 +73,7 @@ const CardProduct = ({ product }) => {
     navigate(`/products/filters/${categoryName}`);
   };
 
-  const handleFavoriteClick = (e) => {
+  const handleDesiredClick = (e) => {
     e.stopPropagation();
     if (login) {
       fetchAddItemWish(dispatch, userId, product.id);
@@ -113,7 +113,7 @@ const CardProduct = ({ product }) => {
             </Typography>
           )}
           <BookmarkIcon
-            onClick={handleFavoriteClick}
+            onClick={handleDesiredClick}
             sx={{
               position: "relative",
               top: "20px",
