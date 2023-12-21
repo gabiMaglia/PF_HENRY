@@ -72,6 +72,7 @@ export const fetchCart = (items) => async (dispatch) => {
       title: item.name,
       price: item.price * item.count,
       quantity: item.count,
+      currency_id: "ARS"
     }));
     console.log(products)
   try {
