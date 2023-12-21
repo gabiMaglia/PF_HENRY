@@ -1,4 +1,4 @@
-const { Order, Cart, Product, ProductCart } = require("../../db");
+const { Order, Cart, Product, ProductCart, User } = require("../../db");
 
 async function createOrder(
   userId,
@@ -51,4 +51,25 @@ async function createOrder(
   }
 }
 
-module.exports = { createOrder };
+const getAllOrders = async () => {
+  try {
+    const allCarts = await Order.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["id"],
+        },
+      ],
+    });
+
+    return allCarts;
+  } catch (error) {
+    console.log(error.message);
+    throw new Error({ error: error.message });
+  }
+};
+
+module.exports = {
+  getAllOrders,
+  createOrder,
+};

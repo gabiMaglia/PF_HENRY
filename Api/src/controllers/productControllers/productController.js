@@ -77,11 +77,10 @@ const postProduct = async ({
       await Promise.all(categoryPromises);
 
       const imagePromises = images.map(async (imageUrl) => {
-        const newImage = await ProductImage.create(
+        await newProduct.createProductImage(
           { address: imageUrl },
           { transaction }
         );
-        await newProduct.addProductImage(newImage, { transaction });
       });
 
       await Promise.all(imagePromises);

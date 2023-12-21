@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
     },
     cartTotal: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
     },
   });
 };
