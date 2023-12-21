@@ -24,6 +24,7 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
 
   const { items, total, id } = useSelector((state) => state.cart);
+  console.log(id);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 

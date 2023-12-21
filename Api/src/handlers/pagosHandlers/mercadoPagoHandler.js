@@ -3,10 +3,11 @@ const {
 } = require("../../controllers/pagosControllers/mercadoPagoContoller");
 
 const mercadoPagoHandler = async (req, res) => {
-  const { items } = req.body;
+  
+  const array  = req.body;
 
   try {
-    const response = await mercadoPago(items);
+    const response = await mercadoPago(array);
 
     res.status(200).json(response.id);
   } catch (error) {
