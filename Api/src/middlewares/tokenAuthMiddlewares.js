@@ -7,13 +7,13 @@ const checkAuthToken = async (req, res, next) => {
     const tokenData = await verifyToken(token);
     if (!tokenData?.userId) {
       res.status(409);
-      res.send({ error: "Not authorized" });
+      res.send({ error: "No tienes acceso a esta ruta" });
     } else {
       next();
     }
   } catch (error) {
     res.status(409);
-    res.send({ error: "Not authorized" });
+    res.send({ error: "No tienes acceso a esta ruta" });
   }
 };
 
@@ -31,13 +31,13 @@ const checkRoleAuthToken = (role) => async (req, res, next) => {
 
     if (![].concat(role).includes(tokenData.userRole)) {
       res.status(409);
-      res.send({ error: "Not authorized" });
+      res.send({ error: "No tienes acceso a esta ruta" });
     } else {
       next();
     }
   } catch (error) {
     res.status(409);
-    res.send({ error: "Not authorized" });
+    res.send({ error: "No tienes acceso a esta ruta" });
   }
 };
 
