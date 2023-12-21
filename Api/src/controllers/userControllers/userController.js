@@ -1,11 +1,15 @@
+<<<<<<< HEAD
+const { User, UserRole, UserAddress } = require("../../db.js");
+=======
 require("dotenv").config();
+>>>>>>> develop
 const bcrypt = require("bcrypt");
 const { User, UserRole, UserAddress } = require("../../db.js");
 const {
   sendConfirmationEmail,
 } = require("../../utils/sendConfirmationEmail.js");
 
-const getAllUsers = async () => {
+const getAllUsers    = async () => {
   const user = await User.findAll();
   if (user.length === 0) {
     return {
@@ -15,6 +19,9 @@ const getAllUsers = async () => {
   }
   return user;
 };
+<<<<<<< HEAD
+const getUserById    = async (id) => {
+=======
 
 const getUserByDni = async (dni) => {
   const user = await User.findOne({
@@ -32,6 +39,7 @@ const getUserByDni = async (dni) => {
 };
 
 const getUserById = async (id) => {
+>>>>>>> develop
   const user = await User.findByPk(id, {
     include: [UserAddress],
   });
@@ -43,7 +51,7 @@ const getUserById = async (id) => {
   }
   return user;
 };
-const postUser = async (
+const postUser       = async (
   name,
   surname,
   birthdate,
@@ -114,7 +122,7 @@ const postUser = async (
 
   return completeUser;
 };
-const editUserById = async (
+const editUserById   = async (
   id,
   name,
   surname,
@@ -183,7 +191,25 @@ const editUserById = async (
 
   return updatedUser;
 };
+<<<<<<< HEAD
+const deleteUserById = async (id) => {
+  const user = await User.findByPk(id);
+  if (!user?.name) {
+    return {
+      error: true,
+      response: `No se encontro ningun usuario con ese id`,
+    };
+  } else {
+    await await User.destroy({
+      where: { id: id },
+      force: true,
+    });
+    return { response: `Eliminaste correctamente al usuario ${user.name}` };
+  }
+};
+=======
 
+>>>>>>> develop
 module.exports = {
   getAllUsers,
   getUserById,
