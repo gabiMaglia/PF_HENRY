@@ -14,7 +14,9 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/`);
+    const response = await axios.get(`${urlBack}/product/`, {
+      withCredentials: true,
+    });
     dispatch(getProducts(response.data));
   } catch (error) {
     console.error("Error");
@@ -66,11 +68,17 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 };
 
 export const fetchCart = (items) => async (dispatch) => {
+ const products = items.map((item) => ({
+      title: item.name,
+      price: item.price * item.count,
+      quantity: item.count,
+    }));
+    console.log(products)
   try {
-    const response = await axios.post(`${urlBack}/pagos/`, items
+    const response = await axios.post(`${urlBack}/pagos/`, products
     );
     console.log(response)
-    dispatch(idShop(response))
+    dispatch(idShop(response.data))
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
   }
