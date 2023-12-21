@@ -50,9 +50,9 @@ const ThumbnailContainer = styled(Container)({
 const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  const [localCartItems, setLocalCartItems] = useState([]);
+  const navigate = useNavigate();
   const { productById, isLoading } = useSelector((state) => state.product);
+  const [localCartItems, setLocalCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const { allProducts } = useSelector((state) => state.product);
@@ -101,6 +101,14 @@ const Detail = () => {
     setInitialImage();
   }, [productById]);
 
+  const handleAddToCart = () => {
+    if (productById && productById.id) {
+      // Agrega el producto al estado local del carrito
+      setLocalCartItems([...localCartItems, productById]);
+      console.log("Product added to local cart for ID:", productById.id);
+    }
+  };
+
   useEffect(() => {
     // Esta función se ejecuta al desmontar el componente
     return () => {
@@ -108,13 +116,6 @@ const Detail = () => {
       dispatch(addItemsToCart(localCartItems));
     };
   }, [dispatch, localCartItems]);
-
-  const handleAddToCart = () => {
-    if (productById) {
-      // Asegúrate de pasar el producto como argumento a addItemsToCart
-      setLocalCartItems((prevItems) => [...prevItems, productById]);
-    }
-  };
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(max-width:500px)");
@@ -237,7 +238,7 @@ const Detail = () => {
             >
               Agregar al Carrito
             </CustomButton>
-            {localCartItems.length > 0 && (
+            {cartItemCount > 0 && (
               <span
                 style={{
                   marginLeft: "0.5em",
@@ -248,7 +249,21 @@ const Detail = () => {
                   fontSize: "0.7em",
                 }}
               >
-                {localCartItems.length}
+                {cartItemCount}
+              </span>
+            )}
+            {cartItemCount > 0 && (
+              <span
+                style={{
+                  marginLeft: "0.5em",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.2em 0.5em",
+                  fontSize: "0.7em",
+                }}
+              >
+                {cartItemCount}
               </span>
             )}
           </Container>
