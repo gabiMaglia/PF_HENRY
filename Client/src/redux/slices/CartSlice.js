@@ -10,6 +10,7 @@ export const addItemsToCart = createAsyncThunk(
 const initialState = {
   items: [],
   total: 0,
+  id: null,
 };
 
 const cartSlice = createSlice({
@@ -67,8 +68,14 @@ const cartSlice = createSlice({
       state.items = [...state.items, ...action.payload];
     });
   },
+  idShop: (state, action) => {
+    state.id = action.payload
+    console.log(action.payload, "id")
+  }
+
 });
 
-export const { addItem, updateItem, removeItem, totalItem } = cartSlice.actions;
+export const { addItem, updateItem, removeItem, totalItem, idShop } = cartSlice.actions;
 
 export default cartSlice.reducer;
+
