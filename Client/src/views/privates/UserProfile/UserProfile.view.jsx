@@ -1,10 +1,19 @@
-import { Avatar, Box, CardMedia, Divider, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  CardMedia,
+  Divider,
+  Typography,
+} from "@mui/material";
 import SideBar from "../../../components/SideBar/SideBar.component";
 import { useSelector } from "react-redux";
 import getFirstLetters from "../../../helpers/getFirstLetters";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import EditModal from "../../../components/EditModal/EditModal";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const UserProfile = () => {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
@@ -103,16 +112,24 @@ const UserProfile = () => {
         display: "flex",
         flexDirection: "row",
         width: "100%",
+        mt: "1.2em",
       }}
     >
       <SideBar />
+      <Button sx={{ width: "15%" }}>
+        <ArrowBackIosIcon
+          sx={{
+            cursor: "pointer",
+            color: "black",
+          }}
+        />
+      </Button>
       {login ? (
         <Box
           sx={{
             width: "100%",
             display: "flex",
             justifyContent: "center",
-            border: ".1em solid grey",
           }}
         >
           <Box
@@ -122,7 +139,7 @@ const UserProfile = () => {
               justifyContent: "center",
               alignItems: "center",
               textAlign: "center",
-              width: "70%",
+              width: "100%",
             }}
           >
             {image && image.length > 0 ? (
@@ -307,23 +324,29 @@ const UserProfile = () => {
                     {userAddress.number}
                   </Typography>
                 ) : (
-                  "No se definio una dirección"
+                  <Typography
+                    variant="body2"
+                    sx={{ mb: ".5em" }}
+                  >
+                    No se definio una dirección
+                  </Typography>
                 )}
-
-                <Typography
-                  variant="caption"
-                  sx={{ mb: ".1em", fontWeight: "bold" }}
-                >
-                  Codigo postal
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ mb: "1em" }}
-                >
-                  {userAddress.zipCode
-                    ? userAddress.zipCode
-                    : "No se definio un codigo postal"}
-                </Typography>
+                <Box sx={{ flexGrow: "1" }}>
+                  <Typography
+                    variant="caption"
+                    sx={{ mb: ".1em", fontWeight: "bold" }}
+                  >
+                    Codigo postal
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ mb: "1em" }}
+                  >
+                    {userAddress.zipCode
+                      ? userAddress.zipCode
+                      : "No se definio un codigo postal"}
+                  </Typography>
+                </Box>
               </Box>
               <EditIcon
                 sx={{
@@ -352,6 +375,14 @@ const UserProfile = () => {
       ) : (
         ""
       )}
+      <Button sx={{ width: "15%" }}>
+        <ArrowForwardIosIcon
+          sx={{
+            cursor: "pointer",
+            color: "black",
+          }}
+        />
+      </Button>
     </Box>
   );
 };

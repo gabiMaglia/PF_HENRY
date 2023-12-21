@@ -65,6 +65,7 @@ const SideBar = () => {
         maxWidth: "15em",
         width: "20%",
         height: "100%",
+        // border: ".1px solid grey",
       }
     : {
         minWidth: "5em",
@@ -80,7 +81,7 @@ const SideBar = () => {
   return (
     <Box sx={sideBarBoxStyle}>
       <ListItemButton
-        sx={{ height: "3em", mt: "1.2em" }}
+        sx={{ height: "3em" }}
         onClick={handleMenuClick}
       >
         {sideBarIsOpen ? (
