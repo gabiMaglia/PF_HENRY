@@ -77,10 +77,22 @@ const postProduct = async ({
       await Promise.all(categoryPromises);
 
       const imagePromises = images.map(async (imageUrl) => {
-        await newProduct.createProductImage(
-          { address: imageUrl },
-          { transaction }
-        );
+        // Busca la imagen existente
+        const existingImage = await ProductImage.findOne({
+          where: { address: imageUrl },
+          transaction,
+        });
+
+        // Si existe, la asocia al producto; si no, crea una nueva instancia
+        if (existingImage) {
+          await newProduct.addProductImage(existingImage, { transaction });
+        } else {
+          const newImage = await ProductImage.create(
+            { address: imageUrl },
+            { transaction }
+          );
+          await newProduct.addProductImage(newImage, { transaction });
+        }
       });
 
       await Promise.all(imagePromises);
