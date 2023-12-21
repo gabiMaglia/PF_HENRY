@@ -1,8 +1,17 @@
+import SideBar from "../SideBar/SideBar.component";
+import { Box } from "@mui/system";
+
 const WhishListProfileComponent = () => {
   return (
-    <>
-      <h1>Desde WhishList Profile</h1>
-    </>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+      }}
+    >
+      <SideBar />
+    </Box>
   );
 };
 
