@@ -6,22 +6,17 @@ import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { Box, Button, Container, Typography } from "@mui/material";
 //COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
-//REDUX
-import { addItemsToCart } from "../../redux/slices/CartSlice";
 
 const ProductBox = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow } = useSelector((state) => state.product);
   const isThereAnyProducts = productsToShow.length === 0;
-  const { cartItemCount } = useSelector((state) => state.cart);
 
   const handleAddToCart = (product) => {
-    // Ahora puedes usar dispatch en esta función
-    if (product) {
-      dispatch(addItemsToCart([product]));
-    }
+    // Agrega el producto al carrito
+    setStoredProducts(product);
+    console.log("Producto agregado al carrito:", product);
   };
 
   return (
