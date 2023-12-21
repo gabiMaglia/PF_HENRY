@@ -92,8 +92,6 @@ const registerUser = async (userObj) => {
 };
 
 const loginUser = async (username, password, googleId) => {
-  console.log({ username, password, googleId });
-
   let _userCrential;
   let passwordCorrect;
 
@@ -127,10 +125,10 @@ const loginUser = async (username, password, googleId) => {
   const _user = await User.findByPk(_userCrential.UserId);
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
   if (!_user.isActive) {
-    console.log("llego")
     return {
       error: true,
-      response: "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
+      response:
+        "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
     };
   }
   const { role_name } = await UserRole.findByPk(_user.rolId);
