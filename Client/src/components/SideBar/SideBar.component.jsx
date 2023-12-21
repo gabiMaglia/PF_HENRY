@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 import PATHROUTES from "../../helpers/pathRoute";
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import getFirstLetters from "../../helpers/getFirstLetters";
 
@@ -27,6 +27,8 @@ const SideBar = () => {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
   };
+
+  const actualLocation = useLocation().pathname;
 
   const items = [
     {
@@ -100,6 +102,7 @@ const SideBar = () => {
           >
             <ListItemButton
               sx={{
+                backgroundColor: actualLocation === item.path ? "#fd611a" : "",
                 height: "5em",
                 pt: "1em",
                 pb: "1em",

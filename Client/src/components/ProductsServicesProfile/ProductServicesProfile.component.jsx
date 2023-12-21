@@ -1,10 +1,18 @@
+import SideBar from "../SideBar/SideBar.component";
+import { Box } from "@mui/system";
 
 const ProductServicesProfileComponent = () => {
   return (
-    <>
-    <h1>Desde Product Services Profile</h1>
-    </>
-  )
-}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+      }}
+    >
+      <SideBar />
+    </Box>
+  );
+};
 
-export default ProductServicesProfileComponent
+export default ProductServicesProfileComponent;
