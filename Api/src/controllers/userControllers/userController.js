@@ -1,7 +1,9 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const { User, UserRole, UserAddress } = require("../../db.js");
-const { sendConfirmationEmail } = require("../../utils/sendConfirmationEmail.js");
+const {
+  sendConfirmationEmail,
+} = require("../../utils/sendConfirmationEmail.js");
 
 const getAllUsers = async () => {
   const user = await User.findAll();
@@ -132,15 +134,15 @@ const editUserById = async (
     };
   const isEmailDifferent = email !== user.email;
 
-  if (email !== '' && isEmailDifferent) {
-   await sendConfirmationEmail(
+  if (email !== "" && isEmailDifferent) {
+    await sendConfirmationEmail(
       process.env.EMAIL_MAILER,
       email,
       user.id,
       process.env.JWT_SECRET_KEY,
       process.env.API_URL
     );
-    await user.update({isVerified: false})
+    await user.update({ isVerified: false });
   }
   await user.update({
     name: name || user.name,
