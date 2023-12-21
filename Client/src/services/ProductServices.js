@@ -68,11 +68,18 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 };
 
 export const fetchCart = (items) => async (dispatch) => {
+ const products = items.map((item) => ({
+      title: item.name,
+      price: item.price * item.count,
+      quantity: item.count,
+      currency_id: "ARS"
+    }));
+    console.log(products)
   try {
-    const response = await axios.post(`${urlBack}/pagos/`, items
+    const response = await axios.post(`${urlBack}/pagos/`, products
     );
     console.log(response)
-    dispatch(idShop(response))
+    dispatch(idShop(response.data))
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
   }

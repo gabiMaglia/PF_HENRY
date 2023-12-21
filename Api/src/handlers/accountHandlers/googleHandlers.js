@@ -20,7 +20,8 @@ const googleAuthCallback = async (req, res) => {
     res.cookie('jwt',responseLogin.tokenSession, {
       expire : new Date() + 1,
       httpOnly: false,
-      // sameSite:'none'
+      sameSite:'Strict',
+      secure: true
     });
  
     return res.status(200).send(`<!DOCTYPE html>

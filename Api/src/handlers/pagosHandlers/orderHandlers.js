@@ -1,5 +1,6 @@
 const {
   createOrder,
+  getAllOrders,
 } = require("../../controllers/pagosControllers/ordersControllers");
 
 const createOrderHandler = async (req, res) => {
@@ -32,6 +33,21 @@ const createOrderHandler = async (req, res) => {
   }
 };
 
+const getAllOrdersHandler = async (req, res) => {
+  try {
+    const orders = await getAllOrders();
+
+    if (orders) {
+      res.status(200).json(orders);
+    } else {
+      res.status(400).json({ message: "Orders not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOrderHandler,
+  getAllOrdersHandler,
 };
