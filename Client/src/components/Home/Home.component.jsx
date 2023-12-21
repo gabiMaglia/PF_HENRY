@@ -15,7 +15,7 @@ const HomeComponent = () => {
 
   useEffect(() => {
     dispatch(fetchAllProducts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
