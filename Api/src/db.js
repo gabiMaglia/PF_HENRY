@@ -123,8 +123,8 @@ Product.belongsToMany(Cart, {
   onDelete: "CASCADE",
 });
 
-Order.belongsTo(Cart);
-Cart.hasOne(Order);
+Order.belongsTo(User);
+User.hasMany(Order);
 
 //RELACIONES SERVICE
 Service.hasOne(Service_status);

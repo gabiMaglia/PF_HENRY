@@ -13,6 +13,7 @@ module.exports = (sequelize) => {
       address: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: false, // Aquí se corrigió la posición de unique
       },
     },
     {

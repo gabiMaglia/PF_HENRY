@@ -1,10 +1,15 @@
 import axios from "axios";
-import {
-  setAuthDataCookie,
-} from "../utils/cookiesFunctions";
+import { setAuthDataCookie } from "../utils/cookiesFunctions";
 
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+
+const dataSorterForApp = (data) => {
+  const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
+  const { login, userId } = data;
+
+  return { login, userId, userRole: decodeToken.userRole };
+};
 
 export const loginUser = async (username, password) => {
   try {
@@ -19,13 +24,13 @@ export const loginUser = async (username, password) => {
       }
     );
     if (data.login) {
-      const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
+      const sortedData = dataSorterForApp(data);
       setAuthDataCookie("authData", {
-        ...data,
-        userRole: decodeToken.userRole,
+        login: sortedData.login,
+        userId: sortedData.userId,
+        userRole: sortedData.userRole,
       });
-
-      return { error: false, data };
+      return { error: false, data: sortedData };
     }
   } catch ({ response }) {
     return { error: response };
@@ -48,12 +53,11 @@ export const googleLoginUser = async () => {
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
-          const decodeToken = JSON.parse(
-            atob(event.data.tokenSession.split(".")[1])
-          );
+          const sortedData = dataSorterForApp(event.data);
           setAuthDataCookie("authData", {
-            ...event.data,
-            userRole: decodeToken.userRole,
+            login: sortedData.login,
+            userId: sortedData.userId,
+            userRole: sortedData.userRole,
           });
           if (window.opener && !window.opener.closed) {
             window.opener.close();

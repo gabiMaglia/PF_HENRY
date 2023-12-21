@@ -5,12 +5,15 @@ const {
 
 const {
   createOrderHandler,
+  getAllOrdersHandler,
 } = require("../../handlers/pagosHandlers/orderHandlers");
 
-const mercadoPagoRouter = Router();
+const pagosRouter = Router();
 
-mercadoPagoRouter.post("/", mercadoPagoHandler);
+pagosRouter.post("/", mercadoPagoHandler);
 
-mercadoPagoRouter.post("/order", createOrderHandler);
+pagosRouter.post("/order", createOrderHandler);
 
-module.exports = mercadoPagoRouter;
+pagosRouter.get("/order", getAllOrdersHandler);
+
+module.exports = pagosRouter;
