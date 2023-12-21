@@ -46,7 +46,7 @@ const CardProduct = ({ product }) => {
   const login = useSelector((state) => state.user.login);
 
   useEffect(() => {
-    if (login) {
+    if (login&&wishlistProducts) {
       const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
       setIsDesired(isProductInWishlist);
     }else{

@@ -1,8 +1,11 @@
-const { WishList, User,Product } = require("../../db");
+const { WishList, User, Product } = require("../../db");
 
 const getWishListController = async (id) => {
-const List=await WishList.findOne({where:{UserId:id},include: [{ model: Product }]})
-return List
+  const [List, created] = await WishList.findOrCreate({
+    where: { UserId: id },
+    include: [{ model: Product }],
+  });
+  return List;
 };
 
 const postwishItemController = async (userId, productId) => {
@@ -10,7 +13,7 @@ const postwishItemController = async (userId, productId) => {
   if (!user) {
     return {
       error: true,
-      response: 'Usuario no encontrado.',
+      response: "Usuario no encontrado.",
     };
   }
 
@@ -18,13 +21,13 @@ const postwishItemController = async (userId, productId) => {
   if (!product) {
     return {
       error: true,
-      response: 'Producto no encontrado.',
+      response: "Producto no encontrado.",
     };
   }
 
   if (user.WishList) {
     const products = await user.WishList.getProducts();
-    const productExists = products.some(p => p.id === product.id);
+    const productExists = products.some((p) => p.id === product.id);
 
     if (productExists) {
       await user.WishList.removeProduct(product);
@@ -36,11 +39,13 @@ const postwishItemController = async (userId, productId) => {
     const list = await user.getWishList({ include: [{ model: Product }] });
     return list;
   } else {
-    const [wishList] = await WishList.findOrCreate({ where: { UserId: user.id } });
+    const [wishList] = await WishList.findOrCreate({
+      where: { UserId: user.id },
+    });
     await wishList.addProduct(product);
     const list = await user.getWishList({ include: [{ model: Product }] });
     return list;
   }
-}
+};
 
-module.exports = { getWishListController,postwishItemController };
+module.exports = { getWishListController, postwishItemController };
