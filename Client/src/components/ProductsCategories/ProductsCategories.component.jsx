@@ -9,7 +9,6 @@ import {
   CardContent,
   CardMedia,
   Card,
-  Button,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -42,7 +41,7 @@ const ProductsCategoriesComponent = () => {
     navigate(`/products/filters/${categoryName}`);
   };
 
-  const handleFavoriteClick = () => {
+  const handleDesiredClick = () => {
     setIsDesired(!isDesired);
   };
 
@@ -148,7 +147,7 @@ const ProductsCategoriesComponent = () => {
                     </Typography>
                   )}
                   <BookmarkIcon
-                    onClick={handleFavoriteClick}
+                    onClick={handleDesiredClick}
                     sx={{
                       position: "relative",
                       top: "20px",

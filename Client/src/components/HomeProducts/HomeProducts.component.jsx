@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import ProductCard from "../ProductCard/ProductCard.component";
 import { Container, Typography } from "@mui/material";
 //REDUX
-import { fetchCategories } from "../../services/CategoriesServices";
+// import { fetchCategories } from "../../services/CategoriesServices";
 
 const HomeProducts = ({ allProducts }) => {
   const dispatch = useDispatch();
@@ -22,8 +22,7 @@ const HomeProducts = ({ allProducts }) => {
   useEffect(() => {
     const shuffledProducts = shuffleArray(allProducts);
     setHomeProducts(shuffledProducts.slice(0, 9));
-
-    dispatch(fetchCategories);
+    // dispatch(fetchCategories);
   }, [dispatch, allProducts]);
 
   return (
