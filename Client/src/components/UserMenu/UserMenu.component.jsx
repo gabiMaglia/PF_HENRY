@@ -26,8 +26,7 @@ import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 //REDUX
-import { logoutUser } from "../../redux/slices/UserSlice";
-
+import { logoutUser } from "../../redux/slices/userSlice";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ const UserMenu = () => {
   const logout = () => {
     removeAuthDataCookie("authData");
     removeAuthDataCookie("jwt");
-    navigate("/");
+    navigate(PATHROUTES.HOME);
     dispatch(logoutUser());
   };
 

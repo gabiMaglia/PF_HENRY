@@ -18,14 +18,23 @@ import {
 import PATHROUTES from "../../helpers/pathRoute";
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import getFirstLetters from "../../helpers/getFirstLetters";
+import { logoutUser } from "../../redux/slices/userSlice";
 
 const SideBar = () => {
+  const dispatch = useDispatch();
+
   const { name, surname } = useSelector((state) => state.user);
   const initialLetersUsers = {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
+  };
+
+  const logout = () => {
+    removeAuthDataCookie("authData");
+    removeAuthDataCookie("jwt");
+    dispatch(logoutUser());
   };
 
   const actualLocation = useLocation().pathname;
@@ -56,7 +65,12 @@ const SideBar = () => {
       icon: <HomeRepairService />,
       path: PATHROUTES.PRODUCTSERVICES,
     },
-    { name: "Cerrar sesion", icon: <Logout />, action: "logout" },
+    {
+      name: "Cerrar sesion",
+      icon: <Logout />,
+      action: "logout",
+      path: PATHROUTES.HOME,
+    },
   ];
 
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
@@ -115,8 +129,7 @@ const SideBar = () => {
               }}
               onClick={() => {
                 if (item.action === "logout") {
-                  removeAuthDataCookie();
-                  window.location.reload();
+                  logout();
                 }
               }}
             >
