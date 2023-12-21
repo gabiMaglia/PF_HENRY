@@ -161,7 +161,7 @@ const UserProfile = () => {
               <Box sx={{ flexGrow: "1" }}>
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   Nombre(s) y apelido(s)
                 </Typography>
@@ -188,7 +188,7 @@ const UserProfile = () => {
               <Box sx={{ flexGrow: "1" }}>
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   Fecha de nacimiento
                 </Typography>
@@ -214,7 +214,7 @@ const UserProfile = () => {
               <Box sx={{ flexGrow: "1" }}>
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   Email
                 </Typography>
@@ -238,7 +238,7 @@ const UserProfile = () => {
               <Box sx={{ flexGrow: "1" }}>
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   Numero de telefono
                 </Typography>
@@ -264,7 +264,7 @@ const UserProfile = () => {
               <Box sx={{ flexGrow: "1" }}>
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   DNI
                 </Typography>
@@ -288,7 +288,7 @@ const UserProfile = () => {
               <Box sx={{ flexGrow: "1" }}>
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   Dirección
                 </Typography>
@@ -312,7 +312,7 @@ const UserProfile = () => {
 
                 <Typography
                   variant="caption"
-                  sx={{ mb: ".1em" }}
+                  sx={{ mb: ".1em", fontWeight: "bold" }}
                 >
                   Codigo postal
                 </Typography>
