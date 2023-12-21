@@ -20,6 +20,7 @@ export const loginUser = async (username, password) => {
     );
     if (data.login) {
       const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
+      console.log(data)
       setAuthDataCookie("authData", {
         ...data,
         userRole: decodeToken.userRole,

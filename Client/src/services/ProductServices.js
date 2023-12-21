@@ -13,9 +13,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${urlBack}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
     console.error("Error");
