@@ -1,9 +1,17 @@
 //HOOKS
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { styled } from "@mui/system";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import {
+  fetchAddItemWish,
+  fetchWishList,
+} from "../../services/WishListServices";
+//WISHLIST
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 
 const ProductCard = styled(Card)({
@@ -28,9 +36,29 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
+  const authData = getAuthDataCookie("authData");
+  const userId = authData ? authData.userId : null;
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isDesired, setIsDesired] = useState(false);
   const { id, name, price, ProductImages, ProductCategories } = product;
+  const wishlistProducts = useSelector((state) => state.wishlist.products);
+  const login = useSelector((state) => state.user.login);
+
+  useEffect(() => {
+    if (login) {
+      const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
+      setIsDesired(isProductInWishlist);
+    }else{
+      setIsDesired(false)
+    }
+  }, [wishlistProducts, id, login]);
+
+  useEffect(() => {
+    if (login) {
+      fetchWishList(userId, dispatch);
+    }
+  }, [userId, dispatch, login]);
 
   const categoryName =
     ProductCategories && ProductCategories.length > 0
@@ -47,9 +75,10 @@ const CardProduct = ({ product }) => {
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation();
-    setIsFavorite(!isFavorite);
+    if (login) {
+      fetchAddItemWish(dispatch, userId, product.id);
+    }
   };
-
   return (
     <>
       <ProductCard
@@ -90,14 +119,11 @@ const CardProduct = ({ product }) => {
               top: "20px",
               right: "-30px",
               transform: "translateY(-50%)",
-              color: isFavorite ? "#fd611a" : "gray",
+              color: isDesired  ? "#fd611a" : "gray",
             }}
           />
         </Box>
-        <Link
-          to={`/product/${id}`}
-          style={{ textDecoration: "none" }}
-        >
+        <Link to={`/product/${id}`} style={{ textDecoration: "none" }}>
           <Box>
             <ProductMedia
               component="img"
