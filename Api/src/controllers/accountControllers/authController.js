@@ -149,6 +149,11 @@ const loginUser = async (username, password, googleId) => {
   };
 };
 
+const sendEmailToResetPassword = async () => {
+  
+}
+
+
 const resetPassword = async (userId) => {
   const user = await UserCredentials.findOne({
     where : { UserId : userId}
