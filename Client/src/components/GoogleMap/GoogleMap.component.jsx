@@ -10,10 +10,13 @@ const MapContainer = () => {
       sx={{
         borderRadius: "10px",
         border: "none",
-        width: "90vw",
+        maxWidth: "55vw",
         height: "300px",
-        margin: "0 auto 50px auto",
+        margin: "10px auto 50px auto",
         boxShadow: "0 0 15px rgba(0, 0, 0, 0.7)",
+        "@media (max-width: 1140px)": {
+          display: "none"
+        }
       }}
     />
   );
