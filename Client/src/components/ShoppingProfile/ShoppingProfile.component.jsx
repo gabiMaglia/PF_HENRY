@@ -15,54 +15,7 @@ const ShoppingProfileComponent = () => {
         mt: "1.2em",
       }}
     >
-      <SideBar />
-      <Box
-        sx={{
-          width: "15%",
-          minHeight: "1vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Hidden mdDown>
-          <Link
-            style={{ textDecoration: "none", color: "inherit" }}
-            to={PATHROUTES.PROFILE}
-          >
-            <ArrowBackIosIcon
-              sx={{
-                cursor: "pointer",
-                color: "black",
-              }}
-            />
-          </Link>
-        </Hidden>
-      </Box>
       Contenido del shoping profile
-      <Box
-        sx={{
-          width: "15%",
-          minHeight: "1vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Hidden mdDown>
-          <Link
-            style={{ textDecoration: "none", color: "inherit" }}
-            to={PATHROUTES.WISHLIST}
-          >
-            <ArrowForwardIosIcon
-              sx={{
-                cursor: "pointer",
-                color: "black",
-              }}
-            />
-          </Link>
-        </Hidden>
-      </Box>
     </Box>
   );
 };
