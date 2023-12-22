@@ -5,13 +5,16 @@ const PATHROUTES = {
   QUESTIONS: "/questions",
   DETAIL: "/product/:id",
   CATEGORIES: "/products/filters/:categoryName",
-  USERPANEL: "/userPanel",
+  //USER PANEL
+  CUSTOMER_USER_PANEL: "/customer/userPanel",
+  ADMIN_USER_PANEL: "/admin/userPanel",
+  TECHNICIAN_USER_PANEL: "/technician/userPanel",
   PROFILE: "/profile",
+  PRODUCTS_SERVICES: "/productServices",
   //CUSTOMER
   SHOPINGS: "/shoppings",
   WISHLIST: "/wishlist",
-  SHOPCART: "customer/shoppingCart",
-  PRODUCTS_SERVICES: "/productServices",
+  SHOPCART: "/shoppingCart",
   //ADMIN
   PRODUCT_CREATE: "/productCreate",
   TECHNICIANS: "/technicians",

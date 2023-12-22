@@ -44,22 +44,22 @@ const sideBarItems = (name, surname) => {
             </Typography>
           </Avatar>
         ),
-        path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+        path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.PROFILE,
       },
       {
         name: "Mis compras",
         icon: <LocalShipping />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS,
+        path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.SHOPINGS,
       },
       {
         name: "Lista de deseos",
         icon: <Bookmark />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST,
+        path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.WISHLIST,
       },
       {
         name: "Productos en servicio",
         icon: <HomeRepairService />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+        path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
       },
       {
         name: "Cerrar sesion",
@@ -87,22 +87,22 @@ const sideBarItems = (name, surname) => {
             </Typography>
           </Avatar>
         ),
-        path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PROFILE,
       },
       {
         name: "Crear producto",
         icon: <Add />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCT_CREATE,
       },
       {
         name: "Técnicos",
         icon: <People />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.TECHNICIANS,
       },
       {
         name: "Productos en servicio",
         icon: <HomeRepairService />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
       },
       {
         name: "Cerrar sesion",
@@ -130,22 +130,22 @@ const sideBarItems = (name, surname) => {
             </Typography>
           </Avatar>
         ),
-        path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PROFILE,
       },
       {
         name: "Productos en servicio",
         icon: <HomeRepairService />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
       },
       {
         name: "Prodcutos reparados",
         icon: <Handyman />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.REAPIRED_PRODCUTS,
+        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REAPIRED_PRODCUTS,
       },
       {
         name: "Historial reparaciones",
         icon: <History />,
-        path: PATHROUTES.USERPANEL + PATHROUTES.REPAIR_HISTORY,
+        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REPAIR_HISTORY,
       },
       {
         name: "Cerrar sesion",
