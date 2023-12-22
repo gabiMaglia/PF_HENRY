@@ -7,14 +7,21 @@ const globalProducts = [
     name: "Producto 1",
     image: "url_de_la_imagen_1",
     budget: 100,
-    state: "Activo",
+    state: "Producto en revision",
   },
   {
     id: 2,
     name: "Producto 2",
     image: "url_de_la_imagen_2",
     budget: 150,
-    state: "Inactivo",
+    state: "Listo para retirar del local",
+  },
+  {
+    id: 2,
+    name: "Producto 2",
+    image: "url_de_la_imagen_2",
+    budget: 150,
+    state: "Producto en revision",
   },
 ];
 
