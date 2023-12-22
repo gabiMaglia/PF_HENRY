@@ -12,21 +12,24 @@ import ShopingProfile from "../ShoppingProfile/ShoppingProfile.component";
 
 const UserPanelComponent = () => {
   const userRoutes = [
-    PATHROUTES.PROFILE,
-    PATHROUTES.SHOPINGS,
-    PATHROUTES.WISHLIST,
-    PATHROUTES.PRODUCTSERVICES,
+    PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+    PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS,
+    PATHROUTES.USERPANEL + PATHROUTES.WISHLIST,
+    PATHROUTES.USERPANEL + PATHROUTES.PRODUCTSERVICES,
   ];
 
-  const actualLocation = useLocation().pathname.replace("/userPanel/", "");
+  const actualLocation = useLocation().pathname;
   const navigate = useNavigate();
 
   const handleSliderClick = (action) => {
     let redirectTo = "";
     if (action === "sig") {
       redirectTo = userRoutes[userRoutes.indexOf(actualLocation) + 1];
+      redirectTo === undefined && (redirectTo = userRoutes[0]);
     } else {
       redirectTo = userRoutes[userRoutes.indexOf(actualLocation) - 1];
+      redirectTo === undefined &&
+        (redirectTo = userRoutes[userRoutes.length - 1]);
     }
     navigate(redirectTo);
   };

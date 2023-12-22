@@ -57,7 +57,7 @@ const App = () => {
           />
           <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
             <Route
-              path={PATHROUTES.USERPANEL}
+              path={`${PATHROUTES.USERPANEL}/*`}
               element={<UserPanel />}
             ></Route>
           </Route>
