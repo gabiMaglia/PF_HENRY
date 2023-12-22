@@ -16,7 +16,6 @@ import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 
-
 const UserPanelComponent = () => {
   const navigate = useNavigate();
   const authData = getAuthDataCookie("authData");
