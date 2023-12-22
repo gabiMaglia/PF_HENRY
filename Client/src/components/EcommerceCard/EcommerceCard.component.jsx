@@ -17,9 +17,9 @@ const globalProducts = [
     state: "Listo para retirar del local",
   },
   {
-    id: 2,
-    name: "Producto 2",
-    image: "url_de_la_imagen_2",
+    id: 3,
+    name: "Producto 3",
+    image: "url_de_la_imagen_3",
     budget: 150,
     state: "Producto en revision",
   },
