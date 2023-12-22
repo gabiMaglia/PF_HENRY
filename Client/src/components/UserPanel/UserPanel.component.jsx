@@ -10,28 +10,54 @@ import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesP
 import WishListProfile from "../WishListProfile/WishListProfile.component";
 import ShopingProfile from "../ShoppingProfile/ShoppingProfile.component";
 
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+
 const UserPanelComponent = () => {
+  const authData = getAuthDataCookie("authData");
+
+  const userRole = authData.userRole;
+
   const userRoutes = [
-    PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
-    PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS,
-    PATHROUTES.USERPANEL + PATHROUTES.WISHLIST,
-    PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+    {
+      path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+      roles: ["customer", "admin"],
+    },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS, roles: ["customer"] },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST, roles: ["customer"] },
+    {
+      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+      roles: ["customer", "admin"],
+    },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS, roles: ["admin"] },
+    {
+      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE,
+      roles: ["admin"],
+    },
   ];
 
   const actualLocation = useLocation().pathname;
   const navigate = useNavigate();
 
   const handleSliderClick = (action) => {
-    let redirectTo = "";
-    if (action === "sig") {
-      redirectTo = userRoutes[userRoutes.indexOf(actualLocation) + 1];
-      redirectTo === undefined && (redirectTo = userRoutes[0]);
-    } else {
-      redirectTo = userRoutes[userRoutes.indexOf(actualLocation) - 1];
-      redirectTo === undefined &&
-        (redirectTo = userRoutes[userRoutes.length - 1]);
+    const currentIndex = userRoutes.findIndex(
+      (route) => route.path === actualLocation
+    );
+    const numRoutes = userRoutes.length;
+
+    let nextIndex =
+      action === "sig"
+        ? (currentIndex + 1) % numRoutes
+        : (currentIndex - 1 + numRoutes) % numRoutes;
+
+    while (!userRoutes[nextIndex].roles.includes(userRole)) {
+      nextIndex =
+        action === "sig"
+          ? (nextIndex + 1) % numRoutes
+          : (nextIndex - 1 + numRoutes) % numRoutes;
     }
-    navigate(redirectTo);
+
+    const { path } = userRoutes[nextIndex];
+    navigate(path);
   };
 
   return (
@@ -67,19 +93,29 @@ const UserPanelComponent = () => {
       </Box>
       <Routes>
         <Route
-          path={PATHROUTES.PROFILE}
+          path={userRole === "admin" ? PATHROUTES.PROFILE : PATHROUTES.PROFILE}
           element={<UserProfile />}
         />
         <Route
-          path={PATHROUTES.PRODUCTSERVICES}
+          path={
+            userRole === "admin"
+              ? PATHROUTES.PRODUCTS_SERVICES
+              : PATHROUTES.PRODUCTS_SERVICES
+          }
           element={<ProductsServicesProfile />}
         />
         <Route
-          path={PATHROUTES.WISHLIST}
+          path={
+            userRole === "admin" ? PATHROUTES.TECHNICIANS : PATHROUTES.WISHLIST
+          }
           element={<WishListProfile />}
         />
         <Route
-          path={PATHROUTES.SHOPINGS}
+          path={
+            userRole === "admin"
+              ? PATHROUTES.PRODUCT_CREATE
+              : PATHROUTES.SHOPINGS
+          }
           element={<ShopingProfile />}
         />
       </Routes>
