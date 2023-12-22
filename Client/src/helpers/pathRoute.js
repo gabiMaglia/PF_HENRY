@@ -16,6 +16,9 @@ const PATHROUTES = {
   PRODUCT_CREATE: "/productCreate",
   TECHNICIANS: "/technicians",
   CUSTOMERS: "/customers",
+  //TECHNICIAN
+  REAPIRED_PRODCUTS: "/repairedProdcuts",
+  REPAIR_HISTORY: "/repairHistory",
 };
 
 export default PATHROUTES;
