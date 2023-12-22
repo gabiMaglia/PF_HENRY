@@ -22,7 +22,7 @@ const HomeProducts = ({ allProducts }) => {
       let startTime;
       try {
         // Simular una carga durante 2 segundos (puedes ajustar este tiempo)
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         startTime = Date.now();
 
@@ -32,7 +32,7 @@ const HomeProducts = ({ allProducts }) => {
         console.error("Error fetching home products:", error);
       } finally {
         if (startTime) {
-          const minimumLoadingTime = 2500;
+          const minimumLoadingTime = 2000;
           const remainingTime = Math.max(
             0,
             minimumLoadingTime - (Date.now() - startTime)
