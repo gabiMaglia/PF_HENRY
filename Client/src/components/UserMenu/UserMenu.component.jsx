@@ -22,7 +22,7 @@ import {
   Add,
   People,
   History,
-  Handyman
+  Handyman,
 } from "@mui/icons-material";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
@@ -130,7 +130,11 @@ const UserMenu = () => {
         ),
         path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
       },
-      { name: "Crear producto", icon: <Add />, path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE },
+      {
+        name: "Crear producto",
+        icon: <Add />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE,
+      },
       {
         name: "Técnicos",
         icon: <People />,
@@ -148,7 +152,7 @@ const UserMenu = () => {
         path: PATHROUTES.HOME,
       },
     ];
-  }else if (userRole === "technician") {
+  } else if (userRole === "technician") {
     items = [
       {
         name: "Mi cuenta",
@@ -174,7 +178,11 @@ const UserMenu = () => {
         icon: <HomeRepairService />,
         path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
       },
-      { name: "Prodcutos reparados", icon: <Handyman />, path: PATHROUTES.USERPANEL + PATHROUTES.REAPIRED_PRODCUTS },
+      {
+        name: "Prodcutos reparados",
+        icon: <Handyman />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.REAPIRED_PRODCUTS,
+      },
       {
         name: "Historial reparaciones",
         icon: <History />,
