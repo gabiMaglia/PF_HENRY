@@ -1,9 +1,9 @@
-import SideBar from "../SideBar/SideBar.component";
+// import SideBar from "../SideBar/SideBar.component";
 import { Box, Hidden } from "@mui/material";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import PATHROUTES from "../../helpers/pathRoute";
-import { Link } from "react-router-dom";
+// import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+// import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+// import PATHROUTES from "../../helpers/pathRoute";
+// import { Link } from "react-router-dom";
 import EcommerceCard from "../EcommerceCard/EcommerceCard.component";
 
 const ShoppingProfileComponent = () => {

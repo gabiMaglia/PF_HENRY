@@ -8,12 +8,13 @@ import SideBar from "../SideBar/SideBar.component";
 import UserProfile from "../UserProfile/UserProfile.component";
 import ShopingProfile from "../ShoppingProfile/ShoppingProfile.component";
 import WishListProfile from "../WishListProfile/WishListProfile.component";
+import TechniciansProfile from "../TechniciansProfile/TechniciansProfile.component";
+import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.component";
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
-
 
 const UserPanelComponent = () => {
   const navigate = useNavigate();
@@ -28,15 +29,15 @@ const UserPanelComponent = () => {
       roles: ["customer", "admin"],
     },
     { path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS, roles: ["customer"] },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST, roles: ["customer"] },
-    {
-      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
-      roles: ["customer", "admin"],
-    },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS, roles: ["admin"] },
     {
       path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE,
       roles: ["admin"],
+    },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST, roles: ["customer"] },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS, roles: ["admin"] },
+    {
+      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+      roles: ["customer", "admin"],
     },
   ];
 
@@ -101,27 +102,28 @@ const UserPanelComponent = () => {
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.PRODUCTS_SERVICES
-              : PATHROUTES.PRODUCTS_SERVICES
+              ? PATHROUTES.PRODUCT_CREATE
+              : PATHROUTES.SHOPINGS
           }
-          element={<ProductsServicesProfile />}
+          element={
+            userRole === "admin" ? <ProductCreateProfile /> : <ShopingProfile />
+          }
         />
         <Route
           path={
             userRole === "admin" ? PATHROUTES.TECHNICIANS : PATHROUTES.WISHLIST
           }
-          element={<WishListProfile />}
+          element={userRole === "admin" ? <TechniciansProfile/> : <WishListProfile />}
         />
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.PRODUCT_CREATE
-              : PATHROUTES.SHOPINGS
+              ? PATHROUTES.PRODUCTS_SERVICES
+              : PATHROUTES.PRODUCTS_SERVICES
           }
-          element={<ShopingProfile />}
+          element={<ProductsServicesProfile />}
         />
       </Routes>
-
       <Box
         sx={{
           width: "15%",
