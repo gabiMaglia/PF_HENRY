@@ -1,8 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { getAuthDataCookie } from "../../../utils/cookiesFunctions";
-import { SessionAlertLogin, SessionAlertRole } from "../SessionAlert/SessionAlert.component";
+import {
+  SessionAlertLogin,
+  SessionAlertRole,
+} from "../SessionAlert/SessionAlert.component";
 
-const ProtectedRoutesComponent = ({ redirectPath = "/", allowedRoles= [] }) => {
+const ProtectedRoutesComponent = ({
+  redirectPath = "/",
+  allowedRoles = [],
+}) => {
   const authData = getAuthDataCookie("authData");
 
   if (!authData || !authData.login) {
@@ -21,4 +27,3 @@ const ProtectedRoutesComponent = ({ redirectPath = "/", allowedRoles= [] }) => {
 };
 
 export default ProtectedRoutesComponent;
-

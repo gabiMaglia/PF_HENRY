@@ -15,12 +15,8 @@ import Questions from "./views/publics/Questions/Questions.view";
 import Detail from "./views/publics/Detail/Detail.view";
 import Categories from "./views/publics/Categories/Categories.view";
 //PRIVATES VIEWS
-import UserProfile from "./views/privates/UserProfile/UserProfile.view";
-import ShoppingProfile from "./views/privates/ShoppingProfile/ShoppingProfile.view";
-import WishListProfile from "./views/privates/WishListProfile/WishListProfile.view";
-import ProductServicesProfile from "./views/privates/ProductServices/ProductServices.view";
+import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
-//MATREIAL UI
 import { Box } from "@mui/material";
 //DB
 import PRODUCTS from "./dataBase/bdd.json";
@@ -43,15 +39,25 @@ const App = () => {
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}
           />
-          <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
-            <Route path={PATHROUTES.PROFILE} element={<UserProfile />} />
-            <Route path={PATHROUTES.SHOPINGS} element={<ShoppingProfile />} />
-            <Route path={PATHROUTES.WISHLIST} element={<WishListProfile />} />
-            <Route
-              path={PATHROUTES.PRODUCTSERVICES}
-              element={<ProductServicesProfile />}
-            />
+          <Route element={
+              <ProtectedRoutes
+                allowedRoles={"customer"}
+              />
+            }>
             <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+          </Route>
+
+          <Route
+            element={
+              <ProtectedRoutes
+                allowedRoles={["admin", "technician", "customer"]}
+              />
+            }
+          >
+            <Route
+              path={`${PATHROUTES.USERPANEL}/*`}
+              element={<UserPanel />}
+            ></Route>
           </Route>
         </Routes>
         <WhatsApp />

@@ -19,15 +19,19 @@ import {
   LocalShipping,
   Bookmark,
   HomeRepairService,
+  Add,
+  People,
 } from "@mui/icons-material";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
-import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
+import {
+  getAuthDataCookie,
+  removeAuthDataCookie,
+} from "../../utils/cookiesFunctions";
 //REDUX
 import { logoutUser } from "../../redux/slices/UserSlice";
-
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -37,6 +41,8 @@ const UserMenu = () => {
     surname: getFirstLetters(surname),
   };
   const dispatch = useDispatch();
+  const authData = getAuthDataCookie("authData");
+  const userRole = authData.userRole;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -48,13 +54,99 @@ const UserMenu = () => {
   const logout = () => {
     removeAuthDataCookie("authData");
     removeAuthDataCookie("jwt");
-    navigate("/");
+    navigate(PATHROUTES.HOME);
     dispatch(logoutUser());
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  let items = [];
+
+  if (userRole === "customer") {
+    items = [
+      {
+        name: "Mi cuenta",
+        icon: (
+          <Avatar
+            sx={{ backgroundColor: "#fd611a", height: "40px", width: "40px" }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {initialLetersUsers.name + initialLetersUsers.surname}
+            </Typography>
+          </Avatar>
+        ),
+        path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+      },
+      {
+        name: "Mis compras",
+        icon: <LocalShipping />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS,
+      },
+      {
+        name: "Lista de deseos",
+        icon: <Bookmark />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST,
+      },
+      {
+        name: "Productos en servicio",
+        icon: <HomeRepairService />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+      },
+      {
+        name: "Cerrar sesion",
+        icon: <Logout />,
+        action: "logout",
+        path: PATHROUTES.HOME,
+      },
+    ];
+  } else if (userRole === "admin") {
+    items = [
+      {
+        name: "Mi cuenta",
+        icon: (
+          <Avatar
+            sx={{ backgroundColor: "#fd611a", height: "40px", width: "40px" }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: "bold",
+                color: "white",
+              }}
+            >
+              {initialLetersUsers.name + initialLetersUsers.surname}
+            </Typography>
+          </Avatar>
+        ),
+        path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
+      },
+      { name: "Crear producto", icon: <Add />, path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE },
+      {
+        name: "Técnicos",
+        icon: <People />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS,
+      },
+      {
+        name: "Productos en servicio",
+        icon: <HomeRepairService />,
+        path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+      },
+      {
+        name: "Cerrar sesion",
+        icon: <Logout />,
+        action: "logout",
+        path: PATHROUTES.HOME,
+      },
+    ];
+  }
 
   return (
     <Box sx={{ mr: "1em" }}>
@@ -117,7 +209,7 @@ const UserMenu = () => {
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
-            width: "14em",
+            width: "12em",
             "& .MuiAvatar-root": {
               width: 32,
               height: 32,
@@ -130,108 +222,55 @@ const UserMenu = () => {
               flexDirection: "column",
               position: "absolute",
               top: 0,
-              right: 25,
+              right: 60,
               width: 10,
               height: 10,
               bgcolor: "background.paper",
               transform: "translateY(-50%) rotate(45deg)",
               zIndex: 0,
               justifyContent: "center",
+              [`@media (max-width:1200px)`]: {
+                right: 25,
+              },
             },
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link
-          style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.PROFILE}
-        >
-          <MenuItem
-            onClick={handleClose}
-            sx={{ justifyContent: "center", textAlign: "center" }}
-          >
-            <Avatar sx={{ backgroundColor: "#fd611a" }}>
-              <Typography variant="caption">
-                {initialLetersUsers.name + initialLetersUsers.surname}
-              </Typography>
-            </Avatar>
-            <Typography sx={{ width: "6em" }}>
-              Mi <br />
-              cuenta
-            </Typography>
-          </MenuItem>
-        </Link>
-        <Divider />
-        <Link
-          style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.SHOPINGS}
-        >
-          <MenuItem
-            sx={{ justifyContent: "center", textAlign: "center" }}
-            onClick={handleClose}
-          >
-            <ListItemIcon>
-              <LocalShipping sx={{ color: "black" }} />
-            </ListItemIcon>
-            <Typography sx={{ width: "6em" }}>
-              Mis
-              <br /> compras
-            </Typography>
-          </MenuItem>
-        </Link>
-        <Divider />
-        <Link
-          style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.WISHLIST}
-        >
-          <MenuItem
-            sx={{ justifyContent: "center", textAlign: "center" }}
-            onClick={handleClose}
-          >
-            <ListItemIcon>
-              <Bookmark sx={{ color: "black" }} />
-            </ListItemIcon>
-            <Typography sx={{ width: "6em" }}>
-              Lista de <br /> deseos
-            </Typography>
-          </MenuItem>
-        </Link>
-        <Divider />
-        <Link
-          style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.PRODUCTSERVICES}
-        >
-          <MenuItem
-            sx={{
-              textAlign: "center",
-              justifyContent: "center",
-            }}
-            onClick={handleClose}
-          >
-            <ListItemIcon>
-              <HomeRepairService sx={{ color: "black" }} />
-            </ListItemIcon>
-            <Typography sx={{ width: "6em" }}>
-              Productos <br />
-              en servicio
-            </Typography>
-          </MenuItem>
-        </Link>
-        <Divider />
+        {items.map((item, index) => {
+          return (
+            <Link
+              to={item.path}
+              key={item.name}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <MenuItem
+                onClick={() => {
+                  item.action === "logout" && logout();
+                  handleClose();
+                }}
+                sx={{
+                  justifyContent: "center",
+                  textAlign: "center",
+                  gap: "1.5em",
+                }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <Typography
+                  sx={{
+                    width: "5em",
+                    whiteSpace: "normal",
+                  }}
+                >
+                  {item.name}
+                </Typography>
+              </MenuItem>
 
-        <MenuItem
-          sx={{ justifyContent: "center", textAlign: "center" }}
-          onClick={logout}
-        >
-          <ListItemIcon>
-            <Logout sx={{ color: "black" }} />
-          </ListItemIcon>
-          <Typography sx={{ width: "6em" }}>
-            Cerrar <br />
-            sesión
-          </Typography>
-        </MenuItem>
+              {items.length - 1 !== index && <Divider />}
+            </Link>
+          );
+        })}
       </Menu>
     </Box>
   );
