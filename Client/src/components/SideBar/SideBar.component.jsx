@@ -20,7 +20,7 @@ import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import getFirstLetters from "../../helpers/getFirstLetters";
-import { logoutUser } from "../../redux/slices/userSlice";
+import { logoutUser } from "../../redux/slices/UserSlice";
 
 const SideBar = () => {
   const dispatch = useDispatch();
