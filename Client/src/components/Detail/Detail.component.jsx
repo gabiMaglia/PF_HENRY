@@ -10,7 +10,7 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetState } from "../../redux/slices/ProductSlice";
 import { addItemsToCart } from "../../redux/slices/CartSlice";
@@ -50,11 +50,11 @@ const ThumbnailContainer = styled(Container)({
 const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { productById, isLoading } = useSelector((state) => state.product);
   const [localCartItems, setLocalCartItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const { allProducts } = useSelector((state) => state.product);
 
   const cartItemCount = useSelector((state) => state.cart.items.length);
@@ -75,10 +75,21 @@ const Detail = () => {
 
       try {
         if (id && id !== productById?.id) {
+          setIsLoadingDetail(true);
+          const startTime = Date.now();
           await fetchData();
+          const minimumLoadingTime = 2000;
+          const remainingTime = Math.max(
+            0,
+            minimumLoadingTime - (Date.now() - startTime)
+          );
+          setTimeout(() => {
+            setIsLoadingDetail(false);
+          }, remainingTime);
         }
       } catch (error) {
         console.error("Error in fetchDataAsync:", error);
+        setIsLoadingDetail(false);
       } finally {
         setLoading(false);
       }
@@ -103,16 +114,13 @@ const Detail = () => {
 
   const handleAddToCart = () => {
     if (productById && productById.id) {
-      // Agrega el producto al estado local del carrito
       setLocalCartItems([...localCartItems, productById]);
       console.log("Product added to local cart for ID:", productById.id);
     }
   };
 
   useEffect(() => {
-    // Esta función se ejecuta al desmontar el componente
     return () => {
-      // Despacha la acción para agregar productos al carrito global
       dispatch(addItemsToCart(localCartItems));
     };
   }, [dispatch, localCartItems]);
@@ -120,12 +128,35 @@ const Detail = () => {
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(max-width:500px)");
 
-  if (loading || isLoading || !productById) {
+  if (isLoadingDetail || loading || isLoading || !productById) {
     return (
       <Container
-        sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flexWrap: "wrap",
+          alignContent: "space-around",
+          justifyContent: "center",
+          marginTop: 15,
+          marginBottom: 15,
+        }}
       >
-        <CircularProgress />
+        <CircularProgress
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            margin: 5,
+            color: "#fd611a",
+          }}
+        />
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          Cargando...
+        </Typography>
       </Container>
     );
   }
