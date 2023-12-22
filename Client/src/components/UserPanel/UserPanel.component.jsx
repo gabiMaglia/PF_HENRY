@@ -28,15 +28,15 @@ const UserPanelComponent = () => {
       roles: ["customer", "admin"],
     },
     { path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS, roles: ["customer"] },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST, roles: ["customer"] },
-    {
-      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
-      roles: ["customer", "admin"],
-    },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS, roles: ["admin"] },
     {
       path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE,
       roles: ["admin"],
+    },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST, roles: ["customer"] },
+    { path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS, roles: ["admin"] },
+    {
+      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
+      roles: ["customer", "admin"],
     },
   ];
 
