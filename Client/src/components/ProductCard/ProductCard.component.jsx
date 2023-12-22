@@ -49,8 +49,8 @@ const CardProduct = ({ product }) => {
     if (login && wishlistProducts) {
       const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
       setIsDesired(isProductInWishlist);
-    }else{
-      setIsDesired(false)
+    } else {
+      setIsDesired(false);
     }
   }, [wishlistProducts, id, login]);
 
@@ -115,11 +115,12 @@ const CardProduct = ({ product }) => {
           <BookmarkIcon
             onClick={handleDesiredClick}
             sx={{
+              cursor: login ? null :"not-allowed" ,
               position: "relative",
               top: "20px",
               right: "-30px",
               transform: "translateY(-50%)",
-              color: isDesired  ? "#fd611a" : "gray",
+              color: isDesired ? "#fd611a" : "gray",
             }}
           />
         </Box>
