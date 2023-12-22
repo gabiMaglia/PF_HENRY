@@ -19,6 +19,7 @@ server.use(session({
   cookie: { secure: true }
 }));
 
+
 server.use(cors({ credentials: true , origin: `http://${process.env.FRONTEND_URL}` }));
 server.name = "API";
 server.use(morgan("dev"));
