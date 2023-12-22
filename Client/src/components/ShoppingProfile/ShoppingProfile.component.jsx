@@ -16,7 +16,7 @@ const ShoppingProfileComponent = () => {
         mt: "1.2em",
       }}
     >
-      Contenido del shoping profile
+      <EcommerceCard />
     </Box>
   );
 };
