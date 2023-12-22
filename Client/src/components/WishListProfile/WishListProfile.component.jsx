@@ -11,7 +11,7 @@ const WhishListProfileComponent = () => {
           mt: "1.2em",
         }}
       >
-        Contenido de la WISHLIST
+        Contenido de la WISHLIST (customer)
       </Box>
     </>
   );
