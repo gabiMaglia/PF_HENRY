@@ -70,18 +70,19 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 export const fetchCart = (items) => async (dispatch) => {
  const products = items.map((item) => ({
       title: item.name,
-      price: item.price * item.count,
       quantity: item.count,
+      unit_price: item.price * item.count,
       currency_id: "ARS"
     }));
-    console.log(products)
   try {
-    const response = await axios.post(`${urlBack}/pagos/`, products
-    );
-    console.log(response)
+    const response = await axios.post(`${urlBack}/pagos`, products, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  });
     dispatch(idShop(response.data))
   } catch (error) {
-    console.error("Error al buscar productos por marca:", error);
+    console.error("no mando el response", error);
   }
 };
 
