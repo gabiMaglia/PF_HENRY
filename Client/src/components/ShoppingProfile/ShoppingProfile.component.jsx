@@ -4,6 +4,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PATHROUTES from "../../helpers/pathRoute";
 import { Link } from "react-router-dom";
+import EcommerceCard from "../EcommerceCard/EcommerceCard.component";
 
 const ShoppingProfileComponent = () => {
   return (
@@ -39,7 +40,7 @@ const ShoppingProfileComponent = () => {
           </Link>
         </Hidden>
       </Box>
-      Contenido del shoping profile
+      <EcommerceCard />
       <Box
         sx={{
           width: "15%",
