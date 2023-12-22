@@ -59,9 +59,7 @@ export const googleLoginUser = async () => {
             userId: sortedData.userId,
             userRole: sortedData.userRole,
           });
-          if (window.opener && !window.opener.closed) {
-            window.opener.close();
-          }
+          popup.close();
           resolve({ data: event.data });
         }
       });

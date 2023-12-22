@@ -5,11 +5,17 @@ const PATHROUTES = {
   QUESTIONS: "/questions",
   DETAIL: "/product/:id",
   CATEGORIES: "/products/filters/:categoryName",
-  SHOPCART: "/shoppingCart",
+  USERPANEL: "/userPanel",
   PROFILE: "/profile",
+  //CUSTOMER
   SHOPINGS: "/shoppings",
   WISHLIST: "/wishlist",
-  PRODUCTSERVICES: "/productServices",
+  SHOPCART: "customer/shoppingCart",
+  PRODUCTS_SERVICES: "/productServices",
+  //ADMIN
+  PRODUCT_CREATE: "/productCreate",
+  TECHNICIANS: "/technicians",
+  CUSTOMERS: "/customers",
 };
 
 export default PATHROUTES;

@@ -7,18 +7,6 @@ export const addItemsToCart = createAsyncThunk(
   }
 );
 
-export const updateCartItemCount = createSlice({
-  name: "cart",
-  initialState: {
-    count: 0,
-  },
-  reducers: {
-    incrementCartItemCount: (state) => {
-      state.count += 1;
-    },
-  },
-});
-
 const initialState = {
   items: [],
   total: 0,
@@ -73,20 +61,19 @@ const cartSlice = createSlice({
       );
       state.total = totalPrice;
     },
+    idShop: (state, action) => {
+      state.id = action.payload
+    },
   },
   extraReducers: (builder) => {
+    // Maneja la acción asyncThunk para agregar productos al carrito
     builder.addCase(addItemsToCart.fulfilled, (state, action) => {
-      // action.payload debe contener un array de productos
       state.items = [...state.items, ...action.payload];
     });
   },
-  idShop: (state, action) => {
-    state.id = action.payload;
-    console.log(action.payload, "id");
-  },
 });
 
-export const { addItem, updateItem, removeItem, totalItem, idShop } =
-  cartSlice.actions;
+export const { addItem, updateItem, removeItem, totalItem, idShop } = cartSlice.actions;
 
 export default cartSlice.reducer;
+
