@@ -15,11 +15,8 @@ import Questions from "./views/publics/Questions/Questions.view";
 import Detail from "./views/publics/Detail/Detail.view";
 import Categories from "./views/publics/Categories/Categories.view";
 //PRIVATES VIEWS
-import UserProfile from "./views/privates/UserProfile/UserProfile.view";
-import ShoppingProfile from "./views/privates/ShoppingProfile/ShoppingProfile.view";
-import WishListProfile from "./views/privates/WishListProfile/WishListProfile.view";
-import ProductServicesProfile from "./views/privates/ProductServices/ProductServices.view";
-import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
+import UserPanel from "./views/privates/UserPanel/UserPanel.view";
+import UserProfile from "./components/UserProfile/UserProfile.component";
 //MATREIAL UI
 import { Box } from "@mui/material";
 //DB
@@ -34,24 +31,35 @@ const App = () => {
         <SearchBar />
         <NavBar />
         <Routes>
-          <Route path={PATHROUTES.HOME} element={<Home />} />
-          <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
-          <Route path={PATHROUTES.SUPPORT} element={<Support />} />
-          <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
-          <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
+          <Route
+            path={PATHROUTES.HOME}
+            element={<Home />}
+          />
+          <Route
+            path={PATHROUTES.PRODUCTS}
+            element={<Products />}
+          />
+          <Route
+            path={PATHROUTES.SUPPORT}
+            element={<Support />}
+          />
+          <Route
+            path={PATHROUTES.QUESTIONS}
+            element={<Questions />}
+          />
+          <Route
+            path={PATHROUTES.CATEGORIES}
+            element={<Categories />}
+          />
           <Route
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}
           />
           <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
-            <Route path={PATHROUTES.PROFILE} element={<UserProfile />} />
-            <Route path={PATHROUTES.SHOPINGS} element={<ShoppingProfile />} />
-            <Route path={PATHROUTES.WISHLIST} element={<WishListProfile />} />
             <Route
-              path={PATHROUTES.PRODUCTSERVICES}
-              element={<ProductServicesProfile />}
-            />
-            <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+              path={`${PATHROUTES.USERPANEL}/*`}
+              element={<UserPanel />}
+            ></Route>
           </Route>
         </Routes>
         <WhatsApp />

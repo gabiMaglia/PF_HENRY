@@ -26,7 +26,7 @@ import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 //REDUX
-import { logoutUser } from "../../redux/slices/userSlice";
+import { logoutUser } from "../../redux/slices/UserSlice";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -144,7 +144,7 @@ const UserMenu = () => {
       >
         <Link
           style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.PROFILE}
+          to={PATHROUTES.USERPANEL + PATHROUTES.PROFILE}
         >
           <MenuItem
             onClick={handleClose}
@@ -164,7 +164,7 @@ const UserMenu = () => {
         <Divider />
         <Link
           style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.SHOPINGS}
+          to={PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS}
         >
           <MenuItem
             sx={{ justifyContent: "center", textAlign: "center" }}
@@ -182,7 +182,7 @@ const UserMenu = () => {
         <Divider />
         <Link
           style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.WISHLIST}
+          to={PATHROUTES.USERPANEL + PATHROUTES.WISHLIST}
         >
           <MenuItem
             sx={{ justifyContent: "center", textAlign: "center" }}
@@ -199,7 +199,7 @@ const UserMenu = () => {
         <Divider />
         <Link
           style={{ textDecoration: "none", color: "inherit" }}
-          to={PATHROUTES.PRODUCTSERVICES}
+          to={PATHROUTES.USERPANEL + PATHROUTES.PRODUCTSERVICES}
         >
           <MenuItem
             sx={{

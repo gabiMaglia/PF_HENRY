@@ -6,6 +6,7 @@ const PATHROUTES = {
   DETAIL: "/product/:id",
   CATEGORIES: "/products/filters/:categoryName",
   SHOPCART: "/shoppingCart",
+  USERPANEL: "/userPanel",
   PROFILE: "/profile",
   SHOPINGS: "/shoppings",
   WISHLIST: "/wishlist",
