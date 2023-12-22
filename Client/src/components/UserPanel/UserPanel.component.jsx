@@ -105,13 +105,17 @@ const UserPanelComponent = () => {
               ? PATHROUTES.PRODUCT_CREATE
               : PATHROUTES.SHOPINGS
           }
-          element={userRole === "admin" ? <ProductCreateProfile/> : <ShopingProfile />}
+          element={
+            userRole === "admin" ? <ProductCreateProfile /> : <ShopingProfile />
+          }
         />
         <Route
           path={
             userRole === "admin" ? PATHROUTES.TECHNICIANS : PATHROUTES.WISHLIST
           }
-          element={userRole === "admin" ? <TechniciansProfile/> :<WishListProfile />}
+          element={
+            userRole === "admin" ? <TechniciansProfile /> : <WishListProfile />
+          }
         />
         <Route
           path={
