@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const WhishListProfileComponent = () => {
+const TechniciansProfileComponent = () => {
   return (
     <>
       <Box
@@ -11,10 +11,10 @@ const WhishListProfileComponent = () => {
           mt: "1.2em",
         }}
       >
-        Contenido de la WISHLIST
+        Contenido de TECHNICIANS (admin)
       </Box>
     </>
   );
 };
 
-export default WhishListProfileComponent;
+export default TechniciansProfileComponent;
