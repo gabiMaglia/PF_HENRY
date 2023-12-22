@@ -71,7 +71,7 @@ const SideBar = () => {
     {
       name: "Productos en servicio",
       icon: <HomeRepairService />,
-      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTSERVICES,
+      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
     },
     {
       name: "Cerrar sesion",

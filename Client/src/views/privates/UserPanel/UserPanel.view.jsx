@@ -1,7 +1,11 @@
-import UserPanelComponent from "../../../components/UserPanel/UserPanelComponent.component";
+import UserPanelComponent from "../../../components/UserPanel/UserPanel.component";
 
-const UserPanel = () => {
-  return <UserPanelComponent />;
+const UserPanelView = () => {
+  return (
+    <>
+      <UserPanelComponent />;
+    </>
+  );
 };
 
-export default UserPanel;
+export default UserPanelView;
