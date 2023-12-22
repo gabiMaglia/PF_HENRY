@@ -11,7 +11,7 @@ const ProductCreateProfileComponent = () => {
           mt: "1.2em",
         }}
       >
-        Contenido de PRODUCT CREATE (solo ADMINS)
+        Contenido PRODUCT CREATE (admin)
       </Box>
     </>
   );

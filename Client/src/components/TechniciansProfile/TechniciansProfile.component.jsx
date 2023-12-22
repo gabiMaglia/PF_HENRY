@@ -11,7 +11,7 @@ const TechniciansProfileComponent = () => {
           mt: "1.2em",
         }}
       >
-        Contenido de TECHNICIANS (solo ADMINS)
+        Contenido de TECHNICIANS (admin)
       </Box>
     </>
   );
