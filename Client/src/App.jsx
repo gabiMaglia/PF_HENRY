@@ -39,9 +39,21 @@ const App = () => {
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}
           />
-          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+          <Route element={
+              <ProtectedRoutes
+                allowedRoles={"customer"}
+              />
+            }>
+            <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+          </Route>
 
-          <Route element={<ProtectedRoutes allowedRoles={["admin", "technician", "customer"]} />}>
+          <Route
+            element={
+              <ProtectedRoutes
+                allowedRoles={["admin", "technician", "customer"]}
+              />
+            }
+          >
             <Route
               path={`${PATHROUTES.USERPANEL}/*`}
               element={<UserPanel />}

@@ -1,19 +1,24 @@
-import { Box, Hidden } from "@mui/material";
-import SideBar from "../SideBar/SideBar.component";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import PATHROUTES from "../../helpers/pathRoute";
+//HOOKS
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
-
+//MATERIAL UI
+import { Box, Hidden } from "@mui/material";
+import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material";
+//COMPONENTS
+import SideBar from "../SideBar/SideBar.component";
 import UserProfile from "../UserProfile/UserProfile.component";
-import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
-import WishListProfile from "../WishListProfile/WishListProfile.component";
 import ShopingProfile from "../ShoppingProfile/ShoppingProfile.component";
-
+import WishListProfile from "../WishListProfile/WishListProfile.component";
+import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
+//HELPERS
+import PATHROUTES from "../../helpers/pathRoute";
+//UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 
+
 const UserPanelComponent = () => {
+  const navigate = useNavigate();
   const authData = getAuthDataCookie("authData");
+  const actualLocation = useLocation().pathname;
 
   const userRole = authData.userRole;
 
@@ -34,9 +39,6 @@ const UserPanelComponent = () => {
       roles: ["admin"],
     },
   ];
-
-  const actualLocation = useLocation().pathname;
-  const navigate = useNavigate();
 
   const handleSliderClick = (action) => {
     const currentIndex = userRoutes.findIndex(
@@ -80,7 +82,7 @@ const UserPanelComponent = () => {
         }}
       >
         <Hidden mdDown>
-          <ArrowBackIosIcon
+          <ArrowBackIos
             onClick={() => {
               handleSliderClick("ant");
             }}
@@ -130,7 +132,7 @@ const UserPanelComponent = () => {
         }}
       >
         <Hidden mdDown>
-          <ArrowForwardIosIcon
+          <ArrowForwardIos
             onClick={() => {
               handleSliderClick("sig");
             }}
