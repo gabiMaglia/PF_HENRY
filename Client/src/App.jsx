@@ -16,8 +16,7 @@ import Detail from "./views/publics/Detail/Detail.view";
 import Categories from "./views/publics/Categories/Categories.view";
 //PRIVATES VIEWS
 import UserPanel from "./views/privates/UserPanel/UserPanel.view";
-import UserProfile from "./components/UserProfile/UserProfile.component";
-//MATREIAL UI
+import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view"; //MATREIAL UI
 import { Box } from "@mui/material";
 //DB
 import PRODUCTS from "./dataBase/bdd.json";
@@ -55,6 +54,11 @@ const App = () => {
             path={PATHROUTES.DETAIL}
             element={<Detail products={PRODUCTS} />}
           />
+          <Route
+            path={PATHROUTES.SHOPCART}
+            element={<ShoppingCart />}
+          />
+
           <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
             <Route
               path={`${PATHROUTES.USERPANEL}/*`}

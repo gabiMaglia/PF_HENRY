@@ -56,14 +56,22 @@ const SideBar = () => {
           </Typography>
         </Avatar>
       ),
-      path: PATHROUTES.PROFILE,
+      path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
     },
-    { name: "Mis compras", icon: <LocalShipping />, path: PATHROUTES.SHOPINGS },
-    { name: "Lista de deseos", icon: <Bookmark />, path: PATHROUTES.WISHLIST },
+    {
+      name: "Mis compras",
+      icon: <LocalShipping />,
+      path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS,
+    },
+    {
+      name: "Lista de deseos",
+      icon: <Bookmark />,
+      path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST,
+    },
     {
       name: "Productos en servicio",
       icon: <HomeRepairService />,
-      path: PATHROUTES.PRODUCTSERVICES,
+      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTSERVICES,
     },
     {
       name: "Cerrar sesion",
