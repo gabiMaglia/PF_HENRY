@@ -30,6 +30,7 @@ const CarouselBottomComponent = () => {
   return (
     <Box
       sx={{
+        width: "100%",
         backgroundColor: "#f5f5f5",
         "@media (max-width: 1140px)": {
           height: "100px",
@@ -45,7 +46,7 @@ const CarouselBottomComponent = () => {
       <Box
         sx={{
           margin: "0 auto",
-          width: "100%",
+          width: "98%",
           padding: "10px",
         }}
       >

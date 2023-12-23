@@ -100,8 +100,9 @@ const CarouselTopComponent = () => {
               backgroundImage: `url('${carouselData[activeIndex].tabletImagenUrl}')`,
             },
             "@media (max-width: 480px)": {
-              height: "100px",
-              backgroundImage: `url('${carouselData[activeIndex].mobileImageUrl}')`,
+              display: "none"
+              // height: "100px",
+              // backgroundImage: `url('${carouselData[activeIndex].mobileImageUrl}')`,
             },
           }}
         ></Card>

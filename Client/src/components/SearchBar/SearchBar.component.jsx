@@ -87,7 +87,6 @@ export default function SearchAppBar() {
   return (
     <Box
       sx={{
-        mt: 1,
         mb: 1,
         flexGrow: 1,
         display: "flex",
