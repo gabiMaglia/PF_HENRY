@@ -22,6 +22,7 @@ const ProductCartModel = require("./models/productModels/ProductCart");
 const koyebDb = process.env.KOYEB_DB;
 const localDb = process.env.LOCAL_DB;
 
+
 const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
   dialect: "postgres",
   dialectOptions: {
@@ -29,6 +30,7 @@ const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
   },
   logging: false,
 });
+
 
 // INICIALIZAMOS LOS MODELOS USER
 UserModel(sequelize);

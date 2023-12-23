@@ -149,8 +149,27 @@ const loginUser = async (username, password, googleId) => {
   };
 };
 
+const sendEmailToResetPassword = async () => {
+  
+}
+
+
+const resetPassword = async (userId) => {
+  const user = await UserCredentials.findOne({
+    where : { UserId : userId}
+  });
+  if (!user) {
+    return {
+      error: true,
+      response: "Credenciales no encontradas",
+    };
+  }
+
+};
+
 module.exports = {
   registerUser,
   loginUser,
   confirmAccountController,
+  resetPassword,
 };
