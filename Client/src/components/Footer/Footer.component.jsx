@@ -9,17 +9,22 @@ import PATHROUTE from "../../helpers/pathRoute";
 import { sectionInformation, sectionSocial } from "../../utils/objectsTexts";
 
 const FooterComponent = () => {
-  const handleImageTop = ()=>{
+  const handleImageTop = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-  }
+  };
 
   return (
     <>
       {/* BOX FOOTER */}
-      <Box sx={{ backgroundColor: "#000" }}>
+      <Box
+        sx={{
+          backgroundColor: "#000",
+          "@media (max-width: 480px)": { marginTop: "-100px" },
+        }}
+      >
         {/* BOX SECCIONES */}
         <Box
           sx={{
@@ -100,7 +105,7 @@ const FooterComponent = () => {
             </Box>
           </Container>
           {/* CIERRE LOGO EMPRESA */}
-          
+
           {/* SECCION PAGINAS */}
           {sectionSocial.map((section, index) => (
             <Container key={index}>
