@@ -11,14 +11,14 @@ const CookiesPopup = () => {
   const showCookiesBox = useSelector((state) => state.cookies.boxEnable);
 
   useEffect(() => {
-    const showBox = window.localStorage.getItem('showCoookieBox')
-    console.log(typeof showBox)
-    if (showBox) {
-      dispatch(cookieBoxEnable(showBox));
-    }
-    const acceptance = window.localStorage.getItem('showCoookieBox')
+    const acceptance = window.localStorage.getItem('cookieAccepted')
     if (acceptance) {
       dispatch(acceptCookie(Boolean(acceptance)));
+    }
+    const showBox = window.localStorage.getItem('showCoookieBox')
+
+    if (showBox) {
+      dispatch(cookieBoxEnable(showBox));
     }
   }, []);
 
@@ -114,14 +114,14 @@ const CookiesPopup = () => {
           <Button
             sx={buttonStyles}
             onClick={() => {
-              handleSubmit(true);
+              handleSubmit(false);
             }}
           >
             Aceptar
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(false);
+              handleSubmit(true);
             }}
             sx={buttonStyles}
           >
