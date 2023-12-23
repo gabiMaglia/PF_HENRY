@@ -14,7 +14,7 @@ import {
 import { Menu, ArrowBack } from "@mui/icons-material";
 //UTILS
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
-import sideBarItems from "../../utils/sidebarItems.jsx";
+import userPanelItems from "../../utils/userPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/UserSlice";
 
@@ -22,7 +22,7 @@ const SideBar = () => {
   const dispatch = useDispatch();
   const { name, surname } = useSelector((state) => state.user);
 
-  const items = sideBarItems(name, surname);
+  const items = userPanelItems(name, surname);
 
   const logout = () => {
     removeAuthDataCookie("authData");

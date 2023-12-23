@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -9,14 +10,14 @@ import {
 import React from "react";
 
 const getCurrentDate = () => {
-  const CurrentDate = new Date();
+  const currentDate = new Date();
   const options = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   };
-  return CurrentDate.toLocaleDateString("es-AR", options);
+  return currentDate.toLocaleDateString("es-AR", options);
 };
 
 const globalProducts = [
@@ -25,7 +26,7 @@ const globalProducts = [
     name: "Producto 1",
     image: "url_de_la_imagen_1",
     budget: "enviado",
-    state: "Producto en revision",
+    state: "Producto en revisión",
   },
   {
     id: 2,
@@ -39,12 +40,11 @@ const globalProducts = [
     name: "Producto 3",
     image: "url_de_la_imagen_3",
     budget: "rechazado",
-    state: "Producto en revision",
+    state: "Producto en revisión",
   },
 ];
 
-const EcommerceCard = () => {
-  // Verificar si globalProducts existe y es un array
+const ProdcuctsServicesCustomerComponent  = () => {
   if (
     !globalProducts ||
     !Array.isArray(globalProducts) ||
@@ -78,7 +78,12 @@ const EcommerceCard = () => {
               alt={product.name}
             />
             <CardContent>
-              <Box display="flex" flexDirection="column" alignItems="center">
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                style={{ height: "100%" }}
+              >
                 <Box>
                   <Typography variant="h6" component="div">
                     {product.name}
@@ -87,16 +92,57 @@ const EcommerceCard = () => {
                 <Box>
                   <Typography variant="body2" color="text.secondary">
                     <span
-                      style={{ color: "orange", textTransform: "uppercase" }}
+                      style={{ color: "#fd611a", textTransform: "uppercase" }}
                     >
                       <h2>PRESUPUESTO : {product.budget}</h2>
                     </span>
                   </Typography>
-                </Box>
-                <Box>
                   <Typography variant="h6" color="text.primary">
                     {product.state} {/* estado del producto */}
                   </Typography>
+                </Box>
+                <Box
+                  mt={1}
+                  width="100%"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <Box mb={1}>
+                    <Button
+                      variant="contained"
+                      style={{
+                        backgroundColor: "#fd611a",
+                        color: "white",
+                        marginRight: "8px",
+                      }}
+                    >
+                      DETALLE SERVICIO
+                    </Button>
+                  </Box>
+                  <Box mb={1}>
+                    <Button
+                      variant="contained"
+                      style={{
+                        backgroundColor: "grey",
+                        color: "white",
+                        marginRight: "8px",
+                      }}
+                    >
+                      ACEPTAR
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button
+                      variant="contained"
+                      style={{ backgroundColor: "black", color: "white" }}
+                    >
+                      RECHAZAR
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             </CardContent>
@@ -107,4 +153,4 @@ const EcommerceCard = () => {
   );
 };
 
-export default EcommerceCard;
+export default ProdcuctsServicesCustomerComponent;
