@@ -4,7 +4,6 @@ const {
   loginUser,
 } = require("../../controllers/accountControllers/authController");
 
-
 const googleAuthCallback = async (req, res) => {
   try {
     
@@ -29,7 +28,7 @@ const googleAuthCallback = async (req, res) => {
       <body>
       </body>
       <script>
-        window.opener.postMessage(${JSON.stringify(responseLogin)}, ${process.env.FRONTEND_URL})
+        window.opener.postMessage(${JSON.stringify(responseLogin)}, '${process.env.FRONTEND_URL}')
       </script>
     </html>`);
 
