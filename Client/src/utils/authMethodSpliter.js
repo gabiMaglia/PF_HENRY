@@ -2,6 +2,12 @@ import Cookies from "js-cookie";
 import { getAuthDataCookie, setAuthDataCookie } from "./cookiesFunctions";
 import { rejectCookies } from "../redux/slices/cookiesSlice";
 
+// ESTE ARCHIVO SE ENCARGA DE DETERMINAR SEGUN LA ELECCION DE USAR COOKIES O NO
+// DE DONDE SE SACARA LA INFORMACION DE PERSISTENCIA
+// DEPENDIENDO DE CUAL SEA LA ACCION QUE SE NECESITE, CREAR, LEER O ELIMINAR
+// 
+
+
 export const createPersistency = (sortedData, cookieStatus) => {
   if (cookieStatus) {
     setAuthDataCookie("authData", {

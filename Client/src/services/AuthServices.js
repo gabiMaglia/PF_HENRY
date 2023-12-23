@@ -19,11 +19,13 @@ const dataSorterForApp = (data) => {
 export const loginUser = async (username, password, cookieStatus) => {
   console.log(cookieStatus);
   try {
-    const { data } = await axios.post(`${url}/account/login`, {
-      username: username,
-      password: password,
-    },
-    {withCredentials: true}
+    const { data } = await axios.post(
+      `${url}/account/login`,
+      {
+        username: username,
+        password: password,
+      },
+      { withCredentials: true }
     );
     if (data.login) {
       const sortedData = dataSorterForApp(data);

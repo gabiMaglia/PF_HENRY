@@ -42,7 +42,6 @@ const UserMenu = () => {
   };
 
   const logout = () => {
-
     clearPersistanceData(cookieStatus);
     navigate(PATHROUTES.HOME);
     dispatch(logoutUser());

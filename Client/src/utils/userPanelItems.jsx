@@ -16,9 +16,10 @@ import { useSelector } from "react-redux";
 import { getDataFromSelectedPersistanceMethod } from "./authMethodSpliter";
 
 const sideBarItems = (name, surname) => {
+
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  console.log(cookieStatus)
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+  
   const userRole = authData.userRole;
 
   const initialLetersUsers = {
