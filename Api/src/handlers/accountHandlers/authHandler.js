@@ -61,7 +61,6 @@ const loginHandler = async (req, res) => {
       sameSite: "Strict",
       secure: true,
     });
-    // const {login, userId, user} = response
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -77,7 +76,6 @@ const forgetPassword = async (req, res) => {
     return res.status(500).json(error.message);
   }
 }
-
 const confirmAccountHandler = async (req, res) => {
   const { token } = req.params;
   try {

@@ -15,13 +15,13 @@ import UserMenu from "../UserMenu/UserMenu.component";
 import { fetchSearch, fetchChage } from "../../services/ProductServices";
 import { getUserById } from "../../services/UserServices";
 //UTILS
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logUser } from "../../redux/slices/UserSlice";
+import { logUser } from "../../redux/slices/userSlice";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 // import { loginUser } from "../../services/AuthServices";
 
 export default function SearchAppBar() {
@@ -29,7 +29,7 @@ export default function SearchAppBar() {
   const dispatch = useDispatch();
 
   const cartItemCount = useSelector((state) => state.cart.items.length);
-
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const Img = styled("img")({
     width: 140,
     height: 140,
@@ -45,6 +45,7 @@ export default function SearchAppBar() {
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (token) => {
+    
     if (token !== undefined) {
       const response = await getUserById(token.userId);
       dispatch(logUser({ userObject: { ...response, rolId: token.userRole } }));
@@ -78,11 +79,12 @@ export default function SearchAppBar() {
   // };
 
   useEffect(() => {
-    const userToken = getAuthDataCookie("authData");
-    if (userToken) {
+    const userToken = getDataFromSelectedPersistanceMethod(cookieStatus);  
+    console.log(userToken)
+    if (userToken?.login) {
       getUserInfo(userToken);
     }
-  }, []);
+  }, [cookieStatus]);
 
   return (
     <Box

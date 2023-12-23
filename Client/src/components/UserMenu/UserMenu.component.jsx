@@ -18,22 +18,22 @@ import {
 import PATHROUTES from "../../helpers/pathRoute";
 import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
-import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 import userPanelItems from "../../utils/userPanelItems.jsx";
 //REDUX
-import { logoutUser } from "../../redux/slices/UserSlice";
+import { logoutUser } from "../../redux/slices/userSlice";
+import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
 
 const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const { name, surname } = useSelector((state) => state.user);
+
   const initialLetersUsers = {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
   };
-
   const items = userPanelItems(name, surname);
-
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -42,8 +42,8 @@ const UserMenu = () => {
   };
 
   const logout = () => {
-    removeAuthDataCookie("authData");
-    removeAuthDataCookie("jwt");
+
+    clearPersistanceData(cookieStatus);
     navigate(PATHROUTES.HOME);
     dispatch(logoutUser());
   };

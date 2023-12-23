@@ -1,6 +1,6 @@
 //HOKKS
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import {
   Box,
@@ -20,7 +20,7 @@ import "./alertStyles.min.css";
 //HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX
-import { logUser } from "../../redux/slices/UserSlice";
+import { logUser } from "../../redux/slices/userSlice";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
 import { getUserById } from "../../services/UserServices";
 
@@ -32,6 +32,7 @@ const LoginModal = ({
   setRegisterModalIsOpen,
 }) => {
   const dispatch = useDispatch();
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
 
   const handledispatch = async (userId) => {
     await getUserById(userId).then((data) => {
@@ -39,12 +40,12 @@ const LoginModal = ({
     });
   };
 
-  const loginManagement = async (username, address) => {
+  const loginManagement = async (username, address, cookieStatus) => {
     let response;
     if (!username || !address) {
-      response = await googleLoginUser();
+      response = await googleLoginUser(cookieStatus);
     } else {
-      response = await loginUser(username, address);
+      response = await loginUser(username, address, cookieStatus);
     }
     if (response.error) {
       Swal.fire({
@@ -141,7 +142,7 @@ const LoginModal = ({
     userLoginValidate({ address: user.address }, setErrors, errors);
     if (!errors.address) {
       //Funcionalidad en caso de inicio correcto
-      loginManagement(user.username, user.address);
+      loginManagement(user.username, user.address, cookieStatus);
       resetModal();
       setLoginModalIsOpen(false);
     } else {
@@ -215,10 +216,7 @@ const LoginModal = ({
           />
         </Button>
 
-        <GoogleReCaptchaProvider
-          reCaptchaKey={reCaptchaKey}
-          language="es"
-        >
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
           {!isUsernameVerified ? (
             <FormControl
               fullWidth
@@ -227,16 +225,10 @@ const LoginModal = ({
                 textAlign: "center",
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{ mb: 4 }}
-              >
+              <Typography variant="h4" sx={{ mb: 4 }}>
                 Iniciar sesión
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "#fd611a" }}
-              >
+              <Typography variant="body1" sx={{ color: "#fd611a" }}>
                 Para continuar ingresá tu nombre de usuario
               </Typography>
               <TextField
@@ -264,7 +256,9 @@ const LoginModal = ({
 
               <Typography variant="body1">Inicia sesion con: </Typography>
               <CardMedia
-                onClick={loginManagement}
+                onClick={() => {
+                  loginManagement(null, null, cookieStatus);
+                }}
                 sx={{
                   cursor: "pointer",
                   maxWidth: "2.5em",
@@ -321,10 +315,7 @@ const LoginModal = ({
               >
                 {user.username}
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "#fd611a", mt: "2em" }}
-              >
+              <Typography variant="body1" sx={{ color: "#fd611a", mt: "2em" }}>
                 Ingresá tu contraseña
               </Typography>
               <TextField

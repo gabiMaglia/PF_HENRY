@@ -11,11 +11,14 @@ import {
 } from "@mui/icons-material";
 import PATHROUTES from "../helpers/pathRoute";
 import getFirstLetters from "../helpers/getFirstLetters";
-import { getAuthDataCookie } from "./cookiesFunctions";
+
+import { useSelector } from "react-redux";
+import { getDataFromSelectedPersistanceMethod } from "./authMethodSpliter";
 
 const sideBarItems = (name, surname) => {
-  const authData = getAuthDataCookie("authData");
-
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  console.log(cookieStatus)
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userRole = authData.userRole;
 
   const initialLetersUsers = {

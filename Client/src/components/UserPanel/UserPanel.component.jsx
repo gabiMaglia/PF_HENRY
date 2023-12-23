@@ -14,14 +14,18 @@ import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesP
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { useSelector } from "react-redux";
 
 const UserPanelComponent = () => {
   const navigate = useNavigate();
-  const authData = getAuthDataCookie("authData");
   const actualLocation = useLocation().pathname;
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted)
 
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userRole = authData.userRole;
+  
+
 
   const userRoutes = [
     //CUSTOMERS

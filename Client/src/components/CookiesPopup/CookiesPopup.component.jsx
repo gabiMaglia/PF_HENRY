@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import React, { useEffect } from "react";
+
 
 import { Box, Button, Link, Typography } from "@mui/material";
 import CookieIcon from "@mui/icons-material/Cookie";
@@ -12,20 +12,20 @@ const CookiesPopup = () => {
 
   useEffect(() => {
     const acceptance = window.localStorage.getItem('cookieAccepted')
+    console.log(acceptance)
     if (acceptance) {
-      dispatch(acceptCookie(Boolean(acceptance)));
+      dispatch(acceptCookie(acceptance));
     }
     const showBox = window.localStorage.getItem('showCoookieBox')
-
     if (showBox) {
       dispatch(cookieBoxEnable(showBox));
     }
   }, []);
 
-  const handleSubmit = (isDeclined) => {
-    dispatch(cookieBoxEnable(isDeclined));
-    dispatch(acceptCookie(isDeclined));
-    isDeclined ? rejectCookies() : null;
+  const handleSubmit = (coockies, showBox) => {
+    dispatch(acceptCookie(coockies));
+    dispatch(cookieBoxEnable(showBox));
+    !coockies ? rejectCookies() : null;
   };
 
   const buttonStyles = {
@@ -114,14 +114,14 @@ const CookiesPopup = () => {
           <Button
             sx={buttonStyles}
             onClick={() => {
-              handleSubmit(false);
+              handleSubmit(true, false);
             }}
           >
             Aceptar
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(true);
+              handleSubmit(false, false);
             }}
             sx={buttonStyles}
           >
