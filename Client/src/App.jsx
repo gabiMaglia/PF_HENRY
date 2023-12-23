@@ -7,6 +7,7 @@ import Footer from "./components/Footer/Footer.component";
 import WhatsApp from "./components/WhatsApp/WhatsApp.component";
 import ButtonScrollTop from "./components/ButtonScrollTop/ButtonScrollTop.component";
 import ProtectedRoutes from "./components/utils/ProtectedRoutes/ProtectedRoutes.component";
+import CookiesPopup from "./components/CookiesPopup/CookiesPopup.component";
 //PUBLICS VIEWS
 import Home from "./views/publics/Home/Home.view";
 import Products from "./views/publics/Products/Products.view";
@@ -26,6 +27,7 @@ import PATHROUTES from "./helpers/pathRoute";
 const App = () => {
   return (
     <>
+      <CookiesPopup />
       <Box>
         <SearchBar />
         <NavBar />
