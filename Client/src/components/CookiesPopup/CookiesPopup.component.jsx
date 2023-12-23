@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 import { Box, Button, Link, Typography } from "@mui/material";
 import CookieIcon from "@mui/icons-material/Cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { cookieBoxEnable, acceptCookie } from "../../redux/slices/cookiesSlice";
 
 const CookiesPopup = () => {
-  const [Isvisible, setIsVisible] = useState(true);
+  const dispatch = useDispatch();
+  const showCookiesBox = useSelector((state) => state.cookies.boxEnable);
+  // const showCookiesBox = window.localStorage.getItem('showCoookieBox')
+
+  console.log(showCookiesBox);
 
   const rejectCookies = () => {
     const allCookies = Cookies.get();
@@ -15,9 +21,17 @@ const CookiesPopup = () => {
     });
   };
 
+  useEffect(() => {
+    const showBox = window.localStorage.getItem('showCoookieBox')
+    console.log(showBox)
+    if (showBox) {
+      dispatch(cookieBoxEnable(showBox));
+    }
+  }, []);
+
   const handleSubmit = (isDeclined) => {
+    dispatch(cookieBoxEnable(isDeclined));
     isDeclined ? rejectCookies() : null;
-    setIsVisible(false);
   };
 
   const buttonStyles = {
@@ -34,7 +48,7 @@ const CookiesPopup = () => {
     },
   };
   return (
-    Isvisible && (
+    showCookiesBox === true && (
       <Box
         sx={{
           position: "fixed",
@@ -42,6 +56,7 @@ const CookiesPopup = () => {
           left: "20px",
           maxWidth: "345px",
           width: "100%",
+
           background: "#FD611A",
           borderRadius: "8px",
           padding: "15px 25px 22px",
@@ -65,10 +80,10 @@ const CookiesPopup = () => {
             }}
           />
           <Typography
-            sx={{ fontWeight: 500, fontSize: "25px", color: "white" }}
+            sx={{ fontWeight: 600, fontSize: "17px", color: "white" }}
             variant="h2"
           >
-            Cookies Consent
+            Consentimiento de Cookies
           </Typography>
         </Box>
         <Box>
@@ -103,16 +118,16 @@ const CookiesPopup = () => {
           }}
         >
           <Button
-            onClick={() => {
-              handleSubmit(false);
-            }}
             sx={buttonStyles}
+            onClick={() => {
+              handleSubmit(true);
+            }}
           >
             Aceptar
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(true);
+              handleSubmit(false);
             }}
             sx={buttonStyles}
           >
