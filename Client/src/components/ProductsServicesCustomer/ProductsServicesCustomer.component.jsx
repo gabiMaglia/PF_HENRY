@@ -44,7 +44,7 @@ const globalProducts = [
   },
 ];
 
-const EcommerceCard = () => {
+const PoductServicesCustomerComponent = () => {
   // Verificar si globalProducts existe y es un array
   if (
     !globalProducts ||
@@ -154,4 +154,4 @@ const EcommerceCard = () => {
   );
 };
 
-export default EcommerceCard;
+export default PoductServicesCustomerComponent;

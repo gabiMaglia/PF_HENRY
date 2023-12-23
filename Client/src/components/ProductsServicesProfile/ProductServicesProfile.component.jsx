@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import ServicesProductsCard from "../ServicesProductsCard/ServicesProductsCard.component";
+import ProductsServicesCustomer from "../ProductsServicesCustomer/ProductsServicesCustomer.component";
 
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 
@@ -20,7 +20,7 @@ const ProductServicesProfileComponent = () => {
       {userRole === "admin" ? (
         <p>Contenido de PRODUCTS SERVICVES (admin)</p>
       ) : (
-        <ServicesProductsCard />
+        <ProductsServicesCustomer />
       )}
     </Box>
   );
