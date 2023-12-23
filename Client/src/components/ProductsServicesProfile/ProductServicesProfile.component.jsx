@@ -7,7 +7,7 @@ const ProductServicesProfileComponent = () => {
   const userRole = authData.userRole;
 
   return (
-    <Box
+    <
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -20,7 +20,7 @@ const ProductServicesProfileComponent = () => {
       ) : (
         <p>Contenido de PRODUCTS SERVICVES (customer)</p>
       )}
-    </Box>
+    </>
   );
 };
 
