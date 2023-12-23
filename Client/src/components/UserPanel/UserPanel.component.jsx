@@ -24,20 +24,56 @@ const UserPanelComponent = () => {
   const userRole = authData.userRole;
 
   const userRoutes = [
+    //CUSTOMERS
     {
-      path: PATHROUTES.USERPANEL + PATHROUTES.PROFILE,
-      roles: ["customer", "admin"],
+      path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.PROFILE,
+      roles: ["customer"],
     },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.SHOPINGS, roles: ["customer"] },
     {
-      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCT_CREATE,
+      path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.SHOPINGS,
+      roles: ["customer"],
+    },
+    {
+      path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.WISHLIST,
+      roles: ["customer"],
+    },
+    {
+      path: PATHROUTES.CUSTOMER_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
+      roles: ["customer"],
+    },
+    //ADMINS
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PROFILE,
       roles: ["admin"],
     },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.WISHLIST, roles: ["customer"] },
-    { path: PATHROUTES.USERPANEL + PATHROUTES.TECHNICIANS, roles: ["admin"] },
     {
-      path: PATHROUTES.USERPANEL + PATHROUTES.PRODUCTS_SERVICES,
-      roles: ["customer", "admin"],
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCT_CREATE,
+      roles: ["admin"],
+    },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.TECHNICIANS,
+      roles: ["admin"],
+    },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
+      roles: ["admin"],
+    },
+    //TECHNICIANS
+    {
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PROFILE,
+      roles: ["technician"],
+    },
+    {
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
+      roles: ["technician"],
+    },
+    {
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REAPIRED_PRODCUTS,
+      roles: ["technician"],
+    },
+    {
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REPAIR_HISTORY,
+      roles: ["technician"],
     },
   ];
 
