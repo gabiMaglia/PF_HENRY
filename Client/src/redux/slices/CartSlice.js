@@ -1,12 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addItemsToCart = createAsyncThunk(
-  "cart/addItems",
-  async (items, { dispatch }) => {
-    return items;
-  }
-);
-
 const initialState = {
   items: [],
   total: 0,
@@ -23,12 +16,7 @@ const cartSlice = createSlice({
       );
 
       if (storedProducts) {
-        const uniqueProducts = storedProducts.filter(
-          (product) => !state.items.some((item) => item.id === product.id)
-        );
-        state.items = [...state.items, ...uniqueProducts];
-      } else {
-        state.items = [];
+        state.items = Object.values(storedProducts).map((product) => ({ ...product }));
       }
     },
     updateItem: (state, action) => {
@@ -36,12 +24,19 @@ const cartSlice = createSlice({
       const itemIndex = state.items.findIndex((item) => item.id === id);
 
       if (itemIndex !== -1) {
-        state.items[itemIndex].count = count;
+        const updatedItem = {
+          ...state.items[itemIndex],
+          count: count,
+        };
 
-        const updatedProducts = [...state.items];
+        const updatedItems = [...state.items];
+        updatedItems[itemIndex] = updatedItem;
+
+        state.items = updatedItems;
+
         window.localStorage.setItem(
           "storedProducts",
-          JSON.stringify(updatedProducts)
+          JSON.stringify(updatedItems)
         );
       }
     },
@@ -64,12 +59,6 @@ const cartSlice = createSlice({
     idShop: (state, action) => {
       state.id = action.payload
     },
-  },
-  extraReducers: (builder) => {
-    // Maneja la acción asyncThunk para agregar productos al carrito
-    builder.addCase(addItemsToCart.fulfilled, (state, action) => {
-      state.items = [...state.items, ...action.payload];
-    });
   },
 });
 

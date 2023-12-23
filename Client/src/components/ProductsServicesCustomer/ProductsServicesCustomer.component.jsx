@@ -44,7 +44,7 @@ const globalProducts = [
   },
 ];
 
-const ProdcuctsServicesCustomerComponent  = () => {
+const ProdcuctsServicesCustomerComponent = () => {
   if (
     !globalProducts ||
     !Array.isArray(globalProducts) ||
@@ -90,12 +90,12 @@ const ProdcuctsServicesCustomerComponent  = () => {
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    <span
-                      style={{ color: "#fd611a", textTransform: "uppercase" }}
-                    >
-                      <h2>PRESUPUESTO : {product.budget}</h2>
-                    </span>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    style={{ color: "#fd611a", textTransform: "uppercase" }}
+                  >
+                    PRESUPUESTO : {product.budget}
                   </Typography>
                   <Typography variant="h6" color="text.primary">
                     {product.state} {/* estado del producto */}

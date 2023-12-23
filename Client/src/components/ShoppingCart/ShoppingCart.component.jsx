@@ -29,7 +29,7 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     dispatch(addItem());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(totalItem());
@@ -50,7 +50,6 @@ export default function ShoppingCart() {
   }
 
   const handleChange = (product, event) => {
-    console.log(product, "cant");
     const newQuantity = parseInt(event.target.value, 10) || 1;
 
     dispatch(updateItem({ id: product.id, count: newQuantity }));
