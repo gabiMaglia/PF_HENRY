@@ -234,6 +234,8 @@ const SupportComponent = () => {
               error={errorName.error}
               helperText={errorName.message}
               value={name}
+              name="name"
+              autoComplete="name"
               onChange={(e) => handleChangeName(e.target.value)}
             />
             <TextField
@@ -245,6 +247,8 @@ const SupportComponent = () => {
               error={errorPhone.error}
               helperText={errorPhone.message}
               value={phone}
+              name="phone"
+              autoComplete="phone"
               onChange={(e) => handleChangePhone(e.target.value)}
               sx={{ margin: "20px 0" }}
             />
@@ -257,6 +261,8 @@ const SupportComponent = () => {
               error={errorEmail.error}
               helperText={errorEmail.message}
               value={email}
+              name="email"
+              autoComplete="email"
               onChange={(e) => handleChangeEmail(e.target.value)}
             />
             <Textarea
