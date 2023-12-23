@@ -4,33 +4,27 @@ import Cookies from "js-cookie";
 import { Box, Button, Link, Typography } from "@mui/material";
 import CookieIcon from "@mui/icons-material/Cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { cookieBoxEnable, acceptCookie } from "../../redux/slices/cookiesSlice";
+import { cookieBoxEnable, acceptCookie, rejectCookies } from "../../redux/slices/cookiesSlice";
 
 const CookiesPopup = () => {
   const dispatch = useDispatch();
   const showCookiesBox = useSelector((state) => state.cookies.boxEnable);
-  // const showCookiesBox = window.localStorage.getItem('showCoookieBox')
-
-  console.log(showCookiesBox);
-
-  const rejectCookies = () => {
-    const allCookies = Cookies.get();
-    const allCookiesKeys = Object.keys(allCookies);
-    allCookiesKeys.map((cookie) => {
-      Cookies.remove(cookie);
-    });
-  };
 
   useEffect(() => {
     const showBox = window.localStorage.getItem('showCoookieBox')
-    console.log(showBox)
+    console.log(typeof showBox)
     if (showBox) {
       dispatch(cookieBoxEnable(showBox));
+    }
+    const acceptance = window.localStorage.getItem('showCoookieBox')
+    if (acceptance) {
+      dispatch(acceptCookie(Boolean(acceptance)));
     }
   }, []);
 
   const handleSubmit = (isDeclined) => {
     dispatch(cookieBoxEnable(isDeclined));
+    dispatch(acceptCookie(isDeclined));
     isDeclined ? rejectCookies() : null;
   };
 
