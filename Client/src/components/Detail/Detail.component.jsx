@@ -19,6 +19,7 @@ import {
   fetchAllProducts,
 } from "../../services/ProductServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { addItem } from "../../redux/slices/CartSlice";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -151,6 +152,7 @@ const Detail = () => {
   const handleAddToCart = () => {
     if (productById && productById.id) {
       setStoredProducts(productById);
+      dispatch(addItem());
     }
   };
 
