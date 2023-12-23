@@ -91,6 +91,16 @@ const HomeProducts = ({ allProducts }) => {
         flexDirection: "column",
       }}
     >
+      <Typography
+        variant="h5"
+        sx={{
+          color: "#000",
+          fontWeight: "900",
+          margin: "25px auto 0"
+        }}
+      >
+        Productos Destacados
+      </Typography>
       <Container
         sx={{
           display: "flex",
