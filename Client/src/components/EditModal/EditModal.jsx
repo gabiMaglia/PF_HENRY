@@ -14,6 +14,7 @@ import {
 import CancelIcon from "@mui/icons-material/Cancel";
 //HELPERS
 import { userEditValidate } from "../../helpers/userValidate";
+//STYLES
 import "./alertStyles.min.css";
 //SERVICES
 import { PutUser } from "../../services/userServices";

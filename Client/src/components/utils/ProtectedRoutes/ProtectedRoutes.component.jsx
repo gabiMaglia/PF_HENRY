@@ -1,10 +1,13 @@
+//HOOKS
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import { getDataFromSelectedPersistanceMethod } from "../../../utils/authMethodSpliter";
+//SESISON ALERT
 import {
   SessionAlertLogin,
   SessionAlertRole,
 } from "../SessionAlert/SessionAlert.component";
+//UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../../utils/authMethodSpliter";
 
 const ProtectedRoutesComponent = ({
   redirectPath = "/",

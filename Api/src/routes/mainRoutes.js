@@ -41,7 +41,7 @@ mainRouter.use("/user_credentials", userCredentialsRoutes);
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);
 // ProductRoute
-mainRouter.use("/product", productRouter);
+mainRouter.use("/product",  productRouter);
 mainRouter.use("/brand", brandRouter);
 mainRouter.use("/category", categoryRouter);
 mainRouter.use("/stock", stockRouter);

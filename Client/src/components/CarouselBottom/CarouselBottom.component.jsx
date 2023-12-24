@@ -1,6 +1,9 @@
+//HOOKS
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
 import Slider from "react-slick";
+//MATERIAL UI
+import { Box } from "@mui/material";
+//SLICK
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 

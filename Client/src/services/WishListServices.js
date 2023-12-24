@@ -1,9 +1,12 @@
+//AXIOS
 import axios from "axios";
-import Swal from "sweetalert2";
+//UTILS
 import {
   getWishlist,
   addProductToWishlist,
 } from "../redux/slices/wishListSlice";
+//SWEET ALERT
+import Swal from "sweetalert2";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 

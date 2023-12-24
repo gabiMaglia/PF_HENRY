@@ -22,7 +22,7 @@ import {
   fetchAllProducts,
 } from "../../services/ProductServices";
 //HOOK
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
 //REDUX
 import { resetState } from "../../redux/slices/productSlice";
 import { addItem } from "../../redux/slices/cartSlice";

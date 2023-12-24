@@ -1,6 +1,6 @@
 //HOOKS
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 //MATERIAL UI
 import {
   Box,
@@ -17,11 +17,11 @@ import styled from "@emotion/styled";
 import data from "../../DataBase/categories.json";
 //UTILS
 import { brands } from "../../utils/objectsTexts";
-//REDUCERS
+//SERVICES
 import {
-  fetchProductsByCategory,
   fetchProductsByBrand,
-} from "../../services/ProductServices";
+} from "../../services/productServices";
+//REDUX
 import {
   resetState,
   orderPrice,
