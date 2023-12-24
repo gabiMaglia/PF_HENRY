@@ -20,11 +20,11 @@ import { useSelector } from "react-redux";
 const UserPanelComponent = () => {
   const navigate = useNavigate();
   const actualLocation = useLocation().pathname;
-  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted)
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
 
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userRole = authData.userRole;
-  
+
   const userRoutes = [
     //CUSTOMERS
     {
