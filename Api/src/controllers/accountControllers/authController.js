@@ -148,7 +148,6 @@ const loginUser = async (username, password, googleId) => {
     user: `${_user.name} ${_user.surname}`,
   };
 };
-
 const sendEmailToResetPassword = async () => {};
 
 const resetPassword = async (userId) => {

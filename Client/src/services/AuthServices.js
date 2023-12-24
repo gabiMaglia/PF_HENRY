@@ -56,7 +56,6 @@ export const googleLoginUser = async (cookieStatus) => {
           const sortedData = dataSorterForApp(event.data);
           console.log(sortedData);
           createPersistency(sortedData, cookieStatus)
-          
           popup.close();
           resolve({ data: event.data });
         }

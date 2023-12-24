@@ -1,3 +1,4 @@
+//MATERIAL UI
 import { Box } from "@mui/material";
 
 const WhishListProfileComponent = () => {

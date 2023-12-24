@@ -1,5 +1,6 @@
+//AXIOS
 import axios from "axios";
-import Swal from "sweetalert2";
+//UTILS
 import {
   search,
   getProductById,
@@ -8,7 +9,10 @@ import {
   filterByBrand,
   changeInput,
 } from "../redux/slices/productSlice";
+//REDUX
 import { idShop } from "../redux/slices/cartSlice";
+//SWEET ALERT
+import Swal from "sweetalert2";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 

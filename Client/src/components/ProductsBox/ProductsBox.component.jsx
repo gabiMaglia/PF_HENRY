@@ -13,7 +13,7 @@ import {
 //COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
 //HOOK
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
 //REDUX
 import { addItem } from "../../redux/slices/cartSlice";
 
