@@ -27,7 +27,7 @@ import {
   orderPrice,
   filterByBrand,
   filterByCategory,
-} from "../../redux/slices/ProductSlice";
+} from "../../redux/slices/productSlice";
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();

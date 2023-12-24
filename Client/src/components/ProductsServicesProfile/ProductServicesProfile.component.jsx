@@ -1,9 +1,15 @@
+//HOOKS
+import { useSelector } from "react-redux";
+//MATERIAL UI
 import { Box } from "@mui/material";
+//COMPONENTS
 import ProdcuctsServicesCustomer from "../ProductsServicesCustomer/ProductsServicesCustomer.component";
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+//UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductServicesProfileComponent = () => {
-  const authData = getAuthDataCookie("authData");
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const userRole = authData.userRole;
 

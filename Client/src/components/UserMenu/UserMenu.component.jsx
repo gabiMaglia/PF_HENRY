@@ -18,9 +18,9 @@ import {
 import PATHROUTES from "../../helpers/pathRoute";
 import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
-import userPanelItems from "../../utils/userPanelItems.jsx";
+import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
-import { logoutUser } from "../../redux/slices/UserSlice.js";
+import { logoutUser } from "../../redux/slices/userSlice.js";
 import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
 
 const UserMenu = () => {
@@ -33,7 +33,7 @@ const UserMenu = () => {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
   };
-  const items = userPanelItems(name, surname);
+  const items = UserPanelItems(name, surname);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 

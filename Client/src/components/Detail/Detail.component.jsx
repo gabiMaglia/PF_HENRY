@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+//MATERIAL UI
 import {
   Typography,
   Box,
@@ -10,16 +14,18 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { resetState } from "../../redux/slices/ProductSlice";
+//COMPONENT
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
+//SERVICES
 import {
   fetchProductById,
   fetchAllProducts,
 } from "../../services/ProductServices";
+//HOOK
 import { useLocalStorage } from "../../Hook/useLocalStorage";
-import { addItem } from "../../redux/slices/CartSlice";
+//REDUX
+import { resetState } from "../../redux/slices/productSlice";
+import { addItem } from "../../redux/slices/cartSlice";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
