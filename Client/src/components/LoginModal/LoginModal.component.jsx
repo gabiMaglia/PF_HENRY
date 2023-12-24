@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+//MATERIAL UI
 import {
   Box,
   Button,
@@ -12,15 +13,18 @@ import {
   CardMedia,
   Divider,
 } from "@mui/material";
-import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
 //HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX
-import { logUser } from "../../redux/slices/UserSlice";
-import { googleLoginUser, loginUser } from "../../services/AuthServices";
-import { getUserById } from "../../services/UserServices";
+
+import { logUser } from "../../redux/slices/userSlice";
+//SERVICES
+import { googleLoginUser, loginUser } from "../../services/authServices";
+import { getUserById } from "../../services/userServices";
+//SWEET ALERT
+import Swal from "sweetalert2";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 

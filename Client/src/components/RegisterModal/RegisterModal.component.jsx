@@ -15,8 +15,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 //HELPERS
 import { userRegisterValidate } from "../../helpers/userValidate";
 //REDUX
-import { registerUser } from "../../services/AuthServices";
-
+import { registerUser } from "../../services/authServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 

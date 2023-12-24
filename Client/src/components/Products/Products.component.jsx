@@ -7,9 +7,10 @@ import { Box, Pagination, Stack } from "@mui/material";
 //COMPONENTS
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
-//REDUCERS
-import { fetchSearch, fetchAllProducts } from "../../services/ProductServices";
-import { nextPage } from "../../redux/slices/ProductSlice";
+//REDUX
+import { nextPage } from "../../redux/slices/productSlice";
+//SERVICES
+import { fetchSearch, fetchAllProducts } from "../../services/productServices";
 
 const Products = () => {
   const dispatch = useDispatch();

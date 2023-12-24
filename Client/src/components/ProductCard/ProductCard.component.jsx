@@ -10,7 +10,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import {
   fetchAddItemWish,
   fetchWishList,
-} from "../../services/WishListServices";
+} from "../../services/wishListServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 

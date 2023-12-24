@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import {
   getWishlist,
   addProductToWishlist,
-} from "../redux/slices/WishListSlice";
+} from "../redux/slices/wishListSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 

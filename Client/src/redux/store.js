@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./slices/UserSlice";
-import cookiesReducer from './slices/CookiesSlice'
-import productReducer from "./slices/ProductSlice";
-import cartReducer from "./slices/CartSlice";
-import categoriesReducer from "./slices/CategoriesSlice";
-import wishlistReducer from "./slices/WishListSlice";
+import userReducer from "./slices/userSlice";
+import cookiesReducer from "./slices/cookiesSlice";
+import productReducer from "./slices/productSlice";
+import cartReducer from "./slices/cartSlice";
+import categoriesReducer from "./slices/categoriesSlice";
+import wishlistReducer from "./slices/wishListSlice";
 
 import thunkMiddleware from "redux-thunk";
 
@@ -18,7 +18,6 @@ const store = configureStore({
     wishlist: wishlistReducer,
   },
   middleware: [thunkMiddleware],
-  
 });
 
 export default store;

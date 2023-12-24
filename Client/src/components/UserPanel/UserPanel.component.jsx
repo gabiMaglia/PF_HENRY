@@ -25,8 +25,6 @@ const UserPanelComponent = () => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userRole = authData.userRole;
   
-
-
   const userRoutes = [
     //CUSTOMERS
     {

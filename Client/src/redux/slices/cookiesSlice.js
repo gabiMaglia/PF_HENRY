@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+
 const initialState = {
   cookiesAccepted: false,
   boxEnable: true,
 };
+
 const cookiesSlice = createSlice({
   name: "cookies",
   initialState,

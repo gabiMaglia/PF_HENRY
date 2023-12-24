@@ -7,8 +7,8 @@ import {
   filterByCategory,
   filterByBrand,
   changeInput,
-} from "../redux/slices/ProductSlice";
-import { idShop } from "../redux/slices/CartSlice";
+} from "../redux/slices/productSlice";
+import { idShop } from "../redux/slices/cartSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
