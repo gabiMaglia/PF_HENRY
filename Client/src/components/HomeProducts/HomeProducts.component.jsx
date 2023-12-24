@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+//HOOKS
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import ProductCard from "../ProductCard/ProductCard.component";
+//MATERIAL UI
 import { Container, Typography, CircularProgress } from "@mui/material";
+//COMPONENTS
+import ProductCard from "../ProductCard/ProductCard.component";
 
 const HomeProducts = ({ allProducts }) => {
   const dispatch = useDispatch();
@@ -91,6 +94,16 @@ const HomeProducts = ({ allProducts }) => {
         flexDirection: "column",
       }}
     >
+      <Typography
+        variant="h5"
+        sx={{
+          color: "#000",
+          fontWeight: "900",
+          margin: "25px auto 0"
+        }}
+      >
+        Productos Destacados
+      </Typography>
       <Container
         sx={{
           display: "flex",

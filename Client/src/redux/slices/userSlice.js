@@ -44,7 +44,6 @@ const userSlice = createSlice({
       state.userAddress.zipCode = UserAddress.zipCode;
     },
     logoutUser: (state) => {
-
       state.login = false
       state.name = "";
       state.surname = "";

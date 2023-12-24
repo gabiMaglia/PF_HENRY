@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+//HOOKS
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+//MATERIAL UI
 import {
   Box,
   Button,
@@ -9,10 +10,16 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+//COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
+//HOOK
+import { useLocalStorage } from "../../Hook/useLocalStorage";
+//REDUX
+import { addItem } from "../../redux/slices/cartSlice";
 
 const ProductBox = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow, isLoading } = useSelector((state) => state.product);
 
@@ -22,7 +29,7 @@ const ProductBox = () => {
 
   const handleAddToCart = (product) => {
     setStoredProducts(product);
-    console.log("Producto agregado al carrito:", product);
+    dispatch(addItem());
   };
 
   useEffect(() => {
@@ -94,11 +101,32 @@ const ProductBox = () => {
         </Typography>
       ) : (
         productsToShow.map((product, index) => (
-          <ProductCardWithFade
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
             key={product.id}
-            product={product}
-            index={index}
-          />
+          >
+            <ProductCardWithFade product={product} index={index} />
+            <Button
+              variant="contained"
+              sx={{
+                maxWidth: 270,
+                backgroundColor: "#fd611a",
+                color: "black",
+                transition: "transform 0.3s",
+                marginTop: "10px",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  backgroundColor: "#fd611a",
+                  color: "white",
+                },
+              }}
+              onClick={() => handleAddToCart(product)}
+            >
+              AGREGAR AL CARRITO
+            </Button>
+          </Box>
         ))
       )}
     </Container>

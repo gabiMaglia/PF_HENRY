@@ -1,5 +1,6 @@
+import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import { getAuthDataCookie } from "../../../utils/cookiesFunctions";
+import { getDataFromSelectedPersistanceMethod } from "../../../utils/authMethodSpliter";
 import {
   SessionAlertLogin,
   SessionAlertRole,
@@ -9,7 +10,8 @@ const ProtectedRoutesComponent = ({
   redirectPath = "/",
   allowedRoles = [],
 }) => {
-  const authData = getAuthDataCookie("authData");
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   if (!authData || !authData.login) {
     SessionAlertLogin();

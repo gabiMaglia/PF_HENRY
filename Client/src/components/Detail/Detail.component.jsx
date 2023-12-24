@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+//MATERIAL UI
 import {
   Typography,
   Box,
@@ -10,15 +14,18 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { resetState } from "../../redux/slices/ProductSlice";
-import { addItemsToCart } from "../../redux/slices/CartSlice";
+//COMPONENT
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
+//SERVICES
 import {
   fetchProductById,
   fetchAllProducts,
 } from "../../services/ProductServices";
+//HOOK
+import { useLocalStorage } from "../../Hook/useLocalStorage";
+//REDUX
+import { resetState } from "../../redux/slices/productSlice";
+import { addItem } from "../../redux/slices/cartSlice";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -76,7 +83,7 @@ const Detail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { productById, isLoading } = useSelector((state) => state.product);
-  const [localCartItems, setLocalCartItems] = useState([]);
+  const [storedProducts, setStoredProducts] = useLocalStorage();
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
@@ -101,7 +108,9 @@ const Detail = () => {
     const fetchData = async () => {
       try {
         await dispatch(fetchProductById(id));
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const fetchDataAsync = async () => {
@@ -148,16 +157,10 @@ const Detail = () => {
 
   const handleAddToCart = () => {
     if (productById && productById.id) {
-      setLocalCartItems([...localCartItems, productById]);
-      console.log("Product added to local cart for ID:", productById.id);
+      setStoredProducts(productById);
+      dispatch(addItem());
     }
   };
-
-  useEffect(() => {
-    return () => {
-      dispatch(addItemsToCart(localCartItems));
-    };
-  }, [dispatch, localCartItems]);
 
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(max-width:500px)");
@@ -306,34 +309,6 @@ const Detail = () => {
               >
                 Agregar al Carrito
               </CustomButton>
-              {cartItemCount > 0 && (
-                <span
-                  style={{
-                    marginLeft: "0.5em",
-                    backgroundColor: "red",
-                    color: "white",
-                    borderRadius: "50%",
-                    padding: "0.2em 0.5em",
-                    fontSize: "0.7em",
-                  }}
-                >
-                  {cartItemCount}
-                </span>
-              )}
-              {cartItemCount > 0 && (
-                <span
-                  style={{
-                    marginLeft: "0.5em",
-                    backgroundColor: "red",
-                    color: "white",
-                    borderRadius: "50%",
-                    padding: "0.2em 0.5em",
-                    fontSize: "0.7em",
-                  }}
-                >
-                  {cartItemCount}
-                </span>
-              )}
             </Container>
           </Container>
         </Container>

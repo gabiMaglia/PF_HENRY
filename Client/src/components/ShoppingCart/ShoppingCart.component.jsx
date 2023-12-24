@@ -1,4 +1,8 @@
-import React, { useEffect } from "react";
+//HOOKS
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+//MATERIAL UI
 import {
   TextField,
   Container,
@@ -9,16 +13,15 @@ import {
   Button,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { useDispatch, useSelector } from "react-redux";
+//REDUX
 import {
   addItem,
   updateItem,
   removeItem,
   totalItem,
-} from "../../redux/slices/CartSlice";
-import { fetchCart } from "../../services/ProductServices";
-
-import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+} from "../../redux/slices/cartSlice";
+//SERVICES
+import { fetchCart } from "../../services/productServices";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
@@ -29,7 +32,7 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     dispatch(addItem());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(totalItem());
@@ -50,7 +53,6 @@ export default function ShoppingCart() {
   }
 
   const handleChange = (product, event) => {
-    console.log(product, "cant");
     const newQuantity = parseInt(event.target.value, 10) || 1;
 
     dispatch(updateItem({ id: product.id, count: newQuantity }));

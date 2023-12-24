@@ -3,6 +3,8 @@ const {
   registerUser,
   confirmAccountController,
 } = require("../../controllers/accountControllers/authController");
+
+
 const signInHandler = async (req, res) => {
   const {
     name,
@@ -59,12 +61,21 @@ const loginHandler = async (req, res) => {
       sameSite: "Strict",
       secure: true,
     });
-    // const {login, userId, user} = response
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
   }
 };
+const forgetPassword = async (req, res) => {
+  try {
+    const {username} = req.body
+    const message = `Chekea tu casilla de correo para resetear el password`
+
+    if (!username) return res.status(400).json({message: `User ${username} not found`})
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
 const confirmAccountHandler = async (req, res) => {
   const { token } = req.params;
   try {
@@ -78,5 +89,6 @@ const confirmAccountHandler = async (req, res) => {
 module.exports = {
   loginHandler,
   signInHandler,
+  forgetPassword,
   confirmAccountHandler,
 };

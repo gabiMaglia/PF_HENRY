@@ -1,5 +1,4 @@
 //HOOKS
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,28 +11,29 @@ import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
-import { fetchSearch, fetchChage } from "../../services/ProductServices";
-import { getUserById } from "../../services/UserServices";
-//UTILS
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { fetchSearch, fetchChage } from "../../services/productServices";
+import { getUserById } from "../../services/userServices";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
+//UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
-import { logUser } from "../../redux/slices/UserSlice";
-// import { loginUser } from "../../services/AuthServices";
+import { logUser } from "../../redux/slices/userSlice";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const cartItemCount = useSelector((state) => state.cart.items.length);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
 
   const Img = styled("img")({
     width: 140,
     height: 140,
   });
+  
   const Logo = styled("img")({
     width: 30,
     height: 30,
@@ -45,6 +45,7 @@ export default function SearchAppBar() {
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (token) => {
+    
     if (token !== undefined) {
       const response = await getUserById(token.userId);
       dispatch(logUser({ userObject: { ...response, rolId: token.userRole } }));
@@ -68,26 +69,16 @@ export default function SearchAppBar() {
     navigate(PATHROUTES.SHOPCART);
   };
 
-  // const handleAddToCart = () => {
-  //   // Despacha la acción del carrito para agregar el producto
-  //   dispatch(addItem());
-  // };
-
-  // const updateCartCount = (count) => {
-  //   setCartItemCount(count);
-  // };
-
   useEffect(() => {
-    const userToken = getAuthDataCookie("authData");
-    if (userToken) {
+    const userToken = getDataFromSelectedPersistanceMethod(cookieStatus);  
+    if (userToken?.login) {
       getUserInfo(userToken);
     }
-  }, []);
+  }, [cookieStatus]);
 
   return (
     <Box
       sx={{
-        mt: 1,
         mb: 1,
         flexGrow: 1,
         display: "flex",

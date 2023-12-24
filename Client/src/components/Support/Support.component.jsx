@@ -13,8 +13,6 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Textarea from "@mui/joy/Textarea";
-//SWEET ALERT
-import Swal from "sweetalert2";
 //HELPERS
 import {
   validateName,
@@ -24,7 +22,9 @@ import {
 } from "../../helpers/supportValidateForm";
 //UTILS
 import { textSupport } from "../../utils/objectsTexts";
-//VARIABLE DE ENTORNO
+//SWEET ALERT
+import Swal from "sweetalert2";
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -234,6 +234,8 @@ const SupportComponent = () => {
               error={errorName.error}
               helperText={errorName.message}
               value={name}
+              name="name"
+              autoComplete="name"
               onChange={(e) => handleChangeName(e.target.value)}
             />
             <TextField
@@ -245,6 +247,8 @@ const SupportComponent = () => {
               error={errorPhone.error}
               helperText={errorPhone.message}
               value={phone}
+              name="phone"
+              autoComplete="phone"
               onChange={(e) => handleChangePhone(e.target.value)}
               sx={{ margin: "20px 0" }}
             />
@@ -257,6 +261,8 @@ const SupportComponent = () => {
               error={errorEmail.error}
               helperText={errorEmail.message}
               value={email}
+              name="email"
+              autoComplete="email"
               onChange={(e) => handleChangeEmail(e.target.value)}
             />
             <Textarea

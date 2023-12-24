@@ -1,3 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
 body {
-    min-width: 425px;
+  width: 100%;
+  min-width: 425px;
+  overflow-x: hidden;
 }

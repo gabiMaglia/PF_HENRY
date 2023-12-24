@@ -14,15 +14,15 @@ import {
 import { Menu, ArrowBack } from "@mui/icons-material";
 //UTILS
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
-import sideBarItems from "../../utils/sidebarItems.jsx";
+import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
-import { logoutUser } from "../../redux/slices/UserSlice";
+import { logoutUser } from "../../redux/slices/userSlice.js";
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const { name, surname } = useSelector((state) => state.user);
 
-  const items = sideBarItems(name, surname);
+  const items = UserPanelItems(name, surname);
 
   const logout = () => {
     removeAuthDataCookie("authData");

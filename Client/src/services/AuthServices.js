@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAuthDataCookie } from "../utils/cookiesFunctions";
+import { createPersistency } from "../utils/authMethodSpliter";
 
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
@@ -11,7 +11,8 @@ const dataSorterForApp = (data) => {
   return { login, userId, userRole: decodeToken.userRole };
 };
 
-export const loginUser = async (username, password) => {
+export const loginUser = async (username, password, cookieStatus) => {
+  console.log(cookieStatus);
   try {
     const { data } = await axios.post(
       `${url}/account/login`,
@@ -19,24 +20,20 @@ export const loginUser = async (username, password) => {
         username: username,
         password: password,
       },
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
     if (data.login) {
       const sortedData = dataSorterForApp(data);
-      setAuthDataCookie("authData", {
-        login: sortedData.login,
-        userId: sortedData.userId,
-        userRole: sortedData.userRole,
-      });
+      createPersistency(sortedData, cookieStatus);
       return { error: false, data: sortedData };
     }
   } catch ({ response }) {
     return { error: response };
   }
 };
-export const googleLoginUser = async () => {
+export const googleLoginUser = async (cookieStatus) => {
+  //
+
   try {
     const popup = window.open(
       `${url}/auth/google`,
@@ -54,11 +51,7 @@ export const googleLoginUser = async () => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
           const sortedData = dataSorterForApp(event.data);
-          setAuthDataCookie("authData", {
-            login: sortedData.login,
-            userId: sortedData.userId,
-            userRole: sortedData.userRole,
-          });
+          createPersistency(sortedData, cookieStatus);
           popup.close();
           resolve({ data: event.data });
         }
