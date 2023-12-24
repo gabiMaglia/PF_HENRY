@@ -16,7 +16,7 @@ import { Menu, ArrowBack } from "@mui/icons-material";
 import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 import userPanelItems from "../../utils/userPanelItems.jsx";
 //REDUX
-import { logoutUser } from "../../redux/slices/UserSlice";
+import { logoutUser } from "../../redux/slices/UserSlice.js";
 
 const SideBar = () => {
   const dispatch = useDispatch();

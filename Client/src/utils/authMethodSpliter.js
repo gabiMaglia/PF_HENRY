@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { getAuthDataCookie, setAuthDataCookie } from "./cookiesFunctions";
-import { rejectCookies } from "../redux/slices/cookiesSlice";
+import { rejectCookies } from "../redux/slices/CookiesSlice";
 
 // ESTE ARCHIVO SE ENCARGA DE DETERMINAR SEGUN LA ELECCION DE USAR COOKIES O NO
 // DE DONDE SE SACARA LA INFORMACION DE PERSISTENCIA

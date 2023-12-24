@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { Avatar, Typography } from "@mui/material";
 import {
   LocalShipping,
@@ -12,10 +13,9 @@ import {
 import PATHROUTES from "../helpers/pathRoute";
 import getFirstLetters from "../helpers/getFirstLetters";
 
-import { useSelector } from "react-redux";
 import { getDataFromSelectedPersistanceMethod } from "./authMethodSpliter";
 
-const sideBarItems = (name, surname) => {
+const userPanelItems = (name, surname) => {
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -162,4 +162,4 @@ const sideBarItems = (name, surname) => {
   return items;
 };
 
-export default sideBarItems;
+export default userPanelItems;
