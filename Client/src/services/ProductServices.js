@@ -13,14 +13,21 @@ import {
 import { idShop } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
+import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
+
   try {
-    const response = await axios.get(`${urlBack}/product/`, {
-      withCredentials: true,
-    });
+    const cookieStatus = JSON.parse(window.localStorage.getItem('cookieAccepted'))
+    
+    const axiosInstance = cookieStatus
+      ? headerSetterForPetitions(cookieStatus)
+      : headerSetterForPetitions(cookieStatus)(
+          window.localStorage.getItem("jwt")
+        );
+    const response = await axiosInstance.get(`${urlBack}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
     console.error("Error");

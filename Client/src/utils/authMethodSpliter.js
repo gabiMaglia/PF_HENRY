@@ -46,12 +46,12 @@ export const clearPersistanceData = (cookieStatus) => {
 
 export const headerSetterForPetitions = (cookiesStatus) => {
   if (cookiesStatus) {
-    console.log("entro en el true");
+  
     return axios.create({
       withCredentials: true,
     });
   } else {
-    console.log("entro en el false");
+
     return (token) => {
       return axios.create({
         headers: {
