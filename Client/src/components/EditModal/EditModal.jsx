@@ -14,9 +14,7 @@ import {
 import CancelIcon from "@mui/icons-material/Cancel";
 //HELPERS
 import { userEditValidate } from "../../helpers/userValidate";
-
-import Swal from "sweetalert2";
-
+import "./alertStyles.min.css";
 //SERVICES
 import { PutUser } from "../../services/userServices";
 //UTILS
@@ -82,17 +80,15 @@ const EditModal = ({
   };
 
   const putManagement = async () => {
-    <Box sx={{ zIndex: "999" }}>
-      {Swal.fire({
-        icon: "info",
-        allowOutsideClick: false,
-        title: "Por favor espere mientras procesamos la información",
-        showConfirmButton: false,
-        customClass: {
-          container: "container",
-        },
-      })}
-    </Box>;
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+      customClass: {
+        container: "container",
+      },
+    });
     Swal.showLoading();
     const cookie = getAuthDataCookie("authData");
     const { userId, userRole } = cookie;
@@ -111,32 +107,29 @@ const EditModal = ({
       response = await PutUser(userId, userRole, userData);
     }
     if (response.status === 200 || response.response.status === 200) {
-      <Box sx={{ zIndex: "999" }}>
-        {Swal.fire({
-          allowOutsideClick: false,
-          icon: "success",
-          title: "Los datos ingresados son validos",
-          text: "Información modificada correctamente",
-          confirmButtonText: "Aceptar",
-          confirmButtonColor: "#fd611a",
-          customClass: {
-            container: "container",
-          },
-        })}
-      </Box>;
+      Swal.fire({
+        allowOutsideClick: false,
+
+        icon: "success",
+        title: "Los datos ingresados son validos",
+        text: "Información modificada correctamente",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#fd611a",
+        customClass: {
+          container: "container",
+        },
+      });
       handleDispatch(response.data);
     } else {
-      <Box sx={{ zIndex: "999" }}>
-        {Swal.fire({
-          allowOutsideClick: false,
-          customClass: {
-            container: "container",
-          },
-          icon: "error",
-          title: "Fallo en la modificación de los datos",
-          text: `${response.response.data}`,
-        })}
-      </Box>;
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Fallo en la modificación de los datos",
+        text: `${response.response.data}`,
+      });
     }
   };
 

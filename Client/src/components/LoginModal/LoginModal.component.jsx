@@ -15,10 +15,11 @@ import {
 } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
+//STYLES
+import "./alertStyles.min.css";
 //HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX
-
 import { logUser } from "../../redux/slices/userSlice";
 //SERVICES
 import { googleLoginUser, loginUser } from "../../services/authServices";
@@ -50,34 +51,30 @@ const LoginModal = ({
       response = await loginUser(username, address, cookieStatus);
     }
     if (response.error) {
-      <Box sx={{ zIndex: "999" }}>
-        {Swal.fire({
-          allowOutsideClick: false,
-          customClass: {
-            container: "container",
-          },
-          icon: "error",
-          title: "Fallo en el inicio de sesion",
-          text: `${response.error.data}`,
-        })}
-      </Box>;
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Fallo en el inicio de sesion",
+        text: `${response.error.data}`,
+      });
     } else {
-      <Box sx={{ zIndex: "999" }}>
-        {Swal.fire({
-          allowOutsideClick: false,
-          customClass: {
-            container: "container",
-          },
-          icon: "success",
-          title: "Inicio de sesion correcto",
-          confirmButtonColor: "#fd611a",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            handledispatch(response.data.userId);
-            setLoginModalIsOpen(false);
-          }
-        })}
-      </Box>;
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "success",
+        title: "Inicio de sesion correcto",
+        confirmButtonColor: "#fd611a",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handledispatch(response.data.userId);
+          setLoginModalIsOpen(false);
+        }
+      });
     }
   };
 

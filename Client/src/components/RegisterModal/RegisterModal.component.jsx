@@ -138,46 +138,41 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       const { data, error } = response;
 
       if (error || !data) {
-        <Box sx={{ zIndex: "999" }}>
-          {Swal.fire({
-            allowOutsideClick: false,
-            customClass: {
-              container: "container",
-            },
-            icon: "error",
-            title: "Falla en el registro",
-            text: `${response.error}`,
-          })}
-        </Box>;
-      } else {
-        <Box sx={{ zIndex: "999" }}>
-          {Swal.fire({
-            allowOutsideClick: false,
-            customClass: {
-              container: "container",
-            },
-            icon: "success",
-            title: "Registro exitoso",
-            titleText: "",
-            text: `Para poder iniciar sesion confirma el correo que deberia haber llegado al email: ${userInfo.email}`,
-
-            confirmButtonText: "Volver al menu principal",
-            confirmButtonColor: "#fd611a",
-          }).then((result) => {
-            resetModal();
-          })}
-        </Box>;
-      }
-    } else {
-      <Box sx={{ zIndex: "999" }}>
-        {Swal.fire({
+        Swal.fire({
           allowOutsideClick: false,
           customClass: {
             container: "container",
           },
           icon: "error",
-          title: "Error/es en el formulario",
-          html: `<div>          
+          title: "Falla en el registro",
+          text: `${response.error}`,
+        });
+      } else {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "success",
+          title: "Registro exitoso",
+          titleText: "",
+          text: `Para poder iniciar sesion confirma el correo que deberia haber llegado a el email: ${userInfo.email}`,
+
+          confirmButtonText: "Volver al menu principal",
+          confirmButtonColor: "#fd611a",
+        }).then((result) => {
+          resetModal();
+        });
+      }
+    } else {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Error/es en el formulario",
+        html: `<div>          
         ${errorsUser.email ? "Revise el email <br/>" : ""}
       
         ${errorsUser.address.length > 0 ? "Revise la contraseña <br/>" : ""}
@@ -186,19 +181,18 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
             ? "Revise la confirmación de la contraseña <br/>"
             : ""
         }
-          ${errorsUser.username ? "Revise el nombre de usuario <br/>" : ""}
-          ${
-            errorsUser.phoneNumberAreaCode.length > 0
-              ? "Revise el codigo de area <br/>"
-              : ""
-          }
+        ${errorsUser.username ? "Revise el nombre de usuario <br/>" : ""}
+        ${
+          errorsUser.phoneNumberAreaCode.length > 0
+            ? "Revise el codigo de area <br/>"
+            : ""
+        }
         ${errorsUser.phoneNumber.length > 0 ? "Revise el telefono <br/>" : ""}
         ${errorsUser.name ? "Revise el nombre <br/>" : ""}
         ${errorsUser.surname ? "Revise el apellido <br/>" : ""}
         ${errorsUser.dni.length > 0 ? `Revise el DNI <br/>` : ""}
         <div>`,
-        })}
-      </Box>;
+      });
     }
   };
 
