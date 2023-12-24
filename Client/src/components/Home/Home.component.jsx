@@ -1,5 +1,5 @@
 //HOOKS
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //COMPONENTS
 import HomeProducts from "../HomeProducts/HomeProducts.component";

@@ -1,4 +1,6 @@
+//AXIOS
 import axios from "axios";
+//UTILS
 import { getCategories } from "../redux/slices/categoriesSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
