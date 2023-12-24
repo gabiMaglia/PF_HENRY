@@ -1,4 +1,6 @@
+//HOOKS
 import { configureStore } from "@reduxjs/toolkit";
+//REDUX
 import userReducer from "./slices/userSlice";
 import cookiesReducer from "./slices/cookiesSlice";
 import productReducer from "./slices/productSlice";
