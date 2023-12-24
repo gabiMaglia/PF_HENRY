@@ -15,12 +15,10 @@ import {
 import Swal from "sweetalert2";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
-//STYLES
-import "./alertStyles.min.css";
 //HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX
-import { logUser } from "../../redux/slices/userSlice";
+import { logUser } from "../../redux/slices/UserSlice";
 import { googleLoginUser, loginUser } from "../../services/AuthServices";
 import { getUserById } from "../../services/UserServices";
 
@@ -48,30 +46,34 @@ const LoginModal = ({
       response = await loginUser(username, address, cookieStatus);
     }
     if (response.error) {
-      Swal.fire({
-        allowOutsideClick: false,
-        customClass: {
-          container: "container",
-        },
-        icon: "error",
-        title: "Fallo en el inicio de sesion",
-        text: `${response.error.data}`,
-      });
+      <Box sx={{ zIndex: "999" }}>
+        {Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "error",
+          title: "Fallo en el inicio de sesion",
+          text: `${response.error.data}`,
+        })}
+      </Box>;
     } else {
-      Swal.fire({
-        allowOutsideClick: false,
-        customClass: {
-          container: "container",
-        },
-        icon: "success",
-        title: "Inicio de sesion correcto",
-        confirmButtonColor: "#fd611a",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          handledispatch(response.data.userId);
-          setLoginModalIsOpen(false);
-        }
-      });
+      <Box sx={{ zIndex: "999" }}>
+        {Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "success",
+          title: "Inicio de sesion correcto",
+          confirmButtonColor: "#fd611a",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            handledispatch(response.data.userId);
+            setLoginModalIsOpen(false);
+          }
+        })}
+      </Box>;
     }
   };
 
@@ -216,7 +218,10 @@ const LoginModal = ({
           />
         </Button>
 
-        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
+        <GoogleReCaptchaProvider
+          reCaptchaKey={reCaptchaKey}
+          language="es"
+        >
           {!isUsernameVerified ? (
             <FormControl
               fullWidth
@@ -225,10 +230,16 @@ const LoginModal = ({
                 textAlign: "center",
               }}
             >
-              <Typography variant="h4" sx={{ mb: 4 }}>
+              <Typography
+                variant="h4"
+                sx={{ mb: 4 }}
+              >
                 Iniciar sesión
               </Typography>
-              <Typography variant="body1" sx={{ color: "#fd611a" }}>
+              <Typography
+                variant="body1"
+                sx={{ color: "#fd611a" }}
+              >
                 Para continuar ingresá tu nombre de usuario
               </Typography>
               <TextField
@@ -315,7 +326,10 @@ const LoginModal = ({
               >
                 {user.username}
               </Typography>
-              <Typography variant="body1" sx={{ color: "#fd611a", mt: "2em" }}>
+              <Typography
+                variant="body1"
+                sx={{ color: "#fd611a", mt: "2em" }}
+              >
                 Ingresá tu contraseña
               </Typography>
               <TextField
