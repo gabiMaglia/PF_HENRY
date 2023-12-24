@@ -9,17 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 
-const getCurrentDate = () => {
-  const currentDate = new Date();
-  const options = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  return currentDate.toLocaleDateString("es-AR", options);
-};
-
 const globalProducts = [
   {
     id: 1,
@@ -44,7 +33,7 @@ const globalProducts = [
   },
 ];
 
-const ProdcuctsServicesCustomerComponent = () => {
+const ProductsServicesCustomerComponent = () => {
   if (
     !globalProducts ||
     !Array.isArray(globalProducts) ||
@@ -67,9 +56,7 @@ const ProdcuctsServicesCustomerComponent = () => {
                 textAlign: "center",
                 background: "#f0f0f0",
               }}
-            >
-              {getCurrentDate()}
-            </Typography>
+            ></Typography>
             <CardMedia
               component="img"
               height="140"
@@ -153,4 +140,4 @@ const ProdcuctsServicesCustomerComponent = () => {
   );
 };
 
-export default ProdcuctsServicesCustomerComponent;
+export default ProductsServicesCustomerComponent;
