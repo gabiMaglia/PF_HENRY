@@ -1,5 +1,5 @@
 //HOOKS
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 //MATERIAL UI
 import { Card, Box } from "@mui/material";

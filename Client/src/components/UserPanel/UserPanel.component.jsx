@@ -1,4 +1,5 @@
 //HOOKS
+import { useSelector } from "react-redux";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 //MATERIAL UI
 import { Box, Hidden } from "@mui/material";
@@ -15,7 +16,6 @@ import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesP
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { useSelector } from "react-redux";
 
 const UserPanelComponent = () => {
   const navigate = useNavigate();

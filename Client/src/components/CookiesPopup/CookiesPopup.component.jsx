@@ -1,5 +1,5 @@
 //HOOKS
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
 import { Box, Button, Link, Typography } from "@mui/material";

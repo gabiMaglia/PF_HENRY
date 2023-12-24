@@ -1,8 +1,12 @@
-import { Avatar, Box, CardMedia, Divider, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import getFirstLetters from "../../helpers/getFirstLetters";
-import EditIcon from "@mui/icons-material/Edit";
+//HOOKS
 import { useState } from "react";
+import { useSelector } from "react-redux";
+//MATERIAL UI
+import EditIcon from "@mui/icons-material/Edit";
+import { Avatar, Box, CardMedia, Divider, Typography } from "@mui/material";
+//HELPERS
+import getFirstLetters from "../../helpers/getFirstLetters";
+//MODAL
 import EditModal from "../EditModal/EditModal";
 
 const UserProfile = () => {

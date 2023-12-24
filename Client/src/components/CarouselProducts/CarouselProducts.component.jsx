@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
-import ProductCard from "../ProductCard/ProductCard.component";
+//HOOKS
+import { useEffect, useState } from "react";
+//MATERIAL UI
 import { Container, Typography } from "@mui/material";
+//COMPONENT
+import ProductCard from "../ProductCard/ProductCard.component";
+//SLICK
 import Slider from "react-slick";
 
 const CarouselProducts = ({ allProducts }) => {
