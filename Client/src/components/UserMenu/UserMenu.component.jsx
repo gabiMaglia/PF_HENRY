@@ -20,7 +20,7 @@ import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
 import userPanelItems from "../../utils/userPanelItems.jsx";
 //REDUX
-import { logoutUser } from "../../redux/slices/userSlice";
+import { logoutUser } from "../../redux/slices/UserSlice.js";
 import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
 
 const UserMenu = () => {
