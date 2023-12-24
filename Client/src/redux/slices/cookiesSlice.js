@@ -23,9 +23,7 @@ const cookiesSlice = createSlice({
 
 export const rejectCookies = () => {
   const allCookies = Cookies.get();
-  console.log(allCookies);
   const allCookiesKeys = Object.keys(allCookies);
-  console.log(allCookiesKeys);
   allCookiesKeys.map((cookie) => {
     Cookies.remove(cookie);
   });

@@ -1,30 +1,34 @@
 import axios from "axios";
-import { createPersistency } from "../utils/authMethodSpliter";
+import {
+  createPersistency,
+  headerSetterForPetitions,
+} from "../utils/authMethodSpliter";
 
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
 const dataSorterForApp = (data) => {
   const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
-  const { login, userId } = data;
-
-  return { login, userId, userRole: decodeToken.userRole };
+  return { ...data, userRole: decodeToken.userRole };
 };
 
 export const loginUser = async (username, password, cookieStatus) => {
-  console.log(cookieStatus);
   try {
-    const { data } = await axios.post(
-      `${url}/account/login`,
-      {
-        username: username,
-        password: password,
-      },
-      { withCredentials: true }
-    );
+    const axiosInstance = cookieStatus
+      ? headerSetterForPetitions(cookieStatus)
+      : headerSetterForPetitions(cookieStatus)(
+          window.localStorage.getItem("jwt")
+        );
+
+    const { data } = await axiosInstance.post(`${url}/account/login`, {
+      username: username,
+      password: password,
+    });
+
     if (data.login) {
       const sortedData = dataSorterForApp(data);
       createPersistency(sortedData, cookieStatus);
+
       return { error: false, data: sortedData };
     }
   } catch ({ response }) {
@@ -33,7 +37,6 @@ export const loginUser = async (username, password, cookieStatus) => {
 };
 export const googleLoginUser = async (cookieStatus) => {
   //
-
   try {
     const popup = window.open(
       `${url}/auth/google`,
@@ -51,7 +54,9 @@ export const googleLoginUser = async (cookieStatus) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
           const sortedData = dataSorterForApp(event.data);
-          createPersistency(sortedData, cookieStatus);
+          console.log(sortedData);
+          createPersistency(sortedData, cookieStatus)
+          
           popup.close();
           resolve({ data: event.data });
         }

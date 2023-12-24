@@ -26,6 +26,7 @@ import { googleLoginUser, loginUser } from "../../services/authServices";
 import { getUserById } from "../../services/userServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
+import { rejectCookies } from "../../redux/slices/cookiesSlice";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -45,11 +46,14 @@ const LoginModal = ({
 
   const loginManagement = async (username, address, cookieStatus) => {
     let response;
+  
     if (!username || !address) {
       response = await googleLoginUser(cookieStatus);
     } else {
       response = await loginUser(username, address, cookieStatus);
     }
+    !cookieStatus && rejectCookies()
+    
     if (response.error) {
       Swal.fire({
         allowOutsideClick: false,
@@ -73,6 +77,7 @@ const LoginModal = ({
         if (result.isConfirmed) {
           handledispatch(response.data.userId);
           setLoginModalIsOpen(false);
+          
         }
       });
     }
