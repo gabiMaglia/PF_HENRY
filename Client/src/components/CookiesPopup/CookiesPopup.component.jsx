@@ -1,9 +1,10 @@
+//HOOKS
 import React, { useEffect } from "react";
-
-
+import { useDispatch, useSelector } from "react-redux";
+//MATERIAL UI
 import { Box, Button, Link, Typography } from "@mui/material";
 import CookieIcon from "@mui/icons-material/Cookie";
-import { useDispatch, useSelector } from "react-redux";
+//REDUX
 import { cookieBoxEnable, acceptCookie, rejectCookies } from "../../redux/slices/cookiesSlice";
 
 const CookiesPopup = () => {

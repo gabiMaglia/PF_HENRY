@@ -1,13 +1,10 @@
 //HOOKS
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 //MATERIAL UI
-import { Typography, Box, CardContent, CardMedia, Card } from "@mui/material";
-import { styled } from "@mui/system";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import CircularProgress from "@mui/material/CircularProgress";
-
+import { Typography, Box, CircularProgress } from "@mui/material";
+//COMPONENTS
 import CardProduct from "../ProductCard/ProductCard.component";
 
 const backUrl = import.meta.env.VITE_BACKEND_URL;

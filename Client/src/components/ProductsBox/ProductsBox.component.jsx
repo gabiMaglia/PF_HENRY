@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+//HOOKS
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
-import { addItem } from "../../redux/slices/CartSlice";
+//MATERIAL UI
 import {
   Box,
   Button,
@@ -10,7 +10,12 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
+//COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
+//HOOK
+import { useLocalStorage } from "../../Hook/useLocalStorage";
+//REDUX
+import { addItem } from "../../redux/slices/cartSlice";
 
 const ProductBox = () => {
   const navigate = useNavigate();

@@ -1,4 +1,7 @@
+//HOOKS
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+//MATERIAL UI
 import {
   Modal,
   Box,
@@ -9,13 +12,17 @@ import {
   FormHelperText,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
+//HELPERS
 import { userEditValidate } from "../../helpers/userValidate";
-import Swal from "sweetalert2";
 import "./alertStyles.min.css";
-import { PutUser } from "../../services/UserServices";
+//SERVICES
+import { PutUser } from "../../services/userServices";
+//UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
-import { useDispatch } from "react-redux";
-import { logUser } from "../../redux/slices/UserSlice";
+//REDUX
+import { logUser } from "../../redux/slices/userSlice";
+//SWEET ALERT
+import Swal from "sweetalert2";
 
 const EditModal = ({
   isOpen,

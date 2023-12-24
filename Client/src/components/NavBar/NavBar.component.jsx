@@ -1,14 +1,19 @@
+//HOOKS
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
 import { Link, useLocation } from "react-router-dom";
+//MATERIAL UI
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Button,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+//HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
 
 const NavBar = () => {

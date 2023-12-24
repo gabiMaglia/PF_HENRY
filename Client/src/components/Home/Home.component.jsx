@@ -7,7 +7,7 @@ import CarouselBottom from "../../components/CarouselBottom/CarouselBottom.compo
 import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
 import GoogleMap from "../../components/GoogleMap/GoogleMap.component";
 //REDUX
-import { fetchAllProducts } from "../../services/ProductServices";
+import { fetchAllProducts } from "../../services/productServices";
 
 const HomeComponent = () => {
   const dispatch = useDispatch();

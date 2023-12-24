@@ -1,9 +1,4 @@
 import axios from "axios";
-import {
-  getAuthDataCookie,
-  setAuthDataCookie,
-} from "../utils/cookiesFunctions";
-import Cookies from "js-cookie";
 import { createPersistency } from "../utils/authMethodSpliter";
 
 // address = password

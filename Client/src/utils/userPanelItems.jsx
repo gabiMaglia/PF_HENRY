@@ -15,7 +15,7 @@ import getFirstLetters from "../helpers/getFirstLetters";
 
 import { getDataFromSelectedPersistanceMethod } from "./authMethodSpliter";
 
-const userPanelItems = (name, surname) => {
+const UserPanelItems = (name, surname) => {
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -162,4 +162,4 @@ const userPanelItems = (name, surname) => {
   return items;
 };
 
-export default userPanelItems;
+export default UserPanelItems;

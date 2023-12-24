@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 //MATERIAL UI
 import { Container, Typography, Box } from "@mui/material";
 import { Copyright } from "@mui/icons-material";
-import useMediaQuery from "@mui/material/useMediaQuery";
 //HELPERS
-import PATHROUTE from "../../helpers/pathRoute";
 import { sectionInformation, sectionSocial } from "../../utils/objectsTexts";
 
 const FooterComponent = () => {

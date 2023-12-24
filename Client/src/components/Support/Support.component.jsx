@@ -13,8 +13,6 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Textarea from "@mui/joy/Textarea";
-//SWEET ALERT
-import Swal from "sweetalert2";
 //HELPERS
 import {
   validateName,
@@ -24,7 +22,9 @@ import {
 } from "../../helpers/supportValidateForm";
 //UTILS
 import { textSupport } from "../../utils/objectsTexts";
-//VARIABLE DE ENTORNO
+//SWEET ALERT
+import Swal from "sweetalert2";
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
