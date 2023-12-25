@@ -126,7 +126,7 @@ const ProductServicesProfileComponent = () => {
                 color: "white",
               }}
             >
-              Ingresar un dispositivo
+              Ingresar un equipo
             </Button>
           </Link>
         </Box>

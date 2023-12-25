@@ -2,7 +2,6 @@
 import {
   Box,
   Button,
-  Card,
   CardContent,
   CardMedia,
   Hidden,
@@ -17,6 +16,7 @@ const ProductsServicesCustomerComponent = ({ product, buttons }) => {
     <Box
       sx={{
         height: "100%",
+        minHeight: "10vh",
         alignItems: "center",
         display: "flex",
         flexDirection: "row",
@@ -34,7 +34,6 @@ const ProductsServicesCustomerComponent = ({ product, buttons }) => {
           },
         }}
       />
-
       <CardContent
         sx={{
           display: "flex",
@@ -50,7 +49,6 @@ const ProductsServicesCustomerComponent = ({ product, buttons }) => {
             flexGrow: "1",
             display: "flex",
             flexDirection: "column",
-            height: "90%",
             justifyContent: "space-between",
           }}
         >
@@ -114,7 +112,7 @@ const ProductsServicesCustomerComponent = ({ product, buttons }) => {
                   sx={{
                     maxWidth: "13em",
                     fontSize: ".8em",
-                    maxHeight: "2.5em",
+                    maxHeight: "3em",
                     textSizeAdjust: "50%",
                   }}
                 >
