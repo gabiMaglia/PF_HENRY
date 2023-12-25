@@ -2,141 +2,128 @@
 import {
   Box,
   Button,
-  Card,
   CardContent,
   CardMedia,
-  Grid,
+  Hidden,
   Typography,
 } from "@mui/material";
+import useTheme from "@mui/system/useTheme";
 
-const globalProducts = [
-  {
-    id: 1,
-    name: "Producto 1",
-    image: "url_de_la_imagen_1",
-    budget: "enviado",
-    state: "Producto en revisión",
-  },
-  {
-    id: 2,
-    name: "Producto 2",
-    image: "url_de_la_imagen_2",
-    budget: "pendiente",
-    state: "Listo para retirar del local",
-  },
-  {
-    id: 3,
-    name: "Producto 3",
-    image: "url_de_la_imagen_3",
-    budget: "rechazado",
-    state: "Producto en revisión",
-  },
-];
-
-const ProductsServicesCustomerComponent = () => {
-  if (
-    !globalProducts ||
-    !Array.isArray(globalProducts) ||
-    globalProducts.length === 0
-  ) {
-    console.error("No hay productos disponibles.");
-    return <div>No hay productos disponibles.</div>;
-  }
+const ProductsServicesCustomerComponent = ({ product, buttons }) => {
+  const theme = useTheme();
 
   return (
-    <Grid container spacing={2}>
-      {globalProducts.map((product) => (
-        <Grid item key={product.id} xs={12}>
-          <Card>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              style={{
-                padding: "8px",
-                textAlign: "center",
-                background: "#f0f0f0",
-              }}
-            ></Typography>
-            <CardMedia
-              component="img"
-              height="140"
-              width="100"
-              image={product.image}
-              alt={product.name}
-            />
-            <CardContent>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                style={{ height: "100%" }}
-              >
-                <Box>
-                  <Typography variant="h6" component="div">
-                    {product.name}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    style={{ color: "#fd611a", textTransform: "uppercase" }}
-                  >
-                    PRESUPUESTO : {product.budget}
-                  </Typography>
-                  <Typography variant="h6" color="text.primary">
-                    {product.state} {/* estado del producto */}
-                  </Typography>
-                </Box>
-                <Box
-                  mt={1}
-                  width="100%"
+    <Box
+      sx={{
+        height: "100%",
+        minHeight: "10vh",
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+      }}
+    >
+      <CardMedia
+        component="img"
+        image={product.image}
+        alt={product.name}
+        sx={{
+          ml: ".5em",
+          width: "8em",
+          [theme.breakpoints.down("sm")]: {
+            width: "5em",
+          },
+        }}
+      />
+      <CardContent
+        sx={{
+          display: "flex",
+          flexFlow: "row",
+          width: "100%",
+          height: "100%",
+          alignContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            flexGrow: "1",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: "bold",
+              [theme.breakpoints.down("sm")]: {
+                fontSize: ".8em",
+              },
+            }}
+          >
+            {product.name}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            style={{
+              color: "#fd611a",
+              textTransform: "uppercase",
+            }}
+            sx={{
+              [theme.breakpoints.down("sm")]: {
+                fontSize: ".7em",
+              },
+            }}
+          >
+            {product.budget}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.primary"
+            sx={{
+              [theme.breakpoints.down("sm")]: {
+                fontSize: ".8em",
+              },
+            }}
+          >
+            {product.state}
+          </Typography>
+        </Box>
+        <Hidden mdDown>
+          <Box
+            sx={{
+              width: "10em",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              gap: ".7em",
+            }}
+          >
+            {buttons.map((button) => {
+              return (
+                <Button
+                  key={button.text}
+                  variant="contained"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                    justifyContent: "flex-start",
+                    backgroundColor: button.color,
+                    color: "white",
+                  }}
+                  sx={{
+                    maxWidth: "13em",
+                    fontSize: ".8em",
+                    maxHeight: "3em",
+                    textSizeAdjust: "50%",
                   }}
                 >
-                  <Box mb={1}>
-                    <Button
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#fd611a",
-                        color: "white",
-                        marginRight: "8px",
-                      }}
-                    >
-                      DETALLE SERVICIO
-                    </Button>
-                  </Box>
-                  <Box mb={1}>
-                    <Button
-                      variant="contained"
-                      style={{
-                        backgroundColor: "grey",
-                        color: "white",
-                        marginRight: "8px",
-                      }}
-                    >
-                      ACEPTAR
-                    </Button>
-                  </Box>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      style={{ backgroundColor: "black", color: "white" }}
-                    >
-                      RECHAZAR
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+                  {button.text}
+                </Button>
+              );
+            })}
+          </Box>
+        </Hidden>
+      </CardContent>
+    </Box>
   );
 };
 

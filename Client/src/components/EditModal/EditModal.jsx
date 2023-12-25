@@ -164,10 +164,7 @@ const EditModal = ({
   const formRender = () => {
     return dataList.map((data) => {
       return (
-        <Box
-          key={data.en}
-          sx={{ width: "100%" }}
-        >
+        <Box key={data.en} sx={{ width: "100%" }}>
           <TextField
             fullWidth
             margin="normal"
@@ -201,18 +198,12 @@ const EditModal = ({
                 : errors[data.en] !== ""
             }
           />
-          <FormHelperText
-            error={true}
-            sx={{ fontSize: "0.6em" }}
-          >
+          <FormHelperText error={true} sx={{ fontSize: "0.6em" }}>
             {typeof errors[data.en] !== "object"
               ? errors[data.en]
               : errors[data.en].map((error, key) => {
                   return (
-                    <Typography
-                      variant="p"
-                      key={key}
-                    >
+                    <Typography variant="p" key={key}>
                       {error}
                       <br />
                     </Typography>
@@ -249,26 +240,17 @@ const EditModal = ({
             onClick={resetModal}
           />
         </Button>
-        <Typography
-          sx={{ mb: ".5em" }}
-          variant="h6"
-        >
+        <Typography sx={{ mb: ".5em" }} variant="h6">
           Editar {dataName}
         </Typography>
         {typeof previousValue === "object" ? (
           ""
         ) : (
-          <Typography
-            sx={{ mb: ".5em" }}
-            variant="h5"
-          >
+          <Typography sx={{ mb: ".5em" }} variant="h5">
             {previousValue}
           </Typography>
         )}
-        <Typography
-          variant="body1"
-          sx={{ color: "#fd611a", mb: ".3em" }}
-        >
+        <Typography variant="body1" sx={{ color: "#fd611a", mb: ".3em" }}>
           Para continuar ingresá tus datos actualizados
         </Typography>
         <FormControl
