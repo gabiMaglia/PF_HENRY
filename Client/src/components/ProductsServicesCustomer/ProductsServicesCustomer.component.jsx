@@ -111,7 +111,12 @@ const ProductsServicesCustomerComponent = ({ product, buttons }) => {
                     backgroundColor: button.color,
                     color: "white",
                   }}
-                  sx={{ width: "12em", fontSize: ".8em" }}
+                  sx={{
+                    maxWidth: "13em",
+                    fontSize: ".8em",
+                    maxHeight: "2.5em",
+                    textSizeAdjust: "50%",
+                  }}
                 >
                   {button.text}
                 </Button>
