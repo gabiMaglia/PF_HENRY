@@ -20,7 +20,7 @@ import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import {
   fetchProductById,
   fetchAllProducts,
-} from "../../services/ProductServices";
+} from "../../services/productServices";
 //HOOK
 import { useLocalStorage } from "../../Hook/UseLocalStorage";
 //REDUX

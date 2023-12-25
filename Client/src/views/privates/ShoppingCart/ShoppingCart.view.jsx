@@ -2,10 +2,9 @@ import ShoppingCartComponent from "../../../components/ShoppingCart/ShoppingCart
 
 const ShoppingCartView = () => {
   return (
-    <div>
-      <h1>Shoping Cart</h1>
+    <>
       <ShoppingCartComponent />
-    </div>
+    </>
   );
 };
 

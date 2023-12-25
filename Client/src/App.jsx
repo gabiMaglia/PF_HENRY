@@ -28,48 +28,48 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-      <Box>
-        <SearchBar />
-        <NavBar />
-        <Routes>
-          <Route path={PATHROUTES.HOME} element={<Home />} />
-          <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
-          <Route path={PATHROUTES.SUPPORT} element={<Support />} />
-          <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
-          <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
+      {/* <Box> */}
+      <SearchBar />
+      <NavBar />
+      <Routes>
+        <Route path={PATHROUTES.HOME} element={<Home />} />
+        <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
+        <Route path={PATHROUTES.SUPPORT} element={<Support />} />
+        <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
+        <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
+        <Route
+          path={PATHROUTES.DETAIL}
+          element={<Detail products={PRODUCTS} />}
+        />
+        <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
+          <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+        </Route>
+
+        <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
           <Route
-            path={PATHROUTES.DETAIL}
-            element={<Detail products={PRODUCTS} />}
-          />
-          <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
-            <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
-          </Route>
+            path={`${PATHROUTES.ADMIN_USER_PANEL}/*`}
+            element={<UserPanel />}
+          ></Route>
+        </Route>
 
-          <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
-            <Route
-              path={`${PATHROUTES.ADMIN_USER_PANEL}/*`}
-              element={<UserPanel />}
-            ></Route>
-          </Route>
+        <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
+          <Route
+            path={`${PATHROUTES.CUSTOMER_USER_PANEL}/*`}
+            element={<UserPanel />}
+          ></Route>
+        </Route>
 
-          <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
-            <Route
-              path={`${PATHROUTES.CUSTOMER_USER_PANEL}/*`}
-              element={<UserPanel />}
-            ></Route>
-          </Route>
-
-          <Route element={<ProtectedRoutes allowedRoles={["technician"]} />}>
-            <Route
-              path={`${PATHROUTES.TECHNICIAN_USER_PANEL}/*`}
-              element={<UserPanel />}
-            ></Route>
-          </Route>
-        </Routes>
-        <WhatsApp />
-        <ButtonScrollTop />
-        <Footer />
-      </Box>
+        <Route element={<ProtectedRoutes allowedRoles={["technician"]} />}>
+          <Route
+            path={`${PATHROUTES.TECHNICIAN_USER_PANEL}/*`}
+            element={<UserPanel />}
+          ></Route>
+        </Route>
+      </Routes>
+      <WhatsApp />
+      <ButtonScrollTop />
+      <Footer />
+      {/* </Box> */}
     </>
   );
 };

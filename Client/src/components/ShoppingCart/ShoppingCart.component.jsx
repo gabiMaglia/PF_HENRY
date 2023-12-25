@@ -39,11 +39,10 @@ export default function ShoppingCart() {
   }, [items]);
 
   const ProductMedia = styled(CardMedia)({
-    padding: 24,
-    height: 200,
-    width: 200,
+    padding: 5,
+    height: 140,
+    width: 140,
     objectFit: "cover",
-    margin: "auto",
   });
 
   if (items.length === 0) {
@@ -67,18 +66,26 @@ export default function ShoppingCart() {
   };
 
   return (
-    <Container xs={{ display: "flex", flexDirection: "column" }}>
-      <Typography component="h2">Cart Items:</Typography>
+    <Container display="flex" sx={{ flexDirection: "column", mt: 5 }}>
+      <Typography display="flex" component="h2" sx={{ fontSize: 30, mb: 5 }}>
+        Carrito de Compras
+      </Typography>
       <Box display="flex" flexDirection="column">
         {items.map((item) => (
-          <Box key={item.id} display="flex" flexDirection="row">
+          <Box
+            key={item.id}
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-evenly"
+            sx={{ mb: 4 }}
+          >
             <ProductMedia
               component="img"
               alt={item.name}
               src={item.ProductImages[0].address}
             />
             <Typography>{item.name}</Typography>
-            <Typography>Precio: ${item.price * item.count}</Typography>
             <TextField
               id={item.id}
               label="Cantidad"
@@ -87,14 +94,40 @@ export default function ShoppingCart() {
               value={item.count}
               onChange={(e) => handleChange(item, e)}
             />
+            <Typography>Precio: ${item.price * item.count}</Typography>
             <Button onClick={() => handleDelete(item.id)}>
               <DeleteForeverIcon />
             </Button>
           </Box>
         ))}
-        <Typography>Total: ${total}</Typography>
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          sx={{ mb: 2 }}
+        >
+          <Typography sx={{ mr: 8 }}>Total: ${total}</Typography>
+          <Button
+            onClick={handleShop}
+            sx={{
+              mr: 10,
+              maxWidth: 270,
+              backgroundColor: "#fd611a",
+              color: "black",
+              transition: "transform 0.3s",
+              marginTop: "10px",
+              "&:hover": {
+                transform: "scale(1.05)",
+                backgroundColor: "#fd611a",
+                color: "white",
+              },
+            }}
+          >
+            Comprar
+          </Button>
+        </Box>
       </Box>
-      <Button onClick={handleShop}>Comprar</Button>
       {id && <Wallet initialization={{ preferenceId: id }} />}
     </Container>
   );
