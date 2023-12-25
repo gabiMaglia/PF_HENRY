@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 //MATERIAL UI
 import { Box, Hidden } from "@mui/material";
 import { ArrowForwardIos, ArrowBackIos } from "@mui/icons-material";
+import { createTheme } from "@mui/material/styles";
 //COMPONENTS
 import SideBar from "../SideBar/SideBar.component";
 import UserProfile from "../UserProfile/UserProfile.component";
@@ -18,6 +19,18 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const UserPanelComponent = () => {
+  const theme = createTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        xxs: 480,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+      },
+    },
+  });
   const navigate = useNavigate();
   const actualLocation = useLocation().pathname;
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
@@ -108,6 +121,12 @@ const UserPanelComponent = () => {
         flexDirection: "row",
         width: "100%",
         mt: "1.2em",
+        [theme.breakpoints.down("sm")]: {
+          mt: ".5em",
+        },
+        [theme.breakpoints.down("xxs")]: {
+          mb: "6.25em",
+        },
       }}
     >
       <SideBar />
@@ -171,6 +190,9 @@ const UserPanelComponent = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          [theme.breakpoints.down("sm")]: {
+            width: "5em",
+          },
         }}
       >
         <Hidden mdDown>
