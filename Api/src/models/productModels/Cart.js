@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
     },
     date: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     state: {
       type: DataTypes.ENUM("inicializado", "comprado"),

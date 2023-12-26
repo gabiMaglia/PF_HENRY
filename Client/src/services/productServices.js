@@ -78,22 +78,73 @@ export const fetchChage = (inputValue) => async (dispatch) => {
   }
 };
 
+// export const fetchCart = (items) => async (dispatch) => {
+//  const products = items.map((item) => ({
+//       title: item.name,
+//       quantity: item.count,
+//       unit_price: item.price * item.count,
+//       currency_id: "ARS"
+//     }));
+//   try {
+//     const response = await axios.post(`${urlBack}/pagos`, products, {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//   });
+//     dispatch(idShop(response.data))
+//   } catch (error) {
+//     console.error("no mando el response", error);
+//   }
+// };
+
+export const fetchProduct = (product) => async () => {
+  const user = window.localStorage.getItem("userId")
+  const {id} = product
+  const data = {
+    userId: user,
+    productId: id,
+    productQuantity: 1,
+  }
+  console.log(data)
+  try {
+    const res = await axios.post(`${urlBack}/cart/`, data)
+    console.log(res, "se cargo el producto")
+  } catch (error) {
+    console.error("error", error);
+  }
+}
+
+export const fetchGetProduct = () => async () => {
+  const user = window.localStorage.getItem("userId")
+  try {
+    const res = await axios.get(`${urlBack}/cart/${user}`)
+    console.log(res, "product")
+  } catch (error) {
+    console.error("error", error);
+  }
+} 
+
+
 export const fetchCart = (items) => async (dispatch) => {
- const products = items.map((item) => ({
+  const id = window.localStorage.getItem("userId")
+  console.log(id)
+  const products = items.map((item) => ({
       title: item.name,
       quantity: item.count,
       unit_price: item.price * item.count,
       currency_id: "ARS"
     }));
+    console.log(products)
   try {
-    const response = await axios.post(`${urlBack}/pagos`, products, {
+    const response = await axios.post(`${urlBack}/pagos/order`, {array: products, userId: id}, {
       headers: {
         'Content-Type': 'application/json'
       }
   });
-    dispatch(idShop(response.data))
+  console.log(response)
+    dispatch(idShop(response))
   } catch (error) {
-    console.error("no mando el response", error);
+    console.error("error", error);
   }
 };
 
