@@ -25,6 +25,7 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
+
       <SearchBar />
       <NavBar />
       <Routes>
@@ -33,10 +34,7 @@ const App = () => {
         <Route path={PATHROUTES.SUPPORT} element={<Support />} />
         <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
         <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
-        <Route
-          path={PATHROUTES.DETAIL}
-          element={<Detail/>}
-        />
+        <Route path={PATHROUTES.DETAIL} element={<Detail />} />
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
         </Route>
