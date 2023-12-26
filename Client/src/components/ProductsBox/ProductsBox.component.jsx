@@ -147,14 +147,14 @@ const ProductCardWithFade = ({ product, index }) => {
   }, [index]);
 
   return (
-    <div
+    <Box
       style={{
         opacity: opacity,
         transition: "opacity 0.5s ease-in",
       }}
     >
       <ProductCard product={product} />
-    </div>
+    </Box>
   );
 };
 
