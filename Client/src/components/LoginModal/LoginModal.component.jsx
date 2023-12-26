@@ -46,14 +46,14 @@ const LoginModal = ({
 
   const loginManagement = async (username, address, cookieStatus) => {
     let response;
-  
+
     if (!username || !address) {
       response = await googleLoginUser(cookieStatus);
     } else {
       response = await loginUser(username, address, cookieStatus);
     }
-    !cookieStatus && rejectCookies()
-    
+    !cookieStatus && rejectCookies();
+
     if (response.error) {
       Swal.fire({
         allowOutsideClick: false,
@@ -77,7 +77,6 @@ const LoginModal = ({
         if (result.isConfirmed) {
           handledispatch(response.data.userId);
           setLoginModalIsOpen(false);
-          
         }
       });
     }
@@ -90,6 +89,7 @@ const LoginModal = ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "50%",
+    minWidth: "350px",
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,

@@ -33,7 +33,7 @@ export default function SearchAppBar() {
     width: 140,
     height: 140,
   });
-  
+
   const Logo = styled("img")({
     width: 30,
     height: 30,
@@ -45,7 +45,6 @@ export default function SearchAppBar() {
   const { inputName } = useSelector((state) => state.product);
 
   const getUserInfo = async (token) => {
-    
     if (token !== undefined) {
       const response = await getUserById(token.userId);
       dispatch(logUser({ userObject: { ...response, rolId: token.userRole } }));
@@ -70,7 +69,7 @@ export default function SearchAppBar() {
   };
 
   useEffect(() => {
-    const userToken = getDataFromSelectedPersistanceMethod(cookieStatus);  
+    const userToken = getDataFromSelectedPersistanceMethod(cookieStatus);
     if (userToken?.login) {
       getUserInfo(userToken);
     }

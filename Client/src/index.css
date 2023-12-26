@@ -11,4 +11,5 @@ body {
   width: 100%;
   min-width: 425px;
   overflow-x: hidden;
+  padding-right: 0 !important;
 }
