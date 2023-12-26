@@ -246,16 +246,10 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           />
         </Button>
         <Typography variant="h4">Registrarse</Typography>
-        <Typography
-          variant="body1"
-          sx={{ color: "#fd611a", mt: ".5em" }}
-        >
+        <Typography variant="body1" sx={{ color: "#fd611a", mt: ".5em" }}>
           Para crear una cuenta ingresá tus datos
         </Typography>
-        <GoogleReCaptchaProvider
-          reCaptchaKey={reCaptchaKey}
-          language="es"
-        >
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaKey} language="es">
           <FormControl
             onSubmit={handleSubmit}
             fullWidth
@@ -279,10 +273,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
                 value={userInfo.name}
                 error={Boolean(errorsUser.name)}
               />
-              <FormHelperText
-                sx={{ fontSize: ".6em" }}
-                error={true}
-              >
+              <FormHelperText sx={{ fontSize: ".6em" }} error={true}>
                 {errorsUser.name}
               </FormHelperText>
             </Box>
@@ -296,10 +287,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
                 value={userInfo.surname}
                 error={Boolean(errorsUser.surname)}
               />
-              <FormHelperText
-                error={true}
-                sx={{ fontSize: "0.6em" }}
-              >
+              <FormHelperText error={true} sx={{ fontSize: "0.6em" }}>
                 {errorsUser.surname}
               </FormHelperText>
             </Box>
@@ -313,10 +301,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
                 value={userInfo.username}
                 error={Boolean(errorsUser.username)}
               />
-              <FormHelperText
-                error={true}
-                sx={{ fontSize: "0.6em" }}
-              >
+              <FormHelperText error={true} sx={{ fontSize: "0.6em" }}>
                 {errorsUser.username}
               </FormHelperText>
             </Box>
@@ -391,10 +376,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
                 value={userInfo.confirmAddress}
                 error={Boolean(errorsUser.confirmAddress)}
               />
-              <FormHelperText
-                sx={{ fontSize: ".6em" }}
-                error={true}
-              >
+              <FormHelperText sx={{ fontSize: ".6em" }} error={true}>
                 {errorsUser.confirmAddress}
               </FormHelperText>
             </Box>
@@ -444,10 +426,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
               />
               {errorsUser.phoneNumber.map((error, key) => {
                 return (
-                  <FormHelperText
-                    key={key}
-                    error={true}
-                  >
+                  <FormHelperText key={key} error={true}>
                     {error}
                   </FormHelperText>
                 );

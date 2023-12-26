@@ -13,7 +13,6 @@ const CookiesPopup = () => {
 
   useEffect(() => {
     const acceptance = window.localStorage.getItem('cookieAccepted')
-    console.log(acceptance)
     if (acceptance) {
       dispatch(acceptCookie(acceptance));
     }

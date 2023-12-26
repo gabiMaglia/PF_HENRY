@@ -106,7 +106,7 @@ const UserProfile = () => {
         display: "flex",
         flexDirection: "row",
         width: "100%",
-        mt: "1.2em",
+        height: "500px",
       }}
     >
       {login ? (
@@ -167,10 +167,7 @@ const UserProfile = () => {
                 >
                   Nombre(s) y apelido(s)
                 </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{ mb: ".5em" }}
-                >
+                <Typography variant="h6" sx={{ mb: ".5em" }}>
                   {name && surname
                     ? name + " " + surname
                     : "No se definio un nombre o apellido"}
@@ -194,10 +191,7 @@ const UserProfile = () => {
                 >
                   Fecha de nacimiento
                 </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ mb: ".5em" }}
-                >
+                <Typography variant="body2" sx={{ mb: ".5em" }}>
                   {birthdate
                     ? birthdate
                     : "No se definio una fecha de nacimiento"}
@@ -220,10 +214,7 @@ const UserProfile = () => {
                 >
                   Email
                 </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ mb: ".5em" }}
-                >
+                <Typography variant="body1" sx={{ mb: ".5em" }}>
                   {email ? email : "No se definio un email"}
                 </Typography>
               </Box>
@@ -244,10 +235,7 @@ const UserProfile = () => {
                 >
                   Numero de telefono
                 </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ mb: ".5em" }}
-                >
+                <Typography variant="body2" sx={{ mb: ".5em" }}>
                   {telephone
                     ? telephone
                     : "No se definio un numero de telefono"}
@@ -270,10 +258,7 @@ const UserProfile = () => {
                 >
                   DNI
                 </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ mb: ".5em" }}
-                >
+                <Typography variant="body2" sx={{ mb: ".5em" }}>
                   {dni ? dni : "No se definio un DNI"}
                 </Typography>
               </Box>
@@ -300,19 +285,13 @@ const UserProfile = () => {
                 userAddress.city &&
                 userAddress.street &&
                 userAddress.number ? (
-                  <Typography
-                    variant="body2"
-                    sx={{ mb: ".5em" }}
-                  >
+                  <Typography variant="body2" sx={{ mb: ".5em" }}>
                     {userAddress.country}, {userAddress.state},{" "}
                     {userAddress.city}, {userAddress.street},{" "}
                     {userAddress.number}
                   </Typography>
                 ) : (
-                  <Typography
-                    variant="body2"
-                    sx={{ mb: ".5em" }}
-                  >
+                  <Typography variant="body2" sx={{ mb: ".5em" }}>
                     No se definio una dirección
                   </Typography>
                 )}
@@ -323,10 +302,7 @@ const UserProfile = () => {
                   >
                     Codigo postal
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ mb: "1em" }}
-                  >
+                  <Typography variant="body2" sx={{ mb: "1em" }}>
                     {userAddress.zipCode
                       ? userAddress.zipCode
                       : "No se definio un codigo postal"}
