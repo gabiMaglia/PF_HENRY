@@ -12,6 +12,7 @@ const createOrderHandler = async (req, res) => {
     trackingNumber,
     shippingDetails,
     customerNotes,
+    array,
   } = req.body;
 
   try {
@@ -22,7 +23,8 @@ const createOrderHandler = async (req, res) => {
       totalAmount,
       trackingNumber,
       shippingDetails,
-      customerNotes
+      customerNotes,
+      array
     );
 
     res
