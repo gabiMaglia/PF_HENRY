@@ -83,7 +83,7 @@ const CookiesPopup = () => {
         <Box>
           <Typography sx={{ fontSize: "16px", color: "white" }} variant="p">
             Este sitio web usa Cookies para mejorar la experiencia de usuario y
-            funcionalidad del mismo.{" "}
+            funcionalidad del mismo. Si no las acepta su informacion de sesion se guardara en el almacenamiento local de su navegador quedando expuesta a diversos ataques
             <Link
               sx={{
                 textDecoration: "none",

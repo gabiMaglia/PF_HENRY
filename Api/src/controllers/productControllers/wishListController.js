@@ -1,9 +1,19 @@
-const { WishList, User, Product } = require("../../db");
+const { WishList, User, Product,ProductCategory,ProductImage,ProductStock, ProductBrand} = require("../../db");
 
 const getWishListController = async (id) => {
   const [List, created] = await WishList.findOrCreate({
     where: { UserId: id },
-    include: [{ model: Product }],
+    include: [
+      { 
+        model: Product,
+        include: [
+          { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["address"] },
+        { model: ProductStock, attributes: ["amount"] },
+        ]
+      }
+    ],
   });
   return List;
 };
