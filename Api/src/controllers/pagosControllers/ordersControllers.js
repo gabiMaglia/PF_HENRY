@@ -12,18 +12,6 @@ async function createOrder(
   array
 ) {
   try {
-    console.log(
-      "Entrando en createOrder con datos:",
-      userId,
-      shippingAddress,
-      paymentMethod,
-      totalAmount,
-      trackingNumber,
-      shippingDetails,
-      customerNotes,
-      array
-    );
-
     const cart = await Cart.findOne({
       where: {
         UserId: userId,
@@ -62,7 +50,7 @@ async function createOrder(
       preferenceId,
     });
 
-    // await cart.destroy();
+    await cart.destroy();
 
     return order;
   } catch (error) {
