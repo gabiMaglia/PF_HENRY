@@ -8,9 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import ProductsServicesCustomer from "../ProductsServicesCustomer/ProductsServicesCustomer.component";
-import { useState } from "react";
+import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
+import { useEffect, useState } from "react";
 import PATHROUTES from "../../helpers/pathRoute";
+import { useSelector } from "react-redux";
 
 const cardsContent = [
   {
@@ -66,11 +67,16 @@ const WhishListProfileComponent = () => {
     backgroundColor: "black",
   };
 
+  const wishListCards = useSelector((state) => state.wishlist);
+  console.log(wishListCards);
+
   const [cardStatus, setCardStatus] = useState(
     cardsContent.map((card) => {
       return { id: card.id, status: false };
     })
   );
+
+  useEffect(() => {}, [wishListCards]);
 
   const handleChange = (e) => {
     const { name, checked } = e.target;
@@ -179,12 +185,12 @@ const WhishListProfileComponent = () => {
                     }}
                   >
                     <Checkbox
-                      name={index}
+                      name={`${index}`}
                       checked={cardStatus[index].status}
                       onChange={handleChange}
                     />
                     <Box sx={{ flexGrow: "1" }}>
-                      <ProductsServicesCustomer
+                      <UserProfileProductCard
                         product={card}
                         buttons={buttons}
                       />

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/system/useTheme";
 
-const ProductsServicesCustomerComponent = ({ product, buttons }) => {
+const UserProfileProductCard = ({ product, buttons }) => {
   const theme = useTheme();
 
   return (
@@ -127,4 +127,4 @@ const ProductsServicesCustomerComponent = ({ product, buttons }) => {
   );
 };
 
-export default ProductsServicesCustomerComponent;
+export default UserProfileProductCard;
