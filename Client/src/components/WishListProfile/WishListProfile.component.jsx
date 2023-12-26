@@ -5,59 +5,22 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
+  Container,
+  CircularProgress,
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
 import { useEffect, useState } from "react";
 import PATHROUTES from "../../helpers/pathRoute";
-import { useSelector } from "react-redux";
-
-const cardsContent = [
-  {
-    id: 1,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$45000",
-  },
-  {
-    id: 2,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$75000",
-  },
-  {
-    id: 3,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$55000",
-  },
-  {
-    id: 4,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$120000",
-  },
-  {
-    id: 5,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$52500",
-  },
-  {
-    id: 6,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$85000",
-  },
-];
-const buttons = [{ text: "Agregar al carrito", action: "", color: "#fd611a" }];
+import { useSelector, useDispatch } from "react-redux";
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import {
+  fetchWishList,
+  fetchAddItemWish,
+} from "../../services/wishListServices";
+import { addItem } from "../../redux/slices/cartSlice";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -67,16 +30,64 @@ const WhishListProfileComponent = () => {
     backgroundColor: "black",
   };
 
-  const wishListCards = useSelector((state) => state.wishlist);
-  console.log(wishListCards);
+  const dispatch = useDispatch();
+
+  const [storedProducts, setStoredProducts] = useLocalStorage();
+
+  const authData = getAuthDataCookie("authData");
+  const userId = authData ? authData.userId : null;
+
+  const wishListCards = useSelector((state) => state.wishlist.products);
+
+  const chargeWishListProduct = () => {
+    fetchWishList(userId, dispatch);
+  };
+
+  const handleAddToCart = (product) => {
+    setStoredProducts(product);
+    dispatch(addItem());
+  };
 
   const [cardStatus, setCardStatus] = useState(
-    cardsContent.map((card) => {
+    wishListCards.map((card) => {
       return { id: card.id, status: false };
     })
   );
 
-  useEffect(() => {}, [wishListCards]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const resetSelection = () => {
+    const reset = wishListCards.map((card) => {
+      return { id: card.id, status: false };
+    });
+    setCardStatus(reset);
+  };
+
+  useEffect(() => {
+    chargeWishListProduct();
+  }, []);
+
+  useEffect(() => {
+    resetSelection();
+    if (wishListCards[0] && wishListCards[0].ProductImages) {
+      setIsLoading(false);
+    } else {
+      chargeWishListProduct();
+    }
+  }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
+
+  const deleteProduct = (id) => {
+    fetchAddItemWish(dispatch, userId, id);
+  };
+
+  const handleClickDeleteButton = () => {
+    setIsLoading(true);
+    cardStatus.forEach((card) => {
+      if (card.status) {
+        deleteProduct(card.id);
+      }
+    });
+  };
 
   const handleChange = (e) => {
     const { name, checked } = e.target;
@@ -90,6 +101,14 @@ const WhishListProfileComponent = () => {
     }
     setCardStatus(newCardStatus);
   };
+
+  const buttons = [
+    {
+      text: "Agregar al carrito",
+      action: handleAddToCart,
+      color: "#fd611a",
+    },
+  ];
 
   return (
     <Box
@@ -105,7 +124,7 @@ const WhishListProfileComponent = () => {
         },
       }}
     >
-      {cardsContent.length === 0 ? (
+      {wishListCards.length === 0 ? (
         <Box
           sx={{
             width: "100%",
@@ -131,7 +150,7 @@ const WhishListProfileComponent = () => {
             </Button>
           </Link>
         </Box>
-      ) : (
+      ) : !isLoading ? (
         <>
           <Box
             sx={{
@@ -159,12 +178,13 @@ const WhishListProfileComponent = () => {
                 color: "white",
               }}
               sx={{ mr: "3.5em" }}
+              onClick={handleClickDeleteButton}
             >
               Eliminar selección
             </Button>
           </Box>
           <Box sx={{ mt: "4em" }}>
-            {cardsContent.map((card, index) => {
+            {wishListCards.map((card, index) => {
               return (
                 <Box
                   key={index}
@@ -191,12 +211,20 @@ const WhishListProfileComponent = () => {
                     />
                     <Box sx={{ flexGrow: "1" }}>
                       <UserProfileProductCard
-                        product={card}
+                        actionParam={card}
+                        product={{
+                          id: card.id,
+                          name: card.name,
+                          image: card.ProductImages
+                            ? card.ProductImages[0].address
+                            : "",
+                          budget: `$${card.price}`,
+                        }}
                         buttons={buttons}
                       />
                     </Box>
                   </Box>
-                  {index + 1 === cardsContent.length && (
+                  {index + 1 === wishListCards.length && (
                     <Divider sx={dividerStyle} />
                   )}
                 </Box>
@@ -204,6 +232,35 @@ const WhishListProfileComponent = () => {
             })}
           </Box>
         </>
+      ) : (
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "wrap",
+            alignContent: "space-around",
+            justifyContent: "center",
+            marginTop: 15,
+            marginBottom: 15,
+          }}
+        >
+          <CircularProgress
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              margin: 5,
+              color: "#fd611a",
+            }}
+          />
+          <Typography
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            Cargando...
+          </Typography>
+        </Container>
       )}
     </Box>
   );
