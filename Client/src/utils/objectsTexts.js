@@ -117,6 +117,7 @@ const brands = [
   "Genius",
   "HyperX",
   "Intel",
+  "Kingston",
   "Lg",
   "Logitech",
   "Msi",
