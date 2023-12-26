@@ -28,7 +28,7 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-      {/* <Box> */}
+     
       <SearchBar />
       <NavBar />
       <Routes>
@@ -69,7 +69,7 @@ const App = () => {
       <WhatsApp />
       <ButtonScrollTop />
       <Footer />
-      {/* </Box> */}
+
     </>
   );
 };
