@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 import { Box, Button, TextField, Grid, Select, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllProducts } from "../../services/ProductServices";
-=======
 //MATERIAL UI
-import { Box } from "@mui/material";
 
->>>>>>> c3080270e5b99918d45d696b13f3c097bb6ff5f0
 const ProductCreateProfileComponent = () => {
   //HOOKS
   const dispatch = useDispatch();
