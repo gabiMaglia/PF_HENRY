@@ -9,19 +9,22 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
+//HOOKS
 import { Link } from "react-router-dom";
-import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
-import { useEffect, useState } from "react";
-import PATHROUTES from "../../helpers/pathRoute";
 import { useSelector, useDispatch } from "react-redux";
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { useEffect, useState } from "react";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
+import { useNavigate } from "react-router-dom";
+//UTILS
 import {
   fetchWishList,
   fetchAddItemWish,
 } from "../../services/wishListServices";
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import { addItem } from "../../redux/slices/cartSlice";
-import { useLocalStorage } from "../../Hook/UseLocalStorage";
-import { useNavigate } from "react-router-dom";
+import PATHROUTES from "../../helpers/pathRoute";
+//COMPONENTS
+import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -34,64 +37,66 @@ const WhishListProfileComponent = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [storedProducts, setStoredProducts] = useLocalStorage();
+  const [storedProducts, setStoredProducts] = useLocalStorage(); //Productos del carrito
 
   const authData = getAuthDataCookie("authData");
-  const userId = authData ? authData.userId : null;
+  const userId = authData ? authData.userId : null; //Información del usuario
 
-  const wishListCards = useSelector((state) => state.wishlist.products);
+  const wishListCards = useSelector((state) => state.wishlist.products); //Estado global Wishlist
 
   const chargeWishListProduct = () => {
-    fetchWishList(userId, dispatch);
+    fetchWishList(userId, dispatch); //Recarga de el estado global Wishlist
   };
 
   const handleCardClick = (id) => {
-    const path = PATHROUTES.DETAIL.replace(":id", id);
+    const path = PATHROUTES.DETAIL.replace(":id", id); // Redireccionamient al detail
     navigate(path);
   };
 
   const handleAddToCart = (product) => {
-    setStoredProducts(product);
+    setStoredProducts(product); // Agregar producto al carrito
     dispatch(addItem());
   };
 
   const [cardStatus, setCardStatus] = useState(
     wishListCards.map((card) => {
-      return { id: card.id, status: false };
+      return { id: card.id, status: false }; //Estado de productos seleccionados
     })
   );
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); //Estado de carga
 
   const resetSelection = () => {
     const reset = wishListCards.map((card) => {
-      return { id: card.id, status: false };
+      return { id: card.id, status: false }; // Recarga del estado de seleccionados
     });
     setCardStatus(reset);
   };
 
   useEffect(() => {
-    chargeWishListProduct();
+    chargeWishListProduct(); //Recarga del estado global Wishlist al iniciar el componente
   }, []);
 
   useEffect(() => {
     resetSelection();
     if (wishListCards[0] && wishListCards[0].ProductImages) {
-      setIsLoading(false);
+      //Si ya cargo las imagenes
+      setIsLoading(false); //Deja de cargar
     } else {
-      chargeWishListProduct();
+      chargeWishListProduct(); //Sino recarga el estado global
     }
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
   const deleteProduct = (id) => {
-    fetchAddItemWish(dispatch, userId, id);
+    fetchAddItemWish(dispatch, userId, id); // ELiminar un producto
   };
 
   const handleClickDeleteButton = () => {
     setIsLoading(true);
     cardStatus.forEach((card) => {
+      //Recorrer el estado de productos seleccionados
       if (card.status) {
-        deleteProduct(card.id);
+        deleteProduct(card.id); // Eliminar los seleccionados
       }
     });
   };
@@ -101,7 +106,7 @@ const WhishListProfileComponent = () => {
     let newCardStatus = [...cardStatus];
     if (name === "all") {
       newCardStatus = newCardStatus.map((card) => {
-        return { id: card.id, status: checked };
+        return { id: card.id, status: checked }; //Manejo del estado de seleccionados
       });
     } else {
       newCardStatus[name].status = checked;
@@ -112,7 +117,7 @@ const WhishListProfileComponent = () => {
   const buttons = [
     {
       text: "Agregar al carrito",
-      action: handleAddToCart,
+      action: handleAddToCart, // Botones que renderiza la card
       color: "#fd611a",
     },
   ];

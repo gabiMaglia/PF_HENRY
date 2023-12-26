@@ -10,10 +10,10 @@ import {
 import useTheme from "@mui/system/useTheme";
 
 const UserProfileProductCard = ({
-  actionParam = () => {},
+  actionParam = () => {}, // Si no llega una funcion establece una por defecto
   product,
   buttons,
-  handleCardClick = () => {},
+  handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
 }) => {
   const theme = useTheme();
 
