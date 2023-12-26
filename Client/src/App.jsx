@@ -25,7 +25,6 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-
       <SearchBar />
       <NavBar />
       <Routes>
