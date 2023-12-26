@@ -53,15 +53,15 @@ const CarouselTopComponent = () => {
     switch (activeIndex) {
       case 0:
         productUrl =
-          "/product/22a6c046-bdb5-416c-9fe5-8c7fdac8e8cf";
+          "/product/06d7c687-923c-4f4e-8749-bb606dc1ebf4";
         break;
       case 1:
         productUrl =
-          "/product/1664bf89-90f1-43ad-9bfb-575d5c9d0385";
+          "/product/9e0f7a1a-65c6-4eaf-b85e-8e9f8f628ee1";
         break;
       case 2:
         productUrl =
-          "/product/65cdc8f9-c39f-4115-84cc-f2ae42d15da1";
+          "/product/0445b484-f8e0-4c3a-93bb-907288ac4abc";
         break;
       default:
         break;

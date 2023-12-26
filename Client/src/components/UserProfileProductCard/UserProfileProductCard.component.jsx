@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/system/useTheme";
 
-const UserProfileProductCard = ({ product, buttons }) => {
+const UserProfileProductCard = ({ actionParam = "", product, buttons }) => {
   const theme = useTheme();
 
   return (
@@ -24,13 +24,16 @@ const UserProfileProductCard = ({ product, buttons }) => {
     >
       <CardMedia
         component="img"
-        image={product.image}
         alt={product.name}
+        image={product.image}
         sx={{
           ml: ".5em",
           width: "8em",
+          height: "5em",
+          objectFit: "contain",
           [theme.breakpoints.down("sm")]: {
-            width: "5em",
+            width: "6em",
+            height: "4em",
           },
         }}
       />
@@ -114,6 +117,9 @@ const UserProfileProductCard = ({ product, buttons }) => {
                     fontSize: ".8em",
                     maxHeight: "3em",
                     textSizeAdjust: "50%",
+                  }}
+                  onClick={() => {
+                    button.action(actionParam);
                   }}
                 >
                   {button.text}

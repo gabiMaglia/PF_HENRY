@@ -200,7 +200,7 @@ const FiltersSorting = () => {
         </Box>
         <Box
           display="flex"
-          sx={{ flexDirection: { xs: "column", lg: "row" }, mr: { xs: 4 } }}
+          sx={{ flexDirection: { xs: "column", lg: "row" }, mr: { xs: 4 }, position: "relative", left: "30px" }}
         >
           <Buttons
             variant="contained"
