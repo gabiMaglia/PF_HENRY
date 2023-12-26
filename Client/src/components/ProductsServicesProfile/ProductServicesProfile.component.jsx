@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Box, Divider, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 //COMPONENTS
-import ProductsServicesCustomer from "../ProductsServicesCustomer/ProductsServicesCustomer.component";
+import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import sortCardByDate from "../../utils/sortCardsByDate";
@@ -156,10 +156,7 @@ const ProductServicesProfileComponent = () => {
                       flexDirection: "column",
                     }}
                   >
-                    <ProductsServicesCustomer
-                      product={card}
-                      buttons={buttons}
-                    />
+                    <UserProfileProductCard product={card} buttons={buttons} />
                     {index + 1 !== cardsPerDate.cards.length && (
                       <Divider
                         sx={{
