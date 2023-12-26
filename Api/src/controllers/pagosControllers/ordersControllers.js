@@ -1,4 +1,5 @@
 const { Order, Cart, Product, ProductCart, User } = require("../../db");
+const { v4: uuidv4 } = require("uuid");
 const { mercadoPago } = require("./mercadoPagoContoller");
 async function createOrder(
   userId,
@@ -42,12 +43,13 @@ async function createOrder(
     if (!cart) {
       throw new Error("El usuario no tiene un carrito");
     }
-    console.log(array);
-    const preferenceResult = await mercadoPago(array);
+    const idOrder = uuidv4();
+    console.log(idOrder);
+    const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
-
     const order = await Order.create({
+      id: idOrder,
       UserId: userId,
       totalAmount,
       shippingAddress: shippingAddress ?? null,
