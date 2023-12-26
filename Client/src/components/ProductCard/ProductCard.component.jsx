@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 //MATREIAL UI
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
+import Swal from "sweetalert2";
 import { styled } from "@mui/system";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 //REDUX
@@ -49,8 +50,8 @@ const CardProduct = ({ product }) => {
     if (login && wishlistProducts) {
       const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
       setIsDesired(isProductInWishlist);
-    }else{
-      setIsDesired(false)
+    } else {
+      setIsDesired(false);
     }
   }, [wishlistProducts, id, login]);
 
@@ -77,6 +78,8 @@ const CardProduct = ({ product }) => {
     e.stopPropagation();
     if (login) {
       fetchAddItemWish(dispatch, userId, product.id);
+    } else {
+      Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
     }
   };
   return (
@@ -115,11 +118,12 @@ const CardProduct = ({ product }) => {
           <BookmarkIcon
             onClick={handleDesiredClick}
             sx={{
+              cursor: login ? null : "not-allowed",
               position: "relative",
               top: "20px",
               right: "-30px",
               transform: "translateY(-50%)",
-              color: isDesired  ? "#fd611a" : "gray",
+              color: isDesired ? "#fd611a" : "gray",
             }}
           />
         </Box>
