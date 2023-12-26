@@ -19,8 +19,8 @@ import {
   fetchWishList,
   fetchAddItemWish,
 } from "../../services/wishListServices";
-
-const buttons = [{ text: "Agregar al carrito", action: "", color: "#fd611a" }];
+import { addItem } from "../../redux/slices/cartSlice";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -32,6 +32,8 @@ const WhishListProfileComponent = () => {
 
   const dispatch = useDispatch();
 
+  const [storedProducts, setStoredProducts] = useLocalStorage();
+
   const authData = getAuthDataCookie("authData");
   const userId = authData ? authData.userId : null;
 
@@ -39,6 +41,11 @@ const WhishListProfileComponent = () => {
 
   const chargeWishListProduct = () => {
     fetchWishList(userId, dispatch);
+  };
+
+  const handleAddToCart = (product) => {
+    setStoredProducts(product);
+    dispatch(addItem());
   };
 
   const [cardStatus, setCardStatus] = useState(
@@ -94,6 +101,14 @@ const WhishListProfileComponent = () => {
     }
     setCardStatus(newCardStatus);
   };
+
+  const buttons = [
+    {
+      text: "Agregar al carrito",
+      action: handleAddToCart,
+      color: "#fd611a",
+    },
+  ];
 
   return (
     <Box
@@ -196,6 +211,7 @@ const WhishListProfileComponent = () => {
                     />
                     <Box sx={{ flexGrow: "1" }}>
                       <UserProfileProductCard
+                        actionParam={card}
                         product={{
                           id: card.id,
                           name: card.name,

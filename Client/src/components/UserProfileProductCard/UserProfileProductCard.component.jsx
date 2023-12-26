@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/system/useTheme";
 
-const UserProfileProductCard = ({ product, buttons }) => {
+const UserProfileProductCard = ({ actionParam = "", product, buttons }) => {
   const theme = useTheme();
 
   return (
@@ -117,6 +117,9 @@ const UserProfileProductCard = ({ product, buttons }) => {
                     fontSize: ".8em",
                     maxHeight: "3em",
                     textSizeAdjust: "50%",
+                  }}
+                  onClick={() => {
+                    button.action(actionParam);
                   }}
                 >
                   {button.text}
