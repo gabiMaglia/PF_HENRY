@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
     },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
     },
     preferenceId: {
       type: DataTypes.STRING,
@@ -31,7 +31,7 @@ module.exports = (sequelize) => {
     },
     paymentMethod: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     trackingNumber: {
       type: DataTypes.STRING,
