@@ -24,13 +24,16 @@ const UserProfileProductCard = ({ product, buttons }) => {
     >
       <CardMedia
         component="img"
-        image={product.image}
         alt={product.name}
+        image={product.image}
         sx={{
           ml: ".5em",
           width: "8em",
+          height: "5em",
+          objectFit: "contain",
           [theme.breakpoints.down("sm")]: {
-            width: "5em",
+            width: "6em",
+            height: "4em",
           },
         }}
       />
