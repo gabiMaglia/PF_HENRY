@@ -21,6 +21,7 @@ import {
 } from "../../services/wishListServices";
 import { addItem } from "../../redux/slices/cartSlice";
 import { useLocalStorage } from "../../Hook/UseLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -30,6 +31,7 @@ const WhishListProfileComponent = () => {
     backgroundColor: "black",
   };
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [storedProducts, setStoredProducts] = useLocalStorage();
@@ -41,6 +43,11 @@ const WhishListProfileComponent = () => {
 
   const chargeWishListProduct = () => {
     fetchWishList(userId, dispatch);
+  };
+
+  const handleCardClick = (id) => {
+    const path = PATHROUTES.DETAIL.replace(":id", id);
+    navigate(path);
   };
 
   const handleAddToCart = (product) => {
@@ -211,6 +218,7 @@ const WhishListProfileComponent = () => {
                     />
                     <Box sx={{ flexGrow: "1" }}>
                       <UserProfileProductCard
+                        handleCardClick={handleCardClick}
                         actionParam={card}
                         product={{
                           id: card.id,
