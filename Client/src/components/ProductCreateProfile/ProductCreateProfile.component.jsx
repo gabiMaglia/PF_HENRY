@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Grid, Select, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllProducts } from "../../services/ProductServices";
+import { fetchAllProducts } from "../../services/productServices";
 //MATERIAL UI
 
 const ProductCreateProfileComponent = () => {
