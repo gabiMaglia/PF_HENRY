@@ -18,7 +18,6 @@ import Categories from "./views/publics/Categories/Categories.view";
 //PRIVATES VIEWS
 import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
-import { Box } from "@mui/material";
 //DB
 import PRODUCTS from "./dataBase/bdd.json";
 //HELPERS
@@ -28,7 +27,7 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-     
+
       <SearchBar />
       <NavBar />
       <Routes>
@@ -69,7 +68,6 @@ const App = () => {
       <WhatsApp />
       <ButtonScrollTop />
       <Footer />
-
     </>
   );
 };
