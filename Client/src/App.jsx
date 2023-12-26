@@ -18,8 +18,6 @@ import Categories from "./views/publics/Categories/Categories.view";
 //PRIVATES VIEWS
 import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
-//DB
-import PRODUCTS from "./dataBase/bdd.json";
 //HELPERS
 import PATHROUTES from "./helpers/pathRoute";
 
@@ -38,7 +36,7 @@ const App = () => {
         <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
         <Route
           path={PATHROUTES.DETAIL}
-          element={<Detail products={PRODUCTS} />}
+          element={<Detail/>}
         />
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
