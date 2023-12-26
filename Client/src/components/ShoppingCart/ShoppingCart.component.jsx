@@ -21,7 +21,7 @@ import {
   totalItem,
 } from "../../redux/slices/cartSlice";
 //SERVICES
-import { fetchCart } from "../../services/productServices";
+import { fetchCart, fetchGetProduct } from "../../services/productServices";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     dispatch(addItem());
+    // dispatch(fetchGetProduct());
   }, [dispatch]);
 
   useEffect(() => {

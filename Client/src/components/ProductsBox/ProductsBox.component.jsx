@@ -13,9 +13,10 @@ import {
 //COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
 //HOOK
-import { useLocalStorage } from "../../Hook/useLocalStorage";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
 //REDUX
 import { addItem } from "../../redux/slices/cartSlice";
+import { fetchProduct } from "../../services/productServices";
 
 const ProductBox = () => {
   const navigate = useNavigate();
@@ -25,11 +26,18 @@ const ProductBox = () => {
 
   const [animationComplete, setAnimationComplete] = useState(false);
 
+  const { login } = useSelector((state) => state.user);
+
   const isThereAnyProducts = productsToShow.length === 0;
 
   const handleAddToCart = (product) => {
-    setStoredProducts(product);
-    dispatch(addItem());
+    if (login === false) {
+      alert("no estas logeado");
+    } else {
+      setStoredProducts(product);
+      dispatch(addItem());
+      dispatch(fetchProduct(product));
+    }
   };
 
   useEffect(() => {
