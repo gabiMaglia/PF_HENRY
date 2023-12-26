@@ -52,7 +52,7 @@ const UserMenu = () => {
   };
 
   return (
-    <Box sx={{ mr: "1em" }}>
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -113,6 +113,12 @@ const UserMenu = () => {
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
             width: "12em",
+            mr: "0em",
+            pr: 0,
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+            scrollbarWidth: "none",
             "& .MuiAvatar-root": {
               width: 32,
               height: 32,

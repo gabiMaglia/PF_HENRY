@@ -41,7 +41,6 @@ const SideBar = () => {
         width: "25%",
         minHeight: "530px",
         borderRight: ".1px solid grey",
-        backgroundColor: "red",
       }
     : {
         minWidth: "5em",
