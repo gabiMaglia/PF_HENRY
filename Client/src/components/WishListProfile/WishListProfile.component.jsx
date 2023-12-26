@@ -13,7 +13,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { useLocalStorage } from "../../Hook/UseLocalStorage";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 //UTILS
 import {
