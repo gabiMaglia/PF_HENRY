@@ -5,59 +5,26 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
+  Container,
+  CircularProgress,
   Typography,
 } from "@mui/material";
+//HOOKS
 import { Link } from "react-router-dom";
-import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { useLocalStorage } from "../../Hook/UseLocalStorage";
+import { useNavigate } from "react-router-dom";
+//UTILS
+import {
+  fetchWishList,
+  fetchAddItemWish,
+} from "../../services/wishListServices";
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
-import { useSelector } from "react-redux";
-
-const cardsContent = [
-  {
-    id: 1,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$45000",
-  },
-  {
-    id: 2,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$75000",
-  },
-  {
-    id: 3,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$55000",
-  },
-  {
-    id: 4,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$120000",
-  },
-  {
-    id: 5,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$52500",
-  },
-  {
-    id: 6,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "$85000",
-  },
-];
-const buttons = [{ text: "Agregar al carrito", action: "", color: "#fd611a" }];
+//COMPONENTS
+import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -67,29 +34,93 @@ const WhishListProfileComponent = () => {
     backgroundColor: "black",
   };
 
-  const wishListCards = useSelector((state) => state.wishlist);
-  console.log(wishListCards);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [storedProducts, setStoredProducts] = useLocalStorage(); //Productos del carrito
+
+  const authData = getAuthDataCookie("authData");
+  const userId = authData ? authData.userId : null; //Información del usuario
+
+  const wishListCards = useSelector((state) => state.wishlist.products); //Estado global Wishlist
+
+  const chargeWishListProduct = () => {
+    fetchWishList(userId, dispatch); //Recarga de el estado global Wishlist
+  };
+
+  const handleCardClick = (id) => {
+    const path = PATHROUTES.DETAIL.replace(":id", id); // Redireccionamient al detail
+    navigate(path);
+  };
+
+  const handleAddToCart = (product) => {
+    setStoredProducts(product); // Agregar producto al carrito
+    dispatch(addItem());
+  };
 
   const [cardStatus, setCardStatus] = useState(
-    cardsContent.map((card) => {
-      return { id: card.id, status: false };
+    wishListCards.map((card) => {
+      return { id: card.id, status: false }; //Estado de productos seleccionados
     })
   );
 
-  useEffect(() => {}, [wishListCards]);
+  const [isLoading, setIsLoading] = useState(true); //Estado de carga
+
+  const resetSelection = () => {
+    const reset = wishListCards.map((card) => {
+      return { id: card.id, status: false }; // Recarga del estado de seleccionados
+    });
+    setCardStatus(reset);
+  };
+
+  useEffect(() => {
+    chargeWishListProduct(); //Recarga del estado global Wishlist al iniciar el componente
+  }, []);
+
+  useEffect(() => {
+    resetSelection();
+    if (wishListCards[0] && wishListCards[0].ProductImages) {
+      //Si ya cargo las imagenes
+      setIsLoading(false); //Deja de cargar
+    } else {
+      chargeWishListProduct(); //Sino recarga el estado global
+    }
+  }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
+
+  const deleteProduct = (id) => {
+    fetchAddItemWish(dispatch, userId, id); // ELiminar un producto
+  };
+
+  const handleClickDeleteButton = () => {
+    setIsLoading(true);
+    cardStatus.forEach((card) => {
+      //Recorrer el estado de productos seleccionados
+      if (card.status) {
+        deleteProduct(card.id); // Eliminar los seleccionados
+      }
+    });
+  };
 
   const handleChange = (e) => {
     const { name, checked } = e.target;
     let newCardStatus = [...cardStatus];
     if (name === "all") {
       newCardStatus = newCardStatus.map((card) => {
-        return { id: card.id, status: checked };
+        return { id: card.id, status: checked }; //Manejo del estado de seleccionados
       });
     } else {
       newCardStatus[name].status = checked;
     }
     setCardStatus(newCardStatus);
   };
+
+  const buttons = [
+    {
+      text: "Agregar al carrito",
+      action: handleAddToCart, // Botones que renderiza la card
+      color: "#fd611a",
+    },
+  ];
 
   return (
     <Box
@@ -105,7 +136,7 @@ const WhishListProfileComponent = () => {
         },
       }}
     >
-      {cardsContent.length === 0 ? (
+      {wishListCards.length === 0 ? (
         <Box
           sx={{
             width: "100%",
@@ -131,7 +162,7 @@ const WhishListProfileComponent = () => {
             </Button>
           </Link>
         </Box>
-      ) : (
+      ) : !isLoading ? (
         <>
           <Box
             sx={{
@@ -159,12 +190,13 @@ const WhishListProfileComponent = () => {
                 color: "white",
               }}
               sx={{ mr: "3.5em" }}
+              onClick={handleClickDeleteButton}
             >
               Eliminar selección
             </Button>
           </Box>
           <Box sx={{ mt: "4em" }}>
-            {cardsContent.map((card, index) => {
+            {wishListCards.map((card, index) => {
               return (
                 <Box
                   key={index}
@@ -191,12 +223,21 @@ const WhishListProfileComponent = () => {
                     />
                     <Box sx={{ flexGrow: "1" }}>
                       <UserProfileProductCard
-                        product={card}
+                        handleCardClick={handleCardClick}
+                        actionParam={card}
+                        product={{
+                          id: card.id,
+                          name: card.name,
+                          image: card.ProductImages
+                            ? card.ProductImages[0].address
+                            : "",
+                          budget: `$${card.price}`,
+                        }}
                         buttons={buttons}
                       />
                     </Box>
                   </Box>
-                  {index + 1 === cardsContent.length && (
+                  {index + 1 === wishListCards.length && (
                     <Divider sx={dividerStyle} />
                   )}
                 </Box>
@@ -204,6 +245,35 @@ const WhishListProfileComponent = () => {
             })}
           </Box>
         </>
+      ) : (
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "wrap",
+            alignContent: "space-around",
+            justifyContent: "center",
+            marginTop: 15,
+            marginBottom: 15,
+          }}
+        >
+          <CircularProgress
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              margin: 5,
+              color: "#fd611a",
+            }}
+          />
+          <Typography
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            Cargando...
+          </Typography>
+        </Container>
       )}
     </Box>
   );

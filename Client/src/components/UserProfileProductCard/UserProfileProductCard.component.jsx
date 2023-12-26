@@ -9,7 +9,12 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/system/useTheme";
 
-const UserProfileProductCard = ({ product, buttons }) => {
+const UserProfileProductCard = ({
+  actionParam = () => {}, // Si no llega una funcion establece una por defecto
+  product,
+  buttons,
+  handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
+}) => {
   const theme = useTheme();
 
   return (
@@ -24,13 +29,24 @@ const UserProfileProductCard = ({ product, buttons }) => {
     >
       <CardMedia
         component="img"
-        image={product.image}
         alt={product.name}
+        image={product.image}
+        onClick={() => {
+          handleCardClick(product.id);
+        }}
         sx={{
+          cursor: "pointer",
+          transition: "transform 0.3s",
+          "&:hover": {
+            transform: "scale(1.1)",
+          },
           ml: ".5em",
           width: "8em",
+          height: "5em",
+          objectFit: "contain",
           [theme.breakpoints.down("sm")]: {
-            width: "5em",
+            width: "6em",
+            height: "4em",
           },
         }}
       />
@@ -45,11 +61,19 @@ const UserProfileProductCard = ({ product, buttons }) => {
         }}
       >
         <Box
+          onClick={() => {
+            handleCardClick(product.id);
+          }}
           sx={{
             flexGrow: "1",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
+            cursor: "pointer",
+            transition: "transform 0.3s",
+            "&:hover": {
+              transform: "scale(1.01)",
+            },
           }}
         >
           <Typography
@@ -114,6 +138,9 @@ const UserProfileProductCard = ({ product, buttons }) => {
                     fontSize: ".8em",
                     maxHeight: "3em",
                     textSizeAdjust: "50%",
+                  }}
+                  onClick={() => {
+                    button.action(actionParam);
                   }}
                 >
                   {button.text}

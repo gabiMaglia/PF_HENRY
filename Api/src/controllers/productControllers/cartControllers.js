@@ -1,11 +1,12 @@
 const { Product, Cart, User, ProductCart } = require("../../db");
 
-async function postCart(userId, productId, productQuantity, date, cartMoney) {
+async function postCart(userId, productId, productQuantity) {
   try {
+    const currentDate = new Date();
     const cart = await Cart.create({
       productQuantity,
-      date,
-      cartTotal: cartMoney,
+      currentDate,
+
       state: "inicializado",
     });
 
@@ -20,7 +21,7 @@ async function postCart(userId, productId, productQuantity, date, cartMoney) {
     const product = await Product.findByPk(productId);
 
     await cart.addProduct(product, { through: { quantity: productQuantity } });
-
+    cart.cartTotal = product.price;
     return cart;
   } catch (error) {
     console.error("Error al agregar el producto al carrito:", error);

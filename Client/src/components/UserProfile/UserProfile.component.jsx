@@ -286,9 +286,9 @@ const UserProfile = () => {
                 userAddress.street &&
                 userAddress.number ? (
                   <Typography variant="body2" sx={{ mb: ".5em" }}>
-                    {userAddress.country}, {userAddress.state},{" "}
-                    {userAddress.city}, {userAddress.street},{" "}
-                    {userAddress.number}
+                    {userAddress.street} {userAddress.number},{" "}
+                    {userAddress.city}, {userAddress.state},{" "}
+                    {userAddress.country}
                   </Typography>
                 ) : (
                   <Typography variant="body2" sx={{ mb: ".5em" }}>

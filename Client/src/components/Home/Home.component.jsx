@@ -1,6 +1,8 @@
 //HOOKS
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//MATERIAL UI
+import { Box } from "@mui/material";
 //COMPONENTS
 import HomeProducts from "../HomeProducts/HomeProducts.component";
 import CarouselBottom from "../../components/CarouselBottom/CarouselBottom.component";
@@ -18,12 +20,12 @@ const HomeComponent = () => {
 
   return (
     <>
-      <div>
+      <Box>
         <CarouselTop />
         <HomeProducts allProducts={allProducts} />
         <GoogleMap />
         <CarouselBottom />
-      </div>
+      </Box>
     </>
   );
 };
