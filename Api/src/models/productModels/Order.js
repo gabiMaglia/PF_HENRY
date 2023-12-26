@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("Order", {
+  const Order = sequelize.define("Order", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -16,6 +16,10 @@ module.exports = (sequelize) => {
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+    },
+    preferenceId: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     cartTotal: {
       type: DataTypes.DECIMAL(10, 2),
@@ -46,4 +50,14 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
   });
+
+  // Define el hook después de la actualización
+  Order.addHook("afterUpdate", "updateEstado", async (order, options) => {
+    if (order.changed("paymentId") && order.paymentId !== null) {
+      order.state = "finalizado";
+      await order.save();
+    }
+  });
+
+  return Order;
 };
