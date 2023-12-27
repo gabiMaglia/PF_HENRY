@@ -103,10 +103,10 @@ const UserProfile = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "row",
         width: "100%",
-        height: "500px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       {login ? (
