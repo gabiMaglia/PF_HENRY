@@ -190,8 +190,9 @@ const removeFromCart = async (userId, productId, cartMoney) => {
   }
 };
 
-const getCartById = async (id) => {
-  const cart = await Cart.findByPk(id, {
+const getCartById = async (userId) => {
+  const cart = await Cart.findOne({
+    where: { UserId: userId },
     include: [
       {
         model: Product,
