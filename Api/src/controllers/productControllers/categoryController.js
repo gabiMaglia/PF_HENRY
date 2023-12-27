@@ -82,7 +82,7 @@ const deleteCategory = async (id) => {
   }
 };
 const postCategory = async (name) => {
-  try {
+  try { 
     if (name === "") {
       return {
         error: true,
@@ -94,10 +94,8 @@ const postCategory = async (name) => {
     await category.save();
     const categories = await ProductCategory.findAll();
     if (categories.length !== 0) {
-      return {
-        categories,
-      };
-    } else {
+      return  categories
+    }else{
       return {
         error: true,
         response: `No se encontraron categorias`,
