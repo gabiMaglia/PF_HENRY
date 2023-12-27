@@ -67,6 +67,7 @@ const Dropdown = () => {
           },
           "@media (max-width: 480px)": {
             padding: "50px",
+            marginBottom: "100px",
           },
         }}
       >

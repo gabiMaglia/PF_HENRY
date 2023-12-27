@@ -13,10 +13,12 @@ import {
 //COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
 //HOOK
-import { useLocalStorage } from "../../Hook/UseLocalStorage";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 //REDUX
 import { addItem } from "../../redux/slices/cartSlice";
 import { fetchProduct } from "../../services/productServices";
+//ALERT
+import Swal from "sweetalert2";
 
 const ProductBox = () => {
   const navigate = useNavigate();
@@ -32,7 +34,13 @@ const ProductBox = () => {
 
   const handleAddToCart = (product) => {
     if (login === false) {
-      alert("no estas logeado");
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Debes estar logueado para agregar productos al carrito.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
     } else {
       setStoredProducts(product);
       dispatch(addItem());

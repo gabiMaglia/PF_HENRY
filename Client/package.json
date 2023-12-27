@@ -21,6 +21,7 @@
     "@mui/system": "^5.15.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.2",
+    "circular-json": "^0.5.9",
     "dotenv": "^16.3.1",
     "formik": "^2.4.5",
     "js-cookie": "^3.0.5",

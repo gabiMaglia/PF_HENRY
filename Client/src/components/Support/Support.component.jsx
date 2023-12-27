@@ -223,6 +223,9 @@ const SupportComponent = () => {
                 marginTop: "10px",
                 order: "2",
               },
+              "@media (max-width: 480px)": {
+                marginBottom: "70px",
+              },
             }}
           >
             <TextField
