@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 //MATERIAL UI
 import {
-  TextField,
   Container,
   Box,
   Typography,
@@ -13,6 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import QuantityInput from "./InputCount.component";
 //REDUX
 import {
   addItem,
@@ -32,7 +32,6 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     dispatch(addItem());
-    // dispatch(fetchGetProduct());
   }, [dispatch]);
 
   useEffect(() => {
@@ -46,16 +45,18 @@ export default function ShoppingCart() {
     objectFit: "cover",
   });
 
-  if (items.length === 0) {
+  if (items.length == 0) {
     return (
-      <Typography component="h2">No hay productos en el carrito</Typography>
+      <Typography sx={{ mt: 10 }} component="h2">
+        No hay productos en el carrito
+      </Typography>
     );
   }
 
-  const handleChange = (product, event) => {
-    const newQuantity = parseInt(event.target.value, 10) || 1;
+  const handleChange = (product, newValue) => {
+    // const newQuantity = parseInt(event.target.value, 10) || 1;
 
-    dispatch(updateItem({ id: product.id, count: newQuantity }));
+    dispatch(updateItem({ id: product.id, count: newValue }));
   };
 
   const handleDelete = (product) => {
@@ -67,7 +68,7 @@ export default function ShoppingCart() {
   };
 
   return (
-    <Container display="flex" sx={{ flexDirection: "column", mt: 5 }}>
+    <Container display="flex" sx={{ flexDirection: "column", mt: 10 }}>
       <Typography display="flex" component="h2" sx={{ fontSize: 30, mb: 5 }}>
         Carrito de Compras
       </Typography>
@@ -84,16 +85,13 @@ export default function ShoppingCart() {
             <ProductMedia
               component="img"
               alt={item.name}
-              src={item.ProductImages[0].address}
+              src={item.ProductImages.address}
             />
             <Typography>{item.name}</Typography>
-            <TextField
+            <QuantityInput
               id={item.id}
-              label="Cantidad"
-              variant="outlined"
-              type="number"
               value={item.count}
-              onChange={(e) => handleChange(item, e)}
+              onChange={(newValue) => handleChange(item, newValue)}
             />
             <Typography>Precio: ${item.price * item.count}</Typography>
             <Button onClick={() => handleDelete(item.id)}>

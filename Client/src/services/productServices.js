@@ -141,8 +141,7 @@ export const fetchCart = (items) => async (dispatch) => {
         'Content-Type': 'application/json'
       }
   });
-  console.log(response)
-    dispatch(idShop(response))
+    dispatch(idShop(response.data.Order.preferenceId))
   } catch (error) {
     console.error("error", error);
   }
