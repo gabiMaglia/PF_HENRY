@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 //MATERIAL UI
 import {
-  TextField,
   Container,
   Box,
   Typography,
@@ -89,14 +88,6 @@ export default function ShoppingCart() {
               src={item.ProductImages.address}
             />
             <Typography>{item.name}</Typography>
-            {/* <TextField
-              id={item.id}
-              label="Cantidad"
-              variant="outlined"
-              type="number"
-              value={item.count}
-              onChange={(e) => handleChange(item, e)}
-            /> */}
             <QuantityInput
               id={item.id}
               value={item.count}

@@ -40,25 +40,21 @@ const cartSlice = createSlice({
         const updatedStoredProducts = storedProducts.map((product) =>
           product.id === id ? { ...product, count } : product
         );
-    
+
         window.localStorage.setItem(
           "storedProducts",
-          JSON.stringify(updatedStoredProducts)
+          CircularJSON.stringify(updatedStoredProducts)
         );
-    
-        // window.localStorage.setItem(
-        //   "storedProducts",
-        //   CircularJSON.stringify(updatedItems)
-        // );
       }
     },
     removeItem: (state, action) => {
       const productIdToRemove = action.payload;
       state.items = state.items.filter((item) => item.id !== productIdToRemove);
-      window.localStorage.setItem(
-        "storedProducts",
-        CircularJSON.stringify(state.items)
-      );
+
+  window.localStorage.setItem(
+    "storedProducts",
+    JSON.stringify(state.items)
+  );
     },
     totalItem: (state, action) => {
       const totalPrice = state.items.reduce(
