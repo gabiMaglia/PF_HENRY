@@ -1,7 +1,7 @@
 //MATERIAL UI
 import { Box, Typography, Divider, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
+import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import { useEffect, useState } from "react";
 
 import sortCardByDate from "../../utils/sortCardsByDate";
@@ -142,10 +142,7 @@ const ShoppingProfileComponent = () => {
                         flexDirection: "column",
                       }}
                     >
-                      <UserProfileProductCard
-                        product={card}
-                        buttons={buttons}
-                      />
+                      <UserPanelProductCard product={card} buttons={buttons} />
                       {index + 1 !== cardsPerDate.cards.length && (
                         <Divider
                           sx={{

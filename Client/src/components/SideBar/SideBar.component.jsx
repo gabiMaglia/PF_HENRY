@@ -39,7 +39,7 @@ const SideBar = () => {
         minWidth: "10em",
         maxWidth: "18em",
         width: "25%",
-        minHeight: "min-content",
+        minHeight: "500px",
         borderRight: ".1px solid grey",
       }
     : {

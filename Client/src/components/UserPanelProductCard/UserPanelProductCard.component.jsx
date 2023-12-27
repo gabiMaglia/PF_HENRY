@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import useTheme from "@mui/system/useTheme";
 
-const UserProfileProductCard = ({
+const UserPanelProductCard = ({
   actionParam = () => {}, // Si no llega una funcion establece una por defecto
   product,
   buttons,
@@ -174,4 +174,4 @@ const UserProfileProductCard = ({
   );
 };
 
-export default UserProfileProductCard;
+export default UserPanelProductCard;

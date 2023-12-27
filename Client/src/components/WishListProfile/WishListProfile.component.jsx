@@ -24,7 +24,7 @@ import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
-import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
+import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -222,7 +222,7 @@ const WhishListProfileComponent = () => {
                       onChange={handleChange}
                     />
                     <Box sx={{ flexGrow: "1" }}>
-                      <UserProfileProductCard
+                      <UserPanelProductCard
                         handleCardClick={handleCardClick}
                         actionParam={card}
                         product={{
