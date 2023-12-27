@@ -95,7 +95,6 @@ const postCategory = async (name) => {
     const categories = await ProductCategory.findAll();
     if (categories.length !== 0) {
       return {
-        message: `se creo exitosamente la categoria ${category.name}`,
         categories,
       };
     } else {
