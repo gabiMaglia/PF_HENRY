@@ -1,5 +1,6 @@
 //HOOKS
 import { createSlice } from "@reduxjs/toolkit";
+import CircularJSON from "circular-json";
 
 const initialState = {
   items: [],
@@ -35,10 +36,20 @@ const cartSlice = createSlice({
 
         state.items = updatedItems;
 
+        const storedProducts = JSON.parse(window.localStorage.getItem("storedProducts")) || [];
+        const updatedStoredProducts = storedProducts.map((product) =>
+          product.id === id ? { ...product, count } : product
+        );
+    
         window.localStorage.setItem(
           "storedProducts",
-          JSON.stringify(updatedItems)
+          JSON.stringify(updatedStoredProducts)
         );
+    
+        // window.localStorage.setItem(
+        //   "storedProducts",
+        //   CircularJSON.stringify(updatedItems)
+        // );
       }
     },
     removeItem: (state, action) => {
@@ -46,7 +57,7 @@ const cartSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== productIdToRemove);
       window.localStorage.setItem(
         "storedProducts",
-        JSON.stringify(state.items)
+        CircularJSON.stringify(state.items)
       );
     },
     totalItem: (state, action) => {

@@ -13,6 +13,7 @@ import {
   Button,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import QuantityInput from "./InputCount.component";
 //REDUX
 import {
   addItem,
@@ -53,10 +54,10 @@ export default function ShoppingCart() {
     );
   }
 
-  const handleChange = (product, event) => {
-    const newQuantity = parseInt(event.target.value, 10) || 1;
+  const handleChange = (product, newValue) => {
+    // const newQuantity = parseInt(event.target.value, 10) || 1;
 
-    dispatch(updateItem({ id: product.id, count: newQuantity }));
+    dispatch(updateItem({ id: product.id, count: newValue }));
   };
 
   const handleDelete = (product) => {
@@ -85,16 +86,21 @@ export default function ShoppingCart() {
             <ProductMedia
               component="img"
               alt={item.name}
-              src={item.ProductImages[0].address}
+              src={item.ProductImages.address}
             />
             <Typography>{item.name}</Typography>
-            <TextField
+            {/* <TextField
               id={item.id}
               label="Cantidad"
               variant="outlined"
               type="number"
               value={item.count}
               onChange={(e) => handleChange(item, e)}
+            /> */}
+            <QuantityInput
+              id={item.id}
+              value={item.count}
+              onChange={(newValue) => handleChange(item, newValue)}
             />
             <Typography>Precio: ${item.price * item.count}</Typography>
             <Button onClick={() => handleDelete(item.id)}>
