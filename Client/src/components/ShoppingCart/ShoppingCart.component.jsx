@@ -32,7 +32,6 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     dispatch(addItem());
-    // dispatch(fetchGetProduct());
   }, [dispatch]);
 
   useEffect(() => {
@@ -46,9 +45,11 @@ export default function ShoppingCart() {
     objectFit: "cover",
   });
 
-  if (items.length === 0) {
+  if (items.length == 0) {
     return (
-      <Typography component="h2">No hay productos en el carrito</Typography>
+      <Typography sx={{ mt: 10 }} component="h2">
+        No hay productos en el carrito
+      </Typography>
     );
   }
 
@@ -67,7 +68,7 @@ export default function ShoppingCart() {
   };
 
   return (
-    <Container display="flex" sx={{ flexDirection: "column", mt: 5 }}>
+    <Container display="flex" sx={{ flexDirection: "column", mt: 10 }}>
       <Typography display="flex" component="h2" sx={{ fontSize: 30, mb: 5 }}>
         Carrito de Compras
       </Typography>
