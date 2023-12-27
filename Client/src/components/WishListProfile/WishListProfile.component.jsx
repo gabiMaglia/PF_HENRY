@@ -88,11 +88,11 @@ const WhishListProfileComponent = () => {
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
   const deleteProduct = (id) => {
+    setIsLoading(true);
     fetchAddItemWish(dispatch, userId, id); // ELiminar un producto
   };
 
   const handleClickDeleteButton = () => {
-    setIsLoading(true);
     cardStatus.forEach((card) => {
       //Recorrer el estado de productos seleccionados
       if (card.status) {
@@ -128,7 +128,6 @@ const WhishListProfileComponent = () => {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        height: "500px",
         mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -146,6 +145,7 @@ const WhishListProfileComponent = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: "2em",
+            textAlign: "center",
           }}
         >
           <Typography variant="h5">
@@ -248,13 +248,13 @@ const WhishListProfileComponent = () => {
       ) : (
         <Container
           sx={{
+            height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column",
             flexWrap: "wrap",
             alignContent: "space-around",
             justifyContent: "center",
-            marginTop: 15,
-            marginBottom: 15,
           }}
         >
           <CircularProgress

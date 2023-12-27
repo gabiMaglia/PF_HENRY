@@ -94,7 +94,6 @@ const ProductServicesProfileComponent = () => {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        height: "500px",
         mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -114,6 +113,7 @@ const ProductServicesProfileComponent = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: "2em",
+            textAlign: "center",
           }}
         >
           <Typography variant="h5">
