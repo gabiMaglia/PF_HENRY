@@ -131,10 +131,15 @@ const deleteOrderById = async (id) => {
   try {
     const orderToDelete = await Order.findByPk(id);
 
+    if (!orderToDelete) {
+      throw new Error("Order not found");
+    }
+
     await orderToDelete.destroy();
     return { orderToDelete, deleted: true };
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
