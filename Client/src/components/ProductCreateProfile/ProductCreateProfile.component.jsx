@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../services/categoriesServices";
 
 const ProductCreateProfileComponent = () => {
-  // HOOKS
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
   useEffect(() => {
@@ -27,6 +26,7 @@ const ProductCreateProfileComponent = () => {
     price: "",
     description: "",
     stock: "",
+    soldCount:0,
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: "",
     images: [],
@@ -170,7 +170,12 @@ const ProductCreateProfileComponent = () => {
             />
           </Grid>
           <Grid item xs={12}>
-          <Input inputProps={{ multiple: true }} type="file" name="images" onChange={handleChange} />
+            <Input
+              inputProps={{ multiple: true }}
+              type="file"
+              name="images"
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={12}>
             <ul>
