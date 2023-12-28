@@ -5,6 +5,7 @@ const {
   getCartById,
   deleteCartById,
   removeFromCart,
+  editQuantity,
 } = require("../../controllers/productControllers/cartControllers");
 
 const postCartHandler = async (req, res) => {
@@ -103,6 +104,27 @@ const deleteCartHandler = async (req, res) => {
   }
 };
 
+const editQuantityHandler = async (req, res) => {
+  const { userId, productId, productQuantity, cartMoney } = req.body;
+  try {
+    const updatedCarrito = await editQuantity(
+      userId,
+      productId,
+      productQuantity,
+      cartMoney
+    );
+    if (updatedCarrito) {
+      res.status(200).json({
+        message: "Quantities updated successfully",
+        updatedCarritoCart: updatedCarrito,
+      });
+    } else {
+      res.status(400).send("not found");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
   postCartHandler,
   getAllCartsHandler,
@@ -110,4 +132,5 @@ module.exports = {
   cartByIdHandler,
   deleteCartHandler,
   removeFromCartHandler,
+  editQuantityHandler,
 };
