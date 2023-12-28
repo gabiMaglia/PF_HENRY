@@ -199,7 +199,7 @@ const CreateService = () => {
             fullWidth
             sx={{ color: "white" }}
           >
-            Registrar
+            Registrar servicio
           </Button>
         </Box>
       </FormControl>
