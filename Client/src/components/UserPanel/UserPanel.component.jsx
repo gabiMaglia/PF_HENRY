@@ -13,6 +13,7 @@ import WishListProfile from "../WishListProfile/WishListProfile.component";
 import TechniciansProfile from "../TechniciansProfile/TechniciansProfile.component";
 import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.component";
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
+import CreateService from "../CreateService/CreateService.component";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -73,6 +74,10 @@ const UserPanelComponent = () => {
       path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
       roles: ["admin"],
     },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
+      roles: ["admin"],
+    },
     //TECHNICIANS
     {
       path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PROFILE,
@@ -83,11 +88,7 @@ const UserPanelComponent = () => {
       roles: ["technician"],
     },
     {
-      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REAPIRED_PRODCUTS,
-      roles: ["technician"],
-    },
-    {
-      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REPAIR_HISTORY,
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
       roles: ["technician"],
     },
   ];
@@ -119,6 +120,8 @@ const UserPanelComponent = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
+        height: "97vh",
+        minHeight: "500px",
         width: "100%",
         mt: "1.2em",
         [theme.breakpoints.down("sm")]: {
@@ -181,6 +184,14 @@ const UserPanelComponent = () => {
               : PATHROUTES.PRODUCTS_SERVICES
           }
           element={<ProductsServicesProfile />}
+        />
+        <Route
+          path={
+            userRole === "technician" || userRole === "admin"
+              ? PATHROUTES.CREATE_SERVICES
+              : ""
+          }
+          element={<CreateService />}
         />
       </Routes>
       <Box

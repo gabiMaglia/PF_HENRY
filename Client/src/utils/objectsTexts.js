@@ -10,9 +10,6 @@ import {
   Twitter,
 } from "@mui/icons-material";
 
-//HELPERS
-import PATHROUTE from "../helpers/pathRoute";
-
 const itemsQuestions = [
   {
     title: "¿Que garantia tienen los productos?",
@@ -122,6 +119,7 @@ const brands = [
   "Logitech",
   "Msi",
   "Nvidia",
+  "Radeon",
   "Raidmax",
   "Ryzen",
   "Samsung",

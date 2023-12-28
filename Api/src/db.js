@@ -21,7 +21,10 @@ const WishListModel = require("./models/productModels/WishList");
 const CartModel = require("./models/productModels/Cart");
 const OrderModel = require("./models/productModels/Order");
 const ProductCartModel = require("./models/productModels/ProductCart");
+
 // Inicializacion de la instancia de sequelize
+const OrderProductModel = require("./models/productModels/OrderProduct");
+
 const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
   dialect: "postgres",
   dialectOptions: {
@@ -49,6 +52,7 @@ ProductImageModel(sequelize);
 CartModel(sequelize);
 OrderModel(sequelize);
 ProductCartModel(sequelize);
+OrderProductModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
@@ -69,6 +73,7 @@ const {
   Cart,
   Order,
   ProductCart,
+  OrderProduct,
 } = sequelize.models;
 
 // Creacion del session store encargado de guardar en la base de datos las sesiones
@@ -132,6 +137,8 @@ Product.belongsToMany(Cart, {
 Order.belongsTo(User);
 User.hasMany(Order);
 
+Order.belongsToMany(Product, { through: "OrderProduct" });
+Product.belongsToMany(Order, { through: "OrderProduct" });
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
 Service.belongsTo(User, {
