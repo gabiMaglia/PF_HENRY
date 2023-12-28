@@ -17,11 +17,9 @@ const PATHROUTES = {
   SHOPCART: "/shoppingCart",
   //ADMIN
   PRODUCT_CREATE: "/productCreate",
-  TECHNICIANS: "/technicians",
-  CUSTOMERS: "/customers",
+  USERS_LIST: "/usersList",
   //TECHNICIAN
-  REAPIRED_PRODCUTS: "/repairedProdcuts",
-  REPAIR_HISTORY: "/repairHistory",
+  CREATE_SERVICES: "/createServices",
 };
 
 export default PATHROUTES;

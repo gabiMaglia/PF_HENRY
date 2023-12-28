@@ -99,9 +99,9 @@ const UserPanelItems = (name, surname) => {
         path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCT_CREATE,
       },
       {
-        name: "Técnicos",
+        name: "Lista de usuarios",
         icon: <People />,
-        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.TECHNICIANS,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
       },
       {
         name: "Productos en servicio",
@@ -142,14 +142,9 @@ const UserPanelItems = (name, surname) => {
         path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
       },
       {
-        name: "Prodcutos reparados",
-        icon: <Handyman />,
-        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REAPIRED_PRODCUTS,
-      },
-      {
-        name: "Historial reparaciones",
-        icon: <History />,
-        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REPAIR_HISTORY,
+        name: "Crear servicio",
+        icon: <Add />,
+        path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
       },
       {
         name: "Cerrar sesion",
