@@ -37,6 +37,7 @@ function ImageUploaderComponent() {
       setImageInput("");
     } catch (error) {
       console.error("Error al subir la imagen desde URL:", error);
+      console.log("Detalles del error:", error.response.data);
     }
   };
 

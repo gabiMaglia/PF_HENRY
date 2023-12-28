@@ -17,7 +17,7 @@ const handleImageUpload = async (file) => {
     formData.append("upload_preset", uploadPreset);
 
     const response = await axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload?transformation=w_300,c_scale`,
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
       formData
     );
 
