@@ -23,14 +23,14 @@ const sessionStore = new SequelizeStore({
     sid: session.sid,
   }),
 });;
-// Configuramos esxpress-session
+// Configuramos express-session
 server.use(
   session({
     secret: `${process.env.EXPRESS_SESSION_KEY}`,
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    cookie: { secure: true,  maxAge: 2 * 60 * 60 * 1000, },
+    cookie: { maxAge: 1 * 60 * 60 * 24, },
   })
 );
 

@@ -49,10 +49,12 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+ 
   done(null, user._json.email);
 });
 
-passport.deserializeUser( async (email, done) => {
-  const user = await User.findOne({ where: { email: email.value } });
+passport.deserializeUser( async (mail, done) => {
+
+  const user = await User.findOne({ where: { email: mail } });
   done(null, user);
 });
