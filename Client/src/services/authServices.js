@@ -55,11 +55,7 @@ export const googleLoginUser = async (cookieStatus) => {
         if (event.origin === `${url}` && event.data) {
           console.log(event);
           const sortedData = dataSorterForApp(event.data);
-<<<<<<< HEAD
           createPersistency(sortedData, cookieStatus)
-=======
-          createPersistency(sortedData, cookieStatus);
->>>>>>> develop
           popup.close();
           resolve({ data: event.data });
         }
