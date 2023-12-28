@@ -153,9 +153,17 @@ const getMisCompras = async (userId) => {
           include: [
             {
               model: Product,
+              attributes: ["id", "name", "price"],
               through: {
-                model: OrderProduct,
+                model: ProductCart,
+                attributes: ["quantity"],
               },
+              include: [
+                {
+                  model: ProductImage,
+                  attributes: ["address"],
+                },
+              ],
             },
           ],
         },

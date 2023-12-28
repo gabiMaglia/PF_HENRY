@@ -247,6 +247,66 @@ const deleteCartById = async (id) => {
   }
 };
 
+const editQuantity = async (userId, productId, productQuantity, cartMoney) => {
+  try {
+    let cartToUpdate = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
+      include: [
+        {
+          model: Product,
+          attributes: ["id"],
+          through: {
+            model: ProductCart,
+            attributes: ["quantity"],
+          },
+        },
+      ],
+    });
+
+    if (cartToUpdate) {
+      const existingProduct = cartToUpdate.Products.find(
+        (product) => product.id === productId
+      );
+
+      if (existingProduct) {
+        await ProductCart.update(
+          {
+            quantity: (existingProduct.ProductCart.quantity =
+              Number(productQuantity)),
+          },
+          { where: { CartId: cartToUpdate.id, ProductId: productId } }
+        );
+      }
+
+      await cartToUpdate.update({ cartTotal: cartMoney });
+
+      //vuelve a pedir el carrito para que devuelva el carrito actualizado
+      const updatedCart = await Cart.findOne({
+        where: {
+          UserId: userId,
+        },
+        include: [
+          {
+            model: Product,
+            attributes: ["id"],
+            through: {
+              model: ProductCart,
+              attributes: ["quantity"],
+            },
+          },
+        ],
+      });
+      return updatedCart;
+    } else {
+      return "El usuario no ha generado aun un carrito en la base de datos.";
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   postCart,
   addToCart,
@@ -254,4 +314,5 @@ module.exports = {
   getCartById,
   deleteCartById,
   removeFromCart,
+  editQuantity,
 };
