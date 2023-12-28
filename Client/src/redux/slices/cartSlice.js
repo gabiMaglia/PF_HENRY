@@ -16,9 +16,7 @@ const cartSlice = createSlice({
       const storedProducts = JSON.parse(
         window.localStorage.getItem("storedProducts")
       );
-      // if(!storedProducts){
-      //   state.items = action.payload
-      // }
+      
       if (storedProducts) {
         state.items = Object.values(storedProducts).map((product) => ({ ...product }));
       }
