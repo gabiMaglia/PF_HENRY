@@ -127,13 +127,16 @@ async function updateOrder(orderId, updatedFields) {
   }
 }
 
-
 const deleteOrderById = async (id) => {
   try {
     const orderToDelete = await Order.findByPk(id);
 
     await orderToDelete.destroy();
     return { orderToDelete, deleted: true };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const getMisCompras = async (userId) => {
   try {
@@ -159,7 +162,6 @@ const getMisCompras = async (userId) => {
     }
 
     return user;
-
   } catch (error) {
     throw new Error(error);
   }
@@ -173,5 +175,4 @@ module.exports = {
   deleteOrderById,
 
   getMisCompras,
-
 };
