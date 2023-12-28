@@ -1,62 +1,16 @@
-const bcrypt = require("bcrypt");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const { User, UserCredentials } = require("../db");
+const localStrategy = require("./../middlewares/passport/localStrategy");
+const googleStrategy = require("../middlewares/passport/googleStrategy");
+const { User } = require("../db");
 
-const verifyCallback = async (username, password, done) => {
-  let userCredential;
-  let passwordCorrect;
+passport.use(localStrategy);
+passport.use(googleStrategy);
 
-  if (password) {
-    userCredential = await UserCredentials.findOne({
-      where: { username: username },
-    });
-    passwordCorrect =
-      userCredential === null
-        ? false
-        : await bcrypt.compare(password, userCrential.password);
-  }
+passport.serializeUser((user, done) => {
+  done(null, user._json.email);
+});
 
-  if (!userCredential) {
-    return done(
-      {
-        error: true,
-        response: "Credenciales incorrectas",
-      },
-      false
-    );
-  }
-  if (passwordCorrect) {
-    const user = await User.findByPk(userCredential.UserId);
-
-    if (!_user.isActive) {
-      return done(
-        {
-          error: true,
-          response:
-            "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
-        },
-        false
-      );
-    }
-    return done(null, user);
-  } else {
-    return done(
-      {
-        error: true,
-        response: "Credenciales incorrectas",
-      },
-      false
-    );
-  }
-};
-const strategy = new LocalStrategy();
-
-passport.use(
-  new LocalStrategy((username, password, cb) => {
-    // .then((user) => {
-    //     if (!user) {return cb(null, false)}
-    //     const isValid = validPassword(password, user.hash, user.salt)
-    // })
-  })
-);
+passport.deserializeUser(async (mail, done) => {
+  const user = await User.findOne({ where: { email: mail } });
+  done(null, user);
+});

@@ -9,7 +9,7 @@ var cors = require("cors");
 const passport = require("passport");
 const { conn } = require("./db.js");
 // importamos la configuracion de passport
-require("./middlewares/googleAuthMiddleware.js");
+require("./config/passport.js");
 const server = express();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
