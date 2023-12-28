@@ -1,4 +1,11 @@
-const { Order, Cart, Product, ProductCart, OrderProduct } = require("../../db");
+const {
+  Order,
+  Cart,
+  Product,
+  ProductCart,
+  OrderProduct,
+  User,
+} = require("../../db");
 const { v4: uuidv4 } = require("uuid");
 const { mercadoPago } = require("./mercadoPagoContoller");
 async function createOrder(
@@ -120,12 +127,39 @@ async function updateOrder(orderId, updatedFields) {
   }
 }
 
+
 const deleteOrderById = async (id) => {
   try {
     const orderToDelete = await Order.findByPk(id);
 
     await orderToDelete.destroy();
     return { orderToDelete, deleted: true };
+
+const getMisCompras = async (userId) => {
+  try {
+    const user = await User.findAll({
+      where: { id: userId },
+      include: [
+        {
+          model: Order,
+          include: [
+            {
+              model: Product,
+              through: {
+                model: OrderProduct,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+
   } catch (error) {
     throw new Error(error);
   }
@@ -135,5 +169,9 @@ module.exports = {
   getAllOrders,
   createOrder,
   updateOrder,
+
   deleteOrderById,
+
+  getMisCompras,
+
 };

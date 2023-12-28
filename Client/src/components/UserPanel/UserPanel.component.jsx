@@ -13,6 +13,7 @@ import WishListProfile from "../WishListProfile/WishListProfile.component";
 import TechniciansProfile from "../TechniciansProfile/TechniciansProfile.component";
 import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.component";
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
+import CreateService from "../CreateService/CreateService.component";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -83,11 +84,7 @@ const UserPanelComponent = () => {
       roles: ["technician"],
     },
     {
-      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REAPIRED_PRODCUTS,
-      roles: ["technician"],
-    },
-    {
-      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.REPAIR_HISTORY,
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
       roles: ["technician"],
     },
   ];
@@ -183,6 +180,10 @@ const UserPanelComponent = () => {
               : PATHROUTES.PRODUCTS_SERVICES
           }
           element={<ProductsServicesProfile />}
+        />
+        <Route
+          path={userRole === "technician" && PATHROUTES.CREATE_SERVICES}
+          element={<CreateService />}
         />
       </Routes>
       <Box

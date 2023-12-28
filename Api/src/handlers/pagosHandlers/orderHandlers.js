@@ -1,7 +1,11 @@
 const {
   createOrder,
   getAllOrders,
+
   deleteOrderById,
+
+  getMisCompras,
+
 } = require("../../controllers/pagosControllers/ordersControllers");
 
 const createOrderHandler = async (req, res) => {
@@ -49,6 +53,7 @@ const getAllOrdersHandler = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 const deleteOrderHandler = async (req, res) => {
   const { id } = req.params;
   try {
@@ -58,8 +63,23 @@ const deleteOrderHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+const misComprasHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const misCompras = await getMisCompras(id);
+    if (misCompras) {
+      res.status(200).json(misCompras);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createOrderHandler,
   getAllOrdersHandler,
-  deleteOrderHandler,
+  misComprasHandler,
+deleteOrderHandler
 };
