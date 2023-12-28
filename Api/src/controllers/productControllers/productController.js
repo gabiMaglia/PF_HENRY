@@ -93,6 +93,7 @@ const postProduct = async ({
           // Si la imagen no existe, subirla a Cloudinary
           const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
             folder: "products",
+            width: 300,
           });
           
           const cloudinaryImageUrl = cloudinaryResponse.secure_url;
