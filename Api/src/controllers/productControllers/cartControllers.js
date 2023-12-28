@@ -2,27 +2,38 @@ const { Product, Cart, User, ProductCart } = require("../../db");
 
 async function postCart(userId, productId, productQuantity) {
   try {
-    const currentDate = new Date();
-    const cart = await Cart.create({
-      productQuantity,
-      currentDate,
-
-      state: "inicializado",
+    let cart = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
     });
 
-    if (userId) {
-      const user = await User.findByPk(userId);
-      if (!user) {
-        throw new Error("Usuario no encontrado");
+    if (cart) {
+      return "El usuario ya tiene carrito";
+    } else {
+      const currentDate = new Date();
+      let cart = await Cart.create({
+        productQuantity,
+        currentDate,
+        state: "inicializado",
+      });
+
+      if (userId) {
+        const user = await User.findByPk(userId);
+        if (!user) {
+          throw new Error("Usuario no encontrado");
+        }
+        await user.setCart(cart);
       }
-      await user.setCart(cart);
+
+      const product = await Product.findByPk(productId);
+
+      await cart.addProduct(product, {
+        through: { quantity: productQuantity },
+      });
+      cart.cartTotal = product.price;
+      return cart;
     }
-
-    const product = await Product.findByPk(productId);
-
-    await cart.addProduct(product, { through: { quantity: productQuantity } });
-    cart.cartTotal = product.price;
-    return cart;
   } catch (error) {
     console.error("Error al agregar el producto al carrito:", error);
     throw new Error("Error al agregar el producto al carrito");

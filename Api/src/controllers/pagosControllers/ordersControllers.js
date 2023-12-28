@@ -120,8 +120,20 @@ async function updateOrder(orderId, updatedFields) {
   }
 }
 
+const deleteOrderById = async (id) => {
+  try {
+    const orderToDelete = await Order.findByPk(id);
+
+    await orderToDelete.destroy();
+    return { orderToDelete, deleted: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getAllOrders,
   createOrder,
   updateOrder,
+  deleteOrderById,
 };
