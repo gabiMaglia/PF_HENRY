@@ -45,10 +45,12 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    products: {
-      type: DataTypes.JSONB,
-      allowNull: true,
-    },
+
+    // products: {
+    //   type: DataTypes.JSONB,
+    //   allowNull: false,
+    // },
+
   });
 
   // Define el hook después de la actualización
