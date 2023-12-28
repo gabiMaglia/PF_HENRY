@@ -27,7 +27,7 @@ const getAllProducts = async () => {
   }
 };
 
-//postProducts
+//POST PRODUCT
 const postProduct = async ({
   name,
   description,
@@ -165,6 +165,8 @@ const postProduct = async ({
 //   }
 // };
 
+
+//UPDATE PRODUCT
 const updateProduct = async (productId, updateData) => {
   try {
     const productToUpdate = await Product.findByPk(productId, {
