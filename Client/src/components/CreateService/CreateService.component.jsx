@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Button,
   FormControl,
+  FormHelperText,
   TextField,
   Typography,
 } from "@mui/material";
@@ -12,8 +13,9 @@ import Textarea from "@mui/joy/Textarea";
 import { createNewService } from "../../services/serviceServices";
 import { getUsersByRole } from "../../services/userServices";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import PATHROUTES from "../../helpers/pathRoute";
+import { createServiceValidate } from "../../helpers/serviceValidate";
 
 const CreateService = () => {
   const navigate = useNavigate();
@@ -38,6 +40,14 @@ const CreateService = () => {
 
   const [technicianListValue, setTechnicianListValue] = useState(null);
 
+  const [errors, setErrors] = useState({
+    product_model: "",
+    product_income_date: "",
+    user_diagnosis: "",
+    client: "",
+    technician: "",
+  });
+
   const authData = getAuthDataCookie("authData");
   const jwt = getAuthDataCookie("jwt");
 
@@ -46,8 +56,11 @@ const CreateService = () => {
       product_model: "",
       product_income_date: "",
       user_diagnosis: "",
-      ClientId: "",
-      technicianId: "",
+    });
+    setErrors({
+      product_model: "",
+      product_income_date: "",
+      user_diagnosis: "",
     });
     setUserListValue(null);
     setTechnicianListValue(null);
@@ -55,10 +68,28 @@ const CreateService = () => {
 
   const getUsers = async () => {
     const users = await getUsersByRole("customer", jwt);
-    setUsers(users.data);
-    if (authData.userRole === "admin") {
-      const technicians = await getUsersByRole("technician", jwt);
-      setTechnicians(technicians.data);
+    if (users.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al obtener los usuarios",
+        text: `${users.data.message}`,
+      });
+    } else {
+      setUsers(users.data);
+      if (authData.userRole === "admin") {
+        const technicians = await getUsersByRole("technician", jwt);
+        if (technicians.error) {
+          Swal.fire({
+            allowOutsideClick: false,
+            icon: "error",
+            title: "Error al obtener los tecnicos",
+            text: `${users.data.message}`,
+          });
+        } else {
+          setTechnicians(technicians.data);
+        }
+      }
     }
   };
 
@@ -83,53 +114,67 @@ const CreateService = () => {
   };
 
   const handleSubmit = async () => {
-    Swal.fire({
-      icon: "info",
-      allowOutsideClick: false,
-      title: "Por favor espere mientras procesamos la información",
-      showConfirmButton: false,
-      customClass: {
-        container: "container",
-      },
-    });
-    Swal.showLoading();
-
-    let response = undefined;
-    if ((authData.userRole = "admin")) {
-      response = await createNewService(productInfo, productInfo.technicianId);
-    } else if (authData.userRole === "technician") {
-      response = await createNewService(productInfo, authData.userId);
-    }
-    if (response.status === 200) {
+    createServiceValidate(productInfo, setErrors, errors);
+    if (
+      errors.product_model === "" &&
+      errors.product_income_date === "" &&
+      errors.user_diagnosis === "" &&
+      errors.client === "" &&
+      errors.technician === ""
+    ) {
       Swal.fire({
+        icon: "info",
         allowOutsideClick: false,
-        showCancelButton: true,
-        icon: "success",
-        title: "Servicio creado exitosamente",
-        text: "Para continuar con la reparación diríjase a: Productos en servicio",
-        confirmButtonText: "Continuar",
-        confirmButtonColor: "#fd611a",
-        cancelButtonText: "Cancelar",
-        cancelButtonColor: "red",
-      }).then((value) => {
-        if (value.isConfirmed) {
-          navigate(
-            authData.userRole === "admin"
-              ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
-              : PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
-          );
-        }
-        resetForm();
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
       });
+      Swal.showLoading();
+
+      let response = undefined;
+      if ((authData.userRole = "admin")) {
+        response = await createNewService(
+          productInfo,
+          productInfo.technicianId
+        );
+      } else if (authData.userRole === "technician") {
+        response = await createNewService(productInfo, authData.userId);
+      }
+      if (response.status === 200) {
+        Swal.fire({
+          allowOutsideClick: false,
+          showCancelButton: true,
+          icon: "success",
+          title: "Servicio creado exitosamente",
+          text: "Para continuar con la reparación diríjase a: Productos en servicio",
+          confirmButtonText: "Continuar",
+          confirmButtonColor: "#fd611a",
+          cancelButtonText: "Cancelar",
+          cancelButtonColor: "red",
+        }).then((value) => {
+          if (value.isConfirmed) {
+            navigate(
+              authData.userRole === "admin"
+                ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
+                : PATHROUTES.TECHNICIAN_USER_PANEL +
+                    PATHROUTES.PRODUCTS_SERVICES
+            );
+          }
+          resetForm();
+        });
+      } else {
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "error",
+          title: "Error en la creación del servicio",
+          text: `${response.response.data}`,
+        });
+      }
     } else {
       Swal.fire({
         allowOutsideClick: false,
-        customClass: {
-          container: "container",
-        },
         icon: "error",
         title: "Error en la creación del servicio",
-        text: `${response.response.data}`,
+        text: "Por favor revise los campos del formulario",
       });
     }
   };
@@ -137,6 +182,7 @@ const CreateService = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductInfo({ ...productInfo, [name]: value });
+    createServiceValidate({ [name]: value }, setErrors, errors);
   };
 
   const handleUserChange = (e) => {
@@ -145,11 +191,13 @@ const CreateService = () => {
       const email = outerText.split(" --- ")[1];
       if (id && id.includes("technician")) {
         setTechnicianListValue(outerText);
+        createServiceValidate({ technician: outerText }, setErrors, errors);
         const technicianId = technicians.find(
           (technician) => technician.email === email
         ).id;
         setProductInfo({ ...productInfo, technicianId: technicianId });
       } else {
+        createServiceValidate({ client: outerText }, setErrors, errors);
         setUserListValue(outerText);
         const userId = users.find((user) => user.email === email).id;
         setProductInfo({ ...productInfo, ClientId: userId });
@@ -187,64 +235,93 @@ const CreateService = () => {
       <FormControl
         onSubmit={handleSubmit}
         sx={{
+          width: "100%",
           display: "flex",
           flexDirection: "column",
           flexGrow: "1",
           justifyContent: "space-around",
         }}
       >
-        <TextField
-          label="Modelo del producto"
-          value={productInfo.product_model}
-          variant="outlined"
-          name="product_model"
-          onChange={handleChange}
-        />
-        <TextField
-          label="Dia de ingreso"
-          value={productInfo.product_income_date}
-          type="date"
-          name="product_income_date"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          onChange={handleChange}
-        />
+        <Box>
+          <TextField
+            fullWidth
+            error={Boolean(errors.product_model)}
+            label="Modelo del producto"
+            value={productInfo.product_model}
+            variant="outlined"
+            name="product_model"
+            onChange={handleChange}
+          />
+          <FormHelperText error={true}>{errors.product_model}</FormHelperText>
+        </Box>
+        <Box>
+          <TextField
+            fullWidth
+            error={Boolean(errors.product_income_date)}
+            label="Dia de ingreso"
+            value={productInfo.product_income_date}
+            type="date"
+            name="product_income_date"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            variant="outlined"
+            onChange={handleChange}
+          />
+          <FormHelperText error={true}>
+            {errors.product_income_date}
+          </FormHelperText>
+        </Box>
         {authData.userRole === "admin" && (
+          <Box>
+            <Autocomplete
+              id={"technician"}
+              selectOnFocus
+              onChange={handleUserChange}
+              value={technicianListValue}
+              options={techniciansName}
+              renderInput={(params) => (
+                <TextField
+                  error={Boolean(errors.technician)}
+                  name="technician"
+                  {...params}
+                  label="Tecnico a asignar"
+                />
+              )}
+            />
+            <FormHelperText error={true}>{errors.technician}</FormHelperText>
+          </Box>
+        )}
+        <Box>
           <Autocomplete
-            id={"technician"}
+            id={"user"}
             selectOnFocus
             onChange={handleUserChange}
-            value={technicianListValue}
-            options={techniciansName}
+            value={userListValue}
+            options={usersName}
             renderInput={(params) => (
               <TextField
-                name="technician"
+                error={Boolean(errors.client)}
+                name="user"
                 {...params}
-                label="Tecnico a asignar"
+                label="Usuario"
               />
             )}
           />
-        )}
-        <Autocomplete
-          id={"user"}
-          selectOnFocus
-          onChange={handleUserChange}
-          value={userListValue}
-          options={usersName}
-          renderInput={(params) => (
-            <TextField name="user" {...params} label="Usuario" />
-          )}
-        />
-        <Textarea
-          value={productInfo.user_diagnosis}
-          name="user_diagnosis"
-          variant="outlined"
-          minRows={3}
-          placeholder="Diagnóstico del usuario"
-          onChange={handleChange}
-        />
+          <FormHelperText error={true}>{errors.client}</FormHelperText>
+        </Box>
+        <Box>
+          <Textarea
+            error={Boolean(errors.user_diagnosis)}
+            value={productInfo.user_diagnosis}
+            name="user_diagnosis"
+            variant="outlined"
+            minRows={3}
+            placeholder="Diagnóstico del usuario"
+            onChange={handleChange}
+          />
+          <FormHelperText error={true}>{errors.user_diagnosis}</FormHelperText>
+        </Box>
         <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
           <Button
             type="submit"
