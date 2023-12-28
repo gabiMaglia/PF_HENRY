@@ -106,7 +106,11 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
       );
 
       if (existingProduct) {
-        existingProduct.ProductCart.quantity = productQuantity;
+        await ProductCart.update(
+          { quantity: existingProduct.ProductCart.quantity + Number(productQuantity) },
+          { where: { CartId: cartToUpdate.id, ProductId: productId } }
+        );
+        // existingProduct.ProductCart.quantity += Number(productQuantity);
       } else {
         const product = await Product.findByPk(productId);
         const addProductResult = await cartToUpdate.addProduct(product, {

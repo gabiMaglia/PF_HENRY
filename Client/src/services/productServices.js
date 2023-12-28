@@ -10,7 +10,7 @@ import {
   changeInput,
 } from "../redux/slices/productSlice";
 //REDUX
-import { idShop } from "../redux/slices/cartSlice";
+import { idShop } from "../redux/slices/CartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { headerSetterForPetitions } from "../utils/authMethodSpliter";
@@ -109,6 +109,10 @@ export const fetchProduct = (product) => async () => {
   try {
     const res = await axios.post(`${urlBack}/cart/`, data)
     console.log(res, "se cargo el producto")
+    if(res.data.Cart === 'El usuario ya tiene carrito'){
+      const response = await axios.put(`${urlBack}/cart/add`, data)
+      console.log(response, "el mensaje put")
+    }
   } catch (error) {
     console.error("error", error);
   }
