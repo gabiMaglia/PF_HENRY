@@ -1,24 +1,35 @@
-require("dotenv").config();
-const cloudinary = require("cloudinary").v2;
+import axios from "axios";
+import { Cloudinary } from "@cloudinary/url-gen";
 
-const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = process.env;
-// Cloudinary configuration
-cloudinary.config({
-  cloud_name: CLOUDINARY_NAME,
-  api_key: CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_SECRET,
+const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
+const cloudinary = new Cloudinary({
+  cloud: {
+    cloudName: cloudName,
+  },
 });
 
-const cloudinaryUpdate = async (image) => {
-  const result = await cloudinary.uploader.upload(image, {
-    folder: "HYPERMEGARED",
-  });
+const handleImageUpload = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
 
-  const { public_id, secure_url } = result;
+    const response = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      formData,
+    );
 
-  console.log(public_id, secure_url);
+    if (!response.data.secure_url) {
+      throw new Error("Error al subir la imagen a Cloudinary");
+    }
 
-  return { public_id, secure_url };
+    return response.data.secure_url;
+  } catch (error) {
+    console.error("Error en la subida de la imagen:", error);
+    throw error;
+  }
 };
 
-module.exports = cloudinaryUpdate;
+export { cloudinary, handleImageUpload };

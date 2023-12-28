@@ -53,9 +53,9 @@ export const googleLoginUser = async (cookieStatus) => {
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
+          console.log(event);
           const sortedData = dataSorterForApp(event.data);
-          console.log(sortedData);
-          createPersistency(sortedData, cookieStatus)
+          createPersistency(sortedData, cookieStatus);
           popup.close();
           resolve({ data: event.data });
         }
@@ -71,6 +71,14 @@ export const registerUser = async (userObj) => {
       userObj,
     });
     return { error: false, data: registerData };
+  } catch ({ response }) {
+    return { error: response.data };
+  }
+};
+export const logOutUser = async () => {
+  try {
+    const response = await axios.post(`${url}/account/logout`);
+    return { error: false, data: response };
   } catch ({ response }) {
     return { error: response.data };
   }

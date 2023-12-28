@@ -1,10 +1,10 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("ProductCart", {
+  sequelize.define("OrderProduct", {
     quantity: {
       type: DataTypes.INTEGER,
-      defaultValue: 1,
+      allowNull: true,
     },
   });
 };
