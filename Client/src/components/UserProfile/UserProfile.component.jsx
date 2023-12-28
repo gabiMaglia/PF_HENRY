@@ -105,7 +105,7 @@ const UserProfile = () => {
       sx={{
         width: "100%",
         display: "flex",
-        justifyContent: "center",
+        // justifyContent: "center",
         alignItems: "center",
       }}
     >
