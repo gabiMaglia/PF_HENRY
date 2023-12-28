@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
+//MATREIAL UI
 import {
   Box,
   Button,
@@ -8,11 +10,12 @@ import {
   MenuItem,
   Input,
 } from "@mui/material";
+//REDUX
 import { useSelector, useDispatch } from "react-redux";
+//SERVICES
 import { fetchCategories } from "../../services/CategoriesServices";
 
 const ProductCreateProfileComponent = () => {
-  // HOOKS
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
   useEffect(() => {
@@ -170,7 +173,12 @@ const ProductCreateProfileComponent = () => {
             />
           </Grid>
           <Grid item xs={12}>
-          <Input inputProps={{ multiple: true }} type="file" name="images" onChange={handleChange} />
+            <Input
+              inputProps={{ multiple: true }}
+              type="file"
+              name="images"
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={12}>
             <ul>
