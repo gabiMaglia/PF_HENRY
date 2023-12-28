@@ -99,9 +99,9 @@ const UserPanelItems = (name, surname) => {
         path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCT_CREATE,
       },
       {
-        name: "Técnicos",
+        name: "Lista de usuarios",
         icon: <People />,
-        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.TECHNICIANS,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
       },
       {
         name: "Productos en servicio",
