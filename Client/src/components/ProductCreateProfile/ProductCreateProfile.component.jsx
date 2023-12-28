@@ -13,7 +13,7 @@ import {
 //REDUX
 import { useSelector, useDispatch } from "react-redux";
 //SERVICES
-import { fetchCategories } from "../../services/CategoriesServices";
+import { fetchCategories } from "../../services/categoriesServices";
 
 const ProductCreateProfileComponent = () => {
   const dispatch = useDispatch();
