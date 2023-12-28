@@ -66,6 +66,14 @@ const CardProduct = ({ product }) => {
     }
   }, [userId, dispatch, login, wishlistProducts]);
 
+  useEffect(() => {
+    if (login) {
+      if (items.length == 0) {
+        dispatch(fetchGetProduct());
+      }
+    }
+  }, []);
+
   const categoryName =
     ProductCategories && ProductCategories.length > 0
       ? ProductCategories[0].name
