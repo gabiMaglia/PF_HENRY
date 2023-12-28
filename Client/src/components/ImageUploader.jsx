@@ -21,6 +21,7 @@ function ImageUploaderComponent() {
         Array.from(files).map((file) => handleImageUpload(file))
       );
       setUploadedUrls((prevUrls) => [...prevUrls, ...newImages]);
+      fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error al subir la imagen:", error);
     }
