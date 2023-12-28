@@ -122,6 +122,7 @@ const brands = [
   "Logitech",
   "Msi",
   "Nvidia",
+  "Radeon",
   "Raidmax",
   "Ryzen",
   "Samsung",
