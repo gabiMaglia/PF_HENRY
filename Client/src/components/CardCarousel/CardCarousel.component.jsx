@@ -1,4 +1,10 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+//MATREIAL UI
 import {
   Card,
   CardContent,
@@ -7,10 +13,6 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Container } from "@mui/system";
 
 const CardCarousel = ({ allProducts }) => {

@@ -97,7 +97,7 @@ const CreateService = () => {
     let response = undefined;
     if ((authData.userRole = "admin")) {
       response = await createNewService(productInfo, productInfo.technicianId);
-    } else if (authData.userRole === "technician") {
+    // } else if (authData.userRole === "technician") {
       response = await createNewService(productInfo, authData.userId);
     }
     if (response.status === 200) {

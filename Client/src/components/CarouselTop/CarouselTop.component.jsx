@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+//HOOKS
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//MATRIAL UI
 import { Box, Card } from "@mui/material";
+//COMPONENTS
 import CardCarousel from "../CardCarousel/CardCarousel.component";
+//SERVICES
 import { fetchAllProducts } from "../../services/productServices";
 
 const CarouselTopComponent = () => {
