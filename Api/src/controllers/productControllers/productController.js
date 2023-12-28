@@ -7,7 +7,7 @@ const {
   ProductImage,
   ProductStock,
 } = require("../../db");
-const cloudinary = require("../../utils/cloudinaryConfig");
+const cloudinary = require("../../config/cloudinaryConfig");
 const folderImages = process.env.CLOUDINARY_UPLOAD_PRESET;
 
 const { conn } = require("../../db");
