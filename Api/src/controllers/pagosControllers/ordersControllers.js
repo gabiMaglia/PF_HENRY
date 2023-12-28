@@ -5,6 +5,7 @@ const {
   ProductCart,
   OrderProduct,
   User,
+  ProductImage,
 } = require("../../db");
 const { v4: uuidv4 } = require("uuid");
 const { mercadoPago } = require("./mercadoPagoContoller");
@@ -155,7 +156,7 @@ const getMisCompras = async (userId) => {
               model: Product,
               attributes: ["id", "name", "price"],
               through: {
-                model: ProductCart,
+                model: OrderProduct,
                 attributes: ["quantity"],
               },
               include: [
