@@ -11,11 +11,13 @@ import {
 } from "../redux/slices/productSlice";
 //REDUX
 import { addItem, idShop } from "../redux/slices/cartSlice";
+import { useLocalStorage } from "../Hook/useLocalStorage";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
+
 
 export const fetchAllProducts = () => async (dispatch) => {
 
@@ -105,25 +107,37 @@ export const fetchProduct = (product) => async () => {
     productId: id,
     productQuantity: 1,
   }
-  console.log(data)
+  
   try {
     const res = await axios.post(`${urlBack}/cart/`, data)
-    console.log(res, "se cargo el producto")
+    
     if(res.data.Cart === 'El usuario ya tiene carrito'){
       const response = await axios.put(`${urlBack}/cart/add`, data)
-      console.log(response, "el mensaje put")
+      
     }
   } catch (error) {
     console.error("error", error);
   }
 }
 
-export const fetchGetProduct = () => async (dispatch) => {
+export const fetchGetProduct = () => async () => {
   const user = window.localStorage.getItem("userId")
   try {
     const res = await axios.get(`${urlBack}/cart/${user}`)
-    console.log(res.data.Products, "product")
-    dispatch(addItem(res.data.Products))
+    
+    const products = res.data.Products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      ProductImages:product.ProductImages[0],
+      count: product.ProductCart.quantity
+    }))
+
+    const storedProducts = getProducts();
+    
+    if (storedProducts.payload === undefined) {
+      window.localStorage.setItem("storedProducts", JSON.stringify(products));
+    }
   } catch (error) {
     console.error("error", error);
   }
@@ -131,7 +145,7 @@ export const fetchGetProduct = () => async (dispatch) => {
 
 export const fetchCount = (product) => async () => {
   const user = window.localStorage.getItem("userId")
-  console.log(product)
+  
   const data = {
     userId: user,
     productId: product.id,
@@ -139,7 +153,6 @@ export const fetchCount = (product) => async () => {
   }
   try {
     const response = await axios.put(`${urlBack}/cart/edit`, data)
-      console.log(response, "cambio de cantidad")
   } catch (error) {
     console.error("error", error);
   }
