@@ -42,10 +42,10 @@ const getAllOrdersHandler = async (req, res) => {
     if (orders) {
       res.status(200).json(orders);
     } else {
-      res.status(400).json({ message: "Orders not found" });
+      res.status(404).json({ message: "Orders not found" });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 

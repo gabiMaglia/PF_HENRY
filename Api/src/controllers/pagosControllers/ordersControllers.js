@@ -1,4 +1,4 @@
-const { Order, Cart, Product, ProductCart, User } = require("../../db");
+const { Order, Cart, Product, ProductCart, OrderProduct } = require("../../db");
 const { v4: uuidv4 } = require("uuid");
 const { mercadoPago } = require("./mercadoPagoContoller");
 async function createOrder(
@@ -31,18 +31,19 @@ async function createOrder(
     if (!cart) {
       throw new Error("El usuario no tiene un carrito");
     }
+
     const idOrder = uuidv4();
     console.log(idOrder);
     const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
+
     const order = await Order.create({
       id: idOrder,
       UserId: userId,
       totalAmount,
       shippingAddress: shippingAddress ?? null,
       paymentMethod,
-      products: cart.Products,
       cartTotal: cart.cartTotal || 0,
       trackingNumber: trackingNumber ?? null,
       shippingDetails: shippingDetails ?? null,
@@ -50,8 +51,28 @@ async function createOrder(
       preferenceId,
     });
 
+    // Agregar productos a la orden y la tabla intermedia OrderProduct
+    for (const product of cart.Products) {
+      await order.addProduct(product, {
+        through: { quantity: product.ProductCart.quantity },
+      });
+    }
+
+    // Eliminar el carrito después de crear la orden
     await cart.destroy();
 
+    // Retornar la orden con relaciones incluidas
+    // return Order.findOne({
+    //   where: { id: idOrder },
+    //   include: [
+    //     {
+    //       model: Product,
+    //       through: {
+    //         model: OrderProduct,
+    //       },
+    //     },
+    //   ],
+    // });
     return order;
   } catch (error) {
     console.error(error);
@@ -64,8 +85,11 @@ const getAllOrders = async () => {
     const allCarts = await Order.findAll({
       include: [
         {
-          model: User,
+          model: Product,
           attributes: ["id"],
+          through: {
+            model: OrderProduct,
+          },
         },
       ],
     });
