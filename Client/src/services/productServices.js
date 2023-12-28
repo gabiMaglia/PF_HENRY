@@ -10,7 +10,7 @@ import {
   changeInput,
 } from "../redux/slices/productSlice";
 //REDUX
-import { addItem, idShop } from "../redux/slices/CartSlice";
+import { addItem, idShop } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { headerSetterForPetitions } from "../utils/authMethodSpliter";
