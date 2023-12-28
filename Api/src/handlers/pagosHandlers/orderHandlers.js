@@ -1,6 +1,7 @@
 const {
   createOrder,
   getAllOrders,
+  getMisCompras,
 } = require("../../controllers/pagosControllers/ordersControllers");
 
 const createOrderHandler = async (req, res) => {
@@ -49,7 +50,20 @@ const getAllOrdersHandler = async (req, res) => {
   }
 };
 
+const misComprasHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const misCompras = await getMisCompras(id);
+    if (misCompras) {
+      res.status(200).json(misCompras);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createOrderHandler,
   getAllOrdersHandler,
+  misComprasHandler,
 };

@@ -6,12 +6,13 @@ const {
 const {
   createOrderHandler,
   getAllOrdersHandler,
+  misComprasHandler,
 } = require("../../handlers/pagosHandlers/orderHandlers");
 
 const pagosRouter = Router();
 
 pagosRouter.post("/", mercadoPagoHandler);
-
+pagosRouter.get("/misCompras/:id", misComprasHandler);
 pagosRouter.post("/order", createOrderHandler);
 
 pagosRouter.get("/order", getAllOrdersHandler);
