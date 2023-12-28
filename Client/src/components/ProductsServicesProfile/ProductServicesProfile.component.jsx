@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Box, Divider, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 //COMPONENTS
-import UserProfileProductCard from "../UserProfileProductCard/UserProfileProductCard.component";
+import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import sortCardByDate from "../../utils/sortCardsByDate";
@@ -94,7 +94,6 @@ const ProductServicesProfileComponent = () => {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        height: "500px",
         mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -114,6 +113,7 @@ const ProductServicesProfileComponent = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: "2em",
+            textAlign: "center",
           }}
         >
           <Typography variant="h5">
@@ -156,7 +156,7 @@ const ProductServicesProfileComponent = () => {
                       flexDirection: "column",
                     }}
                   >
-                    <UserProfileProductCard product={card} buttons={buttons} />
+                    <UserPanelProductCard product={card} buttons={buttons} />
                     {index + 1 !== cardsPerDate.cards.length && (
                       <Divider
                         sx={{

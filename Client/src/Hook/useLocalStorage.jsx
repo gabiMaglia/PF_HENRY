@@ -28,7 +28,10 @@ export function useLocalStorage() {
           return updatedProducts;
         } else {
           const newProduct = {
-            ...product,
+            id: product.id,
+            name: product.name,
+            ProductImages: product.ProductImages[0],
+            price: product.price,
             count: 1,
           };
           const newProducts = [...prevProducts, newProduct];

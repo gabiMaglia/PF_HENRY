@@ -18,6 +18,7 @@ const WishListModel = require("./models/productModels/WishList");
 const CartModel = require("./models/productModels/Cart");
 const OrderModel = require("./models/productModels/Order");
 const ProductCartModel = require("./models/productModels/ProductCart");
+const OrderProductModel = require("./models/productModels/OrderProduct");
 
 const koyebDb = process.env.KOYEB_DB;
 const localDb = process.env.LOCAL_DB;
@@ -48,6 +49,7 @@ ProductImageModel(sequelize);
 CartModel(sequelize);
 OrderModel(sequelize);
 ProductCartModel(sequelize);
+OrderProductModel(sequelize);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
@@ -67,6 +69,7 @@ const {
   Cart,
   Order,
   ProductCart,
+  OrderProduct,
 } = sequelize.models;
 
 // RELACIONES USER
@@ -126,6 +129,8 @@ Product.belongsToMany(Cart, {
 Order.belongsTo(User);
 User.hasMany(Order);
 
+Order.belongsToMany(Product, { through: "OrderProduct" });
+Product.belongsToMany(Order, { through: "OrderProduct" });
 //RELACIONES SERVICE
 Service.hasOne(Service_status);
 Service.belongsTo(User, {

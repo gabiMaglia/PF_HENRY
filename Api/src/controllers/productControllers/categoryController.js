@@ -81,11 +81,37 @@ const deleteCategory = async (id) => {
     return Category;
   }
 };
-
+const postCategory = async (name) => {
+  try { 
+    if (name === "") {
+      return {
+        error: true,
+        response: "no se puede crear una categoria con valor vacio ",
+      };
+    }
+    const lowerCaseName = name.toLowerCase();
+    const [category] = await ProductCategory.findOrCreate({ where: { name: lowerCaseName } });
+    await category.save();
+    const categories = await ProductCategory.findAll();
+    if (categories.length !== 0) {
+      return  categories
+    }else{
+      return {
+        error: true,
+        response: `No se encontraron categorias`,
+      };
+    }
+  } catch (error) {
+    return {
+      message: error.message,
+    };
+  }
+};
 module.exports = {
   deleteCategory,
   getAllCategories,
   getCategoryById,
   updateCategory,
   getCategoriesWithProducts,
+  postCategory,
 };
