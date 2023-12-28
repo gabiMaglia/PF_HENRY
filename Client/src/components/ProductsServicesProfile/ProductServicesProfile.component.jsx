@@ -82,11 +82,7 @@ const ProductServicesProfileComponent = () => {
 
   const userRole = authData.userRole;
 
-  const buttons = [
-    { text: "Detalle servicio", action: "", color: "#fd611a" },
-    { text: "Aceptar", action: "", color: "grey" },
-    { text: "Rechazar", action: "", color: "black" },
-  ];
+  const buttons = [{ text: "Detalle servicio", action: "", color: "#fd611a" }];
 
   return (
     <Box
