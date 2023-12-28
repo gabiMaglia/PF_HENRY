@@ -11,7 +11,11 @@ import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
-import { fetchSearch, fetchChage } from "../../services/productServices";
+import {
+  fetchSearch,
+  fetchChage,
+  fetchGetProduct,
+} from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
