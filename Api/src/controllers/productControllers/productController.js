@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Op } = require("sequelize");
 const {
   Product,
@@ -7,6 +8,7 @@ const {
   ProductStock,
 } = require("../../db");
 const cloudinary = require("../../utils/cloudinaryConfig");
+const folderImages = process.env.CLOUDINARY_UPLOAD_PRESET;
 
 const { conn } = require("../../db");
 
@@ -92,7 +94,7 @@ const postProduct = async ({
           }
           // Si la imagen no existe, subirla a Cloudinary
           const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
-            folder: "productos",
+            folder: folderImages,
           });
           
           const cloudinaryImageUrl = cloudinaryResponse.secure_url;
