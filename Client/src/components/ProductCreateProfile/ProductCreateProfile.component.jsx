@@ -170,7 +170,7 @@ const ProductCreateProfileComponent = () => {
             />
           </Grid>
           <Grid item xs={12}>
-          <Input multiple type="file" name="images" onChange={handleChange} />
+          <Input inputProps={{ multiple: true }} type="file" name="images" onChange={handleChange} />
           </Grid>
           <Grid item xs={12}>
             <ul>
