@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Op } = require("sequelize");
 const {
   Product,
@@ -6,6 +7,8 @@ const {
   ProductImage,
   ProductStock,
 } = require("../../db");
+const cloudinary = require("../../config/cloudinaryConfig");
+const folderImages = process.env.CLOUDINARY_UPLOAD_PRESET;
 
 const { conn } = require("../../db");
 
@@ -77,23 +80,56 @@ const postProduct = async ({
       await Promise.all(categoryPromises);
 
       const imagePromises = images.map(async (imageUrl) => {
-        // Busca la imagen existente
-        const existingImage = await ProductImage.findOne({
-          where: { address: imageUrl },
-          transaction,
-        });
-
-        // Si existe, la asocia al producto; si no, crea una nueva instancia
-        if (existingImage) {
-          await newProduct.addProductImage(existingImage, { transaction });
-        } else {
+        try {
+          // Verificar si la imagen ya existe en Cloudinary
+          const existingImage = await ProductImage.findOne({
+            where: { address: imageUrl },
+            transaction,
+          });
+      
+          if (existingImage) {
+            // Si la imagen ya existe, asocíala al producto y pasa a la siguiente iteración
+            await newProduct.addProductImage(existingImage, { transaction });
+            return;
+          }
+          // Si la imagen no existe, subirla a Cloudinary
+          const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
+            folder: folderImages,
+          });
+          
+          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
+          // Crea una nueva instancia de ProductImage
           const newImage = await ProductImage.create(
-            { address: imageUrl },
+            { address: cloudinaryImageUrl },
             { transaction }
           );
+          // Asocia la nueva imagen al producto
           await newProduct.addProductImage(newImage, { transaction });
+      
+        } catch (error) {
+          console.error("Error al procesar la imagen:", error);
+          throw error;
         }
-      });
+      })
+
+      // const imagePromises = images.map(async (imageUrl) => {
+      //   // Busca la imagen existente
+      //   const existingImage = await ProductImage.findOne({
+      //     where: { address: imageUrl },
+      //     transaction,
+      //   });
+
+      //   // Si existe, la asocia al producto; si no, crea una nueva instancia
+      //   if (existingImage) {
+      //     await newProduct.addProductImage(existingImage, { transaction });
+      //   } else {
+      //     const newImage = await ProductImage.create(
+      //       { address: imageUrl },
+      //       { transaction }
+      //     );
+      //     await newProduct.addProductImage(newImage, { transaction });
+      //   }
+      // });
 
       await Promise.all(imagePromises);
 
