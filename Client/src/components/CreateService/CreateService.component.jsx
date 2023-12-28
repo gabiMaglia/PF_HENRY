@@ -22,6 +22,7 @@ const CreateService = () => {
 
   const [productInfo, setProductInfo] = useState({
     product_model: "",
+    product_image: null,
     product_income_date: "",
     user_diagnosis: "",
     ClientId: "",
@@ -181,6 +182,7 @@ const CreateService = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setProductInfo({ ...productInfo, [name]: value });
     createServiceValidate({ [name]: value }, setErrors, errors);
   };
@@ -253,6 +255,21 @@ const CreateService = () => {
             onChange={handleChange}
           />
           <FormHelperText error={true}>{errors.product_model}</FormHelperText>
+        </Box>
+        <Box>
+          <TextField
+            accept="image/*"
+            multiple
+            fullWidth
+            type="file"
+            label="Imagen del producto"
+            variant="outlined"
+            name="product_image"
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         </Box>
         <Box>
           <TextField
