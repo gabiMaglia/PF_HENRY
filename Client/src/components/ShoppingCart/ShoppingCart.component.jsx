@@ -24,7 +24,11 @@ import {
   totalItem,
 } from "../../redux/slices/CartSlice";
 //SERVICES
-import { fetchCart, fetchGetProduct } from "../../services/productServices";
+import {
+  fetchCart,
+  fetchDelete,
+  fetchGetProduct,
+} from "../../services/productServices";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
@@ -80,6 +84,7 @@ export default function ShoppingCart() {
 
   const handleDelete = (product) => {
     dispatch(removeItem(product));
+    dispatch(fetchDelete(product));
   };
 
   const handleShop = (e) => {

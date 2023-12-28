@@ -128,6 +128,21 @@ export const fetchGetProduct = () => async () => {
   }
 } 
 
+export const fetchDelete = (product) => async () => {
+  const user = window.localStorage.getItem("userId")
+  console.log(user, product)
+  const data = {
+    userId: user,
+    productId: product
+}
+  try {
+    const res = await axios.put(`${urlBack}/cart/remove`, data)
+    console.log(res, "delete")
+  } catch (error) {
+    console.error("error", error);
+  }
+}
+
 
 export const fetchCart = (items) => async (dispatch) => {
   const id = window.localStorage.getItem("userId")
