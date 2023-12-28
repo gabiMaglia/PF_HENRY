@@ -9,6 +9,7 @@ const UserRoleModel = require("./models/userModels/UserRole");
 const UserAddressModel = require("./models/userModels/UserAddress");
 const ServiceStatusModel = require("./models/ServiceModels/Service_status");
 const ServiceModel = require("./models/ServiceModels/Service");
+const ServiceImageModel = require("./models/ServiceModels/Service_image");
 const ProductModel = require("./models/productModels/Product");
 const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
@@ -65,6 +66,7 @@ const {
   ProductImage,
   Service,
   Service_status,
+  Service_image,
   WishList,
   Cart,
   Order,
