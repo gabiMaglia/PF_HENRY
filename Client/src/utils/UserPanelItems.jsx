@@ -16,10 +16,9 @@ import getFirstLetters from "../helpers/getFirstLetters";
 import { getDataFromSelectedPersistanceMethod } from "./authMethodSpliter";
 
 const UserPanelItems = (name, surname) => {
-
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-  
+
   const userRole = authData.userRole;
 
   const initialLetersUsers = {
@@ -107,6 +106,11 @@ const UserPanelItems = (name, surname) => {
         name: "Productos en servicio",
         icon: <HomeRepairService />,
         path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
+      },
+      {
+        name: "Crear servicio",
+        icon: <Add />,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
       },
       {
         name: "Cerrar sesion",
