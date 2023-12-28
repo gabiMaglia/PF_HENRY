@@ -9,7 +9,7 @@ import {
   Input,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchCategories } from "../../services/CategoriesServices";
+import { fetchCategories } from "../../services/categoriesServices";
 
 const ProductCreateProfileComponent = () => {
   // HOOKS

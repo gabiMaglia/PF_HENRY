@@ -22,7 +22,7 @@ import {
   updateItem,
   removeItem,
   totalItem,
-} from "../../redux/slices/CartSlice";
+} from "../../redux/slices/cartSlice";
 //SERVICES
 import {
   fetchCart,
