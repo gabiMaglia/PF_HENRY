@@ -1,4 +1,4 @@
-const { Product, Cart, User, ProductCart } = require("../../db");
+const { Product, Cart, User, ProductCart, ProductImage } = require("../../db");
 
 async function postCart(userId, productId, productQuantity) {
   try {
@@ -107,7 +107,10 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
 
       if (existingProduct) {
         await ProductCart.update(
-          { quantity: existingProduct.ProductCart.quantity + Number(productQuantity) },
+          {
+            quantity:
+              existingProduct.ProductCart.quantity + Number(productQuantity),
+          },
           { where: { CartId: cartToUpdate.id, ProductId: productId } }
         );
         // existingProduct.ProductCart.quantity += Number(productQuantity);
@@ -211,11 +214,17 @@ const getCartById = async (userId) => {
     include: [
       {
         model: Product,
-        attributes: ["id"],
+        attributes: ["id", "name", "price"],
         through: {
           model: ProductCart,
           attributes: ["quantity"],
         },
+        include: [
+          {
+            model: ProductImage,
+            attributes: ["address"],
+          },
+        ],
       },
     ],
   });
