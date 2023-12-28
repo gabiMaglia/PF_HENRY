@@ -187,8 +187,9 @@ const UserPanelComponent = () => {
         />
         <Route
           path={
-            (userRole === "technician" || userRole === "admin") &&
-            PATHROUTES.CREATE_SERVICES
+            userRole === "technician" || userRole === "admin"
+              ? PATHROUTES.CREATE_SERVICES
+              : ""
           }
           element={<CreateService />}
         />
