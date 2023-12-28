@@ -6,6 +6,7 @@ const {
   ProductImage,
   ProductStock,
 } = require("../../db");
+const cloudinary = require("../../utils/cloudinaryConfig");
 
 const { conn } = require("../../db");
 
@@ -77,23 +78,40 @@ const postProduct = async ({
       await Promise.all(categoryPromises);
 
       const imagePromises = images.map(async (imageUrl) => {
-        // Busca la imagen existente
-        const existingImage = await ProductImage.findOne({
-          where: { address: imageUrl },
-          transaction,
-        });
-
-        // Si existe, la asocia al producto; si no, crea una nueva instancia
-        if (existingImage) {
-          await newProduct.addProductImage(existingImage, { transaction });
-        } else {
-          const newImage = await ProductImage.create(
-            { address: imageUrl },
-            { transaction }
-          );
-          await newProduct.addProductImage(newImage, { transaction });
+        try {
+          const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
+            folder: "HyperMegaRed",
+          })
+          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
+          const [productImage, createdImage] = await ProductImage.findOrCreate({
+            where: { address: cloudinaryImageUrl },
+            transaction,
+          })
+          await newProduct.addProductImage(productImage, { transaction });
+        } catch (error) {
+          console.log("Error al procesar la imagen", error)
+          throw Error
         }
-      });
+      })
+
+      // const imagePromises = images.map(async (imageUrl) => {
+      //   // Busca la imagen existente
+      //   const existingImage = await ProductImage.findOne({
+      //     where: { address: imageUrl },
+      //     transaction,
+      //   });
+
+      //   // Si existe, la asocia al producto; si no, crea una nueva instancia
+      //   if (existingImage) {
+      //     await newProduct.addProductImage(existingImage, { transaction });
+      //   } else {
+      //     const newImage = await ProductImage.create(
+      //       { address: imageUrl },
+      //       { transaction }
+      //     );
+      //     await newProduct.addProductImage(newImage, { transaction });
+      //   }
+      // });
 
       await Promise.all(imagePromises);
 
