@@ -30,7 +30,7 @@ server.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore,
-    cookie: { maxAge: 1 * 60 * 60 * 24, },
+    cookie: { secure: process.env.NODE_ENV === 'production', maxAge: 1 * 60 * 60 * 24, },
   })
 );
 
@@ -40,10 +40,20 @@ server.use(morgan("dev"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true}));
 server.use(cookieParser());
-
+// Passport
 server.use(passport.initialize());
-server.use(passport.session());
-
+server.use(passport.session({ session: false }));
+server.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Pragma', 'no-cache');
+  next();
+});
+server.use((req,res,next) => {
+  console.log(req.session)
+  console.log(req.user)
+  next()
+})
+// Entryp0nt de la ruta principal
 server.use("/", routes);
 
 // Error catching endware.

@@ -16,8 +16,6 @@ const getAllUsers    = async () => {
   return user;
 };
 
-
-
 const getUserByDni = async (dni) => {
   const user = await User.findOne({
     where: { dni: dni },
