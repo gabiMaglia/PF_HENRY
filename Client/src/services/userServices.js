@@ -7,8 +7,21 @@ export const getAllUsers = async () => {
   try {
     const AllUsers = await axios.get(`${url}/user`);
     return AllUsers;
-  } catch ({ AllUsers }) {
-    return { error: AllUsers };
+  } catch (error) {
+    return { error: error };
+  }
+};
+
+export const getUsersByRole = async (role, userAuthData) => {
+  try {
+    const AllUsers = await axios.get(`${url}/user_role/by_role/${role}`, {
+      headers: {
+        Authorization: `Bearer ${userAuthData}`,
+      },
+    });
+    return AllUsers;
+  } catch (error) {
+    return { error: error };
   }
 };
 

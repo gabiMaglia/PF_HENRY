@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import Textarea from "@mui/joy/Textarea";
 import { createNewService } from "../../services/serviceServices";
-import { getAllUsers } from "../../services/userServices";
+import { getUsersByRole } from "../../services/userServices";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import PATHROUTES from "../../helpers/pathRoute";
@@ -33,6 +33,7 @@ const CreateService = () => {
   const [userListValue, setUserListValue] = useState(null);
 
   const technicianId = getAuthDataCookie("authData").userId;
+  const jwt = getAuthDataCookie("jwt");
 
   const resetForm = () => {
     setProductInfo({
@@ -46,7 +47,7 @@ const CreateService = () => {
   };
 
   const getUsers = async () => {
-    const users = await getAllUsers();
+    const users = await getUsersByRole("customer", jwt);
     const { data } = users;
     setUsers(data);
   };
@@ -71,7 +72,9 @@ const CreateService = () => {
       },
     });
     Swal.showLoading();
+
     const response = await createNewService(productInfo, technicianId);
+
     if (response.status === 200) {
       Swal.fire({
         allowOutsideClick: false,
