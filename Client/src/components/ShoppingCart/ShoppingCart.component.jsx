@@ -26,6 +26,7 @@ import {
 //SERVICES
 import {
   fetchCart,
+  fetchCount,
   fetchDelete,
   fetchGetProduct,
 } from "../../services/productServices";
@@ -34,11 +35,15 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
 
   const { items, total, id } = useSelector((state) => state.cart);
+  console.log(items);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 
   useEffect(() => {
     dispatch(addItem());
+    // if (items.length == 0) {
+    //   dispatch(fetchGetProduct());
+    // }
   }, [dispatch]);
 
   useEffect(() => {
@@ -63,6 +68,7 @@ export default function ShoppingCart() {
   const handleChange = (productId, value) => {
     const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
+    dispatch(fetchCount({ id: productId, count: newValue }));
   };
 
   const handleIncrement = (productId) => {

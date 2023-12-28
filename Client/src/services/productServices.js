@@ -10,7 +10,7 @@ import {
   changeInput,
 } from "../redux/slices/productSlice";
 //REDUX
-import { idShop } from "../redux/slices/CartSlice";
+import { addItem, idShop } from "../redux/slices/CartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { headerSetterForPetitions } from "../utils/authMethodSpliter";
@@ -118,15 +118,32 @@ export const fetchProduct = (product) => async () => {
   }
 }
 
-export const fetchGetProduct = () => async () => {
+export const fetchGetProduct = () => async (dispatch) => {
   const user = window.localStorage.getItem("userId")
   try {
     const res = await axios.get(`${urlBack}/cart/${user}`)
-    console.log(res, "product")
+    console.log(res.data.Products, "product")
+    dispatch(addItem(res.data.Products))
   } catch (error) {
     console.error("error", error);
   }
 } 
+
+export const fetchCount = (product) => async () => {
+  const user = window.localStorage.getItem("userId")
+  console.log(product)
+  const data = {
+    userId: user,
+    productId: product.id,
+    productQuantity: product.count,
+  }
+  try {
+    const response = await axios.put(`${urlBack}/cart/edit`, data)
+      console.log(response, "cambio de cantidad")
+  } catch (error) {
+    console.error("error", error);
+  }
+}
 
 export const fetchDelete = (product) => async () => {
   const user = window.localStorage.getItem("userId")
