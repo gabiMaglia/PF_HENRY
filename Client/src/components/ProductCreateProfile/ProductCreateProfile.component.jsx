@@ -17,7 +17,7 @@ const ProductCreateProfileComponent = () => {
   const { categories } = useSelector((state) => state.categories);
   useEffect(() => {
     fetchCategories(dispatch);
-  }, [dispatch]);
+  }, []);
 
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryName, setCategoryName] = useState("selecciona una categoria");
