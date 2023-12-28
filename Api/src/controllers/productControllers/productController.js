@@ -79,18 +79,34 @@ const postProduct = async ({
 
       const imagePromises = images.map(async (imageUrl) => {
         try {
-          const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
-            folder: "HyperMegaRed",
-          })
-          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
-          const [productImage, createdImage] = await ProductImage.findOrCreate({
-            where: { address: cloudinaryImageUrl },
+          // Verificar si la imagen ya existe en Cloudinary
+          const existingImage = await ProductImage.findOne({
+            where: { address: imageUrl },
             transaction,
-          })
-          await newProduct.addProductImage(productImage, { transaction });
+          });
+      
+          if (existingImage) {
+            // Si la imagen ya existe, asocíala al producto y pasa a la siguiente iteración
+            await newProduct.addProductImage(existingImage, { transaction });
+            return;
+          }
+          // Si la imagen no existe, subirla a Cloudinary
+          const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
+            folder: "productos",
+          });
+          
+          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
+          // Crea una nueva instancia de ProductImage
+          const newImage = await ProductImage.create(
+            { address: cloudinaryImageUrl },
+            { transaction }
+          );
+          // Asocia la nueva imagen al producto
+          await newProduct.addProductImage(newImage, { transaction });
+      
         } catch (error) {
-          console.log("Error al procesar la imagen", error)
-          throw Error
+          console.error("Error al procesar la imagen:", error);
+          throw error;
         }
       })
 
