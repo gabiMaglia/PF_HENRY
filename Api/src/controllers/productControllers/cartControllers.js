@@ -1,28 +1,39 @@
-const { Product, Cart, User, ProductCart } = require("../../db");
+const { Product, Cart, User, ProductCart, ProductImage } = require("../../db");
 
 async function postCart(userId, productId, productQuantity) {
   try {
-    const currentDate = new Date();
-    const cart = await Cart.create({
-      productQuantity,
-      currentDate,
-
-      state: "inicializado",
+    let cart = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
     });
 
-    if (userId) {
-      const user = await User.findByPk(userId);
-      if (!user) {
-        throw new Error("Usuario no encontrado");
+    if (cart) {
+      return "El usuario ya tiene carrito";
+    } else {
+      const currentDate = new Date();
+      let cart = await Cart.create({
+        productQuantity,
+        currentDate,
+        state: "inicializado",
+      });
+
+      if (userId) {
+        const user = await User.findByPk(userId);
+        if (!user) {
+          throw new Error("Usuario no encontrado");
+        }
+        await user.setCart(cart);
       }
-      await user.setCart(cart);
+
+      const product = await Product.findByPk(productId);
+
+      await cart.addProduct(product, {
+        through: { quantity: productQuantity },
+      });
+      cart.cartTotal = product.price;
+      return cart;
     }
-
-    const product = await Product.findByPk(productId);
-
-    await cart.addProduct(product, { through: { quantity: productQuantity } });
-    cart.cartTotal = product.price;
-    return cart;
   } catch (error) {
     console.error("Error al agregar el producto al carrito:", error);
     throw new Error("Error al agregar el producto al carrito");
@@ -95,7 +106,14 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
       );
 
       if (existingProduct) {
-        existingProduct.ProductCart.quantity = productQuantity;
+        await ProductCart.update(
+          {
+            quantity:
+              existingProduct.ProductCart.quantity + Number(productQuantity),
+          },
+          { where: { CartId: cartToUpdate.id, ProductId: productId } }
+        );
+        // existingProduct.ProductCart.quantity += Number(productQuantity);
       } else {
         const product = await Product.findByPk(productId);
         const addProductResult = await cartToUpdate.addProduct(product, {
@@ -190,16 +208,23 @@ const removeFromCart = async (userId, productId, cartMoney) => {
   }
 };
 
-const getCartById = async (id) => {
-  const cart = await Cart.findByPk(id, {
+const getCartById = async (userId) => {
+  const cart = await Cart.findOne({
+    where: { UserId: userId },
     include: [
       {
         model: Product,
-        attributes: ["id"],
+        attributes: ["id", "name", "price"],
         through: {
           model: ProductCart,
           attributes: ["quantity"],
         },
+        include: [
+          {
+            model: ProductImage,
+            attributes: ["address"],
+          },
+        ],
       },
     ],
   });
@@ -222,6 +247,66 @@ const deleteCartById = async (id) => {
   }
 };
 
+const editQuantity = async (userId, productId, productQuantity, cartMoney) => {
+  try {
+    let cartToUpdate = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
+      include: [
+        {
+          model: Product,
+          attributes: ["id"],
+          through: {
+            model: ProductCart,
+            attributes: ["quantity"],
+          },
+        },
+      ],
+    });
+
+    if (cartToUpdate) {
+      const existingProduct = cartToUpdate.Products.find(
+        (product) => product.id === productId
+      );
+
+      if (existingProduct) {
+        await ProductCart.update(
+          {
+            quantity: (existingProduct.ProductCart.quantity =
+              Number(productQuantity)),
+          },
+          { where: { CartId: cartToUpdate.id, ProductId: productId } }
+        );
+      }
+
+      await cartToUpdate.update({ cartTotal: cartMoney });
+
+      //vuelve a pedir el carrito para que devuelva el carrito actualizado
+      const updatedCart = await Cart.findOne({
+        where: {
+          UserId: userId,
+        },
+        include: [
+          {
+            model: Product,
+            attributes: ["id"],
+            through: {
+              model: ProductCart,
+              attributes: ["quantity"],
+            },
+          },
+        ],
+      });
+      return updatedCart;
+    } else {
+      return "El usuario no ha generado aun un carrito en la base de datos.";
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   postCart,
   addToCart,
@@ -229,4 +314,5 @@ module.exports = {
   getCartById,
   deleteCartById,
   removeFromCart,
+  editQuantity,
 };

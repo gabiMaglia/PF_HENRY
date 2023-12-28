@@ -91,61 +91,29 @@ const registerUser = async (userObj) => {
   return completeUser;
 };
 
-const loginUser = async (username, password, googleId) => {
-  let _userCrential;
-  let passwordCorrect;
-
-  if (password) {
-    _userCrential = await UserCredentials.findOne({
-      where: { username: username },
-    });
-    passwordCorrect =
-      _userCrential === null
-        ? false
-        : await bcrypt.compare(password, _userCrential.password);
-  }
-
-  if (googleId) {
-    const user = await User.findOne({
-      where: { email: username },
-    });
-    _userCrential = await UserCredentials.findOne({
-      where: { UserId: user.id },
-    });
-    passwordCorrect = true;
-  }
-
-  if (!passwordCorrect) {
-    return {
-      error: true,
-      response: "Usuario o password invalido",
-    };
-  }
-  // SI USERNAME Y PASSWORD MACHEAN EN LA DB< EXTRAEMOS EL ROL DEL USUARIO QUE LOGUEA
-  const _user = await User.findByPk(_userCrential.UserId);
+const loginUser = async (user) => {
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
-  if (!_user.isActive) {
+
+  if (!user.isActive) {
     return {
       error: true,
       response:
         "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
     };
   }
-  const { role_name } = await UserRole.findByPk(_user.rolId);
-
+  const { role_name } = await UserRole.findByPk(user.rolId);
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
-
   const tokenSession = await tokenSign(
-    _user.id,
-    _userCrential.username,
+    user.id,
+    user.username,
     role_name
   );
   // RETORNAMOS AL FRONTEND EL TOKEN EL USUARIO Y EL ROL Y LA VERIFICACION DE MATCH DE PASSWORDS
   return {
     login: true,
     tokenSession,
-    userId: _user.id,
-    user: `${_user.name} ${_user.surname}`,
+    userId: user.id,
+    user: `${user.name} ${user.surname}`,
   };
 };
 const sendEmailToResetPassword = async () => {};

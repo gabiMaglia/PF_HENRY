@@ -1,6 +1,10 @@
 const {
   createOrder,
   getAllOrders,
+
+  deleteOrderById,
+
+  getMisCompras,
 } = require("../../controllers/pagosControllers/ordersControllers");
 
 const createOrderHandler = async (req, res) => {
@@ -42,14 +46,42 @@ const getAllOrdersHandler = async (req, res) => {
     if (orders) {
       res.status(200).json(orders);
     } else {
-      res.status(400).json({ message: "Orders not found" });
+      res.status(404).json({ message: "Orders not found" });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const deleteOrderHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedOrder = await deleteOrderById(id);
+    res.status(200).json(`Order deleted successfully`);
+  } catch (error) {
+    if (error.message === "Order not found") {
+      res.status(404).json({ error: "Order not found" });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
+  }
+};
+
+const misComprasHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const misCompras = await getMisCompras(id);
+    if (misCompras) {
+      res.status(200).json(misCompras);
+    }
+  } catch (error) {
+    throw new Error(error);
   }
 };
 
 module.exports = {
   createOrderHandler,
   getAllOrdersHandler,
+  misComprasHandler,
+  deleteOrderHandler,
 };

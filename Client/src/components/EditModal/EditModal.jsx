@@ -112,7 +112,6 @@ const EditModal = ({
     if (response.status === 200 || response.response.status === 200) {
       Swal.fire({
         allowOutsideClick: false,
-
         icon: "success",
         title: "Los datos ingresados son validos",
         text: "Información modificada correctamente",

@@ -18,14 +18,17 @@ const addServiceController = async (
     !ClientId ||
     !technicianId
   ) {
-    return "faltan datos";
+    return {
+      error: true,
+      response: "Faltan datos",
+    };
   } else {
     const clientObj = await User.findByPk(ClientId);
     const technicianObj = await User.findByPk(technicianId);
     if (!clientObj || !technicianObj) {
       return {
         error: true,
-        response: "id no valido",
+        response: "Id no valido",
       };
     }
     const rolTech = await UserRole.findByPk(technicianObj.rolId);
@@ -55,14 +58,14 @@ const addServiceController = async (
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
         await transporter.sendMail({
-          from: `"aviso de ingreso 👻"  ${destinationEmail}`, 
+          from: `"aviso de ingreso 👻"  ${destinationEmail}`,
           to: clientObj.email, // list of receivers
-          subject: "ingreso a servicio ✔", 
+          subject: "ingreso a servicio ✔",
           html: `su equipo se ingreso a nuestro sistema el dia ${date}<br><br>
           <div style="background: linear-gradient(30deg, white, orange 50%, white , orange 50%, black 100%); padding: 20px; text-align: center;">
             <h2 style="color: #000; font-weight: bold;">hyper mega red</h2>
             <p style="color:#FFFFFF; font-size:large;">Gracias por usar nuestro servicio.</p>
-          </div>`, 
+          </div>`,
         });
 
         //corta envio
@@ -104,13 +107,13 @@ const updateServiceStatusController = async (id, field, value) => {
 
     await transporter.sendMail({
       from: `"aviso de actualizacion de estado 👻"  ${destinationEmail}`, // sender address
-      to: clientObj.email, 
-      subject: "actualizacion de estado✔", 
+      to: clientObj.email,
+      subject: "actualizacion de estado✔",
       html: `se modifico el estado de su equipo ${service.product_model} a ${field}:${value}<br><br>
       <div style="background: linear-gradient(30deg, white, orange 50%, white , orange 50%, black 100%); padding: 20px; text-align: center;">
         <h2 style="color: #000;">hyper mega red</h2>
         <p style="color:#FFFFFF; font-size:large;">Gracias por usar nuestro servicio.</p>
-      </div>`, 
+      </div>`,
     });
     return service;
   } else if (
@@ -185,27 +188,26 @@ const getServiceByModelController = async (model) => {
   }
   return Services;
 };
-const filterServicesByStatusController=async(status,value)=>{
-
-  console.log(status)
-  const serviceStatuses = await Service_status.findAll()
+const filterServicesByStatusController = async (status, value) => {
+  console.log(status);
+  const serviceStatuses = await Service_status.findAll();
   let arrayOfServices = [];
   for (let serviceStatus of serviceStatuses) {
-    if(serviceStatus[status] === value){
+    if (serviceStatus[status] === value) {
       const service = await Service.findByPk(serviceStatus.ServiceId, {
         include: [Service_status],
       });
       arrayOfServices.push(service);
     }
   }
-  if(arrayOfServices.length === 0){
+  if (arrayOfServices.length === 0) {
     return {
       error: true,
       response: `service not found`,
     };
   }
   return arrayOfServices;
-}
+};
 module.exports = {
   addServiceController,
   updateServiceStatusController,
