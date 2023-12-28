@@ -5,6 +5,7 @@ const {
   ProductCart,
   OrderProduct,
   User,
+  ProductImage,
 } = require("../../db");
 const { v4: uuidv4 } = require("uuid");
 const { mercadoPago } = require("./mercadoPagoContoller");
@@ -131,10 +132,15 @@ const deleteOrderById = async (id) => {
   try {
     const orderToDelete = await Order.findByPk(id);
 
+    if (!orderToDelete) {
+      throw new Error("Order not found");
+    }
+
     await orderToDelete.destroy();
     return { orderToDelete, deleted: true };
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
@@ -148,9 +154,17 @@ const getMisCompras = async (userId) => {
           include: [
             {
               model: Product,
+              attributes: ["id", "name", "price"],
               through: {
                 model: OrderProduct,
+                attributes: ["quantity"],
               },
+              include: [
+                {
+                  model: ProductImage,
+                  attributes: ["address"],
+                },
+              ],
             },
           ],
         },

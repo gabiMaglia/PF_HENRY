@@ -5,7 +5,6 @@ const {
   deleteOrderById,
 
   getMisCompras,
-
 } = require("../../controllers/pagosControllers/ordersControllers");
 
 const createOrderHandler = async (req, res) => {
@@ -58,12 +57,15 @@ const deleteOrderHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedOrder = await deleteOrderById(id);
-    res.status(200).json(`Cart deleted successfully`);
+    res.status(200).json(`Order deleted successfully`);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    if (error.message === "Order not found") {
+      res.status(404).json({ error: "Order not found" });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 };
-
 
 const misComprasHandler = async (req, res) => {
   try {
@@ -81,5 +83,5 @@ module.exports = {
   createOrderHandler,
   getAllOrdersHandler,
   misComprasHandler,
-deleteOrderHandler
+  deleteOrderHandler,
 };
