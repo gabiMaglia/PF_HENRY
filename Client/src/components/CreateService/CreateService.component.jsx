@@ -32,7 +32,13 @@ const CreateService = () => {
 
   const [userListValue, setUserListValue] = useState(null);
 
-  const technicianId = getAuthDataCookie("authData").userId;
+  const [technicians, setTechnicians] = useState([]);
+
+  const [techniciansName, setTechniciansName] = useState([]);
+
+  const [technicianListValue, setTechnicianListValue] = useState(null);
+
+  const authData = getAuthDataCookie("authData");
   const jwt = getAuthDataCookie("jwt");
 
   const resetForm = () => {
@@ -44,12 +50,16 @@ const CreateService = () => {
       technicianId: "",
     });
     setUserListValue(null);
+    setTechnicianListValue(null);
   };
 
   const getUsers = async () => {
     const users = await getUsersByRole("customer", jwt);
-    const { data } = users;
-    setUsers(data);
+    setUsers(users.data);
+    if (authData.userRole === "admin") {
+      const technicians = await getUsersByRole("technician", jwt);
+      setTechnicians(technicians.data);
+    }
   };
 
   const getNameUsers = () => {
@@ -58,6 +68,17 @@ const CreateService = () => {
         (user) => user.name + " " + user.surname + " --- " + user.email
       );
       setUsersName(nameUsers);
+    }
+    if (technicians) {
+      const nameTechnicians = technicians.map(
+        (technician) =>
+          technician.name +
+          " " +
+          technician.surname +
+          " --- " +
+          technician.email
+      );
+      setTechniciansName(nameTechnicians);
     }
   };
 
@@ -73,8 +94,12 @@ const CreateService = () => {
     });
     Swal.showLoading();
 
-    const response = await createNewService(productInfo, technicianId);
-
+    let response = undefined;
+    if ((authData.userRole = "admin")) {
+      response = await createNewService(productInfo, productInfo.technicianId);
+    } else if (authData.userRole === "technician") {
+      response = await createNewService(productInfo, authData.userId);
+    }
     if (response.status === 200) {
       Swal.fire({
         allowOutsideClick: false,
@@ -89,7 +114,9 @@ const CreateService = () => {
       }).then((value) => {
         if (value.isConfirmed) {
           navigate(
-            PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
+            authData.userRole === "admin"
+              ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
+              : PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
           );
         }
         resetForm();
@@ -113,12 +140,20 @@ const CreateService = () => {
   };
 
   const handleUserChange = (e) => {
-    const { outerText } = e.target;
+    const { outerText, id } = e.target;
     if (outerText && outerText.length > 0) {
-      setUserListValue(outerText);
       const email = outerText.split(" --- ")[1];
-      const userId = users.find((user) => user.email === email).id;
-      setProductInfo({ ...productInfo, ClientId: userId });
+      if (id && id.includes("technician")) {
+        setTechnicianListValue(outerText);
+        const technicianId = technicians.find(
+          (technician) => technician.email === email
+        ).id;
+        setProductInfo({ ...productInfo, technicianId: technicianId });
+      } else {
+        setUserListValue(outerText);
+        const userId = users.find((user) => user.email === email).id;
+        setProductInfo({ ...productInfo, ClientId: userId });
+      }
     } else {
       setUserListValue(null);
     }
@@ -130,7 +165,7 @@ const CreateService = () => {
 
   useEffect(() => {
     getNameUsers();
-  }, [users]);
+  }, [users, technicians]);
 
   return (
     <Box
@@ -176,7 +211,24 @@ const CreateService = () => {
           variant="outlined"
           onChange={handleChange}
         />
+        {authData.userRole === "admin" && (
+          <Autocomplete
+            id={"technician"}
+            selectOnFocus
+            onChange={handleUserChange}
+            value={technicianListValue}
+            options={techniciansName}
+            renderInput={(params) => (
+              <TextField
+                name="technician"
+                {...params}
+                label="Tecnico a asignar"
+              />
+            )}
+          />
+        )}
         <Autocomplete
+          id={"user"}
           selectOnFocus
           onChange={handleUserChange}
           value={userListValue}

@@ -74,6 +74,10 @@ const UserPanelComponent = () => {
       path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
       roles: ["admin"],
     },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
+      roles: ["admin"],
+    },
     //TECHNICIANS
     {
       path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.PROFILE,
@@ -182,7 +186,11 @@ const UserPanelComponent = () => {
           element={<ProductsServicesProfile />}
         />
         <Route
-          path={userRole === "technician" && PATHROUTES.CREATE_SERVICES}
+          path={
+            userRole === "technician" || userRole === "admin"
+              ? PATHROUTES.CREATE_SERVICES
+              : ""
+          }
           element={<CreateService />}
         />
       </Routes>
