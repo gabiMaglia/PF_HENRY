@@ -94,6 +94,7 @@ const postProduct = async ({
           const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
             folder: "products",
             width: 300,
+            format: "png",
           });
           
           const cloudinaryImageUrl = cloudinaryResponse.secure_url;
