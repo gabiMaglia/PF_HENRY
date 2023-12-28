@@ -127,6 +127,14 @@ async function updateOrder(orderId, updatedFields) {
   }
 }
 
+
+const deleteOrderById = async (id) => {
+  try {
+    const orderToDelete = await Order.findByPk(id);
+
+    await orderToDelete.destroy();
+    return { orderToDelete, deleted: true };
+
 const getMisCompras = async (userId) => {
   try {
     const user = await User.findAll({
@@ -151,13 +159,19 @@ const getMisCompras = async (userId) => {
     }
 
     return user;
+
   } catch (error) {
     throw new Error(error);
   }
 };
+
 module.exports = {
   getAllOrders,
   createOrder,
   updateOrder,
+
+  deleteOrderById,
+
   getMisCompras,
+
 };
