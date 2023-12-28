@@ -56,9 +56,8 @@ export default function ShoppingCart() {
     );
   }
 
-  const handleChange = (productId, event) => {
-    const newValue = parseInt(event.target.value) || 1;
-    console.log(newValue);
+  const handleChange = (productId, value) => {
+    const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
   };
 
@@ -114,7 +113,7 @@ export default function ShoppingCart() {
               max={10}
               id={item.id}
               value={item.count}
-              onChange={(event) => handleChange(item.id, event.target.value)}
+              onChange={(event, value) => handleChange(item.id, value)}
               slots={{
                 root: StyledInputRoot,
                 input: StyledInput,
