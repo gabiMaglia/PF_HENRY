@@ -5,7 +5,7 @@ const url = import.meta.env.VITE_BACKEND_URL;
 
 export const getAllUsers = async () => {
   try {
-    const AllUsers = await axios.get(`${url}/users/`);
+    const AllUsers = await axios.get(`${url}/user`);
     return AllUsers;
   } catch ({ AllUsers }) {
     return { error: AllUsers };
