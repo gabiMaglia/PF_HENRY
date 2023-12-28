@@ -65,5 +65,7 @@ const userSlice = createSlice({
   },
 });
 
+
+
 export const { logUser, logoutUser } = userSlice.actions;
 export default userSlice.reducer;

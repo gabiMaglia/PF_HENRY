@@ -10,9 +10,7 @@ useRouter.get(
 );
 useRouter.get(
   "/google/callback",
-  passport.authenticate("google", {
-  }),
+  passport.authenticate("google"),
   googleAuthCallback
 );
-
 module.exports = useRouter;
