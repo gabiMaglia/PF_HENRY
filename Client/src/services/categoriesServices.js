@@ -1,7 +1,7 @@
 //AXIOS
 import axios from "axios";
 //UTILS
-import { getCategories } from "../redux/slices/categoriesSlice";
+import { getCategories, postCategory } from "../redux/slices/categoriesSlice";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -11,5 +11,13 @@ export const fetchCategories = async (dispatch) => {
     dispatch(getCategories(data));
   } catch (error) {
     console.log(error, "Error al obtener las categorias");
+  }
+};
+export const fetchPostCategories = async (dispatch, name) => {
+  try {
+    const { data } = await axios.post(`${urlBack}/category/`, name);
+    dispatch(postCategory(data));
+  } catch (error) {
+    console.log(error, "al crear la categoria");
   }
 };
