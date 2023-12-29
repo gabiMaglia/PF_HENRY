@@ -3,8 +3,7 @@ const {
 } = require("../../controllers/pagosControllers/mercadoPagoContoller");
 
 const mercadoPagoHandler = async (req, res) => {
-  
-  const array  = req.body;
+  const array = req.body;
 
   try {
     const response = await mercadoPago(array);
@@ -14,7 +13,18 @@ const mercadoPagoHandler = async (req, res) => {
     console.log(error);
   }
 };
+const mercadopagoWebhookHandler = async (req, res) => {
+  try {
+    const paymentId = req.body.id;
+    await mercadopagoController.handlePaymentNotification(paymentId);
 
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Error en el manejador de webhook de MercadoPago:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 module.exports = {
   mercadoPagoHandler,
+  mercadopagoWebhookHandler,
 };
