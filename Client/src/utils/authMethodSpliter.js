@@ -7,10 +7,10 @@ import axios from "axios";
 // DEPENDIENDO DE CUAL SEA LA ACCION QUE SE NECESITE, CREAR, LEER O ELIMINAR
 //
 export const createPersistency = (sortedData, cookieStatus) => {
-
   if (cookieStatus) {
     setAuthDataCookie("authData", {
       login: sortedData.login,
+      jwt: sortedData.tokenSession,
       userId: sortedData.userId,
       userRole: sortedData.userRole,
     });
@@ -46,17 +46,15 @@ export const clearPersistanceData = (cookieStatus) => {
 
 export const headerSetterForPetitions = (cookiesStatus) => {
   if (cookiesStatus) {
-  
     return axios.create({
       withCredentials: true,
     });
   } else {
-
     return (token) => {
       return axios.create({
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
     };

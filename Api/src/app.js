@@ -31,6 +31,8 @@ server.use(
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
+      httpOnly: false,
+      sameSite: false,
       secure: process.env.NODE_ENV === "production",
       maxAge: 1 * 60 * 60 * 24,
     },
@@ -56,8 +58,8 @@ server.use((req, res, next) => {
 
 server.use((req, res, next) => {
   console.log({ session: req.session });
-  console.log({ isAuthenticated: req.isAuthenticated()});
-  console.log({passport : req.session.passport })
+  console.log({ isAuthenticated: req.isAuthenticated()} );
+  console.log({ passport : req.session.passport })
   next();
 });
 // Entryp0nt de la ruta principal
