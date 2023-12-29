@@ -12,15 +12,10 @@ import {
 } from "../redux/slices/productSlice";
 
 //REDUX
-import { addItem, idShop } from "../redux/slices/cartSlice";
-import { useLocalStorage } from "../Hook/useLocalStorage";
+import { idShop } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
-<<<<<<< HEAD
-=======
-import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
->>>>>>> 8a4a17ed5ea5568931ca9227258ed1bc70759f59
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -99,12 +94,12 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 // };
 
 export const fetchProduct = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
   const user = window.localStorage.getItem("userId");
   const { id } = product;
   const data = {
-    userId: userId? userId : user,
+    userId: userId ? userId : user,
     productId: id,
     productQuantity: 1,
   };
@@ -121,8 +116,8 @@ export const fetchProduct = (product, cookieAccepted) => async () => {
 };
 
 export const fetchGetProduct = (cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
   try {
     const res = await axios.get(`${urlBack}/cart/${userId}`);
 
@@ -145,8 +140,8 @@ export const fetchGetProduct = (cookieAccepted) => async () => {
 };
 
 export const fetchCount = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
 
   const data = {
     userId: userId,
@@ -161,8 +156,8 @@ export const fetchCount = (product, cookieAccepted) => async () => {
 };
 
 export const fetchDelete = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
 
   const data = {
     userId: userId,
@@ -177,9 +172,9 @@ export const fetchDelete = (product, cookieAccepted) => async () => {
 };
 
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
-  
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
+
   const products = items.map((item) => ({
     title: item.name,
     quantity: item.count,
