@@ -10,7 +10,7 @@ const mercadoPago = async (array, idOrder) => {
   try {
     let body = {
       metadata: { idOrder },
-      notification_url: `${backend_Url}/mercadopago/webhook`,
+      notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
         success: `${frontend_Url}/confirmacionPago`,
