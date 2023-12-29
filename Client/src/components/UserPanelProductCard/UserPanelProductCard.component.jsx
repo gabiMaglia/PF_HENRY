@@ -14,6 +14,7 @@ const UserPanelProductCard = ({
   product,
   buttons,
   handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
+  alternativeImage = "Product Image", // Si no llega una imagen establece una por defecto
 }) => {
   const theme = useTheme();
 
@@ -30,7 +31,7 @@ const UserPanelProductCard = ({
       <Box>
         <CardMedia
           component="img"
-          alt={product.name}
+          alt={alternativeImage}
           image={product.image}
           onClick={() => {
             handleCardClick(product.id);

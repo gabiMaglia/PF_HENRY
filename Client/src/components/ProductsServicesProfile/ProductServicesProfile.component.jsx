@@ -5,12 +5,16 @@ import { useEffect, useState } from "react";
 //MATERIAL UI
 import { Box, Divider, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+// SweetAlert2
+import Swal from "sweetalert2";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import sortCardByDate from "../../utils/sortCardsByDate";
+import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
+import { getServices } from "../../services/serviceServices";
+import logo from "../../../public/icons/logo.svg";
 
 const cardsContent = [];
 
@@ -20,10 +24,29 @@ const ProductServicesProfileComponent = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
+  const getAllServices = async () => {
+    const services = await getServices();
+    if (services.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Fallo en la carga de productos",
+        text: `${services}`,
+      });
+    } else {
+      let newCardsPerDates = sortServiceCardByDate(services.data, [
+        ...cardPerDates,
+      ]);
+      console.log(newCardsPerDates);
+      setCardPerDates(newCardsPerDates);
+    }
+  };
+
+  useEffect(() => {}, [cardsContent]);
+
   useEffect(() => {
-    let newCardsPerDates = sortCardByDate(cardsContent, [...cardPerDates]);
-    setCardPerDates(newCardsPerDates);
-  }, [cardsContent]);
+    getAllServices();
+  }, []);
 
   const userRole = authData.userRole;
 
@@ -60,7 +83,14 @@ const ProductServicesProfileComponent = () => {
           <Typography variant="h5">
             No tienes equipos registrados en reparación
           </Typography>
-          <Link to={PATHROUTES.SUPPORT}>
+          <Link
+            to={
+              userRole === "customer"
+                ? PATHROUTES.SUPPORT
+                : userRole === "technician" &&
+                  PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.CREATE_SERVICES
+            }
+          >
             <Button
               style={{
                 backgroundColor: "#fd611a",
@@ -73,6 +103,8 @@ const ProductServicesProfileComponent = () => {
         </Box>
       ) : (
         cardPerDates.map((cardsPerDate) => {
+          const splitDate = cardsPerDate.date.split("-");
+          const date = splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
           return (
             <Box
               key={cardsPerDate.date}
@@ -86,9 +118,18 @@ const ProductServicesProfileComponent = () => {
                 variant="body2"
                 sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
               >
-                {cardsPerDate.date}
+                {date}
               </Typography>
-              {cardsPerDate.cards.map((card, index) => {
+              {cardsPerDate.cards.map((product, index) => {
+                const card = {
+                  id: product.product_id,
+                  name: product.product_model,
+                  image:
+                    product.Service_images.length > 0 &&
+                    product.Service_images[0].address,
+                  budget: product.Service_status.budget,
+                  state: product.Service_status.repair_finish,
+                };
                 return (
                   <Box
                     key={card.id}
@@ -97,7 +138,11 @@ const ProductServicesProfileComponent = () => {
                       flexDirection: "column",
                     }}
                   >
-                    <UserPanelProductCard product={card} buttons={buttons} />
+                    <UserPanelProductCard
+                      product={card}
+                      buttons={buttons}
+                      alternativeImage={logo}
+                    />
                     {index + 1 !== cardsPerDate.cards.length && (
                       <Divider
                         sx={{

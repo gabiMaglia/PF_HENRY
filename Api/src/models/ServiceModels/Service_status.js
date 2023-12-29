@@ -20,11 +20,15 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    budget: {
+      type: DataTypes.STRING,
+      defaultValue: "pendiente",
+    },
     confirm_repair: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    reparir_finish: {
+    repair_finish: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
