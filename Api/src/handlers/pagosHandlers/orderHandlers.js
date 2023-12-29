@@ -1,9 +1,7 @@
 const {
   createOrder,
   getAllOrders,
-
   deleteOrderById,
-
   getMisCompras,
 } = require("../../controllers/pagosControllers/ordersControllers");
 
@@ -33,7 +31,7 @@ const createOrderHandler = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Order created successfully", Order: order });
+      .json({ message: "La orden se ha creado correctamente", Order: order });
   } catch (error) {
     console.log(error);
   }
@@ -46,10 +44,10 @@ const getAllOrdersHandler = async (req, res) => {
     if (orders) {
       res.status(200).json(orders);
     } else {
-      res.status(404).json({ message: "Orders not found" });
+      res.status(404).json({ message: "No hay ordenes que mostrar" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
@@ -57,13 +55,9 @@ const deleteOrderHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedOrder = await deleteOrderById(id);
-    res.status(200).json(`Order deleted successfully`);
+    res.status(200).json(`La orden se ha eliminado con éxito`);
   } catch (error) {
-    if (error.message === "Order not found") {
-      res.status(404).json({ error: "Order not found" });
-    } else {
-      res.status(500).json({ error: error.message });
-    }
+    res.status(500).json({ error: error.message });
   }
 };
 
