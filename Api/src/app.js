@@ -1,16 +1,17 @@
+
 require("dotenv").config();
+require("./config/passport.js");
+
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");
 var cors = require("cors");
 const passport = require("passport");
 const { conn } = require("./db.js");
-// importamos la configuracion de passport
-require("./config/passport.js");
 const server = express();
+
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // Creamos session store
@@ -42,12 +43,14 @@ server.use(express.urlencoded({ extended: true}));
 server.use(cookieParser());
 // Passport
 server.use(passport.initialize());
-server.use(passport.session({ session: false }));
+server.use(passport.session());
+
 server.use((req, res, next) => {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('Pragma', 'no-cache');
   next();
 });
+
 server.use((req,res,next) => {
   console.log(req.session)
   console.log(req.user)

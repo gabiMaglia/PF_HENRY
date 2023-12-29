@@ -181,6 +181,44 @@ const getMisCompras = async (userId) => {
   }
 };
 
+//LUEGO DE QUE TERMINEMMOS MERCADO PAGO ESTA VA A SER LA FUNCION QUE SE VA A USAR
+// const getMisCompras = async (userId) => {
+//   try {
+//     const user = await User.findAll({
+//       where: { id: userId },
+//       include: [
+//         {
+//           model: Order,
+//           where: { status: 'finished' },
+//           include: [
+//             {
+//               model: Product,
+//               attributes: ["id", "name", "price"],
+//               through: {
+//                 model: OrderProduct,
+//                 attributes: ["quantity"],
+//               },
+//               include: [
+//                 {
+//                   model: ProductImage,
+//                   attributes: ["address"],
+//                 },
+//               ],
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     if (!user) {
+//       throw new Error("User not found");
+//     }
+
+//     return user;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 module.exports = {
   getAllOrders,
   createOrder,
