@@ -27,6 +27,7 @@ import { getUserById } from "../../services/userServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
+import { fetchGetProduct } from "../../services/productServices";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -37,10 +38,14 @@ const LoginModal = ({
 }) => {
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const { items } = useSelector((state) => state.cart);
 
   const handledispatch = async (userId) => {
     await getUserById(userId).then((data) => {
       dispatch(logUser({ userObject: data }));
+      if (items == 0) {
+        dispatch(fetchGetProduct(cookieStatus));
+      }
     });
   };
 
@@ -53,7 +58,6 @@ const LoginModal = ({
       response = await loginUser(username, address, cookieStatus);
     }
     !cookieStatus && rejectCookies();
-
     if (response.error) {
       Swal.fire({
         allowOutsideClick: false,
@@ -62,7 +66,7 @@ const LoginModal = ({
         },
         icon: "error",
         title: "Fallo en el inicio de sesion",
-        text: `${response.error.data}`,
+        text: `${response.error.data.response}`,
       });
     } else {
       Swal.fire({

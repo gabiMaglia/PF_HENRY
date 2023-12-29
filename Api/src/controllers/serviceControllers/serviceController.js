@@ -11,10 +11,12 @@ const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 require("dotenv").config();
 const destinationEmail = process.env.EMAIL_MAILER;
+
 const addServiceController = async (
   product_model,
   product_income_date,
-  product_image,
+  // product_image,
+  product_image_url,
   user_diagnosis,
   ClientId,
   technicianId
@@ -60,27 +62,36 @@ const addServiceController = async (
           ServiceId: newService.id,
         });
 
-        if (product_image) {
-          try {
-            const cloudinaryResponse = await cloudinary.uploader.upload(
-              product_image,
-              {
-                folder: "service",
-                width: 300,
-                format: "png",
-              }
-            );
+        // if (product_image) {
+        //   try {
+        //     const cloudinaryResponse = await cloudinary.uploader.upload(
+        //       product_image,
+        //       {
+        //         folder: "services",
+        //         width: 300,
+        //         format: "png",
+        //       }
+        //     );
 
-            const cloudinaryImageUrl = cloudinaryResponse.secure_url;
+        //     const cloudinaryImageUrl = cloudinaryResponse.secure_url;
 
-            const newServiceImage = await Service_image.create({
-              address: cloudinaryImageUrl,
-              ServiceId: newService.id,
-            });
-            await newService.addService_image(newServiceImage);
-          } catch (error) {
-            return { error: true, response: "Error en la carga de la imagen" };
-          }
+        //     const newServiceImage = await Service_image.create({
+        //       address: cloudinaryImageUrl,
+        //       ServiceId: newService.id,
+        //     });
+        //     await newService.addService_image(newServiceImage);
+        //   } catch (error) {
+        //     return { error: true, response: "Error en la carga de la imagen" };
+        //   }
+        // }
+
+        if (product_image_url) {
+          // No se sube la imagen a Cloudinary aca ya que obtenemos la URL que nos envia el front
+          const newServiceImage = await Service_image.create({
+            address: product_image_url,
+            ServiceId: newService.id,
+          });
+          await newService.addService_image(newServiceImage);
         }
 
         const createdService = await Service.findByPk(newService.id, {

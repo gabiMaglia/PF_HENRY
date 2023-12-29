@@ -44,9 +44,9 @@ const UserMenu = () => {
 
   const logout = async () => {
     clearPersistanceData(cookieStatus);
-    navigate(PATHROUTES.HOME);
-    logOutUser()
     dispatch(logoutUser());
+    logOutUser()
+    navigate(PATHROUTES.HOME);
   };
 
   const handleClose = () => {

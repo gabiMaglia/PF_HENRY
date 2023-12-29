@@ -1,8 +1,9 @@
-//HOOKS
+// Importación de React y hooks
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-//MATERIAL UI
+
+// Importación de componentes y utilidades de Material-UI
 import {
   Typography,
   Box,
@@ -14,19 +15,22 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
-//COMPONENT
+
+// Importación del componente CarouselProducts
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
-//SERVICES
+
+// Importación de servicios y hooks personalizados
 import {
   fetchProductById,
   fetchAllProducts,
 } from "../../services/productServices";
-//HOOK
 import { useLocalStorage } from "../../Hook/useLocalStorage";
-//REDUX
+
+// Importación de acciones de Redux
 import { resetState } from "../../redux/slices/productSlice";
 import { addItem } from "../../redux/slices/cartSlice";
 
+// Estilo personalizado para el botón
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
   color: "white",
@@ -35,26 +39,36 @@ const CustomButton = styled(Button)({
   },
 });
 
+// Estilo personalizado para el componente CardMedia que muestra la imagen del producto
 const ProductMedia = styled(CardMedia)({
-  padding: 10,
+  padding: 0,
   height: 200,
   width: 200,
   objectFit: "cover",
-  margin: "auto",
+  margin: 0,
 });
 
+// Estilo personalizado para el contenedor de las miniaturas de imágenes
 const ThumbnailContainer = styled(Container)({
-  border: "1px solid #ddd",
-  boxShadow: "2px 2px 2px #888888",
-  borderRadius: "4px",
+  width: "80px",
+  height: "80px",
   margin: "4px",
   cursor: "pointer",
+  overflow: "hidden",
   "&:hover": {
     border: "1px solid #fd611a",
+    boxShadow: "2px 2px 2px #888888",
+    borderRadius: "4px",
+  },
+  img: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
   },
 });
 
-const FadeInTransition = ({ children, key }) => {
+// Componente para gestionar la transición de fundido
+const FadeInTransition = ({ children }) => {
   const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
@@ -65,7 +79,7 @@ const FadeInTransition = ({ children, key }) => {
     return () => {
       clearTimeout(fadeInTimeout);
     };
-  }, [key]);
+  }, [children]);
 
   return (
     <div
@@ -79,8 +93,12 @@ const FadeInTransition = ({ children, key }) => {
   );
 };
 
+// Componente principal del detalle del producto
 const Detail = () => {
+  // Obtención del parámetro de la URL
   const { id } = useParams();
+
+  // Configuración de Redux
   const dispatch = useDispatch();
   const { productById, isLoading } = useSelector((state) => state.product);
   const [storedProducts, setStoredProducts] = useLocalStorage();
@@ -88,10 +106,10 @@ const Detail = () => {
   const [loading, setLoading] = useState(true);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const { allProducts } = useSelector((state) => state.product);
-
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const [fadeInKey, setFadeInKey] = useState(0);
 
+  // Función para resetear la animación de fundido
   const resetFadeIn = () => {
     setFadeInKey((prevKey) => prevKey + 1);
   };
@@ -105,14 +123,7 @@ const Detail = () => {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatch(fetchProductById(id));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
+    // Función asíncrona para cargar los datos del producto
     const fetchDataAsync = async () => {
       dispatch(resetState());
 
@@ -120,7 +131,7 @@ const Detail = () => {
         if (id && id !== productById?.id) {
           setIsLoadingDetail(true);
           const startTime = Date.now();
-          await fetchData();
+          await dispatch(fetchProductById(id));
           const minimumLoadingTime = 2000;
           const remainingTime = Math.max(
             0,
@@ -142,6 +153,7 @@ const Detail = () => {
   }, [dispatch, id, productById]);
 
   useEffect(() => {
+    // Función para establecer la imagen inicial
     const setInitialImage = () => {
       if (
         productById &&
@@ -155,6 +167,7 @@ const Detail = () => {
     setInitialImage();
   }, [productById]);
 
+  // Función para manejar la acción de agregar al carrito
   const handleAddToCart = () => {
     if (productById && productById.id) {
       setStoredProducts(productById);
@@ -162,9 +175,11 @@ const Detail = () => {
     }
   };
 
+  // Verificación del tamaño de pantalla
   const isLargeScreen = useMediaQuery("(min-width:900px)");
   const isSmallScreen = useMediaQuery("(max-width:500px)");
 
+  // Renderizado condicional según el estado de carga y existencia de datos
   if (isLoadingDetail || loading || isLoading || !productById) {
     return (
       <FadeInTransition key={fadeInKey}>
@@ -200,6 +215,7 @@ const Detail = () => {
     );
   }
 
+  // Renderizado del componente cuando los datos están disponibles
   return (
     <FadeInTransition key={fadeInKey}>
       <Container

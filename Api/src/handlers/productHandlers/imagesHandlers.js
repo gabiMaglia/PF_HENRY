@@ -21,7 +21,9 @@ const getImageByIdHandler = async (req, res) => {
     if (image) {
       res.status(200).json(image);
     } else {
-      res.status(400).json({ error: `Image with ID:${id} was not found` });
+      res
+        .status(400)
+        .json({ error: `La imagen con ID:${id} no fue encontrada` });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
