@@ -4,15 +4,13 @@ const getAllStock = async () => {
   const allStock = await ProductStock.findAll();
   if (allStock) {
     return allStock;
-  } else {
-    return "No Stock";
   }
 };
 
 const getStockById = async (id) => {
   const stock = await ProductStock.findByPk(id);
   if (!stock) {
-    throw new Error("Stock not found");
+    throw new Error("Stock no disponible");
   } else {
     return stock;
   }
@@ -23,7 +21,7 @@ const updateStock = async (id, updateData) => {
     const stockToUpdate = await ProductStock.findByPk(id);
 
     if (!stockToUpdate) {
-      throw new Error(`Stock with ID:${id} was not found`);
+      throw new Error(`Stock con ID:${id} no ha sido encontrado.`);
     }
 
     await stockToUpdate.update(updateData);
@@ -41,7 +39,7 @@ const deleteStock = async (id) => {
   if (stock.amount) {
     await stock.destroy();
     return {
-      response: `${stock.id} deleted successfully`,
+      response: `${id} ha sido eliminado`,
     };
   } else {
     return stock;
