@@ -11,7 +11,6 @@ function ImageUploaderComponent() {
   const handleUpload = async (e) => {
     try {
       const files = fileInputRef.current.files;
-
       if (!files) {
         console.error("No se han seleccionado archivos");
         return;

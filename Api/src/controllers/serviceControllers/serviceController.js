@@ -65,7 +65,7 @@ const addServiceController = async (
             const cloudinaryResponse = await cloudinary.uploader.upload(
               product_image,
               {
-                folder: "service",
+                folder: "services",
                 width: 300,
                 format: "png",
               }
