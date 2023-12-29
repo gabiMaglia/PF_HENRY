@@ -14,7 +14,6 @@ import {
 } from "../../services/wishListServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
-import { fetchGetProduct } from "../../services/productServices";
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -46,7 +45,6 @@ const CardProduct = ({ product }) => {
   const { id, name, price, ProductImages, ProductCategories } = product;
   const wishlistProducts = useSelector((state) => state.wishlist.products);
   const login = useSelector((state) => state.user.login);
-  const { items } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (login && wishlistProducts) {
@@ -62,14 +60,6 @@ const CardProduct = ({ product }) => {
       fetchWishList(userId, dispatch);
     }
   }, [userId, dispatch, login, wishlistProducts]);
-
-  useEffect(() => {
-    if (login) {
-      if (items.length == 0) {
-        dispatch(fetchGetProduct());
-      }
-    }
-  }, []);
 
   const categoryName =
     ProductCategories && ProductCategories.length > 0

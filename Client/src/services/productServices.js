@@ -34,7 +34,7 @@ export const fetchAllProducts = () => async (dispatch) => {
     const response = await axiosInstance.get(`${urlBack}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
-    console.error("Error");
+    return
   }
 };
 
@@ -78,7 +78,7 @@ export const fetchChage = (inputValue) => async (dispatch) => {
   try {
     dispatch(changeInput(inputValue));
   } catch (error) {
-    console.log("error");
+    return
   }
 };
 
@@ -117,7 +117,7 @@ export const fetchProduct = (product) => async () => {
       const response = await axios.put(`${urlBack}/cart/add`, data);
     }
   } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 
@@ -142,7 +142,7 @@ export const fetchGetProduct = () => async () => {
       window.localStorage.setItem("storedProducts", JSON.stringify(products));
     }
   } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 
@@ -157,7 +157,7 @@ export const fetchCount = (product) => async () => {
   try {
     const response = await axios.put(`${urlBack}/cart/edit`, data);
   } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 
@@ -172,7 +172,7 @@ export const fetchDelete = (product) => async () => {
     const res = await axios.put(`${urlBack}/cart/remove`, data);
     console.log(res, "delete");
   } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 
@@ -198,7 +198,7 @@ export const fetchCart = (items) => async (dispatch) => {
     );
     dispatch(idShop(response.data.Order.preferenceId));
   } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 export const fetchAddProduct = async (obj, dispatch) => {
@@ -208,7 +208,7 @@ export const fetchAddProduct = async (obj, dispatch) => {
       dispatch(addProduct(data.product));
     }
   } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 
