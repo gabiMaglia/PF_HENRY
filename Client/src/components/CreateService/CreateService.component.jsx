@@ -13,9 +13,10 @@ import Textarea from "@mui/joy/Textarea";
 import Swal from "sweetalert2";
 // HOOKS
 import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //UTILS
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { createNewService } from "../../services/serviceServices";
 import { getUsersByRole } from "../../services/userServices";
 import PATHROUTES from "../../helpers/pathRoute";
@@ -25,6 +26,9 @@ import { handleImageUpload } from "../../utils/cloudinaryUpload";
 const CreateService = () => {
   const fileInputRef = useRef(null); //Referencia a un archivo
   const navigate = useNavigate();
+
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const [productInfo, setProductInfo] = useState({
     product_model: "",
@@ -69,9 +73,6 @@ const CreateService = () => {
     }
   };
 
-  const authData = getAuthDataCookie("authData"); //Obtener datos del usuario
-  const jwt = getAuthDataCookie("jwt"); //Obtener token de sesión
-
   const resetForm = () => {
     // Función para resetear el componente
     setProductInfo({
@@ -92,7 +93,7 @@ const CreateService = () => {
 
   const getUsers = async () => {
     // Función que obtiene los usuarios y tecnicos
-    const users = await getUsersByRole("customer", jwt);
+    const users = await getUsersByRole("customer", authData.jwt);
     if (users.error) {
       Swal.fire({
         allowOutsideClick: false,
@@ -103,7 +104,7 @@ const CreateService = () => {
     } else {
       setUsers(users.data);
       if (authData.userRole === "admin") {
-        const technicians = await getUsersByRole("technician", jwt);
+        const technicians = await getUsersByRole("technician", authData.jwt);
         if (technicians.error) {
           Swal.fire({
             allowOutsideClick: false,
