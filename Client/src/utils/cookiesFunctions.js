@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 export const setAuthDataCookie = async (cookieName, cookieData) => {
   if (cookieData !== undefined) {
     const serialized = JSON.stringify(cookieData);
-
     Cookies.set(cookieName, serialized, {
       expires: 1,
       sameSite: "None",

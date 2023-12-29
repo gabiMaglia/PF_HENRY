@@ -4,12 +4,13 @@ const frontend_Url = process.env.FRONTEND_URL;
 const miAccessToken = process.env.MP_ACCESS_TOKEN;
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
+backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app/`;
 
 const mercadoPago = async (array, idOrder) => {
-  console.log(array);
   try {
     let body = {
       metadata: { idOrder },
+      notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
         success: `${frontend_Url}/confirmacionPago`,

@@ -28,12 +28,14 @@ const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+
   const { name, surname } = useSelector((state) => state.user);
 
   const initialLetersUsers = {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
   };
+
   const items = UserPanelItems(name, surname);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -43,10 +45,12 @@ const UserMenu = () => {
   };
 
   const logout = async () => {
-    clearPersistanceData(cookieStatus);
-    navigate(PATHROUTES.HOME);
-    logOutUser()
+    console.log('estoylogout')
+    clearPersistanceData(cookieStatus, true);
     dispatch(logoutUser());
+    logOutUser()
+
+    navigate(PATHROUTES.HOME);
   };
 
   const handleClose = () => {

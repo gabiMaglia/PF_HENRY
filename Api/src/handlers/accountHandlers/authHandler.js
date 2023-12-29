@@ -53,6 +53,7 @@ const loginHandler = async (req, res) => {
     if (response.error) {
       return res.status(401).json(response.response);
     }
+    req.session.token = response.tokenSession
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);

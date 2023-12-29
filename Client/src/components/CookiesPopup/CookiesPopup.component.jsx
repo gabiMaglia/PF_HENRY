@@ -25,7 +25,7 @@ const CookiesPopup = () => {
   const handleSubmit = (coockies, showBox) => {
     dispatch(acceptCookie(coockies));
     dispatch(cookieBoxEnable(showBox));
-    !coockies ? rejectCookies() : null;
+   
   };
 
   const buttonStyles = {
