@@ -14,22 +14,20 @@ const dataSorterForApp = (data) => {
 
 export const loginUser = async (username, password, cookieStatus) => {
   try {
-    const axiosInstance = cookieStatus
-      ? headerSetterForPetitions(cookieStatus)
-      : headerSetterForPetitions(cookieStatus)(
-          window.localStorage.getItem("jwt")
-        );
+    const { data } = await axios.post(
+      `${url}/account/login`,
+      {
+        username: username,
+        password: password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
 
-    const { data } = await axiosInstance.post(`${url}/account/login`, {
-      username: username,
-      password: password,
-    });
-    console.log(data)
     if (data.login) {
       const sortedData = dataSorterForApp(data);
-      console.log(sortedData)
       createPersistency(sortedData, cookieStatus);
-
       return { error: false, data: sortedData };
     }
   } catch ({ response }) {

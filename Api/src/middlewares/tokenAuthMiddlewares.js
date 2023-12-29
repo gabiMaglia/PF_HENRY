@@ -1,15 +1,9 @@
 const { verifyToken } = require("../jwt/tokenGenerator.js");
 
-function extractJwtToken(inputString) {
-  const jwt = inputString.split(' ').pop()
-  return jwt
-
-}
-
 // MIDDLEWARE QUE CHEKEA TOKEN
 const checkAuthToken = async (req, res, next) => {
   try {
-    const token = extractJwtToken(req.headers.cookie);
+    const token = extractJwtToken(req.session.token);
     const tokenData = await verifyToken(token);
     if (!tokenData?.userId) {
       res.status(409);
@@ -27,9 +21,7 @@ const checkAuthToken = async (req, res, next) => {
 const checkRoleAuthToken = (role) => async (req, res, next) => {
   try {
 
-    const token = req.cookies.jwt
-    ? req.cookies.jwt
-    : extractJwtToken(req.headers.authorization)
+    const token = req.session.token
 
     const tokenData = await verifyToken(token);
     if (![].concat(role).includes(tokenData.userRole)) {
