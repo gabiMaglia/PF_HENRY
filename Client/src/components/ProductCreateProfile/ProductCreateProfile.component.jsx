@@ -92,6 +92,18 @@ const ProductCreateProfileComponent = () => {
     event.preventDefault();
     console.log(values);
     // Agregar lógica para enviar los datos al servidor o realizar otras acciones.
+    setValues({
+      name: "",
+      price: "",
+      description: "",
+      stock: "",
+      soldCount: 0,
+      warranty: "",
+      categoryName: isOtherCategory ? newCategory : [categoryName],
+      brandName: "",
+      images: [],
+    })
+    setImageURL('')
   };
 
   return (
