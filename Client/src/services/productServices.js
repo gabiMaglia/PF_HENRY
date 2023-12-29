@@ -12,15 +12,10 @@ import {
 } from "../redux/slices/productSlice";
 
 //REDUX
-import { addItem, idShop } from "../redux/slices/cartSlice";
-import { useLocalStorage } from "../Hook/useLocalStorage";
+import { idShop } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
-<<<<<<< HEAD
-=======
-import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
->>>>>>> 8a4a17ed5ea5568931ca9227258ed1bc70759f59
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
