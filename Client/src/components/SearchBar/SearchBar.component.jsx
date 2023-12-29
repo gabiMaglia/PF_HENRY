@@ -47,6 +47,7 @@ export default function SearchAppBar() {
 
   const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
+  const { items } = useSelector((state) => state.cart);
 
   const getUserInfo = async (token) => {
     if (token !== undefined) {
@@ -78,6 +79,14 @@ export default function SearchAppBar() {
       getUserInfo(userToken);
     }
   }, [cookieStatus]);
+
+  useEffect(() => {
+    if (login) {
+      if (items == 0) {
+        dispatch(fetchGetProduct());
+      }
+    }
+  }, []);
 
   return (
     <Box
