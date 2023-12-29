@@ -21,21 +21,33 @@ const ProductCreateProfileComponent = () => {
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryName, setCategoryName] = useState("selecciona una categoria");
   const [newCategory, setNewCategory] = useState("");
+  const [isUrlInput, setIsUrlInput] = useState(false);
+  const [imageURL, setImageURL] = useState("");
   const [values, setValues] = useState({
     name: "",
     price: "",
     description: "",
     stock: "",
-    soldCount:0,
-    categoryName: isOtherCategory ? newCategory : categoryName,
+    soldCount: 0,
+    warranty: "",
+    categoryName: isOtherCategory ? newCategory : [categoryName],
     brandName: "",
     images: [],
   });
   console.log(values);
+  const handlerAddImage = ({ target }) => {
+    setValues({
+      ...values,
+      images: [...values.images, imageURL], // Corrected part
+    });
+  };
+  const handlerImageChange = (e) => {
+    setImageURL(e.target.value);
+  };
   const handleChange = (event) => {
     const { name, value, files } = event.target;
 
-    if (name === "images") {
+    if (name === "images" && !isUrlInput) {
       setValues((prevValues) => ({
         ...prevValues,
         images: [...prevValues.images, ...files],
@@ -79,6 +91,7 @@ const ProductCreateProfileComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(values);
+    // Agregar lógica para enviar los datos al servidor o realizar otras acciones.
   };
 
   return (
@@ -124,6 +137,15 @@ const ProductCreateProfileComponent = () => {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              name="warranty"
+              label="garantia del producto"
+              value={values.warranty}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
               name="stock"
               label="unidades ingresadas"
               value={values.stock}
@@ -161,27 +183,43 @@ const ProductCreateProfileComponent = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              name="brandName"
-              label="ingrese la marca"
-              value={values.brandName}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Input
-              inputProps={{ multiple: true }}
-              type="file"
-              name="images"
-              onChange={handleChange}
-            />
+            {!isUrlInput ? (
+              <Input
+                inputProps={{ multiple: true }}
+                type="file"
+                name="images"
+                onChange={handleChange}
+              />
+            ) : (
+              <>
+                <TextField
+                  label="URL de la imagen"
+                  name="imageUrl"
+                  required
+                  onChange={handlerImageChange}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(event) => handlerAddImage(event)}
+                >
+                  agregar imagen
+                </Button>
+              </>
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsUrlInput(!isUrlInput)}
+            >
+              {!isUrlInput ? "Ingresar URL" : "Cargar desde archivo"}
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <ul>
               {values.images.map((image, index) => (
                 <li key={index}>
-                  {image.name}
+                  {image.name||image}
                   <Button
                     variant="contained"
                     color="secondary"
