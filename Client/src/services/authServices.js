@@ -52,7 +52,6 @@ export const googleLoginUser = async (cookieStatus) => {
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
-          console.log(event);
           const sortedData = dataSorterForApp(event.data);
           createPersistency(sortedData, cookieStatus);
           popup.close();

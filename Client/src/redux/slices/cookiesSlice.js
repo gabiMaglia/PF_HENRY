@@ -25,17 +25,14 @@ const cookiesSlice = createSlice({
 export const rejectCookies = (bool) => {
   const allCookies = Cookies.get();
   const allCookiesKeys = Object.keys(allCookies);
-  if (bool) {
-    allCookiesKeys.map((cookie) => {
-     Cookies.remove(cookie);
-    });
+  if (bool) {   
+     Cookies.remove('connect.sid');
+     Cookies.remove('authData');
   }else { 
   allCookiesKeys.map((cookie) => {
    cookie !=='connect.sid' && Cookies.remove(cookie);
   });
     }
-  
-
 };
 
 export const { acceptCookie, cookieBoxEnable } = cookiesSlice.actions;
