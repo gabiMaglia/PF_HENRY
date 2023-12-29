@@ -9,13 +9,16 @@ import {
   filterByBrand,
   changeInput,
 } from "../redux/slices/productSlice";
+
 //REDUX
-import { idShop } from "../redux/slices/cartSlice";
+import { addItem, idShop } from "../redux/slices/cartSlice";
+import { useLocalStorage } from "../Hook/useLocalStorage";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
+
 
 export const fetchAllProducts = () => async (dispatch) => {
 
@@ -105,10 +108,14 @@ export const fetchProduct = (product) => async () => {
     productId: id,
     productQuantity: 1,
   }
-  console.log(data)
+  
   try {
     const res = await axios.post(`${urlBack}/cart/`, data)
-    console.log(res, "se cargo el producto")
+    
+    if(res.data.Cart === 'El usuario ya tiene carrito'){
+      const response = await axios.put(`${urlBack}/cart/add`, data)
+      
+    }
   } catch (error) {
     console.error("error", error);
   }
@@ -118,11 +125,56 @@ export const fetchGetProduct = () => async () => {
   const user = window.localStorage.getItem("userId")
   try {
     const res = await axios.get(`${urlBack}/cart/${user}`)
-    console.log(res, "product")
+    
+    const products = res.data.Products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      ProductImages:product.ProductImages[0],
+      count: product.ProductCart.quantity
+    }))
+    console.log(products)
+
+    const storedProducts = getProducts();
+    console.log(storedProducts)
+    
+    if (storedProducts.payload === undefined) {
+      window.localStorage.setItem("storedProducts", JSON.stringify(products));
+    }
   } catch (error) {
     console.error("error", error);
   }
 } 
+
+export const fetchCount = (product) => async () => {
+  const user = window.localStorage.getItem("userId")
+  
+  const data = {
+    userId: user,
+    productId: product.id,
+    productQuantity: product.count,
+  }
+  try {
+    const response = await axios.put(`${urlBack}/cart/edit`, data)
+  } catch (error) {
+    console.error("error", error);
+  }
+}
+
+export const fetchDelete = (product) => async () => {
+  const user = window.localStorage.getItem("userId")
+  console.log(user, product)
+  const data = {
+    userId: user,
+    productId: product
+}
+  try {
+    const res = await axios.put(`${urlBack}/cart/remove`, data)
+    console.log(res, "delete")
+  } catch (error) {
+    console.error("error", error);
+  }
+}
 
 
 export const fetchCart = (items) => async (dispatch) => {

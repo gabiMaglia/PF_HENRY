@@ -1,14 +1,18 @@
 require("dotenv").config();
 const isProduction = process.env.NODE_ENV === "production";
+const koyebDb = process.env.KOYEB_DB;
+const localDb = process.env.LOCAL_DB;
 
 const { Sequelize } = require("sequelize");
-
+// Models import
 const UserModel = require("./models/userModels/User");
 const UserCredentialsModel = require("./models/userModels/UserCredentials");
+const UserSessionModel = require("./models/Session");
 const UserRoleModel = require("./models/userModels/UserRole");
 const UserAddressModel = require("./models/userModels/UserAddress");
 const ServiceStatusModel = require("./models/ServiceModels/Service_status");
 const ServiceModel = require("./models/ServiceModels/Service");
+const ServiceImageModel = require("./models/ServiceModels/Service_image");
 const ProductModel = require("./models/productModels/Product");
 const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
@@ -18,10 +22,9 @@ const WishListModel = require("./models/productModels/WishList");
 const CartModel = require("./models/productModels/Cart");
 const OrderModel = require("./models/productModels/Order");
 const ProductCartModel = require("./models/productModels/ProductCart");
-const OrderProductModel = require("./models/productModels/OrderProduct");
 
-const koyebDb = process.env.KOYEB_DB;
-const localDb = process.env.LOCAL_DB;
+// Inicializacion de la instancia de sequelize
+const OrderProductModel = require("./models/productModels/OrderProduct");
 
 const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
   dialect: "postgres",
@@ -34,9 +37,11 @@ const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
 // INICIALIZAMOS LOS MODELOS USER
 UserModel(sequelize);
 UserCredentialsModel(sequelize);
+UserSessionModel(sequelize);
 UserRoleModel(sequelize);
 UserAddressModel(sequelize);
 ServiceStatusModel(sequelize);
+ServiceImageModel(sequelize);
 ServiceModel(sequelize);
 WishListModel(sequelize);
 
@@ -56,6 +61,7 @@ OrderProductModel(sequelize);
 const {
   User,
   UserRole,
+  Session,
   UserAddress,
   UserCredentials,
   Product,
@@ -65,12 +71,15 @@ const {
   ProductImage,
   Service,
   Service_status,
+  Service_image,
   WishList,
   Cart,
   Order,
   ProductCart,
   OrderProduct,
 } = sequelize.models;
+
+// Creacion del session store encargado de guardar en la base de datos las sesiones
 
 // RELACIONES USER
 
@@ -150,6 +159,9 @@ User.hasMany(Service, {
   as: "TechnicianServices",
   foreignKey: "technicianId",
 });
+
+Service.hasMany(Service_image, { onDelete: "CASCADE" });
+Service_image.belongsTo(Service);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

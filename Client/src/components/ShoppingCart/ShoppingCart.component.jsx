@@ -22,9 +22,14 @@ import {
   updateItem,
   removeItem,
   totalItem,
-} from "../../redux/slices/CartSlice";
+} from "../../redux/slices/cartSlice";
 //SERVICES
-import { fetchCart, fetchGetProduct } from "../../services/productServices";
+import {
+  fetchCart,
+  fetchCount,
+  fetchDelete,
+  fetchGetProduct,
+} from "../../services/productServices";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
@@ -56,10 +61,10 @@ export default function ShoppingCart() {
     );
   }
 
-  const handleChange = (productId, event) => {
-    const newValue = parseInt(event.target.value) || 1;
-    console.log(newValue);
+  const handleChange = (productId, value) => {
+    const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
+    dispatch(fetchCount({ id: productId, count: newValue }));
   };
 
   const handleIncrement = (productId) => {
@@ -81,6 +86,7 @@ export default function ShoppingCart() {
 
   const handleDelete = (product) => {
     dispatch(removeItem(product));
+    dispatch(fetchDelete(product));
   };
 
   const handleShop = (e) => {
@@ -114,7 +120,7 @@ export default function ShoppingCart() {
               max={10}
               id={item.id}
               value={item.count}
-              onChange={(event) => handleChange(item.id, event.target.value)}
+              onChange={(event, value) => handleChange(item.id, value)}
               slots={{
                 root: StyledInputRoot,
                 input: StyledInput,

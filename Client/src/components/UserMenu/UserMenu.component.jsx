@@ -22,6 +22,7 @@ import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
 import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
+import { logOutUser } from "../../services/authServices.js";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -41,9 +42,10 @@ const UserMenu = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const logout = () => {
+  const logout = async () => {
     clearPersistanceData(cookieStatus);
     navigate(PATHROUTES.HOME);
+    logOutUser()
     dispatch(logoutUser());
   };
 
