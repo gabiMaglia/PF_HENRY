@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -11,13 +11,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchAddProduct } from "../../services/productServices";
+import Swal from "sweetalert2";
+import { handleImageUpload } from "../../utils/cloudinaryUpload";
 
 const ProductCreateProfileComponent = () => {
+  const fileInputRef = useRef(null); //Referencia a un archivo
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
-  useEffect(() => {
-    fetchCategories(dispatch);
-  }, []);
 
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryName, setCategoryName] = useState("selecciona una categoria");
@@ -35,11 +35,67 @@ const ProductCreateProfileComponent = () => {
     brandName: "",
     images: [],
   });
-  console.log(values);
+console.log(values)
+  useEffect(() => {
+    fetchCategories(dispatch);
+  }, []);
+
+  const handlerUpdateCloudinary = async (folderName) => {
+    try {
+      const file = fileInputRef.current.files;
+
+      if (!file || file.length === 0) {
+        return { error: true, response: "No se han seleccionado archivos" };
+      }
+
+      const newImagePromises = Array.from(file).map(async (f) => {
+        try {
+          console.log(f);
+          return await handleImageUpload(f, folderName);
+        } catch (error) {
+          console.error("Error al subir imagen a Cloudinary:", error);
+          throw error;
+        }
+      });
+
+      const newImage = await Promise.all(newImagePromises);
+
+      return newImage;
+    } catch (error) {
+      console.error("Error en la carga de imágenes:", error);
+      return { error: true, response: "Error en la carga de imágenes" };
+    }
+  };
+  const uploadCloudinaryUrl = async (urls, folderName) => {
+    try {
+      if (!urls || urls.length === 0) {
+        throw new Error("No se han proporcionado URLs");
+      }
+  
+      const newImagePromises = urls.map(async (url) => {
+        try {
+          const uploadedImage = await handleImageUpload(url, folderName);
+          console.log("Imagen subida con éxito:", uploadedImage);
+          return uploadedImage;
+        } catch (error) {
+          console.error("Error al subir imagen a Cloudinary:", error.message);
+          throw error;
+        }
+      });
+  
+      const newImage = await Promise.all(newImagePromises);
+  
+      return newImage;
+    } catch (error) {
+      console.error("Error en la carga de imágenes:", error.message);
+      return { error: true, response: "Error en la carga de imágenes" };
+    }
+  };
+
   const handlerAddImage = ({ target }) => {
     setValues({
       ...values,
-      images: [...values.images, imageURL], // Corrected part
+      images: [...values.images, imageURL],
     });
   };
   const handlerImageChange = (e) => {
@@ -89,10 +145,31 @@ const ProductCreateProfileComponent = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(values);
-    fetchAddProduct(values, dispatch);
+    let array = [];
+    if (isUrlInput) {
+      const array2 = await uploadCloudinaryUrl(values.images,"products");
+      array = array2;
+    } else {
+      const array2 = await handlerUpdateCloudinary("products");
+      array = array2;
+    }
+
+    if (array.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al subir la imagen a Cloudinary",
+        text: "Por favor, inténtelo de nuevo.",
+      });
+    }
+
+    const obj = {
+      ...values,
+      images: array,
+    };
+
+    fetchAddProduct(obj, dispatch);
     setValues({
       name: "",
       price: "",
@@ -171,7 +248,7 @@ const ProductCreateProfileComponent = () => {
               name="brandName"
               label="marca"
               value={values.brandName}
-              onChange={handleChange} 
+              onChange={handleChange}
               required
             />
           </Grid>
@@ -210,6 +287,7 @@ const ProductCreateProfileComponent = () => {
                 inputProps={{ multiple: true }}
                 type="file"
                 name="images"
+                inputRef={fileInputRef}
                 onChange={handleChange}
               />
             ) : (

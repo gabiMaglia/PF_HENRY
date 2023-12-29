@@ -90,20 +90,9 @@ const postProduct = async ({
             await newProduct.addProductImage(existingImage, { transaction });
             return;
           }
-          // Si la imagen no existe, subirla a Cloudinary
-          const cloudinaryResponse = await cloudinary.uploader.upload(
-            imageUrl,
-            {
-              folder: "products",
-              width: 300,
-              format: "png",
-            }
-          );
-
-          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
-          // Crea una nueva instancia de ProductImage
+     
           const newImage = await ProductImage.create(
-            { address: cloudinaryImageUrl },
+            { address: imageUrl },
             { transaction }
           );
           // Asocia la nueva imagen al producto
