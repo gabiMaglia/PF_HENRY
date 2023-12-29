@@ -22,7 +22,7 @@ const getBrandByIdHandler = async (req, res) => {
     if (brand) {
       res.status(200).json(brand);
     } else {
-      res.status(400).json({ error: `Brand ${id} was not found` });
+      res.status(400).json({ error: `Marca con ID: ${id} no fue encontrada` });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -57,7 +57,9 @@ const getBrandWithProductsHandler = async (req, res) => {
   try {
     const brandProducts = await getBrandWithProducts(name);
     if (!brandProducts) {
-      res.status(400).json({ error: `Brand with name: ${name} was not found` });
+      res
+        .status(400)
+        .json({ error: `Marca con nombre: ${name} no fue encontrada` });
     } else {
       res.status(200).json(brandProducts);
     }
