@@ -61,6 +61,8 @@ const FiltersSorting = () => {
     dispatch(filterByCategory("all"));
     dispatch(filterByBrand("default"));
     dispatch(resetState());
+
+    setSelectedCategory("all");
   };
 
   const Selects = styled(Select)({

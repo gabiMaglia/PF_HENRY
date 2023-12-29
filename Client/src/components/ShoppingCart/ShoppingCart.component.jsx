@@ -106,6 +106,8 @@ export default function ShoppingCart() {
             flexDirection="row"
             alignItems="center"
             justifyContent="space-evenly"
+            boxShadow="5px 5px 5px #888888"
+            borderRadius="8px"
             sx={{ mb: 4 }}
           >
             <ProductMedia
