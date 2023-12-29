@@ -10,10 +10,7 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../services/categoriesServices";
-<<<<<<< HEAD
-=======
 import { fetchAddProduct } from "../../services/productServices";
->>>>>>> develop
 
 const ProductCreateProfileComponent = () => {
   const dispatch = useDispatch();

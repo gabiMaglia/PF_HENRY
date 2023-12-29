@@ -12,15 +12,7 @@ import {
 } from "../redux/slices/productSlice";
 
 //REDUX
-<<<<<<< HEAD
-import { addItem, idShop } from "../redux/slices/cartSlice";
-<<<<<<< HEAD
-=======
-import { useLocalStorage } from "../Hook/useLocalStorage";
->>>>>>> develop
-=======
 import { idShop } from "../redux/slices/cartSlice";
->>>>>>> develop
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
