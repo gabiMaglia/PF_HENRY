@@ -83,7 +83,11 @@ const CardCarousel = ({ allProducts }) => {
                         component="div"
                         fontWeight="bold"
                         sx={{
-                          fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
+                          fontSize: {
+                            xs: "1.5rem",
+                            sm: "2.5rem",
+                            md: "3.5rem",
+                          },
                         }}
                       >
                         {product.name}
@@ -100,10 +104,14 @@ const CardCarousel = ({ allProducts }) => {
                           color="#fd611a"
                           fontWeight="bold"
                           sx={{
-                            fontSize: { xs: "1.5rem", sm: "3rem", md: "4rem" },
+                            fontSize: {
+                              xs: "1rem",
+                              sm: "1.5rem",
+                              md: "2rem",
+                            },
                           }}
                         >
-                          ${product.price}
+                          PROMOCION: ${product.price}
                         </Typography>
                       </Container>
                     </Container>

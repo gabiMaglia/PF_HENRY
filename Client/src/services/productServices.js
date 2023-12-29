@@ -16,6 +16,11 @@ import { addItem, idShop } from "../redux/slices/cartSlice";
 import { useLocalStorage } from "../Hook/useLocalStorage";
 //SWEET ALERT
 import Swal from "sweetalert2";
+<<<<<<< HEAD
+=======
+import { headerSetterForPetitions } from "../utils/authMethodSpliter";
+import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
+>>>>>>> 8a4a17ed5ea5568931ca9227258ed1bc70759f59
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -93,11 +98,13 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 //   }
 // };
 
-export const fetchProduct = (product) => async () => {
+export const fetchProduct = (product, cookieAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
+  const {userId} = aux
   const user = window.localStorage.getItem("userId");
   const { id } = product;
   const data = {
-    userId: user,
+    userId: userId? userId : user,
     productId: id,
     productQuantity: 1,
   };
@@ -113,10 +120,11 @@ export const fetchProduct = (product) => async () => {
   }
 };
 
-export const fetchGetProduct = () => async () => {
-  const user = window.localStorage.getItem("userId");
+export const fetchGetProduct = (cookieAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
+  const {userId} = aux
   try {
-    const res = await axios.get(`${urlBack}/cart/${user}`);
+    const res = await axios.get(`${urlBack}/cart/${userId}`);
 
     const products = res.data.Products.map((product) => ({
       id: product.id,
@@ -136,11 +144,12 @@ export const fetchGetProduct = () => async () => {
   }
 };
 
-export const fetchCount = (product) => async () => {
-  const user = window.localStorage.getItem("userId");
+export const fetchCount = (product, cookieAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
+  const {userId} = aux
 
   const data = {
-    userId: user,
+    userId: userId,
     productId: product.id,
     productQuantity: product.count,
   };
@@ -151,11 +160,12 @@ export const fetchCount = (product) => async () => {
   }
 };
 
-export const fetchDelete = (product) => async () => {
-  const user = window.localStorage.getItem("userId");
-  console.log(user, product);
+export const fetchDelete = (product, cookieAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
+  const {userId} = aux
+
   const data = {
-    userId: user,
+    userId: userId,
     productId: product,
   };
   try {
@@ -166,9 +176,10 @@ export const fetchDelete = (product) => async () => {
   }
 };
 
-export const fetchCart = (items) => async (dispatch) => {
-  const id = window.localStorage.getItem("userId");
-  console.log(id);
+export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
+  const {userId} = aux
+  
   const products = items.map((item) => ({
     title: item.name,
     quantity: item.count,
@@ -179,7 +190,7 @@ export const fetchCart = (items) => async (dispatch) => {
   try {
     const response = await axios.post(
       `${urlBack}/pagos/order`,
-      { array: products, userId: id },
+      { array: products, userId: userId },
       {
         headers: {
           "Content-Type": "application/json",

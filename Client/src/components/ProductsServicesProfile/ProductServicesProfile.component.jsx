@@ -12,62 +12,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import sortCardByDate from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
 
-const cardsContent = [
-  {
-    id: 1,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "Presupuesto: enviado",
-    state: "Producto en revisión",
-    date: "01/12/2023",
-  },
-  {
-    id: 2,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "Presupuesto: $3500",
-    state: "Producto en revisión",
-    date: "01/12/2023",
-  },
-  {
-    id: 3,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "Presupuesto: $3500",
-    state: "Producto en revisión",
-    date: "10/12/2023",
-  },
-  {
-    id: 4,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "Presupuesto: $3500",
-    state: "Producto en revisión",
-    date: "10/12/2023",
-  },
-  {
-    id: 5,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "Presupuesto: $3500",
-    state: "Producto en revisión",
-    date: "15/12/2023",
-  },
-  {
-    id: 6,
-    image:
-      "https://www.lg.com/ar/images/monitores/md07556921/gallery/Dm-01.jpg",
-    name: "Monitor Samsung 15 pulgadas",
-    budget: "Presupuesto: $3500",
-    state: "Producto en revisión",
-    date: "20/12/2023",
-  },
-];
+const cardsContent = [];
 
 const ProductServicesProfileComponent = () => {
   const [cardPerDates, setCardPerDates] = useState([]);

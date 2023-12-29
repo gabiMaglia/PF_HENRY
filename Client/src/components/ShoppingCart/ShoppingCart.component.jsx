@@ -35,6 +35,7 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
 
   const { items, total, id } = useSelector((state) => state.cart);
+  const { cookiesAccepted } = useSelector((state) => state.cookies);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 
@@ -64,7 +65,7 @@ export default function ShoppingCart() {
   const handleChange = (productId, value) => {
     const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
-    dispatch(fetchCount({ id: productId, count: newValue }));
+    dispatch(fetchCount({ id: productId, count: newValue }), cookiesAccepted);
   };
 
   const handleIncrement = (productId) => {
@@ -86,11 +87,11 @@ export default function ShoppingCart() {
 
   const handleDelete = (product) => {
     dispatch(removeItem(product));
-    dispatch(fetchDelete(product));
+    dispatch(fetchDelete(product, cookiesAccepted));
   };
 
   const handleShop = (e) => {
-    dispatch(fetchCart(items));
+    dispatch(fetchCart(items, cookiesAccepted));
   };
 
   return (
@@ -106,6 +107,8 @@ export default function ShoppingCart() {
             flexDirection="row"
             alignItems="center"
             justifyContent="space-evenly"
+            boxShadow="5px 5px 5px #888888"
+            borderRadius="8px"
             sx={{ mb: 4 }}
           >
             <ProductMedia
