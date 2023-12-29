@@ -29,7 +29,6 @@ const postProductHandler = async (req, res) => {
       !name ||
       !description ||
       !price ||
-      !is_deleted ||
       !stock ||
       !categoryName ||
       !brandName ||
