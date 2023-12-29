@@ -29,6 +29,7 @@ const ProductBox = () => {
   const [animationComplete, setAnimationComplete] = useState(false);
 
   const { login } = useSelector((state) => state.user);
+  const { cookiesAccepted } = useSelector((state) => state.cookies);
 
   const isThereAnyProducts = productsToShow.length === 0;
 
@@ -44,7 +45,7 @@ const ProductBox = () => {
     } else {
       setStoredProducts(product);
       dispatch(addItem());
-      dispatch(fetchProduct(product));
+      dispatch(fetchProduct(product, cookiesAccepted));
     }
   };
 

@@ -107,7 +107,7 @@ const ProductServicesProfileComponent = () => {
           const date = splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
           return (
             <Box
-              key={cardsPerDate.date}
+              key={date}
               sx={{
                 border: "1px solid black",
                 borderRadius: "10px",
@@ -125,10 +125,15 @@ const ProductServicesProfileComponent = () => {
                   id: product.product_id,
                   name: product.product_model,
                   image:
-                    product.Service_images.length > 0 &&
-                    product.Service_images[0].address,
-                  budget: product.Service_status.budget,
-                  state: product.Service_status.repair_finish,
+                    product.Service_images.length > 0
+                      ? product.Service_images[0].address
+                      : "error",
+                  budget: "presupuesto: " + product.Service_status.budget,
+                  state: product.Service_status.repair_finish
+                    ? "Finalizado"
+                    : product.Service_status.confirm_repair
+                    ? "Presupuesto aceptado, esperando reparación"
+                    : "Esperando",
                 };
                 return (
                   <Box

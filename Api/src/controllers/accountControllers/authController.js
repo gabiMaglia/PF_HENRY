@@ -93,7 +93,6 @@ const registerUser = async (userObj) => {
 
 const loginUser = async (user) => {
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
-
   if (!user.isActive) {
     return {
       error: true,

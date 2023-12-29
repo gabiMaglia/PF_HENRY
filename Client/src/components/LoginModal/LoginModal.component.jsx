@@ -44,7 +44,7 @@ const LoginModal = ({
     await getUserById(userId).then((data) => {
       dispatch(logUser({ userObject: data }));
       if (items == 0) {
-        dispatch(fetchGetProduct());
+        dispatch(fetchGetProduct(cookieStatus));
       }
     });
   };
