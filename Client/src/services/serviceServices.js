@@ -14,6 +14,15 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   }
 };
 
+export const getAllServices = async () => {
+  try {
+    const response = await axios.get(`${url}/service`);
+    return response;
+  } catch (error) {
+    return { error: true, response: "Falla en la obtención de servicios" };
+  }
+};
+
 //Estaba de antes no lo quise borrar por las dudas
 export const GetAllRoles = async () => {
   try {
