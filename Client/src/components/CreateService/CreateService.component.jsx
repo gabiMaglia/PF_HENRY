@@ -55,14 +55,14 @@ const CreateService = () => {
     technician: "",
   });
 
-  const handleCloudinaryUpload = async (e) => {
+  const handleCloudinaryUpload = async (folderName) => {
     // Función que sube la imagen a Cloudinary
     try {
       const file = fileInputRef.current.files;
       if (!file) {
         return { error: true, response: "No se han seleccionado archivos" };
       }
-      const newImage = await handleImageUpload(file[0]);
+      const newImage = await handleImageUpload(file[0], folderName);
       return newImage;
     } catch (error) {
       return { error: true, response: "Error al subir la imagen" };
@@ -149,8 +149,13 @@ const CreateService = () => {
     });
     Swal.showLoading();
 
-    const imageUrl = await handleCloudinaryUpload(); // Sube la imagen a cloudinary
+    const imageUrl = await handleCloudinaryUpload("services"); // Sube la imagen a cloudinary
     if (imageUrl.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al subir la imagen a Cloudinary",
+        text: "Por favor, inténtelo de nuevo.",
+      });
     } else {
       createServiceValidate(productInfo, setErrors, errors); // Valida los campos
       if (

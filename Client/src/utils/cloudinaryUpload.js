@@ -3,6 +3,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+// const floderProducts = import.meta.env.VITE_CLOUDINARY_FOLDER_PRODUCTS;
 
 const cloudinary = new Cloudinary({
   cloud: {
@@ -10,11 +11,15 @@ const cloudinary = new Cloudinary({
   },
 });
 
-const handleImageUpload = async (file) => {
+const handleImageUpload = async (file, floderName) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
+
+    if(floderName){
+      formData.append("folder", floderName);
+    }
 
     const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
