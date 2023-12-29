@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../services/categoriesServices";
+import { fetchAddProduct } from "../../services/productServices";
 
 const ProductCreateProfileComponent = () => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const ProductCreateProfileComponent = () => {
     price: "",
     description: "",
     stock: "",
-    soldCount: 0,
+    soldCount: "0",
     warranty: "",
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: "",
@@ -91,13 +92,13 @@ const ProductCreateProfileComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(values);
-    // Agregar lógica para enviar los datos al servidor o realizar otras acciones.
+    fetchAddProduct(values, dispatch);
     setValues({
       name: "",
       price: "",
       description: "",
       stock: "",
-      soldCount: 0,
+      soldCount: "0",
       warranty: "",
       categoryName: isOtherCategory ? newCategory : [categoryName],
       brandName: "",
@@ -139,7 +140,7 @@ const ProductCreateProfileComponent = () => {
           <Grid item xl={12}>
             <TextField
               multiline
-              rows={5}
+              rows={2}
               label="Descripción del producto"
               name="description"
               value={values.description}
@@ -162,6 +163,15 @@ const ProductCreateProfileComponent = () => {
               label="unidades ingresadas"
               value={values.stock}
               onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="brandName"
+              label="marca"
+              value={values.brandName}
+              onChange={handleChange} 
               required
             />
           </Grid>
