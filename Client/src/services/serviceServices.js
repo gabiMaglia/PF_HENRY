@@ -3,13 +3,14 @@ import axios from "axios";
 
 const url = import.meta.env.VITE_BACKEND_URL;
 
-export const createNewService = async (serviceInfo, technicianId) => {
+export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   try {
+    serviceInfo.product_image = imageUrl;
     serviceInfo.technicianId = technicianId;
     const response = await axios.post(`${url}/service`, serviceInfo);
     return response;
   } catch (error) {
-    return error;
+    return { error: true, response: "Falla en la creación del servicio" };
   }
 };
 

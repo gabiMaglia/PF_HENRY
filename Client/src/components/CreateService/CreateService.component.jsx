@@ -1,3 +1,4 @@
+//Material UI
 import {
   Autocomplete,
   Button,
@@ -5,23 +6,29 @@ import {
   FormHelperText,
   TextField,
   Typography,
+  Box,
 } from "@mui/material";
-import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import Textarea from "@mui/joy/Textarea";
+//SWAL ALERT 2
+import Swal from "sweetalert2";
+// HOOKS
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+//UTILS
+import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import { createNewService } from "../../services/serviceServices";
 import { getUsersByRole } from "../../services/userServices";
-import Swal from "sweetalert2";
-import { Form, useNavigate } from "react-router-dom";
 import PATHROUTES from "../../helpers/pathRoute";
 import { createServiceValidate } from "../../helpers/serviceValidate";
+import { handleImageUpload } from "../../utils/cloudinaryUpload";
 
 const CreateService = () => {
+  const fileInputRef = useRef(null); //Referencia a un archivo
   const navigate = useNavigate();
 
   const [productInfo, setProductInfo] = useState({
     product_model: "",
+    product_image: null,
     product_income_date: "",
     user_diagnosis: "",
     ClientId: "",
@@ -48,12 +55,28 @@ const CreateService = () => {
     technician: "",
   });
 
-  const authData = getAuthDataCookie("authData");
-  const jwt = getAuthDataCookie("jwt");
+  const handleCloudinaryUpload = async (e) => {
+    // Función que sube la imagen a Cloudinary
+    try {
+      const file = fileInputRef.current.files;
+      if (!file) {
+        return { error: true, response: "No se han seleccionado archivos" };
+      }
+      const newImage = await handleImageUpload(file[0]);
+      return newImage;
+    } catch (error) {
+      return { error: true, response: "Error al subir la imagen" };
+    }
+  };
+
+  const authData = getAuthDataCookie("authData"); //Obtener datos del usuario
+  const jwt = getAuthDataCookie("jwt"); //Obtener token de sesión
 
   const resetForm = () => {
+    // Función para resetear el componente
     setProductInfo({
       product_model: "",
+      product_image: null,
       product_income_date: "",
       user_diagnosis: "",
     });
@@ -62,11 +85,13 @@ const CreateService = () => {
       product_income_date: "",
       user_diagnosis: "",
     });
+    fileInputRef.current.value = "";
     setUserListValue(null);
     setTechnicianListValue(null);
   };
 
   const getUsers = async () => {
+    // Función que obtiene los usuarios y tecnicos
     const users = await getUsersByRole("customer", jwt);
     if (users.error) {
       Swal.fire({
@@ -94,6 +119,7 @@ const CreateService = () => {
   };
 
   const getNameUsers = () => {
+    // Función que guarda los nombres de usuarios y tecnicos
     if (users) {
       const nameUsers = users.map(
         (user) => user.name + " " + user.surname + " --- " + user.email
@@ -114,78 +140,95 @@ const CreateService = () => {
   };
 
   const handleSubmit = async () => {
-    createServiceValidate(productInfo, setErrors, errors);
-    if (
-      errors.product_model === "" &&
-      errors.product_income_date === "" &&
-      errors.user_diagnosis === "" &&
-      errors.client === "" &&
-      errors.technician === ""
-    ) {
-      Swal.fire({
-        icon: "info",
-        allowOutsideClick: false,
-        title: "Por favor espere mientras procesamos la información",
-        showConfirmButton: false,
-      });
-      Swal.showLoading();
+    // Función de carga
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
 
-      let response = undefined;
-      if ((authData.userRole = "admin")) {
-        response = await createNewService(
-          productInfo,
-          productInfo.technicianId
-        );
-      } else if (authData.userRole === "technician") {
-        response = await createNewService(productInfo, authData.userId);
-      }
-      if (response.status === 200) {
-        Swal.fire({
-          allowOutsideClick: false,
-          showCancelButton: true,
-          icon: "success",
-          title: "Servicio creado exitosamente",
-          text: "Para continuar con la reparación diríjase a: Productos en servicio",
-          confirmButtonText: "Continuar",
-          confirmButtonColor: "#fd611a",
-          cancelButtonText: "Cancelar",
-          cancelButtonColor: "red",
-        }).then((value) => {
-          if (value.isConfirmed) {
-            navigate(
-              authData.userRole === "admin"
-                ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES
-                : PATHROUTES.TECHNICIAN_USER_PANEL +
-                    PATHROUTES.PRODUCTS_SERVICES
-            );
-          }
-          resetForm();
-        });
+    const imageUrl = await handleCloudinaryUpload(); // Sube la imagen a cloudinary
+    if (imageUrl.error) {
+    } else {
+      createServiceValidate(productInfo, setErrors, errors); // Valida los campos
+      if (
+        errors.product_model === "" &&
+        errors.product_income_date === "" &&
+        errors.user_diagnosis === "" &&
+        errors.client === "" &&
+        errors.technician === ""
+      ) {
+        let response = undefined;
+        if (authData.userRole === "admin") {
+          response = await createNewService(
+            //Crea el servicio si es admin
+            productInfo,
+            productInfo.technicianId,
+            imageUrl
+          );
+        } else if (authData.userRole === "technician") {
+          response = await createNewService(
+            // Crea el servicio si es tecnico
+            productInfo,
+            authData.userId,
+            imageUrl
+          );
+        }
+        if (!response.error && response.status === 200) {
+          // Exito
+          Swal.fire({
+            showCancelButton: authData.userRole === "technician",
+            icon: "success",
+            title: "Servicio creado exitosamente",
+            text:
+              authData.userRole === "technician" &&
+              "Para continuar con la reparación diríjase a: Productos en servicio",
+            confirmButtonText: "Continuar",
+            confirmButtonColor: "#fd611a",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "red",
+          }).then((value) => {
+            if (value.isConfirmed) {
+              navigate(
+                authData.userRole === "admin"
+                  ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES
+                  : PATHROUTES.TECHNICIAN_USER_PANEL +
+                      PATHROUTES.PRODUCTS_SERVICES
+              );
+            }
+            resetForm();
+          });
+        } else {
+          //Falla en creacion
+          Swal.fire({
+            allowOutsideClick: false,
+            icon: "error",
+            title: "Error en la creación del servicio",
+            text: `${response.response.data}`,
+          });
+        }
       } else {
         Swal.fire({
           allowOutsideClick: false,
           icon: "error",
           title: "Error en la creación del servicio",
-          text: `${response.response.data}`,
+          text: "Por favor revise los campos del formulario",
         });
       }
-    } else {
-      Swal.fire({
-        allowOutsideClick: false,
-        icon: "error",
-        title: "Error en la creación del servicio",
-        text: "Por favor revise los campos del formulario",
-      });
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
+    // Función que maneja los estados
     const { name, value } = e.target;
     setProductInfo({ ...productInfo, [name]: value });
     createServiceValidate({ [name]: value }, setErrors, errors);
   };
 
   const handleUserChange = (e) => {
+    // Función que maneja los cambios de clientes o tecnicos
     const { outerText, id } = e.target;
     if (outerText && outerText.length > 0) {
       const email = outerText.split(" --- ")[1];
@@ -253,6 +296,20 @@ const CreateService = () => {
             onChange={handleChange}
           />
           <FormHelperText error={true}>{errors.product_model}</FormHelperText>
+        </Box>
+        <Box>
+          <TextField
+            accept="image/*"
+            fullWidth
+            inputRef={fileInputRef}
+            type="file"
+            label="Imagen del producto"
+            variant="outlined"
+            name="product_image"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         </Box>
         <Box>
           <TextField

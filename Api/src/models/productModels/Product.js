@@ -26,7 +26,8 @@ module.exports = (sequelize) => {
     },
     is_deleted: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: false,
     },
     soldCount: {
       type: DataTypes.INTEGER,
