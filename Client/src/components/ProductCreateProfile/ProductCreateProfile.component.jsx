@@ -30,7 +30,7 @@ const ProductCreateProfileComponent = () => {
     stock: "",
     soldCount: 0,
     warranty: "",
-    categoryName: isOtherCategory ? newCategory : [categoryName],
+    categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: "",
     images: [],
   });
@@ -60,14 +60,14 @@ const ProductCreateProfileComponent = () => {
         setCategoryName(value);
         setValues((prevValues) => ({
           ...prevValues,
-          categoryName: value,
+          categoryName: [value],
         }));
       }
     } else if (name === "newCategory") {
       setNewCategory(value);
       setValues((prevValues) => ({
         ...prevValues,
-        categoryName: value,
+        categoryName: [value],
       }));
     } else {
       setValues((prevValues) => ({
@@ -102,8 +102,8 @@ const ProductCreateProfileComponent = () => {
       categoryName: isOtherCategory ? newCategory : [categoryName],
       brandName: "",
       images: [],
-    })
-    setImageURL('')
+    });
+    setImageURL("");
   };
 
   return (
@@ -231,7 +231,7 @@ const ProductCreateProfileComponent = () => {
             <ul>
               {values.images.map((image, index) => (
                 <li key={index}>
-                  {image.name||image}
+                  {image.name || image}
                   <Button
                     variant="contained"
                     color="secondary"
