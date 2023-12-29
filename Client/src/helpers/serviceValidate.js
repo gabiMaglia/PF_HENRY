@@ -17,7 +17,6 @@ const productModelValidate = (model) => {
 };
 const productIncomeDateValidate = (date) => {
   let error = "";
-  console.log(date);
   if (date.length === 0) {
     error = "La fecha de ingreso del producto es requerida";
   }

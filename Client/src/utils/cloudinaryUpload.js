@@ -18,7 +18,7 @@ const handleImageUpload = async (file) => {
 
     const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      formData,
+      formData
     );
 
     if (!response.data.secure_url) {
