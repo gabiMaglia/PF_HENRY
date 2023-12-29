@@ -8,8 +8,6 @@ const getAllCategories = async () => {
   const allCategories = await ProductCategory.findAll();
   if (allCategories) {
     return allCategories;
-  } else {
-    return "No Categories Found";
   }
 };
 
@@ -42,12 +40,9 @@ const updateCategory = async (id, updateData) => {
     const CategoryToUpdate = await ProductCategory.findByPk(id);
 
     if (!CategoryToUpdate) {
-      throw new Error(`Category with ID:${id} was not found`);
+      throw new Error(`Categoria con ID:${id} no ha sido encontrada.`);
     }
 
-    console.log("Current category:", CategoryToUpdate.toJSON());
-
-    // Verificar si el nuevo nombre ya existe en la tabla para no repetir
     if (updateData.name) {
       const existingCategory = await ProductCategory.findOne({
         where: { name: updateData.name },
@@ -55,7 +50,7 @@ const updateCategory = async (id, updateData) => {
 
       if (existingCategory && existingCategory.id !== id) {
         throw new Error(
-          "There is already a category with that name. Please try a different one."
+          "Ya existe una categoría con ese nombre. Intente uno nuevo."
         );
       }
     }
@@ -75,27 +70,23 @@ const deleteCategory = async (id) => {
   if (Category.name) {
     await Category.destroy();
     return {
-      response: `${Category.name} deleted successfully`,
+      response: `${Category.name} ha sido eliminado.`,
     };
   } else {
     return Category;
   }
 };
 const postCategory = async (name) => {
-  try { 
-    if (name === "") {
-      return {
-        error: true,
-        response: "no se puede crear una categoria con valor vacio ",
-      };
-    }
+  try {
     const lowerCaseName = name.toLowerCase();
-    const [category] = await ProductCategory.findOrCreate({ where: { name: lowerCaseName } });
+    const [category] = await ProductCategory.findOrCreate({
+      where: { name: lowerCaseName },
+    });
     await category.save();
     const categories = await ProductCategory.findAll();
     if (categories.length !== 0) {
-      return  categories
-    }else{
+      return categories;
+    } else {
       return {
         error: true,
         response: `No se encontraron categorias`,

@@ -11,7 +11,7 @@ const getAllBrands = async () => {
   if (allBrands) {
     return allBrands;
   } else {
-    return "No Brands Found";
+    return "No hay marcas disponibles";
   }
 };
 
@@ -25,7 +25,7 @@ const updateBrand = async (id, updateData) => {
     const BrandToUpdate = await ProductBrand.findByPk(id);
 
     if (!BrandToUpdate) {
-      throw new Error(`Brand with ID:${id} was not found`);
+      throw new Error(`Marca con ID:${id} no fue encontrada.`);
     }
 
     if (updateData.name) {
@@ -35,7 +35,7 @@ const updateBrand = async (id, updateData) => {
 
       if (existingBrand && existingBrand.id !== id) {
         throw new Error(
-          "There is already a brand with that name. Please try a different one."
+          "Ya existe una marca con ese nombre. Intente uno nuevo."
         );
       }
     }
@@ -55,10 +55,8 @@ const deleteBrand = async (id) => {
   if (brand.name) {
     await brand.destroy();
     return {
-      response: `${brand.name} deleted successfully`,
+      response: `${brand.name} ha sido eliminada.`,
     };
-  } else {
-    return brand;
   }
 };
 

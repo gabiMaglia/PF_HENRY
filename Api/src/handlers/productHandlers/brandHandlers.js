@@ -8,10 +8,16 @@ const {
 
 const getAllBrandsHandler = async (req, res) => {
   try {
-    const allBrands = await getAllBrands();
-    res.status(200).json(allBrands);
+    const brands = await getAllBrands();
+
+    if (brands === "No hay marcas disponibles") {
+      return res.status(404).json({ error: brands });
+    }
+
+    res.status(200).json(brands);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
