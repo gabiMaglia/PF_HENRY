@@ -18,9 +18,7 @@ import data from "../../DataBase/categories.json";
 //UTILS
 import { brands } from "../../utils/objectsTexts";
 //SERVICES
-import {
-  fetchProductsByBrand,
-} from "../../services/productServices";
+import { fetchProductsByBrand } from "../../services/productServices";
 //REDUX
 import {
   resetState,
@@ -34,9 +32,11 @@ const FiltersSorting = () => {
   const { categories } = data;
   const [selectedBrand, setSelectedBrand] = useState("default");
   const [selectedPrice, setSelectedPrice] = useState("default");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const handleCategoryClick = (categoryName) => {
     dispatch(filterByCategory(categoryName));
+    setSelectedCategory(categoryName);
   };
 
   const handleSelectBrand = (e) => {
@@ -123,12 +123,13 @@ const FiltersSorting = () => {
                 display: "flex",
                 flexDirection: "column",
                 textAlign: "center",
-                backgroundColor: "#fd611a",
+                backgroundColor:
+                  categorie.name === selectedCategory ? "#b54410" : "#fd611a",
                 width: 90,
                 height: 90,
                 ml: { xs: 3, lg: -2.1 },
                 mt: 2,
-                "&:hover": { color: "black", backgroundColor: "#fd611a" },
+                "&:hover": { color: "black", backgroundColor: "#b54410" },
               }}
               onClick={() => handleCategoryClick(categorie.name)}
             >
@@ -139,7 +140,7 @@ const FiltersSorting = () => {
                 sx={{
                   display: "flex",
                   flexWrap: "wrap",
-                  backgroundColor: "#fd611a",
+                  backgroundColor: "none",
                 }}
               ></CategorieMedia>
               <Typography
@@ -200,7 +201,12 @@ const FiltersSorting = () => {
         </Box>
         <Box
           display="flex"
-          sx={{ flexDirection: { xs: "column", lg: "row" }, mr: { xs: 4 }, position: "relative", left: "30px" }}
+          sx={{
+            flexDirection: { xs: "column", lg: "row" },
+            mr: { xs: 4 },
+            position: "relative",
+            left: "30px",
+          }}
         >
           <Buttons
             variant="contained"
