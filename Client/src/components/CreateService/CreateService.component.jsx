@@ -7,22 +7,23 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import Textarea from "@mui/joy/Textarea";
 import { createNewService } from "../../services/serviceServices";
 import { getUsersByRole } from "../../services/userServices";
 import Swal from "sweetalert2";
-import { Form, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PATHROUTES from "../../helpers/pathRoute";
 import { createServiceValidate } from "../../helpers/serviceValidate";
+import { handleImageUpload } from "../../utils/cloudinaryUpload";
 
 const CreateService = () => {
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   const [productInfo, setProductInfo] = useState({
     product_model: "",
-    product_image: null,
     product_income_date: "",
     user_diagnosis: "",
     ClientId: "",
@@ -48,6 +49,20 @@ const CreateService = () => {
     client: "",
     technician: "",
   });
+
+  const handleCloudinaryUpload = async (e) => {
+    try {
+      const file = fileInputRef.current.files;
+      if (!files) {
+        return { error: true, response: "No se han seleccionado archivos" };
+      }
+      const newImage = await handleImageUpload(file);
+      fileInputRef.current.value = "";
+      return newImage;
+    } catch (error) {
+      return { error: true, response: "Error al subir la imagen" };
+    }
+  };
 
   const authData = getAuthDataCookie("authData");
   const jwt = getAuthDataCookie("jwt");
@@ -115,6 +130,15 @@ const CreateService = () => {
   };
 
   const handleSubmit = async () => {
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
+    const imageUrl = await handleCloudinaryUpload();
+    console.log(imageUrl);
     createServiceValidate(productInfo, setErrors, errors);
     if (
       errors.product_model === "" &&
@@ -123,14 +147,6 @@ const CreateService = () => {
       errors.client === "" &&
       errors.technician === ""
     ) {
-      Swal.fire({
-        icon: "info",
-        allowOutsideClick: false,
-        title: "Por favor espere mientras procesamos la información",
-        showConfirmButton: false,
-      });
-      Swal.showLoading();
-
       let response = undefined;
       if ((authData.userRole = "admin")) {
         response = await createNewService(
@@ -259,13 +275,12 @@ const CreateService = () => {
         <Box>
           <TextField
             accept="image/*"
-            multiple
             fullWidth
+            inputRef={fileInputRef}
             type="file"
             label="Imagen del producto"
             variant="outlined"
             name="product_image"
-            onChange={handleChange}
             InputLabelProps={{
               shrink: true,
             }}
