@@ -124,11 +124,7 @@ export const fetchGetProduct = () => async () => {
   const user = window.localStorage.getItem("userId")
   try {
     const res = await axios.get(`${urlBack}/cart/${user}`)
-    
-    if(!res){
-      return
-    }else{
-    
+     
     const products = res.data.Products.map((product) => ({
       id: product.id,
       name: product.name,
@@ -141,7 +137,7 @@ export const fetchGetProduct = () => async () => {
     
     if (storedProducts.payload === undefined) {
       window.localStorage.setItem("storedProducts", JSON.stringify(products));
-    }}
+    }
   } catch (error) {
     return
   }
