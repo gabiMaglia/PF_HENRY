@@ -12,6 +12,7 @@ const addServiceHandler = async (req, res) => {
   const {
     product_model,
     product_income_date,
+    product_image,
     user_diagnosis,
     technicianId,
     ClientId,
@@ -20,6 +21,7 @@ const addServiceHandler = async (req, res) => {
     const newService = await addServiceController(
       product_model,
       product_income_date,
+      product_image,
       user_diagnosis,
       ClientId,
       technicianId
@@ -107,24 +109,23 @@ const getServiceByClientid = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-const filterServiceByStatus=async(req,res)=>{
-  const {status,value}=req.body
+const filterServiceByStatus = async (req, res) => {
+  const { status, value } = req.body;
   try {
-    const services=await filterServicesByStatusController(status,value)
+    const services = await filterServicesByStatusController(status, value);
     if (services.error) {
       return res.status(404).json(services.response);
     }
-    res.status(200).json(services)
+    res.status(200).json(services);
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
-}
+};
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
   getAllServices,
   getServiceById,
   getServiceByClientid,
-  filterServiceByStatus
+  filterServiceByStatus,
 };

@@ -8,9 +8,15 @@ import {
   filterByCategory,
   filterByBrand,
   changeInput,
+  addProduct,
 } from "../redux/slices/productSlice";
+
 //REDUX
 import { addItem, idShop } from "../redux/slices/cartSlice";
+<<<<<<< HEAD
+=======
+import { useLocalStorage } from "../Hook/useLocalStorage";
+>>>>>>> develop
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { headerSetterForPetitions } from "../utils/authMethodSpliter";
@@ -18,10 +24,11 @@ import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
-
   try {
-    const cookieStatus = JSON.parse(window.localStorage.getItem('cookieAccepted'))
-    
+    const cookieStatus = JSON.parse(
+      window.localStorage.getItem("cookieAccepted")
+    );
+
     const axiosInstance = cookieStatus
       ? headerSetterForPetitions(cookieStatus)
       : headerSetterForPetitions(cookieStatus)(
@@ -30,7 +37,7 @@ export const fetchAllProducts = () => async (dispatch) => {
     const response = await axiosInstance.get(`${urlBack}/product/`);
     dispatch(getProducts(response.data));
   } catch (error) {
-    console.error("Error");
+    return
   }
 };
 
@@ -74,7 +81,7 @@ export const fetchChage = (inputValue) => async (dispatch) => {
   try {
     dispatch(changeInput(inputValue));
   } catch (error) {
-    console.log("error");
+    return
   }
 };
 
@@ -98,92 +105,113 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 // };
 
 export const fetchProduct = (product) => async () => {
-  const user = window.localStorage.getItem("userId")
-  const {id} = product
+  const user = window.localStorage.getItem("userId");
+  const { id } = product;
   const data = {
     userId: user,
     productId: id,
     productQuantity: 1,
-  }
-  console.log(data)
+  };
+
   try {
-    const res = await axios.post(`${urlBack}/cart/`, data)
-    console.log(res, "se cargo el producto")
-    if(res.data.Cart === 'El usuario ya tiene carrito'){
-      const response = await axios.put(`${urlBack}/cart/add`, data)
-      console.log(response, "el mensaje put")
+    const res = await axios.post(`${urlBack}/cart/`, data);
+
+    if (res.data.Cart === "El usuario ya tiene carrito") {
+      const response = await axios.put(`${urlBack}/cart/add`, data);
     }
   } catch (error) {
-    console.error("error", error);
+    return
   }
-}
+};
 
-export const fetchGetProduct = () => async (dispatch) => {
-  const user = window.localStorage.getItem("userId")
+export const fetchGetProduct = () => async () => {
+  const user = window.localStorage.getItem("userId");
   try {
-    const res = await axios.get(`${urlBack}/cart/${user}`)
-    console.log(res.data.Products, "product")
-    dispatch(addItem(res.data.Products))
+    const res = await axios.get(`${urlBack}/cart/${user}`);
+
+    const products = res.data.Products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      ProductImages: product.ProductImages[0],
+      count: product.ProductCart.quantity,
+    }));
+
+    const storedProducts = getProducts();
+
+    if (storedProducts.payload === undefined) {
+      window.localStorage.setItem("storedProducts", JSON.stringify(products));
+    }
   } catch (error) {
-    console.error("error", error);
+    return
   }
-} 
+};
 
 export const fetchCount = (product) => async () => {
-  const user = window.localStorage.getItem("userId")
-  console.log(product)
+  const user = window.localStorage.getItem("userId");
+
   const data = {
     userId: user,
     productId: product.id,
     productQuantity: product.count,
-  }
+  };
   try {
-    const response = await axios.put(`${urlBack}/cart/edit`, data)
-      console.log(response, "cambio de cantidad")
+    const response = await axios.put(`${urlBack}/cart/edit`, data);
   } catch (error) {
-    console.error("error", error);
-  }
-}
-
-export const fetchDelete = (product) => async () => {
-  const user = window.localStorage.getItem("userId")
-  console.log(user, product)
-  const data = {
-    userId: user,
-    productId: product
-}
-  try {
-    const res = await axios.put(`${urlBack}/cart/remove`, data)
-    console.log(res, "delete")
-  } catch (error) {
-    console.error("error", error);
-  }
-}
-
-
-export const fetchCart = (items) => async (dispatch) => {
-  const id = window.localStorage.getItem("userId")
-  console.log(id)
-  const products = items.map((item) => ({
-      title: item.name,
-      quantity: item.count,
-      unit_price: item.price * item.count,
-      currency_id: "ARS"
-    }));
-    console.log(products)
-  try {
-    const response = await axios.post(`${urlBack}/pagos/order`, {array: products, userId: id}, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-  });
-    dispatch(idShop(response.data.Order.preferenceId))
-  } catch (error) {
-    console.error("error", error);
+    return
   }
 };
 
+export const fetchDelete = (product) => async () => {
+  const user = window.localStorage.getItem("userId");
+  console.log(user, product);
+  const data = {
+    userId: user,
+    productId: product,
+  };
+  try {
+    const res = await axios.put(`${urlBack}/cart/remove`, data);
+    console.log(res, "delete");
+  } catch (error) {
+    return
+  }
+};
 
+export const fetchCart = (items) => async (dispatch) => {
+  const id = window.localStorage.getItem("userId");
+  console.log(id);
+  const products = items.map((item) => ({
+    title: item.name,
+    quantity: item.count,
+    unit_price: item.price * item.count,
+    currency_id: "ARS",
+  }));
+  console.log(products);
+  try {
+    const response = await axios.post(
+      `${urlBack}/pagos/order`,
+      { array: products, userId: id },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    dispatch(idShop(response.data.Order.preferenceId));
+  } catch (error) {
+    return
+  }
+};
+export const fetchAddProduct = async (obj, dispatch) => {
+  try {
+    const { data } = await axios.post(`${urlBack}/product`, obj);
+    if (data) {
+      dispatch(addProduct(data.product));
+    }
+  } catch (error) {
+    return
+  }
+};
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {

@@ -10,32 +10,48 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategories } from "../../services/categoriesServices";
+<<<<<<< HEAD
+=======
+import { fetchAddProduct } from "../../services/productServices";
+>>>>>>> develop
 
 const ProductCreateProfileComponent = () => {
-  // HOOKS
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
   useEffect(() => {
     fetchCategories(dispatch);
-  }, [dispatch]);
+  }, []);
 
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryName, setCategoryName] = useState("selecciona una categoria");
   const [newCategory, setNewCategory] = useState("");
+  const [isUrlInput, setIsUrlInput] = useState(false);
+  const [imageURL, setImageURL] = useState("");
   const [values, setValues] = useState({
     name: "",
     price: "",
     description: "",
     stock: "",
+    soldCount: "0",
+    warranty: "",
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: "",
     images: [],
   });
   console.log(values);
+  const handlerAddImage = ({ target }) => {
+    setValues({
+      ...values,
+      images: [...values.images, imageURL], // Corrected part
+    });
+  };
+  const handlerImageChange = (e) => {
+    setImageURL(e.target.value);
+  };
   const handleChange = (event) => {
     const { name, value, files } = event.target;
 
-    if (name === "images") {
+    if (name === "images" && !isUrlInput) {
       setValues((prevValues) => ({
         ...prevValues,
         images: [...prevValues.images, ...files],
@@ -48,14 +64,14 @@ const ProductCreateProfileComponent = () => {
         setCategoryName(value);
         setValues((prevValues) => ({
           ...prevValues,
-          categoryName: value,
+          categoryName: [value],
         }));
       }
     } else if (name === "newCategory") {
       setNewCategory(value);
       setValues((prevValues) => ({
         ...prevValues,
-        categoryName: value,
+        categoryName: [value],
       }));
     } else {
       setValues((prevValues) => ({
@@ -79,6 +95,19 @@ const ProductCreateProfileComponent = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(values);
+    fetchAddProduct(values, dispatch);
+    setValues({
+      name: "",
+      price: "",
+      description: "",
+      stock: "",
+      soldCount: "0",
+      warranty: "",
+      categoryName: isOtherCategory ? newCategory : [categoryName],
+      brandName: "",
+      images: [],
+    });
+    setImageURL("");
   };
 
   return (
@@ -114,10 +143,19 @@ const ProductCreateProfileComponent = () => {
           <Grid item xl={12}>
             <TextField
               multiline
-              rows={5}
+              rows={2}
               label="Descripción del producto"
               name="description"
               value={values.description}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="warranty"
+              label="garantia del producto"
+              value={values.warranty}
               onChange={handleChange}
               required
             />
@@ -128,6 +166,15 @@ const ProductCreateProfileComponent = () => {
               label="unidades ingresadas"
               value={values.stock}
               onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              name="brandName"
+              label="marca"
+              value={values.brandName}
+              onChange={handleChange} 
               required
             />
           </Grid>
@@ -161,22 +208,43 @@ const ProductCreateProfileComponent = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              name="brandName"
-              label="ingrese la marca"
-              value={values.brandName}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-          <Input inputProps={{ multiple: true }} type="file" name="images" onChange={handleChange} />
+            {!isUrlInput ? (
+              <Input
+                inputProps={{ multiple: true }}
+                type="file"
+                name="images"
+                onChange={handleChange}
+              />
+            ) : (
+              <>
+                <TextField
+                  label="URL de la imagen"
+                  name="imageUrl"
+                  required
+                  onChange={handlerImageChange}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(event) => handlerAddImage(event)}
+                >
+                  agregar imagen
+                </Button>
+              </>
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setIsUrlInput(!isUrlInput)}
+            >
+              {!isUrlInput ? "Ingresar URL" : "Cargar desde archivo"}
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <ul>
               {values.images.map((image, index) => (
                 <li key={index}>
-                  {image.name}
+                  {image.name || image}
                   <Button
                     variant="contained"
                     color="secondary"

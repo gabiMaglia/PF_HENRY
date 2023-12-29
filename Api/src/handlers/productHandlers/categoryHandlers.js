@@ -27,7 +27,7 @@ const getCategoriesWithProductsHandler = async (req, res) => {
     } else {
       res
         .status(400)
-        .json({ error: `Category with Name: ${name} was not found` });
+        .json({ error: `La categoría ${name} no fue encontrada.` });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -41,7 +41,9 @@ const getCategoryByIdHandler = async (req, res) => {
     if (category) {
       res.status(200).json(category);
     } else {
-      res.status(400).json({ error: `Category with ID:${id} was not found` });
+      res
+        .status(400)
+        .json({ error: `La categoría con ID:${id} no fue encontrada` });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

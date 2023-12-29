@@ -1,5 +1,5 @@
 //HOOKS
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -8,12 +8,13 @@ import { Box, Pagination, Stack } from "@mui/material";
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
 //REDUX
-import { nextPage } from "../../redux/slices/productSlice";
+import { nextPage, prevPage } from "../../redux/slices/productSlice";
 //SERVICES
 import { fetchSearch, fetchAllProducts } from "../../services/productServices";
 
 const Products = () => {
   const dispatch = useDispatch();
+
   const { productsToShow, inputName, totalPages, currentPage } = useSelector(
     (state) => state.product
   );
@@ -34,7 +35,11 @@ const Products = () => {
   });
 
   const handlePageChange = (event, value) => {
-    dispatch(nextPage(value - 1));
+    if (value > currentPage + 1) {
+      dispatch(nextPage(value - 1));
+    } else if (value < currentPage + 1) {
+      dispatch(prevPage(value - 1));
+    }
   };
 
   return (

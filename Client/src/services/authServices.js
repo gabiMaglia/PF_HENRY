@@ -24,9 +24,10 @@ export const loginUser = async (username, password, cookieStatus) => {
       username: username,
       password: password,
     });
-
+    console.log(data)
     if (data.login) {
       const sortedData = dataSorterForApp(data);
+      console.log(sortedData)
       createPersistency(sortedData, cookieStatus);
 
       return { error: false, data: sortedData };
@@ -53,7 +54,6 @@ export const googleLoginUser = async (cookieStatus) => {
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
-          console.log(event);
           const sortedData = dataSorterForApp(event.data);
           createPersistency(sortedData, cookieStatus)
           popup.close();

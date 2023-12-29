@@ -1,5 +1,12 @@
 const transporter = require("../../config/mailer");
-const { Service, Service_status, User, UserRole } = require("../../db");
+const cloudinary = require("../../config/cloudinaryConfig");
+const {
+  Service,
+  Service_status,
+  Service_image,
+  User,
+  UserRole,
+} = require("../../db");
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 require("dotenv").config();
@@ -7,6 +14,7 @@ const destinationEmail = process.env.EMAIL_MAILER;
 const addServiceController = async (
   product_model,
   product_income_date,
+  product_image,
   user_diagnosis,
   ClientId,
   technicianId
@@ -33,7 +41,6 @@ const addServiceController = async (
     }
     const rolTech = await UserRole.findByPk(technicianObj.rolId);
     const rolCust = await UserRole.findByPk(clientObj.rolId);
-    console.log(rolCust.role_name);
 
     if (rolCust.role_name === "customer") {
       if (rolTech.role_name === "technician") {
@@ -52,8 +59,32 @@ const addServiceController = async (
           reparir_finish: false,
           ServiceId: newService.id,
         });
+
+        if (product_image) {
+          try {
+            const cloudinaryResponse = await cloudinary.uploader.upload(
+              product_image,
+              {
+                folder: "services",
+                width: 300,
+                format: "png",
+              }
+            );
+
+            const cloudinaryImageUrl = cloudinaryResponse.secure_url;
+
+            const newServiceImage = await Service_image.create({
+              address: cloudinaryImageUrl,
+              ServiceId: newService.id,
+            });
+            await newService.addService_image(newServiceImage);
+          } catch (error) {
+            return { error: true, response: "Error en la carga de la imagen" };
+          }
+        }
+
         const createdService = await Service.findByPk(newService.id, {
-          include: [Service_status],
+          include: [Service_status, Service_image],
         });
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
@@ -143,7 +174,7 @@ const getAllServicesController = async () => {
   const arrayOfServices = await Promise.all(
     services.map(async (service) => {
       return await Service.findByPk(service.id, {
-        include: [Service_status],
+        include: [Service_status, Service_image],
       });
     })
   );
@@ -151,7 +182,9 @@ const getAllServicesController = async () => {
 };
 
 const getServiceByIdController = async (id) => {
-  const service = await Service.findByPk(id);
+  const service = await Service.findByPk(id, {
+    include: [Service_status, Service_image],
+  });
   if (!service) {
     return {
       error: true,
@@ -163,6 +196,7 @@ const getServiceByIdController = async (id) => {
 const getServiceByClientController = async (id) => {
   const Services = await Service.findAll({
     where: { userId: id },
+    include: [Service_status, Service_image],
   });
   if (Services.length === 0) {
     return {
@@ -189,13 +223,12 @@ const getServiceByModelController = async (model) => {
   return Services;
 };
 const filterServicesByStatusController = async (status, value) => {
-  console.log(status);
   const serviceStatuses = await Service_status.findAll();
   let arrayOfServices = [];
   for (let serviceStatus of serviceStatuses) {
     if (serviceStatus[status] === value) {
       const service = await Service.findByPk(serviceStatus.ServiceId, {
-        include: [Service_status],
+        include: [Service_status, Service_image],
       });
       arrayOfServices.push(service);
     }
