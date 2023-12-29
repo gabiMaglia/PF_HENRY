@@ -21,7 +21,7 @@ async function postCart(userId, productId, productQuantity) {
       if (userId) {
         const user = await User.findByPk(userId);
         if (!user) {
-          throw new Error("Usuario no encontrado");
+          console.log("Usuario no encontrado");
         }
         await user.setCart(cart);
       }
@@ -36,7 +36,6 @@ async function postCart(userId, productId, productQuantity) {
     }
   } catch (error) {
     console.error("Error al agregar el producto al carrito:", error);
-    throw new Error("Error al agregar el producto al carrito");
   }
 }
 
@@ -62,7 +61,6 @@ const getAllCarts = async () => {
     return allCarts;
   } catch (error) {
     console.log(error.message);
-    throw new Error({ error: error.message });
   }
 };
 
@@ -204,7 +202,6 @@ const removeFromCart = async (userId, productId, cartMoney) => {
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Error al procesar la solicitud");
   }
 };
 
@@ -230,7 +227,7 @@ const getCartById = async (userId) => {
   });
 
   if (!cart) {
-    throw new Error("Cart not found");
+    console.log("Cart not found");
   } else {
     return cart;
   }
@@ -243,7 +240,7 @@ const deleteCartById = async (id) => {
     await cartToDelete.destroy();
     return { cartToDelete, deleted: true };
   } catch (error) {
-    throw new Error(error);
+    console.log(error);
   }
 };
 
