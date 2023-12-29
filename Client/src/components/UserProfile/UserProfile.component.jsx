@@ -105,8 +105,6 @@ const UserProfile = () => {
       sx={{
         width: "100%",
         display: "flex",
-        // justifyContent: "center",
-        alignItems: "center",
       }}
     >
       {login ? (
@@ -114,14 +112,13 @@ const UserProfile = () => {
           sx={{
             width: "100%",
             display: "flex",
-            justifyContent: "center",
           }}
         >
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "center",
               textAlign: "center",
               width: "100%",
