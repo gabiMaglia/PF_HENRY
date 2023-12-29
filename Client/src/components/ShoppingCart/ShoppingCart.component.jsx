@@ -35,15 +35,11 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
 
   const { items, total, id } = useSelector((state) => state.cart);
-  console.log(items);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 
   useEffect(() => {
     dispatch(addItem());
-    // if (items.length == 0) {
-    //   dispatch(fetchGetProduct());
-    // }
   }, [dispatch]);
 
   useEffect(() => {

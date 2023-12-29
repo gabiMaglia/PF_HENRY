@@ -12,6 +12,7 @@ const UserRoleModel = require("./models/userModels/UserRole");
 const UserAddressModel = require("./models/userModels/UserAddress");
 const ServiceStatusModel = require("./models/ServiceModels/Service_status");
 const ServiceModel = require("./models/ServiceModels/Service");
+const ServiceImageModel = require("./models/ServiceModels/Service_image");
 const ProductModel = require("./models/productModels/Product");
 const ProductBrandModel = require("./models/productModels/ProductBrand");
 const ProductStockModel = require("./models/productModels/ProductStock");
@@ -31,15 +32,16 @@ const sequelize = new Sequelize(isProduction ? koyebDb : localDb, {
     ssl: isProduction ? { require: true, rejectUnauthorized: false } : false,
   },
   logging: false,
-})
+});
 
 // INICIALIZAMOS LOS MODELOS USER
 UserModel(sequelize);
 UserCredentialsModel(sequelize);
-UserSessionModel(sequelize)
+UserSessionModel(sequelize);
 UserRoleModel(sequelize);
 UserAddressModel(sequelize);
 ServiceStatusModel(sequelize);
+ServiceImageModel(sequelize);
 ServiceModel(sequelize);
 WishListModel(sequelize);
 
@@ -69,6 +71,7 @@ const {
   ProductImage,
   Service,
   Service_status,
+  Service_image,
   WishList,
   Cart,
   Order,
@@ -77,8 +80,6 @@ const {
 } = sequelize.models;
 
 // Creacion del session store encargado de guardar en la base de datos las sesiones
-
-
 
 // RELACIONES USER
 
@@ -158,6 +159,9 @@ User.hasMany(Service, {
   as: "TechnicianServices",
   foreignKey: "technicianId",
 });
+
+Service.hasMany(Service_image, { onDelete: "CASCADE" });
+Service_image.belongsTo(Service);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
