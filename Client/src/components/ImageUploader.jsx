@@ -8,7 +8,7 @@ function ImageUploaderComponent() {
   const [imageInput, setImageInput] = useState("");
   const fileInputRef = useRef(null);
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (folderName) => {
     try {
       const files = fileInputRef.current.files;
       if (!files) {
@@ -17,7 +17,7 @@ function ImageUploaderComponent() {
       }
 
       const newImages = await Promise.all(
-        Array.from(files).map((file) => handleImageUpload(file))
+        Array.from(files).map((file) => handleImageUpload(file, folderName))
       );
       setUploadedUrls((prevUrls) => [...prevUrls, ...newImages]);
       fileInputRef.current.value = "";
