@@ -24,9 +24,10 @@ export const loginUser = async (username, password, cookieStatus) => {
       username: username,
       password: password,
     });
-
+    console.log(data)
     if (data.login) {
       const sortedData = dataSorterForApp(data);
+      console.log(sortedData)
       createPersistency(sortedData, cookieStatus);
 
       return { error: false, data: sortedData };
