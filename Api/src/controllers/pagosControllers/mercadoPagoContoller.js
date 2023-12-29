@@ -1,4 +1,4 @@
-const { Order, Product, OrderProduct } = require("../../db");
+const { Order, Product, OrderProduct, ProductStock } = require("../../db");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
 const frontend_Url = process.env.FRONTEND_URL;
 const miAccessToken = process.env.MP_ACCESS_TOKEN;
@@ -55,7 +55,7 @@ const handlePaymentNotification = async (paymentId) => {
         const products = order.getProducts();
 
         for (const product of products) {
-          const { id, stock, soldCount } = product;
+          const { id, soldCount } = product;
           const orderProduct = order.OrderProducts.find(
             (op) => op.ProductId === id
           );
@@ -63,11 +63,17 @@ const handlePaymentNotification = async (paymentId) => {
           if (orderProduct) {
             const productQuantity = orderProduct.quantity;
 
-            stock -= productQuantity;
+            const productStock = await ProductStock.findOne({
+              where: { ProductId: id },
+            });
 
-            soldCount += productQuantity;
+            if (productStock) {
+              productStock.amount -= productQuantity;
+              await productStock.save();
 
-            await product.save();
+              soldCount += productQuantity;
+              await product.save();
+            }
           }
         }
       }
