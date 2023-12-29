@@ -22,13 +22,20 @@ const cookiesSlice = createSlice({
   },
 });
 
-export const rejectCookies = () => {
+export const rejectCookies = (bool) => {
   const allCookies = Cookies.get();
   const allCookiesKeys = Object.keys(allCookies);
-
+  if (bool) {
+    allCookiesKeys.map((cookie) => {
+     Cookies.remove(cookie);
+    });
+  }else { 
   allCookiesKeys.map((cookie) => {
-    Cookies.remove(cookie);
+   cookie !=='connect.sid' && Cookies.remove(cookie);
   });
+    }
+  
+
 };
 
 export const { acceptCookie, cookieBoxEnable } = cookiesSlice.actions;

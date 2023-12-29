@@ -16,25 +16,17 @@ import { addItem, idShop } from "../redux/slices/cartSlice";
 import { useLocalStorage } from "../Hook/useLocalStorage";
 //SWEET ALERT
 import Swal from "sweetalert2";
-import { headerSetterForPetitions } from "../utils/authMethodSpliter";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const cookieStatus = JSON.parse(
-      window.localStorage.getItem("cookieAccepted")
-    );
-
-    const axiosInstance = cookieStatus
-      ? headerSetterForPetitions(cookieStatus)
-      : headerSetterForPetitions(cookieStatus)(
-          window.localStorage.getItem("jwt")
-        );
-    const response = await axiosInstance.get(`${urlBack}/product/`);
+    const response = await axios.get(`${urlBack}/product/`, {
+      withCredentials: true,
+    });
     dispatch(getProducts(response.data));
   } catch (error) {
-    return
+    return;
   }
 };
 
@@ -78,7 +70,7 @@ export const fetchChage = (inputValue) => async (dispatch) => {
   try {
     dispatch(changeInput(inputValue));
   } catch (error) {
-    return
+    return;
   }
 };
 
@@ -117,7 +109,7 @@ export const fetchProduct = (product) => async () => {
       const response = await axios.put(`${urlBack}/cart/add`, data);
     }
   } catch (error) {
-    return
+    return;
   }
 };
 
@@ -140,7 +132,7 @@ export const fetchGetProduct = () => async () => {
       window.localStorage.setItem("storedProducts", JSON.stringify(products));
     }
   } catch (error) {
-    return
+    return;
   }
 };
 
@@ -155,7 +147,7 @@ export const fetchCount = (product) => async () => {
   try {
     const response = await axios.put(`${urlBack}/cart/edit`, data);
   } catch (error) {
-    return
+    return;
   }
 };
 
@@ -170,7 +162,7 @@ export const fetchDelete = (product) => async () => {
     const res = await axios.put(`${urlBack}/cart/remove`, data);
     console.log(res, "delete");
   } catch (error) {
-    return
+    return;
   }
 };
 
@@ -196,7 +188,7 @@ export const fetchCart = (items) => async (dispatch) => {
     );
     dispatch(idShop(response.data.Order.preferenceId));
   } catch (error) {
-    return
+    return;
   }
 };
 export const fetchAddProduct = async (obj, dispatch) => {
@@ -206,7 +198,7 @@ export const fetchAddProduct = async (obj, dispatch) => {
       dispatch(addProduct(data.product));
     }
   } catch (error) {
-    return
+    return;
   }
 };
 

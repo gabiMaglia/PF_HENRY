@@ -25,7 +25,7 @@ const sessionStore = new SequelizeStore({
 });
 // Configuramos express-session
 server.use(
-  session({
+  session({ 
     secret: `${process.env.EXPRESS_SESSION_KEY}`,
     resave: false,
     saveUninitialized: false,
@@ -50,16 +50,12 @@ server.use(cookieParser());
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.use((req, res, next) => {
-  res.setHeader("Cache-Control", "no-store");
-  res.setHeader("Pragma", "no-cache");
-  next();
-});
+
 
 server.use((req, res, next) => {
   console.log({ session: req.session });
   console.log({ isAuthenticated: req.isAuthenticated()} );
-  console.log({ passport : req.session.passport })
+
   next();
 });
 // Entryp0nt de la ruta principal
