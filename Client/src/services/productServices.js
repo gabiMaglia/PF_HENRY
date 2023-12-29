@@ -133,10 +133,8 @@ export const fetchGetProduct = () => async () => {
       ProductImages: product.ProductImages[0],
       count: product.ProductCart.quantity,
     }));
-    console.log(products);
 
     const storedProducts = getProducts();
-    console.log(storedProducts);
 
     if (storedProducts.payload === undefined) {
       window.localStorage.setItem("storedProducts", JSON.stringify(products));
