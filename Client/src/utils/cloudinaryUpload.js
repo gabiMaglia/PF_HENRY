@@ -3,7 +3,6 @@ import { Cloudinary } from "@cloudinary/url-gen";
 
 const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-// const floderProducts = import.meta.env.VITE_CLOUDINARY_FOLDER_PRODUCTS;
 
 const cloudinary = new Cloudinary({
   cloud: {
