@@ -67,7 +67,7 @@ const UserPanelComponent = () => {
       roles: ["admin"],
     },
     {
-      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.TECHNICIANS,
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
       roles: ["admin"],
     },
     {
