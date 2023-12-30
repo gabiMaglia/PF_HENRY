@@ -16,7 +16,7 @@ const handleImageUpload = async (file, floderName) => {
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
 
-    if(floderName){
+    if (floderName) {
       formData.append("folder", floderName);
     }
 
@@ -31,8 +31,7 @@ const handleImageUpload = async (file, floderName) => {
 
     return response.data.secure_url;
   } catch (error) {
-    console.error("Error en la subida de la imagen:", error);
-    throw error;
+    return { error };
   }
 };
 

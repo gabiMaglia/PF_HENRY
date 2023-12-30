@@ -63,7 +63,7 @@ const CreateService = () => {
     // Función que sube la imagen a Cloudinary
     try {
       const file = fileInputRef.current.files;
-      if (!file) {
+      if (!file || file.length === 0) {
         return { error: true, response: "No se han seleccionado archivos" };
       }
       const newImage = await handleImageUpload(file[0], folderName);
@@ -142,6 +142,7 @@ const CreateService = () => {
 
   const handleSubmit = async () => {
     // Función de carga
+    const actErrors = createServiceValidate(productInfo, setErrors, errors); // Valida los campos
     Swal.fire({
       icon: "info",
       allowOutsideClick: false,
@@ -155,16 +156,15 @@ const CreateService = () => {
       Swal.fire({
         icon: "error",
         title: "Error al subir la imagen a Cloudinary",
-        text: "Por favor, inténtelo de nuevo.",
+        text: imageUrl.response,
       });
     } else {
-      createServiceValidate(productInfo, setErrors, errors); // Valida los campos
       if (
-        errors.product_model === "" &&
-        errors.product_income_date === "" &&
-        errors.user_diagnosis === "" &&
-        errors.client === "" &&
-        errors.technician === ""
+        actErrors.product_model === "" &&
+        actErrors.product_income_date === "" &&
+        actErrors.user_diagnosis === "" &&
+        actErrors.client === "" &&
+        actErrors.technician === ""
       ) {
         let response = undefined;
         if (authData.userRole === "admin") {

@@ -8,14 +8,18 @@ import {
   Typography,
 } from "@mui/material";
 import useTheme from "@mui/system/useTheme";
+import { useState } from "react";
 
 const UserPanelProductCard = ({
   actionParam = () => {}, // Si no llega una funcion establece una por defecto
   product,
   buttons,
   handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
+  alternativeImage = "Product Image", // Si no llega una imagen establece una por defecto
+  setIsLoading = () => {}, // Si no llega una funcion establece una por defecto
 }) => {
   const theme = useTheme();
+  const [imageError, setImageError] = useState(false);
 
   return (
     <Box
@@ -31,9 +35,15 @@ const UserPanelProductCard = ({
         <CardMedia
           component="img"
           alt={product.name}
-          image={product.image}
+          image={!imageError ? product.image : alternativeImage}
           onClick={() => {
             handleCardClick(product.id);
+          }}
+          onError={() => {
+            setImageError(true);
+          }}
+          onLoad={() => {
+            setIsLoading(false);
           }}
           sx={{
             cursor: "pointer",

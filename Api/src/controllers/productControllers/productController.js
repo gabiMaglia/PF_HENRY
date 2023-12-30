@@ -90,20 +90,9 @@ const postProduct = async ({
             await newProduct.addProductImage(existingImage, { transaction });
             return;
           }
-          // Si la imagen no existe, subirla a Cloudinary
-          const cloudinaryResponse = await cloudinary.uploader.upload(
-            imageUrl,
-            {
-              folder: "products",
-              width: 300,
-              format: "png",
-            }
-          );
-
-          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
-          // Crea una nueva instancia de ProductImage
+     
           const newImage = await ProductImage.create(
-            { address: cloudinaryImageUrl },
+            { address: imageUrl },
             { transaction }
           );
           // Asocia la nueva imagen al producto
@@ -113,25 +102,6 @@ const postProduct = async ({
           throw error;
         }
       });
-
-      // const imagePromises = images.map(async (imageUrl) => {
-      //   // Busca la imagen existente
-      //   const existingImage = await ProductImage.findOne({
-      //     where: { address: imageUrl },
-      //     transaction,
-      //   });
-
-      //   // Si existe, la asocia al producto; si no, crea una nueva instancia
-      //   if (existingImage) {
-      //     await newProduct.addProductImage(existingImage, { transaction });
-      //   } else {
-      //     const newImage = await ProductImage.create(
-      //       { address: imageUrl },
-      //       { transaction }
-      //     );
-      //     await newProduct.addProductImage(newImage, { transaction });
-      //   }
-      // });
 
       await Promise.all(imagePromises);
 
@@ -209,22 +179,6 @@ const postProductSeveral = async (products) => {
   }
   return newProducts;
 };
-
-// const updateProduct = async (id, updatedData) => {
-//   try {
-//     const productToUpdate = await Product.findByPk(id);
-
-//     if (!productToUpdate) {
-//       throw new Error("Producto no encontrado");
-//     }
-
-//     await productToUpdate.update(updatedData);
-
-//     return productToUpdate;
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// };
 
 //UPDATE PRODUCT
 const updateProduct = async (productId, updateData) => {

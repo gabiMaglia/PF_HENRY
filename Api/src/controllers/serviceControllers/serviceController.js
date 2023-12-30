@@ -62,29 +62,6 @@ const addServiceController = async (
           ServiceId: newService.id,
         });
 
-        // if (product_image) {
-        //   try {
-        //     const cloudinaryResponse = await cloudinary.uploader.upload(
-        //       product_image,
-        //       {
-        //         folder: "services",
-        //         width: 300,
-        //         format: "png",
-        //       }
-        //     );
-
-        //     const cloudinaryImageUrl = cloudinaryResponse.secure_url;
-
-        //     const newServiceImage = await Service_image.create({
-        //       address: cloudinaryImageUrl,
-        //       ServiceId: newService.id,
-        //     });
-        //     await newService.addService_image(newServiceImage);
-        //   } catch (error) {
-        //     return { error: true, response: "Error en la carga de la imagen" };
-        //   }
-        // }
-
         if (product_image_url) {
           // No se sube la imagen a Cloudinary aca ya que obtenemos la URL que nos envia el front
           const newServiceImage = await Service_image.create({
@@ -205,16 +182,17 @@ const getServiceByIdController = async (id) => {
   return service;
 };
 const getServiceByClientController = async (id) => {
-  const Services = await Service.findAll({
+  let Services = await Service.findAll({
     where: { userId: id },
     include: [Service_status, Service_image],
   });
   if (Services.length === 0) {
-    return {
-      error: true,
-      response: `service not found`,
-    };
+    Services = await Service.findAll({
+      where: { technicianId: id },
+      include: [Service_status, Service_image],
+    });
   }
+
   return Services;
 };
 
