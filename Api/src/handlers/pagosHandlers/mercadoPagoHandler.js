@@ -1,5 +1,6 @@
 const {
   mercadoPago,
+  handlePaymentNotification,
 } = require("../../controllers/pagosControllers/mercadoPagoContoller");
 
 const mercadoPagoHandler = async (req, res) => {
@@ -13,10 +14,11 @@ const mercadoPagoHandler = async (req, res) => {
     console.log(error);
   }
 };
+
 const mercadopagoWebhookHandler = async (req, res) => {
   try {
     const paymentId = req.body.id;
-    await mercadopagoController.handlePaymentNotification(paymentId);
+    await handlePaymentNotification(paymentId);
 
     res.sendStatus(200);
   } catch (error) {
