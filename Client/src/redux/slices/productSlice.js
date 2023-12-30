@@ -5,6 +5,7 @@ const initialState = {
   allProductsBackup: [],
   allProducts: [],
   productsToShow: [],
+  allProductsTotal: [],
   productById: {},
   filteredProductsByCategory: [],
   filteredProductsByBrand: [],
@@ -21,6 +22,7 @@ const productSlice = createSlice({
     getProducts: (state, action) => {
       state.allProductsBackup = action.payload;
       state.allProducts = action.payload;
+      state.allProductsTotal = action.payload;
       state.productsToShow = action.payload.slice(0, PRODUCT_PER_PAGE);
       state.totalPages = Math.ceil(action.payload.length / PRODUCT_PER_PAGE);
     },
@@ -85,27 +87,35 @@ const productSlice = createSlice({
     },
     filterByCategory: (state, action) => {
       const categoryName = action.payload;
-      state.productsToShow = state.allProducts.filter(
+      const filterCate = state.allProductsBackup.filter(
         (product) => product.ProductCategories[0].name === categoryName
       );
-      state.allProductsBackup = state.productsToShow;
       state.currentPage = 0;
-      state.totalPages = Math.ceil(state.productsToShow.length / 9);
+      state.allProducts = filterCate
+      state.totalPages = Math.ceil(filterCate.length / PRODUCT_PER_PAGE);
+      state.productsToShow = filterCate.slice(0, PRODUCT_PER_PAGE) 
+      console.log(state.allProducts)
     },
     filterByBrand: (state, action) => {
       const brandName = action.payload;
-      state.productsToShow = state.allProductsBackup.filter(
-        (product) => product.ProductBrands[0].name === brandName
+      console.log(action.payload)
+      console.log(state.productsToShow)
+      const filterBrand = state.productsToShow.filter(
+        (product) => product.ProductBrands[0].name == brandName
       );
       state.currentPage = 0;
+      state.allProducts = filterBrand
       state.totalPages = Math.ceil(
-        state.productsToShow.length / PRODUCT_PER_PAGE
+        filterBrand.length / PRODUCT_PER_PAGE
       );
+      state.productsToShow = filterBrand.slice(0, PRODUCT_PER_PAGE)
+      console.log(state.allProducts)
+      
     },
 
     resetState: (state, action) => {
-      state.allProductsBackup = state.allProducts;
-      state.productsToShow = state.allProductsBackup.slice(0, PRODUCT_PER_PAGE);
+      state.allProductsBackup = state.allProductsTotal;
+      state.productsToShow = state.allProductsTotal.slice(0, PRODUCT_PER_PAGE);
       state.totalPages = Math.ceil(
         state.allProductsBackup.length / PRODUCT_PER_PAGE
       );
