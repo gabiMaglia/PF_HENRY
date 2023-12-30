@@ -3,19 +3,13 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 //MATERIAL UI
-import {
-  Box,
-  Divider,
-  Typography,
-  Button,
-  Container,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Divider, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 // SweetAlert2
 import Swal from "sweetalert2";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
+import Loading from "../Loading/Loading.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
@@ -26,6 +20,7 @@ import logo from "../../../public/icons/logo.svg";
 const ProductServicesProfileComponent = () => {
   const [cardPerDates, setCardPerDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [openDetail, setOpenDetail] = useState(false);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -58,7 +53,14 @@ const ProductServicesProfileComponent = () => {
 
   const userRole = authData.userRole;
 
-  const buttons = [{ text: "Detalle servicio", action: "", color: "#fd611a" }];
+  const buttons = [
+    {
+      text: "Detalle servicio",
+      action: setOpenDetail,
+      color: "#fd611a",
+      actionParam: true,
+    },
+  ];
 
   return (
     <Box
@@ -66,14 +68,19 @@ const ProductServicesProfileComponent = () => {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
           display: "none",
         },
       }}
     >
-      <Box sx={{ position: "relative", height: "100%" }}>
+      <Box
+        sx={{
+          position: "relative",
+          height: "100%",
+          pt: "1em",
+        }}
+      >
         {cardPerDates.length === 0 ? (
           <Box
             sx={{
@@ -117,9 +124,9 @@ const ProductServicesProfileComponent = () => {
               <Box
                 key={date}
                 sx={{
+                  mb: "1em",
                   border: "1px solid black",
                   borderRadius: "10px",
-                  mb: "1em",
                 }}
               >
                 <Typography
@@ -170,40 +177,23 @@ const ProductServicesProfileComponent = () => {
             );
           })
         )}
-        {isLoading && (
-          <Container
+        {/* Cargando */}
+        {isLoading && <Loading />}
+        {/* Detalle de producto */}
+        {openDetail && (
+          <Box
             sx={{
               position: "absolute",
-              height: "100%",
               width: "100%",
+              height: "100%",
+              backgroundColor: "white",
               top: "0",
               left: "0",
-              display: "flex",
-              backgroundColor: "white",
-              zIndex: "100",
-              flexDirection: "column",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              alignItems: "center",
+              zIndex: "10",
             }}
           >
-            <CircularProgress
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                mb: 5,
-                color: "#fd611a",
-              }}
-            />
-            <Typography
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              Cargando...
-            </Typography>
-          </Container>
+            Aca iria el detalle
+          </Box>
         )}
       </Box>
     </Box>
