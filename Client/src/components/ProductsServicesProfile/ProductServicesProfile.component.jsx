@@ -116,6 +116,17 @@ const ProductServicesProfileComponent = () => {
               </Button>
             </Link>
           </Box>
+        ) : openDetail ? (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "white",
+              zIndex: "10",
+            }}
+          >
+            Aca iria el detalle
+          </Box>
         ) : (
           cardPerDates.map((cardsPerDate) => {
             const splitDate = cardsPerDate.date.split("-");
@@ -179,22 +190,6 @@ const ProductServicesProfileComponent = () => {
         )}
         {/* Cargando */}
         {isLoading && <Loading />}
-        {/* Detalle de producto */}
-        {openDetail && (
-          <Box
-            sx={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "white",
-              top: "0",
-              left: "0",
-              zIndex: "10",
-            }}
-          >
-            Aca iria el detalle
-          </Box>
-        )}
       </Box>
     </Box>
   );
