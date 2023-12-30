@@ -14,7 +14,7 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   }
 };
 
-export const getAllServices = async () => {
+export const getServices = async () => {
   try {
     const response = await axios.get(`${url}/service`);
     return response;
