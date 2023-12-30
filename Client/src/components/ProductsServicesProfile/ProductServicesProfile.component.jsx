@@ -78,7 +78,6 @@ const ProductServicesProfileComponent = () => {
         sx={{
           position: "relative",
           height: "100%",
-          pt: "1em",
         }}
       >
         {cardPerDates.length === 0 ? (
@@ -128,65 +127,68 @@ const ProductServicesProfileComponent = () => {
             Aca iria el detalle
           </Box>
         ) : (
-          cardPerDates.map((cardsPerDate) => {
-            const splitDate = cardsPerDate.date.split("-");
-            const date = splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
-            return (
-              <Box
-                key={date}
-                sx={{
-                  mb: "1em",
-                  border: "1px solid black",
-                  borderRadius: "10px",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
+          <Box sx={{ pt: "1em", pb: ".2em" }}>
+            {cardPerDates.map((cardsPerDate, key) => {
+              const splitDate = cardsPerDate.date.split("-");
+              const date =
+                splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
+              return (
+                <Box
+                  key={`${key}${date}`}
+                  sx={{
+                    mb: "1em",
+                    border: "1px solid black",
+                    borderRadius: "10px",
+                  }}
                 >
-                  {date}
-                </Typography>
-                {cardsPerDate.cards.map((product, index) => {
-                  const card = {
-                    id: product.product_id,
-                    name: product.product_model,
-                    image:
-                      product.Service_images.length > 0
-                        ? product.Service_images[0].address
-                        : "error",
-                    budget: "presupuesto: " + product.Service_status.budget,
-                    state: product.Service_status.status,
-                  };
-                  return (
-                    <Box
-                      key={card.id}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <UserPanelProductCard
-                        product={card}
-                        buttons={buttons}
-                        alternativeImage={logo}
-                        setIsLoading={setIsLoading}
-                      />
-                      {index + 1 !== cardsPerDate.cards.length && (
-                        <Divider
-                          sx={{
-                            width: "90%",
-                            height: "1px",
-                            alignSelf: "center",
-                            backgroundColor: "black",
-                          }}
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
+                  >
+                    {date}
+                  </Typography>
+                  {cardsPerDate.cards.map((product, index) => {
+                    const card = {
+                      id: product.product_id,
+                      name: product.product_model,
+                      image:
+                        product.Service_images.length > 0
+                          ? product.Service_images[0].address
+                          : "error",
+                      budget: "presupuesto: " + product.Service_status.budget,
+                      state: product.Service_status.status,
+                    };
+                    return (
+                      <Box
+                        key={card.id}
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <UserPanelProductCard
+                          product={card}
+                          buttons={buttons}
+                          alternativeImage={logo}
+                          setIsLoading={setIsLoading}
                         />
-                      )}
-                    </Box>
-                  );
-                })}
-              </Box>
-            );
-          })
+                        {index + 1 !== cardsPerDate.cards.length && (
+                          <Divider
+                            sx={{
+                              width: "90%",
+                              height: "1px",
+                              alignSelf: "center",
+                              backgroundColor: "black",
+                            }}
+                          />
+                        )}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              );
+            })}
+          </Box>
         )}
         {/* Cargando */}
         {isLoading && <Loading />}
