@@ -11,7 +11,6 @@ import useTheme from "@mui/system/useTheme";
 import { useState } from "react";
 
 const UserPanelProductCard = ({
-  actionParam = () => {}, // Si no llega una funcion establece una por defecto
   product,
   buttons,
   handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
@@ -158,7 +157,7 @@ const UserPanelProductCard = ({
                     maxHeight: "3em",
                   }}
                   onClick={() => {
-                    button.action(actionParam);
+                    button.action(button.actionParam && button.actionParam);
                   }}
                 >
                   <Typography
