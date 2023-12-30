@@ -25,6 +25,7 @@ import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
+import Loading from "../Loading/Loading.component";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -162,16 +163,17 @@ const WhishListProfileComponent = () => {
             </Button>
           </Link>
         </Box>
-      ) : !isLoading ? (
-        <>
+      ) : (
+        <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
           <Box
             sx={{
-              width: "75%",
-              zIndex: "10",
+              width: "100%",
+              zIndex: "5",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               pb: "1em",
+              pr: ".5em",
               position: "absolute",
               backgroundColor: "white",
             }}
@@ -189,7 +191,6 @@ const WhishListProfileComponent = () => {
                 backgroundColor: "#fd611a",
                 color: "white",
               }}
-              sx={{ mr: "3.5em" }}
               onClick={handleClickDeleteButton}
             >
               Eliminar selección
@@ -244,36 +245,8 @@ const WhishListProfileComponent = () => {
               );
             })}
           </Box>
-        </>
-      ) : (
-        <Container
-          sx={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "wrap",
-            alignContent: "space-around",
-            justifyContent: "center",
-          }}
-        >
-          <CircularProgress
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              margin: 5,
-              color: "#fd611a",
-            }}
-          />
-          <Typography
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            Cargando...
-          </Typography>
-        </Container>
+          {isLoading && <Loading />}
+        </Box>
       )}
     </Box>
   );
