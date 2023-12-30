@@ -16,6 +16,7 @@ const UserPanelProductCard = ({
   buttons,
   handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
   alternativeImage = "Product Image", // Si no llega una imagen establece una por defecto
+  setIsLoading = () => {}, // Si no llega una funcion establece una por defecto
 }) => {
   const theme = useTheme();
   const [imageError, setImageError] = useState(false);
@@ -40,6 +41,9 @@ const UserPanelProductCard = ({
           }}
           onError={() => {
             setImageError(true);
+          }}
+          onLoad={() => {
+            setIsLoading(false);
           }}
           sx={{
             cursor: "pointer",

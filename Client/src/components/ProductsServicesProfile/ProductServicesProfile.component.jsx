@@ -3,7 +3,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 //MATERIAL UI
-import { Box, Divider, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Typography,
+  Button,
+  Container,
+  CircularProgress,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 // SweetAlert2
 import Swal from "sweetalert2";
@@ -16,33 +23,32 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
 
-const cardsContent = [];
-
 const ProductServicesProfileComponent = () => {
   const [cardPerDates, setCardPerDates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const getAllServices = async () => {
     const services = await getServices();
+
     if (services.error) {
       Swal.fire({
         allowOutsideClick: false,
         icon: "error",
-        title: "Fallo en la carga de productos",
+        title: "Error en la carga de productos",
         text: `${services}`,
       });
+      setIsLoading(false);
     } else {
+      services.data.length === 0 && setIsLoading(false);
       let newCardsPerDates = sortServiceCardByDate(services.data, [
         ...cardPerDates,
       ]);
-      console.log(newCardsPerDates);
       setCardPerDates(newCardsPerDates);
     }
   };
-
-  useEffect(() => {}, [cardsContent]);
 
   useEffect(() => {
     getAllServices();
@@ -65,102 +71,139 @@ const ProductServicesProfileComponent = () => {
         },
       }}
     >
-      {userRole === "admin" ? (
-        <p>Contenido de PRODUCTS SERVICVES (admin)</p>
-      ) : cardPerDates.length === 0 ? (
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "2em",
-            textAlign: "center",
-          }}
-        >
-          <Typography variant="h5">
-            No tienes equipos registrados en reparación
-          </Typography>
-          <Link
-            to={
-              userRole === "customer"
-                ? PATHROUTES.SUPPORT
-                : userRole === "technician" &&
-                  PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.CREATE_SERVICES
-            }
+      <Box sx={{ position: "relative", height: "100%" }}>
+        {cardPerDates.length === 0 ? (
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "2em",
+              textAlign: "center",
+            }}
           >
-            <Button
-              style={{
-                backgroundColor: "#fd611a",
-                color: "white",
-              }}
+            <Typography variant="h5">
+              No tienes equipos registrados en reparación
+            </Typography>
+            <Link
+              to={
+                userRole === "customer"
+                  ? PATHROUTES.SUPPORT
+                  : userRole === "technician" &&
+                    PATHROUTES.TECHNICIAN_USER_PANEL +
+                      PATHROUTES.CREATE_SERVICES
+              }
             >
-              Ingresar un equipo
-            </Button>
-          </Link>
-        </Box>
-      ) : (
-        cardPerDates.map((cardsPerDate) => {
-          const splitDate = cardsPerDate.date.split("-");
-          const date = splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
-          return (
-            <Box
-              key={date}
-              sx={{
-                border: "1px solid black",
-                borderRadius: "10px",
-                mb: "1em",
-              }}
-            >
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
+              <Button
+                style={{
+                  backgroundColor: "#fd611a",
+                  color: "white",
+                }}
               >
-                {date}
-              </Typography>
-              {cardsPerDate.cards.map((product, index) => {
-                const card = {
-                  id: product.product_id,
-                  name: product.product_model,
-                  image:
-                    product.Service_images.length > 0
-                      ? product.Service_images[0].address
-                      : "error",
-                  budget: "presupuesto: " + product.Service_status.budget,
-                  state: product.Service_status.status,
-                };
-                return (
-                  <Box
-                    key={card.id}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <UserPanelProductCard
-                      product={card}
-                      buttons={buttons}
-                      alternativeImage={logo}
-                    />
-                    {index + 1 !== cardsPerDate.cards.length && (
-                      <Divider
-                        sx={{
-                          width: "90%",
-                          height: "1px",
-                          alignSelf: "center",
-                          backgroundColor: "black",
-                        }}
+                Ingresar un equipo
+              </Button>
+            </Link>
+          </Box>
+        ) : (
+          cardPerDates.map((cardsPerDate) => {
+            const splitDate = cardsPerDate.date.split("-");
+            const date = splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
+            return (
+              <Box
+                key={date}
+                sx={{
+                  border: "1px solid black",
+                  borderRadius: "10px",
+                  mb: "1em",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
+                >
+                  {date}
+                </Typography>
+                {cardsPerDate.cards.map((product, index) => {
+                  const card = {
+                    id: product.product_id,
+                    name: product.product_model,
+                    image:
+                      product.Service_images.length > 0
+                        ? product.Service_images[0].address
+                        : "error",
+                    budget: "presupuesto: " + product.Service_status.budget,
+                    state: product.Service_status.status,
+                  };
+                  return (
+                    <Box
+                      key={card.id}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <UserPanelProductCard
+                        product={card}
+                        buttons={buttons}
+                        alternativeImage={logo}
+                        setIsLoading={setIsLoading}
                       />
-                    )}
-                  </Box>
-                );
-              })}
-            </Box>
-          );
-        })
-      )}
+                      {index + 1 !== cardsPerDate.cards.length && (
+                        <Divider
+                          sx={{
+                            width: "90%",
+                            height: "1px",
+                            alignSelf: "center",
+                            backgroundColor: "black",
+                          }}
+                        />
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            );
+          })
+        )}
+        {isLoading && (
+          <Container
+            sx={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              top: "0",
+              left: "0",
+              display: "flex",
+              backgroundColor: "white",
+              zIndex: "100",
+              flexDirection: "column",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mb: 5,
+                color: "#fd611a",
+              }}
+            />
+            <Typography
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              Cargando...
+            </Typography>
+          </Container>
+        )}
+      </Box>
     </Box>
   );
 };
