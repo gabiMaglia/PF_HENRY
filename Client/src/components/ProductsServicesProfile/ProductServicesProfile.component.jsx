@@ -149,7 +149,7 @@ const ProductServicesProfileComponent = () => {
                   </Typography>
                   {cardsPerDate.cards.map((product, index) => {
                     const card = {
-                      id: product.product_id,
+                      id: product.id,
                       name: product.product_model,
                       image:
                         product.Service_images.length > 0
