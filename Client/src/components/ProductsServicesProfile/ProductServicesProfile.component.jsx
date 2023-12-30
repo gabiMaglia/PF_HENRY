@@ -31,22 +31,24 @@ const ProductServicesProfileComponent = () => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const getAllServices = async () => {
-    const services = await getServices();
-
-    if (services.error) {
+    const services = await getServices(authData.userId);
+    if (services.error && services.error.message !== "service not found") {
       Swal.fire({
         allowOutsideClick: false,
         icon: "error",
         title: "Error en la carga de productos",
-        text: `${services}`,
+        text: `${services.error.message}`,
       });
       setIsLoading(false);
     } else {
-      services.data.length === 0 && setIsLoading(false);
-      let newCardsPerDates = sortServiceCardByDate(services.data, [
-        ...cardPerDates,
-      ]);
-      setCardPerDates(newCardsPerDates);
+      if (services.error || services.data.length === 0) {
+        setIsLoading(false);
+      } else {
+        let newCardsPerDates = sortServiceCardByDate(services.data, [
+          ...cardPerDates,
+        ]);
+        setCardPerDates(newCardsPerDates);
+      }
     }
   };
 
@@ -90,7 +92,7 @@ const ProductServicesProfileComponent = () => {
             </Typography>
             <Link
               to={
-                userRole === "customer"
+                authData.userRole === "customer"
                   ? PATHROUTES.SUPPORT
                   : userRole === "technician" &&
                     PATHROUTES.TECHNICIAN_USER_PANEL +
