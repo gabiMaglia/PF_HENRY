@@ -86,7 +86,7 @@ const logoutHandler = async (req, res, next) => {
           console.log("error", err);
           return next(err);
         }
-       return res.clearCookie('connect', { path: '/' , });
+       return res.clearCookie('connect.sid', { path: '/' , });
     });
   } catch (error) {
     return res.status(500).json(error.message);
