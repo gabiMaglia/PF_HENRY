@@ -140,10 +140,12 @@ const CardCarousel = ({ allProducts }) => {
                   height="200px"
                   image={product.ProductImages[0]?.address}
                   sx={{
-                    width: "200px",
+                    width: "250px",
                     border: "1px solid transparent",
                     marginTop: "8px",
                     marginRight: "3%",
+                    boxShadow: "0px 0px 10px rgba(252, 252, 252, 0.5)",
+                    borderRadius: "5px",
                   }}
                 />
               </Box>
