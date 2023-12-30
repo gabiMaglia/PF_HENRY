@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import Loading from "../Loading/Loading.component";
+import DetailProductService from "../DetailProductService/DetailProductService.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
@@ -124,7 +125,7 @@ const ProductServicesProfileComponent = () => {
               zIndex: "10",
             }}
           >
-            Aca iria el detalle
+            <DetailProductService />
           </Box>
         ) : (
           <Box sx={{ pt: "1em", pb: ".2em" }}>
