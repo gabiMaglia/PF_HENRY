@@ -30,8 +30,8 @@ server.use(
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      httpOnly: false,
-      sameSite: 'Lax',
+      httpOnly: true,
+      sameSite: 'Strict',
       secure: process.env.NODE_ENV === "production",
     },
   })
