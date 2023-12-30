@@ -1,6 +1,7 @@
 const {
   getAllProducts,
   postProduct,
+  postProductSeveral,
   updateProduct,
   deleteProduct,
   getProductById,
@@ -53,6 +54,23 @@ const postProductHandler = async (req, res) => {
       .json({ message: "Producto creado correctamente!", Product: newProduct });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+//POST PRODUCT SEVERAL
+const postProductSeveralHandler = async (req, res) => {
+  const products = req.body;
+  try {
+    const newProducts = await postProductSeveral(products);
+    if (newProducts.error) {
+      res.status(400).json({ error: newProducts.response });
+    }
+    res.status(201).json({
+      message: "Productos creados correctamente!",
+      Products: newProducts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -130,4 +148,5 @@ module.exports = {
   deleteProductHandler,
   getProductByIdHandler,
   searchByNameHandler,
+  postProductSeveralHandler,
 };
