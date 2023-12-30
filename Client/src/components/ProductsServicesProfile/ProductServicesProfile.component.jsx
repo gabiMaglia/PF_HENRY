@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import Loading from "../Loading/Loading.component";
+import DetailProductService from "../DetailProductService/DetailProductService.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
@@ -21,6 +22,7 @@ const ProductServicesProfileComponent = () => {
   const [cardPerDates, setCardPerDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openDetail, setOpenDetail] = useState(false);
+  const [cardDetail, setCardDetail] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -47,6 +49,11 @@ const ProductServicesProfileComponent = () => {
     }
   };
 
+  const handleOpenDetail = (open, id) => {
+    open && setOpenDetail(open);
+    id && setCardDetail(id);
+  };
+
   useEffect(() => {
     getAllServices();
   }, []);
@@ -56,7 +63,7 @@ const ProductServicesProfileComponent = () => {
   const buttons = [
     {
       text: "Detalle servicio",
-      action: setOpenDetail,
+      action: handleOpenDetail,
       color: "#fd611a",
       actionParam: true,
     },
@@ -124,7 +131,7 @@ const ProductServicesProfileComponent = () => {
               zIndex: "10",
             }}
           >
-            Aca iria el detalle
+            <DetailProductService id={cardDetail} />
           </Box>
         ) : (
           <Box sx={{ pt: "1em", pb: ".2em" }}>
