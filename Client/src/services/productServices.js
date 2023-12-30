@@ -102,12 +102,12 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 // };
 
 export const fetchProduct = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
   const user = window.localStorage.getItem("userId");
   const { id } = product;
   const data = {
-    userId: userId? userId : user,
+    userId: userId ? userId : user,
     productId: id,
     productQuantity: 1,
   };
@@ -124,8 +124,8 @@ export const fetchProduct = (product, cookieAccepted) => async () => {
 };
 
 export const fetchGetProduct = (cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
   try {
     const res = await axios.get(`${urlBack}/cart/${userId}`);
 
@@ -148,8 +148,8 @@ export const fetchGetProduct = (cookieAccepted) => async () => {
 };
 
 export const fetchCount = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
 
   const data = {
     userId: userId,
@@ -164,8 +164,8 @@ export const fetchCount = (product, cookieAccepted) => async () => {
 };
 
 export const fetchDelete = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
 
   const data = {
     userId: userId,
@@ -180,9 +180,9 @@ export const fetchDelete = (product, cookieAccepted) => async () => {
 };
 
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted)
-  const {userId} = aux
-  
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
+
   const products = items.map((item) => ({
     title: item.name,
     quantity: item.count,

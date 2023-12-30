@@ -14,12 +14,23 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   }
 };
 
-export const getAllServices = async () => {
+export const getServices = async (id) => {
   try {
-    const response = await axios.get(`${url}/service`);
+    let completeUrl = `${url}/service`;
+    id && (completeUrl = `${url}/service/client/${id}`);
+    const response = await axios.get(completeUrl);
     return response;
   } catch (error) {
-    return { error: true, response: "Falla en la obtención de servicios" };
+    return { error };
+  }
+};
+
+export const getServicesById = async (id) => {
+  try {
+    const response = await axios.get(`${url}/service/${id}`);
+    return response;
+  } catch (error) {
+    return { error };
   }
 };
 
