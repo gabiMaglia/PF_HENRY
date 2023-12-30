@@ -3,6 +3,8 @@ import { Typography, Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { getAllUsers, getUserRoles } from "../../services/userServices";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const gridColumns = [
   { field: "id", headerName: "Id", width: 90 },
@@ -14,14 +16,17 @@ const gridColumns = [
 const UsersTable = () => {
   const [users, setuser] = useState([]);
 
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
   const getUsers = async (variant) => {
     let roles;
     let response;
 
     switch (variant) {
       case "all":
-        response = await getAllUsers();
-        roles = await getUserRoles();
+        response = await getAllUsers(authData.userId);
+        roles = await getUserRoles(authData.userId);
         break;
 
       default:
