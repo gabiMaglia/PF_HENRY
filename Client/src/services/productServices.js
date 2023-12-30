@@ -208,7 +208,7 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
 };
 export const fetchAddProduct = async (obj, dispatch) => {
   try {
-    const { data } = await axios.post(`${urlBack}/product`, obj);
+    const { data } = await axios.post(`${urlBack}/product`, obj, {withCredentials: true});
     if (data) {
       dispatch(addProduct(data.product));
     }
