@@ -22,6 +22,7 @@ const ProductServicesProfileComponent = () => {
   const [cardPerDates, setCardPerDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openDetail, setOpenDetail] = useState(false);
+  const [cardDetail, setCardDetail] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -48,6 +49,11 @@ const ProductServicesProfileComponent = () => {
     }
   };
 
+  const handleOpenDetail = (open, id) => {
+    open && setOpenDetail(open);
+    id && setCardDetail(id);
+  };
+
   useEffect(() => {
     getAllServices();
   }, []);
@@ -57,7 +63,7 @@ const ProductServicesProfileComponent = () => {
   const buttons = [
     {
       text: "Detalle servicio",
-      action: setOpenDetail,
+      action: handleOpenDetail,
       color: "#fd611a",
       actionParam: true,
     },
@@ -125,7 +131,7 @@ const ProductServicesProfileComponent = () => {
               zIndex: "10",
             }}
           >
-            <DetailProductService />
+            <DetailProductService id={cardDetail} />
           </Box>
         ) : (
           <Box sx={{ pt: "1em", pb: ".2em" }}>
@@ -150,7 +156,7 @@ const ProductServicesProfileComponent = () => {
                   </Typography>
                   {cardsPerDate.cards.map((product, index) => {
                     const card = {
-                      id: product.product_id,
+                      id: product.id,
                       name: product.product_model,
                       image:
                         product.Service_images.length > 0

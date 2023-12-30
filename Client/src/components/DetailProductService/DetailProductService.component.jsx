@@ -1,70 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { getServicesById } from "../../services/serviceServices";
 
-const DetailProductService = ({
-  model,
-  imageUrl,
-  entryDate,
-  technicianName,
-  userDiagnosis,
-  technicianDiagnosis,
-  finalDiagnosis,
-  repairStatus,
-}) => {
+const DetailProductService = ({ id }) => {
+  const [data, setData] = useState({});
+  const getService = async () => {
+    const response = await getServicesById(id);
+    console.log(response.data);
+    setData(response.data);
+  };
+  useEffect(() => {
+    getService();
+  }, [id]);
   return (
     <Card>
-      <CardMedia
-        component="img"
-        height="140"
-        image={imageUrl}
-        alt={model}
-        sx={{ objectFit: "cover" }}
-      />
+      <CardMedia component="img" height="140" sx={{ objectFit: "cover" }} />
       <CardContent sx={{ backgroundColor: "#fd611a" }}>
-        <Typography variant="h5" component="div" sx={{ color: "#000" }}>
-          {model}
-        </Typography>
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ color: "#000" }}
+        ></Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ fontSize: "0.9rem", color: "#000" }}
         >
-          Fecha de ingreso: {entryDate}
+          Fecha de ingreso:
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ color: "#000" }}
         >
-          Técnico: {technicianName}
+          Técnico:
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ color: "#000" }}
         >
-          Diagnóstico del usuario: {userDiagnosis}
+          Diagnóstico del usuario:
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ color: "#000" }}
         >
-          Diagnóstico del técnico: {technicianDiagnosis}
+          Diagnóstico del técnico:
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ color: "#000" }}
         >
-          Diagnóstico final: {finalDiagnosis}
+          Diagnóstico final:
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
           sx={{ color: "#000" }}
         >
-          Estado de la reparación: {repairStatus}
+          Estado de la reparación:
         </Typography>
       </CardContent>
     </Card>
