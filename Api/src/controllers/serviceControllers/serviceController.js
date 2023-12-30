@@ -182,16 +182,17 @@ const getServiceByIdController = async (id) => {
   return service;
 };
 const getServiceByClientController = async (id) => {
-  const Services = await Service.findAll({
+  let Services = await Service.findAll({
     where: { userId: id },
     include: [Service_status, Service_image],
   });
   if (Services.length === 0) {
-    return {
-      error: true,
-      response: `service not found`,
-    };
+    Services = await Service.findAll({
+      where: { technicianId: id },
+      include: [Service_status, Service_image],
+    });
   }
+
   return Services;
 };
 
