@@ -21,6 +21,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import img from "/icons/logo.svg";
 import carrito from "/icons/carrito-de-compras.png";
 import { logUser } from "../../redux/slices/userSlice";
+import { addItem } from "../../redux/slices/cartSlice";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -28,6 +29,10 @@ export default function SearchAppBar() {
 
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+
+  useEffect(() => {
+    dispatch(addItem());
+  }, [dispatch]);
 
   const Img = styled("img")({
     width: 140,
@@ -43,6 +48,14 @@ export default function SearchAppBar() {
 
   const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
+
+  let valueCart = 0;
+
+  if (login === false) {
+    valueCart = 0;
+  } else {
+    valueCart = cartItemCount;
+  }
 
   const getUserInfo = async (token) => {
     if (token !== undefined) {
@@ -162,8 +175,7 @@ export default function SearchAppBar() {
           }}
         >
           <Logo src={carrito} onClick={handleCartClick} />
-
-          {cartItemCount > 0 && (
+          {cartItemCount > -1 && (
             <span
               style={{
                 position: "absolute",
@@ -177,7 +189,7 @@ export default function SearchAppBar() {
                 fontSize: "0.7em",
               }}
             >
-              {cartItemCount}
+              {valueCart}
             </span>
           )}
         </Box>
