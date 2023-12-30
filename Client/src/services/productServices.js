@@ -32,7 +32,9 @@ export const fetchAllProducts = () => async (dispatch) => {
 
 export const fetchProductById = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/${id}`);
+    const response = await axios.get(`${urlBack}/product/${id}`, {
+      withCredentials: true,
+    });
     dispatch(getProductById(response.data));
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -41,7 +43,9 @@ export const fetchProductById = (id) => async (dispatch) => {
 
 export const fetchSearch = (name) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/search?name=${name}`);
+    const response = await axios.get(`${urlBack}/search?name=${name}`, {
+      withCredentials: true,
+    });
     dispatch(search(response.data));
   } catch (error) {
     Swal.fire("Producto no existente", "", "error");
@@ -50,7 +54,9 @@ export const fetchSearch = (name) => async (dispatch) => {
 
 export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/category/filter/${category}`);
+    const response = await axios.get(`${urlBack}/category/filter/${category}`, {
+      withCredentials: true,
+    });
     dispatch(filterByCategory(response.data));
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
@@ -59,7 +65,9 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
 
 export const fetchProductsByBrand = (brand) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/brand/filter/${brand}`);
+    const response = await axios.get(`${urlBack}/brand/filter/${brand}`, {
+      withCredentials: true,
+    });
     dispatch(filterByBrand(response.data));
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
