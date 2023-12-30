@@ -1,6 +1,5 @@
 //HOOKS
 import { createSlice } from "@reduxjs/toolkit";
-import CircularJSON from "circular-json";
 
 const initialState = {
   items: [],
@@ -43,7 +42,7 @@ const cartSlice = createSlice({
 
         window.localStorage.setItem(
           "storedProducts",
-          CircularJSON.stringify(updatedStoredProducts)
+          JSON.stringify(updatedStoredProducts)
         );
       }
     },
