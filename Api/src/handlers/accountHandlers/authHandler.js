@@ -85,9 +85,10 @@ const logoutHandler = async (req, res, next) => {
         if (err) {
           return res.status(400).json({ error: "error cerrando sesion" });
         } else {
-        return res.status(200).json({ loginStatus: req.session });
-      }
-    });
+          
+        }
+      });
+      return res.status(200).json({ loginStatus: req.session });
   } catch (error) {
     return res.status(500).json(error.message);
   }
