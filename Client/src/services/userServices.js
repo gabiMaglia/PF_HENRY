@@ -25,6 +25,15 @@ export const getUsersByRole = async (role, userAuthData) => {
   }
 };
 
+export const getUserRoles = () => {
+  try {
+    const roles = axios.get(`${url}/user_role`, { withCredentials: true });
+    return roles;
+  } catch (error) {
+    return { error: true, respose: error };
+  }
+};
+
 export const getUserById = async (id) => {
   try {
     const ById = await axios.get(`${url}/user/${id}`);
