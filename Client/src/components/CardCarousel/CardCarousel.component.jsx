@@ -19,12 +19,21 @@ const CardCarousel = ({ allProducts }) => {
 
   useEffect(() => {
     if (Array.isArray(allProducts)) {
-      setProductData(allProducts);
+      const filteredProducts = allProducts
+        .filter(
+          (product) =>
+            product.ProductImages[0]?.address.endsWith(".png") &&
+            product.name &&
+            product.price
+        )
+        .slice(0, 5);
+
+      setProductData(filteredProducts);
     }
   }, [allProducts]);
 
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -46,7 +55,13 @@ const CardCarousel = ({ allProducts }) => {
     >
       <Slider {...settings}>
         {productData.map((product) => (
-          <Box key={product.id} sx={{ marginBottom: "8px", marginRight: "3%" }}>
+          <Box
+            key={product.id}
+            sx={{
+              marginBottom: "8px",
+              marginRight: "3%",
+            }}
+          >
             <Link
               to={`/product/${product.id}`}
               style={{ textDecoration: "none" }}
@@ -61,68 +76,70 @@ const CardCarousel = ({ allProducts }) => {
                   textAlign: "center",
                 }}
               >
-                <CardContent>
-                  <Box
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    justifyContent: "center",
+                    color: "white",
+                    flex: "1",
+                  }}
+                >
+                  <Container
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      color: "white",
+                      width: "auto", // Ancho fijo para el contenedor del nombre
+                      height: "170px", // Alto fijo para el contenedor del nombre
+                      overflow: "hidden", // Oculta el contenido adicional si es demasiado largo
                     }}
                   >
-                    <Container
+                    <Typography
+                      variant="h2"
+                      component="div"
+                      fontWeight="bold"
                       sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        textAlign: "start",
-                        flexDirection: "column",
+                        fontSize: {
+                          xs: "1.8rem",
+                          sm: "2.8rem",
+                          md: "3.5rem",
+                        },
                       }}
                     >
-                      <Typography
-                        variant="h2"
-                        component="div"
-                        fontWeight="bold"
-                        sx={{
-                          fontSize: {
-                            xs: "1.5rem",
-                            sm: "2.5rem",
-                            md: "3.5rem",
-                          },
-                        }}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Container
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          alignContent: "space-around",
-                        }}
-                      >
-                        <Typography
-                          variant="h4"
-                          color="#fd611a"
-                          fontWeight="bold"
-                          sx={{
-                            fontSize: {
-                              xs: "1rem",
-                              sm: "1.5rem",
-                              md: "2rem",
-                            },
-                          }}
-                        >
-                          PROMOCION: ${product.price}
-                        </Typography>
-                      </Container>
-                    </Container>
-                  </Box>
+                      {product.name}
+                    </Typography>
+                  </Container>
+                  <Container
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                    }}
+                  >
+                    <Typography
+                      variant="h4"
+                      color="#fd611a"
+                      fontWeight="bold"
+                      sx={{
+                        fontSize: {
+                          xs: "1rem",
+                          sm: "1.5rem",
+                          md: "2rem",
+                        },
+                        marginLeft: "auto",
+                      }}
+                    >
+                      PROMOCION: ${product.price}
+                    </Typography>
+                  </Container>
                 </CardContent>
                 <CardMedia
                   component="img"
                   alt={product.name}
                   height="200px"
                   image={product.ProductImages[0]?.address}
-                  style={{
+                  sx={{
                     width: "200px",
                     border: "1px solid transparent",
                     marginTop: "8px",
