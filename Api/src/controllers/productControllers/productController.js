@@ -153,6 +153,63 @@ const postProduct = async ({
   }
 };
 
+// POST SEVERAL PRODUCTS
+const postProductSeveral = async (products) => {
+  if (!products || products.length === 0) {
+    return { error: true, response: "No hay productos para agregar" };
+  }
+
+  const newProducts = await Promise.all(
+    products.map(async (product) => {
+      let newImages = await Promise.all(
+        product.images.map((imageURL) => {
+          const cloudinaryResponse = cloudinary.uploader.upload(imageURL, {
+            folder: "products",
+            width: 300,
+            format: "png",
+          });
+
+          return cloudinaryResponse;
+        })
+      );
+      if (!newImages) {
+        return {
+          error: true,
+          response: "No se pudo cargar la imagen en cloudinary",
+        };
+      }
+      newImages = newImages.map((image) => image.secure_url);
+      const newProduct = postProduct({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        warranty: product.warranty,
+        is_deleted: product.is_deleted,
+        stock: product.stock,
+        categoryName: product.categoryName,
+        images: newImages,
+        brandName: product.brandName,
+        soldCount: product.soldCount,
+      });
+      if (!newProduct) {
+        return {
+          error: true,
+          response: `No se pudo crear el producto: ${product.name}`,
+        };
+      }
+
+      return newProduct;
+    })
+  );
+  if (!newProducts) {
+    return {
+      error: true,
+      response: `No se pudo crear los productos`,
+    };
+  }
+  return newProducts;
+};
+
 // const updateProduct = async (id, updatedData) => {
 //   try {
 //     const productToUpdate = await Product.findByPk(id);
@@ -265,6 +322,7 @@ const searchByName = async (name) => {
 
 module.exports = {
   postProduct,
+  postProductSeveral,
   getAllProducts,
   updateProduct,
   deleteProduct,
