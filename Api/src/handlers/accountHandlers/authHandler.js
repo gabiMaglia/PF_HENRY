@@ -53,7 +53,7 @@ const loginHandler = async (req, res) => {
     if (response.error) {
       return res.status(401).json(response.response);
     }
-    req.session.token = response.tokenSession
+    req.session.token = response.tokenSession;
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -80,13 +80,17 @@ const confirmAccountHandler = async (req, res) => {
   }
 };
 const logoutHandler = async (req, res, next) => {
-  try {  
-      req.logout((err) => {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        return done(err);
+      }});
+      req.logOut(req.user, function (err) {
         if (err) {
-          return res.status(400).json({ error: "error cerrando sesion" });
-        } else {
-        return res.status(200).json({ loginStatus: req.session });
-      }
+          console.log("error", err);
+          return next(err);
+        }
+       return res.clearCookie('connect', { path: '/' , });
     });
   } catch (error) {
     return res.status(500).json(error.message);

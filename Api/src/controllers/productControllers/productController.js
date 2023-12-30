@@ -103,25 +103,6 @@ const postProduct = async ({
         }
       });
 
-      // const imagePromises = images.map(async (imageUrl) => {
-      //   // Busca la imagen existente
-      //   const existingImage = await ProductImage.findOne({
-      //     where: { address: imageUrl },
-      //     transaction,
-      //   });
-
-      //   // Si existe, la asocia al producto; si no, crea una nueva instancia
-      //   if (existingImage) {
-      //     await newProduct.addProductImage(existingImage, { transaction });
-      //   } else {
-      //     const newImage = await ProductImage.create(
-      //       { address: imageUrl },
-      //       { transaction }
-      //     );
-      //     await newProduct.addProductImage(newImage, { transaction });
-      //   }
-      // });
-
       await Promise.all(imagePromises);
 
       const newStock = await ProductStock.create(
@@ -198,22 +179,6 @@ const postProductSeveral = async (products) => {
   }
   return newProducts;
 };
-
-// const updateProduct = async (id, updatedData) => {
-//   try {
-//     const productToUpdate = await Product.findByPk(id);
-
-//     if (!productToUpdate) {
-//       throw new Error("Producto no encontrado");
-//     }
-
-//     await productToUpdate.update(updatedData);
-
-//     return productToUpdate;
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// };
 
 //UPDATE PRODUCT
 const updateProduct = async (productId, updateData) => {

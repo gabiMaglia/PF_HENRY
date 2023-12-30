@@ -59,6 +59,7 @@ const LoginModal = ({
     }
     !cookieStatus && rejectCookies();
     if (response.error) {
+    
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -66,7 +67,7 @@ const LoginModal = ({
         },
         icon: "error",
         title: "Fallo en el inicio de sesion",
-        text: `${response.error.data.response}`,
+        text: `${response.error.data.response || response.error.data}`,
       });
     } else {
       Swal.fire({

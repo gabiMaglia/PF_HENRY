@@ -15,3 +15,5 @@ passport.deserializeUser(async (mail, done) => {
   const user = await User.findOne({ where: { email: mail } });
   done(null, user);
 });
+
+

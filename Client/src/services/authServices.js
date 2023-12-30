@@ -67,6 +67,8 @@ export const registerUser = async (userObj) => {
   try {
     const registerData = await axios.post(`${url}/account/signin`, {
       userObj,
+    },{
+      withCredentials: true,
     });
     return { error: false, data: registerData };
   } catch ({ response }) {
@@ -75,7 +77,9 @@ export const registerUser = async (userObj) => {
 };
 export const logOutUser = async () => {
   try {
-    const response = await axios.post(`${url}/account/logout`);
+    const response = await axios.post(`${url}/account/logout`,{
+      withCredentials: true,
+    });
     return { error: false, data: response };
   } catch ({ response }) {
     return { error: response.data };
