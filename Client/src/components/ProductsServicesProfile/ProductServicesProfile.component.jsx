@@ -129,11 +129,7 @@ const ProductServicesProfileComponent = () => {
                       ? product.Service_images[0].address
                       : "error",
                   budget: "presupuesto: " + product.Service_status.budget,
-                  state: product.Service_status.repair_finish
-                    ? "Finalizado"
-                    : product.Service_status.confirm_repair
-                    ? "Presupuesto aceptado, esperando reparación"
-                    : "Esperando",
+                  state: product.Service_status.status,
                 };
                 return (
                   <Box
