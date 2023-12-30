@@ -15,5 +15,6 @@ module.exports = (sequelize) => {
     product_income_date: {
       type: DataTypes.DATE,
       allowNull: true,
-    }})
-}
+    },
+  });
+};

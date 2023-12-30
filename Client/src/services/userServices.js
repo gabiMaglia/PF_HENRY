@@ -21,7 +21,7 @@ export const getUsersByRole = async (role, userAuthData) => {
     });
     return AllUsers;
   } catch (error) {
-    return { error: error };
+    return { error: true, data: error };
   }
 };
 

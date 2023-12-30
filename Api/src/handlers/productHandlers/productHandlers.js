@@ -1,8 +1,7 @@
-const { Product } = require("../../db");
-
 const {
   getAllProducts,
   postProduct,
+  postProductSeveral,
   updateProduct,
   deleteProduct,
   getProductById,
@@ -29,14 +28,13 @@ const postProductHandler = async (req, res) => {
       !name ||
       !description ||
       !price ||
-      !is_deleted ||
       !stock ||
       !categoryName ||
       !brandName ||
       !images ||
       !soldCount
     ) {
-      return res.status(400).json({ error: "Missing required data..." });
+      return res.status(400).json({ error: "Faltan datos requeridos..." });
     }
     const newProduct = await postProduct({
       name,
@@ -53,9 +51,26 @@ const postProductHandler = async (req, res) => {
 
     res
       .status(201)
-      .json({ message: "Product created successfully", Product: newProduct });
+      .json({ message: "Producto creado correctamente!", Product: newProduct });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+//POST PRODUCT SEVERAL
+const postProductSeveralHandler = async (req, res) => {
+  const products = req.body;
+  try {
+    const newProducts = await postProductSeveral(products);
+    if (newProducts.error) {
+      res.status(400).json({ error: newProducts.response });
+    }
+    res.status(201).json({
+      message: "Productos creados correctamente!",
+      Products: newProducts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -86,7 +101,7 @@ const deleteProductHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedProduct = await deleteProduct(id);
-    res.status(200).json(`Product deleted successfully`);
+    res.status(200).json(`El producto con ID: ${id} fue eliminado`);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -100,7 +115,9 @@ const getProductByIdHandler = async (req, res) => {
     if (product) {
       res.status(200).json(product);
     } else {
-      res.status(404).json({ error: `Product ${id} was not found.` });
+      res
+        .status(404)
+        .json({ error: `Producto con ID: ${id} no fue encontrado.` });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -115,7 +132,9 @@ const searchByNameHandler = async (req, res) => {
     if (results.length > 0) {
       res.status(200).json(results);
     } else {
-      res.status(404).json({ error: `No products found` });
+      res
+        .status(404)
+        .json({ error: `No se encontraron resultados para ${name}` });
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -129,4 +148,5 @@ module.exports = {
   deleteProductHandler,
   getProductByIdHandler,
   searchByNameHandler,
+  postProductSeveralHandler,
 };

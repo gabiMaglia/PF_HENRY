@@ -22,7 +22,7 @@ import {
   updateItem,
   removeItem,
   totalItem,
-} from "../../redux/slices/CartSlice";
+} from "../../redux/slices/cartSlice";
 //SERVICES
 import {
   fetchCart,
@@ -35,15 +35,12 @@ export default function ShoppingCart() {
   const dispatch = useDispatch();
 
   const { items, total, id } = useSelector((state) => state.cart);
-  console.log(items);
+  const { cookiesAccepted } = useSelector((state) => state.cookies);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 
   useEffect(() => {
     dispatch(addItem());
-    // if (items.length == 0) {
-    //   dispatch(fetchGetProduct());
-    // }
   }, [dispatch]);
 
   useEffect(() => {
@@ -55,20 +52,37 @@ export default function ShoppingCart() {
     height: 140,
     width: 140,
     objectFit: "cover",
+    // Estilos adicionales para dispositivos móviles
+    "@media (max-width: 600px)": {
+      width: "70px",
+      height: "70px",
+    },
   });
 
   if (items.length == 0) {
     return (
-      <Typography sx={{ mt: 10 }} component="h2">
-        No hay productos en el carrito
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          alignContent: "space-around",
+          justifyContent: "space-around",
+        }}
+      >
+        <Typography
+          sx={{ m: 10, fontWeight: "bold", fontSize: 28 }}
+          component="h2"
+        >
+          No hay productos en el carrito
+        </Typography>
+      </Box>
     );
   }
 
   const handleChange = (productId, value) => {
     const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
-    dispatch(fetchCount({ id: productId, count: newValue }));
+    dispatch(fetchCount({ id: productId, count: newValue }), cookiesAccepted);
   };
 
   const handleIncrement = (productId) => {
@@ -90,11 +104,11 @@ export default function ShoppingCart() {
 
   const handleDelete = (product) => {
     dispatch(removeItem(product));
-    dispatch(fetchDelete(product));
+    dispatch(fetchDelete(product, cookiesAccepted));
   };
 
   const handleShop = (e) => {
-    dispatch(fetchCart(items));
+    dispatch(fetchCart(items, cookiesAccepted));
   };
 
   return (
@@ -110,14 +124,28 @@ export default function ShoppingCart() {
             flexDirection="row"
             alignItems="center"
             justifyContent="space-evenly"
+            boxShadow="5px 5px 5px #888888"
+            borderRadius="8px"
             sx={{ mb: 4 }}
           >
             <ProductMedia
               component="img"
               alt={item.name}
               src={item.ProductImages.address}
+              sx={{
+                width: { xs: "70px", sm: "140px" }, // Establece el ancho de la imagen
+              }}
             />
-            <Typography>{item.name}</Typography>
+            <Typography
+              sx={{
+                fontSize: "1rem",
+                maxWidth: "150px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {item.name}
+            </Typography>
 
             <BaseNumberInput
               min={1}
@@ -148,28 +176,72 @@ export default function ShoppingCart() {
                       onClick={() => handleDecrement(item.id)}
                     />
                   ),
+                  className: "decrement",
+                },
+              }}
+              sx={{
+                width: {
+                  xs: "100px",
+                  sm: "150px",
+                },
+                "& .increment, & .decrement": {
+                  backgroundColor: "#fd611a",
+                  borderColor: "#fd611a",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "#e04d17",
+                    borderColor: "#e04d17",
+                    color: "white",
+                  },
+                },
+                "& input": {
+                  "&:hover": {
+                    borderColor: "#e04d17", // Ajusta el color del borde al pasar el ratón sobre el input
+                  },
+                  "&:focus": {
+                    borderColor: "#fd611a",
+                    boxShadow: "0 0 0 3px #fd611a",
+                    "&.focused": {
+                      borderColor: "#fd611a",
+                      boxShadow: "0 0 0 3px #fd611a",
+                    },
+                  },
                 },
               }}
             />
+
             <Typography>Precio: ${item.price * item.count}</Typography>
             <Button onClick={() => handleDelete(item.id)}>
-              <DeleteForeverIcon />
+              <DeleteForeverIcon sx={{ color: "#fd611a" }} />
             </Button>
           </Box>
         ))}
         <Box
           display="flex"
           flexDirection="row"
-          justifyContent="flex-end"
+          justifyContent="space-between"
           alignItems="center"
           sx={{ mb: 2 }}
+          pb={"140px"}
         >
-          <Typography sx={{ mr: 8 }}>Total: ${total}</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              textAlign: "center",
+              flexDirection: "row",
+              flexWrap: "nowrap",
+            }}
+          >
+            <Typography sx={{ mr: 8, ml: 8, fontSize: 28, fontWeight: "bold" }}>
+              Total: ${total}
+            </Typography>
+          </Box>
           <Button
             onClick={handleShop}
             sx={{
-              mr: 10,
-              maxWidth: 270,
+              width: "100%",
+              maxWidth: "270px",
               backgroundColor: "#fd611a",
               color: "black",
               transition: "transform 0.3s",
@@ -178,6 +250,10 @@ export default function ShoppingCart() {
                 transform: "scale(1.05)",
                 backgroundColor: "#fd611a",
                 color: "white",
+              },
+              "@media (max-width: 600px)": {
+                fontSize: "0.9rem",
+                padding: "10px",
               },
             }}
           >

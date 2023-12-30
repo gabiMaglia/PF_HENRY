@@ -22,17 +22,20 @@ import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
 import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
+import { logOutUser } from "../../services/authServices.js";
 
 const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+
   const { name, surname } = useSelector((state) => state.user);
 
   const initialLetersUsers = {
     name: getFirstLetters(name),
     surname: getFirstLetters(surname),
   };
+
   const items = UserPanelItems(name, surname);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -41,10 +44,12 @@ const UserMenu = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const logout = () => {
-    clearPersistanceData(cookieStatus);
-    navigate(PATHROUTES.HOME);
+  const logout = async () => {
+    clearPersistanceData(cookieStatus, true);
     dispatch(logoutUser());
+    logOutUser();
+
+    navigate(PATHROUTES.HOME);
   };
 
   const handleClose = () => {

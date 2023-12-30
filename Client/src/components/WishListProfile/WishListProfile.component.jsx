@@ -16,15 +16,16 @@ import { useEffect, useState } from "react";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 //UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import {
   fetchWishList,
   fetchAddItemWish,
 } from "../../services/wishListServices";
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
+import Loading from "../Loading/Loading.component";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -39,7 +40,8 @@ const WhishListProfileComponent = () => {
 
   const [storedProducts, setStoredProducts] = useLocalStorage(); //Productos del carrito
 
-  const authData = getAuthDataCookie("authData");
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userId = authData ? authData.userId : null; //Información del usuario
 
   const wishListCards = useSelector((state) => state.wishlist.products); //Estado global Wishlist
@@ -162,16 +164,17 @@ const WhishListProfileComponent = () => {
             </Button>
           </Link>
         </Box>
-      ) : !isLoading ? (
-        <>
+      ) : (
+        <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
           <Box
             sx={{
-              width: "75%",
-              zIndex: "10",
+              width: "100%",
+              zIndex: "5",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
               pb: "1em",
+              pr: ".5em",
               position: "absolute",
               backgroundColor: "white",
             }}
@@ -189,7 +192,6 @@ const WhishListProfileComponent = () => {
                 backgroundColor: "#fd611a",
                 color: "white",
               }}
-              sx={{ mr: "3.5em" }}
               onClick={handleClickDeleteButton}
             >
               Eliminar selección
@@ -244,36 +246,8 @@ const WhishListProfileComponent = () => {
               );
             })}
           </Box>
-        </>
-      ) : (
-        <Container
-          sx={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "wrap",
-            alignContent: "space-around",
-            justifyContent: "center",
-          }}
-        >
-          <CircularProgress
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              margin: 5,
-              color: "#fd611a",
-            }}
-          />
-          <Typography
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            Cargando...
-          </Typography>
-        </Container>
+          {isLoading && <Loading />}
+        </Box>
       )}
     </Box>
   );

@@ -1,86 +1,68 @@
-//HOOKS
 import { useEffect, useState } from "react";
-//MATERIAL UI
 import { Container, Typography } from "@mui/material";
-//COMPONENT
 import ProductCard from "../ProductCard/ProductCard.component";
-//SLICK
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const CarouselProducts = ({ allProducts }) => {
   const [carouselProducts, setCarouselProducts] = useState([]);
 
   useEffect(() => {
     const randomProducts = allProducts.slice().sort(() => Math.random() - 0.5);
-    setCarouselProducts(randomProducts);
+    const limitedProducts = randomProducts.slice(0, 8);
+    setCarouselProducts(limitedProducts);
   }, [allProducts]);
 
-  const [settings, setSettings] = useState({
+  const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
     slidesToScroll: 1,
+    slidesToShow: 3, // Mostrar 3 tarjetas inicialmente
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1200,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 730,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 720,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
-          initialSlide: 1,
         },
       },
     ],
-  });
+    centerMode: carouselProducts.length === 1, // Habilitar centerMode solo si hay una tarjeta
+  };
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-        alignItems: "flex-start",
-      }}
-    >
+    <Container sx={{ marginBottom: 20 }}>
       <Typography
-        paddingLeft={8}
-        margin={2}
+        variant="h4"
         fontWeight="bold"
-        fontSize={24}
         sx={{ textTransform: "uppercase" }}
       >
-        MAS PRODUCTOS:
+        MAS PRODUCTOS
       </Typography>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          flexWrap: "nowrap",
-          justifyContent: "space-around",
-          marginBottom: 5,
-          gap: 1,
-          [`@media (max-width: 900px)`]: {
-            flexDirection: "column",
-            alignItems: "center",
-          },
-        }}
-      >
-        <Slider {...settings}>
-          {carouselProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </Slider>
-      </Container>
+      <Slider {...settings} sx={{ display: "flex" }}>
+        {carouselProducts.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </Slider>
     </Container>
   );
 };

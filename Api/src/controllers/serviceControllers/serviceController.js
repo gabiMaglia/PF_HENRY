@@ -1,12 +1,22 @@
 const transporter = require("../../config/mailer");
-const { Service, Service_status, User, UserRole } = require("../../db");
+const cloudinary = require("../../config/cloudinaryConfig");
+const {
+  Service,
+  Service_status,
+  Service_image,
+  User,
+  UserRole,
+} = require("../../db");
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 require("dotenv").config();
 const destinationEmail = process.env.EMAIL_MAILER;
+
 const addServiceController = async (
   product_model,
   product_income_date,
+  // product_image,
+  product_image_url,
   user_diagnosis,
   ClientId,
   technicianId
@@ -33,7 +43,6 @@ const addServiceController = async (
     }
     const rolTech = await UserRole.findByPk(technicianObj.rolId);
     const rolCust = await UserRole.findByPk(clientObj.rolId);
-    console.log(rolCust.role_name);
 
     if (rolCust.role_name === "customer") {
       if (rolTech.role_name === "technician") {
@@ -52,8 +61,18 @@ const addServiceController = async (
           reparir_finish: false,
           ServiceId: newService.id,
         });
+
+        if (product_image_url) {
+          // No se sube la imagen a Cloudinary aca ya que obtenemos la URL que nos envia el front
+          const newServiceImage = await Service_image.create({
+            address: product_image_url,
+            ServiceId: newService.id,
+          });
+          await newService.addService_image(newServiceImage);
+        }
+
         const createdService = await Service.findByPk(newService.id, {
-          include: [Service_status],
+          include: [Service_status, Service_image],
         });
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
@@ -143,7 +162,7 @@ const getAllServicesController = async () => {
   const arrayOfServices = await Promise.all(
     services.map(async (service) => {
       return await Service.findByPk(service.id, {
-        include: [Service_status],
+        include: [Service_status, Service_image],
       });
     })
   );
@@ -151,7 +170,9 @@ const getAllServicesController = async () => {
 };
 
 const getServiceByIdController = async (id) => {
-  const service = await Service.findByPk(id);
+  const service = await Service.findByPk(id, {
+    include: [Service_status, Service_image],
+  });
   if (!service) {
     return {
       error: true,
@@ -161,15 +182,17 @@ const getServiceByIdController = async (id) => {
   return service;
 };
 const getServiceByClientController = async (id) => {
-  const Services = await Service.findAll({
+  let Services = await Service.findAll({
     where: { userId: id },
+    include: [Service_status, Service_image],
   });
   if (Services.length === 0) {
-    return {
-      error: true,
-      response: `service not found`,
-    };
+    Services = await Service.findAll({
+      where: { technicianId: id },
+      include: [Service_status, Service_image],
+    });
   }
+
   return Services;
 };
 
@@ -189,13 +212,12 @@ const getServiceByModelController = async (model) => {
   return Services;
 };
 const filterServicesByStatusController = async (status, value) => {
-  console.log(status);
   const serviceStatuses = await Service_status.findAll();
   let arrayOfServices = [];
   for (let serviceStatus of serviceStatuses) {
     if (serviceStatus[status] === value) {
       const service = await Service.findByPk(serviceStatus.ServiceId, {
-        include: [Service_status],
+        include: [Service_status, Service_image],
       });
       arrayOfServices.push(service);
     }

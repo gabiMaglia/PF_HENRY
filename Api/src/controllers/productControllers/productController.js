@@ -84,52 +84,24 @@ const postProduct = async ({
             where: { address: imageUrl },
             transaction,
           });
-      
+
           if (existingImage) {
             // Si la imagen ya existe, asocíala al producto y pasa a la siguiente iteración
             await newProduct.addProductImage(existingImage, { transaction });
             return;
           }
-          // Si la imagen no existe, subirla a Cloudinary
-          const cloudinaryResponse = await cloudinary.uploader.upload(imageUrl, {
-            folder: "products",
-            width: 300,
-            format: "png",
-          });
-          
-          const cloudinaryImageUrl = cloudinaryResponse.secure_url;
-          // Crea una nueva instancia de ProductImage
+     
           const newImage = await ProductImage.create(
-            { address: cloudinaryImageUrl },
+            { address: imageUrl },
             { transaction }
           );
           // Asocia la nueva imagen al producto
           await newProduct.addProductImage(newImage, { transaction });
-      
         } catch (error) {
           console.error("Error al procesar la imagen:", error);
           throw error;
         }
-      })
-
-      // const imagePromises = images.map(async (imageUrl) => {
-      //   // Busca la imagen existente
-      //   const existingImage = await ProductImage.findOne({
-      //     where: { address: imageUrl },
-      //     transaction,
-      //   });
-
-      //   // Si existe, la asocia al producto; si no, crea una nueva instancia
-      //   if (existingImage) {
-      //     await newProduct.addProductImage(existingImage, { transaction });
-      //   } else {
-      //     const newImage = await ProductImage.create(
-      //       { address: imageUrl },
-      //       { transaction }
-      //     );
-      //     await newProduct.addProductImage(newImage, { transaction });
-      //   }
-      // });
+      });
 
       await Promise.all(imagePromises);
 
@@ -151,22 +123,62 @@ const postProduct = async ({
   }
 };
 
-// const updateProduct = async (id, updatedData) => {
-//   try {
-//     const productToUpdate = await Product.findByPk(id);
+// POST SEVERAL PRODUCTS
+const postProductSeveral = async (products) => {
+  if (!products || products.length === 0) {
+    return { error: true, response: "No hay productos para agregar" };
+  }
 
-//     if (!productToUpdate) {
-//       throw new Error("Producto no encontrado");
-//     }
+  const newProducts = await Promise.all(
+    products.map(async (product) => {
+      let newImages = await Promise.all(
+        product.images.map((imageURL) => {
+          const cloudinaryResponse = cloudinary.uploader.upload(imageURL, {
+            folder: "products",
+            width: 300,
+            format: "png",
+          });
 
-//     await productToUpdate.update(updatedData);
+          return cloudinaryResponse;
+        })
+      );
+      if (!newImages) {
+        return {
+          error: true,
+          response: "No se pudo cargar la imagen en cloudinary",
+        };
+      }
+      newImages = newImages.map((image) => image.secure_url);
+      const newProduct = postProduct({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        warranty: product.warranty,
+        is_deleted: product.is_deleted,
+        stock: product.stock,
+        categoryName: product.categoryName,
+        images: newImages,
+        brandName: product.brandName,
+        soldCount: product.soldCount,
+      });
+      if (!newProduct) {
+        return {
+          error: true,
+          response: `No se pudo crear el producto: ${product.name}`,
+        };
+      }
 
-//     return productToUpdate;
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// };
-
+      return newProduct;
+    })
+  );
+  if (!newProducts) {
+    return {
+      error: true,
+      response: `No se pudo crear los productos`,
+    };
+  }
+  return newProducts;
+};
 
 //UPDATE PRODUCT
 const updateProduct = async (productId, updateData) => {
@@ -207,9 +219,7 @@ const updateProduct = async (productId, updateData) => {
 const deleteProduct = async (id) => {
   try {
     const productToDelete = await Product.findByPk(id);
-
     await productToDelete.destroy();
-
     return { productToDelete, deleted: true };
   } catch (error) {
     throw new Error(error);
@@ -226,12 +236,7 @@ const getProductById = async (id) => {
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
-
-    if (!product) {
-      throw new Error("Product not found");
-    } else {
-      return product;
-    }
+    return product;
   } catch (error) {
     console.error(error);
   }
@@ -271,6 +276,7 @@ const searchByName = async (name) => {
 
 module.exports = {
   postProduct,
+  postProductSeveral,
   getAllProducts,
   updateProduct,
   deleteProduct,

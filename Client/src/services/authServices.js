@@ -14,21 +14,20 @@ const dataSorterForApp = (data) => {
 
 export const loginUser = async (username, password, cookieStatus) => {
   try {
-    const axiosInstance = cookieStatus
-      ? headerSetterForPetitions(cookieStatus)
-      : headerSetterForPetitions(cookieStatus)(
-          window.localStorage.getItem("jwt")
-        );
-
-    const { data } = await axiosInstance.post(`${url}/account/login`, {
-      username: username,
-      password: password,
-    });
+    const { data } = await axios.post(
+      `${url}/account/login`,
+      {
+        username: username,
+        password: password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
 
     if (data.login) {
       const sortedData = dataSorterForApp(data);
       createPersistency(sortedData, cookieStatus);
-
       return { error: false, data: sortedData };
     }
   } catch ({ response }) {
@@ -54,8 +53,7 @@ export const googleLoginUser = async (cookieStatus) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
           const sortedData = dataSorterForApp(event.data);
-          console.log(sortedData);
-          createPersistency(sortedData, cookieStatus)
+          createPersistency(sortedData, cookieStatus);
           popup.close();
           resolve({ data: event.data });
         }
@@ -69,8 +67,20 @@ export const registerUser = async (userObj) => {
   try {
     const registerData = await axios.post(`${url}/account/signin`, {
       userObj,
+    },{
+      withCredentials: true,
     });
     return { error: false, data: registerData };
+  } catch ({ response }) {
+    return { error: response.data };
+  }
+};
+export const logOutUser = async () => {
+  try {
+    const response = await axios.post(`${url}/account/logout`,{
+      withCredentials: true,
+    });
+    return { error: false, data: response };
   } catch ({ response }) {
     return { error: response.data };
   }

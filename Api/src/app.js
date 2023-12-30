@@ -1,36 +1,60 @@
 require("dotenv").config();
+require("./config/passport.js");
+
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");
 var cors = require("cors");
 const passport = require("passport");
-// importamos la configuracion de passport
-require("./middlewares/googleAuthMiddleware.js");
-
+const { conn } = require("./db.js");
 const server = express();
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
+// Creamos session store
+const sessionStore = new SequelizeStore({
+  db: conn,
+  table: "Session",
+  extendDefaultFields: (defaults, session) => ({
+    data: defaults.data,
+    expires: defaults.expires,
+    sid: session.sid,
+  }),
+});
+// Configuramos express-session
 server.use(
-  session({
-    secret: "your-secret-key",
+  session({ 
+    secret: `${process.env.EXPRESS_SESSION_KEY}`,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true },
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      httpOnly: false,
+      sameSite: 'Lax',
+      secure: process.env.NODE_ENV === "production",
+    },
   })
 );
+
+sessionStore.sync();
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 server.name = "API";
 server.use(morgan("dev"));
 server.use(express.json());
-
-server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
-server.use(bodyParser.json({ limit: "50mb" }));
+server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
+// Passport
 server.use(passport.initialize());
 server.use(passport.session());
+
+server.use((req, res, next) => {
+  console.log({ session: req.session });
+  console.log({ isAuthenticated: req.isAuthenticated()} );
+  next();
+});
+// Entryp0nt de la ruta principal
 server.use("/", routes);
 
 // Error catching endware.

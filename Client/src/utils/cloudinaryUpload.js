@@ -10,15 +10,19 @@ const cloudinary = new Cloudinary({
   },
 });
 
-const handleImageUpload = async (file) => {
+const handleImageUpload = async (file, floderName) => {
   try {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", uploadPreset);
 
+    if (floderName) {
+      formData.append("folder", floderName);
+    }
+
     const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      formData,
+      formData
     );
 
     if (!response.data.secure_url) {
@@ -27,8 +31,7 @@ const handleImageUpload = async (file) => {
 
     return response.data.secure_url;
   } catch (error) {
-    console.error("Error en la subida de la imagen:", error);
-    throw error;
+    return { error };
   }
 };
 
