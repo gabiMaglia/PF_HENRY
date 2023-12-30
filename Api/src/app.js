@@ -10,7 +10,6 @@ var cors = require("cors");
 const passport = require("passport");
 const { conn } = require("./db.js");
 const server = express();
-
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // Creamos session store
@@ -31,13 +30,13 @@ server.use(
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      httpOnly: true,
-      sameSite: false,
+      httpOnly: false,
+      sameSite: 'Lax',
       secure: process.env.NODE_ENV === "production",
-      maxAge: 1 * 60 * 60 * 24,
     },
   })
 );
+
 sessionStore.sync();
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
@@ -50,12 +49,9 @@ server.use(cookieParser());
 server.use(passport.initialize());
 server.use(passport.session());
 
-
-
 server.use((req, res, next) => {
   console.log({ session: req.session });
   console.log({ isAuthenticated: req.isAuthenticated()} );
-  // req.logout(err => console.log(err))
   next();
 });
 // Entryp0nt de la ruta principal
