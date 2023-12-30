@@ -81,10 +81,6 @@ const confirmAccountHandler = async (req, res) => {
 };
 const logoutHandler = async (req, res, next) => {
   try {
-    req.session.destroy((err) => {
-      if (err) {
-        return done(err);
-      }});
       req.logOut(req.user, function (err) {
         if (err) {
           console.log("error", err);
