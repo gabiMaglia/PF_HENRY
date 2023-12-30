@@ -60,18 +60,22 @@ export const createServiceValidate = (values, setErrors, antErrors) => {
 
   const errors = { ...antErrors };
 
-  product_model
+  product_model !== undefined
     ? (errors.product_model = productModelValidate(product_model))
     : "";
-  product_income_date
+
+  product_income_date !== undefined
     ? (errors.product_income_date =
         productIncomeDateValidate(product_income_date))
     : "";
-  user_diagnosis
+  user_diagnosis !== undefined
     ? (errors.user_diagnosis = userDiagnosisValidate(user_diagnosis))
     : "";
-  client ? (errors.client = clientValidate(client)) : "";
-  technician ? (errors.technician = technicianValidate(technician)) : "";
+  client !== undefined ? (errors.client = clientValidate(client)) : "";
+  technician !== undefined
+    ? (errors.technician = technicianValidate(technician))
+    : "";
 
   setErrors(errors);
+  return errors;
 };
