@@ -1,11 +1,15 @@
 function getFirstLetters(text) {
-  const words = text.split(" ");
+  if (text) {
+    const words = text.split(" ");
 
-  const firstLetters = words.map((word) => word.charAt(0));
+    const firstLetters = words.map((word) => word.charAt(0));
 
-  const result = firstLetters.join("");
+    const result = firstLetters.join("");
 
-  return result;
+    return result;
+  } else {
+    return "";
+  }
 }
 
 export default getFirstLetters;
