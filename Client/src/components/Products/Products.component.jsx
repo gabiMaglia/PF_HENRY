@@ -57,7 +57,7 @@ const Products = () => {
 
         <ProductBox products={productsToShow} />
 
-        <Stack spacing={2} sx={{ mt: 3 }}>
+        <Stack spacing={2} sx={{ mt: { xs: 2, lg: 3 }, mb: { xs: 10 } }}>
           <Pagination
             variant="outlined"
             shape="rounded"
@@ -66,10 +66,9 @@ const Products = () => {
             value={value}
             page={currentPage + 1}
             onChange={handlePageChange}
-            boundaryCount={3}
             showFirstButton
             showLastButton
-            sx={{ color: "black" }}
+            sx={{ color: "black", boundaryCount: { xs: 2, md: 3 } }}
           />
         </Stack>
       </Box>
