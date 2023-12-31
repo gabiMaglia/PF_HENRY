@@ -8,7 +8,7 @@ import { Box, Pagination, Stack } from "@mui/material";
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
 //REDUX
-import { nextPage, prevPage } from "../../redux/slices/productSlice";
+import { selectPage } from "../../redux/slices/productSlice";
 //SERVICES
 import { fetchSearch, fetchAllProducts } from "../../services/productServices";
 
@@ -18,6 +18,8 @@ const Products = () => {
   const { productsToShow, inputName, totalPages, currentPage } = useSelector(
     (state) => state.product
   );
+
+  const [value, setValue] = useState(1);
 
   useEffect(() => {
     inputName !== ""
@@ -35,11 +37,9 @@ const Products = () => {
   });
 
   const handlePageChange = (event, value) => {
-    if (value > currentPage + 1) {
-      dispatch(nextPage(value - 1));
-    } else if (value < currentPage + 1) {
-      dispatch(prevPage(value - 1));
-    }
+    console.log(value);
+    setValue(value);
+    dispatch(selectPage(value));
   };
 
   return (
@@ -63,8 +63,12 @@ const Products = () => {
             shape="rounded"
             color="primary"
             count={totalPages}
+            value={value}
             page={currentPage + 1}
             onChange={handlePageChange}
+            boundaryCount={3}
+            showFirstButton
+            showLastButton
             sx={{ color: "black" }}
           />
         </Stack>
