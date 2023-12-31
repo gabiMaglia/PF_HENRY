@@ -179,9 +179,9 @@ export const fetchDelete = (product, cookieAccepted) => async () => {
   }
 };
 
-export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  const { userId } = aux;
+export const fetchCart = (items) => async (dispatch) => {
+  // const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  // const { userId } = aux;
 
   const products = items.map((item) => ({
     title: item.name,
@@ -191,17 +191,13 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   }));
   console.log(products);
   try {
-    const response = await axios.post(
-      `${urlBack}/pagos/order`,
-      { array: products, userId: userId },
-      {withCredentials: true},
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await axios.post(`${urlBack}/pagos`, products, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    );
-    dispatch(idShop(response.data.Order.preferenceId));
+  });
+    console.log(response.data)
+    dispatch(idShop(response.data));
   } catch (error) {
     return;
   }

@@ -5,6 +5,7 @@ const {
 
 const mercadoPagoHandler = async (req, res) => {
   const array = req.body;
+  console.log(array)
 
   try {
     const response = await mercadoPago(array);
