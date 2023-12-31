@@ -3,6 +3,7 @@ import { Typography, Box } from "@mui/material";
 import {
   DataGrid,
   GridCellEditStopReasons,
+  GridLogicOperator,
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarDensitySelector,
@@ -14,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { PutUser } from "../../services/userServices";
+import Loading from "../Loading/Loading.component";
 
 const gridColumns = [
   {
@@ -71,6 +73,13 @@ const gridColumns = [
     minWidth: 25,
     editable: "true",
   },
+  {
+    field: "isDeleted",
+    headerAlign: "center",
+    headerName: "Eliminado",
+    minWidth: 25,
+    editable: "true",
+  },
 ];
 
 const columnGroupingModel = [
@@ -88,7 +97,7 @@ const columnGroupingModel = [
     ],
   },
   {
-    groupId: "´privateUserData",
+    groupId: "privateUserData",
     headerName: "Estado del usuario",
     headerAlign: "center",
     description: "Estado del usuario dentro de la pagina",
@@ -96,45 +105,75 @@ const columnGroupingModel = [
       { field: "role" },
       { field: "isActive" },
       { field: "isVerified" },
+      { field: "isDeleted" },
     ],
   },
 ];
+
+const CustomToolbar = ({ setFilterButtonEl }) => {
+  return (
+    <GridToolbarContainer
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        backgroundColor: "#fd611a",
+      }}
+    >
+      <Typography>Lista de usuarios</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
+        <GridToolbarColumnsButton sx={{ color: "black" }} />
+        <GridToolbarFilterButton
+          ref={setFilterButtonEl}
+          sx={{ color: "black" }}
+        />
+        <GridToolbarDensitySelector sx={{ color: "black" }} />
+        <GridToolbarExport sx={{ color: "black" }} />
+      </Box>
+    </GridToolbarContainer>
+  );
+};
 
 const UsersTable = () => {
   const editingRow = useRef(null);
   const [rows, setRows] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
   const [availableModify, setAvailableModify] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filterButtonEl, setFilterButtonEl] = useState(null);
+  const [customFilters, setCustomFilters] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const CustomToolbar = () => {
-    return (
-      <GridToolbarContainer
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-          backgroundColor: "#fd611a",
-        }}
-      >
-        <Typography>Lista de usuarios</Typography>
-        <Box
-          sx={{
-            display: "flex",
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-around",
-          }}
-        >
-          <GridToolbarColumnsButton sx={{ color: "black" }} />
-          <GridToolbarFilterButton sx={{ color: "black" }} />
-          <GridToolbarDensitySelector sx={{ color: "black" }} />
-          <GridToolbarExport sx={{ color: "black" }} />
-        </Box>
-      </GridToolbarContainer>
-    );
+  const addCustomFilter = () => {
+    setCustomFilters((prevFilters) => [
+      ...prevFilters,
+      { field: "", operator: "", value: "" },
+    ]);
+  };
+
+  const handleCustomFilterChange = (index, key, value) => {
+    setCustomFilters((prevFilters) => {
+      const updatedFilters = [...prevFilters];
+      updatedFilters[index][key] = value;
+      return updatedFilters;
+    });
+  };
+
+  const removeCustomFilter = (index) => {
+    setCustomFilters((prevFilters) => {
+      const updatedFilters = [...prevFilters];
+      updatedFilters.splice(index, 1);
+      return updatedFilters;
+    });
   };
 
   const addRole = (rows, roles) => {
@@ -158,17 +197,22 @@ const UsersTable = () => {
     });
     setUserRoles(roles);
     setRows(newUsers);
+    setIsLoading(false);
   };
 
   const getUsers = async () => {
     const response = await getAllUsers(authData.jwt);
     const roles = await getUserRoles(authData.jwt);
     if (response.error || roles.error) {
+      const error = response.error
+        ? response.error.response.data.error
+        : roles.error.response.data.error;
+      setIsLoading(false);
       Swal.fire({
         allowOutsideClick: false,
         icon: "error",
         title: "Error en la obtención de usuarios",
-        text: `No se pudo cargar la tabla`,
+        text: `${error}`,
       });
     }
 
@@ -214,6 +258,8 @@ const UsersTable = () => {
           email: newRow.email,
           telephone: newRow.telephone,
           image: newRow.image,
+          isActive: newRow.isActive,
+          isVerified: newRow.isVerified,
           userAddress: {},
         };
         const response = await PutUser(newRow.id, newRow.role, editedUser);
@@ -257,6 +303,7 @@ const UsersTable = () => {
     <Box
       sx={{
         width: "100%",
+        position: "relative",
         maxWidth: "70%",
         height: "95%",
         minHeight: "10vh",
@@ -272,6 +319,17 @@ const UsersTable = () => {
         slots={{
           toolbar: CustomToolbar,
         }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
+          panel: {
+            anchorEl: filterButtonEl,
+          },
+          toolbar: {
+            setFilterButtonEl,
+          },
+        }}
         initialState={{
           columns: {
             columnVisibilityModel: {
@@ -279,6 +337,14 @@ const UsersTable = () => {
               telephone: false,
               isActive: false,
               isVerified: false,
+              isDeleted: false,
+            },
+          },
+          filter: {
+            filterModel: {
+              items: [
+                { field: "isDeleted", operator: "equals", value: "false" },
+              ],
             },
           },
         }}
@@ -328,9 +394,6 @@ const UsersTable = () => {
               backgroundColor: "black",
               borderColor: "black",
             },
-          "& .editing": {
-            backgroundColor: "lightyellow", // Cambia el fondo al editar la celda
-          },
         }}
         getRowClassName={() => "row"}
         columns={gridColumns}
@@ -340,6 +403,7 @@ const UsersTable = () => {
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleErrorInput}
       ></DataGrid>
+      {isLoading && <Loading />}
     </Box>
   );
 };
