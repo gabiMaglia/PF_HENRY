@@ -157,7 +157,6 @@ const UserPanelProductCard = ({
                     maxHeight: "3em",
                   }}
                   onClick={() => {
-                    console.log(product.id);
                     button.action(
                       button.actionParam && button.actionParam,
                       product.id
