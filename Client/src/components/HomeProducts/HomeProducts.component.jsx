@@ -35,7 +35,7 @@ const HomeProducts = ({ allProducts }) => {
         console.error("Error fetching home products:", error);
       } finally {
         if (startTime) {
-          const minimumLoadingTime = 2000;
+          const minimumLoadingTime = 1000;
           const remainingTime = Math.max(
             0,
             minimumLoadingTime - (Date.now() - startTime)

@@ -113,10 +113,10 @@ export const fetchProduct = (product, cookieAccepted) => async () => {
   };
 
   try {
-    const res = await axios.post(`${urlBack}/cart/`, data);
+    const res = await axios.post(`${urlBack}/cart/`, data, {withCredentials: true});
 
     if (res.data.Cart === "El usuario ya tiene carrito") {
-      const response = await axios.put(`${urlBack}/cart/add`, data);
+      const response = await axios.put(`${urlBack}/cart/add`, data, {withCredentials: true});
     }
   } catch (error) {
     return;
@@ -127,7 +127,7 @@ export const fetchGetProduct = (cookieAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
   const { userId } = aux;
   try {
-    const res = await axios.get(`${urlBack}/cart/${userId}`);
+    const res = await axios.get(`${urlBack}/cart/${userId}`, {withCredentials: true});
 
     const products = res.data.Products.map((product) => ({
       id: product.id,
@@ -157,7 +157,7 @@ export const fetchCount = (product, cookieAccepted) => async () => {
     productQuantity: product.count,
   };
   try {
-    const response = await axios.put(`${urlBack}/cart/edit`, data);
+    const response = await axios.put(`${urlBack}/cart/edit`, data, {withCredentials: true});
   } catch (error) {
     return;
   }
@@ -172,16 +172,16 @@ export const fetchDelete = (product, cookieAccepted) => async () => {
     productId: product,
   };
   try {
-    const res = await axios.put(`${urlBack}/cart/remove`, data);
+    const res = await axios.put(`${urlBack}/cart/remove`, data, {withCredentials: true});
     console.log(res, "delete");
   } catch (error) {
     return;
   }
 };
 
-export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  const { userId } = aux;
+export const fetchCart = (items) => async (dispatch) => {
+  // const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  // const { userId } = aux;
 
   const products = items.map((item) => ({
     title: item.name,
@@ -191,23 +191,20 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   }));
   console.log(products);
   try {
-    const response = await axios.post(
-      `${urlBack}/pagos/order`,
-      { array: products, userId: userId },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await axios.post(`${urlBack}/pagos`, products, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    );
-    dispatch(idShop(response.data.Order.preferenceId));
+  });
+    console.log(response.data)
+    dispatch(idShop(response.data));
   } catch (error) {
     return;
   }
 };
 export const fetchAddProduct = async (obj, dispatch) => {
   try {
-    const { data } = await axios.post(`${urlBack}/product`, obj);
+    const { data } = await axios.post(`${urlBack}/product`, obj, {withCredentials: true});
     if (data) {
       dispatch(addProduct(data.product));
     }

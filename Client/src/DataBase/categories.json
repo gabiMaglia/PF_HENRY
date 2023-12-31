@@ -53,13 +53,13 @@
       },
       {
         "id": 11,
-        "name": "Teclado",
-        "image":"/categories/teclado.png"
+        "name": "Ssd",
+        "image":"/categories/ssd.png"
       },
       {
         "id": 12,
-        "name": "Ssd",
-        "image":"/categories/ssd.png"
+        "name": "Teclado",
+        "image":"/categories/teclado.png"
       }
     ]
   }

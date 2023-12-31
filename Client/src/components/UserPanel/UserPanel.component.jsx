@@ -14,6 +14,7 @@ import TechniciansProfile from "../TechniciansProfile/TechniciansProfile.compone
 import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.component";
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
 import CreateService from "../CreateService/CreateService.component";
+import UsersTable from "../UsersTable/UsersTable.component";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -180,18 +181,22 @@ const UserPanelComponent = () => {
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.PRODUCTS_SERVICES
+              ? PATHROUTES.USERS_LIST
               : PATHROUTES.PRODUCTS_SERVICES
           }
-          element={<ProductsServicesProfile />}
+          element={
+            userRole === "admin" ? <UsersTable /> : <ProductsServicesProfile />
+          }
         />
         <Route
           path={
-            userRole === "technician" || userRole === "admin"
-              ? PATHROUTES.CREATE_SERVICES
-              : ""
+            userRole === "customer"
+              ? PATHROUTES.PROFILE
+              : PATHROUTES.CREATE_SERVICES
           }
-          element={<CreateService />}
+          element={
+            userRole === "customer" ? <UserProfile /> : <CreateService />
+          }
         />
       </Routes>
       <Box

@@ -37,14 +37,15 @@ const FiltersSorting = () => {
   const handleCategoryClick = (categoryName) => {
     dispatch(filterByCategory(categoryName));
     setSelectedCategory(categoryName);
+    setSelectedBrand("default");
+    setSelectedPrice("default");
   };
 
   const handleSelectBrand = (e) => {
     setSelectedBrand(e.target.value);
   };
 
-  const handleFilterBrand = async () => {
-    await dispatch(fetchProductsByBrand(selectedBrand));
+  const handleFilterBrand = () => {
     dispatch(filterByBrand(selectedBrand));
     dispatch(orderPrice(selectedPrice));
   };

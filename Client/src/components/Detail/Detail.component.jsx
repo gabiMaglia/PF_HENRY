@@ -15,6 +15,7 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
+import Swal from "sweetalert2";
 
 // Importación del componente CarouselProducts
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
@@ -23,6 +24,7 @@ import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import {
   fetchProductById,
   fetchAllProducts,
+  fetchProduct,
 } from "../../services/productServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 
@@ -106,8 +108,9 @@ const Detail = () => {
   const [loading, setLoading] = useState(true);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const { allProducts } = useSelector((state) => state.product);
-  const cartItemCount = useSelector((state) => state.cart.items.length);
+  const { login } = useSelector((state) => state.user);
   const [fadeInKey, setFadeInKey] = useState(0);
+  const { cookiesAccepted } = useSelector((state) => state.cookies);
 
   // Función para resetear la animación de fundido
   const resetFadeIn = () => {
@@ -169,10 +172,23 @@ const Detail = () => {
 
   // Función para manejar la acción de agregar al carrito
   const handleAddToCart = () => {
-    if (productById && productById.id) {
+    if (login === false) {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Debes estar logueado para agregar productos al carrito.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
+    } else {
       setStoredProducts(productById);
       dispatch(addItem());
+      dispatch(fetchProduct(productById, cookiesAccepted));
     }
+    // if (productById && productById.id) {
+    //   setStoredProducts(productById);
+    //   dispatch(addItem());
+    // }
   };
 
   // Verificación del tamaño de pantalla

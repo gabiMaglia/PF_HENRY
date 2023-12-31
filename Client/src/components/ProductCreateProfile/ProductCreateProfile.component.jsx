@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+//HOOKS
+import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+//MATERIAL UI
 import {
   FormControl,
   Box,
@@ -9,12 +12,16 @@ import {
   Input,
   Typography,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+//SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchAddProduct } from "../../services/productServices";
+//SWEET ALERT
 import Swal from "sweetalert2";
+//UTILS
 import { handleImageUpload } from "../../utils/cloudinaryUpload";
-import { margin, padding } from "@mui/system";
+//HELPERS
+import validationsCreate from "../../helpers/productValidate";
+
 
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
@@ -26,6 +33,8 @@ const ProductCreateProfileComponent = () => {
   const [newCategory, setNewCategory] = useState("");
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
+  const [errors, setErrors] = useState({});
+
   const [values, setValues] = useState({
     name: "",
     price: "",
@@ -38,11 +47,77 @@ const ProductCreateProfileComponent = () => {
     images: [],
   });
   const [imagePreviews, setImagePreviews] = useState([]);
-
   useEffect(() => {
     fetchCategories(dispatch);
   }, []);
+console.log(values);
+  const handlerAddImage = ({ target }) => {
+    setValues({
+      ...values,
+      images: [...values.images, imageURL],
+    });
 
+    setImagePreviews([...imagePreviews, imageURL]);
+    setImageURL("");
+  };
+
+  const handlerImageChange = (e) => {
+    setImageURL(e.target.value);
+  };
+
+  const handleChange = (event) => {
+    const { name, value, files } = event.target;
+  
+    switch (name) {
+      case "images":
+        if (!isUrlInput) {
+          const selectedImages = Array.from(files);
+          setValues((prevValues) => ({
+            ...prevValues,
+            images: [...prevValues.images, ...selectedImages],
+          }));
+  
+          const selectedPreviews = Array.from(files).map((file) =>
+            URL.createObjectURL(file)
+          );
+          setImagePreviews((prevPreviews) => [
+            ...prevPreviews,
+            ...selectedPreviews,
+          ]);
+        }
+        break;
+  
+      case "imageUrl":
+        setImageURL(value);
+        break;
+  
+      case "categoryName":
+        setValues((prevValues) => ({
+          ...prevValues,
+          categoryName: isOtherCategory ? newCategory : [value],
+        }));
+        setIsOtherCategory(value === "otra");
+        break;
+  
+      case "newCategory":
+        setNewCategory(value);
+        setValues((prevValues) => ({
+          ...prevValues,
+          categoryName: isOtherCategory ? [value] : prevValues.categoryName,
+        }));
+        break;
+  
+      default:
+        setValues((prevValues) => {
+          const updatedValues = { ...prevValues, [name]: value };
+          return updatedValues;
+        });
+    }
+  
+    // Realizar la validación después de cada caso
+    const errorObject = validationsCreate(values);
+    setErrors(errorObject);
+  };
   const handlerUpdateCloudinary = async (folderName) => {
     try {
       const file = fileInputRef.current.files;
@@ -53,7 +128,6 @@ const ProductCreateProfileComponent = () => {
 
       const newImagePromises = Array.from(file).map(async (f) => {
         try {
-          console.log(f);
           return await handleImageUpload(f, folderName);
         } catch (error) {
           console.error("Error al subir imagen a Cloudinary:", error);
@@ -95,54 +169,56 @@ const ProductCreateProfileComponent = () => {
       return { error: true, response: "Error en la carga de imágenes" };
     }
   };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handlerAddImage = ({ target }) => {
-    setValues({
-      ...values,
-      images: [...values.images, imageURL],
-    });
+    let array = [];
 
-    setImagePreviews([...imagePreviews, imageURL]);
-    setImageURL("");
-  };
-
-  const handlerImageChange = (e) => {
-    setImageURL(e.target.value);
-  };
-
-  const handleChange = (event) => {
-    const { name, value, files } = event.target;
-
-    if (name === "images" && !isUrlInput) {
-      const selectedImages = Array.from(files);
-      setValues((prevValues) => ({
-        ...prevValues,
-        images: [...prevValues.images, ...selectedImages],
-      }));
-
-      const selectedPreviews = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setImagePreviews((prevPreviews) => [
-        ...prevPreviews,
-        ...selectedPreviews,
-      ]);
-    } else if (name === "imageUrl") {
-      setImageURL(value);
-    } else if (name === "categoryName") {
-      setCategoryName(value);
-      if (value === "otra") {
-        setIsOtherCategory(true);
-      } else {
-        setIsOtherCategory(false);
-      }
-    } else if (name === "newCategory") {
-      setNewCategory(value);
+    const errorObject = validationsCreate(values);
+    setErrors(errorObject);
+    if (Object.keys(errorObject).length !== 0) {
+      console.log(values);
+      Swal.fire({
+        icon: "error",
+        title: "datos incorrectos",
+        text: "Por favor verifique los datos e inténtelo de nuevo.",
+      });
     } else {
-      setValues((prevValues) => ({
-        ...prevValues,
-        [name]: value,
-      }));
+      if (isUrlInput) {
+        const array2 = await uploadCloudinaryUrl(values.images, "products");
+        array = array2;
+      } else {
+        const array2 = await handlerUpdateCloudinary("products");
+        array = array2;
+      }
+
+      if (array.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al subir la imagen a Cloudinary",
+          text: "Por favor, inténtelo de nuevo.",
+        });
+      }
+
+      const obj = {
+        ...values,
+        images: array,
+      };
+      console.log(obj);
+      fetchAddProduct(obj, dispatch);
+      setValues({
+        name: "",
+        price: "",
+        description: "",
+        stock: "",
+        soldCount: "0",
+        warranty: "",
+        categoryName: isOtherCategory ? newCategory : [categoryName],
+        brandName: "",
+        images: [],
+      });
+      setImagePreviews([]);
+      setImageURL("");
     }
   };
 
@@ -161,51 +237,11 @@ const ProductCreateProfileComponent = () => {
     setImagePreviews(updatedPreviews);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    let array = [];
-    if (isUrlInput) {
-      const array2 = await uploadCloudinaryUrl(values.images, "products");
-      array = array2;
-    } else {
-      const array2 = await handlerUpdateCloudinary("products");
-      array = array2;
-    }
-
-    if (array.error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al subir la imagen a Cloudinary",
-        text: "Por favor, inténtelo de nuevo.",
-      });
-    }
-
-    const obj = {
-      ...values,
-      images: array,
-    };
-
-    fetchAddProduct(obj, dispatch);
-    setValues({
-      name: "",
-      price: "",
-      description: "",
-      stock: "",
-      soldCount: "0",
-      warranty: "",
-      categoryName: isOtherCategory ? newCategory : [categoryName],
-      brandName: "",
-      images: [],
-    });
-    setImagePreviews([]); 
-    setImageURL("");
-  };
-
   return (
     <Box
       sx={{
         width: "100%",
-        height: "100%",
+        height: "auto",
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
@@ -236,6 +272,8 @@ const ProductCreateProfileComponent = () => {
             variant="outlined"
             required
             fullWidth
+            helperText={errors.e1}
+            error={Boolean(errors.e1)}
           />
         </Box>
         <Box>
@@ -247,6 +285,8 @@ const ProductCreateProfileComponent = () => {
             variant="outlined"
             required
             fullWidth
+            helperText={errors.e2 ? errors.e2 : errors.e9}
+            error={Boolean(errors.e2) || Boolean(errors.e9)}
           />
         </Box>
         <Box>
@@ -260,6 +300,8 @@ const ProductCreateProfileComponent = () => {
             onChange={handleChange}
             variant="outlined"
             required
+            helperText={errors.e3}
+            error={Boolean(errors.e3)}
           />
         </Box>
         <Box>
@@ -271,6 +313,8 @@ const ProductCreateProfileComponent = () => {
             onChange={handleChange}
             variant="outlined"
             required
+            helperText={errors.e7}
+            error={Boolean(errors.e7)}
           />
         </Box>
         <Box>
@@ -282,6 +326,8 @@ const ProductCreateProfileComponent = () => {
             variant="outlined"
             required
             fullWidth
+            helperText={errors.e8 ? errors.e8 : errors.e10}
+            error={Boolean(errors.e8) || Boolean(errors.e10)}
           />
         </Box>
         <Box>
@@ -293,6 +339,8 @@ const ProductCreateProfileComponent = () => {
             variant="outlined"
             required
             fullWidth
+            helperText={errors.e5}
+            error={Boolean(errors.e5)}
           />
         </Box>
         <Box>
@@ -300,10 +348,11 @@ const ProductCreateProfileComponent = () => {
             name="categoryName"
             labelId="categoria del producto"
             label="categoria"
-            value={isOtherCategory ? "otra" : categoryName}
+            value={isOtherCategory ? "otra" : values.categoryName}
             onChange={handleChange}
             variant="outlined"
             fullWidth
+            error={Boolean(errors.e6)}
           >
             <MenuItem
               value="selecciona una categoria"
@@ -320,6 +369,7 @@ const ProductCreateProfileComponent = () => {
             ))}
             <MenuItem value="otra">Otra</MenuItem>
           </Select>
+          {errors.e6 && <Typography color="error">{errors.e6}</Typography>}
           {isOtherCategory && (
             <TextField
               name="newCategory"
@@ -341,11 +391,26 @@ const ProductCreateProfileComponent = () => {
                 inputProps={{ multiple: true }}
                 inputRef={fileInputRef}
                 onChange={handleChange}
-                variant="outlined"
+                sx={{
+                  padding: "15px",
+                  marginBottom: "10px",
+                  borderRadius: 2,
+                  backgroundColor: "#fd611a",
+                  color: "white",
+                }}
               />
+              {errors.e4 && (
+                <Typography variant="caption" color="error">
+                  {errors.e4}
+                </Typography>
+              )}
             </FormControl>
           ) : (
-            <>
+            <Box
+              sx={{
+                display: "flex",
+              }}
+            >
               <TextField
                 label="URL de la imagen"
                 name="imageUrl"
@@ -354,7 +419,9 @@ const ProductCreateProfileComponent = () => {
                 onChange={handlerImageChange}
                 fullWidth
               />
+            
               <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
+             
                 <Button
                   variant="outlined"
                   color="inherit"
@@ -365,8 +432,17 @@ const ProductCreateProfileComponent = () => {
                   insertar URL
                 </Button>
               </Box>
-            </>
+           
+            </Box>
+              
+            
+            
           )}
+           {errors.e4 &&isUrlInput? (
+                <Typography variant="caption" color="error">
+                  Ingrese una URL valida
+                </Typography>
+              ):null}
           <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
             <Button
               variant="outlined"
@@ -379,43 +455,58 @@ const ProductCreateProfileComponent = () => {
             </Button>
           </Box>
         </Box>
-        <Box sx={{display:"flex", flexDirection:"row", backgroundColor:"red"}}>
-  <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", backgroundColor:"red"}}>
-    {imagePreviews.map((preview, index) => (
-      <img
-        key={index}
-        src={preview}
-        alt={`Preview-${index}`}
-        style={{
-          maxWidth: "100px",
-          maxHeight: "100px",
-          margin: "10px",
-        }}
-      />
-    ))}
-  </Box>
-  <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center"}}>
-    <ul>
-      {values.images.map((image, index) => (
-        <li key={index} style={{margin:"35px"}}>
-          {image.name || image}
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => handleRemoveImage(index)}
+        <Box
+          sx={{ display: "flex", flexDirection: "row", backgroundColor: "red" }}
+        >
+          <Box
             sx={{
-              color: "white",
-              borderRadius: 2,
-              backgroundColor: "#fd611a",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              backgroundColor: "red",
             }}
           >
-            Eliminar
-          </Button>
-        </li>
-      ))}
-    </ul>
-  </Box>
-</Box>
+            {imagePreviews.map((preview, index) => (
+              <img
+                key={index}
+                src={preview}
+                alt={`Preview-${index}`}
+                style={{
+                  maxWidth: "100px",
+                  maxHeight: "100px",
+                  margin: "10px",
+                }}
+              />
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <ul>
+              {values.images.map((image, index) => (
+                <li key={index} style={{ margin: "35px" }}>
+                  {image.name || image}
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleRemoveImage(index)}
+                    sx={{
+                      color: "white",
+                      borderRadius: 2,
+                      backgroundColor: "#fd611a",
+                    }}
+                  >
+                    Eliminar
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </Box>
+        </Box>
         <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
           <Button
             type="submit"

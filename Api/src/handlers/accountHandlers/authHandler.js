@@ -2,6 +2,7 @@ const {
   loginUser,
   registerUser,
   confirmAccountController,
+  deleteActivateUserById,
 } = require("../../controllers/accountControllers/authController");
 
 const signInHandler = async (req, res) => {
@@ -81,13 +82,34 @@ const confirmAccountHandler = async (req, res) => {
 };
 const logoutHandler = async (req, res, next) => {
   try {
+<<<<<<< HEAD
       req.logOut(req.user, function (err) {
         if (err) {
           console.log("error", err);
           return next(err);
         }
        return res.clearCookie('connect.sid', { path: '/' , });
+=======
+    req.logOut(req.user, function (err) {
+      if (err) {
+        console.log("error", err);
+        return next(err);
+      }
+      return res.clearCookie("connect", { path: "/" });
+>>>>>>> develop
     });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+const deleteActivateUserByIdHandler = async (req, res) => {
+  try {
+    console.log('llego')
+    const { id } = req.params;
+    const response = await deleteActivateUserById(id);
+    console.log(response)
+    return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -98,4 +120,5 @@ module.exports = {
   signInHandler,
   forgetPassword,
   confirmAccountHandler,
+  deleteActivateUserByIdHandler,
 };

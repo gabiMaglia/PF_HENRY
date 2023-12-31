@@ -52,7 +52,7 @@ const ProductBox = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationComplete(true);
-    }, 2000); // Puedes ajustar el tiempo de la animación
+    }, 1000); // Puedes ajustar el tiempo de la animación
 
     return () => {
       clearTimeout(timeout);

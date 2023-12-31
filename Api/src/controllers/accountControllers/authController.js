@@ -102,11 +102,7 @@ const loginUser = async (user) => {
   }
   const { role_name } = await UserRole.findByPk(user.rolId);
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
-  const tokenSession = await tokenSign(
-    user.id,
-    user.username,
-    role_name
-  );
+  const tokenSession = await tokenSign(user.id, user.username, role_name);
   // RETORNAMOS AL FRONTEND EL TOKEN EL USUARIO Y EL ROL Y LA VERIFICACION DE MATCH DE PASSWORDS
   return {
     login: true,
@@ -129,9 +125,19 @@ const resetPassword = async (userId) => {
   }
 };
 
+const deleteActivateUserById = async (id) => {
+  const user = await User.findByPk(id);
+  const newState = user.isDeleted;
+  user.update({ isDeleted: !newState });
+  return {
+    response: `${user.name} ${newState && 'Dado de alta' || 'Eliminado'}`,
+  };
+};
+
 module.exports = {
   registerUser,
   loginUser,
   confirmAccountController,
   resetPassword,
+  deleteActivateUserById,
 };
