@@ -25,7 +25,7 @@ const ProductBox = () => {
   const dispatch = useDispatch();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow, isLoading } = useSelector((state) => state.product);
-  console.log(productsToShow);
+
   const [animationComplete, setAnimationComplete] = useState(false);
 
   const { login } = useSelector((state) => state.user);
