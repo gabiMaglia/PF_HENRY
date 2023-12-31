@@ -82,21 +82,14 @@ const confirmAccountHandler = async (req, res) => {
 };
 const logoutHandler = async (req, res, next) => {
   try {
-<<<<<<< HEAD
-      req.logOut(req.user, function (err) {
-        if (err) {
-          console.log("error", err);
-          return next(err);
-        }
-       return res.clearCookie('connect.sid', { path: '/' , });
-=======
+
     req.logOut(req.user, function (err) {
       if (err) {
         console.log("error", err);
         return next(err);
       }
       return res.clearCookie("connect", { path: "/" });
->>>>>>> develop
+
     });
   } catch (error) {
     return res.status(500).json(error.message);
