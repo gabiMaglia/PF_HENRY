@@ -119,8 +119,6 @@ const brands = [
   "Lg",
   "Logitech",
   "Msi",
-  "Radeon",
-  "Raidmax",
   "Ryzen",
   "Samsung",
   "Seagate",
