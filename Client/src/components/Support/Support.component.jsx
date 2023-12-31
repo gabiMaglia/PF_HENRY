@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import Textarea from "@mui/joy/Textarea";
-import ImageUploader from "../ImageUploader";
 //HELPERS
 import {
   validateName,
@@ -194,7 +193,6 @@ const SupportComponent = () => {
       {/* CIERRE BOX TITULO SOPORTE */}
 
       {/* BOX FORM Y CAJA TEXTO */}
-      <ImageUploader />
       <Box
         sx={{
           display: "flex",
