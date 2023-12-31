@@ -38,6 +38,7 @@ const FiltersSorting = () => {
     dispatch(filterByCategory(categoryName));
     setSelectedCategory(categoryName);
     setSelectedBrand("default");
+    setSelectedPrice("default");
   };
 
   const handleSelectBrand = (e) => {
