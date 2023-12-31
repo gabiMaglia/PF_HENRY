@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { PutUser } from "../../services/userServices";
+import Loading from "../Loading/Loading.component";
 
 const gridColumns = [
   {
@@ -88,7 +89,7 @@ const columnGroupingModel = [
     ],
   },
   {
-    groupId: "´privateUserData",
+    groupId: "privateUserData",
     headerName: "Estado del usuario",
     headerAlign: "center",
     description: "Estado del usuario dentro de la pagina",
@@ -105,6 +106,7 @@ const UsersTable = () => {
   const [rows, setRows] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
   const [availableModify, setAvailableModify] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -158,6 +160,7 @@ const UsersTable = () => {
     });
     setUserRoles(roles);
     setRows(newUsers);
+    setIsLoading(false);
   };
 
   const getUsers = async () => {
@@ -214,6 +217,8 @@ const UsersTable = () => {
           email: newRow.email,
           telephone: newRow.telephone,
           image: newRow.image,
+          isActive: newRow.isActive,
+          isVerified: newRow.isVerified,
           userAddress: {},
         };
         const response = await PutUser(newRow.id, newRow.role, editedUser);
@@ -257,6 +262,7 @@ const UsersTable = () => {
     <Box
       sx={{
         width: "100%",
+        position: "relative",
         maxWidth: "70%",
         height: "95%",
         minHeight: "10vh",
@@ -279,6 +285,11 @@ const UsersTable = () => {
               telephone: false,
               isActive: false,
               isVerified: false,
+            },
+          },
+          filter: {
+            filterModel: {
+              items: [{ field: "isActive", operator: "equals", value: "true" }],
             },
           },
         }}
@@ -340,6 +351,7 @@ const UsersTable = () => {
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleErrorInput}
       ></DataGrid>
+      {isLoading && <Loading />}
     </Box>
   );
 };
