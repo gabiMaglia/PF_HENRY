@@ -46,7 +46,7 @@ const productSlice = createSlice({
       state.inputName = action.payload;
     },
     orderPrice: (state, action) => {
-      const prodOrder = state.productsToShow;
+      const prodOrder = state.allProducts;
       const prodSort =
         action.payload == "desc"
           ? prodOrder.sort((a, b) => {
@@ -59,7 +59,7 @@ const productSlice = createSlice({
               if (a.price < b.price) return -1;
             })
           : prodOrder;
-      state.productsToShow = prodSort;
+      state.productsToShow = prodSort.slice(0, PRODUCT_PER_PAGE);
       state.currentPage = 0;
       state.totalPages = Math.ceil(prodSort.length / PRODUCT_PER_PAGE);
     },
@@ -86,6 +86,7 @@ const productSlice = createSlice({
           (product) => product.ProductBrands[0].name === brandName
         )
         state.currentPage = 0;
+        state.allProducts = filterBrand2
       state.totalPages = Math.ceil(
         filterBrand2.length / PRODUCT_PER_PAGE
       );
@@ -95,9 +96,11 @@ const productSlice = createSlice({
       state.totalPages = Math.ceil(
         filterBrand.length / PRODUCT_PER_PAGE
       );
+      state.allProducts = filterBrand
       state.productsToShow = filterBrand.slice(0, PRODUCT_PER_PAGE)}
     },
     resetState: (state, action) => {
+      state.allProducts = state.allProductsTotal;
       state.allProductsBackup = state.allProductsTotal;
       state.productsToShow = state.allProductsTotal.slice(0, PRODUCT_PER_PAGE);
       state.totalPages = Math.ceil(
