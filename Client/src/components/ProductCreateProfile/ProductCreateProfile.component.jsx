@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+//HOOKS
+import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+//MATERIAL UI
 import {
   FormControl,
   Box,
@@ -9,12 +12,17 @@ import {
   Input,
   Typography,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+//SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchAddProduct } from "../../services/productServices";
+//SWEET ALERT
 import Swal from "sweetalert2";
+//UTILS
 import { handleImageUpload } from "../../utils/cloudinaryUpload";
+//HELPERS
 import validationsCreate from "../../helpers/productValidate";
+
+
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
