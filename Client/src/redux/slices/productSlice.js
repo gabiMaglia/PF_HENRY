@@ -29,34 +29,12 @@ const productSlice = createSlice({
     getProductById: (state, action) => {
       state.productById = action.payload;
     },
-    nextPage: (state, action) => {
-      const nextPage = state.currentPage + 1;
-      if (nextPage >= state.totalPages) {
-        const startIndex = 0;
-        const endIndex = PRODUCT_PER_PAGE;
-        state.currentPage = 0;
-        state.productsToShow = state.allProducts.slice(startIndex, endIndex);
-      } else {
-        const startIndex = nextPage * PRODUCT_PER_PAGE;
-        const endIndex = startIndex + PRODUCT_PER_PAGE;
-        state.currentPage = nextPage;
-        state.productsToShow = state.allProducts.slice(startIndex, endIndex);
-      }
-    },
-    prevPage: (state, action) => {
-      const prevPage = state.currentPage - 1;
-      if (prevPage >= 0) {
-        const startIndex = prevPage * PRODUCT_PER_PAGE;
-        const endIndex = startIndex + PRODUCT_PER_PAGE;
-        state.currentPage = state.currentPage - 1;
-        state.productsToShow = state.allProducts.slice(startIndex, endIndex);
-      } else {
-        const lastPage = state.totalPages - 1;
-        const startIndex = lastPage * PRODUCT_PER_PAGE;
-        const endIndex = startIndex + PRODUCT_PER_PAGE;
-        state.currentPage = lastPage;
-        state.productsToShow = state.allProducts.slice(startIndex, endIndex);
-      }
+    selectPage: (state, action) => { 
+      const pagina = action.payload - 1;
+      const startIndex = pagina * PRODUCT_PER_PAGE;
+      const endIndex = startIndex + PRODUCT_PER_PAGE
+      state.currentPage = pagina
+      state.productsToShow = state.allProducts.slice(startIndex, endIndex);
     },
     search: (state, action) => {
       state.productsToShow = action.payload;
@@ -145,6 +123,7 @@ export const {
   prevPage,
   nextPage,
   addProduct,
+  selectPage
 } = productSlice.actions;
 
 export default productSlice.reducer;
