@@ -9,6 +9,7 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
   GridToolbarFilterButton,
+  GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
 import { getAllUsers, getUserRoles } from "../../services/userServices";
 import { useEffect, useRef, useState } from "react";
@@ -120,7 +121,12 @@ const CustomToolbar = ({ setFilterButtonEl }) => {
         backgroundColor: "#fd611a",
       }}
     >
-      <Typography>Lista de usuarios</Typography>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <Typography variant="h5" sx={{ flexGrow: "1" }}>
+          Lista de usuarios
+        </Typography>
+        <GridToolbarQuickFilter sx={{ color: "black" }} />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -148,33 +154,9 @@ const UsersTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
-  const [customFilters, setCustomFilters] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-
-  const addCustomFilter = () => {
-    setCustomFilters((prevFilters) => [
-      ...prevFilters,
-      { field: "", operator: "", value: "" },
-    ]);
-  };
-
-  const handleCustomFilterChange = (index, key, value) => {
-    setCustomFilters((prevFilters) => {
-      const updatedFilters = [...prevFilters];
-      updatedFilters[index][key] = value;
-      return updatedFilters;
-    });
-  };
-
-  const removeCustomFilter = (index) => {
-    setCustomFilters((prevFilters) => {
-      const updatedFilters = [...prevFilters];
-      updatedFilters.splice(index, 1);
-      return updatedFilters;
-    });
-  };
 
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
@@ -327,6 +309,7 @@ const UsersTable = () => {
             anchorEl: filterButtonEl,
           },
           toolbar: {
+            showQuickFilter: true,
             setFilterButtonEl,
           },
         }}
