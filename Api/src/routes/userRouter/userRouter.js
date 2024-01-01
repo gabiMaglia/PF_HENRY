@@ -5,7 +5,6 @@ const {
   postUserHandler,
   editUserByIdHandler,
 } = require("../../handlers/userHandlers/userHandlers");
-
 const useRouter = Router();
 
 useRouter.get("/", getUsersHandler);
