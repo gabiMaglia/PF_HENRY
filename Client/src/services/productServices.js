@@ -101,8 +101,8 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 //   }
 // };
 
-export const fetchProduct = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+export const fetchProduct = (product, cookiesAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
   const user = window.localStorage.getItem("userId");
   const { id } = product;
@@ -123,8 +123,8 @@ export const fetchProduct = (product, cookieAccepted) => async () => {
   }
 };
 
-export const fetchGetProduct = (cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+export const fetchGetProduct = (cookiesAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
   try {
     const res = await axios.get(`${urlBack}/cart/${userId}`, {withCredentials: true});
@@ -147,8 +147,8 @@ export const fetchGetProduct = (cookieAccepted) => async () => {
   }
 };
 
-export const fetchCount = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+export const fetchCount = (product, cookiesAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
 
   const data = {
@@ -163,8 +163,8 @@ export const fetchCount = (product, cookieAccepted) => async () => {
   }
 };
 
-export const fetchDelete = (product, cookieAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+export const fetchDelete = (product, cookiesAccepted) => async () => {
+  const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
 
   const data = {
@@ -179,9 +179,9 @@ export const fetchDelete = (product, cookieAccepted) => async () => {
   }
 };
 
-export const fetchCart = (items) => async (dispatch) => {
-  // const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  // const { userId } = aux;
+export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
 
   const products = items.map((item) => ({
     title: item.name,
@@ -191,17 +191,22 @@ export const fetchCart = (items) => async (dispatch) => {
   }));
   console.log(products);
   try {
-    const response = await axios.post(`${urlBack}/pagos`, products, {
-      headers: {
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      `${urlBack}/pagos/order`,
+      { array: products, userId: userId },
+      {withCredentials: true},
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-  });
-    console.log(response.data)
-    dispatch(idShop(response.data));
+      );
+      console.log(response.data.Order.preferenceId)
+    dispatch(idShop(response.data.Order.preferenceId));
   } catch (error) {
     return;
   }
-};
+}
 export const fetchAddProduct = async (obj, dispatch) => {
   try {
     const { data } = await axios.post(`${urlBack}/product`, obj, {withCredentials: true});
