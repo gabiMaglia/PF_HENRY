@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 import {
   DataGrid,
   GridCellEditStopReasons,
@@ -11,11 +11,12 @@ import {
   GridToolbarFilterButton,
   GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getAllUsers, getUserRoles } from "../../services/userServices";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { PutUser } from "../../services/userServices";
+import { PutUser, isDeleteChange } from "../../services/userServices";
 import Loading from "../Loading/Loading.component";
 
 const gridColumns = [
@@ -23,19 +24,19 @@ const gridColumns = [
     field: "id",
     headerName: "Id",
     headerAlign: "center",
-    minWidth: 120,
+    minWidth: 300,
   },
   {
     field: "name",
     headerName: "Nombre",
-    minWidth: 125,
+    minWidth: 150,
     headerAlign: "center",
     editable: "true",
   },
   {
     field: "surname",
     headerName: "Apellido",
-    minWidth: 135,
+    minWidth: 150,
     headerAlign: "center",
     editable: "true",
   },
@@ -111,7 +112,12 @@ const columnGroupingModel = [
   },
 ];
 
-const CustomToolbar = ({ setFilterButtonEl }) => {
+const CustomToolbar = ({ setFilterButtonEl, rowSelected }) => {
+  const handleDelete = async () => {
+    const response = await isDeleteChange(rowSelected);
+    console.log(response);
+  };
+
   return (
     <GridToolbarContainer
       sx={{
@@ -122,6 +128,9 @@ const CustomToolbar = ({ setFilterButtonEl }) => {
       }}
     >
       <Box sx={{ display: "flex", width: "100%" }}>
+        <Button color="inherit" onClick={handleDelete}>
+          <DeleteIcon sx={{ color: "black" }} />
+        </Button>
         <Typography variant="h5" sx={{ flexGrow: "1" }}>
           Lista de usuarios
         </Typography>
@@ -154,6 +163,7 @@ const UsersTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
+  const [rowSelected, setRowSelected] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -309,6 +319,7 @@ const UsersTable = () => {
             anchorEl: filterButtonEl,
           },
           toolbar: {
+            rowSelected,
             showQuickFilter: true,
             setFilterButtonEl,
           },
@@ -385,6 +396,10 @@ const UsersTable = () => {
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleErrorInput}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelected(newRowSelectionModel);
+        }}
+        rowSelectionModel={rowSelected}
       ></DataGrid>
       {isLoading && <Loading />}
     </Box>
