@@ -80,7 +80,7 @@ const gridColumns = [
     headerAlign: "center",
     headerName: "Eliminado",
     minWidth: 25,
-    editable: "true",
+    editable: "false",
   },
 ];
 
@@ -112,10 +112,25 @@ const columnGroupingModel = [
   },
 ];
 
-const CustomToolbar = ({ setFilterButtonEl, rowSelected }) => {
+const CustomToolbar = ({ setFilterButtonEl, rowSelected, getUsers }) => {
   const handleDelete = async () => {
     const response = await isDeleteChange(rowSelected);
-    console.log(response);
+    if (response.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: response.error,
+      });
+    } else {
+      getUsers();
+
+      Swal.fire({
+        icon: "success",
+        title: "Usuario eliminado exitosamente",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#fd611a",
+      });
+    }
   };
 
   return (
@@ -322,6 +337,7 @@ const UsersTable = () => {
             rowSelected,
             showQuickFilter: true,
             setFilterButtonEl,
+            getUsers,
           },
         }}
         initialState={{
@@ -369,6 +385,24 @@ const UsersTable = () => {
               },
             },
           },
+          "& .row--deleted": {
+            backgroundColor: "red",
+            "&:hover": {
+              backgroundColor: "#ff2b2b",
+            },
+            "&:active": {
+              backgroundColor: "#ff2b2b",
+            },
+            "&:focus-within": {
+              backgroundColor: "#ff2b2b",
+            },
+            "&.Mui-selected": {
+              backgroundColor: "red",
+              "&:hover": {
+                backgroundColor: "#ff2b2b",
+              },
+            },
+          },
           "& .MuiCheckbox-root svg": {
             width: ".5em",
             height: ".5em",
@@ -389,7 +423,9 @@ const UsersTable = () => {
               borderColor: "black",
             },
         }}
-        getRowClassName={() => "row"}
+        getRowClassName={(params) => {
+          return params.row.isDeleted ? `row--deleted` : `row`;
+        }}
         columns={gridColumns}
         rows={rows}
         checkboxSelection
