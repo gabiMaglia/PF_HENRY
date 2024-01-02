@@ -3,6 +3,7 @@ import { Box, Typography, Divider, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 import sortCardByDate from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
@@ -64,9 +65,25 @@ const cardsContent = [
   },
 ];
 
+const handleClick = () => {
+  Swal.fire({
+    icon: "warning",
+    iconColor: "#fd611a",
+    title: "Funcionalidad en construcción",
+    showCancelButton: true,
+    confirmButtonColor: "#fd611a",
+    confirmButtonText: "Ir a inicio",
+    cancelButtonText: `Cancelar`,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      navigate(PATHROUTES.HOME);
+    }
+  });
+};
+
 const buttons = [
-  { text: "Detalle compra", action: "", color: "black" },
-  { text: "Volver a comprar", action: "", color: "#fd611a" },
+  { text: "Detalle compra", action: handleClick, color: "black" },
+  { text: "Volver a comprar", action: handleClick, color: "#fd611a" },
 ];
 
 const ShoppingProfileComponent = () => {
