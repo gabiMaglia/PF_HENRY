@@ -13,7 +13,6 @@ export const getAllUsers = async () => {
 };
 
 export const getUsersByRole = async (role, jwt) => {
-  console.log(jwt);
 
   try {
     const AllUsers = await axios.get(`${url}/user_role/by_role/${role}`, {

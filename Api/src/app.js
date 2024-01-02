@@ -31,8 +31,8 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      // sameSite: 'None',
-      secure: false,
+      sameSite: 'Lax',
+      secure: process.env.NODE_ENV === 'production',
     },
   })
 );
@@ -45,7 +45,7 @@ server.name = "API";
 server.use(morgan("dev"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
-server.use(cookieParser());
+
 // Passport
 server.use(passport.initialize());
 server.use(passport.session());
@@ -61,6 +61,7 @@ server.use((req, res, next) => {
 });
 // Entryp0nt de la ruta principal
 server.use("/", routes);
+
 
 // Error catching endware.
 server.use((err, req, res, next) => {
