@@ -32,13 +32,12 @@ server.use(
     cookie: {
       httpOnly: false,
       // sameSite: 'None',
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
     },
   })
 );
 
 sessionStore.sync();
-
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 server.name = "API";
@@ -57,6 +56,10 @@ server.use((req, res, next) => {
 server.use((req, res, next) => {
   console.log({ headers: req.headers });
   console.log({ cookie: req.headers.cookie });
+  next();
+});
+server.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 // Entryp0nt de la ruta principal
