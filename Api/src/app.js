@@ -31,7 +31,7 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      sameSite: 'None',
+      // sameSite: 'None',
       secure: false,
     },
   })
@@ -55,6 +55,7 @@ server.use((req, res, next) => {
 });
 server.use((req, res, next) => {
   console.log({ headers: req.headers });
+  console.log({ cookie: req.headers.cookie });
   next();
 });
 // Entryp0nt de la ruta principal
