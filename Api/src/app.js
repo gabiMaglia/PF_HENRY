@@ -32,13 +32,13 @@ server.use(
     cookie: {
       httpOnly: false,
       sameSite: 'Lax',
-      secure: process.env.NODE_ENV === 'production',
+      // secure: process.env.NODE_ENV === 'production',
+      secure: false,
     },
   })
 );
 
 sessionStore.sync();
-
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 server.name = "API";
