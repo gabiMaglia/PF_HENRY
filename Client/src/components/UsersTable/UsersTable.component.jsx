@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 import {
   DataGrid,
   GridCellEditStopReasons,
@@ -9,12 +9,14 @@ import {
   GridToolbarDensitySelector,
   GridToolbarExport,
   GridToolbarFilterButton,
+  GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getAllUsers, getUserRoles } from "../../services/userServices";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { PutUser } from "../../services/userServices";
+import { PutUser, isDeleteChange } from "../../services/userServices";
 import Loading from "../Loading/Loading.component";
 
 const gridColumns = [
@@ -22,19 +24,19 @@ const gridColumns = [
     field: "id",
     headerName: "Id",
     headerAlign: "center",
-    minWidth: 120,
+    minWidth: 300,
   },
   {
     field: "name",
     headerName: "Nombre",
-    minWidth: 125,
+    minWidth: 150,
     headerAlign: "center",
     editable: "true",
   },
   {
     field: "surname",
     headerName: "Apellido",
-    minWidth: 135,
+    minWidth: 150,
     headerAlign: "center",
     editable: "true",
   },
@@ -78,7 +80,7 @@ const gridColumns = [
     headerAlign: "center",
     headerName: "Eliminado",
     minWidth: 25,
-    editable: "true",
+    editable: "false",
   },
 ];
 
@@ -110,7 +112,27 @@ const columnGroupingModel = [
   },
 ];
 
-const CustomToolbar = ({ setFilterButtonEl }) => {
+const CustomToolbar = ({ setFilterButtonEl, rowSelected, getUsers }) => {
+  const handleDelete = async () => {
+    const response = await isDeleteChange(rowSelected);
+    if (response.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: response.error,
+      });
+    } else {
+      getUsers();
+
+      Swal.fire({
+        icon: "success",
+        title: "Usuario eliminado exitosamente",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#fd611a",
+      });
+    }
+  };
+
   return (
     <GridToolbarContainer
       sx={{
@@ -120,7 +142,15 @@ const CustomToolbar = ({ setFilterButtonEl }) => {
         backgroundColor: "#fd611a",
       }}
     >
-      <Typography>Lista de usuarios</Typography>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <Button color="inherit" onClick={handleDelete}>
+          <DeleteIcon sx={{ color: "black" }} />
+        </Button>
+        <Typography variant="h5" sx={{ flexGrow: "1" }}>
+          Lista de usuarios
+        </Typography>
+        <GridToolbarQuickFilter sx={{ color: "black" }} />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -148,33 +178,10 @@ const UsersTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
-  const [customFilters, setCustomFilters] = useState([]);
+  const [rowSelected, setRowSelected] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-
-  const addCustomFilter = () => {
-    setCustomFilters((prevFilters) => [
-      ...prevFilters,
-      { field: "", operator: "", value: "" },
-    ]);
-  };
-
-  const handleCustomFilterChange = (index, key, value) => {
-    setCustomFilters((prevFilters) => {
-      const updatedFilters = [...prevFilters];
-      updatedFilters[index][key] = value;
-      return updatedFilters;
-    });
-  };
-
-  const removeCustomFilter = (index) => {
-    setCustomFilters((prevFilters) => {
-      const updatedFilters = [...prevFilters];
-      updatedFilters.splice(index, 1);
-      return updatedFilters;
-    });
-  };
 
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
@@ -327,7 +334,10 @@ const UsersTable = () => {
             anchorEl: filterButtonEl,
           },
           toolbar: {
+            rowSelected,
+            showQuickFilter: true,
             setFilterButtonEl,
+            getUsers,
           },
         }}
         initialState={{
@@ -375,6 +385,24 @@ const UsersTable = () => {
               },
             },
           },
+          "& .row--deleted": {
+            backgroundColor: "red",
+            "&:hover": {
+              backgroundColor: "#ff2b2b",
+            },
+            "&:active": {
+              backgroundColor: "#ff2b2b",
+            },
+            "&:focus-within": {
+              backgroundColor: "#ff2b2b",
+            },
+            "&.Mui-selected": {
+              backgroundColor: "red",
+              "&:hover": {
+                backgroundColor: "#ff2b2b",
+              },
+            },
+          },
           "& .MuiCheckbox-root svg": {
             width: ".5em",
             height: ".5em",
@@ -395,13 +423,19 @@ const UsersTable = () => {
               borderColor: "black",
             },
         }}
-        getRowClassName={() => "row"}
+        getRowClassName={(params) => {
+          return params.row.isDeleted ? `row--deleted` : `row`;
+        }}
         columns={gridColumns}
         rows={rows}
         checkboxSelection
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleErrorInput}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelected(newRowSelectionModel);
+        }}
+        rowSelectionModel={rowSelected}
       ></DataGrid>
       {isLoading && <Loading />}
     </Box>

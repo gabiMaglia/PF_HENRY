@@ -3,7 +3,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 //MATERIAL UI
-import { Box, Divider, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Typography,
+  Button,
+  Autocomplete,
+  TextField,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 // SweetAlert2
 import Swal from "sweetalert2";
@@ -79,8 +86,59 @@ const ProductServicesProfileComponent = () => {
         "&::-webkit-scrollbar": {
           display: "none",
         },
+        position: "relative",
       }}
     >
+      <Box
+        sx={{
+          width: "100%",
+          border: "1px solid black",
+          borderRadius: "10px",
+          mt: ".5em",
+          backgroundColor: "white",
+          pt: ".3em",
+          pb: ".3em",
+          zIndex: "10",
+          gap: "15%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {authData.userRole === "technician" && (
+          <Autocomplete
+            id={"users"}
+            sx={{ width: "40%" }}
+            selectOnFocus
+            // onChange={handleUserChange}
+            // value={technicianListValue}
+            // options={techniciansName}
+            renderInput={(params) => (
+              <TextField
+                // error={Boolean(errors.technician)}
+                name="users"
+                {...params}
+                label="Filtrar por usuario"
+              />
+            )}
+          />
+        )}
+        <Autocomplete
+          id={"status"}
+          sx={{ width: "40%" }}
+          selectOnFocus
+          // onChange={handleUserChange}
+          // value={technicianListValue}
+          // options={techniciansName}
+          renderInput={(params) => (
+            <TextField
+              // error={Boolean(errors.technician)}
+              name="status"
+              {...params}
+              label="Filtrar por estados"
+            />
+          )}
+        />
+      </Box>
       <Box
         sx={{
           position: "relative",
@@ -134,7 +192,7 @@ const ProductServicesProfileComponent = () => {
             <DetailProductService id={cardDetail} />
           </Box>
         ) : (
-          <Box sx={{ pt: "1em", pb: ".2em" }}>
+          <Box sx={{ pt: ".5em", pb: ".2em" }}>
             {cardPerDates.map((cardsPerDate, key) => {
               const splitDate = cardsPerDate.date.split("-");
               const date =

@@ -26,6 +26,19 @@ export const getUsersByRole = async (role, userAuthData) => {
   }
 };
 
+export const isDeleteChange = async (ids) => {
+  try {
+    const deleteChanges = await Promise.all(
+      ids.map((id) => {
+        return axios.delete(`${url}/account/${id}`);
+      })
+    );
+    return deleteChanges;
+  } catch (error) {
+    return { error: error };
+  }
+};
+
 export const getUserRoles = async (userAuthData) => {
   try {
     const roles = await axios.get(`${url}/user_role`, {
