@@ -67,8 +67,10 @@ async function createOrder(
     }
 
     // Eliminar el carrito después de crear la orden
-    await cart.destroy();
-
+    // await cart.destroy();
+    for (const product of cart.Products) {
+      await cart.removeProduct(product);
+    }
     // Retornar la orden con relaciones incluidas
     // return Order.findOne({
     //   where: { id: idOrder },
@@ -223,8 +225,6 @@ module.exports = {
   getAllOrders,
   createOrder,
   updateOrder,
-
   deleteOrderById,
-
   getMisCompras,
 };
