@@ -113,9 +113,16 @@ export default function ShoppingCart() {
   };
 
   return (
-    <Container display="flex" sx={{ flexDirection: "column", mt: 10 }}>
+    <Container
+      display="flex"
+      sx={{
+        flexDirection: "column",
+        mt: 10,
+        marginBottom: "100px",
+      }}
+    >
       <Typography display="flex" component="h2" sx={{ fontSize: 30, mb: 5 }}>
-        Carrito de Compras
+        Mi Compra
       </Typography>
       <Box display="flex" flexDirection="column">
         {items.map((item) => (
@@ -223,7 +230,6 @@ export default function ShoppingCart() {
           justifyContent="space-between"
           alignItems="center"
           sx={{ mb: 2 }}
-          pb={"140px"}
         >
           <Box
             sx={{
@@ -247,6 +253,7 @@ export default function ShoppingCart() {
               color: "black",
               transition: "transform 0.3s",
               marginTop: "10px",
+
               "&:hover": {
                 transform: "scale(1.05)",
                 backgroundColor: "#fd611a",
@@ -262,7 +269,7 @@ export default function ShoppingCart() {
           </Button>
         </Box>
       </Box>
-      {id && <Wallet initialization={{ preferenceId: id }} />}
+      <Box>{id && <Wallet initialization={{ preferenceId: id }} />}</Box>
     </Container>
   );
 }
