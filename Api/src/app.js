@@ -11,7 +11,7 @@ const passport = require("passport");
 const { conn } = require("./db.js");
 const server = express();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
-server.use(cookieParser())
+
 // Creamos session store
 const sessionStore = new SequelizeStore({
   db: conn,
@@ -31,8 +31,8 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      sameSite: 'None',
-      secure: process.env.NODE_ENV === 'poduction',
+      sameSite: 'Lax',
+      secure: false,
     },
   })
 );
