@@ -18,6 +18,7 @@ const PATHROUTES = {
   //ADMIN
   PRODUCT_CREATE: "/productCreate",
   USERS_LIST: "/usersList",
+  PRODUCTS_LIST: "/productsList",
   //TECHNICIAN
   CREATE_SERVICES: "/createServices",
 };
