@@ -27,7 +27,7 @@ const filterRouter = require("./productRouter/filterRouter");
 const WishListRouter = require("./productRouter/wishListRouter");
 // SERVICES ROUTERS
 const serviceRouter = require("./serviceRouter/serviceRouter");
-
+// checkRoleAuthToken(['customer', "admin", "technician"])
 const mainRouter = Router();
 
 // auth
@@ -36,7 +36,7 @@ mainRouter.use("/auth", googleRouter);
 
 // UserRoutes
 mainRouter.use("/user",  userRoutes);
-mainRouter.use("/user_role", checkRoleAuthToken(['customer', "admin", "technician"]) , userRoleRoutes);
+mainRouter.use("/user_role" , userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);
