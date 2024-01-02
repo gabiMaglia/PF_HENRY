@@ -109,10 +109,15 @@ const getServiceByClientid = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 const filterServiceByStatus = async (req, res) => {
-  const { status, value } = req.body;
+  const { status, user, technician } = req.query;
   try {
-    const services = await filterServicesByStatusController(status, value);
+    const services = await filterServicesByStatusController(
+      status,
+      user,
+      technician
+    );
     if (services.error) {
       return res.status(404).json(services.response);
     }
@@ -121,6 +126,7 @@ const filterServiceByStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 module.exports = {
   addServiceHandler,
   updateServiceStatus,

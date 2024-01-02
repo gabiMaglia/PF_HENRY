@@ -22,17 +22,41 @@ import DetailProductService from "../DetailProductService/DetailProductService.c
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
-import { getServices } from "../../services/serviceServices";
+import { filterService, getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
+import { getUsersByRole } from "../../services/UserServices";
 
-const ProductServicesProfileComponent = () => {
+const statusOptions = [
+  "Local esperando llegada",
+  "Recibido en el local",
+  "En proceso de diagnostico",
+  "Esperando confirmación del cliente",
+  "Reparación en curso",
+  "Pruebas finales",
+  "Reparación finalizada",
+  "Listo para retirar",
+  "Servicio finalizado",
+];
+
+const ProductsServicesProfile = () => {
+  const [filters, setFilters] = useState({
+    users: null,
+    status: null,
+  });
+  const [usersId, setUsersId] = useState([]);
   const [cardPerDates, setCardPerDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openDetail, setOpenDetail] = useState(false);
   const [cardDetail, setCardDetail] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
+  const sortCards = (data) => {
+    let newCardsPerDates = sortServiceCardByDate(data, []);
+    setCardPerDates(newCardsPerDates);
+  };
 
   const getAllServices = async () => {
     const services = await getServices(authData.userId);
@@ -48,10 +72,62 @@ const ProductServicesProfileComponent = () => {
       if (services.error || services.data.length === 0) {
         setIsLoading(false);
       } else {
-        let newCardsPerDates = sortServiceCardByDate(services.data, [
-          ...cardPerDates,
-        ]);
-        setCardPerDates(newCardsPerDates);
+        sortCards(services.data);
+      }
+    }
+  };
+
+  const getUsers = async () => {
+    const users = await getUsersByRole("customer", authData.jwt);
+    if (users.error) {
+      console.log("Error al obtener los usuarios");
+    } else {
+      const usersName = users.data.map((user) => {
+        return user.name + " " + user.surname + " ------- " + user.email;
+      });
+      setUsers(usersName);
+      const usersId = users.data.map((user) => {
+        return user.id;
+      });
+      setUsersId(usersId);
+    }
+  };
+
+  const handleFilterChange = async (e, newValue, clear) => {
+    setCardPerDates([]);
+    setIsLoading(true);
+    if (clear === "clear") {
+      getAllServices();
+    } else {
+      const { id } = e.target;
+      const property = id.split("-")[0];
+      setFilters({ ...filters, [property]: newValue });
+
+      let userPosition;
+      let response;
+      if (property === "users") {
+        users.forEach((user, index) => {
+          user === newValue && (userPosition = index);
+        });
+        response = await filterService(
+          filters.status,
+          usersId[userPosition],
+          authData.userId
+        );
+      } else {
+        users.forEach((user, index) => {
+          user === filters.users && (userPosition = index);
+        });
+        response = await filterService(
+          newValue,
+          usersId[userPosition],
+          authData.userId
+        );
+      }
+      if (response.error) {
+        setIsLoading(false);
+      } else {
+        sortCards(response.data);
       }
     }
   };
@@ -63,6 +139,7 @@ const ProductServicesProfileComponent = () => {
 
   useEffect(() => {
     getAllServices();
+    getUsers();
   }, []);
 
   const userRole = authData.userRole;
@@ -96,8 +173,8 @@ const ProductServicesProfileComponent = () => {
           borderRadius: "10px",
           mt: ".5em",
           backgroundColor: "white",
-          pt: ".3em",
-          pb: ".3em",
+          pt: ".5em",
+          pb: ".5em",
           zIndex: "10",
           gap: "15%",
           display: "flex",
@@ -109,16 +186,11 @@ const ProductServicesProfileComponent = () => {
             id={"users"}
             sx={{ width: "40%" }}
             selectOnFocus
-            // onChange={handleUserChange}
-            // value={technicianListValue}
-            // options={techniciansName}
+            onChange={handleFilterChange}
+            value={filters.user}
+            options={users}
             renderInput={(params) => (
-              <TextField
-                // error={Boolean(errors.technician)}
-                name="users"
-                {...params}
-                label="Filtrar por usuario"
-              />
+              <TextField name="users" {...params} label="Filtrar por usuario" />
             )}
           />
         )}
@@ -126,16 +198,14 @@ const ProductServicesProfileComponent = () => {
           id={"status"}
           sx={{ width: "40%" }}
           selectOnFocus
-          // onChange={handleUserChange}
-          // value={technicianListValue}
-          // options={techniciansName}
+          onChange={handleFilterChange}
+          on={() => {
+            console.log("hola");
+          }}
+          value={filters.status}
+          options={statusOptions}
           renderInput={(params) => (
-            <TextField
-              // error={Boolean(errors.technician)}
-              name="status"
-              {...params}
-              label="Filtrar por estados"
-            />
+            <TextField name="status" {...params} label="Filtrar por estados" />
           )}
         />
       </Box>
@@ -262,4 +332,4 @@ const ProductServicesProfileComponent = () => {
   );
 };
 
-export default ProductServicesProfileComponent;
+export default ProductsServicesProfile;

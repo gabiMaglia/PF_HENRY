@@ -34,6 +34,23 @@ export const getServicesById = async (id) => {
   }
 };
 
+export const filterService = async (status, user, technician) => {
+  try {
+    const response = await axios.get(`${url}/service/filter`, {
+      params: {
+        status: status,
+        user: user,
+        technician: technician,
+      },
+      withCredentials: "true",
+    });
+
+    return response;
+  } catch (error) {
+    return { error };
+  }
+};
+
 //Estaba de antes no lo quise borrar por las dudas
 export const GetAllRoles = async () => {
   try {
