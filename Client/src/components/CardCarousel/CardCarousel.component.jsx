@@ -50,7 +50,7 @@ const CardCarousel = ({ allProducts }) => {
         height: "260px",
         marginTop: "8px",
         overflow: "hidden",
-        background: `linear-gradient(to bottom right, #fd611a 10%, rgba(0, 0, 0, 1) 60%)`,
+        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, #1afd94de 90%)`,
       }}
     >
       <Slider {...settings}>
@@ -123,9 +123,10 @@ const CardCarousel = ({ allProducts }) => {
                   >
                     <Typography
                       variant="h4"
-                      color="#fd611a"
+                      color="#ff5000"
                       fontWeight="bold"
                       sx={{
+                        p: "5px",
                         fontSize: {
                           xs: "1rem",
                           sm: "1.5rem",
