@@ -22,7 +22,7 @@ const CardCarousel = ({ allProducts }) => {
       const filteredProducts = allProducts
         .filter(
           (product) =>
-            product.ProductImages[0]?.address.endsWith(".png") &&
+            product?.ProductImages[0]?.address.endsWith(".png") &&
             product.name &&
             product.price
         )
