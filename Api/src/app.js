@@ -32,7 +32,7 @@ server.use(
     cookie: {
       httpOnly: false,
       sameSite: 'None',
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'poduction',
     },
   })
 );
