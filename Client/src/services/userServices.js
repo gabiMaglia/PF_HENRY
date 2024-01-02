@@ -12,12 +12,14 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getUsersByRole = async (role, userAuthData) => {
+export const getUsersByRole = async (role, jwt) => {
+  console.log(jwt);
+  
   try {
     const AllUsers = await axios.get(`${url}/user_role/by_role/${role}`, {
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${userAuthData}`,
+        Authorization: `Bearer ${jwt}`,
       },
     });
     return AllUsers;
@@ -39,12 +41,12 @@ export const isDeleteChange = async (ids) => {
   }
 };
 
-export const getUserRoles = async (userAuthData) => {
+export const getUserRoles = async (jwt) => {
   try {
     const roles = await axios.get(`${url}/user_role`, {
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${userAuthData}`,
+        Authorization: `Bearer ${jwt}`,
       },
     });
     return roles;
