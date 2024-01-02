@@ -1,4 +1,7 @@
-import Swal from "sweetalert2";
+//HOOKS
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+//MATERIAL UI
 import { Typography, Box, Button } from "@mui/material";
 import {
   DataGrid,
@@ -12,12 +15,15 @@ import {
   GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { getAllUsers, getUserRoles } from "../../services/userServices";
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { PutUser, isDeleteChange } from "../../services/userServices";
+//COMPONENTS
 import Loading from "../Loading/Loading.component";
+//SERVICES
+import { getAllUsers, getUserRoles } from "../../services/userServices";
+import { PutUser, isDeleteChange } from "../../services/userServices";
+//UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+//SWEET ALERT
+import Swal from "sweetalert2";
 
 const gridColumns = [
   {
