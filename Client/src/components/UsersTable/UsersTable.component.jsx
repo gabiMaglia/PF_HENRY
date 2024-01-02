@@ -86,7 +86,7 @@ const gridColumns = [
     headerAlign: "center",
     headerName: "Eliminado",
     minWidth: 25,
-    editable: "false",
+    editable: false,
   },
 ];
 
