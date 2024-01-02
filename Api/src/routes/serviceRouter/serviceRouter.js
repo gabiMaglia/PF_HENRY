@@ -5,14 +5,14 @@ const {
   getAllServices,
   getServiceById,
   getServiceByClientid,
-  filterServiceByStatus,
+  getFilterService,
 } = require("../../handlers/serviceHandlers/ServiceHandlers");
 const useRouter = Router();
 
 useRouter.post("/", addServiceHandler);
 useRouter.put("/:id", updateServiceStatus);
 useRouter.get("/", getAllServices);
-useRouter.get("/filter", filterServiceByStatus);
+useRouter.get("/filter", getFilterService);
 useRouter.get("/client/:id", getServiceByClientid);
 useRouter.get("/:id", getServiceById);
 

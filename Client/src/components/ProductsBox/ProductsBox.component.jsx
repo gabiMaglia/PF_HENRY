@@ -19,6 +19,8 @@ import { addItem } from "../../redux/slices/cartSlice";
 import { fetchProduct } from "../../services/productServices";
 //ALERT
 import Swal from "sweetalert2";
+// UTILS
+import PATHROUTES from "../../helpers/pathRoute";
 
 const ProductBox = () => {
   const navigate = useNavigate();
@@ -46,6 +48,21 @@ const ProductBox = () => {
       setStoredProducts(product);
       dispatch(addItem());
       dispatch(fetchProduct(product, cookiesAccepted));
+      Swal.fire({
+        icon: "success",
+        title: "Producto agregado exitosamente",
+        text: "El producto ha sido agregado al carrito.",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ir al carrito",
+        cancelButtonText: "Seguir comprando",
+        cancelButtonColor: "green",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(PATHROUTES.SHOPCART);
+          window.scrollTo(0, 0);
+        }
+      });
     }
   };
 

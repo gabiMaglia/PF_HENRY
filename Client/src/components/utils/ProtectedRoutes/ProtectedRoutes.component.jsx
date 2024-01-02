@@ -34,18 +34,14 @@ const ProtectedRoutesComponent = ({
   switch (login) {
     case "Cargando":
       return <div>Cargando...</div>;
-      break;
     case "noSession":
       SessionAlertLogin();
       return <Navigate to={redirectPath} replace />;
-      break;
     case "noRole":
       SessionAlertRole();
       return <Navigate to={redirectPath} replace />;
-      break;
     case "enabled":
       return <Outlet />;
-      break;
 
     default:
       break;

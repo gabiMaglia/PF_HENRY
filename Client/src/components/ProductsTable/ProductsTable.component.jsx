@@ -86,7 +86,7 @@ const gridColumns = [
     headerAlign: "center",
     headerName: "Eliminado",
     minWidth: 25,
-    editable: false,
+    editable: "false",
   },
 ];
 
@@ -129,16 +129,12 @@ const CustomToolbar = ({ setFilterButtonEl, rowSelected, getUsers }) => {
       });
     } else {
       getUsers();
-      let responses = "";
-      response.forEach((value) => {
-        responses = responses + " ---- " + value.data.response;
-      });
+
       Swal.fire({
         icon: "success",
-        title: "Usuario/s actualizados exitosamente",
+        title: "Usuario eliminado exitosamente",
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#fd611a",
-        text: responses,
       });
     }
   };

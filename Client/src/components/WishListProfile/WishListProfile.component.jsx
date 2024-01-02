@@ -5,8 +5,6 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
-  Container,
-  CircularProgress,
   Typography,
 } from "@mui/material";
 //HOOKS
@@ -22,10 +20,13 @@ import {
   fetchAddItemWish,
 } from "../../services/wishListServices";
 import { addItem } from "../../redux/slices/cartSlice";
+import { fetchProduct } from "../../services/productServices";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import Loading from "../Loading/Loading.component";
+// SweetAlert
+import Swal from "sweetalert2";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -35,11 +36,12 @@ const WhishListProfileComponent = () => {
     backgroundColor: "black",
   };
 
+  const [storedProducts, setStoredProducts] = useLocalStorage();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const [storedProducts, setStoredProducts] = useLocalStorage(); //Productos del carrito
-
+  const login = useSelector((state) => state.user.login);
+  const { cookiesAccepted } = useSelector((state) => state.cookies);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userId = authData ? authData.userId : null; //Información del usuario
@@ -55,9 +57,35 @@ const WhishListProfileComponent = () => {
     navigate(path);
   };
 
-  const handleAddToCart = (product) => {
-    setStoredProducts(product); // Agregar producto al carrito
-    dispatch(addItem());
+  const handleAddToCart = async (none, productId, product) => {
+    if (login === false) {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Debes estar logueado para agregar productos al carrito.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
+    } else {
+      setStoredProducts(product);
+      dispatch(addItem());
+      dispatch(fetchProduct(product, cookiesAccepted));
+      Swal.fire({
+        icon: "success",
+        title: "Producto agregado exitosamente",
+        text: "El producto ha sido agregado al carrito.",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ir al carrito",
+        cancelButtonText: "Seguir comprando",
+        cancelButtonColor: "green",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(PATHROUTES.SHOPCART);
+          window.scrollTo(0, 0);
+        }
+      });
+    }
   };
 
   const [cardStatus, setCardStatus] = useState(
