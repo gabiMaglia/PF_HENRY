@@ -1,33 +1,73 @@
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'Nombre', width: 130 },
-  { field: 'price', headerName: 'Precio', width: 80 },
+  { field: "id", headerName: "ID", minWidth: 70 },
+  { field: "firstName", headerName: "Nombre", width: 150 },
+  { field: "price", headerName: "Precio", width: 80 },
   {
-    field: 'warranty',
-    headerName: 'Garantía',
-    type: 'number',
+    field: "warranty",
+    headerName: "Garantía",
+    type: "number",
     width: 100,
   },
   {
-    field: 'souldCount',
-    headerName: 'Vendidos',
+    field: "souldCount",
+    headerName: "Vendidos",
     width: 80,
+  },
+  {
+    field: "brand",
+    headerName: "Marca",
+    width: 100,
+  },
+  {
+    field: "category",
+    headerName: "Categoria",
+    width: 100,
   },
 ];
 
 const rows = [
-  { id: 1, firstName: 'Monitor Lg', price: 120000, warranty: "6 meses", souldCount: 20 },
-  { id: 2, firstName: 'Mother Asus', price: 120000, warranty: "12 meses", souldCount: 8 },
-  { id: 3, firstName: 'Teclado Logitech', price: 120000, warranty: "3 meses", souldCount: 25 },
-  { id: 4, firstName: 'Mouse HyperX', price: 120000, warranty: "12 meses", souldCount: 46 },
-  { id: 5, firstName: 'Gabinete Antec', price: 120000, warranty: "6 meses", souldCount: 12 },
+  {
+    id: 1,
+    firstName: "Monitor Lg",
+    price: 120000,
+    warranty: "6 meses",
+    souldCount: 20,
+  },
+  {
+    id: 2,
+    firstName: "Mother Asus",
+    price: 120000,
+    warranty: "12 meses",
+    souldCount: 8,
+  },
+  {
+    id: 3,
+    firstName: "Teclado Logitech",
+    price: 120000,
+    warranty: "3 meses",
+    souldCount: 25,
+  },
+  {
+    id: 4,
+    firstName: "Mouse HyperX",
+    price: 120000,
+    warranty: "12 meses",
+    souldCount: 46,
+  },
+  {
+    id: 5,
+    firstName: "Gabinete Antec",
+    price: 120000,
+    warranty: "6 meses",
+    souldCount: 12,
+  },
 ];
 
 export default function DataTable() {
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ height: 400, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -42,5 +82,3 @@ export default function DataTable() {
     </div>
   );
 }
-
-
