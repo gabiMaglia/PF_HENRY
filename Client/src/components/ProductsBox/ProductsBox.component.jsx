@@ -60,6 +60,7 @@ const ProductBox = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           navigate(PATHROUTES.SHOPCART);
+          window.scrollTo(0, 0);
         }
       });
     }
