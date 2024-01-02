@@ -23,7 +23,6 @@ export const fetchAllProducts = () => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/product/`, {
       withCredentials: true,
-      withXSRFToken: true
     });
     dispatch(getProducts(response.data));
   } catch (error) {
@@ -35,7 +34,6 @@ export const fetchProductById = (id) => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/product/${id}`, {
       withCredentials: true,
-      withXSRFToken: true
     });
     dispatch(getProductById(response.data));
   } catch (error) {
@@ -106,9 +104,11 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 export const fetchProduct = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
+  const user = window.localStorage.getItem("userId");
+  const { id } = product;
   const data = {
-    userId: userId,
-    productId: product.id,
+    userId: userId ? userId : user,
+    productId: id,
     productQuantity: 1,
   };
 
