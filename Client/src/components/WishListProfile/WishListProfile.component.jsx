@@ -25,6 +25,8 @@ import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import Loading from "../Loading/Loading.component";
+// SweetAlert
+import Swal from "sweetalert2";
 
 const WhishListProfileComponent = () => {
   const dividerStyle = {
@@ -68,6 +70,20 @@ const WhishListProfileComponent = () => {
       setStoredProducts(product);
       dispatch(addItem());
       dispatch(fetchProduct(product, cookiesAccepted));
+      Swal.fire({
+        icon: "success",
+        title: "Producto agregado exitosamente",
+        text: "El producto ha sido agregado al carrito.",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ir al carrito",
+        cancelButtonText: "Seguir comprando",
+        cancelButtonColor: "green",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(PATHROUTES.SHOPCART);
+        }
+      });
     }
   };
 
