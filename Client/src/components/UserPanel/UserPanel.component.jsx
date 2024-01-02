@@ -180,19 +180,23 @@ const UserPanelComponent = () => {
           }
         />
         <Route
-          path={ PATHROUTES.PRODUCTS_LIST }
+          path={
+            userRole === "admin"
+              ? PATHROUTES.PRODUCTS_LIST
+              : PATHROUTES.PRODUCTS_SERVICES
+          }
           element={
-            userRole === "admin" ? <ProductsTable /> : <UserProfile />
+            userRole === "admin" ? <ProductsTable /> : <ProductsServicesProfile />
           }
         />
         <Route
           path={
-            userRole === "customer"
-              ? PATHROUTES.PROFILE
-              : PATHROUTES.CREATE_SERVICES
+            userRole === "admin"
+              ? PATHROUTES.CREATE_SERVICES
+              : PATHROUTES.PROFILE
           }
           element={
-            userRole === "customer" ? <UserProfile /> : <CreateService />
+            userRole === "admin" ? <CreateService /> :  <UserProfile />
           }
         />
       </Routes>
