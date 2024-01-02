@@ -30,7 +30,7 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      sameSite: 'Lax',
+      sameSite: 'Strict',
       secure: false,
     },
   })
