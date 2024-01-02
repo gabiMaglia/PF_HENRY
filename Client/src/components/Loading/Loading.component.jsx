@@ -6,7 +6,7 @@ const Loading = () => {
       sx={{
         position: "absolute",
         height: "100%",
-        width: "100%",
+        minWidth: "100%",
         top: "0",
         left: "0",
         display: "flex",
