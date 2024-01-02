@@ -12,6 +12,7 @@ const { conn } = require("./db.js");
 const server = express();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 // Creamos session store
+server.use(cookieParser())
 const sessionStore = new SequelizeStore({
   db: conn,
   table: "Session",
@@ -31,7 +32,7 @@ server.use(
     cookie: {
       httpOnly: false,
       // sameSite: 'None',
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
      
     },
   })
@@ -40,7 +41,6 @@ server.use(
 sessionStore.sync();
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
-server.use(cookieParser())
 server.name = "API";
 server.use(morgan("dev"));
 server.use(express.json());
