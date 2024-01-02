@@ -54,13 +54,16 @@ const ProductsServicesProfile = () => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const sortCards = (data) => {
+    if (data.length === 0) {
+      setIsLoading(false);
+    }
     let newCardsPerDates = sortServiceCardByDate(data, []);
     setCardPerDates(newCardsPerDates);
   };
 
   const getAllServices = async () => {
     const services = await getServices(authData.userId);
-    if (services.error && services.error.message !== "service not found") {
+    if (services.error) {
       Swal.fire({
         allowOutsideClick: false,
         icon: "error",
@@ -80,7 +83,12 @@ const ProductsServicesProfile = () => {
   const getUsers = async () => {
     const users = await getUsersByRole("customer", authData.jwt);
     if (users.error) {
-      console.log("Error al obtener los usuarios");
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al obtener los usuarios",
+        text: `${users}`,
+      });
     } else {
       const usersName = users.data.map((user) => {
         return user.name + " " + user.surname + " ------- " + user.email;
@@ -93,39 +101,65 @@ const ProductsServicesProfile = () => {
     }
   };
 
-  const handleFilterChange = async (e, newValue, clear) => {
+  const handleFilterChange = async (newValue, clear, property) => {
     setCardPerDates([]);
     setIsLoading(true);
-    if (clear === "clear") {
-      getAllServices();
+    if (!clear === "clear") {
+      setFilters({ ...filters, [property]: null });
     } else {
-      const { id } = e.target;
-      const property = id.split("-")[0];
       setFilters({ ...filters, [property]: newValue });
+    }
 
-      let userPosition;
-      let response;
-      if (property === "users") {
-        users.forEach((user, index) => {
-          user === newValue && (userPosition = index);
+    let userPosition;
+    let response;
+    if (property === "users") {
+      users.forEach((user, index) => {
+        user === newValue && (userPosition = index);
+      });
+      response = await filterService(
+        filters.status,
+        usersId[userPosition],
+        authData.userId
+      );
+    } else {
+      users.forEach((user, index) => {
+        user === filters.users && (userPosition = index);
+      });
+      response = await filterService(
+        newValue,
+        usersId[userPosition],
+        authData.userId
+      );
+    }
+    if (response.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error en la carga de productos",
+        text: `${response?.error?.response?.statusText}`,
+      });
+      setIsLoading(false);
+    } else {
+      if (response.data.length === 0) {
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "info",
+          showDenyButton: true,
+          confirmButtonText: "Sí",
+          confirmButtonColor: "#fd611a",
+          title: "Parace que no hay servicios que coincidan con tu busqueda",
+          text: `¿Desea restablecer los filtros?`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            getAllServices();
+            setFilters({
+              users: null,
+              status: null,
+            });
+          } else {
+            setIsLoading(false);
+          }
         });
-        response = await filterService(
-          filters.status,
-          usersId[userPosition],
-          authData.userId
-        );
-      } else {
-        users.forEach((user, index) => {
-          user === filters.users && (userPosition = index);
-        });
-        response = await filterService(
-          newValue,
-          usersId[userPosition],
-          authData.userId
-        );
-      }
-      if (response.error) {
-        setIsLoading(false);
       } else {
         sortCards(response.data);
       }
@@ -186,8 +220,10 @@ const ProductsServicesProfile = () => {
             id={"users"}
             sx={{ width: "40%" }}
             selectOnFocus
-            onChange={handleFilterChange}
-            value={filters.user}
+            onChange={(e, newValue, clear) => {
+              handleFilterChange(newValue, clear, "users");
+            }}
+            value={filters.users}
             options={users}
             renderInput={(params) => (
               <TextField name="users" {...params} label="Filtrar por usuario" />
@@ -198,11 +234,10 @@ const ProductsServicesProfile = () => {
           id={"status"}
           sx={{ width: "40%" }}
           selectOnFocus
-          onChange={handleFilterChange}
-          on={() => {
-            console.log("hola");
+          onChange={(e, newValue, clear) => {
+            handleFilterChange(newValue, clear, "status");
           }}
-          value={filters.status}
+          value={filters.status ? filters.status : null}
           options={statusOptions}
           renderInput={(params) => (
             <TextField name="status" {...params} label="Filtrar por estados" />

@@ -212,11 +212,7 @@ const getServiceByModelController = async (model) => {
   return Services;
 };
 
-const filterServicesByStatusController = async (status, user, technician) => {
-  // !status && (status = "");
-  // !technician && (technician = "");
-  // !user && (user = "");
-
+const getFilterServiceController = async (status, user, technician) => {
   let conditionService = {};
   let conditionStatus = {};
   status && (conditionStatus.status = status);
@@ -238,12 +234,6 @@ const filterServicesByStatusController = async (status, user, technician) => {
     ],
   });
 
-  if (arrayOfServices.length === 0) {
-    return {
-      error: true,
-      response: `service not found`,
-    };
-  }
   return arrayOfServices;
 };
 
@@ -254,5 +244,5 @@ module.exports = {
   getServiceByIdController,
   getServiceByClientController,
   getServiceByModelController,
-  filterServicesByStatusController,
+  getFilterServiceController,
 };

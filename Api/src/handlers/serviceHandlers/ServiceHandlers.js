@@ -5,7 +5,7 @@ const {
   getServiceByIdController,
   getServiceByClientController,
   getServiceByModelController,
-  filterServicesByStatusController,
+  getFilterServiceController,
 } = require("../../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
@@ -110,14 +110,10 @@ const getServiceByClientid = async (req, res) => {
   }
 };
 
-const filterServiceByStatus = async (req, res) => {
+const getFilterService = async (req, res) => {
   const { status, user, technician } = req.query;
   try {
-    const services = await filterServicesByStatusController(
-      status,
-      user,
-      technician
-    );
+    const services = await getFilterServiceController(status, user, technician);
     if (services.error) {
       return res.status(404).json(services.response);
     }
@@ -133,5 +129,5 @@ module.exports = {
   getAllServices,
   getServiceById,
   getServiceByClientid,
-  filterServiceByStatus,
+  getFilterService,
 };
