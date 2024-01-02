@@ -126,12 +126,15 @@ const ProductBox = () => {
             gridColumnStart: 1,
             gridColumnEnd: 4,
             alignItems: "center",
-            fontSize: 18,
+            justifyContent: "center",
+            mt: 4,
+            mb: 4,
+            fontSize: 28,
             fontWeight: 700,
             color: "red",
           }}
         >
-          No se encontró ningún producto relacionado con su búsqueda.
+          No se encontró ningún producto relacionado con su búsqueda!
         </Typography>
       ) : (
         productsToShow.map((product, index) => (
