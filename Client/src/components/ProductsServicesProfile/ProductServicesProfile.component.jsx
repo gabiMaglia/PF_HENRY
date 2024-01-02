@@ -102,7 +102,7 @@ const ProductsServicesProfile = () => {
   };
 
   const handleFilterChange = async (newValue, clear, property) => {
-    setCardDetail(false);
+    setOpenDetail(false);
     setCardPerDates([]);
     setIsLoading(true);
     if (!clear === "clear") {
@@ -304,7 +304,12 @@ const ProductsServicesProfile = () => {
               zIndex: "10",
             }}
           >
-            <DetailProductService id={cardDetail} isOpen={cardDetail} />
+            <DetailProductService
+              id={cardDetail}
+              authData={authData}
+              setOpenDetail={setOpenDetail}
+              setIsLoading={setIsLoading}
+            />
           </Box>
         ) : (
           <Box sx={{ pt: ".5em", pb: ".2em" }}>
