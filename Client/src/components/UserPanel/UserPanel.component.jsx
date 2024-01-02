@@ -165,18 +165,40 @@ const UserPanelComponent = () => {
           path={
             userRole === "admin"
               ? PATHROUTES.PRODUCT_CREATE
-              : PATHROUTES.SHOPINGS
+              : userRole === "customer"
+              ? PATHROUTES.SHOPINGS
+              : PATHROUTES.CREATE_SERVICES
           }
           element={
-            userRole === "admin" ? <ProductCreateProfile /> : <ShopingProfile />
+            userRole === "admin" ? (
+              <ProductCreateProfile />
+            ) : userRole === "customer" ? (
+              <ShopingProfile />
+            ) : (
+              <CreateService />
+            )
           }
         />
         <Route
           path={
-            userRole === "admin" ? PATHROUTES.USERS_LIST : PATHROUTES.WISHLIST
+            userRole === "admin"
+              ? PATHROUTES.USERS_LIST
+              : userRole === "customer"
+              ? PATHROUTES.WISHLIST
+              : userRole === "technician"
+              ? PATHROUTES.CREATE_SERVICES
+              : PATHROUTES.PROFILE
           }
           element={
-            userRole === "admin" ? <UsersTable /> : <WishListProfile />
+            userRole === "admin" ? (
+              <UsersTable />
+            ) : userRole === "customer" ? (
+              <WishListProfile />
+            ) : userRole === "technician" ? (
+              <CreateService />
+            ) : (
+              <UserProfile />
+            )
           }
         />
         <Route
@@ -186,7 +208,11 @@ const UserPanelComponent = () => {
               : PATHROUTES.PRODUCTS_SERVICES
           }
           element={
-            userRole === "admin" ? <ProductsTable /> : <ProductsServicesProfile />
+            userRole === "admin" ? (
+              <ProductsTable />
+            ) : (
+              <ProductsServicesProfile />
+            )
           }
         />
         <Route
@@ -195,9 +221,7 @@ const UserPanelComponent = () => {
               ? PATHROUTES.CREATE_SERVICES
               : PATHROUTES.PROFILE
           }
-          element={
-            userRole === "admin" ? <CreateService /> :  <UserProfile />
-          }
+          element={userRole === "admin" ? <CreateService /> : <UserProfile />}
         />
       </Routes>
       <Box
