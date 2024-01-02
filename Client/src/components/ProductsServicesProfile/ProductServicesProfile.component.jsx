@@ -102,6 +102,7 @@ const ProductsServicesProfile = () => {
   };
 
   const handleFilterChange = async (newValue, clear, property) => {
+    setOpenDetail(false);
     setCardPerDates([]);
     setIsLoading(true);
     if (!clear === "clear") {
@@ -122,14 +123,23 @@ const ProductsServicesProfile = () => {
         authData.userId
       );
     } else {
-      users.forEach((user, index) => {
-        user === filters.users && (userPosition = index);
-      });
-      response = await filterService(
-        newValue,
-        usersId[userPosition],
-        authData.userId
-      );
+      if (authData.userRole === "customer") {
+        response = await filterService(newValue, authData.userId);
+      } else {
+        users.forEach((user, index) => {
+          user === filters.users && (userPosition = index);
+        });
+        response = await filterService(
+          newValue,
+          usersId[userPosition],
+          authData.userId
+        );
+        response = await filterService(
+          newValue,
+          usersId[userPosition],
+          authData.userId
+        );
+      }
     }
     if (response.error) {
       Swal.fire({
@@ -294,7 +304,12 @@ const ProductsServicesProfile = () => {
               zIndex: "10",
             }}
           >
-            <DetailProductService id={cardDetail} />
+            <DetailProductService
+              id={cardDetail}
+              authData={authData}
+              setOpenDetail={setOpenDetail}
+              setIsLoading={setIsLoading}
+            />
           </Box>
         ) : (
           <Box sx={{ pt: ".5em", pb: ".2em" }}>
