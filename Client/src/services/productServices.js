@@ -104,11 +104,9 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 export const fetchProduct = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
-  const user = window.localStorage.getItem("userId");
-  const { id } = product;
   const data = {
-    userId: userId ? userId : user,
-    productId: id,
+    userId: userId,
+    productId: product.id,
     productQuantity: 1,
   };
 
