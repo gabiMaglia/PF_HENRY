@@ -6,6 +6,7 @@ const initialState = {
   allProducts: [],
   productsToShow: [],
   allProductsTotal: [],
+  filterCat: [],
   productById: {},
   filteredProductsByCategory: [],
   filteredProductsByBrand: [],
@@ -72,17 +73,23 @@ const productSlice = createSlice({
       state.allProducts = filterCate
       state.totalPages = Math.ceil(filterCate.length / PRODUCT_PER_PAGE);
       state.productsToShow = filterCate.slice(0, PRODUCT_PER_PAGE) 
+      state.filterCat = filterCate
     },
     filterByBrand: (state, action) => {
       const brandName = action.payload;
-  
-      const filterBrand = state.allProducts.filter(
+      const filter = state.filterCat
+      if(filter.length > 0){
+      const filterBrand = state.filterCat.filter(
         (product) => product.ProductBrands[0].name === brandName
       );
-      
-      if(filterBrand.length === 0){
-        
-       const filterBrand2 = state.allProductsBackup.filter(
+      state.currentPage = 0;
+      state.totalPages = Math.ceil(
+        filterBrand.length / PRODUCT_PER_PAGE
+      );
+      state.allProducts = filterBrand
+      state.productsToShow = filterBrand.slice(0, PRODUCT_PER_PAGE)}
+      else{
+        const filterBrand2 = state.allProductsBackup.filter(
           (product) => product.ProductBrands[0].name === brandName
         )
         state.currentPage = 0;
@@ -91,13 +98,7 @@ const productSlice = createSlice({
         filterBrand2.length / PRODUCT_PER_PAGE
       );
       state.productsToShow = filterBrand2.slice(0, PRODUCT_PER_PAGE)
-      }else{
-      state.currentPage = 0;
-      state.totalPages = Math.ceil(
-        filterBrand.length / PRODUCT_PER_PAGE
-      );
-      state.allProducts = filterBrand
-      state.productsToShow = filterBrand.slice(0, PRODUCT_PER_PAGE)}
+      }
     },
     resetState: (state, action) => {
       state.allProducts = state.allProductsTotal;
