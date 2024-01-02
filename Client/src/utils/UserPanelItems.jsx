@@ -1,4 +1,6 @@
+//HOOKS
 import { useSelector } from "react-redux";
+//MATERIAL UI
 import { Avatar, Typography } from "@mui/material";
 import {
   LocalShipping,
@@ -7,9 +9,9 @@ import {
   Add,
   People,
   Logout,
-  History,
-  Handyman,
+  FormatListNumbered
 } from "@mui/icons-material";
+//HELPERS
 import PATHROUTES from "../helpers/pathRoute";
 import getFirstLetters from "../helpers/getFirstLetters";
 
@@ -103,9 +105,9 @@ const UserPanelItems = (name, surname) => {
         path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
       },
       {
-        name: "Productos en servicio",
-        icon: <HomeRepairService />,
-        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
+        name: "Lista de productos",
+        icon: <FormatListNumbered />,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_LIST,
       },
       {
         name: "Crear servicio",
