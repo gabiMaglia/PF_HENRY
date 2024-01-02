@@ -15,6 +15,7 @@ import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.c
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
 import CreateService from "../CreateService/CreateService.component";
 import UsersTable from "../UsersTable/UsersTable.component";
+import ProductsTable from "../ProductsTable/ProductsTable.component";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -72,7 +73,7 @@ const UserPanelComponent = () => {
       roles: ["admin"],
     },
     {
-      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_SERVICES,
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_LIST,
       roles: ["admin"],
     },
     {
@@ -172,20 +173,16 @@ const UserPanelComponent = () => {
         />
         <Route
           path={
-            userRole === "admin" ? PATHROUTES.TECHNICIANS : PATHROUTES.WISHLIST
+            userRole === "admin" ? PATHROUTES.USERS_LIST : PATHROUTES.WISHLIST
           }
           element={
-            userRole === "admin" ? <TechniciansProfile /> : <WishListProfile />
+            userRole === "admin" ? <UsersTable /> : <WishListProfile />
           }
         />
         <Route
-          path={
-            userRole === "admin"
-              ? PATHROUTES.USERS_LIST
-              : PATHROUTES.PRODUCTS_SERVICES
-          }
+          path={ PATHROUTES.PRODUCTS_LIST }
           element={
-            userRole === "admin" ? <UsersTable /> : <ProductsServicesProfile />
+            userRole === "admin" ? <ProductsTable /> : <UserProfile />
           }
         />
         <Route
