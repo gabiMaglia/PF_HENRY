@@ -31,8 +31,8 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      sameSite: 'Strict',
-      secure: process.env.NODE_ENV === "production",
+      // sameSite: 'None',
+      secure: false,
     },
   })
 );
@@ -50,8 +50,12 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 server.use((req, res, next) => {
-  console.log({ session: req.session });
   console.log({ isAuthenticated: req.isAuthenticated()} );
+  next();
+});
+server.use((req, res, next) => {
+  console.log({ headers: req.headers });
+  console.log({ cookie: req.headers.cookie });
   next();
 });
 // Entryp0nt de la ruta principal

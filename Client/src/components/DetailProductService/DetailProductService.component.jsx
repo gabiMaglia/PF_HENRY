@@ -1,5 +1,8 @@
+// HOOKS
 import React, { useEffect, useState } from "react";
+// MATERIAL -UI
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+// UTILS
 import { getServicesById } from "../../services/serviceServices";
 
 const DetailProductService = ({ id }) => {
@@ -15,14 +18,15 @@ const DetailProductService = ({ id }) => {
     getService();
   }, [id]);
 
-  // Renderizar los datos recibidos del backend
+  // Renderizado los datos recibidos del backend
   return (
-    <Card>
+    <Card
+      sx={{ width: "100%", border: "1px solid black", borderRadius: "10px" }}
+    >
       <CardMedia
         component="img"
         height="140"
         sx={{ objectFit: "cover" }}
-        // Asignar la imagen del servicio (ajustar según la estructura real)
         src={data.Service_images ? data.Service_images[0].address : ""}
       />
       <CardContent sx={{ backgroundColor: "#fd611a" }}>
@@ -69,7 +73,7 @@ const DetailProductService = ({ id }) => {
           color="text.secondary"
           sx={{ color: "#000" }}
         >
-          Estado de la reparación: {/* Ajustar según la estructura real */}
+          Estado de la reparación: {data.status}
         </Typography>
       </CardContent>
     </Card>

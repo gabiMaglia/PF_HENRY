@@ -11,7 +11,11 @@ import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
-import { fetchSearch, fetchChage } from "../../services/productServices";
+import {
+  fetchSearch,
+  fetchChage,
+  fetchGetProduct,
+} from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
@@ -29,9 +33,14 @@ export default function SearchAppBar() {
 
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const cookiesAccepted = useSelector((state) => state.cookies);
 
   useEffect(() => {
     dispatch(addItem());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchGetProduct(cookiesAccepted));
   }, [dispatch]);
 
   const Img = styled("img")({

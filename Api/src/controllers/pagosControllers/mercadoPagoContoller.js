@@ -13,7 +13,7 @@ const mercadoPago = async (array, idOrder) => {
       notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
-        success: `${frontend_Url}/confirmacionPago`,
+        success: `${frontend_Url}/home`,
         failure: `${frontend_Url}/cart`,
         pending: `${frontend_Url}/cart`,
       },
