@@ -7,7 +7,9 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   try {
     serviceInfo.product_image = imageUrl;
     serviceInfo.technicianId = technicianId;
-    const response = await axios.post(`${url}/service`, serviceInfo);
+    const response = await axios.post(`${url}/service`, serviceInfo, {
+      withCredentials: true,
+    });
     return response;
   } catch (error) {
     return { error: true, response: "Falla en la creación del servicio" };
@@ -17,7 +19,9 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
 export const getServices = async (id) => {
   try {
     let completeUrl = `${url}/service`;
-    id && (completeUrl = `${url}/service/client/${id}`);
+    id &&
+      ((completeUrl = `${url}/service/client/${id}`),
+      { withCredentials: true });
     const response = await axios.get(completeUrl);
     return response;
   } catch (error) {
@@ -27,7 +31,9 @@ export const getServices = async (id) => {
 
 export const getServicesById = async (id) => {
   try {
-    const response = await axios.get(`${url}/service/${id}`);
+    const response = await axios.get(`${url}/service/${id}`, {
+      withCredentials: true,
+    });
     return response;
   } catch (error) {
     return { error };
@@ -54,7 +60,9 @@ export const filterService = async (status, user, technician) => {
 //Estaba de antes no lo quise borrar por las dudas
 export const GetAllRoles = async () => {
   try {
-    const GetRol = await axios.get(`${url}/user_role`);
+    const GetRol = await axios.get(`${url}/user_role`, {
+      withCredentials: true,
+    });
     return GetRol;
   } catch ({ GetRol }) {
     return { error: GetRol };
@@ -63,7 +71,9 @@ export const GetAllRoles = async () => {
 
 export const CreateNewRole = async () => {
   try {
-    const PostRol = await axios.post(`${url}/user_role/create`);
+    const PostRol = await axios.post(`${url}/user_role/create`, {
+      withCredentials: true,
+    });
     return PostRol;
   } catch ({ PostRol }) {
     return { error: PostRol };

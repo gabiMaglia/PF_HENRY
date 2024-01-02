@@ -45,12 +45,12 @@ const CardCarousel = ({ allProducts }) => {
   return (
     <Box
       sx={{
+        position: "relative",
         width: "100%",
         height: "260px",
-        backgroundColor: "black",
-        paddingTop: "8px",
         marginTop: "8px",
         overflow: "hidden",
+        background: `linear-gradient(to bottom right, #fd611a 10%, rgba(0, 0, 0, 1) 60%)`,
       }}
     >
       <Slider {...settings}>
@@ -80,7 +80,7 @@ const CardCarousel = ({ allProducts }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "flex-start",
+                    alignItems: "center", // Alinea el contenido al centro
                     justifyContent: "center",
                     color: "white",
                     flex: "1",
@@ -88,6 +88,10 @@ const CardCarousel = ({ allProducts }) => {
                 >
                   <Container
                     sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center", // Alinea el contenido al centro
+                      justifyContent: "center",
                       width: "auto", // Ancho fijo para el contenedor del nombre
                       height: "170px", // Alto fijo para el contenedor del nombre
                       overflow: "hidden", // Oculta el contenido adicional si es demasiado largo
@@ -101,7 +105,7 @@ const CardCarousel = ({ allProducts }) => {
                         fontSize: {
                           xs: "1.8rem",
                           sm: "2.8rem",
-                          md: "3.5rem",
+                          md: "3.2rem",
                         },
                       }}
                     >
