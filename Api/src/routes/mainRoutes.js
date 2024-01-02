@@ -27,11 +27,9 @@ const filterRouter = require("./productRouter/filterRouter");
 const WishListRouter = require("./productRouter/wishListRouter");
 // SERVICES ROUTERS
 const serviceRouter = require("./serviceRouter/serviceRouter");
-<<<<<<< HEAD
-// checkRoleAuthToken(['customer', "admin", "technician"])
-=======
+
 // , checkRoleAuthToken(['customer', "admin", "technician"])
->>>>>>> develop
+
 const mainRouter = Router();
 
 // auth
