@@ -13,6 +13,7 @@ import {
   GridToolbarExport,
   GridToolbarFilterButton,
   GridToolbarQuickFilter,
+  esES,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 //COMPONENTS
@@ -182,6 +183,7 @@ const CustomToolbar = ({ setFilterButtonEl, rowSelected, getUsers }) => {
 };
 
 const UsersTable = () => {
+  const language = esES;
   const editingRow = useRef(null);
   const [rows, setRows] = useState([]);
   const [userRoles, setUserRoles] = useState([]);
@@ -336,6 +338,7 @@ const UsersTable = () => {
         slots={{
           toolbar: CustomToolbar,
         }}
+        localeText={language.components.MuiDataGrid.defaultProps.localeText}
         slotProps={{
           filterPanel: {
             logicOperators: [GridLogicOperator.And],
