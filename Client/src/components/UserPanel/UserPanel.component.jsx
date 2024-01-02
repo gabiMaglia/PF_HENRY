@@ -10,7 +10,7 @@ import SideBar from "../SideBar/SideBar.component";
 import UserProfile from "../UserProfile/UserProfile.component";
 import ShopingProfile from "../ShoppingProfile/ShoppingProfile.component";
 import WishListProfile from "../WishListProfile/WishListProfile.component";
-import TechniciansProfile from "../TechniciansProfile/TechniciansProfile.component";
+// import TechniciansProfile from "../TechniciansProfile/TechniciansProfile.component";
 import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.component";
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
 import CreateService from "../CreateService/CreateService.component";
