@@ -16,6 +16,7 @@ const UserPanelProductCard = ({
   handleCardClick = () => {}, // Si no llega una funcion establece una por defecto
   alternativeImage = "Product Image", // Si no llega una imagen establece una por defecto
   setIsLoading = () => {}, // Si no llega una funcion establece una por defecto
+  actionParam = () => {},
 }) => {
   const theme = useTheme();
   const [imageError, setImageError] = useState(false);
@@ -159,7 +160,8 @@ const UserPanelProductCard = ({
                   onClick={() => {
                     button.action(
                       button.actionParam && button.actionParam,
-                      product.id
+                      product.id,
+                      actionParam && actionParam
                     );
                   }}
                 >
