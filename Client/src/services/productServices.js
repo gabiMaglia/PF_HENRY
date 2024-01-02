@@ -128,7 +128,6 @@ export const fetchGetProduct = (cookiesAccepted) => async () => {
   const { userId } = aux;
   try {
     const res = await axios.get(`${urlBack}/cart/${userId}`, {withCredentials: true});
-
     const products = res.data.Products.map((product) => ({
       id: product.id,
       name: product.name,
