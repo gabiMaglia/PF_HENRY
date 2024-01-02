@@ -34,13 +34,17 @@ export default function SearchAppBar() {
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const cookiesAccepted = useSelector((state) => state.cookies);
+  const { login } = useSelector((state) => state.user);
+  const { inputName } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(addItem());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchGetProduct(cookiesAccepted));
+    if (login === true) {
+      dispatch(fetchGetProduct(cookiesAccepted));
+    }
   }, [dispatch]);
 
   const Img = styled("img")({
@@ -54,9 +58,6 @@ export default function SearchAppBar() {
     position: "relative",
     cursor: "pointer",
   });
-
-  const { login } = useSelector((state) => state.user);
-  const { inputName } = useSelector((state) => state.product);
 
   let valueCart = 0;
 

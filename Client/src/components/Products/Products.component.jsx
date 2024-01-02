@@ -37,7 +37,6 @@ const Products = () => {
   });
 
   const handlePageChange = (event, value) => {
-    console.log(value);
     setValue(value);
     dispatch(selectPage(value));
   };
