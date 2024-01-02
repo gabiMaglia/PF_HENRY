@@ -24,7 +24,7 @@ import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
 import { filterService, getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
-import { getUsersByRole } from "../../services/UserServices";
+import { getUsersByRole } from "../../services/userServices";
 
 const statusOptions = [
   "Local esperando llegada",
