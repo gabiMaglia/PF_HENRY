@@ -23,6 +23,7 @@ export const fetchAllProducts = () => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/product/`, {
       withCredentials: true,
+      withXSRFToken: true
     });
     dispatch(getProducts(response.data));
   } catch (error) {
@@ -34,6 +35,7 @@ export const fetchProductById = (id) => async (dispatch) => {
   try {
     const response = await axios.get(`${urlBack}/product/${id}`, {
       withCredentials: true,
+      withXSRFToken: true
     });
     dispatch(getProductById(response.data));
   } catch (error) {
