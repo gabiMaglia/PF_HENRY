@@ -129,12 +129,16 @@ const CustomToolbar = ({ setFilterButtonEl, rowSelected, getUsers }) => {
       });
     } else {
       getUsers();
-
+      let responses = "";
+      response.forEach((value) => {
+        responses = responses + " ---- " + value.data.response;
+      });
       Swal.fire({
         icon: "success",
-        title: "Usuario eliminado exitosamente",
+        title: "Usuario/s actualizados exitosamente",
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#fd611a",
+        text: responses,
       });
     }
   };

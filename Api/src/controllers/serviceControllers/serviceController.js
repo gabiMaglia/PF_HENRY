@@ -211,25 +211,32 @@ const getServiceByModelController = async (model) => {
   }
   return Services;
 };
-const filterServicesByStatusController = async (status, value) => {
-  const serviceStatuses = await Service_status.findAll();
+
+const getFilterServiceController = async (status, user, technician) => {
+  let conditionService = {};
+  let conditionStatus = {};
+  status && (conditionStatus.status = status);
+  technician && (conditionService.technicianId = technician);
+  user && (conditionService.userId = user);
+
+  console.log(conditionService, conditionStatus);
+
   let arrayOfServices = [];
-  for (let serviceStatus of serviceStatuses) {
-    if (serviceStatus[status] === value) {
-      const service = await Service.findByPk(serviceStatus.ServiceId, {
-        include: [Service_status, Service_image],
-      });
-      arrayOfServices.push(service);
-    }
-  }
-  if (arrayOfServices.length === 0) {
-    return {
-      error: true,
-      response: `service not found`,
-    };
-  }
+
+  arrayOfServices = await Service.findAll({
+    where: conditionService,
+    include: [
+      {
+        model: Service_status,
+        where: conditionStatus,
+      },
+      Service_image,
+    ],
+  });
+
   return arrayOfServices;
 };
+
 module.exports = {
   addServiceController,
   updateServiceStatusController,
@@ -237,5 +244,5 @@ module.exports = {
   getServiceByIdController,
   getServiceByClientController,
   getServiceByModelController,
-  filterServicesByStatusController,
+  getFilterServiceController,
 };
