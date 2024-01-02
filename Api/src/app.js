@@ -11,7 +11,6 @@ const passport = require("passport");
 const { conn } = require("./db.js");
 const server = express();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
-
 // Creamos session store
 const sessionStore = new SequelizeStore({
   db: conn,
@@ -41,6 +40,7 @@ server.use(
 sessionStore.sync();
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
+server.use(cookieParser())
 server.name = "API";
 server.use(morgan("dev"));
 server.use(express.json());
