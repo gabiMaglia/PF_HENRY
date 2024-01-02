@@ -12,7 +12,9 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchWishList = async (userId, dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/wishlist/${userId}`);
+    const response = await axios.get(`${urlBack}/wishlist/${userId}`, {
+      withCredentials: true,
+    });
     if (response.data) {
       dispatch(getWishlist(response.data.Products));
     } else {
@@ -29,7 +31,9 @@ export const fetchAddItemWish = async (dispatch, userId, productId) => {
     productID: productId,
   };
   try {
-    const { data } = await axios.post(`${urlBack}/wishlist`, request);
+    const { data } = await axios.post(`${urlBack}/wishlist`, request, {
+      withCredentials: true,
+    });
     if (data) {
       dispatch(addProductToWishlist(data.Products));
     } else {

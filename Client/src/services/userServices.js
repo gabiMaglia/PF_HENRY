@@ -5,7 +5,7 @@ const url = import.meta.env.VITE_BACKEND_URL;
 
 export const getAllUsers = async () => {
   try {
-    const AllUsers = await axios.get(`${url}/user`);
+    const AllUsers = await axios.get(`${url}/user`, { withCredentials: true });
     return AllUsers;
   } catch (error) {
     return { error: error };
@@ -13,6 +13,7 @@ export const getAllUsers = async () => {
 };
 
 export const getUsersByRole = async (role, jwt) => {
+
   try {
     const AllUsers = await axios.get(`${url}/user_role/by_role/${role}`, {
       withCredentials: true,
@@ -55,7 +56,9 @@ export const getUserRoles = async (jwt) => {
 
 export const getUserById = async (id) => {
   try {
-    const ById = await axios.get(`${url}/user/${id}`);
+    const ById = await axios.get(`${url}/user/${id}`, {
+      withCredentials: true,
+    });
     const { data } = ById;
     return data;
   } catch ({ ById }) {
@@ -65,7 +68,9 @@ export const getUserById = async (id) => {
 
 export const PostUser = async () => {
   try {
-    const NewUser = await axios.post(`${url}/users/`);
+    const NewUser = await axios.post(`${url}/users/`, {
+      withCredentials: true,
+    });
     return NewUser;
   } catch ({ NewUser }) {
     return { error: NewUser };
@@ -109,7 +114,9 @@ export const PutUser = async (id, userRole, data) => {
 
 export const DeleteUser = async () => {
   try {
-    const DeleteUser = await axios.delete(`${url}/users/:id`);
+    const DeleteUser = await axios.delete(`${url}/users/:id`, {
+      withCredentials: true,
+    });
     return DeleteUser;
   } catch ({ DeleteUser }) {
     return { error: DeleteUser };
