@@ -19,10 +19,10 @@ const columns = [
 
 const rows = [
   { id: 1, firstName: 'Monitor Lg', price: 120000, warranty: "6 meses", souldCount: 20 },
-  { id: 2, firstName: 'Mother Asus', price: 120000, warranty: "6 meses", souldCount: 20 },
-  { id: 3, firstName: 'Teclado Logitech', price: 120000, warranty: "6 meses", souldCount: 20 },
-  { id: 4, firstName: 'Mouse HyperX', price: 120000, warranty: "6 meses", souldCount: 20 },
-  { id: 5, firstName: 'Gabinete Antec', price: 120000, warranty: "6 meses", souldCount: 20 },
+  { id: 2, firstName: 'Mother Asus', price: 120000, warranty: "12 meses", souldCount: 8 },
+  { id: 3, firstName: 'Teclado Logitech', price: 120000, warranty: "3 meses", souldCount: 25 },
+  { id: 4, firstName: 'Mouse HyperX', price: 120000, warranty: "12 meses", souldCount: 46 },
+  { id: 5, firstName: 'Gabinete Antec', price: 120000, warranty: "6 meses", souldCount: 12 },
 ];
 
 export default function DataTable() {
