@@ -50,8 +50,12 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 server.use((req, res, next) => {
-  console.log({ session: req.session });
   console.log({ isAuthenticated: req.isAuthenticated()} );
+  next();
+});
+server.use((req, res, next) => {
+  console.log({ headers: req.headers });
+  
   next();
 });
 // Entryp0nt de la ruta principal
