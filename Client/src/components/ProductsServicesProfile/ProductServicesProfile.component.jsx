@@ -360,7 +360,6 @@ const ProductsServicesProfile = () => {
             })}
           </Box>
         )}
-        {/* Cargando */}
         {isLoading && <Loading />}
       </Box>
     </Box>
