@@ -109,6 +109,7 @@ export default function ShoppingCart() {
 
   const handleShop = (e) => {
     dispatch(fetchCart(items, cookiesAccepted));
+    window.localStorage.setItem("storedProducts", JSON.stringify([]));
   };
 
   return (
