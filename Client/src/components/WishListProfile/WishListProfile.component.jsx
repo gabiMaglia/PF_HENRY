@@ -45,7 +45,6 @@ const WhishListProfileComponent = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userId = authData ? authData.userId : null; //Información del usuario
-
   const wishListCards = useSelector((state) => state.wishlist.products); //Estado global Wishlist
 
   const chargeWishListProduct = () => {
@@ -248,7 +247,7 @@ const WhishListProfileComponent = () => {
                   >
                     <Checkbox
                       name={`${index}`}
-                      checked={cardStatus[index].status}
+                      checked={cardStatus[index]?.status}
                       onChange={handleChange}
                     />
                     <Box sx={{ flexGrow: "1" }}>

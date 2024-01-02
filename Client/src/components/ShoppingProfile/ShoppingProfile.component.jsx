@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import sortCardByDate from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
@@ -88,6 +89,8 @@ const buttons = [
 
 const ShoppingProfileComponent = () => {
   const [cardPerDates, setCardPerDates] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     let newCardsPerDates = sortCardByDate(cardsContent, [...cardPerDates]);
