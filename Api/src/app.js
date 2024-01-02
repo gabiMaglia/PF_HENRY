@@ -39,6 +39,7 @@ server.use(
 
 sessionStore.sync();
 
+
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 server.name = "API";
 server.use(morgan("dev"));
