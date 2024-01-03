@@ -234,7 +234,7 @@ export const logicalDeleteProduct = async (id) => {
     const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`);
     return response;
   } catch (error) {
-    return { error: true, error: error };
+    return { error: true, message: error.message };
   }
 };
 
