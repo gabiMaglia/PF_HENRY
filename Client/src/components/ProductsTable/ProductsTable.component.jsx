@@ -14,7 +14,9 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
-import { logicalDeleteProduct } from "../../services/productServices";
+import {
+  logicalDeleteProduct,
+} from "../../services/productServices";
 // SweetAlert
 import Swal from "sweetalert2";
 
@@ -29,7 +31,7 @@ const ProductsTable = () => {
 
   const urlBack = import.meta.env.VITE_BACKEND_URL;
 
-  const fetchProducts = async () => {
+  const getProducts = async () => {
     try {
       const response = await axios.get(`${urlBack}/product/`, {
         withCredentials: true,
@@ -44,41 +46,11 @@ const ProductsTable = () => {
   };
 
   const handleDelete = async () => {
-    const response = await fetchDelete(rowSelected);
-    if (Array.isArray(response)) {
-      // Si response es un array, iterar sobre él
-      response.forEach((value) => {
-        // ...
-      });
-    } else {
-      // Si response no es un array, tratarlo según sea necesario
-      console.error("La respuesta de fetchDelete no es un array:", response);
-    }
-    if (response.error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: response.error,
-      });
-      console.log(response.error);
-    } else {
-      getProducts();
-      let responses = "";
-      response.forEach((value) => {
-        responses = responses + " ---- " + value.data.response;
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Producto/s actualizados exitosamente",
-        confirmButtonText: "Aceptar",
-        confirmButtonColor: "#fd611a",
-        text: responses,
-      });
-    }
+    
   };
 
   useEffect(() => {
-    fetchProducts();
+    getProducts();
     logicalDeleteProduct("f02375f9-54ec-4048-8034-a5b5a6f7dec3");
   }, []);
 
@@ -103,10 +75,26 @@ const ProductsTable = () => {
     // { field: "id", headerName: "ID", minWidth: 70 },
     { field: "name", headerName: "Nombre", width: 350, headerAlign: "center" },
     { field: "price", headerName: "Precio", width: 80, headerAlign: "center" },
-    { field: "warranty", headerName: "Garantía", type: "number", width: 100, headerAlign: "center" },
-    { field: "soldCount", headerName: "Vendidos", width: 80, headerAlign: "center" },
+    {
+      field: "warranty",
+      headerName: "Garantía",
+      type: "number",
+      width: 100,
+      headerAlign: "center",
+    },
+    {
+      field: "soldCount",
+      headerName: "Vendidos",
+      width: 80,
+      headerAlign: "center",
+    },
     { field: "brand", headerName: "Marca", width: 150, headerAlign: "center" },
-    { field: "category", headerName: "Categoría", width: 150, headerAlign: "center" },
+    {
+      field: "category",
+      headerName: "Categoría",
+      width: 150,
+      headerAlign: "center",
+    },
   ];
 
   return (
