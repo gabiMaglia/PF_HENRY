@@ -2,22 +2,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 //MATERIAL UI
-import { Typography, Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import {
-  DataGrid,
   GridCellEditStopReasons,
   GridLogicOperator,
-  GridToolbarColumnsButton,
-  GridToolbarContainer,
-  GridToolbarDensitySelector,
-  GridToolbarExport,
-  GridToolbarFilterButton,
-  GridToolbarQuickFilter,
   esES,
 } from "@mui/x-data-grid";
-import DeleteIcon from "@mui/icons-material/Delete";
 //COMPONENTS
 import Loading from "../Loading/Loading.component";
+import {
+  StyledDataGrid,
+  CustomToolbar,
+} from "../CustomDataGrid/CustomDataGrid.component";
 //SERVICES
 import { getAllUsers, getUserRoles } from "../../services/userServices";
 import { PutUser, isDeleteChange } from "../../services/userServices";
@@ -119,69 +115,6 @@ const columnGroupingModel = [
   },
 ];
 
-const CustomToolbar = ({ setFilterButtonEl, rowSelected, getUsers }) => {
-  const handleDelete = async () => {
-    const response = await isDeleteChange(rowSelected);
-    if (response.error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: response.error,
-      });
-    } else {
-      getUsers();
-      let responses = "";
-      response.forEach((value) => {
-        responses = responses + " ---- " + value.data.response;
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Usuario/s actualizados exitosamente",
-        confirmButtonText: "Aceptar",
-        confirmButtonColor: "#fd611a",
-        text: responses,
-      });
-    }
-  };
-
-  return (
-    <GridToolbarContainer
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        backgroundColor: "#fd611a",
-      }}
-    >
-      <Box sx={{ display: "flex", width: "100%" }}>
-        <Button color="inherit" onClick={handleDelete}>
-          <DeleteIcon sx={{ color: "black" }} />
-        </Button>
-        <Typography variant="h5" sx={{ flexGrow: "1" }}>
-          Lista de usuarios
-        </Typography>
-        <GridToolbarQuickFilter sx={{ color: "black" }} />
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-around",
-        }}
-      >
-        <GridToolbarColumnsButton sx={{ color: "black" }} />
-        <GridToolbarFilterButton
-          ref={setFilterButtonEl}
-          sx={{ color: "black" }}
-        />
-        <GridToolbarDensitySelector sx={{ color: "black" }} />
-        <GridToolbarExport sx={{ color: "black" }} />
-      </Box>
-    </GridToolbarContainer>
-  );
-};
-
 const UsersTable = () => {
   const language = esES;
   const editingRow = useRef(null);
@@ -236,6 +169,30 @@ const UsersTable = () => {
     }
 
     addRole(response.data, roles.data);
+  };
+
+  const handleDelete = async () => {
+    const response = await isDeleteChange(rowSelected);
+    if (response.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: response.error,
+      });
+    } else {
+      getUsers();
+      let responses = "";
+      response.forEach((value) => {
+        responses = responses + " ---- " + value.data.response;
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Usuario/s actualizados exitosamente",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#fd611a",
+        text: responses,
+      });
+    }
   };
 
   useEffect(() => {
@@ -329,7 +286,7 @@ const UsersTable = () => {
         textAlign: "center",
       }}
     >
-      <DataGrid
+      <StyledDataGrid
         onCellEditStart={handleCellEditStart}
         onCellEditStop={handleCellEditStop}
         ignoreDiacritics
@@ -347,10 +304,10 @@ const UsersTable = () => {
             anchorEl: filterButtonEl,
           },
           toolbar: {
-            rowSelected,
-            showQuickFilter: true,
             setFilterButtonEl,
-            getUsers,
+            handleDelete,
+            dataName: "Lista de usuarios",
+            showQuickFilter: true,
           },
         }}
         initialState={{
@@ -371,71 +328,6 @@ const UsersTable = () => {
             },
           },
         }}
-        sx={{
-          mt: "1em",
-          scrollbarWidth: "none",
-          textAlign: "center",
-          "& .MuiDataGrid-cell": {
-            justifyContent: "center",
-            "&:active": {
-              border: "5px solid #fd611a",
-            },
-            "&:focus-within": {
-              outline: "2px solid #fd611a",
-            },
-          },
-          "& .MuiDataGrid-row": {
-            "&:focus-within": {
-              backgroundColor: "#fb773a",
-            },
-            "&.Mui-selected": {
-              "& .MuiDataGrid-cell:focus-within": {
-                outline: "0px",
-              },
-              backgroundColor: "#fd611a",
-              "&:hover": {
-                backgroundColor: "#fb773a",
-              },
-            },
-          },
-          "& .row--deleted": {
-            backgroundColor: "red",
-            "&:hover": {
-              backgroundColor: "#ff2b2b",
-            },
-            "&:active": {
-              backgroundColor: "#ff2b2b",
-            },
-            "&:focus-within": {
-              backgroundColor: "#ff2b2b",
-            },
-            "&.Mui-selected": {
-              backgroundColor: "red",
-              "&:hover": {
-                backgroundColor: "#ff2b2b",
-              },
-            },
-          },
-          "& .MuiCheckbox-root svg": {
-            width: ".5em",
-            height: ".5em",
-            border: "1px solid black",
-            borderRadius: "2px",
-          },
-          "& .MuiCheckbox-root svg path": {
-            display: "none",
-          },
-          "& .MuiCheckbox-root": {
-            borderRadius: "0px",
-            width: "100%",
-            height: "100%",
-          },
-          "& .MuiCheckbox-root.Mui-checked:not(.MuiCheckbox-indeterminate) svg":
-            {
-              backgroundColor: "black",
-              borderColor: "black",
-            },
-        }}
         getRowClassName={(params) => {
           return params.row.isDeleted ? `row--deleted` : `row`;
         }}
@@ -449,7 +341,7 @@ const UsersTable = () => {
           setRowSelected(newRowSelectionModel);
         }}
         rowSelectionModel={rowSelected}
-      ></DataGrid>
+      ></StyledDataGrid>
       {isLoading && <Loading />}
     </Box>
   );

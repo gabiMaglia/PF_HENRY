@@ -1,15 +1,28 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { DataGrid, esES } from "@mui/x-data-grid";
+import {
+  GridCellEditStopReasons,
+  GridLogicOperator,
+  esES,
+} from "@mui/x-data-grid";
+
 //COMPONENTS
 import Loading from "../Loading/Loading.component";
-import CustomToolbar from "../CustomToolbar/CustomToolbar.component";
+import {
+  StyledDataGrid,
+  CustomToolbar,
+} from "../CustomDataGrid/CustomDataGrid.component";
+// SweetAlert
+import Swal from "sweetalert2";
 
 const ProductsTable = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filterButtonEl, setFilterButtonEl] = useState(null);
+  const [rowSelected, setRowSelected] = useState([]);
+
   const language = esES;
 
   const urlBack = import.meta.env.VITE_BACKEND_URL;
@@ -25,6 +38,40 @@ const ProductsTable = () => {
       setError("Error al obtener productos");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    const response = await fetchDelete(rowSelected);
+    if (Array.isArray(response)) {
+      // Si response es un array, iterar sobre él
+      response.forEach((value) => {
+        // ...
+      });
+    } else {
+      // Si response no es un array, tratarlo según sea necesario
+      console.error("La respuesta de fetchDelete no es un array:", response);
+    }
+    if (response.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: response.error,
+      });
+      console.log(response.error);
+    } else {
+      getProducts();
+      let responses = "";
+      response.forEach((value) => {
+        responses = responses + " ---- " + value.data.response;
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Producto/s actualizados exitosamente",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#fd611a",
+        text: responses,
+      });
     }
   };
 
@@ -60,16 +107,49 @@ const ProductsTable = () => {
   ];
 
   return (
-    <Box sx={{ width: "100%", height: 400 }}>
-      <DataGrid
+    <Box
+      sx={{
+        width: "100%",
+        position: "relative",
+        maxWidth: "70%",
+        height: "95%",
+        minHeight: "10vh",
+        textAlign: "center",
+      }}
+    >
+      <StyledDataGrid
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelected(newRowSelectionModel);
+        }}
+        ignoreDiacritics
+        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+        slots={{
+          toolbar: CustomToolbar,
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
+          panel: {
+            anchorEl: filterButtonEl,
+          },
+          toolbar: {
+            setFilterButtonEl,
+            handleDelete,
+            dataName: "Lista de productos",
+            showQuickFilter: true,
+          },
+        }}
+        getRowClassName={(params) => {
+          return params.row.isDeleted ? `row--deleted` : `row`;
+        }}
+        checkboxSelection
+        disableRowSelectionOnClick
+        rowSelectionModel={rowSelected}
         rows={productsWithBrandAndCategory}
         columns={columns}
         pageSize={5}
-        checkboxSelection
-        // slots={{ toolbar: CustomToolbar }}
-        slots={{ toolbar: () => <CustomToolbar getProducts={fetchProducts} /> }}
         localeText={language.components.MuiDataGrid.defaultProps.localeText}
-        sx={{ minHeight: "800px", marginTop: "15px", textAlign: "center" }}
       />
     </Box>
   );
