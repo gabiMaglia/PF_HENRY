@@ -236,7 +236,10 @@ const logicalDelete = async (id) => {
     return { error: true, response: "Producto no encontrado" };
   }
   await product.update({ is_deleted: !product.is_deleted });
-  return product;
+
+  return `${product.name} ${
+    product.is_deleted ? " activado" : " desactivado"
+  } `;
 };
 
 const getProductById = async (id) => {
