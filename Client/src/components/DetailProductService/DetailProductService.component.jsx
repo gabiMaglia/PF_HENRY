@@ -209,10 +209,6 @@ const DetailProductService = ({
               ml: ".5em",
               width: "8em",
               height: "5em",
-              objectFit: "contain",
-              "&:hover": {
-                transform: "scale(1.1)",
-              },
             }}
             src={data.image}
           />
