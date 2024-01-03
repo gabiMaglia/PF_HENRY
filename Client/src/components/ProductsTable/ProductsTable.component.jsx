@@ -13,6 +13,8 @@ import {
   StyledDataGrid,
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
+//UTILS
+import { logicalDeleteProduct } from "../../services/productServices";
 // SweetAlert
 import Swal from "sweetalert2";
 
@@ -77,6 +79,7 @@ const ProductsTable = () => {
 
   useEffect(() => {
     fetchProducts();
+    logicalDeleteProduct("f02375f9-54ec-4048-8034-a5b5a6f7dec3");
   }, []);
 
   const productsWithBrandAndCategory = products.map((product) => {
