@@ -104,6 +104,22 @@ const DetailProductService = ({
     }
   };
 
+  const renderButtons = () => {
+    if (authData.userRole === "technician") {
+      return (
+        <Box>
+          <Button name={"prev"} onClick={updateStep}>
+            Prev Step
+          </Button>
+          <Button name={"next"} onClick={updateStep}>
+            Next Step
+          </Button>
+        </Box>
+      );
+    } else {
+    }
+  };
+
   useEffect(() => {
     setIsLoading(true);
     getService();
@@ -256,12 +272,7 @@ const DetailProductService = ({
               Estado de la reparación: {data.status}
             </Typography>
           </Box>
-          <Button name={"prev"} onClick={updateStep}>
-            Prev Step
-          </Button>
-          <Button name={"next"} onClick={updateStep}>
-            Next Step
-          </Button>
+          {renderButtons()}
         </CardContent>
       </Card>
     </Box>
