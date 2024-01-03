@@ -68,10 +68,12 @@ const DetailProductService = ({
         : getName(response.data.userId, product);
     }
   };
+
   const handleUpdateStatus = async (status, value) => {
     if (
       data.statusPosition !== false &&
-      data.status !== "Esperando confirmación del cliente" &&
+      (data.status !== "Esperando confirmación del cliente" ||
+        authData.userRole === "customer") &&
       data.status !== "Servicio finalizado" &&
       data.status !== "Servicio cancelado"
     ) {
@@ -91,16 +93,37 @@ const DetailProductService = ({
 
   const updateStep = (e) => {
     const { name } = e.target;
-    if (name === "next") {
-      handleUpdateStatus(
-        "status",
-        serviceStatuses.progress[data.statusPosition + 1]
-      );
-    } else {
-      handleUpdateStatus(
-        "status",
-        serviceStatuses.progress[data.statusPosition - 1]
-      );
+    switch (name) {
+      case "next":
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition + 1]
+        );
+        break;
+      case "prev":
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition - 1]
+        );
+        break;
+      case "cancel":
+        handleUpdateStatus("confirm_repair", true);
+        break;
+      case "approve":
+        handleUpdateStatus("confirm_repair", true);
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition + 1]
+        );
+        break;
+      case "finished":
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition + 1]
+        );
+        break;
+      default:
+        break;
     }
   };
 
@@ -109,14 +132,28 @@ const DetailProductService = ({
       return (
         <Box>
           <Button name={"prev"} onClick={updateStep}>
-            Prev Step
+            Volver al paso anterior
           </Button>
           <Button name={"next"} onClick={updateStep}>
-            Next Step
+            Pasar al siguiente
           </Button>
         </Box>
       );
-    } else {
+    } else if (data.status === "Listo para retirar") {
+      <Box>
+        <Button name={"finished"} onClick={updateStep}>
+          Ya retire el dispositivo
+        </Button>
+      </Box>;
+    } else if (data.status === "Esperando confirmación del cliente") {
+      <Box>
+        <Button name={"cancel"} onClick={updateStep}>
+          Cancelar servicio
+        </Button>
+        <Button name={"approve"} onClick={updateStep}>
+          Aprobar presupuesto
+        </Button>
+      </Box>;
     }
   };
 

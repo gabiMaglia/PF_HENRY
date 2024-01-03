@@ -112,11 +112,11 @@ const deleteProductHandler = async (req, res) => {
 const logicalDeleteHandler = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedProduct = await logicalDelete(id);
-    if (deletedProduct.error) {
-      res.status(400).json({ error: deletedProduct.response });
+    const result = await logicalDelete(id);
+    if (result.error) {
+      res.status(400).json({ error: result.response });
     }
-    res.status(200).json(`El producto con ID: ${id} fue eliminado`);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
