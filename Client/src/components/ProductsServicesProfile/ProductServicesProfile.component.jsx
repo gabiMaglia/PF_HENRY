@@ -25,18 +25,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { filterService, getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
 import { getUsersByRole } from "../../services/userServices";
-
-const statusOptions = [
-  "Local esperando llegada",
-  "Recibido en el local",
-  "En proceso de diagnostico",
-  "Esperando confirmación del cliente",
-  "Reparación en curso",
-  "Pruebas finales",
-  "Reparación finalizada",
-  "Listo para retirar",
-  "Servicio finalizado",
-];
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
 
 const ProductsServicesProfile = () => {
   const [filters, setFilters] = useState({
@@ -176,7 +165,7 @@ const ProductsServicesProfile = () => {
     }
   };
 
-  const handleOpenDetail = (open, id) => {
+  const handleOpenDetail = (id, open) => {
     open && setOpenDetail(open);
     id && setCardDetail(id);
   };
@@ -196,6 +185,8 @@ const ProductsServicesProfile = () => {
       actionParam: true,
     },
   ];
+
+  const statuses = [...serviceStatuses.progress, ...serviceStatuses.cancel];
 
   return (
     <Box
@@ -248,7 +239,7 @@ const ProductsServicesProfile = () => {
             handleFilterChange(newValue, clear, "status");
           }}
           value={filters.status ? filters.status : null}
-          options={statusOptions}
+          options={statuses}
           renderInput={(params) => (
             <TextField name="status" {...params} label="Filtrar por estados" />
           )}
@@ -352,6 +343,8 @@ const ProductsServicesProfile = () => {
                         }}
                       >
                         <UserPanelProductCard
+                          handleCardClick={handleOpenDetail}
+                          actionParam={true}
                           product={card}
                           buttons={buttons}
                           alternativeImage={logo}
