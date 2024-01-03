@@ -1,12 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, esES } from "@mui/x-data-grid";
+//COMPONENTS
+import Loading from "../Loading/Loading.component";
+import CustomToolbar from "../CustomToolbar/CustomToolbar.component";
 
 const ProductsTable = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const language = esES;
 
   const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -55,14 +59,6 @@ const ProductsTable = () => {
     { field: "category", headerName: "Categoría", width: 150 },
   ];
 
-  if (loading) {
-    return <p>Cargando productos...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
     <Box sx={{ width: "100%", height: 400 }}>
       <DataGrid
@@ -70,7 +66,10 @@ const ProductsTable = () => {
         columns={columns}
         pageSize={5}
         checkboxSelection
-        sx={{ minHeight: "800px", marginTop: "50px", textAlign: "center" }}
+        // slots={{ toolbar: CustomToolbar }}
+        slots={{ toolbar: () => <CustomToolbar getProducts={fetchProducts} /> }}
+        localeText={language.components.MuiDataGrid.defaultProps.localeText}
+        sx={{ minHeight: "800px", marginTop: "15px", textAlign: "center" }}
       />
     </Box>
   );
