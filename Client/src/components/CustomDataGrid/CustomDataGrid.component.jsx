@@ -17,7 +17,6 @@ export const CustomToolbar = ({
   dataName,
   selectedRows,
 }) => {
-// console.log("selected rows", selectedRows)
 
   return (
     <GridToolbarContainer
@@ -29,7 +28,6 @@ export const CustomToolbar = ({
       }}
     >
       <Box sx={{ display: "flex", width: "100%" }}>
-        {/* <Button color="inherit" onClick={handleDelete}> */}
         <Button color="inherit" onClick={() => handleDelete(selectedRows)}>
           <DeleteIcon sx={{ color: "black" }} />
         </Button>

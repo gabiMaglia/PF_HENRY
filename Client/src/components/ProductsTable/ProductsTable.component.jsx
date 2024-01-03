@@ -48,18 +48,13 @@ const ProductsTable = () => {
   }, []);
 
   const handleDelete = async (selectedRows) => {
-    // console.log("Handle Delete - Selected Rows:", selectedRows);
     try {
       if (selectedRows.length > 0) {
-        for (const selectedRow of selectedRows) {
-          console.log("Selected Row:", selectedRow);
-          const productId = selectedRow?.data?.id;
-          console.log("Deleting product with ID:", productId);
-          if (productId) {
-            await logicalDeleteProduct(productId);
-            console.log("Product deleted:", productId);
-          }
-        }
+        await Promise.all(
+          selectedRows.map((id) => {
+            return logicalDeleteProduct(id);
+          })
+        );
         getProducts();
         return selectedRows;
       } else {
