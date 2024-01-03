@@ -66,7 +66,8 @@ const ProductsTable = () => {
         columns={columns}
         pageSize={5}
         checkboxSelection
-        slots={{ toolbar: CustomToolbar }}
+        // slots={{ toolbar: CustomToolbar }}
+        slots={{ toolbar: () => <CustomToolbar getProducts={fetchProducts} /> }}
         localeText={language.components.MuiDataGrid.defaultProps.localeText}
         sx={{ minHeight: "800px", marginTop: "15px", textAlign: "center" }}
       />

@@ -14,18 +14,26 @@ import { fetchDelete } from "../../services/productServices";
 import Swal from "sweetalert2";
 
 const CustomToolbar = ({ setFilterButtonEl, rowSelected, getProducts }) => {
-
   const handleDelete = async () => {
     const response = await fetchDelete(rowSelected);
+    if (Array.isArray(response)) {
+      // Si response es un array, iterar sobre él
+      response.forEach((value) => {
+        // ...
+      });
+    } else {
+      // Si response no es un array, tratarlo según sea necesario
+      console.error("La respuesta de fetchDelete no es un array:", response);
+    }
     if (response.error) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: response.error,
-    });
-    console.log(response.error)
+      });
+      console.log(response.error);
     } else {
-        getProducts();
+      getProducts();
       let responses = "";
       response.forEach((value) => {
         responses = responses + " ---- " + value.data.response;
