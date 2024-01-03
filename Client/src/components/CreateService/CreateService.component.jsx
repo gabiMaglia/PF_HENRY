@@ -85,6 +85,8 @@ const CreateService = () => {
       product_model: "",
       product_income_date: "",
       user_diagnosis: "",
+      client: "",
+      technician: "",
     });
     fileInputRef.current.value = "";
     setUserListValue(null);
@@ -159,6 +161,7 @@ const CreateService = () => {
         text: imageUrl.response,
       });
     } else {
+      authData.userRole === "technician" && (actErrors.technician = "");
       if (
         actErrors.product_model === "" &&
         actErrors.product_income_date === "" &&
@@ -193,8 +196,7 @@ const CreateService = () => {
               "Para continuar con la reparación diríjase a: Productos en servicio",
             confirmButtonText: "Continuar",
             confirmButtonColor: "#fd611a",
-            cancelButtonText: "Cancelar",
-            cancelButtonColor: "red",
+            cancelButtonText: "Quedarse en el formulario",
           }).then((value) => {
             if (value.isConfirmed) {
               navigate(

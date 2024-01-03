@@ -1,5 +1,4 @@
 const transporter = require("../../config/mailer");
-const cloudinary = require("../../config/cloudinaryConfig");
 const {
   Service,
   Service_status,
@@ -55,8 +54,8 @@ const addServiceController = async (
 
         const newServiceStatus = await Service_status.create({
           user_diagnosis,
-          technical_diagnosis: "pending",
-          final_diagnosis: "pending",
+          technical_diagnosis: "Pendiente",
+          final_diagnosis: "Pendiente",
           confirm_repair: false,
           reparir_finish: false,
           ServiceId: newService.id,
@@ -111,11 +110,14 @@ const updateServiceStatusController = async (id, field, value) => {
       response: `status not found`,
     };
   }
-  if (
-    value === true ||
-    field === "technical_diagnosis" ||
-    field === "final_diagnosis"
-  ) {
+  const options = [
+    "technical_diagnosis",
+    "final_diagnosis",
+    "budget",
+    "status",
+    "confirm_repair",
+  ];
+  if (options.includes(field)) {
     serviceStatus[field] = value;
     await serviceStatus.save();
     const service = await Service.findOne({
@@ -135,18 +137,10 @@ const updateServiceStatusController = async (id, field, value) => {
       </div>`,
     });
     return service;
-  } else if (
-    (value !== true && field !== "final_diagnosis") ||
-    (value !== true && field !== "technical_diagnosis")
-  ) {
-    return {
-      error: true,
-      response: `el valor debe ser true o false`,
-    };
   } else {
     return {
       error: true,
-      response: `no se modifico el status`,
+      response: `No existe esa propiedad del estado`,
     };
   }
 };

@@ -7,10 +7,14 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { getServicesById } from "../../services/serviceServices";
+import {
+  getServicesById,
+  updateServiceStatus,
+} from "../../services/serviceServices";
 import useTheme from "@mui/system/useTheme";
 import { getUserById } from "../../services/userServices";
 import Swal from "sweetalert2";
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
 
 const DetailProductService = ({
   id,
@@ -41,6 +45,12 @@ const DetailProductService = ({
       let date = response.data.product_income_date.split("T")[0];
       date = date.split("-");
       date = date[2] + "/" + date[1] + "/" + date[0];
+      const position =
+        response.data.Service_status.status !== "Servicio cancelado"
+          ? serviceStatuses.progress.indexOf(
+              response.data.Service_status.status
+            )
+          : false;
       const product = {
         date: date,
         name: response.data.product_model,
@@ -50,10 +60,47 @@ const DetailProductService = ({
         status: response.data.Service_status.status,
         technical_diagnosis: response.data.Service_status.technical_diagnosis,
         final_diagnosis: response.data.Service_status.final_diagnosis,
+        statusId: response.data.Service_status.id,
+        statusPosition: position,
       };
       authData === "customer"
         ? getName(response.data.technicianId, product)
         : getName(response.data.userId, product);
+    }
+  };
+  const handleUpdateStatus = async (status, value) => {
+    if (
+      data.statusPosition !== false &&
+      data.status !== "Esperando confirmación del cliente" &&
+      data.status !== "Servicio finalizado" &&
+      data.status !== "Servicio cancelado"
+    ) {
+      const response = await updateServiceStatus(data.statusId, status, value);
+      if (response?.error) {
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "error",
+          title: "Error en la actualización del servicio",
+          text: `${response?.error?.response?.statusText}`,
+        });
+      } else {
+        getService();
+      }
+    }
+  };
+
+  const updateStep = (e) => {
+    const { name } = e.target;
+    if (name === "next") {
+      handleUpdateStatus(
+        "status",
+        serviceStatuses.progress[data.statusPosition + 1]
+      );
+    } else {
+      handleUpdateStatus(
+        "status",
+        serviceStatuses.progress[data.statusPosition - 1]
+      );
     }
   };
 
@@ -69,6 +116,7 @@ const DetailProductService = ({
           backgroundColor: "#fd611a",
           borderRadius: "10px",
           width: "10%",
+          minWidth: "80px",
           textAlign: "center",
           mt: "1em",
           mb: "1em",
@@ -208,6 +256,12 @@ const DetailProductService = ({
               Estado de la reparación: {data.status}
             </Typography>
           </Box>
+          <Button name={"prev"} onClick={updateStep}>
+            Prev Step
+          </Button>
+          <Button name={"next"} onClick={updateStep}>
+            Next Step
+          </Button>
         </CardContent>
       </Card>
     </Box>

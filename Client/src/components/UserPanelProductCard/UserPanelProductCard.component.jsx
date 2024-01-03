@@ -74,7 +74,7 @@ const UserPanelProductCard = ({
       >
         <Box
           onClick={() => {
-            handleCardClick(product.id);
+            handleCardClick(product.id, actionParam && actionParam);
           }}
           sx={{
             flexGrow: "1",
@@ -159,8 +159,8 @@ const UserPanelProductCard = ({
                   }}
                   onClick={() => {
                     button.action(
-                      button.actionParam && button.actionParam,
                       product.id,
+                      button.actionParam && button.actionParam,
                       actionParam && actionParam
                     );
                   }}
