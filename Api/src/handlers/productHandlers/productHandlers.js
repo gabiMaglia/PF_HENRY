@@ -6,6 +6,7 @@ const {
   deleteProduct,
   getProductById,
   searchByName,
+  logicalDelete,
 } = require("../../controllers/productControllers/productController");
 
 //Post Product
@@ -107,6 +108,20 @@ const deleteProductHandler = async (req, res) => {
   }
 };
 
+//LOGICAL DELETE
+const logicalDeleteHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedProduct = await logicalDelete(id);
+    if (deletedProduct.error) {
+      res.status(400).json({ error: deletedProduct.response });
+    }
+    res.status(200).json(`El producto con ID: ${id} fue eliminado`);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 //GET BY ID
 const getProductByIdHandler = async (req, res) => {
   const { id } = req.params;
@@ -145,6 +160,7 @@ module.exports = {
   postProductHandler,
   getProductsHandler,
   updateProductHandler,
+  logicalDeleteHandler,
   deleteProductHandler,
   getProductByIdHandler,
   searchByNameHandler,

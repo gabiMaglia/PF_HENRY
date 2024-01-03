@@ -90,7 +90,7 @@ const postProduct = async ({
             await newProduct.addProductImage(existingImage, { transaction });
             return;
           }
-     
+
           const newImage = await ProductImage.create(
             { address: imageUrl },
             { transaction }
@@ -226,6 +226,19 @@ const deleteProduct = async (id) => {
   }
 };
 
+//LOGICAL DELETE
+const logicalDelete = async (id) => {
+  if (!id) {
+    return { error: true, response: "El id es requerido" };
+  }
+  const product = await Product.findByPk(id);
+  if (!product) {
+    return { error: true, response: "Producto no encontrado" };
+  }
+  await product.update({ is_deleted: !product.is_deleted });
+  return product;
+};
+
 const getProductById = async (id) => {
   try {
     const product = await Product.findByPk(id, {
@@ -275,6 +288,7 @@ const searchByName = async (name) => {
 };
 
 module.exports = {
+  logicalDelete,
   postProduct,
   postProductSeveral,
   getAllProducts,
