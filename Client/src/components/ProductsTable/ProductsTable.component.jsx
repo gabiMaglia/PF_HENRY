@@ -115,6 +115,7 @@ const ProductsTable = () => {
         height: "95%",
         minHeight: "10vh",
         textAlign: "center",
+        mt: "1em",
       }}
     >
       <StyledDataGrid

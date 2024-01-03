@@ -13,7 +13,6 @@ import { styled } from "@mui/material/styles";
 
 export const CustomToolbar = ({
   setFilterButtonEl,
-  rowSelected,
   handleDelete,
   dataName,
 }) => {
@@ -56,8 +55,6 @@ export const CustomToolbar = ({
 };
 
 export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-  mt: "1em",
-  scrollbarWidth: "none",
   textAlign: "center",
   "& .MuiDataGrid-cell": {
     justifyContent: "center",
