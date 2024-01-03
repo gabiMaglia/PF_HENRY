@@ -101,12 +101,12 @@ const ProductsTable = () => {
 
   const columns = [
     // { field: "id", headerName: "ID", minWidth: 70 },
-    { field: "name", headerName: "Nombre", width: 350 },
-    { field: "price", headerName: "Precio", width: 80 },
-    { field: "warranty", headerName: "Garantía", type: "number", width: 100 },
-    { field: "soldCount", headerName: "Vendidos", width: 80 },
-    { field: "brand", headerName: "Marca", width: 150 },
-    { field: "category", headerName: "Categoría", width: 150 },
+    { field: "name", headerName: "Nombre", width: 350, headerAlign: "center" },
+    { field: "price", headerName: "Precio", width: 80, headerAlign: "center" },
+    { field: "warranty", headerName: "Garantía", type: "number", width: 100, headerAlign: "center" },
+    { field: "soldCount", headerName: "Vendidos", width: 80, headerAlign: "center" },
+    { field: "brand", headerName: "Marca", width: 150, headerAlign: "center" },
+    { field: "category", headerName: "Categoría", width: 150, headerAlign: "center" },
   ];
 
   return (
