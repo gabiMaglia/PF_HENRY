@@ -14,9 +14,7 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
-import {
-  logicalDeleteProduct,
-} from "../../services/productServices";
+import { logicalDeleteProduct } from "../../services/productServices";
 // SweetAlert
 import Swal from "sweetalert2";
 
@@ -45,14 +43,34 @@ const ProductsTable = () => {
     }
   };
 
-  const handleDelete = async () => {
-    
-  };
-
   useEffect(() => {
     getProducts();
-    logicalDeleteProduct("f02375f9-54ec-4048-8034-a5b5a6f7dec3");
   }, []);
+
+  const handleDelete = async (selectedRows) => {
+    // console.log("Handle Delete - Selected Rows:", selectedRows);
+    try {
+      if (selectedRows.length > 0) {
+        for (const selectedRow of selectedRows) {
+          console.log("Selected Row:", selectedRow);
+          const productId = selectedRow?.data?.id;
+          console.log("Deleting product with ID:", productId);
+          if (productId) {
+            await logicalDeleteProduct(productId);
+            console.log("Product deleted:", productId);
+          }
+        }
+        getProducts();
+        return selectedRows;
+      } else {
+        console.warn(
+          "No se puede eliminar el producto porque no se ha seleccionado ninguno"
+        );
+      }
+    } catch (error) {
+      console.error("Error al realizar el borrado lógico:", error);
+    }
+  };
 
   const productsWithBrandAndCategory = products.map((product) => {
     const brand =
@@ -130,6 +148,7 @@ const ProductsTable = () => {
             handleDelete,
             dataName: "Lista de productos",
             showQuickFilter: true,
+            selectedRows: rowSelected,
           },
         }}
         getRowClassName={(params) => {

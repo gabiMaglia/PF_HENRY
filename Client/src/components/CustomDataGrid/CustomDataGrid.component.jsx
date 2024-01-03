@@ -15,7 +15,10 @@ export const CustomToolbar = ({
   setFilterButtonEl,
   handleDelete,
   dataName,
+  selectedRows,
 }) => {
+// console.log("selected rows", selectedRows)
+
   return (
     <GridToolbarContainer
       sx={{
@@ -26,7 +29,8 @@ export const CustomToolbar = ({
       }}
     >
       <Box sx={{ display: "flex", width: "100%" }}>
-        <Button color="inherit" onClick={handleDelete}>
+        {/* <Button color="inherit" onClick={handleDelete}> */}
+        <Button color="inherit" onClick={() => handleDelete(selectedRows)}>
           <DeleteIcon sx={{ color: "black" }} />
         </Button>
         <Typography variant="h5" sx={{ flexGrow: "1" }}>
