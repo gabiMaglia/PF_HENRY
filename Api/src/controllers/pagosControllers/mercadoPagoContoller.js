@@ -30,6 +30,8 @@ const mercadoPago = async (array, idOrder) => {
 };
 
 const handlePaymentNotification = async (paymentId) => {
+  const transaction = await sequelize.transaction(); // Asegúrate de tener tu instancia de Sequelize (sequelize) disponible
+
   try {
     const paymentInfo = await mercadopago.payment.get(paymentId);
 
@@ -46,6 +48,7 @@ const handlePaymentNotification = async (paymentId) => {
             },
           },
         ],
+        transaction, // Mueve el transaction aquí
       });
 
       if (order) {
@@ -65,6 +68,7 @@ const handlePaymentNotification = async (paymentId) => {
 
             const productStock = await ProductStock.findOne({
               where: { ProductId: id },
+              transaction, // Asegúrate de pasar la transacción aquí también
             });
 
             if (productStock) {
@@ -82,6 +86,8 @@ const handlePaymentNotification = async (paymentId) => {
         }
       }
     }
+
+    await transaction.commit();
   } catch (error) {
     console.error("Error al manejar la notificación de pago:", error);
   }
