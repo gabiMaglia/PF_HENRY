@@ -182,37 +182,98 @@ const postProductSeveral = async (products) => {
 
 //UPDATE PRODUCT
 const updateProduct = async (productId, updateData) => {
-  try {
-    const productToUpdate = await Product.findByPk(productId, {
-      include: [ProductStock, ProductBrand, ProductImage, ProductCategory],
+  const productToUpdate = await Product.findByPk(productId, {
+    include: [ProductStock, ProductBrand, ProductImage, ProductCategory],
+  });
+
+  if (!productToUpdate) {
+    return { error: true, response: "Producto no encontrado" };
+  }
+
+  if (updateData.ProductStock) {
+    await productToUpdate.ProductStock.update({
+      amount: updateData.ProductStock,
+    });
+  }
+
+  //Update brand
+  if (updateData.ProductBrand) {
+    await Promise.all(
+      productToUpdate.ProductBrands.map(async (brand) => {
+        return productToUpdate.removeProductBrand(brand);
+      })
+    );
+
+    const [brand, createdBrand] = await ProductBrand.findOrCreate({
+      where: { name: updateData.ProductBrand },
     });
 
-    if (!productToUpdate) {
-      throw new Error("Producto no encontrado");
+    if (brand) {
+      await productToUpdate.addProductBrand(brand, {
+        through: "ProductProductBrand",
+      });
+    } else {
+      await productToUpdate.addProductBrand(createdBrand, {
+        through: "ProductProductBrand",
+      });
     }
-
-    if (updateData.ProductStock) {
-      await productToUpdate.ProductStock.update(updateData.ProductStock);
-    }
-
-    if (updateData.ProductBrand) {
-      await productToUpdate.ProductBrands[0].update(updateData.ProductBrand);
-    }
-
-    if (updateData.ProductImage) {
-      await productToUpdate.ProductImage.update(updateData.ProductImage);
-    }
-
-    if (updateData.ProductCategory) {
-      await productToUpdate.ProductCategory.update(updateData.ProductCategory);
-    }
-
-    await productToUpdate.update(updateData);
-
-    return productToUpdate;
-  } catch (error) {
-    throw error;
   }
+
+  // Update Image
+  if (updateData.ProductImage) {
+    productToUpdate.ProductImages.map(async (image) => {
+      await productToUpdate.removeProductImage(image);
+      await image.destroy();
+    });
+
+    updateData.ProductImage.map(async (imageUrl) => {
+      const existingImage = await ProductImage.findOne({
+        where: { address: imageUrl },
+      });
+
+      if (existingImage) {
+        await productToUpdate.addProductImage(existingImage);
+      } else {
+        const newImage = await ProductImage.create({ address: imageUrl });
+        await productToUpdate.addProductImage(newImage);
+      }
+    });
+  }
+
+  if (updateData.ProductCategory) {
+    await Promise.all(
+      productToUpdate.ProductCategories.map(async (category) => {
+        return productToUpdate.removeProductCategory(category);
+      })
+    );
+    await Promise.all(
+      updateData.ProductCategory.map(async (category) => {
+        console.log(category);
+        const [existingCategory, createdCategory] =
+          await ProductCategory.findOrCreate({
+            where: { name: category },
+          });
+
+        if (existingCategory) {
+          return productToUpdate.addProductCategory(existingCategory);
+        } else {
+          return productToUpdate.addProductCategory(createdCategory);
+        }
+      })
+    );
+  }
+
+  await productToUpdate.update(updateData);
+
+  const updatedProduct = await Product.findByPk(productId, {
+    include: [
+      { model: ProductImage, attributes: ["address"] },
+      { model: ProductBrand, attributes: ["name"] },
+      { model: ProductCategory, attributes: ["name"] },
+      { model: ProductStock, attributes: ["amount"] },
+    ],
+  });
+  return updatedProduct;
 };
 
 //DELETE PRODUCT
