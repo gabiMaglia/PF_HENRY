@@ -217,8 +217,6 @@ const ProductsTable = () => {
     });
   };
 
-  
-
   return (
     <Box
       sx={{
