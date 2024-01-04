@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
     },
     budget: {
       type: DataTypes.STRING,
-      defaultValue: "pendiente",
+      defaultValue: "Pendiente",
     },
     confirm_repair: {
       type: DataTypes.BOOLEAN,
@@ -43,6 +43,7 @@ module.exports = (sequelize) => {
             "Reparación finalizada",
             "Listo para retirar",
             "Servicio finalizado",
+            "Servicio cancelado",
           ],
         ],
       },

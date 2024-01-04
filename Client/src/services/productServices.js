@@ -113,10 +113,14 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
   };
 
   try {
-    const res = await axios.post(`${urlBack}/cart/`, data, {withCredentials: true});
+    const res = await axios.post(`${urlBack}/cart/`, data, {
+      withCredentials: true,
+    });
 
     if (res.data.Cart === "El usuario ya tiene carrito") {
-      const response = await axios.put(`${urlBack}/cart/add`, data, {withCredentials: true});
+      const response = await axios.put(`${urlBack}/cart/add`, data, {
+        withCredentials: true,
+      });
     }
   } catch (error) {
     return;
@@ -127,7 +131,9 @@ export const fetchGetProduct = (cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
   try {
-    const res = await axios.get(`${urlBack}/cart/${userId}`, {withCredentials: true});
+    const res = await axios.get(`${urlBack}/cart/${userId}`, {
+      withCredentials: true,
+    });
     const products = res.data.Products.map((product) => ({
       id: product.id,
       name: product.name,
@@ -156,7 +162,9 @@ export const fetchCount = (product, cookiesAccepted) => async () => {
     productQuantity: product.count,
   };
   try {
-    const response = await axios.put(`${urlBack}/cart/edit`, data, {withCredentials: true});
+    const response = await axios.put(`${urlBack}/cart/edit`, data, {
+      withCredentials: true,
+    });
   } catch (error) {
     return;
   }
@@ -171,7 +179,9 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
     productId: product,
   };
   try {
-    const res = await axios.put(`${urlBack}/cart/remove`, data, {withCredentials: true});
+    const res = await axios.put(`${urlBack}/cart/remove`, data, {
+      withCredentials: true,
+    });
     console.log(res, "delete");
   } catch (error) {
     return;
@@ -193,27 +203,38 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
     const response = await axios.post(
       `${urlBack}/pagos/order`,
       { array: products, userId: userId },
-      {withCredentials: true},
+      { withCredentials: true },
       {
         headers: {
           "Content-Type": "application/json",
         },
       }
-      );
-      console.log(response.data.Order.preferenceId)
+    );
+    console.log(response.data.Order.preferenceId);
     dispatch(idShop(response.data.Order.preferenceId));
   } catch (error) {
     return;
   }
-}
+};
 export const fetchAddProduct = async (obj, dispatch) => {
   try {
-    const { data } = await axios.post(`${urlBack}/product`, obj, {withCredentials: true});
+    const { data } = await axios.post(`${urlBack}/product`, obj, {
+      withCredentials: true,
+    });
     if (data) {
       dispatch(addProduct(data.product));
     }
   } catch (error) {
     return;
+  }
+};
+
+export const logicalDeleteProduct = async (id) => {
+  try {
+    const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`);
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
   }
 };
 

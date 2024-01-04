@@ -1,5 +1,4 @@
 const transporter = require("../../config/mailer");
-const cloudinary = require("../../config/cloudinaryConfig");
 const {
   Service,
   Service_status,
@@ -55,8 +54,8 @@ const addServiceController = async (
 
         const newServiceStatus = await Service_status.create({
           user_diagnosis,
-          technical_diagnosis: "pending",
-          final_diagnosis: "pending",
+          technical_diagnosis: "Pendiente",
+          final_diagnosis: "Pendiente",
           confirm_repair: false,
           reparir_finish: false,
           ServiceId: newService.id,
@@ -77,14 +76,11 @@ const addServiceController = async (
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
         await transporter.sendMail({
-          from: `"aviso de ingreso 👻"  ${destinationEmail}`,
+          from: `Hyper Mega Red  ${destinationEmail}`,
           to: clientObj.email, // list of receivers
           subject: "ingreso a servicio ✔",
-          html: `su equipo se ingreso a nuestro sistema el dia ${date}<br><br>
-          <div style="background: linear-gradient(30deg, white, orange 50%, white , orange 50%, black 100%); padding: 20px; text-align: center;">
-            <h2 style="color: #000; font-weight: bold;">hyper mega red</h2>
-            <p style="color:#FFFFFF; font-size:large;">Gracias por usar nuestro servicio.</p>
-          </div>`,
+          html: `Estimado cliente.<br><br> se le informa que su equipo se ingreso a nuestro sistema el dia ${date}<br><br> ante cualquier duda comuniquese con nuestro sector de tecnicos<br><br>
+          <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
         });
 
         //corta envio
@@ -111,11 +107,14 @@ const updateServiceStatusController = async (id, field, value) => {
       response: `status not found`,
     };
   }
-  if (
-    value === true ||
-    field === "technical_diagnosis" ||
-    field === "final_diagnosis"
-  ) {
+  const options = [
+    "technical_diagnosis",
+    "final_diagnosis",
+    "budget",
+    "status",
+    "confirm_repair",
+  ];
+  if (options.includes(field)) {
     serviceStatus[field] = value;
     await serviceStatus.save();
     const service = await Service.findOne({
@@ -125,28 +124,17 @@ const updateServiceStatusController = async (id, field, value) => {
     const clientObj = await User.findByPk(service.userId);
 
     await transporter.sendMail({
-      from: `"aviso de actualizacion de estado 👻"  ${destinationEmail}`, // sender address
+      from: `Hyper Mega Red  ${destinationEmail}`, // sender address
       to: clientObj.email,
       subject: "actualizacion de estado✔",
-      html: `se modifico el estado de su equipo ${service.product_model} a ${field}:${value}<br><br>
-      <div style="background: linear-gradient(30deg, white, orange 50%, white , orange 50%, black 100%); padding: 20px; text-align: center;">
-        <h2 style="color: #000;">hyper mega red</h2>
-        <p style="color:#FFFFFF; font-size:large;">Gracias por usar nuestro servicio.</p>
-      </div>`,
+      html: `Estimado cliente<br><br>se modifico el estado de su equipo ${service.product_model} a ${field}:${value}<br><br> ante cualquier duda comuniquese con nuestro sector de tecnicos<br><br>
+      <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
     });
     return service;
-  } else if (
-    (value !== true && field !== "final_diagnosis") ||
-    (value !== true && field !== "technical_diagnosis")
-  ) {
-    return {
-      error: true,
-      response: `el valor debe ser true o false`,
-    };
   } else {
     return {
       error: true,
-      response: `no se modifico el status`,
+      response: `No existe esa propiedad del estado`,
     };
   }
 };

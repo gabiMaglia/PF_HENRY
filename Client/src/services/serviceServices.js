@@ -31,10 +31,12 @@ export const getServices = async (id) => {
 
 export const getServicesById = async (id) => {
   try {
-    const response = await axios.get(`${url}/service/${id}`, {
-      withCredentials: true,
-    });
-    return response;
+    if (id) {
+      const response = await axios.get(`${url}/service/${id}`, {
+        withCredentials: true,
+      });
+      return response;
+    }
   } catch (error) {
     return { error };
   }
@@ -55,6 +57,20 @@ export const filterService = async (status, user, technician) => {
   } catch (error) {
     return { error };
   }
+};
+
+export const updateServiceStatus = async (id, status, value) => {
+  const response = await axios.put(
+    `${url}/service/${id}`,
+    {
+      field: status,
+      value: value,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+  console.log(response);
 };
 
 //Estaba de antes no lo quise borrar por las dudas

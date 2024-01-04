@@ -7,10 +7,14 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { getServicesById } from "../../services/serviceServices";
+import {
+  getServicesById,
+  updateServiceStatus,
+} from "../../services/serviceServices";
 import useTheme from "@mui/system/useTheme";
 import { getUserById } from "../../services/userServices";
 import Swal from "sweetalert2";
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
 
 const DetailProductService = ({
   id,
@@ -41,6 +45,12 @@ const DetailProductService = ({
       let date = response.data.product_income_date.split("T")[0];
       date = date.split("-");
       date = date[2] + "/" + date[1] + "/" + date[0];
+      const position =
+        response.data.Service_status.status !== "Servicio cancelado"
+          ? serviceStatuses.progress.indexOf(
+              response.data.Service_status.status
+            )
+          : false;
       const product = {
         date: date,
         name: response.data.product_model,
@@ -50,10 +60,100 @@ const DetailProductService = ({
         status: response.data.Service_status.status,
         technical_diagnosis: response.data.Service_status.technical_diagnosis,
         final_diagnosis: response.data.Service_status.final_diagnosis,
+        statusId: response.data.Service_status.id,
+        statusPosition: position,
       };
       authData === "customer"
         ? getName(response.data.technicianId, product)
         : getName(response.data.userId, product);
+    }
+  };
+
+  const handleUpdateStatus = async (status, value) => {
+    if (
+      data.statusPosition !== false &&
+      (data.status !== "Esperando confirmación del cliente" ||
+        authData.userRole === "customer") &&
+      data.status !== "Servicio finalizado" &&
+      data.status !== "Servicio cancelado"
+    ) {
+      const response = await updateServiceStatus(data.statusId, status, value);
+      if (response?.error) {
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "error",
+          title: "Error en la actualización del servicio",
+          text: `${response?.error?.response?.statusText}`,
+        });
+      } else {
+        getService();
+      }
+    }
+  };
+
+  const updateStep = (e) => {
+    const { name } = e.target;
+    switch (name) {
+      case "next":
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition + 1]
+        );
+        break;
+      case "prev":
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition - 1]
+        );
+        break;
+      case "cancel":
+        handleUpdateStatus("confirm_repair", true);
+        break;
+      case "approve":
+        handleUpdateStatus("confirm_repair", true);
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition + 1]
+        );
+        break;
+      case "finished":
+        handleUpdateStatus(
+          "status",
+          serviceStatuses.progress[data.statusPosition + 1]
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
+  const renderButtons = () => {
+    if (authData.userRole === "technician") {
+      return (
+        <Box>
+          <Button name={"prev"} onClick={updateStep}>
+            Volver al paso anterior
+          </Button>
+          <Button name={"next"} onClick={updateStep}>
+            Pasar al siguiente
+          </Button>
+        </Box>
+      );
+    } else if (data.status === "Listo para retirar") {
+      <Box>
+        <Button name={"finished"} onClick={updateStep}>
+          Ya retire el dispositivo
+        </Button>
+      </Box>;
+    } else if (data.status === "Esperando confirmación del cliente") {
+      <Box>
+        <Button name={"cancel"} onClick={updateStep}>
+          Cancelar servicio
+        </Button>
+        <Button name={"approve"} onClick={updateStep}>
+          Aprobar presupuesto
+        </Button>
+      </Box>;
     }
   };
 
@@ -69,6 +169,7 @@ const DetailProductService = ({
           backgroundColor: "#fd611a",
           borderRadius: "10px",
           width: "10%",
+          minWidth: "80px",
           textAlign: "center",
           mt: "1em",
           mb: "1em",
@@ -108,10 +209,6 @@ const DetailProductService = ({
               ml: ".5em",
               width: "8em",
               height: "5em",
-              objectFit: "contain",
-              "&:hover": {
-                transform: "scale(1.1)",
-              },
             }}
             src={data.image}
           />
@@ -208,6 +305,7 @@ const DetailProductService = ({
               Estado de la reparación: {data.status}
             </Typography>
           </Box>
+          {renderButtons()}
         </CardContent>
       </Card>
     </Box>

@@ -9,7 +9,7 @@ import {
   Add,
   People,
   Logout,
-  FormatListNumbered
+  FormatListNumbered,
 } from "@mui/icons-material";
 //HELPERS
 import PATHROUTES from "../helpers/pathRoute";
@@ -21,7 +21,7 @@ const UserPanelItems = (name, surname) => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const userRole = authData.userRole;
+  const userRole = authData?.userRole;
 
   const initialLetersUsers = {
     name: getFirstLetters(name),

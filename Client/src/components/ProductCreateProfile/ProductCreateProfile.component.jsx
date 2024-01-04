@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 //MATERIAL UI
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   FormControl,
   Box,
@@ -21,7 +22,7 @@ import Swal from "sweetalert2";
 import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
 import validationsCreate from "../../helpers/productValidate";
-
+import { display } from "@mui/system";
 
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
@@ -50,7 +51,6 @@ const ProductCreateProfileComponent = () => {
   useEffect(() => {
     fetchCategories(dispatch);
   }, []);
-console.log(values);
   const handlerAddImage = ({ target }) => {
     setValues({
       ...values,
@@ -67,7 +67,7 @@ console.log(values);
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
-  
+
     switch (name) {
       case "images":
         if (!isUrlInput) {
@@ -76,7 +76,7 @@ console.log(values);
             ...prevValues,
             images: [...prevValues.images, ...selectedImages],
           }));
-  
+
           const selectedPreviews = Array.from(files).map((file) =>
             URL.createObjectURL(file)
           );
@@ -86,11 +86,11 @@ console.log(values);
           ]);
         }
         break;
-  
+
       case "imageUrl":
         setImageURL(value);
         break;
-  
+
       case "categoryName":
         setValues((prevValues) => ({
           ...prevValues,
@@ -98,7 +98,7 @@ console.log(values);
         }));
         setIsOtherCategory(value === "otra");
         break;
-  
+
       case "newCategory":
         setNewCategory(value);
         setValues((prevValues) => ({
@@ -106,14 +106,14 @@ console.log(values);
           categoryName: isOtherCategory ? [value] : prevValues.categoryName,
         }));
         break;
-  
+
       default:
         setValues((prevValues) => {
           const updatedValues = { ...prevValues, [name]: value };
           return updatedValues;
         });
     }
-  
+
     // Realizar la validación después de cada caso
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
@@ -171,9 +171,9 @@ console.log(values);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     let array = [];
-
+  
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
     if (Object.keys(errorObject).length !== 0) {
@@ -191,7 +191,7 @@ console.log(values);
         const array2 = await handlerUpdateCloudinary("products");
         array = array2;
       }
-
+  
       if (array.error) {
         Swal.fire({
           icon: "error",
@@ -199,13 +199,36 @@ console.log(values);
           text: "Por favor, inténtelo de nuevo.",
         });
       }
-
+  
       const obj = {
         ...values,
         images: array,
       };
       console.log(obj);
-      fetchAddProduct(obj, dispatch);
+  
+      // Muestra una alerta de que la creación está en proceso
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+      });
+  
+      const response = fetchAddProduct(obj, dispatch);
+      response.then((res) => {
+        Swal.close();
+        Swal.fire({
+          icon: "success",
+          title: "Producto creado exitosamente",
+        });
+      }).catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Algo salio mal",
+          text: "Por favor, intente nuevamente",
+        });
+      });
+  
       setValues({
         name: "",
         price: "",
@@ -245,6 +268,10 @@ console.log(values);
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
+        overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }}
     >
       <Typography variant="h4" sx={{ mt: "1%", color: "#fd611a" }}>
@@ -419,9 +446,8 @@ console.log(values);
                 onChange={handlerImageChange}
                 fullWidth
               />
-            
+
               <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
-             
                 <Button
                   variant="outlined"
                   color="inherit"
@@ -432,17 +458,13 @@ console.log(values);
                   insertar URL
                 </Button>
               </Box>
-           
             </Box>
-              
-            
-            
           )}
-           {errors.e4 &&isUrlInput? (
-                <Typography variant="caption" color="error">
-                  Ingrese una URL valida
-                </Typography>
-              ):null}
+          {errors.e4 && isUrlInput ? (
+            <Typography variant="caption" color="error">
+              Ingrese una URL valida
+            </Typography>
+          ) : null}
           <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
             <Button
               variant="outlined"
@@ -455,28 +477,52 @@ console.log(values);
             </Button>
           </Box>
         </Box>
-        <Box
-          sx={{ display: "flex", flexDirection: "row", backgroundColor: "red" }}
-        >
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
           <Box
             sx={{
+              width: "100%",
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              backgroundColor: "red",
+              justifyContent: "space-evenly",
             }}
           >
             {imagePreviews.map((preview, index) => (
-              <img
-                key={index}
-                src={preview}
-                alt={`Preview-${index}`}
-                style={{
+              <Button
+                onClick={() => handleRemoveImage(index)}
+                sx={{
+                  ":hover": {
+                    transform: "scale(1.2,1.2)",
+                    margin: "10px",
+                    "& .MuiIconButton-root": { display: "block" },
+                    backgroundColor: "rgba(255, 0, 0, 0.2)",
+                  },
                   maxWidth: "100px",
                   maxHeight: "100px",
-                  margin: "10px",
+                  transition:"1s"
                 }}
-              />
+              >
+                <DeleteIcon
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    right: "50%",
+                    display: "none",
+                    width:"50px",
+                    height:"50px",
+                    color:"black",
+                    transform: "translate(50%, -50%)",
+                  }}
+                  className="MuiIconButton-root"
+                />
+                <img
+                  key={index}
+                  src={preview}
+                  alt={`Preview-${index}`}
+                  style={{
+                    maxWidth: "100px",
+                    maxHeight: "100px",
+                  }}
+                />
+              </Button>
             ))}
           </Box>
           <Box
@@ -485,27 +531,7 @@ console.log(values);
               flexDirection: "column",
               justifyContent: "center",
             }}
-          >
-            <ul>
-              {values.images.map((image, index) => (
-                <li key={index} style={{ margin: "35px" }}>
-                  {image.name || image}
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleRemoveImage(index)}
-                    sx={{
-                      color: "white",
-                      borderRadius: 2,
-                      backgroundColor: "#fd611a",
-                    }}
-                  >
-                    Eliminar
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          </Box>
+          ></Box>
         </Box>
         <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
           <Button
