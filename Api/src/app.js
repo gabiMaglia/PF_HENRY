@@ -31,11 +31,7 @@ server.use(
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
-    cookie: {
-      httpOnly: false,
-      // sameSite: 'Strict',
-      secure: false,
-    },
+    
   })
 );
 
