@@ -14,7 +14,7 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 server.use(cookieParser({
-  json: true,
+  
   secret: `${process.env.EXPRESS_SESSION_KEY}`
 }))
 
@@ -37,8 +37,8 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      sameSite: 'None',
-      secure: false,
+      sameSite: 'Lax',
+      secure: process.env.NODE_ENV === 'production',
       // maxAge: 30 * 60 * 1000,
     },
   })
