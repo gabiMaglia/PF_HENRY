@@ -50,15 +50,17 @@ const ProductsTable = () => {
   const handleDelete = async (selectedRows) => {
     try {
       if (selectedRows.length > 0) {
-        await Promise.all(
+        const response = await Promise.all(
           selectedRows.map((id) => {
             return logicalDeleteProduct(id);
           })
         );
+        let msg = response.map((res) => res.data);
+        msg = msg.join(", ");
         Swal.fire({
           icon: "success",
           title: "Eliminación exitosa",
-          text: "Los productos seleccionados han sido elimainado con éxito.",
+          text: msg,
         });
         getProducts();
         return selectedRows;
@@ -87,11 +89,12 @@ const ProductsTable = () => {
       product.ProductCategories.length > 0
         ? product.ProductCategories[0].name
         : "Sin categoría";
-
+    const stock = product.ProductStock?.amount || 0;
     return {
       ...product,
       brand,
       category,
+      stock,
     };
   });
 
@@ -107,6 +110,13 @@ const ProductsTable = () => {
       headerAlign: "center",
     },
     {
+      field: "is_deleted",
+      headerName: "Borrado",
+      type: Boolean,
+      width: 100,
+      headerAlign: "center",
+    },
+    {
       field: "soldCount",
       headerName: "Vendidos",
       width: 80,
@@ -116,6 +126,12 @@ const ProductsTable = () => {
     {
       field: "category",
       headerName: "Categoría",
+      width: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "stock",
+      headerName: "Stock",
       width: 150,
       headerAlign: "center",
     },
@@ -158,7 +174,7 @@ const ProductsTable = () => {
           },
         }}
         getRowClassName={(params) => {
-          return params.row.isDeleted ? `row--deleted` : `row`;
+          return params.row.is_deleted ? `row--deleted` : `row`;
         }}
         checkboxSelection
         disableRowSelectionOnClick
