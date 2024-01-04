@@ -1,14 +1,14 @@
-import { Box, Typography } from "@mui/material"
-import DropdownComponent from "../../../components/Dropdown/Dropdown.component"
+import { Box, Typography } from "@mui/material";
+import QuestionsComponent from "../../../components/Questions/Questions.component";
 
 const QuestionsView = () => {
   return (
     <>
       <Box>
-        <DropdownComponent />
+        <QuestionsComponent />
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default QuestionsView
+export default QuestionsView;

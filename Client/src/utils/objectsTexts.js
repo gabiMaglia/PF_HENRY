@@ -10,7 +10,7 @@ import {
   Twitter,
 } from "@mui/icons-material";
 
-const itemsQuestions = [
+const questionsStore = [
   {
     title: "¿Que garantia tienen los productos?",
     content: [
@@ -33,16 +33,60 @@ const itemsQuestions = [
       "- Contado Efectivo",
       "- Transferencia Bancaria",
       "- Tarjetas de Crédito de Banco",
+      "- Mercado Pago",
     ],
   },
   {
     title: "¿Que métodos de envio tienen?",
     content: [
       "Contamos con envios gratis a todo el país para compras superiores a los $50.000",
-      "- Debito/Crédito 1 Pag",
+      "Trabjamos con las siguientes empresas...",
+      "- OCA",
+      "- Andreani",
+      "- Correo Argentino",
+    ],
+  },
+];
+
+const questionsService = [
+  {
+    title: "¿Cómo puedo contratar un servicio técino?",
+    content: [
+      "Tienes varias maneras de contratar un servicio técnico.",
+      "- Desde nuestro WhatsApp, haciendo click en el botón flotante.",
+      "- Desde nuestra página de soporte, completando el formulario.",
+      "- Desde nuestras redes sociales.",
+      "- Acercandote directamente a nustro local.",
+    ],
+  },
+  {
+    title: "¿Como sigo el estado de mi servicio?",
+    content: [
+      "Puedes seguir el estado del servicio ingresando con tu usuario y contraseña al sitio y en el panel de usuario dirigirte a Productos en Servicio. Ahí tendras toda la info necesaria sobre el estado de tus productos en servicio",
+      "También recibirás notificaciones del estado de tus servicios via e-mail o WhatsApp, dependiendo de la opción que elijas como medio de comunicación al momento de contratar un servicio.",
+    ],
+  },
+  {
+    title: "¿Que pasa si quiero cancelar un servicio?",
+    content: [
+      "Los servicios que ya han sido aceptados NO se pueden cancelar. Es por eso que al momento de contratar un servicio debes leer bien la devolución de nuestros técnicos sobre el diagnóstico del producto y el presupuesto de la reparación.",
+      "-Una vez que los técinos reciban el producto, lo revisaran, te enviaran una notificación al medio de comunicación seleccionado y también pódras verlo de tu panel de usuario.",
+      "- Ahí tendrás todo detallado y el presupuesto del servicio.",
+      "- Tendrás dos botones, uno de ACEPTAR y otro de RECHAZAR.",
+      "- Si decides RECHAZAR, nos pondremos en contacto con vos para coordinar día y horario para que pases a retirar el producto.",
+      "- Si decides ACEPTAR, se procedera a comenzar con la reparación del mismo y ya no se podrá cancelar el servicio.",
+      "- Si de igual manera decides canclear y quieres retirar tu producto, podrás hacerlo, pero deberás abonar el presupuesto que ha sido aceptado inicialmente.",
+    ],
+  },
+  {
+    title: "¿Cuales son las formas de pago?",
+    content: [
+      "Aceptamos las siguientes FORMAS DE PAGO:",
+      "- Debito/Crédito 1 Pago",
       "- Contado Efectivo",
       "- Transferencia Bancaria",
       "- Tarjetas de Crédito de Banco",
+      "- Mercado Pago",
     ],
   },
 ];
@@ -128,7 +172,8 @@ const brands = [
 ];
 
 export {
-  itemsQuestions,
+  questionsStore,
+  questionsService,
   textSupport,
   sectionInformation,
   sectionSocial,
