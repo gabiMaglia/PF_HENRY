@@ -17,7 +17,6 @@ export const getUsersByRole = async (role, jwt) => {
   try {
     const AllUsers = await axios.get(`${url}/user_role/by_role/${role}`, {
       withCredentials: true,
-      withXSRFToken: true,
       headers: {
         Authorization: `Bearer ${jwt}`,
       },

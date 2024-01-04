@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Typography, Box, Collapse, Paper } from "@mui/material";
 import { ArrowRight, ArrowDropDown } from "@mui/icons-material";
 //UTILS
-import { itemsQuestions } from "../../utils/objectsTexts";
+import { questionsService } from "../../utils/objectsTexts";
 
 const DropdownItem = ({ title, content }) => (
   <Box sx={{ paddingBottom: "25px", paddingTop: "10px" }}>
@@ -20,7 +20,7 @@ const DropdownItem = ({ title, content }) => (
   </Box>
 );
 
-const Dropdown = () => {
+const DropdownServiceComponent = () => {
   //ESTADOS
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -31,37 +31,18 @@ const Dropdown = () => {
 
   return (
     <>
-      {/* BOX TITULO */}
-      <Box
-        sx={{
-          backgroundColor: "#000",
-          width: "100%",
-          height: "120px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <Box>
         <Typography
           variant="h4"
-          sx={{
-            color: "#fff",
-            textTransform: "uppercase",
-            fontWeight: "800",
-            "@media (max-width: 480px)": {
-              transform: "scale(.8)",
-            },
-          }}
+          sx={{ textAlign: "center", marginTop: "25px", fontWeight: "600" }}
         >
-          Preguntas Frecuentes
+          Servicio Técnico
         </Typography>
       </Box>
-      {/* CIERRE BOX TITULO */}
-
       {/* BOX DROPDOWN */}
       <Box
         sx={{
-          padding: "100px",
+          padding: "10px 50px",
           "@media (max-width: 768px)": {
             padding: "50px 0px",
           },
@@ -71,7 +52,7 @@ const Dropdown = () => {
           },
         }}
       >
-        {itemsQuestions.map((item, index) => (
+        {questionsService.map((item, index) => (
           <Paper
             key={index}
             sx={{
@@ -116,4 +97,4 @@ const Dropdown = () => {
   );
 };
 
-export default Dropdown;
+export default DropdownServiceComponent;
