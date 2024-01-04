@@ -37,7 +37,7 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      sameSite: 'Lax',
+      // sameSite: 'Lax',
       secure: process.env.NODE_ENV === 'production',
       // maxAge: 30 * 60 * 1000,
     },
