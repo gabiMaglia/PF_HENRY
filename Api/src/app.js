@@ -34,7 +34,7 @@ server.use(
     cookie: {
       httpOnly: false,
       // sameSite: 'Strict',
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
     },
   })
 );
