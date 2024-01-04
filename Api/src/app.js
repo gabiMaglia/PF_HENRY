@@ -31,7 +31,12 @@ server.use(
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
-    
+    cookie: {
+      httpOnly: true,
+      sameSite: 'None',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 30 * 60 * 1000,
+    },
   })
 );
 
