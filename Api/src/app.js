@@ -14,6 +14,7 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
 server.use(cookieParser(`${process.env.EXPRESS_SESSION_KEY}`))
+
 // Creamos session store
 const sessionStore = new SequelizeStore({
   db: conn,
