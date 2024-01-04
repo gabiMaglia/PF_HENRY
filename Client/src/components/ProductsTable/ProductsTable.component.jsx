@@ -55,14 +55,29 @@ const ProductsTable = () => {
             return logicalDeleteProduct(id);
           })
         );
+        Swal.fire({
+          icon: "success",
+          title: "Eliminación exitosa",
+          text: "Los productos seleccionados han sido elimainado con éxito.",
+        });
         getProducts();
         return selectedRows;
       } else {
+        Swal.fire({
+          icon: "warning",
+          title: "No hay productos seleccionados",
+          text: "Por favor, selecciona al menos un producto para eliminar.",
+        });
         console.warn(
           "No se puede eliminar el producto porque no se ha seleccionado ninguno"
         );
       }
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al realizar el borrado lógico",
+        text: "Ha ocurrido un error al intentar eliminar los productos.",
+      });
       console.error("Error al realizar el borrado lógico:", error);
     }
   };
