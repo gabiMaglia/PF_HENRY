@@ -63,7 +63,7 @@ const DetailProductService = ({
         statusId: response.data.Service_status.id,
         statusPosition: position,
       };
-      authData === "customer"
+      authData.userRole === "customer"
         ? getName(response.data.technicianId, product)
         : getName(response.data.userId, product);
     }
@@ -77,6 +77,13 @@ const DetailProductService = ({
       data.status !== "Servicio finalizado" &&
       data.status !== "Servicio cancelado"
     ) {
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+      });
+      Swal.showLoading();
       const response = await updateServiceStatus(data.statusId, status, value);
       if (response?.error) {
         Swal.fire({
@@ -85,20 +92,82 @@ const DetailProductService = ({
           title: "Error en la actualización del servicio",
           text: `${response?.error?.response?.statusText}`,
         });
+        return false;
       } else {
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "success",
+          title: "Servicio actualizado",
+          text: `${response?.data.message}`,
+        });
         getService();
+        return true;
       }
     }
   };
 
-  const updateStep = (e) => {
+  const updateValidate = async () => {
+    let valid = true;
+    let response = false;
+    if (data.status === "En proceso de diagnostico") {
+      if (data.budget === "Pendiente") {
+        response = false;
+        valid = response;
+        await Swal.fire({
+          allowOutsideClick: false,
+          icon: "info",
+          input: "text",
+          title: "Para continuar con la reparación ingrese el presupuesto",
+          inputPlaceholder: "Presupuesto: ",
+          inputValidator: async (value) => {
+            if (!value) {
+              return "Debe ingresar el presupuesto para continuar";
+            } else {
+              Swal.showLoading();
+              response = await handleUpdateStatus("budget", `$${value}`);
+              valid = response;
+            }
+          },
+        });
+      }
+      if (data.technical_diagnosis === "Pendiente" && valid) {
+        response = false;
+        valid = response;
+        await Swal.fire({
+          allowOutsideClick: false,
+          icon: "info",
+          input: "text",
+          title: "Para continuar con la reparación ingrese el diagnostico",
+          inputPlaceholder: "Diagnostico: ",
+          inputValidator: async (value) => {
+            if (!value) {
+              return "Debe ingresar el diagnostico para continuar";
+            } else {
+              Swal.showLoading();
+              response = await handleUpdateStatus("technical_diagnosis", value);
+              valid = response;
+            }
+          },
+        });
+      }
+    } else if (data.status === "Pruebas finales") {
+    } else {
+      response = true;
+    }
+    return response;
+  };
+
+  const updateStep = async (e) => {
     const { name } = e.target;
     switch (name) {
       case "next":
-        handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition + 1]
-        );
+        const response = await updateValidate();
+        if (response === true) {
+          handleUpdateStatus(
+            "status",
+            serviceStatuses.progress[data.statusPosition + 1]
+          );
+        }
         break;
       case "prev":
         handleUpdateStatus(
@@ -140,20 +209,24 @@ const DetailProductService = ({
         </Box>
       );
     } else if (data.status === "Listo para retirar") {
-      <Box>
-        <Button name={"finished"} onClick={updateStep}>
-          Ya retire el dispositivo
-        </Button>
-      </Box>;
+      return (
+        <Box>
+          <Button name={"finished"} onClick={updateStep}>
+            Ya retire el dispositivo
+          </Button>
+        </Box>
+      );
     } else if (data.status === "Esperando confirmación del cliente") {
-      <Box>
-        <Button name={"cancel"} onClick={updateStep}>
-          Cancelar servicio
-        </Button>
-        <Button name={"approve"} onClick={updateStep}>
-          Aprobar presupuesto
-        </Button>
-      </Box>;
+      return (
+        <Box>
+          <Button name={"cancel"} onClick={updateStep}>
+            Cancelar servicio
+          </Button>
+          <Button name={"approve"} onClick={updateStep}>
+            Aprobar presupuesto
+          </Button>
+        </Box>
+      );
     }
   };
 
