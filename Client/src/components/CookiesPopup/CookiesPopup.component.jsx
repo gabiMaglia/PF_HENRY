@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Link, Modal, Typography } from "@mui/material";
 import CookieIcon from "@mui/icons-material/Cookie";
 //REDUX
 import { cookieBoxEnable, acceptCookie, rejectCookies } from "../../redux/slices/cookiesSlice";
@@ -43,16 +43,19 @@ const CookiesPopup = () => {
   };
   return (
     showCookiesBox === true && (
+      <Modal
+      open={showCookiesBox}
+      >
       <Box
         sx={{
           position: "fixed",
-          bottom: "50px",
-          left: "20px",
-          maxWidth: "345px",
+          textAlign: 'center',
+          bottom: "0",
+          left: "0",
           width: "100%",
-
-          background: "#FD611A",
-          borderRadius: "8px",
+          background: "#1F8B59",
+          borderRadius: "4px",
+          borderTop: "2px solid white" ,
           padding: "15px 25px 22px",
           zIndex: "99",
         }}
@@ -60,7 +63,7 @@ const CookiesPopup = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
             columnGap: "15px",
             paddingBlock: "1rem",
@@ -107,8 +110,9 @@ const CookiesPopup = () => {
             marginTop: "16px",
             width: "100%",
             display: "flex",
+            gap: '1rem',
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "center",
           }}
         >
           <Button
@@ -129,6 +133,7 @@ const CookiesPopup = () => {
           </Button>
         </Box>
       </Box>
+      </Modal>
     )
   );
 };
