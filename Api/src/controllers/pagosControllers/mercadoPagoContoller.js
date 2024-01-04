@@ -13,7 +13,7 @@ const mercadoPago = async (array, idOrder) => {
       notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
-        success: `${frontend_Url}/`,
+        success: `${frontend_Url}/customer/userPanel/shoppings`,
         failure: `${frontend_Url}/cart`,
         pending: `${frontend_Url}/cart`,
       },
@@ -83,7 +83,6 @@ const handlePaymentNotification = async (paymentId) => {
   }
 };
 
-// };
 // const webhook = async (paymentId, status) => {
 //   if (status === "approved") {
 //     console.log(`Pago aprobado: ${paymentId}`);
