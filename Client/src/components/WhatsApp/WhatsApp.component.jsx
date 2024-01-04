@@ -1,43 +1,22 @@
-//MATERIAL UI
-import { Box, Button } from "@mui/material";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 
 const WhatsAppComponent = () => {
   const phoneNumber = "+5491132069043";
-  const message = "Hola, quiero saber mas acerca del producto...";
-
-  const handleWhatsAppClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(url, "_blank");
-  };
+  const accountName = "Hyper Mega Red";
+  const statusMessage = "Tienda Online de Tecnología";
+  const chatMessage = "Hola como estas? Envianos un mesnaje para poder ayudarte."
+  const placeholder = "escribe tu mensaje aquí..."
+  const avatar = "https://res.cloudinary.com/hypermegared/image/upload/v1704343728/Recurso_8_uxkd1v.png"
 
   return (
-    <>
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: "75px",
-          right: "75px",
-          zIndex: 1000,
-          "@media (max-width: 1140px)": { bottom: "30px", right: "75px" },
-          "@media (max-width: 768px)": { bottom: "100px", right: "30px" },
-        }}
-      >
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleWhatsAppClick}
-          sx={{
-            width: "50px",
-            borderRadius: "50%",
-            backgroundColor: "#25d366",
-            "&:hover": { backgroundColor: "#075E54" },
-          }}
-        >
-          <WhatsAppIcon sx={{ fontSize: "50px" }} />
-        </Button>
-      </Box>
-    </>
+    <FloatingWhatsApp
+      phoneNumber={phoneNumber}
+      accountName={accountName}
+      statusMessage={statusMessage}
+      chatMessage={chatMessage}
+      placeholder={placeholder}
+      avatar={avatar}
+    />
   );
 };
 
