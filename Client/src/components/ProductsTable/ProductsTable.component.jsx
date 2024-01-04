@@ -68,9 +68,6 @@ const ProductsTable = () => {
           title: "No hay productos seleccionados",
           text: "Por favor, selecciona al menos un producto para eliminar.",
         });
-        console.warn(
-          "No se puede eliminar el producto porque no se ha seleccionado ninguno"
-        );
       }
     } catch (error) {
       Swal.fire({
@@ -78,7 +75,6 @@ const ProductsTable = () => {
         title: "Error al realizar el borrado lógico",
         text: "Ha ocurrido un error al intentar eliminar los productos.",
       });
-      console.error("Error al realizar el borrado lógico:", error);
     }
   };
 
