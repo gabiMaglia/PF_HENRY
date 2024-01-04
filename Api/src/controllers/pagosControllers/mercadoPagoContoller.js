@@ -68,10 +68,14 @@ const handlePaymentNotification = async (paymentId) => {
             });
 
             if (productStock) {
-              productStock.amount -= productQuantity;
+              productStock.update({
+                amount: (productStock.amount -= productQuantity),
+              });
               await productStock.save();
 
-              soldCount += productQuantity;
+              product.update({
+                soldCount: (product.soldCount += productQuantity),
+              });
               await product.save();
             }
           }
