@@ -14,9 +14,56 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
-import { logicalDeleteProduct } from "../../services/productServices";
+import {
+  logicalDeleteProduct,
+  fetchUpdateProduct,
+} from "../../services/productServices";
 // SweetAlert
 import Swal from "sweetalert2";
+
+const columns = [
+  { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
+  { field: "name", headerName: "Nombre", width: 350, headerAlign: "center", editable: true },
+  { field: "price", headerName: "Precio", width: 80, headerAlign: "center", editable: true },
+  {
+    field: "warranty",
+    headerName: "Garantía",
+    type: "number",
+    width: 100,
+    headerAlign: "center",
+    editable: true
+  },
+  {
+    field: "is_deleted",
+    headerName: "Borrado",
+    type: Boolean,
+    width: 100,
+    headerAlign: "center",
+    editable: true
+  },
+  {
+    field: "soldCount",
+    headerName: "Vendidos",
+    width: 80,
+    headerAlign: "center",
+    editable: true
+  },
+  { field: "brand", headerName: "Marca", width: 150, headerAlign: "center", editable: true },
+  {
+    field: "category",
+    headerName: "Categoría",
+    width: 150,
+    headerAlign: "center",
+    editable: true
+  },
+  {
+    field: "stock",
+    headerName: "Stock",
+    width: 150,
+    headerAlign: "center",
+    editable: true
+  },
+];
 
 const ProductsTable = () => {
   const editingRow = useRef(null);
@@ -116,100 +163,61 @@ const ProductsTable = () => {
     };
   });
 
-  // const processRowUpdate = async (newRow) => {
-  //   const nameAvailableRoles = userRoles.map((role) => role.role_name);
-  //   if (availableModify) {
-  //     if (nameAvailableRoles.includes(newRow.role)) {
-  //       Swal.fire({
-  //         icon: "info",
-  //         allowOutsideClick: false,
-  //         title: "Por favor espere mientras procesamos la información",
-  //         showConfirmButton: false,
-  //       });
-  //       Swal.showLoading();
-  //       setAvailableModify(false);
-  //       const editedUser = {
-  //         name: newRow.name,
-  //         price: newRow.price,
-  //         warranty: newRow.warranty,
-  //         is_deleted: newRow.is_deleted,
-  //         soldCount: newRow.souldCount,
-  //       };
-  //       const response = await updateProduct(newRow.id, newRow.role, editedUser);
-  //       if (response.status === 200) {
-  //         setRows((prevRows) =>
-  //           prevRows.map((row) =>
-  //             row.id === editingRow.current?.id ? newRow : row
-  //           )
-  //         );
-  //         Swal.fire({
-  //           allowOutsideClick: false,
-  //           icon: "success",
-  //           title: "Los datos ingresados son validos",
-  //           text: "Información modificada correctamente",
-  //           confirmButtonText: "Aceptar",
-  //           confirmButtonColor: "#fd611a",
-  //         });
-  //         return newRow;
-  //       } else {
-  //         throw new Error(response.response.data);
-  //       }
-  //     } else {
-  //       console.log("error");
-  //       throw new Error("El rol ingresado no es válido");
-  //     }
-  //   }
-  //   return newRow;
-  // };
+  const processRowUpdate = async (newRows) => {
+    try {
+      const productId = newRows.id;
+      const updateProduct = {
+        name: newRows.name,
+        price: newRows.price,
+        warranty: newRows.warranty,
+        soldCount: newRows.soldCount,
+        ProductStock: newRows.ProductStock,
+        ProductCategory: newRows.ProductCategory,
+        ProductBrand: newRows.ProductBrand,
+      };
+      const response = await fetchUpdateProduct(productId, updateProduct);
+      if (response.status === 200) {
+        setRows((prevRows) =>
+            prevRows.map((row) =>
+              row.id === editingRow.current?.id ? newRows : row
+            )
+          );
+        Swal.fire({
+          icon: "success",
+          title: "Edición exitosa",
+          text: "El producto ha sido editado correctamente.",
+        });
+        await getProducts();
+        return newRows;
+      } else {
+        console.error("Error al actualizar el producto:", response.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar el producto",
+          text: "Ha ocurrido un error al intentar actualizar el producto.",
+        });
+      }
+    } catch (error) {
+      console.error("Error al actualizar el producto:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al actualizar el producto",
+        text: "Ha ocurrido un error al intentar actualizar el producto.",
+      });
+    }
+  };
 
-  // const handleErrorInput = (error) => {
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: "Error en la edición de usuario",
-  //     allowOutsideClick: false,
-  //     allowEnterKey: false,
-  //     text: `${error}`,
-  //   });
-  // };
+  const handleErrorInput = (error) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error en la edición de producto",
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      text: `${error}`,
+    });
+  };
 
-  const columns = [
-    { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
-    { field: "name", headerName: "Nombre", width: 350, headerAlign: "center" },
-    { field: "price", headerName: "Precio", width: 80, headerAlign: "center" },
-    {
-      field: "warranty",
-      headerName: "Garantía",
-      type: "number",
-      width: 100,
-      headerAlign: "center",
-    },
-    {
-      field: "is_deleted",
-      headerName: "Borrado",
-      type: Boolean,
-      width: 100,
-      headerAlign: "center",
-    },
-    {
-      field: "soldCount",
-      headerName: "Vendidos",
-      width: 80,
-      headerAlign: "center",
-    },
-    { field: "brand", headerName: "Marca", width: 150, headerAlign: "center" },
-    {
-      field: "category",
-      headerName: "Categoría",
-      width: 150,
-      headerAlign: "center",
-    },
-    {
-      field: "stock",
-      headerName: "Stock",
-      width: 150,
-      headerAlign: "center",
-    },
-  ];
+  
 
   return (
     <Box
@@ -226,8 +234,8 @@ const ProductsTable = () => {
       <StyledDataGrid
         onCellEditStart={handleCellEditStart}
         onCellEditStop={handleCellEditStop}
-        // processRowUpdate={processRowUpdate}
-        // onProcessRowUpdateError={handleErrorInput}
+        processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={handleErrorInput}
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setRowSelected(newRowSelectionModel);
         }}
@@ -261,6 +269,7 @@ const ProductsTable = () => {
         columns={columns}
         pageSize={5}
         localeText={language.components.MuiDataGrid.defaultProps.localeText}
+        editMode="cell"
         initialState={{
           columns: {
             columnVisibilityModel: {

@@ -231,12 +231,27 @@ export const fetchAddProduct = async (obj, dispatch) => {
 
 export const logicalDeleteProduct = async (id) => {
   try {
-    const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`);
+    const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`, {
+      withCredentials: true,
+    });
     return response;
   } catch (error) {
     return { error: true, message: error.message };
   }
 };
+
+export const fetchUpdateProduct = async (id)=>{
+  try {
+    const response = await axios.put(`${urlBack}/product/${id}`, {
+      withCredentials: true,
+    });
+    console.log("Respuesta del backend:", response);
+    return response;
+  } catch (error) {
+    console.error("Error al actualizar el producto:", error);
+    return { error: true, message: error.message };
+  }
+}
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
