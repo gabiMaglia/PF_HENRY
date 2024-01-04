@@ -55,7 +55,7 @@ const CookiesPopup = () => {
           width: "100%",
           background: "#1F8B59",
           borderRadius: "4px",
-          borderTop: "2px solid white" ,
+          borderTop: "2px solid white",
           padding: "15px 25px 22px",
           zIndex: "99",
         }}
@@ -100,8 +100,7 @@ const CookiesPopup = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {" "}
-              Leer mas...{" "}
+              Leer mas...
             </Link>
           </Typography>
         </Box>
