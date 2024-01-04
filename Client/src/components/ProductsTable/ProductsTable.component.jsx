@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
 import {
   GridCellEditStopReasons,
@@ -19,9 +19,12 @@ import { logicalDeleteProduct } from "../../services/productServices";
 import Swal from "sweetalert2";
 
 const ProductsTable = () => {
+  const editingRow = useRef(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
 
@@ -47,23 +50,51 @@ const ProductsTable = () => {
     getProducts();
   }, []);
 
+  const handleCellEditStart = (params) => {
+    editingRow.current = rows.find((row) => row.id === params.id) || null;
+  };
+
+  const handleCellEditStop = (params) => {
+    if (
+      params.reason === GridCellEditStopReasons.escapeKeyDown ||
+      params.reason === GridCellEditStopReasons.cellFocusOut
+    ) {
+      setAvailableModify(false);
+    } else {
+      setAvailableModify(true);
+    }
+  };
+
   const handleDelete = async (selectedRows) => {
     try {
       if (selectedRows.length > 0) {
-        await Promise.all(
+        const response = await Promise.all(
           selectedRows.map((id) => {
             return logicalDeleteProduct(id);
           })
         );
+        let msg = response.map((res) => res.data);
+        msg = msg.join(", ");
+        Swal.fire({
+          icon: "success",
+          title: "Eliminación exitosa",
+          text: msg,
+        });
         getProducts();
         return selectedRows;
       } else {
-        console.warn(
-          "No se puede eliminar el producto porque no se ha seleccionado ninguno"
-        );
+        Swal.fire({
+          icon: "warning",
+          title: "No hay productos seleccionados",
+          text: "Por favor, selecciona al menos un producto para eliminar.",
+        });
       }
     } catch (error) {
-      console.error("Error al realizar el borrado lógico:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al realizar el borrado lógico",
+        text: "Ha ocurrido un error al intentar eliminar los productos.",
+      });
     }
   };
 
@@ -76,22 +107,86 @@ const ProductsTable = () => {
       product.ProductCategories.length > 0
         ? product.ProductCategories[0].name
         : "Sin categoría";
-
+    const stock = product.ProductStock?.amount || 0;
     return {
       ...product,
       brand,
       category,
+      stock,
     };
   });
 
+  // const processRowUpdate = async (newRow) => {
+  //   const nameAvailableRoles = userRoles.map((role) => role.role_name);
+  //   if (availableModify) {
+  //     if (nameAvailableRoles.includes(newRow.role)) {
+  //       Swal.fire({
+  //         icon: "info",
+  //         allowOutsideClick: false,
+  //         title: "Por favor espere mientras procesamos la información",
+  //         showConfirmButton: false,
+  //       });
+  //       Swal.showLoading();
+  //       setAvailableModify(false);
+  //       const editedUser = {
+  //         name: newRow.name,
+  //         price: newRow.price,
+  //         warranty: newRow.warranty,
+  //         is_deleted: newRow.is_deleted,
+  //         soldCount: newRow.souldCount,
+  //       };
+  //       const response = await updateProduct(newRow.id, newRow.role, editedUser);
+  //       if (response.status === 200) {
+  //         setRows((prevRows) =>
+  //           prevRows.map((row) =>
+  //             row.id === editingRow.current?.id ? newRow : row
+  //           )
+  //         );
+  //         Swal.fire({
+  //           allowOutsideClick: false,
+  //           icon: "success",
+  //           title: "Los datos ingresados son validos",
+  //           text: "Información modificada correctamente",
+  //           confirmButtonText: "Aceptar",
+  //           confirmButtonColor: "#fd611a",
+  //         });
+  //         return newRow;
+  //       } else {
+  //         throw new Error(response.response.data);
+  //       }
+  //     } else {
+  //       console.log("error");
+  //       throw new Error("El rol ingresado no es válido");
+  //     }
+  //   }
+  //   return newRow;
+  // };
+
+  // const handleErrorInput = (error) => {
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Error en la edición de usuario",
+  //     allowOutsideClick: false,
+  //     allowEnterKey: false,
+  //     text: `${error}`,
+  //   });
+  // };
+
   const columns = [
-    // { field: "id", headerName: "ID", minWidth: 70 },
+    { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
     { field: "name", headerName: "Nombre", width: 350, headerAlign: "center" },
     { field: "price", headerName: "Precio", width: 80, headerAlign: "center" },
     {
       field: "warranty",
       headerName: "Garantía",
       type: "number",
+      width: 100,
+      headerAlign: "center",
+    },
+    {
+      field: "is_deleted",
+      headerName: "Borrado",
+      type: Boolean,
       width: 100,
       headerAlign: "center",
     },
@@ -105,6 +200,12 @@ const ProductsTable = () => {
     {
       field: "category",
       headerName: "Categoría",
+      width: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "stock",
+      headerName: "Stock",
       width: 150,
       headerAlign: "center",
     },
@@ -123,6 +224,10 @@ const ProductsTable = () => {
       }}
     >
       <StyledDataGrid
+        onCellEditStart={handleCellEditStart}
+        onCellEditStop={handleCellEditStop}
+        // processRowUpdate={processRowUpdate}
+        // onProcessRowUpdateError={handleErrorInput}
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setRowSelected(newRowSelectionModel);
         }}
@@ -147,7 +252,7 @@ const ProductsTable = () => {
           },
         }}
         getRowClassName={(params) => {
-          return params.row.isDeleted ? `row--deleted` : `row`;
+          return params.row.is_deleted ? `row--deleted` : `row`;
         }}
         checkboxSelection
         disableRowSelectionOnClick
@@ -156,6 +261,15 @@ const ProductsTable = () => {
         columns={columns}
         pageSize={5}
         localeText={language.components.MuiDataGrid.defaultProps.localeText}
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              id: false,
+              warranty: false,
+              is_deleted: false,
+            },
+          },
+        }}
       />
     </Box>
   );
