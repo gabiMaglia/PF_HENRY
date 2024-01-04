@@ -232,10 +232,9 @@ export const fetchAddProduct = async (obj, dispatch) => {
 export const logicalDeleteProduct = async (id) => {
   try {
     const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`);
-    console.log(response);
     return response;
   } catch (error) {
-    return { error: true, error: error };
+    return { error: true, message: error.message };
   }
 };
 

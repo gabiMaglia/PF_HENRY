@@ -13,11 +13,10 @@ const mercadoPago = async (array, idOrder) => {
       notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
-        success: `${frontend_Url}/home`,
+        success: `${frontend_Url}/`,
         failure: `${frontend_Url}/cart`,
         pending: `${frontend_Url}/cart`,
       },
-      auto_return: "approved",
     };
 
     const preference = new Preference(client);

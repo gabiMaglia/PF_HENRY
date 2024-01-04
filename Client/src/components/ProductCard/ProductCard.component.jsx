@@ -157,7 +157,7 @@ const CardProduct = ({ product }) => {
               align="center"
               sx={{ fontWeight: "900" }}
             >
-              ${price}
+              ${price.toLocaleString('es-ES')}
             </ProductPrice>
           </Box>
         </Link>
