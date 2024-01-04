@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Link, Modal, Typography } from "@mui/material";
 import CookieIcon from "@mui/icons-material/Cookie";
 //REDUX
-import { cookieBoxEnable, acceptCookie, rejectCookies } from "../../redux/slices/cookiesSlice";
+import { cookieBoxEnable, acceptCookie } from "../../redux/slices/cookiesSlice";
 
 const CookiesPopup = () => {
   const dispatch = useDispatch();
