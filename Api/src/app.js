@@ -37,7 +37,7 @@ server.use(
     store: sessionStore,
     cookie: {
       httpOnly: false,
-      // sameSite: 'Lax',
+      sameSite: 'None',
       secure: false,
       // maxAge: 30 * 60 * 1000,
     },
