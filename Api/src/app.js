@@ -11,9 +11,10 @@ const passport = require("passport");
 const { conn } = require("./db.js");
 const server = express();
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+
 server.use(cors({ credentials: true, origin: `${process.env.FRONTEND_URL}` }));
+server.use(cookieParser(`${process.env.EXPRESS_SESSION_KEY}`))
 // Creamos session store
-server.use(cookieParser())
 const sessionStore = new SequelizeStore({
   db: conn,
   table: "Session",
@@ -31,8 +32,8 @@ server.use(
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      httpOnly: true,
-      sameSite: 'Strict',
+      httpOnly: false,
+      // sameSite: 'Strict',
       secure: process.env.NODE_ENV === 'production',
     },
   })
@@ -51,10 +52,11 @@ server.use(passport.session());
 
 server.use((req, res, next) => {
   console.log({ isAuthenticated: req.isAuthenticated()} );
+  console.log({ user: req.user} );
   next();
 });
 server.use((req, res, next) => {
-  console.log({ headers: req.headers });
+  // console.log({ headers: req.headers });
   console.log({ cookie: req.headers.cookie });
   next();
 });
