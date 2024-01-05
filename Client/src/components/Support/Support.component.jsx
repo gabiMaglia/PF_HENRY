@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 // import Textarea from "@mui/joy/Textarea";
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 
 //HELPERS
 import {
@@ -76,35 +76,48 @@ const SupportComponent = () => {
   });
 
   //HANDLES CHANGES
+
   const handleChangeName = (value) => {
     setName(value);
-    setErrorName({
-      error: !validateName(value),
-      message: "El nombre debe tener al menos 3 caracteres",
+    setErrorName(() => {
+      const error = value.trim() !== "" && !validateName(value);
+      return {
+        error,
+        message: error ? "El nombre debe tener al menos 3 caracteres" : "",
+      };
     });
     updateFormComplete();
   };
   const handleChangePhone = (value) => {
     setPhone(value);
-    setErrorPhone({
-      error: !validatePhone(value),
-      message: "El teléfono debe tener 10 dígitos",
+    setErrorPhone(() => {
+      const error = value.trim() !== "" && !validatePhone(value);
+      return {
+        error,
+        message: error ? "El teléfono debe tener 10 dígitos" : "",
+      };
     });
     updateFormComplete();
   };
   const handleChangeEmail = (value) => {
     setEmail(value);
-    setErrorEmail({
-      error: !validateEmail(value),
-      message: "El correo electrónico no es válido",
+    setErrorEmail(() => {
+      const error = value.trim() !== "" && !validateEmail(value);
+      return {
+        error,
+        message: error ? "El correo electrónico no es válido" : "",
+      };
     });
     updateFormComplete();
   };
   const handleChangeArea = (value) => {
     setArea(value);
-    setErrorArea({
-      error: !validateArea(value),
-      message: "El mensaje debe tener al menos 10 caracteres",
+    setErrorArea(() => {
+      const error = value.trim() !== "" && !validateArea(value);
+      return {
+        error,
+        message: error ? "El mensaje debe tener al menos 50 caracteres" : "",
+      };
     });
     updateFormComplete();
   };
@@ -200,7 +213,7 @@ const SupportComponent = () => {
           display: "flex",
           justifyContent: "center",
           margin: "0 auto",
-          "@media (max-width: 768px)": {
+          "@media (max-width: 1140px)": {
             display: "flex",
             flexDirection: "column",
           },
@@ -217,9 +230,7 @@ const SupportComponent = () => {
               flexDirection: "column",
               justifyContent: "center",
               padding: "50px",
-              marginBottom: "50px",
-
-              "@media (max-width: 768px)": {
+              "@media (max-width: 1140px)": {
                 width: "100%",
                 marginBottom: "-10px",
                 marginTop: "10px",
@@ -274,21 +285,28 @@ const SupportComponent = () => {
             <TextareaAutosize
               id="contenet"
               disabled={false}
-              minRows={8}
+              minRows={10}
               size="lg"
+              name="Outlined"
               variant="outlined"
               required={true}
-              error={errorArea.error}
+              error={errorArea.error ? errorArea : undefined}
               placeholder="Ejemplo: Tengo un CPU que no enciende. Queda la pantalla negra."
               value={area}
               onChange={(e) => handleChangeArea(e.target.value)}
-              sx={{ margin: "20px 0" }}
+              style={{
+                borderRadius: "5px",
+                border: "1px solid #C7D0DD",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                padding: "10px",
+              }}
             />
             {errorArea.error && (
               <Typography
                 variant="body2"
                 color="error"
-                sx={{ margin: "-15px 0 25px 15px", fontSize: "12px" }}
+                sx={{ margin: "10px 0 25px 15px", fontSize: "12px" }}
               >
                 {errorArea.message}
               </Typography>
@@ -302,7 +320,7 @@ const SupportComponent = () => {
                 padding: "12px 0",
                 "&:hover": { backgroundColor: "#000" },
                 fontSize: "18px",
-                marginTop: "20px"
+                marginTop: "20px",
               }}
               endIcon={<SendIcon />}
             >
@@ -323,11 +341,10 @@ const SupportComponent = () => {
             display: "flex",
             justifyContent: "center",
             padding: "50px",
-
-            "@media (max-width: 768px)": {
+            "@media (max-width: 1140px)": {
               width: "100%",
               textAlign: "justify",
-              borderBottom: "1px solid #000",
+              borderBottom: "1px solid #00000050",
             },
           }}
         >
