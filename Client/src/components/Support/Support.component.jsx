@@ -285,7 +285,7 @@ const SupportComponent = () => {
             <TextareaAutosize
               id="contenet"
               disabled={false}
-              minRows={12}
+              minRows={10}
               size="lg"
               name="Outlined"
               variant="outlined"
@@ -299,6 +299,7 @@ const SupportComponent = () => {
                 border: "1px solid #C7D0DD",
                 fontFamily: "Roboto",
                 fontSize: "16px",
+                padding: "10px",
               }}
             />
             {errorArea.error && (
