@@ -64,7 +64,7 @@ const getAllCarts = async () => {
   }
 };
 
-const addToCart = async (userId, productId, productQuantity, cartMoney) => {
+const addToCart = async (userId, productId, productQuantity) => {
   try {
     let cartToUpdate = await Cart.findOne({
       where: {
@@ -99,30 +99,33 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
     // 	]
     // }
     if (cartToUpdate) {
-      const existingProduct = cartToUpdate.Products.find(
-        (product) => product.id === productId
-      );
+      // const existingProduct = cartToUpdate.Products.find(
+      //   (product) => product.id === productId
+      // );
 
-      if (existingProduct) {
-        await ProductCart.update(
-          {
-            quantity:
-              existingProduct.ProductCart.quantity + Number(productQuantity),
-          },
-          { where: { CartId: cartToUpdate.id, ProductId: productId } }
-        );
-        // existingProduct.ProductCart.quantity += Number(productQuantity);
-      } else {
-        const product = await Product.findByPk(productId);
-        const addProductResult = await cartToUpdate.addProduct(product, {
-          through: { quantity: productQuantity },
-        });
-        console.log("Resultado de agregar producto:", addProductResult);
-      }
+      // if (existingProduct) {
+      //   await ProductCart.update(
+      //     {
+      //       quantity:
+      //         existingProduct.ProductCart.quantity + Number(productQuantity),
+      //     },
+      //     { where: { CartId: cartToUpdate.id, ProductId: productId } }
+      //   );
+      //   // existingProduct.ProductCart.quantity += Number(productQuantity);
+      // } else {
+      const product = await Product.findByPk(productId);
+      const addProductResult = await cartToUpdate.addProduct(product, {
+        through: { quantity: productQuantity },
+      });
+      console.log("Resultado de agregar producto:", addProductResult);
+      // }
 
-      await cartToUpdate.update({ cartTotal: cartMoney });
+      await cartToUpdate.update({
+        cartTotal:
+          cartToUpdate.cartTotal +
+          existingProduct.price * existingProduct.ProductCart.quantity,
+      });
 
-      //vuelve a pedir el carrito para que devuelva el carrito actualizado
       const updatedCart = await Cart.findOne({
         where: {
           UserId: userId,
@@ -147,7 +150,7 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
   }
 };
 
-const removeFromCart = async (userId, productId, cartMoney) => {
+const removeFromCart = async (userId, productId) => {
   try {
     let cartToUpdate = await Cart.findOne({
       where: {
@@ -173,11 +176,14 @@ const removeFromCart = async (userId, productId, cartMoney) => {
       if (existingProduct) {
         await cartToUpdate.removeProduct(existingProduct);
         console.log("Producto eliminado del carrito");
+        await cartToUpdate.update({
+          cartTotal:
+            cartToUpdate.cartTotal -
+            existingProduct.price * existingProduct.ProductCart.quantity,
+        });
       } else {
         console.log("El producto no existe en el carrito");
       }
-
-      await cartToUpdate.update({ cartTotal: cartMoney });
 
       // Volver a buscar el carrito actualizado
       const updatedCart = await Cart.findOne({
