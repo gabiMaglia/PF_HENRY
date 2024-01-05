@@ -5,6 +5,7 @@ const PATHROUTES = {
   QUESTIONS: "/questions",
   DETAIL: "/product/:id",
   CATEGORIES: "/products/filters/:categoryName",
+  REVIEW: "/review",
   //USER PANEL
   CUSTOMER_USER_PANEL: "/customer/userPanel",
   ADMIN_USER_PANEL: "/admin/userPanel",

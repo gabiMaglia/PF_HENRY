@@ -13,7 +13,7 @@ const mercadoPago = async (array, idOrder) => {
       notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
-        success: `${frontend_Url}/`,
+        success: `${frontend_Url}/customer/userPanel/shoppings`,
         failure: `${frontend_Url}/cart`,
         pending: `${frontend_Url}/cart`,
       },
@@ -30,6 +30,8 @@ const mercadoPago = async (array, idOrder) => {
 };
 
 const handlePaymentNotification = async (paymentId) => {
+  const transaction = await sequelize.transaction(); // Asegúrate de tener tu instancia de Sequelize (sequelize) disponible
+
   try {
     const paymentInfo = await mercadopago.payment.get(paymentId);
 
@@ -46,6 +48,7 @@ const handlePaymentNotification = async (paymentId) => {
             },
           },
         ],
+        transaction, // Mueve el transaction aquí
       });
 
       if (order) {
@@ -65,25 +68,31 @@ const handlePaymentNotification = async (paymentId) => {
 
             const productStock = await ProductStock.findOne({
               where: { ProductId: id },
+              transaction, // Asegúrate de pasar la transacción aquí también
             });
 
             if (productStock) {
-              productStock.amount -= productQuantity;
+              productStock.update({
+                amount: (productStock.amount -= productQuantity),
+              });
               await productStock.save();
 
-              soldCount += productQuantity;
+              product.update({
+                soldCount: (product.soldCount += productQuantity),
+              });
               await product.save();
             }
           }
         }
       }
     }
+
+    await transaction.commit();
   } catch (error) {
     console.error("Error al manejar la notificación de pago:", error);
   }
 };
 
-// };
 // const webhook = async (paymentId, status) => {
 //   if (status === "approved") {
 //     console.log(`Pago aprobado: ${paymentId}`);

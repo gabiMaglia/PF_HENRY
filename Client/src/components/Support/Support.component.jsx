@@ -12,7 +12,9 @@ import {
   Grid,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import Textarea from "@mui/joy/Textarea";
+// import Textarea from "@mui/joy/Textarea";
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+
 //HELPERS
 import {
   validateName,
@@ -267,11 +269,12 @@ const SupportComponent = () => {
               name="email"
               autoComplete="email"
               onChange={(e) => handleChangeEmail(e.target.value)}
+              sx={{ marginBottom: "20px" }}
             />
-            <Textarea
+            <TextareaAutosize
               id="contenet"
               disabled={false}
-              minRows={4}
+              minRows={8}
               size="lg"
               variant="outlined"
               required={true}
@@ -299,6 +302,7 @@ const SupportComponent = () => {
                 padding: "12px 0",
                 "&:hover": { backgroundColor: "#000" },
                 fontSize: "18px",
+                marginTop: "20px"
               }}
               endIcon={<SendIcon />}
             >

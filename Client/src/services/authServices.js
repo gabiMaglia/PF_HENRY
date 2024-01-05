@@ -22,7 +22,7 @@ export const loginUser = async (username, password, cookieStatus) => {
       },
       {
         withCredentials: true,
-        withXSRFToken: true
+        
       }
     );
 
@@ -70,7 +70,6 @@ export const registerUser = async (userObj) => {
       userObj,
     },{
       withCredentials: true,
-      
     });
     return { error: false, data: registerData };
   } catch ({ response }) {
@@ -81,7 +80,6 @@ export const logOutUser = async () => {
   try {
     const response = await axios.post(`${url}/account/logout`,{
       withCredentials: true,
-      withXSRFToken: true
     });
     return { error: false, data: response };
   } catch ({ response }) {
