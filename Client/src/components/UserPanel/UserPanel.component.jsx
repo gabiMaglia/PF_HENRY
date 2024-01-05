@@ -20,6 +20,7 @@ import ProductsTable from "../ProductsTable/ProductsTable.component";
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import ServiceList from "../ServiceList/ServiceList.componet";
 
 const UserPanelComponent = () => {
   const theme = createTheme({
@@ -222,6 +223,12 @@ const UserPanelComponent = () => {
               : PATHROUTES.PROFILE
           }
           element={userRole === "admin" ? <CreateService /> : <UserProfile />}
+        />
+        <Route
+          path={
+            userRole === "admin" ? PATHROUTES.SERVICE_LIST : PATHROUTES.PROFILE
+          }
+          element={userRole === "admin" ? <ServiceList /> : <UserProfile />}
         />
       </Routes>
       <Box
