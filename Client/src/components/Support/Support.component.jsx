@@ -253,15 +253,6 @@ const SupportComponent = () => {
               name="name"
               autoComplete="name"
               onChange={(e) => handleChangeName(e.target.value)}
-              sx={{
-                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
-                    borderColor: "#fd611a",
-                  },
-                "& .MuiInputLabel-outlined.Mui-focused": {
-                  color: "#fd611a",
-                },
-              }}
             />
             <TextField
               id="phone"
@@ -275,16 +266,7 @@ const SupportComponent = () => {
               name="phone"
               autoComplete="phone"
               onChange={(e) => handleChangePhone(e.target.value)}
-              sx={{
-                margin: "20px 0",
-                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
-                    borderColor: "#fd611a",
-                  },
-                "& .MuiInputLabel-outlined.Mui-focused": {
-                  color: "#fd611a",
-                },
-              }}
+              sx={{ margin: "20px 0" }}
             />
             <TextField
               id="email"
@@ -298,16 +280,7 @@ const SupportComponent = () => {
               name="email"
               autoComplete="email"
               onChange={(e) => handleChangeEmail(e.target.value)}
-              sx={{
-                marginBottom: "20px",
-                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
-                    borderColor: "#fd611a",
-                  },
-                "& .MuiInputLabel-outlined.Mui-focused": {
-                  color: "#fd611a",
-                },
-              }}
+              sx={{ marginBottom: "20px" }}
             />
             <TextareaAutosize
               id="contenet"
