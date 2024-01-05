@@ -1,6 +1,8 @@
-import { Button, CardMedia, TextField } from "@mui/material";
+// HOOKS
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// MATERIAL -UI
+import { Button, CardMedia, TextField } from "@mui/material";
 
 const Review = ({ review }) => {
   if (!review) {
@@ -19,13 +21,17 @@ const Review = ({ review }) => {
   };
 
   return (
-    <Card sx={{ minWidth: 275, marginBottom: 2 }}>
+    <Card style={{ minWidth: 275, marginBottom: 2 }}>
       <CardMedia component="img" height="140" image={imageUrl} alt={reviewer} />
       <CardContent>
         <Typography variant="h5" component="div">
           {reviewer}
         </Typography>
-        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+        <Typography
+          style={{ fontSize: 12 }}
+          color="text.secondary"
+          gutterBottom
+        >
           {date}
         </Typography>
         <Typography variant="body2">{content}</Typography>
