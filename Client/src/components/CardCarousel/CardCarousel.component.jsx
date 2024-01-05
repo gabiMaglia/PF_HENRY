@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Card,
   CardContent,
   Typography,
   Box,
@@ -11,6 +12,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Container } from "@mui/system";
+import miVideo from "../CardCarousel/prueba.mp4";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
@@ -49,9 +51,28 @@ const CardCarousel = ({ allProducts }) => {
         height: "260px",
         marginTop: "8px",
         overflow: "hidden",
-        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, #1afd94de 90%)`,
+        opacity: "1",
+        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, rgba(26, 253, 148, 0) 90%)`,
       }}
     >
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: "absolute",
+          // margin: "10px",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: 0.7, // Ajusta la opacidad según tus preferencias
+          zIndex: -1, // Mueve el video detrás del componente
+        }}
+        playbackRate={0.4}
+      >
+        <source src={miVideo} type="video/mp4" />
+        Tu navegador no soporta el elemento de video.
+      </video>
       <Slider {...settings}>
         {productData.map((product) => (
           <Box
@@ -125,6 +146,7 @@ const CardCarousel = ({ allProducts }) => {
                       color="#ff5000"
                       fontWeight="bold"
                       sx={{
+                        textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
                         p: "5px",
                         fontSize: {
                           xs: "1rem",
@@ -132,10 +154,25 @@ const CardCarousel = ({ allProducts }) => {
                           md: "2rem",
                         },
                         marginLeft: "auto",
+                        animation: "blink 1s infinite", // Agregar la animación blink
                       }}
                     >
                       PROMOCION: ${product.price}
                     </Typography>
+
+                    <style jsx>{`
+                      @keyframes blink {
+                        50%,
+                        5%,
+                        100% {
+                          opacity: 1;
+                        }
+                        90%,
+                        100% {
+                          opacity: 0.5;
+                        }
+                      }
+                    `}</style>
                   </Container>
                 </CardContent>
                 <CardMedia
