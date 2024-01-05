@@ -42,9 +42,14 @@ const getAllCartsHandler = async (req, res) => {
 };
 
 const addToCartHandler = async (req, res) => {
-  const { userId, productId, productQuantity } = req.body;
+  const { userId, productId, productQuantity, cartMoney } = req.body;
   try {
-    const updatedCarrito = await addToCart(userId, productId, productQuantity);
+    const updatedCarrito = await addToCart(
+      userId,
+      productId,
+      productQuantity,
+      cartMoney
+    );
     if (updatedCarrito) {
       res.status(200).json({
         message: "Cart updated successfully",
