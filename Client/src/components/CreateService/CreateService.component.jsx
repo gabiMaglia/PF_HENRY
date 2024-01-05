@@ -201,7 +201,7 @@ const CreateService = () => {
             if (value.isConfirmed) {
               navigate(
                 authData.userRole === "admin"
-                  ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES
+                  ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_CREATE
                   : PATHROUTES.TECHNICIAN_USER_PANEL +
                       PATHROUTES.PRODUCTS_SERVICES
               );

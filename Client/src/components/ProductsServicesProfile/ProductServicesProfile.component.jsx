@@ -273,7 +273,7 @@ const ProductsServicesProfile = () => {
                   ? PATHROUTES.SUPPORT
                   : userRole === "technician" &&
                     PATHROUTES.TECHNICIAN_USER_PANEL +
-                      PATHROUTES.CREATE_SERVICES
+                      PATHROUTES.SERVICE_CREATE
               }
             >
               <Button
