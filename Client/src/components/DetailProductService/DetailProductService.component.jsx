@@ -151,6 +151,7 @@ const DetailProductService = ({
         });
       }
     } else if (data.status === "Pruebas finales") {
+      response = false;
     } else {
       response = true;
     }

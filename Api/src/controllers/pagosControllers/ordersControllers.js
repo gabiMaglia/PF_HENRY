@@ -28,10 +28,6 @@ async function createOrder(
         {
           model: Product,
           attributes: ["id"],
-          through: {
-            model: ProductCart,
-            attributes: ["quantity"],
-          },
         },
       ],
     });
@@ -41,7 +37,6 @@ async function createOrder(
     }
 
     const idOrder = uuidv4();
-    console.log(idOrder);
     const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
@@ -60,6 +55,7 @@ async function createOrder(
     });
 
     // Agregar productos a la orden y la tabla intermedia OrderProduct
+    console.log(cart);
     for (const product of cart.Products) {
       await order.addProduct(product, {
         through: { quantity: product.ProductCart.quantity },
