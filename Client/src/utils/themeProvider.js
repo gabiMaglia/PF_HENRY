@@ -11,11 +11,18 @@ export const theme = createTheme({
     h4: {
     //  cardCarouselPromotionn
     },
+    h5: {
+    // homeProduct
+    },
     h6: {
       // navItems
     },
+    subtitle2: {
+      // ProductCardSubtitle
+      // ProductPrice
+    },
     body1: {
-        //homeProductLoading 
+        //Loadings Flags 
     },
     body2: {
 
