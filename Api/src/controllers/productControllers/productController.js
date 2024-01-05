@@ -350,7 +350,22 @@ const searchByName = async (name) => {
     throw new Error(`Error en la búsqueda: ${error.message}`);
   }
 };
-
+const productCarousel = async () => {
+  try {
+    const allProducts = await Product.findAll({
+      where: { carousel: true },
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["address"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
+    return allProducts;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 module.exports = {
   logicalDelete,
   postProduct,
@@ -360,4 +375,5 @@ module.exports = {
   deleteProduct,
   getProductById,
   searchByName,
+  productCarousel,
 };
