@@ -187,34 +187,42 @@ const ProductsTable = () => {
 
   const processRowUpdate = async (newRow) => {
     try {
-      const productId = newRow.id;
-      const updateProduct = {
-        name: newRow.name,
-        price: newRow.price,
-        warranty: newRow.warranty,
-        soldCount: newRow.soldCount,
-        ProductStock: newRow.ProductStock,
-        ProductCategory: newRow.ProductCategory,
-        ProductBrand: newRow.ProductBrand,
-      };
-      const response = await fetchUpdateProduct(productId, updateProduct);
-      console.log("Response from server:", response);
-      if (response.status === 200) {
-        setRows((prevRows) =>
-          prevRows.map((row) =>
-            row.id === editingRow.current?.id ? newRow : row
-            // row.id === editingRow.current?.id ? response.data : row
-          )
-        );
+      if (availableModify) {
         Swal.fire({
-          icon: "success",
-          title: "Edición exitosa",
-          text: "El producto ha sido editado correctamente.",
+          icon: "info",
+          allowOutsideClick: false,
+          title: "Por favor espere mientras procesamos la información",
+          showConfirmButton: false,
         });
-        return newRow;
-        // return response.data;
-      } else {
-        throw new Error("Error al actualizar el producto", response.message);
+        Swal.showLoading();
+        setAvailableModify(false);
+        const productId = newRow.id;
+        const editProduct = {
+          name: newRow.name,
+          price: newRow.price,
+          warranty: newRow.warranty,
+          soldCount: newRow.soldCount,
+          ProductStock: newRow.ProductStock,
+          ProductCategory: newRow.ProductCategory,
+          ProductBrand: newRow.ProductBrand,
+        };
+        const response = await fetchUpdateProduct(productId, editProduct);
+        console.log("Response from server:", response);
+        if (response.status === 200) {
+          setRows((prevRows) =>
+            prevRows.map((row) =>
+              row.id === editingRow.current?.id ? newRow : row
+            )
+          );
+          Swal.fire({
+            icon: "success",
+            title: "Edición exitosa",
+            text: "El producto ha sido editado correctamente.",
+          });
+          return newRow;
+        } else {
+          throw new Error("Error al actualizar el producto", response.message);
+        }
       }
     } catch (error) {
       throw new Error("Error al comunicarse con el servidor", error);
