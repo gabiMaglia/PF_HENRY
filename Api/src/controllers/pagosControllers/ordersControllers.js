@@ -58,12 +58,24 @@ async function createOrder(
     });
     // Agregar productos a la orden y la tabla intermedia OrderProduct
     await Promise.all(
-      cart.Products.map((product) => {
-        return order.addProduct(product, {
+      cart.Products.map(async (product) => {
+        await order.addProduct(product, {
           through: { quantity: product.ProductCart.quantity },
         });
       })
     );
+
+    const newOrder = await Order.findOne({
+      where: { id: idOrder },
+      include: [
+        {
+          model: Product,
+          through: {
+            model: OrderProduct,
+          },
+        },
+      ],
+    });
 
     // Eliminar el carrito después de crear la orden
     // await cart.destroy();
@@ -71,19 +83,6 @@ async function createOrder(
     for (const product of cart.Products) {
       await cart.removeProduct(product);
     }
-
-    // Retornar la orden con relaciones incluidas
-    // return Order.findOne({
-    //   where: { id: idOrder },
-    //   include: [
-    //     {
-    //       model: Product,
-    //       through: {
-    //         model: OrderProduct,
-    //       },
-    //     },
-    //   ],
-    // });
     return order;
   } catch (error) {
     console.error(error);
@@ -184,6 +183,23 @@ const getMisCompras = async (userId) => {
   }
 };
 
+const deleteOrdersController = async (req, res) => {
+  const orders = await Order.findAll({
+    include: [
+      {
+        model: Product,
+        attributes: ["id", "name"],
+        through: {
+          model: OrderProduct,
+          attributes: ["quantity"],
+        },
+      },
+    ],
+  });
+  console.log(orders[0].OrderProducts);
+  Promise.all(orders.map((order) => order.destroy()));
+};
+
 //LUEGO DE QUE TERMINEMMOS MERCADO PAGO ESTA VA A SER LA FUNCION QUE SE VA A USAR
 // const getMisCompras = async (userId) => {
 //   try {
@@ -228,4 +244,5 @@ module.exports = {
   updateOrder,
   deleteOrderById,
   getMisCompras,
+  deleteOrdersController,
 };

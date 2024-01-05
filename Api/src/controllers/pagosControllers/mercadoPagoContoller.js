@@ -66,7 +66,7 @@ const handlePaymentNotification = async (paymentId) => {
           Promise.all(
             products.map(async (product) => {
               const { id, soldCount } = product;
-              const orderProduct = await OrderProduct.findAll({
+              const orderProduct = await OrderProduct.findOne({
                 where: { ProductId: id },
               });
               if (orderProduct) {
@@ -86,6 +86,7 @@ const handlePaymentNotification = async (paymentId) => {
                     soldCount: soldCount + productQuantity,
                   });
                 }
+                await orderProduct.destroy();
               }
             })
           );

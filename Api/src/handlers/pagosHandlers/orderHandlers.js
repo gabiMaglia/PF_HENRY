@@ -2,6 +2,7 @@ const {
   createOrder,
   getAllOrders,
   deleteOrderById,
+  deleteOrdersController,
   getMisCompras,
 } = require("../../controllers/pagosControllers/ordersControllers");
 
@@ -73,9 +74,19 @@ const misComprasHandler = async (req, res) => {
   }
 };
 
+const deleteOrdersHandler = async (req, res) => {
+  try {
+    await deleteOrdersController();
+    res.status(200).json("Todas las ordenes han sido eliminadas");
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createOrderHandler,
   getAllOrdersHandler,
   misComprasHandler,
+  deleteOrdersHandler,
   deleteOrderHandler,
 };
