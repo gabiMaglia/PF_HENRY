@@ -378,7 +378,6 @@ const CreateService = () => {
         </Box>
         <Box>
           <TextareaAutosize
-            // error={Boolean(errors.user_diagnosis)}
             error={errors.user_diagnosis ? "true" : ""}
             value={productInfo.user_diagnosis}
             name="user_diagnosis"
