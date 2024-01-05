@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 // import Textarea from "@mui/joy/Textarea";
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 
 //HELPERS
 import {
@@ -80,7 +80,8 @@ const SupportComponent = () => {
     setName(value);
     setErrorName(() => ({
       error: value.trim() !== "" && !validateName(value),
-      message: value.trim() !== "" ? "El nombre debe tener al menos 3 caracteres" : "",
+      message:
+        value.trim() !== "" ? "El nombre debe tener al menos 3 caracteres" : "",
     }));
     updateFormComplete();
   };
@@ -104,7 +105,10 @@ const SupportComponent = () => {
     setArea(value);
     setErrorArea({
       error: value.trim() !== "" && !validateArea(value),
-      message: value.trim() !== "" ? "El mensaje debe tener al menos 50 caracteres" : "",
+      message:
+        value.trim() !== ""
+          ? "El mensaje debe tener al menos 50 caracteres"
+          : "",
     });
     updateFormComplete();
   };
@@ -240,6 +244,15 @@ const SupportComponent = () => {
               name="name"
               autoComplete="name"
               onChange={(e) => handleChangeName(e.target.value)}
+              sx={{
+                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#fd611a",
+                  },
+                "& .MuiInputLabel-outlined.Mui-focused": {
+                  color: "#fd611a",
+                },
+              }}
             />
             <TextField
               id="phone"
@@ -253,7 +266,16 @@ const SupportComponent = () => {
               name="phone"
               autoComplete="phone"
               onChange={(e) => handleChangePhone(e.target.value)}
-              sx={{ margin: "20px 0" }}
+              sx={{
+                margin: "20px 0",
+                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#fd611a",
+                  },
+                "& .MuiInputLabel-outlined.Mui-focused": {
+                  color: "#fd611a",
+                },
+              }}
             />
             <TextField
               id="email"
@@ -267,7 +289,16 @@ const SupportComponent = () => {
               name="email"
               autoComplete="email"
               onChange={(e) => handleChangeEmail(e.target.value)}
-              sx={{ marginBottom: "20px" }}
+              sx={{
+                marginBottom: "20px",
+                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#fd611a",
+                  },
+                "& .MuiInputLabel-outlined.Mui-focused": {
+                  color: "#fd611a",
+                },
+              }}
             />
             <TextareaAutosize
               id="contenet"
@@ -281,7 +312,12 @@ const SupportComponent = () => {
               placeholder="Ejemplo: Tengo un CPU que no enciende. Queda la pantalla negra."
               value={area}
               onChange={(e) => handleChangeArea(e.target.value)}
-              style={{ borderRadius: "5px", border: "1px solid #C7D0DD" }}
+              style={{
+                borderRadius: "5px",
+                border: "1px solid #C7D0DD",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+              }}
             />
             {errorArea.error && (
               <Typography
@@ -301,7 +337,7 @@ const SupportComponent = () => {
                 padding: "12px 0",
                 "&:hover": { backgroundColor: "#000" },
                 fontSize: "18px",
-                marginTop: "20px"
+                marginTop: "20px",
               }}
               endIcon={<SendIcon />}
             >
