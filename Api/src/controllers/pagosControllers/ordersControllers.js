@@ -28,10 +28,13 @@ async function createOrder(
         {
           model: Product,
           attributes: ["id"],
+          through: {
+            model: ProductCart,
+            attributes: ["quantity"],
+          },
         },
       ],
     });
-
     if (!cart) {
       throw new Error("El usuario no tiene un carrito");
     }
@@ -53,20 +56,22 @@ async function createOrder(
       customerNotes: customerNotes ?? null,
       preferenceId,
     });
-
     // Agregar productos a la orden y la tabla intermedia OrderProduct
-    console.log(cart);
-    for (const product of cart.Products) {
-      await order.addProduct(product, {
-        through: { quantity: product.ProductCart.quantity },
-      });
-    }
+    await Promise.all(
+      cart.Products.map((product) => {
+        return order.addProduct(product, {
+          through: { quantity: product.ProductCart.quantity },
+        });
+      })
+    );
 
     // Eliminar el carrito después de crear la orden
     // await cart.destroy();
+
     for (const product of cart.Products) {
       await cart.removeProduct(product);
     }
+
     // Retornar la orden con relaciones incluidas
     // return Order.findOne({
     //   where: { id: idOrder },
