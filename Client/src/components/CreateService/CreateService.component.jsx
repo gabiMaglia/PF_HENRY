@@ -8,7 +8,8 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import Textarea from "@mui/joy/Textarea";
+// import Textarea from "@mui/joy/Textarea";
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 //SWAL ALERT 2
 import Swal from "sweetalert2";
 // HOOKS
@@ -201,7 +202,7 @@ const CreateService = () => {
             if (value.isConfirmed) {
               navigate(
                 authData.userRole === "admin"
-                  ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES
+                  ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_CREATE
                   : PATHROUTES.TECHNICIAN_USER_PANEL +
                       PATHROUTES.PRODUCTS_SERVICES
               );
@@ -376,14 +377,22 @@ const CreateService = () => {
           <FormHelperText error={true}>{errors.client}</FormHelperText>
         </Box>
         <Box>
-          <Textarea
-            error={Boolean(errors.user_diagnosis)}
+          <TextareaAutosize
+            error={errors.user_diagnosis ? "true" : ""}
             value={productInfo.user_diagnosis}
             name="user_diagnosis"
             variant="outlined"
-            minRows={3}
-            placeholder="Diagnóstico del usuario"
+            minRows={8}
+            placeholder="Diagnóstico del técnico"
             onChange={handleChange}
+            style={{
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #C7D0DD",
+              fontFamily: "Roboto",
+              fontSize: "16px",
+              padding: "10px",
+            }}
           />
           <FormHelperText error={true}>{errors.user_diagnosis}</FormHelperText>
         </Box>
