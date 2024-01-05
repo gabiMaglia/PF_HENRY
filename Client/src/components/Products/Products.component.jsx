@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Box, Pagination, Stack } from "@mui/material";
 //COMPONENTS
 import FiltersSorting from "../Categories/Categories.component";
@@ -27,22 +26,13 @@ const Products = () => {
       : dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#fd611a",
-        dark: "#fd611a"[700],
-      },
-    },
-  });
-
   const handlePageChange = (event, value) => {
     setValue(value);
     dispatch(selectPage(value));
   };
 
   return (
-    <ThemeProvider theme={theme}>
+  
       <Box
         sx={{
           justifyContent: "center",
@@ -71,7 +61,7 @@ const Products = () => {
           />
         </Stack>
       </Box>
-    </ThemeProvider>
+   
   );
 };
 
