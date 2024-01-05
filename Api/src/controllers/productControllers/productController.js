@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, INTEGER } = require("sequelize");
 const {
   Product,
   ProductBrand,
@@ -261,6 +261,9 @@ const updateProduct = async (productId, updateData) => {
         }
       })
     );
+  }
+  if (typeof updateData?.price !== "number") {
+    updateData.price = Number(updateData.price);
   }
 
   await productToUpdate.update(updateData);
