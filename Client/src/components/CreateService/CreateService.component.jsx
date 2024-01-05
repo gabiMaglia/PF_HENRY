@@ -378,13 +378,22 @@ const CreateService = () => {
         </Box>
         <Box>
           <TextareaAutosize
-            error={Boolean(errors.user_diagnosis)}
+            // error={Boolean(errors.user_diagnosis)}
+            error={errors.user_diagnosis ? "true" : ""}
             value={productInfo.user_diagnosis}
             name="user_diagnosis"
             variant="outlined"
-            minRows={3}
-            placeholder="Diagnóstico del usuario"
+            minRows={8}
+            placeholder="Diagnóstico del técnico"
             onChange={handleChange}
+            style={{
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #C7D0DD",
+              fontFamily: "Roboto",
+              fontSize: "16px",
+              padding: "10px",
+            }}
           />
           <FormHelperText error={true}>{errors.user_diagnosis}</FormHelperText>
         </Box>
