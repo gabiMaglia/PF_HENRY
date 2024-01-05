@@ -229,7 +229,6 @@ export const fetchUpdateProduct = async (id, updateProduct) => {
     );
     return response;
   } catch (error) {
-    console.error("Error al actualizar el/los producto:", error);
     return { error: true, message: error.message };
   }
 };

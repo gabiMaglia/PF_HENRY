@@ -248,7 +248,6 @@ const updateProduct = async (productId, updateData) => {
     );
     await Promise.all(
       updateData.ProductCategory.map(async (category) => {
-        console.log(category);
         const [existingCategory, createdCategory] =
           await ProductCategory.findOrCreate({
             where: { name: category },
