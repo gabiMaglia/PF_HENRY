@@ -78,33 +78,33 @@ const SupportComponent = () => {
   //HANDLES CHANGES
   const handleChangeName = (value) => {
     setName(value);
-    setErrorName({
-      error: !validateName(value),
-      message: "El nombre debe tener al menos 3 caracteres",
-    });
+    setErrorName(() => ({
+      error: value.trim() !== "" && !validateName(value),
+      message: value.trim() !== "" ? "El nombre debe tener al menos 3 caracteres" : "",
+    }));
     updateFormComplete();
   };
   const handleChangePhone = (value) => {
     setPhone(value);
     setErrorPhone({
-      error: !validatePhone(value),
-      message: "El teléfono debe tener 10 dígitos",
+      error: value.trim() !== "" && !validatePhone(value),
+      message: value.trim() !== "" ? "El teléfono debe tener 10 dígitos" : "",
     });
     updateFormComplete();
   };
   const handleChangeEmail = (value) => {
     setEmail(value);
     setErrorEmail({
-      error: !validateEmail(value),
-      message: "El correo electrónico no es válido",
+      error: value.trim() !== "" && !validateEmail(value),
+      message: value.trim() !== "" ? "El correo electrónico no es válido" : "",
     });
     updateFormComplete();
   };
   const handleChangeArea = (value) => {
     setArea(value);
     setErrorArea({
-      error: !validateArea(value),
-      message: "El mensaje debe tener al menos 10 caracteres",
+      error: value.trim() !== "" && !validateArea(value),
+      message: value.trim() !== "" ? "El mensaje debe tener al menos 50 caracteres" : "",
     });
     updateFormComplete();
   };
@@ -217,8 +217,6 @@ const SupportComponent = () => {
               flexDirection: "column",
               justifyContent: "center",
               padding: "50px",
-              marginBottom: "50px",
-
               "@media (max-width: 768px)": {
                 width: "100%",
                 marginBottom: "-10px",
@@ -274,21 +272,22 @@ const SupportComponent = () => {
             <TextareaAutosize
               id="contenet"
               disabled={false}
-              minRows={8}
+              minRows={12}
               size="lg"
+              name="Outlined"
               variant="outlined"
               required={true}
-              error={errorArea.error}
+              error={errorArea.error ? errorArea : undefined}
               placeholder="Ejemplo: Tengo un CPU que no enciende. Queda la pantalla negra."
               value={area}
               onChange={(e) => handleChangeArea(e.target.value)}
-              sx={{ margin: "20px 0" }}
+              style={{ borderRadius: "5px", border: "1px solid #C7D0DD" }}
             />
             {errorArea.error && (
               <Typography
                 variant="body2"
                 color="error"
-                sx={{ margin: "-15px 0 25px 15px", fontSize: "12px" }}
+                sx={{ margin: "10px 0 25px 15px", fontSize: "12px" }}
               >
                 {errorArea.message}
               </Typography>
