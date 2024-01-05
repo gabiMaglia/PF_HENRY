@@ -122,7 +122,6 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
 
       await cartToUpdate.update({ cartTotal: cartMoney });
 
-      //vuelve a pedir el carrito para que devuelva el carrito actualizado
       const updatedCart = await Cart.findOne({
         where: {
           UserId: userId,
@@ -147,7 +146,7 @@ const addToCart = async (userId, productId, productQuantity, cartMoney) => {
   }
 };
 
-const removeFromCart = async (userId, productId, cartMoney) => {
+const removeFromCart = async (userId, productId) => {
   try {
     let cartToUpdate = await Cart.findOne({
       where: {
@@ -173,11 +172,14 @@ const removeFromCart = async (userId, productId, cartMoney) => {
       if (existingProduct) {
         await cartToUpdate.removeProduct(existingProduct);
         console.log("Producto eliminado del carrito");
+        await cartToUpdate.update({
+          cartTotal:
+            cartToUpdate.cartTotal -
+            existingProduct.price * existingProduct.ProductCart.quantity,
+        });
       } else {
         console.log("El producto no existe en el carrito");
       }
-
-      await cartToUpdate.update({ cartTotal: cartMoney });
 
       // Volver a buscar el carrito actualizado
       const updatedCart = await Cart.findOne({
