@@ -59,7 +59,7 @@ async function createOrder(
     // Agregar productos a la orden y la tabla intermedia OrderProduct
     await Promise.all(
       cart.Products.map(async (product) => {
-        await order.addProduct(product, {
+        return order.addProduct(product, {
           through: { quantity: product.ProductCart.quantity },
         });
       })

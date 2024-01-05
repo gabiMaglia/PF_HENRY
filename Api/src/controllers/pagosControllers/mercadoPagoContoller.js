@@ -67,10 +67,9 @@ const handlePaymentNotification = async (paymentId) => {
             products.map(async (product) => {
               const { id, soldCount } = product;
               const orderProduct = await OrderProduct.findOne({
-                where: { ProductId: id },
+                where: { ProductId: id, OrderId: orderId },
               });
               if (orderProduct) {
-                console.log(orderProduct);
                 const productQuantity = orderProduct.quantity;
 
                 const productStock = await ProductStock.findOne({
@@ -86,7 +85,6 @@ const handlePaymentNotification = async (paymentId) => {
                     soldCount: soldCount + productQuantity,
                   });
                 }
-                await orderProduct.destroy();
               }
             })
           );
