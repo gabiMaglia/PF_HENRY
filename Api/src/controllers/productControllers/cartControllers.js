@@ -233,14 +233,23 @@ const getCartById = async (userId) => {
   }
 };
 
-const deleteCartById = async (id) => {
+const deleteCartById = async (userId) => {
   try {
-    const cartToDelete = await Cart.findByPk(id);
+    const cartToDelete = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
+    });
 
-    await cartToDelete.destroy();
-    return { cartToDelete, deleted: true };
+    if (cartToDelete) {
+      await cartToDelete.destroy();
+      return { cartToDelete, deleted: true };
+    } else {
+      return { deleted: false, message: "Carrito no encontrado" };
+    }
   } catch (error) {
     console.log(error);
+    return { deleted: false, error: error.message };
   }
 };
 
