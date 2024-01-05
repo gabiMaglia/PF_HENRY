@@ -246,7 +246,7 @@ const deleteCartById = async (id) => {
 
 const editQuantity = async (userId, productId, productQuantity, cartMoney) => {
   try {
-    let cartToUpdate = await Cart.findOne({
+    const cartToUpdate = await Cart.findOne({
       where: {
         UserId: userId,
       },
@@ -261,7 +261,6 @@ const editQuantity = async (userId, productId, productQuantity, cartMoney) => {
         },
       ],
     });
-
     if (cartToUpdate) {
       const existingProduct = cartToUpdate.Products.find(
         (product) => product.id === productId

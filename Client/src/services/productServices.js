@@ -154,8 +154,8 @@ export const fetchGetProduct = (cookiesAccepted) => async () => {
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
+  console.log(cookiesAccepted);
   const { userId } = aux;
-
   const data = {
     userId: userId,
     productId: product.id,
@@ -191,14 +191,12 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
   const { userId } = aux;
-
   const products = items.map((item) => ({
     title: item.name,
     quantity: item.count,
-    unit_price: item.price * item.count,
+    unit_price: item.price,
     currency_id: "ARS",
   }));
-  console.log(products);
   try {
     const response = await axios.post(
       `${urlBack}/pagos/order`,
@@ -210,7 +208,6 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
         },
       }
     );
-    console.log(response.data.Order.preferenceId);
     dispatch(idShop(response.data.Order.preferenceId));
   } catch (error) {
     return;

@@ -35,13 +35,11 @@ async function createOrder(
         },
       ],
     });
-
     if (!cart) {
       throw new Error("El usuario no tiene un carrito");
     }
 
     const idOrder = uuidv4();
-    console.log(idOrder);
     const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
@@ -58,19 +56,22 @@ async function createOrder(
       customerNotes: customerNotes ?? null,
       preferenceId,
     });
-
     // Agregar productos a la orden y la tabla intermedia OrderProduct
-    for (const product of cart.Products) {
-      await order.addProduct(product, {
-        through: { quantity: product.ProductCart.quantity },
-      });
-    }
+    await Promise.all(
+      cart.Products.map((product) => {
+        return order.addProduct(product, {
+          through: { quantity: product.ProductCart.quantity },
+        });
+      })
+    );
 
     // Eliminar el carrito después de crear la orden
     // await cart.destroy();
+
     for (const product of cart.Products) {
       await cart.removeProduct(product);
     }
+
     // Retornar la orden con relaciones incluidas
     // return Order.findOne({
     //   where: { id: idOrder },

@@ -2,9 +2,12 @@ const { Order, Product, OrderProduct, ProductStock } = require("../../db");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
 const frontend_Url = process.env.FRONTEND_URL;
 const miAccessToken = process.env.MP_ACCESS_TOKEN;
+const axios = require("axios");
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
-backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app/`;
+backend_Url = `https://56fb-181-229-81-226.ngrok-free.app`;
+const conn = require("../../db");
+const { where } = require("sequelize");
 
 const mercadoPago = async (array, idOrder) => {
   try {
@@ -30,64 +33,65 @@ const mercadoPago = async (array, idOrder) => {
 };
 
 const handlePaymentNotification = async (paymentId) => {
-  const transaction = await sequelize.transaction(); // Asegúrate de tener tu instancia de Sequelize (sequelize) disponible
-
   try {
-    const paymentInfo = await mercadopago.payment.get(paymentId);
-
-    if (paymentInfo.status === "approved") {
-      const orderId = paymentInfo.metadata;
-      const order = await Order.findByPk(orderId, {
-        include: [
-          {
-            model: Product,
-            attributes: ["id", "name"],
-            through: {
-              model: OrderProduct,
-              attributes: ["quantity"],
-            },
+    if (paymentId?.type === "payment") {
+      const payment = await axios.get(
+        `https://api.mercadopago.com/v1/payments/${paymentId.data.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${miAccessToken}`,
           },
-        ],
-        transaction, // Mueve el transaction aquí
-      });
+        }
+      );
+      if (payment.data.status === "approved") {
+        const orderId = payment.data.metadata.id_order;
+        const order = await Order.findByPk(orderId, {
+          include: [
+            {
+              model: Product,
+              attributes: ["id", "name"],
+              through: {
+                model: OrderProduct,
+                attributes: ["quantity"],
+              },
+            },
+          ],
+        });
 
-      if (order) {
-        order.status = "finalizado";
-        await order.save();
+        if (order) {
+          await order.update({ status: "Finalizado" });
 
-        const products = order.getProducts();
+          const products = await order.getProducts();
+          Promise.all(
+            products.map(async (product) => {
+              const { id, soldCount } = product;
+              const orderProduct = await OrderProduct.findAll({
+                where: { ProductId: id },
+              });
+              if (orderProduct) {
+                console.log(orderProduct);
+                const productQuantity = orderProduct.quantity;
 
-        for (const product of products) {
-          const { id, soldCount } = product;
-          const orderProduct = order.OrderProducts.find(
-            (op) => op.ProductId === id
+                const productStock = await ProductStock.findOne({
+                  where: { ProductId: id },
+                });
+
+                if (productStock) {
+                  await productStock.update({
+                    amount: productStock.amount - productQuantity,
+                  });
+
+                  await product.update({
+                    soldCount: soldCount + productQuantity,
+                  });
+                }
+              }
+            })
           );
-
-          if (orderProduct) {
-            const productQuantity = orderProduct.quantity;
-
-            const productStock = await ProductStock.findOne({
-              where: { ProductId: id },
-              transaction, // Asegúrate de pasar la transacción aquí también
-            });
-
-            if (productStock) {
-              productStock.update({
-                amount: (productStock.amount -= productQuantity),
-              });
-              await productStock.save();
-
-              product.update({
-                soldCount: (product.soldCount += productQuantity),
-              });
-              await product.save();
-            }
-          }
         }
       }
     }
-
-    await transaction.commit();
   } catch (error) {
     console.error("Error al manejar la notificación de pago:", error);
   }

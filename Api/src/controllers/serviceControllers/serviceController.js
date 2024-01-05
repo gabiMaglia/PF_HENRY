@@ -14,7 +14,6 @@ const destinationEmail = process.env.EMAIL_MAILER;
 const addServiceController = async (
   product_model,
   product_income_date,
-  // product_image,
   product_image_url,
   user_diagnosis,
   ClientId,
@@ -54,8 +53,6 @@ const addServiceController = async (
 
         const newServiceStatus = await Service_status.create({
           user_diagnosis,
-          technical_diagnosis: "Pendiente",
-          final_diagnosis: "Pendiente",
           confirm_repair: false,
           reparir_finish: false,
           ServiceId: newService.id,
