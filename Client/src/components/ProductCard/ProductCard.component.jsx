@@ -82,6 +82,11 @@ const CardProduct = ({ product }) => {
       Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
     }
   };
+
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   return (
     <>
       <ProductCard
@@ -157,8 +162,8 @@ const CardProduct = ({ product }) => {
               align="center"
               sx={{ fontWeight: "900" }}
             >
- ${price.toLocaleString('es-ES',{ minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-             </ProductPrice>
+              {formatPrice(price)}
+            </ProductPrice>
           </Box>
         </Link>
       </ProductCard>
