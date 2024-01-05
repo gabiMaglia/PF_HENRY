@@ -23,15 +23,27 @@ import Swal from "sweetalert2";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
-  { field: "name", headerName: "Nombre", width: 350, headerAlign: "center", editable: true },
-  { field: "price", headerName: "Precio", width: 80, headerAlign: "center", editable: true },
+  {
+    field: "name",
+    headerName: "Nombre",
+    width: 350,
+    headerAlign: "center",
+    editable: true,
+  },
+  {
+    field: "price",
+    headerName: "Precio",
+    width: 80,
+    headerAlign: "center",
+    editable: true,
+  },
   {
     field: "warranty",
     headerName: "Garantía",
     type: "number",
     width: 100,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
   {
     field: "is_deleted",
@@ -39,29 +51,35 @@ const columns = [
     type: Boolean,
     width: 100,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
   {
     field: "soldCount",
     headerName: "Vendidos",
     width: 80,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
-  { field: "brand", headerName: "Marca", width: 150, headerAlign: "center", editable: true },
+  {
+    field: "brand",
+    headerName: "Marca",
+    width: 150,
+    headerAlign: "center",
+    editable: true,
+  },
   {
     field: "category",
     headerName: "Categoría",
     width: 150,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
   {
     field: "stock",
     headerName: "Stock",
     width: 150,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
 ];
 
@@ -154,7 +172,11 @@ const ProductsTable = () => {
       product.ProductCategories.length > 0
         ? product.ProductCategories[0].name
         : "Sin categoría";
-    const stock = product.ProductStock?.amount || 0;
+    const stock =
+      product.ProductStock?.amount !== undefined &&
+      product.ProductStock.amount !== 0
+        ? product.ProductStock.amount
+        : "Sin stock";
     return {
       ...product,
       brand,
@@ -178,10 +200,10 @@ const ProductsTable = () => {
       const response = await fetchUpdateProduct(productId, updateProduct);
       if (response.status === 200) {
         setRows((prevRows) =>
-            prevRows.map((row) =>
-              row.id === editingRow.current?.id ? newRows : row
-            )
-          );
+          prevRows.map((row) =>
+            row.id === editingRow.current?.id ? newRows : row
+          )
+        );
         Swal.fire({
           icon: "success",
           title: "Edición exitosa",
