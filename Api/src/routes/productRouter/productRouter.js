@@ -8,11 +8,14 @@ const {
   deleteProductHandler,
   searchByNameHandler,
   postProductSeveralHandler,
+  getProductsCarouselHandler,
 } = require("../../handlers/productHandlers/productHandlers");
 
 const productRouter = Router();
 
 productRouter.get("/", getProductsHandler);
+productRouter.get("/carousel", getProductsCarouselHandler);
+
 productRouter.get("/search", searchByNameHandler);
 productRouter.get("/:id", getProductByIdHandler);
 productRouter.post("/", postProductHandler);
