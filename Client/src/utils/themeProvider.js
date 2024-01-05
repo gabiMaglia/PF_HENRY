@@ -10,10 +10,13 @@ export const theme = createTheme({
     },
     h4: {
     //  cardCarouselPromotionn
+    // support
+    // Questions
     },
     h5: {
     // homeProduct
-    },
+      //Support 
+  },
     h6: {
       // navItems
     },
@@ -25,7 +28,7 @@ export const theme = createTheme({
         //Loadings Flags 
     },
     body2: {
-
+      // support
     },
     span : {
 
