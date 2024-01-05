@@ -198,10 +198,12 @@ const ProductsTable = () => {
         ProductBrand: newRows.ProductBrand,
       };
       const response = await fetchUpdateProduct(productId, updateProduct);
+      console.log("Response from server:", response);
       if (response.status === 200) {
         setRows((prevRows) =>
           prevRows.map((row) =>
             row.id === editingRow.current?.id ? newRows : row
+            // row.id === editingRow.current?.id ? response.data : row
           )
         );
         Swal.fire({
@@ -211,6 +213,7 @@ const ProductsTable = () => {
         });
         await getProducts();
         return newRows;
+        // return response.data;
       } else {
         console.error("Error al actualizar el producto:", response.message);
         Swal.fire({

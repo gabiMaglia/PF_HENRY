@@ -237,18 +237,33 @@ export const logicalDeleteProduct = async (id) => {
   }
 };
 
-export const fetchUpdateProduct = async (id)=>{
+export const fetchUpdateProduct = async (id, data) => {
+  let completeData = {
+    name: null,
+    price: null,
+    warranty: null,
+    soldCount: null,
+    ProductStock: null,
+    ProductCategory: null,
+    ProductBrand: null,
+  };
   try {
-    const response = await axios.put(`${urlBack}/product/${id}`, {
-      withCredentials: true,
-    });
+    completeData = { ...completeData, ...data };
+    const response = await axios.put(
+      `${urlBack}/product/${id}`, {
+        ...completeData,
+        data,
+        withCredentials: true,
+      }
+    );
     console.log("Respuesta del backend:", response);
-    return response;
+    const responseData = response
+    return responseData;
   } catch (error) {
     console.error("Error al actualizar el producto:", error);
     return { error: true, message: error.message };
   }
-}
+};
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
