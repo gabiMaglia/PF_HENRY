@@ -176,7 +176,7 @@ const UserPanelComponent = () => {
           }
           element={
             userRole === "admin" ? (
-              <UsersTable />
+              <ProductsTable />
             ) : userRole === "customer" ? (
               <ShopingProfile />
             ) : (
@@ -230,13 +230,27 @@ const UserPanelComponent = () => {
               ? PATHROUTES.SERVICE_CREATE
               : PATHROUTES.PROFILE
           }
+          element={
+            userRole === "admin" ? (
+              <CreateService />
+            ) : userRole === "customer" ? (
+              <ProductsServicesProfile />
+            ) : (
+              <UserProfile />
+            )
+          }
+        />
+        <Route
+          path={
+            userRole === "admin" ? PATHROUTES.SERVICE_CREATE : PATHROUTES.PROFILE
+          }
           element={userRole === "admin" ? <CreateService /> : <UserProfile />}
         />
         <Route
           path={
-            userRole === "admin" ? PATHROUTES.SERVICE_LIST : PATHROUTES.PROFILE
+            userRole === "admin" ? PATHROUTES.USERS_LIST : PATHROUTES.PROFILE
           }
-          element={userRole === "admin" ? <ServiceList /> : <UserProfile />}
+          element={userRole === "admin" ? <UsersTable /> : <UserProfile />}
         />
       </Routes>
       <Box
