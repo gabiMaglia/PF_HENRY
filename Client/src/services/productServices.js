@@ -237,28 +237,16 @@ export const logicalDeleteProduct = async (id) => {
   }
 };
 
-export const fetchUpdateProduct = async (id, data) => {
-  let completeData = {
-    name: null,
-    price: null,
-    warranty: null,
-    soldCount: null,
-    ProductStock: null,
-    ProductCategory: null,
-    ProductBrand: null,
-  };
+export const fetchUpdateProduct = async (id, updateProduct) => {
   try {
-    completeData = { ...completeData, ...data };
     const response = await axios.put(
       `${urlBack}/product/${id}`, {
-        ...completeData,
-        data,
+        updateProduct,
         withCredentials: true,
       }
     );
     console.log("Respuesta del backend:", response);
-    const responseData = response
-    return responseData;
+    return response;
   } catch (error) {
     console.error("Error al actualizar el producto:", error);
     return { error: true, message: error.message };

@@ -185,24 +185,24 @@ const ProductsTable = () => {
     };
   });
 
-  const processRowUpdate = async (newRows) => {
+  const processRowUpdate = async (newRow) => {
     try {
-      const productId = newRows.id;
+      const productId = newRow.id;
       const updateProduct = {
-        name: newRows.name,
-        price: newRows.price,
-        warranty: newRows.warranty,
-        soldCount: newRows.soldCount,
-        ProductStock: newRows.ProductStock,
-        ProductCategory: newRows.ProductCategory,
-        ProductBrand: newRows.ProductBrand,
+        name: newRow.name,
+        price: newRow.price,
+        warranty: newRow.warranty,
+        soldCount: newRow.soldCount,
+        ProductStock: newRow.ProductStock,
+        ProductCategory: newRow.ProductCategory,
+        ProductBrand: newRow.ProductBrand,
       };
       const response = await fetchUpdateProduct(productId, updateProduct);
       console.log("Response from server:", response);
       if (response.status === 200) {
         setRows((prevRows) =>
           prevRows.map((row) =>
-            row.id === editingRow.current?.id ? newRows : row
+            row.id === editingRow.current?.id ? newRow : row
             // row.id === editingRow.current?.id ? response.data : row
           )
         );
@@ -212,23 +212,13 @@ const ProductsTable = () => {
           text: "El producto ha sido editado correctamente.",
         });
         await getProducts();
-        return newRows;
+        return newRow;
         // return response.data;
       } else {
-        console.error("Error al actualizar el producto:", response.message);
-        Swal.fire({
-          icon: "error",
-          title: "Error al actualizar el producto",
-          text: "Ha ocurrido un error al intentar actualizar el producto.",
-        });
+        throw new Error("Error al actualizar el producto", response.message);
       }
     } catch (error) {
-      console.error("Error al actualizar el producto:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error al actualizar el producto",
-        text: "Ha ocurrido un error al intentar actualizar el producto.",
-      });
+      throw new Error("Error al comunicarse con el servidor", error);
     }
   };
 
