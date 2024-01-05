@@ -148,38 +148,33 @@ const deleteOrderById = async (id) => {
 
 const getMisCompras = async (userId) => {
   try {
-    const user = await User.findAll({
-      where: { id: userId },
+    const userOrders = await Order.findAll({
+      where: { UserId: userId },
       include: [
         {
-          model: Order,
+          model: Product,
+          attributes: ["id", "name", "price"],
+          through: {
+            model: OrderProduct,
+            attributes: ["quantity"],
+          },
           include: [
             {
-              model: Product,
-              attributes: ["id", "name", "price"],
-              through: {
-                model: OrderProduct,
-                attributes: ["quantity"],
-              },
-              include: [
-                {
-                  model: ProductImage,
-                  attributes: ["address"],
-                },
-              ],
+              model: ProductImage,
+              attributes: ["address"],
             },
           ],
         },
       ],
     });
 
-    if (!user) {
-      throw new Error("User not found");
+    if (!userOrders) {
+      throw new Error("User not found or has no orders");
     }
 
-    return user;
+    return userOrders;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
 
