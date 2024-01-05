@@ -22,7 +22,7 @@ const PATHROUTES = {
   PRODUCTS_LIST: "/productsList",
   SERVICE_LIST:"/serviceList",
   //TECHNICIAN
-  CREATE_SERVICES: "/createServices",
+  SERVICE_CREATE: "/serviceCreate",
 };
 
 export default PATHROUTES;
