@@ -8,6 +8,9 @@ export const theme = createTheme({
     h2: {
       fontFamily: 'Times New Roman, serif',
     },
+    h6: {
+      // navItems
+    },
     body1: {
         
     },
