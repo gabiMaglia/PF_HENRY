@@ -56,7 +56,6 @@ async function createOrder(
       customerNotes: customerNotes ?? null,
       preferenceId,
     });
-    // Agregar productos a la orden y la tabla intermedia OrderProduct
     await Promise.all(
       cart.Products.map(async (product) => {
         return order.addProduct(product, {
@@ -83,7 +82,7 @@ async function createOrder(
     for (const product of cart.Products) {
       await cart.removeProduct(product);
     }
-    return order;
+    return newOrder;
   } catch (error) {
     console.error(error);
     throw error;
@@ -151,6 +150,7 @@ const getMisCompras = async (userId) => {
     const userOrders = await Order.findAll({
       where: { UserId: userId },
       include: [
+        "status",
         {
           model: Product,
           attributes: ["id", "name", "price"],
