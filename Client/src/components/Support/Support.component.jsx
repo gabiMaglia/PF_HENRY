@@ -76,39 +76,48 @@ const SupportComponent = () => {
   });
 
   //HANDLES CHANGES
+
   const handleChangeName = (value) => {
     setName(value);
-    setErrorName(() => ({
-      error: value.trim() !== "" && !validateName(value),
-      message:
-        value.trim() !== "" ? "El nombre debe tener al menos 3 caracteres" : "",
-    }));
+    setErrorName(() => {
+      const error = value.trim() !== "" && !validateName(value);
+      return {
+        error,
+        message: error ? "El nombre debe tener al menos 3 caracteres" : "",
+      };
+    });
     updateFormComplete();
   };
   const handleChangePhone = (value) => {
     setPhone(value);
-    setErrorPhone({
-      error: value.trim() !== "" && !validatePhone(value),
-      message: value.trim() !== "" ? "El teléfono debe tener 10 dígitos" : "",
+    setErrorPhone(() => {
+      const error = value.trim() !== "" && !validatePhone(value);
+      return {
+        error,
+        message: error ? "El teléfono debe tener 10 dígitos" : "",
+      };
     });
     updateFormComplete();
   };
   const handleChangeEmail = (value) => {
     setEmail(value);
-    setErrorEmail({
-      error: value.trim() !== "" && !validateEmail(value),
-      message: value.trim() !== "" ? "El correo electrónico no es válido" : "",
+    setErrorEmail(() => {
+      const error = value.trim() !== "" && !validateEmail(value);
+      return {
+        error,
+        message: error ? "El correo electrónico no es válido" : "",
+      };
     });
     updateFormComplete();
   };
   const handleChangeArea = (value) => {
     setArea(value);
-    setErrorArea({
-      error: value.trim() !== "" && !validateArea(value),
-      message:
-        value.trim() !== ""
-          ? "El mensaje debe tener al menos 50 caracteres"
-          : "",
+    setErrorArea(() => {
+      const error = value.trim() !== "" && !validateArea(value);
+      return {
+        error,
+        message: error ? "El mensaje debe tener al menos 50 caracteres" : "",
+      };
     });
     updateFormComplete();
   };
