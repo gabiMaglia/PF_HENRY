@@ -197,21 +197,29 @@ const ProductsTable = () => {
         Swal.showLoading();
         setAvailableModify(false);
         const productId = newRow.id;
-        const editProduct = {
-          name: newRow.name,
-          price: newRow.price,
-          warranty: newRow.warranty,
-          soldCount: newRow.soldCount,
-          ProductStock: newRow.ProductStock,
-          ProductCategory: newRow.ProductCategory,
-          ProductBrand: newRow.ProductBrand,
-        };
+        const editProduct = {};
+
+        newRow?.name && (editProduct.name = newRow.name);
+        newRow?.price && (editProduct.price = newRow.price);
+        newRow?.warranty && (editProduct.warranty = newRow.warranty);
+        newRow?.soldCount && (editProduct.soldCount = newRow.soldCount);
+        newRow?.ProductStock &&
+          (editProduct.ProductStock = newRow.ProductStock.amount);
+        newRow?.ProductCategory &&
+          (editProduct.ProductCategory = newRow.ProductCategory);
+        newRow?.ProductBrand &&
+          (editProduct.ProductBrand = newRow.ProductBrand);
+
         const response = await fetchUpdateProduct(productId, editProduct);
-        console.log("Response from server:", response);
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
               row.id === editingRow.current?.id ? newRow : row
+            )
+          );
+          setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+              product.id === newRow.id ? { ...product, ...newRow } : product
             )
           );
           Swal.fire({
