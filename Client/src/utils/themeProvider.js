@@ -8,11 +8,14 @@ export const theme = createTheme({
     h2: {
       fontFamily: 'Times New Roman, serif',
     },
+    h4: {
+    //  cardCarouselPromotionn
+    },
     h6: {
       // navItems
     },
     body1: {
-        
+        //homeProductLoading 
     },
     body2: {
 
