@@ -16,11 +16,11 @@ import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesP
 import CreateService from "../CreateService/CreateService.component";
 import UsersTable from "../UsersTable/UsersTable.component";
 import ProductsTable from "../ProductsTable/ProductsTable.component";
+import ServiceList from "../ServiceList/ServiceList.componet";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import ServiceList from "../ServiceList/ServiceList.componet";
 
 const UserPanelComponent = () => {
   const theme = createTheme({
@@ -66,19 +66,23 @@ const UserPanelComponent = () => {
       roles: ["admin"],
     },
     {
-      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCT_CREATE,
-      roles: ["admin"],
-    },
-    {
-      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
-      roles: ["admin"],
-    },
-    {
       path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCTS_LIST,
       roles: ["admin"],
     },
     {
-      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.PRODUCT_CREATE,
+      roles: ["admin"],
+    },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_LIST,
+      roles: ["admin"],
+    },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_CREATE,
+      roles: ["admin"],
+    },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
       roles: ["admin"],
     },
     //TECHNICIANS
@@ -91,7 +95,7 @@ const UserPanelComponent = () => {
       roles: ["technician"],
     },
     {
-      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
+      path: PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.SERVICE_CREATE,
       roles: ["technician"],
     },
   ];
@@ -165,34 +169,34 @@ const UserPanelComponent = () => {
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.PRODUCT_CREATE
+              ? PATHROUTES.PRODUCTS_LIST
               : userRole === "customer"
               ? PATHROUTES.SHOPINGS
-              : PATHROUTES.CREATE_SERVICES
+              : PATHROUTES.PRODUCTS_SERVICES
           }
           element={
             userRole === "admin" ? (
-              <ProductCreateProfile />
+              <ProductsTable />
             ) : userRole === "customer" ? (
               <ShopingProfile />
             ) : (
-              <CreateService />
+              <ProductsServicesProfile />
             )
           }
         />
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.USERS_LIST
+              ? PATHROUTES.PRODUCT_CREATE
               : userRole === "customer"
               ? PATHROUTES.WISHLIST
               : userRole === "technician"
-              ? PATHROUTES.CREATE_SERVICES
+              ? PATHROUTES.SERVICE_CREATE
               : PATHROUTES.PROFILE
           }
           element={
             userRole === "admin" ? (
-              <UsersTable />
+              <ProductCreateProfile />
             ) : userRole === "customer" ? (
               <WishListProfile />
             ) : userRole === "technician" ? (
@@ -205,30 +209,48 @@ const UserPanelComponent = () => {
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.PRODUCTS_LIST
-              : PATHROUTES.PRODUCTS_SERVICES
+              ? PATHROUTES.SERVICE_LIST
+              : userRole === "customer"
+              ? PATHROUTES.PRODUCTS_SERVICES
+              : PATHROUTES.PROFILE
           }
           element={
             userRole === "admin" ? (
-              <ProductsTable />
-            ) : (
+              <ServiceList />
+            ) : userRole === "customer" ? (
               <ProductsServicesProfile />
+            ) : (
+              <UserProfile />
             )
           }
         />
         <Route
           path={
             userRole === "admin"
-              ? PATHROUTES.CREATE_SERVICES
+              ? PATHROUTES.SERVICE_CREATE
               : PATHROUTES.PROFILE
+          }
+          element={
+            userRole === "admin" ? (
+              <CreateService />
+            ) : userRole === "customer" ? (
+              <ProductsServicesProfile />
+            ) : (
+              <UserProfile />
+            )
+          }
+        />
+        <Route
+          path={
+            userRole === "admin" ? PATHROUTES.SERVICE_CREATE : PATHROUTES.PROFILE
           }
           element={userRole === "admin" ? <CreateService /> : <UserProfile />}
         />
         <Route
           path={
-            userRole === "admin" ? PATHROUTES.SERVICE_LIST : PATHROUTES.PROFILE
+            userRole === "admin" ? PATHROUTES.USERS_LIST : PATHROUTES.PROFILE
           }
-          element={userRole === "admin" ? <ServiceList /> : <UserProfile />}
+          element={userRole === "admin" ? <UsersTable /> : <UserProfile />}
         />
       </Routes>
       <Box
