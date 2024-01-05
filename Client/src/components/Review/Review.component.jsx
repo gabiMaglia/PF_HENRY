@@ -1,5 +1,5 @@
-import { Button, CardMedia } from "@mui/material";
-import React from "react";
+import { Button, CardMedia, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Review = ({ review }) => {
@@ -8,9 +8,14 @@ const Review = ({ review }) => {
   }
   const { reviewer, date, content, imageUrl } = review;
   const navigate = useNavigate();
+  const [comment, setComment] = useState("");
 
   const handleButtonClick = () => {
     navigate("/review");
+  };
+
+  const handleCommentChange = () => {
+    setComment(event.target.value);
   };
 
   return (
@@ -25,6 +30,14 @@ const Review = ({ review }) => {
         </Typography>
         <Typography variant="body2">{content}</Typography>
         <Button onClick={handleButtonClick}>Comentarios de Google</Button>
+        <TextField
+          label="Deja un comentario"
+          variant="outline"
+          value={comment}
+          onChange={handleCommentChange}
+          fullWidth
+          margin="normal"
+        />
       </CardContent>
     </Card>
   );
