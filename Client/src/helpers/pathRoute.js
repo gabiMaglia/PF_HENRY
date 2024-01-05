@@ -20,6 +20,7 @@ const PATHROUTES = {
   PRODUCT_CREATE: "/productCreate",
   USERS_LIST: "/usersList",
   PRODUCTS_LIST: "/productsList",
+  SERVICE_LIST:"/serviceList",
   //TECHNICIAN
   CREATE_SERVICES: "/createServices",
 };

@@ -10,6 +10,7 @@ import {
   People,
   Logout,
   FormatListNumbered,
+  MedicalServices
 } from "@mui/icons-material";
 //HELPERS
 import PATHROUTES from "../helpers/pathRoute";
@@ -113,6 +114,11 @@ const UserPanelItems = (name, surname) => {
         name: "Crear servicio",
         icon: <Add />,
         path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.CREATE_SERVICES,
+      },
+      {
+        name: "Lista de servicios",
+        icon: <MedicalServices />,
+        path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_LIST,
       },
       {
         name: "Cerrar sesion",
