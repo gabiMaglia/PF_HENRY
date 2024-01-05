@@ -82,25 +82,6 @@ export const fetchChage = (inputValue) => async (dispatch) => {
   }
 };
 
-// export const fetchCart = (items) => async (dispatch) => {
-//  const products = items.map((item) => ({
-//       title: item.name,
-//       quantity: item.count,
-//       unit_price: item.price * item.count,
-//       currency_id: "ARS"
-//     }));
-//   try {
-//     const response = await axios.post(`${urlBack}/pagos`, products, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//   });
-//     dispatch(idShop(response.data))
-//   } catch (error) {
-//     console.error("no mando el response", error);
-//   }
-// };
-
 export const fetchProduct = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
