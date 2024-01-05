@@ -213,7 +213,7 @@ const SupportComponent = () => {
           display: "flex",
           justifyContent: "center",
           margin: "0 auto",
-          "@media (max-width: 768px)": {
+          "@media (max-width: 1140px)": {
             display: "flex",
             flexDirection: "column",
           },
@@ -230,7 +230,7 @@ const SupportComponent = () => {
               flexDirection: "column",
               justifyContent: "center",
               padding: "50px",
-              "@media (max-width: 768px)": {
+              "@media (max-width: 1140px)": {
                 width: "100%",
                 marginBottom: "-10px",
                 marginTop: "10px",
@@ -341,11 +341,10 @@ const SupportComponent = () => {
             display: "flex",
             justifyContent: "center",
             padding: "50px",
-
-            "@media (max-width: 768px)": {
+            "@media (max-width: 1140px)": {
               width: "100%",
               textAlign: "justify",
-              borderBottom: "1px solid #000",
+              borderBottom: "1px solid #00000050",
             },
           }}
         >
