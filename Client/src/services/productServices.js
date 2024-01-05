@@ -239,16 +239,14 @@ export const logicalDeleteProduct = async (id) => {
 
 export const fetchUpdateProduct = async (id, updateProduct) => {
   try {
-    const response = await axios.put(
-      `${urlBack}/product/${id}`, {
-        updateProduct,
-        withCredentials: true,
-      }
-    );
+    const response = await axios.put(`${urlBack}/product/${id}`, {
+      updateProduct,
+      withCredentials: true,
+    });
     console.log("Respuesta del backend:", response);
     return response;
   } catch (error) {
-    console.error("Error al actualizar el producto:", error);
+    console.error("Error al actualizar el/los producto:", error);
     return { error: true, message: error.message };
   }
 };

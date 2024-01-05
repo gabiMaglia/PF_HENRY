@@ -211,7 +211,6 @@ const ProductsTable = () => {
           title: "Edición exitosa",
           text: "El producto ha sido editado correctamente.",
         });
-        await getProducts();
         return newRow;
         // return response.data;
       } else {
