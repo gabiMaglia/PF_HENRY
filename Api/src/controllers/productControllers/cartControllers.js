@@ -31,7 +31,7 @@ async function postCart(userId, productId, productQuantity) {
       await cart.addProduct(product, {
         through: { quantity: productQuantity },
       });
-      cart.cartTotal = product.price;
+      cart.cartTotal = product.price * productQuantity;
       return cart;
     }
   } catch (error) {
