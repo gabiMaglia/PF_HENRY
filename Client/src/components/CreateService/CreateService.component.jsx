@@ -8,7 +8,8 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import Textarea from "@mui/joy/Textarea";
+// import Textarea from "@mui/joy/Textarea";
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 //SWAL ALERT 2
 import Swal from "sweetalert2";
 // HOOKS
@@ -376,7 +377,7 @@ const CreateService = () => {
           <FormHelperText error={true}>{errors.client}</FormHelperText>
         </Box>
         <Box>
-          <Textarea
+          <TextareaAutosize
             error={Boolean(errors.user_diagnosis)}
             value={productInfo.user_diagnosis}
             name="user_diagnosis"
