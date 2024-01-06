@@ -11,7 +11,7 @@ const sequelize = require("sequelize");
 require("dotenv").config();
 
 const destinationEmail = process.env.EMAIL_MAILER;
-const hypermegared = "https://pf-henry-sepia.vercel.app/"
+const hypermegared = "https://pf-henry-sepia.vercel.app/";
 
 const addServiceController = async (
   product_model,
@@ -60,7 +60,6 @@ const addServiceController = async (
           reparir_finish: false,
           ServiceId: newService.id,
         });
-
         if (product_image_url) {
           // No se sube la imagen a Cloudinary aca ya que obtenemos la URL que nos envia el front
           const newServiceImage = await Service_image.create({
@@ -122,6 +121,7 @@ const updateServiceStatusController = async (id, field, value) => {
       include: [Service_status],
     });
     const clientObj = await User.findByPk(service.userId);
+    const clientName = clientObj.name;
 
     await transporter.sendMail({
       from: `Hyper Mega Red  ${destinationEmail}`, // sender address
@@ -225,9 +225,9 @@ const getFilterServiceController = async (status, user, technician) => {
   return arrayOfServices;
 };
 
-const GetUndeletedServicesController=async()=>{
-  const services=await Service.findAll({where:{isDelete:false}})
-  if(services.length===0){
+const GetUndeletedServicesController = async () => {
+  const services = await Service.findAll({ where: { isDelete: false } });
+  if (services.length === 0) {
     return {
       error: true,
       response: `services not found`,
@@ -241,20 +241,20 @@ const GetUndeletedServicesController=async()=>{
     })
   );
   return arrayOfServices;
-} 
+};
 
-const DeleteServiceController=async(id)=>{
-  const service=await Service.findByPk(id)
-  if(!service){
+const DeleteServiceController = async (id) => {
+  const service = await Service.findByPk(id);
+  if (!service) {
     return {
       error: true,
       response: `service not found`,
     };
   }
-  service.isDelete=!service.isDelete
-  service.save()
-  return service
-}
+  service.isDelete = !service.isDelete;
+  service.save();
+  return service;
+};
 
 module.exports = {
   addServiceController,
@@ -265,5 +265,5 @@ module.exports = {
   getServiceByModelController,
   getFilterServiceController,
   DeleteServiceController,
-  GetUndeletedServicesController
+  GetUndeletedServicesController,
 };
