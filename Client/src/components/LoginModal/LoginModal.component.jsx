@@ -1,5 +1,5 @@
 //HOKKS
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 //MATERIAL UI
@@ -28,6 +28,7 @@ import { getUserById } from "../../services/userServices";
 import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
 import { fetchGetProduct } from "../../services/productServices";
+import { addItem } from "../../redux/slices/cartSlice";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -38,15 +39,14 @@ const LoginModal = ({
 }) => {
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const { items } = useSelector((state) => state.cart);
+  const cookiesAccepted = useSelector((state) => state.cookies);
 
   const handledispatch = async (userId) => {
     await getUserById(userId).then((data) => {
       dispatch(logUser({ userObject: data }));
-      if (items == 0) {
-        dispatch(fetchGetProduct(cookieStatus));
-      }
     });
+    await dispatch(fetchGetProduct(cookiesAccepted));
+    dispatch(addItem());
   };
 
   const loginManagement = async (username, address, cookieStatus) => {
@@ -59,7 +59,6 @@ const LoginModal = ({
     }
     !cookieStatus && rejectCookies();
     if (response.error) {
-    
       Swal.fire({
         allowOutsideClick: false,
         customClass: {

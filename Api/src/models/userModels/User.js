@@ -52,6 +52,13 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      communication_preference: {
+        type: DataTypes.STRING,
+        defaultValue: "Pendiente",
+        validate: {
+          isIn: [["Pendiente", "Email", "Whatsapp"]],
+        },
+      },
     },
     {
       timestamps: false,

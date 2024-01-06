@@ -48,7 +48,7 @@ const UserMenu = () => {
     clearPersistanceData(cookieStatus, true);
     dispatch(logoutUser());
     logOutUser();
-
+    window.localStorage.setItem("storedProducts", JSON.stringify([]));
     navigate(PATHROUTES.HOME);
   };
 

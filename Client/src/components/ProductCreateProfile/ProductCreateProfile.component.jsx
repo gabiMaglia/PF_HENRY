@@ -23,15 +23,24 @@ import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
 import validationsCreate from "../../helpers/productValidate";
 import { display } from "@mui/system";
+import { fetchBrands } from "../../services/brandsServices";
 
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
+  const { brands } = useSelector((state) => state.brands);
+  console.log(brands);
 
   const [isOtherCategory, setIsOtherCategory] = useState(false);
+  const [isOtherBrand, setIsOtherBrand] = useState(false);
+
   const [categoryName, setCategoryName] = useState("selecciona una categoria");
+  const [brand, setBrand] = useState("selecciona una marca");
+
   const [newCategory, setNewCategory] = useState("");
+  const [newBrand, setNewBrand] = useState("");
+
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
   const [errors, setErrors] = useState({});
@@ -44,12 +53,13 @@ const ProductCreateProfileComponent = () => {
     soldCount: "0",
     warranty: "",
     categoryName: isOtherCategory ? newCategory : categoryName,
-    brandName: "",
+    brandName: isOtherBrand ? newBrand : brand,
     images: [],
   });
   const [imagePreviews, setImagePreviews] = useState([]);
   useEffect(() => {
     fetchCategories(dispatch);
+    fetchBrands(dispatch);
   }, []);
   const handlerAddImage = ({ target }) => {
     setValues({
@@ -106,6 +116,21 @@ const ProductCreateProfileComponent = () => {
           categoryName: isOtherCategory ? [value] : prevValues.categoryName,
         }));
         break;
+      case "brandName":
+        setValues((prevValues) => ({
+          ...prevValues,
+          brandName: isOtherBrand ? newBrand : value,
+        }));
+        setIsOtherBrand(value === "otra");
+        break;
+
+      case "newBrand":
+        setNewBrand(value);
+        setValues((prevValues) => ({
+          ...prevValues,
+          brandName: isOtherBrand ? value : prevValues.brandName,
+        }));
+        break;
 
       default:
         setValues((prevValues) => {
@@ -114,7 +139,6 @@ const ProductCreateProfileComponent = () => {
         });
     }
 
-    // Realizar la validación después de cada caso
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
   };
@@ -239,14 +263,16 @@ const ProductCreateProfileComponent = () => {
         soldCount: "0",
         warranty: "",
         categoryName: isOtherCategory ? newCategory : [categoryName],
-        brandName: "",
+        brandName: isOtherBrand ? newBrand : brand,
         images: [],
       });
+      setBrand("selecciona una marca");
+      setCategoryName("selecciona una categoria");
       setImagePreviews([]);
       setImageURL("");
     }
   };
-
+  console.log(values);
   const handleRemoveImage = (index) => {
     setValues((prevValues) => {
       const updatedImages = [...prevValues.images];
@@ -282,275 +308,290 @@ const ProductCreateProfileComponent = () => {
       <Typography>
         Para crear un producto nuevo complete el siguiente formulario
       </Typography>
-      <FormControl
-        onSubmit={handleSubmit}
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          flexGrow: "1",
-          justifyContent: "space-around",
-        }}
-      >
-        <Box>
-          <TextField
-            name="name"
-            label="Nombre del producto"
-            value={values.name}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            fullWidth
-            helperText={errors.e1}
-            error={Boolean(errors.e1)}
-          />
-        </Box>
-        <Box>
-          <TextField
-            name="price"
-            label="precio del producto($)"
-            value={values.price}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            fullWidth
-            helperText={errors.e2 ? errors.e2 : errors.e9}
-            error={Boolean(errors.e2) || Boolean(errors.e9)}
-          />
-        </Box>
-        <Box>
-          <TextField
-            multiline
-            fullWidth
-            rows={2}
-            label="Descripción del producto"
-            name="description"
-            value={values.description}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            helperText={errors.e3}
-            error={Boolean(errors.e3)}
-          />
-        </Box>
-        <Box>
-          <TextField
-            name="warranty"
-            label="garantia del producto"
-            fullWidth
-            value={values.warranty}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            helperText={errors.e7}
-            error={Boolean(errors.e7)}
-          />
-        </Box>
-        <Box>
-          <TextField
-            name="stock"
-            label="unidades ingresadas"
-            value={values.stock}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            fullWidth
-            helperText={errors.e8 ? errors.e8 : errors.e10}
-            error={Boolean(errors.e8) || Boolean(errors.e10)}
-          />
-        </Box>
-        <Box>
-          <TextField
-            name="brandName"
-            label="marca"
-            value={values.brandName}
-            onChange={handleChange}
-            variant="outlined"
-            required
-            fullWidth
-            helperText={errors.e5}
-            error={Boolean(errors.e5)}
-          />
-        </Box>
-        <Box>
-          <Select
-            name="categoryName"
-            labelId="categoria del producto"
-            label="categoria"
-            value={isOtherCategory ? "otra" : values.categoryName}
-            onChange={handleChange}
-            variant="outlined"
-            fullWidth
-            error={Boolean(errors.e6)}
-          >
-            <MenuItem
-              value="selecciona una categoria"
-              sx={{
-                overflowY: "auto",
-              }}
-            >
-              selecciona una categoria
-            </MenuItem>
-            {categories.map((Category) => (
-              <MenuItem key={Category.name} value={Category.name}>
-                {Category.name}
-              </MenuItem>
-            ))}
-            <MenuItem value="otra">Otra</MenuItem>
-          </Select>
-          {errors.e6 && <Typography color="error">{errors.e6}</Typography>}
-          {isOtherCategory && (
+      <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            flexGrow: "1",
+            justifyContent: "space-around",
+          }}
+        >
+          <Box>
             <TextField
-              name="newCategory"
-              label="Nueva Categoria"
-              value={newCategory}
+              name="name"
+              label="Nombre del producto"
+              value={values.name}
               onChange={handleChange}
+              variant="outlined"
               required
+              fullWidth
+              helperText={errors.e1}
+              error={Boolean(errors.e1)}
+            />
+          </Box>
+          <Box>
+            <TextField
+              name="price"
+              label="Precio del producto($)"
+              value={values.price}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              fullWidth
+              helperText={errors.e2 ? errors.e2 : errors.e9}
+              error={Boolean(errors.e2) || Boolean(errors.e9)}
+            />
+          </Box>
+          <Box>
+            <TextField
+              multiline
+              fullWidth
+              rows={2}
+              label="Descripción del producto"
+              name="description"
+              value={values.description}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              helperText={errors.e3}
+              error={Boolean(errors.e3)}
+            />
+          </Box>
+          <Box>
+            <TextField
+              name="warranty"
+              label="Garantía del producto"
+              fullWidth
+              value={values.warranty}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              helperText={errors.e7}
+              error={Boolean(errors.e7)}
+            />
+          </Box>
+          <Box>
+            <TextField
+              name="stock"
+              label="Unidades ingresadas"
+              value={values.stock}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              fullWidth
+              helperText={errors.e8 ? errors.e8 : errors.e10}
+              error={Boolean(errors.e8) || Boolean(errors.e10)}
+            />
+          </Box>
+          <Box>
+            <Select
+              id="brandSelect"
+              name="brandName"
+              label="Marca"
+              value={isOtherBrand ? "otra" : values.brandName}
+              onChange={handleChange}
               variant="outlined"
               fullWidth
-            />
-          )}
-        </Box>
-        <Box>
-          {!isUrlInput ? (
-            <FormControl fullWidth>
-              <Input
-                type="file"
-                name="images"
-                inputProps={{ multiple: true }}
-                inputRef={fileInputRef}
-                onChange={handleChange}
-                sx={{
-                  padding: "15px",
-                  marginBottom: "10px",
-                  borderRadius: 2,
-                  backgroundColor: "#fd611a",
-                  color: "white",
-                }}
-              />
-              {errors.e4 && (
-                <Typography variant="caption" color="error">
-                  {errors.e4}
-                </Typography>
-              )}
-            </FormControl>
-          ) : (
-            <Box
-              sx={{
-                display: "flex",
-              }}
             >
+              <MenuItem value="selecciona una marca">
+                selecciona una marca
+              </MenuItem>
+              {[...brands]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((brand) => (
+                <MenuItem key={brand.name} value={brand.name}>
+                  {brand.name}
+                </MenuItem>
+              ))}
+              <MenuItem value="otra">Otra</MenuItem>
+            </Select>
+            {isOtherBrand && (
               <TextField
-                label="URL de la imagen"
-                name="imageUrl"
+                name="newBrand"
+                label="Nueva Marca"
+                value={newBrand}
+                onChange={handleChange}
                 required
                 variant="outlined"
-                onChange={handlerImageChange}
                 fullWidth
               />
-
-              <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  fullWidth
-                  sx={{ color: "white" }}
-                  onClick={(event) => handlerAddImage(event)}
-                >
-                  insertar URL
-                </Button>
-              </Box>
-            </Box>
-          )}
-          {errors.e4 && isUrlInput ? (
-            <Typography variant="caption" color="error">
-              Ingrese una URL valida
-            </Typography>
-          ) : null}
-          <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
-            <Button
-              variant="outlined"
-              color="inherit"
-              fullWidth
-              sx={{ color: "white" }}
-              onClick={() => setIsUrlInput(!isUrlInput)}
-            >
-              {!isUrlInput ? "Ingresar URL" : "Cargar desde archivo"}
-            </Button>
+            )}
           </Box>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-evenly",
-            }}
-          >
-            {imagePreviews.map((preview, index) => (
-              <Button
-                key={index}
-                onClick={() => handleRemoveImage(index)}
+          <Box>
+            <Select
+              id="categorySelect"
+              name="categoryName"
+              label="Categoria"
+              value={isOtherCategory ? "otra" : values.categoryName}
+              onChange={handleChange}
+              variant="outlined"
+              fullWidth
+              error={Boolean(errors.e6)}
+            >
+              <MenuItem value="selecciona una categoria">
+                selecciona una categoria
+              </MenuItem>
+              {categories.map((category) => (
+                <MenuItem key={category.name} value={category.name}>
+                  {category.name}
+                </MenuItem>
+              ))}
+              <MenuItem value="otra">Otra</MenuItem>
+            </Select>
+            {errors.e6 && <Typography color="error">{errors.e6}</Typography>}
+            {isOtherCategory && (
+              <TextField
+                name="newCategory"
+                label="Nueva Categoria"
+                value={newCategory}
+                onChange={handleChange}
+                required
+                variant="outlined"
+                fullWidth
+              />
+            )}
+          </Box>
+          <Box>
+            {!isUrlInput ? (
+              <FormControl fullWidth>
+                <Input
+                  type="file"
+                  name="images"
+                  inputProps={{ multiple: true }}
+                  inputRef={fileInputRef}
+                  onChange={handleChange}
+                  sx={{
+                    padding: "15px",
+                    marginBottom: "10px",
+                    borderRadius: 2,
+                    backgroundColor: "#fd611a",
+                    color: "white",
+                  }}
+                />
+                {errors.e4 && (
+                  <Typography variant="caption" color="error">
+                    {errors.e4}
+                  </Typography>
+                )}
+              </FormControl>
+            ) : (
+              <Box
                 sx={{
-                  ":hover": {
-                    transform: "scale(1.2,1.2)",
-                    margin: "10px",
-                    "& .MuiIconButton-root": { display: "block" },
-                    backgroundColor: "rgba(255, 0, 0, 0.2)",
-                  },
-                  maxWidth: "100px",
-                  maxHeight: "100px",
-                  transition: "1s",
+                  display: "flex",
                 }}
               >
-                <DeleteIcon
-                  sx={{
-                    position: "absolute",
-                    top: "50%",
-                    right: "50%",
-                    display: "none",
-                    width: "50px",
-                    height: "50px",
-                    color: "black",
-                    transform: "translate(50%, -50%)",
-                  }}
-                  className="MuiIconButton-root"
+                <TextField
+                  label="URL de la imagen"
+                  name="imageUrl"
+                  value={imageURL}
+                  required
+                  variant="outlined"
+                  onChange={handlerImageChange}
+                  fullWidth
                 />
-                <img
-                  key={index}
-                  src={preview}
-                  alt={`Preview-${index}`}
-                  style={{
-                    maxWidth: "100px",
-                    maxHeight: "100px",
-                  }}
-                />
+                <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
+                  <Button
+                    variant="outlined"
+                    color="inherit"
+                    fullWidth
+                    sx={{ color: "white" }}
+                    onClick={(event) => handlerAddImage(event)}
+                  >
+                    insertar URL
+                  </Button>
+                </Box>
+              </Box>
+            )}
+            {errors.e4 && isUrlInput ? (
+              <Typography variant="caption" color="error">
+                Ingrese una URL valida
+              </Typography>
+            ) : null}
+            <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                fullWidth
+                sx={{ color: "white" }}
+                onClick={() => setIsUrlInput(!isUrlInput)}
+              >
+                {!isUrlInput ? "Ingresar URL" : "Cargar desde archivo"}
               </Button>
-            ))}
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                {imagePreviews.map((preview, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => handleRemoveImage(index)}
+                    sx={{
+                      ":hover": {
+                        transform: "scale(1.2,1.2)",
+                        margin: "10px",
+                        "& .MuiIconButton-root": { display: "block" },
+                        backgroundColor: "rgba(255, 0, 0, 0.2)",
+                      },
+                      maxWidth: "100px",
+                      maxHeight: "100px",
+                      transition: "1s",
+                    }}
+                  >
+                    <DeleteIcon
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "50%",
+                        display: "none",
+                        width: "50px",
+                        height: "50px",
+                        color: "black",
+                        transform: "translate(50%, -50%)",
+                      }}
+                      className="MuiIconButton-root"
+                    />
+                    <img
+                      key={index}
+                      src={preview}
+                      alt={`Preview-${index}`}
+                      style={{
+                        maxWidth: "100px",
+                        maxHeight: "100px",
+                      }}
+                    />
+                  </Button>
+                ))}
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              ></Box>
+            </Box>
+            <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
+              <Button
+                type="submit"
+                variant="outlined"
+                color="inherit"
+                fullWidth
+                sx={{ color: "white" }}
+              >
+                Crear Producto
+              </Button>
+            </Box>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          ></Box>
         </Box>
-        <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
-          <Button
-            type="submit"
-            onClick={handleSubmit}
-            variant="outlined"
-            color="inherit"
-            fullWidth
-            sx={{ color: "white" }}
-          >
-            Crear Producto
-          </Button>
-        </Box>
-      </FormControl>
+      </form>
     </Box>
   );
 };
-
 export default ProductCreateProfileComponent;

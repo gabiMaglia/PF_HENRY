@@ -89,6 +89,7 @@ const editUserByIdHandler = async (req, res) => {
     userAddress,
     role,
     userCredentials,
+    communication_preference,
   } = req.body;
   const { id } = req.params;
 
@@ -104,6 +105,7 @@ const editUserByIdHandler = async (req, res) => {
       image,
       userAddress,
       role,
+      communication_preference,
       userCredentials
     );
 
