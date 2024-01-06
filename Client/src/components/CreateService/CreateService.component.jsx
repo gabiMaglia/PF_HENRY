@@ -170,53 +170,82 @@ const CreateService = () => {
         actErrors.client === "" &&
         actErrors.technician === ""
       ) {
-        let response = undefined;
-        if (authData.userRole === "admin") {
-          response = await createNewService(
-            //Crea el servicio si es admin
-            productInfo,
-            productInfo.technicianId,
-            imageUrl
-          );
-        } else if (authData.userRole === "technician") {
-          response = await createNewService(
-            // Crea el servicio si es tecnico
-            productInfo,
-            authData.userId,
-            imageUrl
-          );
-        }
-        if (!response.error && response.status === 200) {
-          // Exito
-          Swal.fire({
-            showCancelButton: authData.userRole === "technician",
-            icon: "success",
-            title: "Servicio creado exitosamente",
-            text:
-              authData.userRole === "technician" &&
-              "Para continuar con la reparación diríjase a: Productos en servicio",
+        let validDate = true;
+        let date = productInfo.product_income_date.split("-");
+        date = new Date(date[0], date[1] - 1, date[2], 23, 59, 59);
+        if (date < new Date()) {
+          await Swal.fire({
+            showCancelButton: true,
+            icon: "warning",
+            title: "Fecha anterior a la actual",
+            text: "¿Quieres continuar de todos modos?",
             confirmButtonText: "Continuar",
             confirmButtonColor: "#fd611a",
-            cancelButtonText: "Quedarse en el formulario",
-          }).then((value) => {
+            cancelButtonText: "Modificar",
+          }).then(async (value) => {
             if (value.isConfirmed) {
-              navigate(
-                authData.userRole === "admin"
-                  ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_CREATE
-                  : PATHROUTES.TECHNICIAN_USER_PANEL +
-                      PATHROUTES.PRODUCTS_SERVICES
-              );
+              validDate = true;
+            } else {
+              validDate = false;
             }
-            resetForm();
           });
-        } else {
-          //Falla en creacion
+        }
+        if (validDate) {
           Swal.fire({
+            icon: "info",
             allowOutsideClick: false,
-            icon: "error",
-            title: "Error en la creación del servicio",
-            text: `${response.response.data}`,
+            title: "Por favor espere mientras procesamos la información",
+            showConfirmButton: false,
           });
+          Swal.showLoading();
+          let response = undefined;
+          if (authData.userRole === "admin") {
+            response = await createNewService(
+              //Crea el servicio si es admin
+              productInfo,
+              productInfo.technicianId,
+              imageUrl
+            );
+          } else if (authData.userRole === "technician") {
+            response = await createNewService(
+              // Crea el servicio si es tecnico
+              productInfo,
+              authData.userId,
+              imageUrl
+            );
+          }
+          if (!response.error && response.status === 200) {
+            // Exito
+            Swal.fire({
+              showCancelButton: authData.userRole === "technician",
+              icon: "success",
+              title: "Servicio creado exitosamente",
+              text:
+                authData.userRole === "technician" &&
+                "Para continuar con la reparación diríjase a: Productos en servicio",
+              confirmButtonText: "Continuar",
+              confirmButtonColor: "#fd611a",
+              cancelButtonText: "Quedarse en el formulario",
+            }).then((value) => {
+              if (value.isConfirmed) {
+                navigate(
+                  authData.userRole === "admin"
+                    ? PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.SERVICE_CREATE
+                    : PATHROUTES.TECHNICIAN_USER_PANEL +
+                        PATHROUTES.PRODUCTS_SERVICES
+                );
+              }
+              resetForm();
+            });
+          } else {
+            //Falla en creacion
+            Swal.fire({
+              allowOutsideClick: false,
+              icon: "error",
+              title: "Error en la creación del servicio",
+              text: `${response.response.data}`,
+            });
+          }
         }
       } else {
         Swal.fire({
