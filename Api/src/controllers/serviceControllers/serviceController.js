@@ -230,8 +230,22 @@ const GetUndeletedServicesController=async()=>{
       response: `service not found`,
     };
   }
-  return services
+  const arrayOfServices = await Promise.all(
+    services.map(async (service) => {
+      return await Service.findByPk(service.id, {
+        include: [Service_status, Service_image],
+      });
+    })
+  );
+  return arrayOfServices;
 } 
+
+const DeleteService=async(id)=>{
+  const service=await service.findByPk(id)
+  service.isDelete=!service.isDelete
+  service.save()
+  return service
+}
 
 module.exports = {
   addServiceController,
@@ -241,4 +255,6 @@ module.exports = {
   getServiceByClientController,
   getServiceByModelController,
   getFilterServiceController,
+  DeleteService,
+  GetUndeletedServicesController
 };
