@@ -12,7 +12,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Container } from "@mui/system";
-import miVideo from "../CardCarousel/prueba.mp4";
+import miVideo from "/carousel/prueba.mp4";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
@@ -41,6 +41,10 @@ const CardCarousel = ({ allProducts }) => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
+  };
+
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
 
   return (
@@ -100,7 +104,7 @@ const CardCarousel = ({ allProducts }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center", // Alinea el contenido al centro
+                    alignItems: "center",
                     justifyContent: "center",
                     color: "white",
                     flex: "1",
@@ -110,11 +114,11 @@ const CardCarousel = ({ allProducts }) => {
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "center", // Alinea el contenido al centro
+                      alignItems: "center",
                       justifyContent: "center",
-                      width: "auto", // Ancho fijo para el contenedor del nombre
-                      height: "170px", // Alto fijo para el contenedor del nombre
-                      overflow: "hidden", // Oculta el contenido adicional si es demasiado largo
+                      width: "auto",
+                      height: "170px",
+                      overflow: "hidden",
                     }}
                   >
                     <Typography
@@ -157,7 +161,7 @@ const CardCarousel = ({ allProducts }) => {
                         animation: "blink 1s infinite", // Agregar la animación blink
                       }}
                     >
-                      PROMOCION: ${product.price}
+                      PROMOCION: {formatPrice(product.price)}
                     </Typography>
 
                     <style jsx>{`
