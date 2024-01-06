@@ -1,4 +1,10 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+//MATERIAL UI
 import {
   Card,
   CardContent,
@@ -7,12 +13,9 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Container } from "@mui/system";
-import miVideo from "../CardCarousel/prueba.mp4";
+//PUBLIC
+import miVideo from "/carousel/prueba.mp4";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
@@ -43,6 +46,10 @@ const CardCarousel = ({ allProducts }) => {
     autoplaySpeed: 5000,
   };
 
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   return (
     <Box
       sx={{
@@ -65,10 +72,10 @@ const CardCarousel = ({ allProducts }) => {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          opacity: 0.7, // Ajusta la opacidad según tus preferencias
-          zIndex: -1, // Mueve el video detrás del componente
+          opacity: 0.7,
+          zIndex: -1,
         }}
-        playbackRate={0.4}
+        playbackrate={0.4}
       >
         <source src={miVideo} type="video/mp4" />
         Tu navegador no soporta el elemento de video.
@@ -100,7 +107,7 @@ const CardCarousel = ({ allProducts }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center", // Alinea el contenido al centro
+                    alignItems: "center",
                     justifyContent: "center",
                     color: "white",
                     flex: "1",
@@ -110,11 +117,11 @@ const CardCarousel = ({ allProducts }) => {
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "center", // Alinea el contenido al centro
+                      alignItems: "center",
                       justifyContent: "center",
-                      width: "auto", // Ancho fijo para el contenedor del nombre
-                      height: "170px", // Alto fijo para el contenedor del nombre
-                      overflow: "hidden", // Oculta el contenido adicional si es demasiado largo
+                      width: "auto",
+                      height: "170px",
+                      overflow: "hidden",
                     }}
                   >
                     <Typography
@@ -154,13 +161,12 @@ const CardCarousel = ({ allProducts }) => {
                           md: "2rem",
                         },
                         marginLeft: "auto",
-                        animation: "blink 1s infinite", // Agregar la animación blink
+                        animation: "blink 1s infinite",
                       }}
                     >
-                      PROMOCION: ${product.price}
+                      PROMOCION: {formatPrice(product.price)}
                     </Typography>
-
-                    <style jsx>{`
+                    <style jsx="true">{`
                       @keyframes blink {
                         50%,
                         5%,
