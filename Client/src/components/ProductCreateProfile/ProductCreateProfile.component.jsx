@@ -398,7 +398,9 @@ const ProductCreateProfileComponent = () => {
               <MenuItem value="selecciona una marca">
                 selecciona una marca
               </MenuItem>
-              {brands.map((brand) => (
+              {[...brands]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((brand) => (
                 <MenuItem key={brand.name} value={brand.name}>
                   {brand.name}
                 </MenuItem>
