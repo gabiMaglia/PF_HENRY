@@ -13,12 +13,9 @@ import {
   Select,
 } from "@mui/material";
 import styled from "@emotion/styled";
-//UTILS
-// import { brands } from "../../utils/objectsTexts";
 //SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchBrands } from "../../services/brandsServices";
-// import { fetchProductsByBrand } from "../../services/productServices";
 //REDUX
 import {
   resetState,
