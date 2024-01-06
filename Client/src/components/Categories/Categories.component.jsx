@@ -13,12 +13,12 @@ import {
   Select,
 } from "@mui/material";
 import styled from "@emotion/styled";
-//DATA BASE
-import { fetchCategories } from "../../services/categoriesServices";
 //UTILS
 import { brands } from "../../utils/objectsTexts";
 //SERVICES
-import { fetchProductsByBrand } from "../../services/productServices";
+import { fetchCategories } from "../../services/categoriesServices";
+import { fetchBrands } from "../../services/brandsServices";
+// import { fetchProductsByBrand } from "../../services/productServices";
 //REDUX
 import {
   resetState,
@@ -30,6 +30,7 @@ import {
 const FiltersSorting = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
+  const { brands } = useSelector((state) => state.brands);
   const [selectedBrand, setSelectedBrand] = useState("default");
   const [selectedPrice, setSelectedPrice] = useState("default");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -98,6 +99,7 @@ const FiltersSorting = () => {
 
   useEffect(() => {
     dispatch(fetchCategories);
+    dispatch(fetchBrands);
   }, [dispatch]);
 
   return (
