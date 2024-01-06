@@ -1,17 +1,31 @@
-function validarFormatoImagen(rutaImagen) {
-    const extensionesValidas = ['.jpg', '.jpeg', '.png', '.gif'];
-    let extension = '';
+function validarImagen(url) {
+   return new Promise((resolve, reject) => {
+       const img = new Image();
+       img.onload = () => resolve(true);
+       img.onerror = () => resolve(false);
+       img.src = url;
+   });
+}
 
-    if (!rutaImagen.name&&rutaImagen.includes('http')) {
-        const url = new URL(rutaImagen);
-        const partesRuta = url.pathname.split('.');
-        extension = '.' + partesRuta[partesRuta.length - 1];
-    } else {
-        const partesRuta = rutaImagen.name.split('.');
-        extension = '.' + partesRuta[partesRuta.length - 1];
-    }
+async function validarFormatoImagen(rutaImagen) {
+   const extensionesValidas = ['.jpg', '.jpeg', '.png', '.gif'];
+   let extension = '';
 
-    return extensionesValidas.includes(extension.toLowerCase());
+   if (!rutaImagen.name && rutaImagen.includes('http')) {
+       const url = new URL(rutaImagen);
+       const partesRuta = url.pathname.split('.');
+       extension = '.' + partesRuta[partesRuta.length - 1];
+   } else {
+       const partesRuta = rutaImagen.name.split('.');
+       extension = '.' + partesRuta[partesRuta.length - 1];
+   }
+
+   if (extensionesValidas.includes(extension.toLowerCase())) {
+       const esImagenValida = await validarImagen(rutaImagen);
+       return esImagenValida;
+   } else {
+       return false;
+   }
 }
 const validationsCreate=(values)=>{
  const {name,price,description,images,brandName,categoryName,warranty,stock}=values
@@ -26,6 +40,9 @@ const validationsCreate=(values)=>{
  }
  if(description.length===0||description===''){
     error.e3='la descripcion del producto es requerida'
+ }
+ if(!images){
+   error.e11='Por Favor ingrese una imagen'
  }
  images.forEach((image)=>{
     if(!validarFormatoImagen(image)){
