@@ -65,6 +65,7 @@ const DetailProductService = ({
           : false;
       const product = {
         date: date,
+        communication_preference: response.data.communication_preference,
         status: response.data.Service_status.status,
         name: response.data.product_model,
         image: response.data.Service_images[0].address,
@@ -99,7 +100,7 @@ const DetailProductService = ({
     }
   };
 
-  const handleUpdateStatus = async (status, value, notification) => {
+  const handleUpdateStatus = async (updatedArray) => {
     if (
       data.statusPosition !== false &&
       (data.status !== "Esperando confirmación del cliente" ||
@@ -114,24 +115,26 @@ const DetailProductService = ({
         showConfirmButton: false,
       });
       Swal.showLoading();
-      const response = await updateServiceStatus(data.statusId, status, value);
+      let response = await updateServiceStatus(data.statusId, updatedArray); // ACA
+      response?.length > 0 && (response = response[response.length - 1]);
+      console.log(response);
       if (response?.error) {
+        Swal.hideLoading();
         Swal.fire({
           allowOutsideClick: false,
           icon: "error",
           title: "Error en la actualización del servicio",
-          text: `${response?.error?.response?.statusText}`,
+          text: `${response?.response?.message}`,
         });
         return false;
       } else {
-        notification
-          ? Swal.fire({
-              allowOutsideClick: false,
-              icon: "success",
-              title: "Servicio actualizado",
-              text: `${response?.data}`,
-            })
-          : Swal.close();
+        Swal.hideLoading();
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "success",
+          title: "Servicio actualizado",
+          text: `${response?.data}`,
+        });
         getService();
         return true;
       }
@@ -192,16 +195,16 @@ const DetailProductService = ({
           }
         });
         Swal.showLoading();
-        response = await handleUpdateStatus("budget", `$${newBudget}`);
+        response = await handleUpdateStatus([
+          { status: "budget", value: `$${newBudget}` },
+          { status: "technical_diagnosis", value: newDiagnosis },
+        ]);
         Swal.showLoading();
-        response = await handleUpdateStatus(
-          "technical_diagnosis",
-          newDiagnosis
-        );
       } else {
         response = true;
       }
     } else if (data.status === "Pruebas finales") {
+      console.log("Pruebas finales");
       if (final_diagnosis === "Pendiente") {
         response = false;
         await Swal.fire({
@@ -217,15 +220,18 @@ const DetailProductService = ({
               return "Debe ingresar el informe para continuar";
             } else {
               Swal.showLoading();
-              response = await handleUpdateStatus("final_diagnosis", value);
+              response = await handleUpdateStatus([
+                { status: "final_diagnosis", value: value },
+              ]);
             }
           },
         });
+      } else {
+        response = true;
       }
     } else {
       response = true;
     }
-    console.log(response);
     return response;
   };
 
@@ -235,38 +241,44 @@ const DetailProductService = ({
       case "next":
         const response = await updateValidate();
         if (response === true) {
-          await handleUpdateStatus(
-            "status",
-            serviceStatuses.progress[data.statusPosition + 1],
-            false
-          );
+          await handleUpdateStatus([
+            {
+              status: "status",
+              value: serviceStatuses.progress[data.statusPosition + 1],
+            },
+          ]);
         }
         break;
       case "prev":
-        await handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition - 1],
-          true
-        );
+        await handleUpdateStatus([
+          {
+            status: "status",
+            value: serviceStatuses.progress[data.statusPosition - 1],
+          },
+        ]);
         break;
       case "cancel":
-        await handleUpdateStatus("confirm_repair", false, false);
-        await handleUpdateStatus("status", serviceStatuses.cancel, true);
+        await handleUpdateStatus([
+          { status: "confirm_repair", value: false },
+          { status: "status", value: serviceStatuses.cancel },
+        ]);
         break;
       case "approve":
-        await handleUpdateStatus("confirm_repair", true, false);
-        await handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition + 1],
-          true
-        );
+        await handleUpdateStatus([
+          { status: "confirm_repair", value: true },
+          {
+            status: "status",
+            value: serviceStatuses.progress[data.statusPosition + 1],
+          },
+        ]);
         break;
       case "finished":
-        await handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition + 1],
-          true
-        );
+        await handleUpdateStatus([
+          {
+            status: "status",
+            value: serviceStatuses.progress[data.statusPosition + 1],
+          },
+        ]);
         break;
       default:
         break;
