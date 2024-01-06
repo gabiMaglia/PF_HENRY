@@ -72,16 +72,32 @@ const NavBar = () => {
               vertical: "top",
               horizontal: "left",
             }}
+        
             open={Boolean(anchorElNav)}
             onClose={handleCloseNavMenu}
             sx={{
               display: { xs: "block", md: "none" },
+             
+            }}
+            PaperProps={{
+              sx: {
+                width: '100%',
+              },
             }}
           >
             {navPages.map((item, i) => (
-              <MenuItem key={i} onClick={handleCloseNavMenu}>
-                <Link to={item.link} style={{ textDecoration: "none" }}>
-                  <Typography textAlign="center">{item.text}</Typography>
+          
+              <MenuItem
+                key={i}
+                onClick={handleCloseNavMenu}
+              >
+                <Link
+                  to={item.link}
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  <Typography variant="h6">
+                    {item.text}
+                  </Typography>
                 </Link>
               </MenuItem>
             ))}
@@ -92,7 +108,7 @@ const NavBar = () => {
             flexGrow: 1,
             display: { xs: "none", md: "flex" },
             justifyContent: "space-evenly",
-            height: 40,
+            height: 40
           }}
         >
           {navPages.map((item, i) => (
@@ -100,6 +116,7 @@ const NavBar = () => {
               <Button
                 key={i}
                 onClick={handleCloseNavMenu}
+                variant="h6"
                 sx={{
                   height: 10,
                   my: 2,

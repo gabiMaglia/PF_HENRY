@@ -70,7 +70,7 @@ export const updateServiceStatus = async (id, status, value) => {
       withCredentials: true,
     }
   );
-  console.log(response);
+  return response;
 };
 
 //Estaba de antes no lo quise borrar por las dudas

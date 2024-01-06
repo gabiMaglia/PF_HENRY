@@ -5,6 +5,7 @@ const PATHROUTES = {
   QUESTIONS: "/questions",
   DETAIL: "/product/:id",
   CATEGORIES: "/products/filters/:categoryName",
+  REVIEW: "/review",
   //USER PANEL
   CUSTOMER_USER_PANEL: "/customer/userPanel",
   ADMIN_USER_PANEL: "/admin/userPanel",
@@ -19,8 +20,9 @@ const PATHROUTES = {
   PRODUCT_CREATE: "/productCreate",
   USERS_LIST: "/usersList",
   PRODUCTS_LIST: "/productsList",
+  SERVICE_LIST:"/servicesList",
   //TECHNICIAN
-  CREATE_SERVICES: "/createServices",
+  SERVICE_CREATE: "/serviceCreate",
 };
 
 export default PATHROUTES;

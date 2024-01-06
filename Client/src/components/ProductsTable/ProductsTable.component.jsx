@@ -23,15 +23,26 @@ import Swal from "sweetalert2";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
-  { field: "name", headerName: "Nombre", width: 350, headerAlign: "center", editable: true },
-  { field: "price", headerName: "Precio", width: 80, headerAlign: "center", editable: true },
+  {
+    field: "name",
+    headerName: "Nombre",
+    width: 350,
+    headerAlign: "center",
+    editable: true,
+  },
+  {
+    field: "price",
+    headerName: "Precio",
+    width: 80,
+    headerAlign: "center",
+    editable: true,
+  },
   {
     field: "warranty",
     headerName: "Garantía",
-    type: "number",
     width: 100,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
   {
     field: "is_deleted",
@@ -39,29 +50,35 @@ const columns = [
     type: Boolean,
     width: 100,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
   {
     field: "soldCount",
     headerName: "Vendidos",
     width: 80,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
-  { field: "brand", headerName: "Marca", width: 150, headerAlign: "center", editable: true },
+  {
+    field: "brand",
+    headerName: "Marca",
+    width: 150,
+    headerAlign: "center",
+    editable: true,
+  },
   {
     field: "category",
     headerName: "Categoría",
     width: 150,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
   {
     field: "stock",
     headerName: "Stock",
     width: 150,
     headerAlign: "center",
-    editable: true
+    editable: true,
   },
 ];
 
@@ -84,7 +101,21 @@ const ProductsTable = () => {
       const response = await axios.get(`${urlBack}/product/`, {
         withCredentials: true,
       });
-      setProducts(response.data);
+      const newProducts = response.data.map((product) => {
+        return {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          warranty: product.warranty,
+          souldCount: product.soldCount,
+          is_deleted: product.is_deleted,
+          brand: product.ProductBrands[0].name,
+          category: product.ProductCategories[0].name,
+          stock: product.ProductStock.amount,
+        };
+      });
+
+      setProducts(newProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
       setError("Error al obtener productos");
@@ -145,65 +176,43 @@ const ProductsTable = () => {
     }
   };
 
-  const productsWithBrandAndCategory = products.map((product) => {
-    const brand =
-      product.ProductBrands.length > 0
-        ? product.ProductBrands[0].name
-        : "Sin marca";
-    const category =
-      product.ProductCategories.length > 0
-        ? product.ProductCategories[0].name
-        : "Sin categoría";
-    const stock = product.ProductStock?.amount || 0;
-    return {
-      ...product,
-      brand,
-      category,
-      stock,
-    };
-  });
-
-  const processRowUpdate = async (newRows) => {
+  const processRowUpdate = async (newRow) => {
     try {
-      const productId = newRows.id;
-      const updateProduct = {
-        name: newRows.name,
-        price: newRows.price,
-        warranty: newRows.warranty,
-        soldCount: newRows.soldCount,
-        ProductStock: newRows.ProductStock,
-        ProductCategory: newRows.ProductCategory,
-        ProductBrand: newRows.ProductBrand,
-      };
-      const response = await fetchUpdateProduct(productId, updateProduct);
-      if (response.status === 200) {
-        setRows((prevRows) =>
+      if (availableModify) {
+        Swal.fire({
+          icon: "info",
+          allowOutsideClick: false,
+          title: "Por favor espere mientras procesamos la información",
+          showConfirmButton: false,
+        });
+        Swal.showLoading();
+        setAvailableModify(false);
+        const productId = newRow.id;
+
+        const response = await fetchUpdateProduct(productId, newRow);
+        if (response.status === 200) {
+          setRows((prevRows) =>
             prevRows.map((row) =>
-              row.id === editingRow.current?.id ? newRows : row
+              row.id === editingRow.current?.id ? newRow : row
             )
           );
-        Swal.fire({
-          icon: "success",
-          title: "Edición exitosa",
-          text: "El producto ha sido editado correctamente.",
-        });
-        await getProducts();
-        return newRows;
-      } else {
-        console.error("Error al actualizar el producto:", response.message);
-        Swal.fire({
-          icon: "error",
-          title: "Error al actualizar el producto",
-          text: "Ha ocurrido un error al intentar actualizar el producto.",
-        });
+          setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+              product.id === newRow.id ? { ...product, ...newRow } : product
+            )
+          );
+          Swal.fire({
+            icon: "success",
+            title: "Edición exitosa",
+            text: "El producto ha sido editado correctamente.",
+          });
+          return newRow;
+        } else {
+          throw new Error("Error al actualizar el producto", response.message);
+        }
       }
     } catch (error) {
-      console.error("Error al actualizar el producto:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error al actualizar el producto",
-        text: "Ha ocurrido un error al intentar actualizar el producto.",
-      });
+      throw new Error("Error al comunicarse con el servidor", error);
     }
   };
 
@@ -263,7 +272,7 @@ const ProductsTable = () => {
         checkboxSelection
         disableRowSelectionOnClick
         rowSelectionModel={rowSelected}
-        rows={productsWithBrandAndCategory}
+        rows={products}
         columns={columns}
         pageSize={5}
         localeText={language.components.MuiDataGrid.defaultProps.localeText}

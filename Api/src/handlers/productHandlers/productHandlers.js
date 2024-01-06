@@ -158,7 +158,14 @@ const searchByNameHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
+const getProductsCarouselHandler = async (req, res) => {
+  try {
+    const products = await productCarousel();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 module.exports = {
   postProductHandler,
   getProductsHandler,
@@ -168,4 +175,5 @@ module.exports = {
   getProductByIdHandler,
   searchByNameHandler,
   postProductSeveralHandler,
+  getProductsCarouselHandler,
 };

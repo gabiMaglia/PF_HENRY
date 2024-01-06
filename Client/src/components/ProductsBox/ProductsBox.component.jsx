@@ -98,6 +98,7 @@ const ProductBox = () => {
           }}
         />
         <Typography
+          variant="body1"
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -117,10 +118,14 @@ const ProductBox = () => {
         flexDirection: "row",
         gap: 4,
         mt: 2,
+        p: 2,
+        minHeight: '25vw',
+       
       }}
     >
       {isThereAnyProducts ? (
         <Typography
+          variant="body1"
           sx={{
             display: "grid",
             gridColumnStart: 1,

@@ -33,5 +33,9 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    carousel: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   });
 };

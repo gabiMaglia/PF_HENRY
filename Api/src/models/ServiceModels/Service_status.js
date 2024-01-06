@@ -14,11 +14,11 @@ module.exports = (sequelize) => {
     },
     technical_diagnosis: {
       type: DataTypes.STRING,
-      allowNull: false,
+      defaultValue: "Pendiente",
     },
     final_diagnosis: {
       type: DataTypes.STRING,
-      allowNull: false,
+      defaultValue: "Pendiente",
     },
     budget: {
       type: DataTypes.STRING,

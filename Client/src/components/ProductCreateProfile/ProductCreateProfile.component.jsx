@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 //MATERIAL UI
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   FormControl,
   Box,
@@ -171,9 +171,9 @@ const ProductCreateProfileComponent = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     let array = [];
-  
+
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
     if (Object.keys(errorObject).length !== 0) {
@@ -191,7 +191,7 @@ const ProductCreateProfileComponent = () => {
         const array2 = await handlerUpdateCloudinary("products");
         array = array2;
       }
-  
+
       if (array.error) {
         Swal.fire({
           icon: "error",
@@ -199,13 +199,13 @@ const ProductCreateProfileComponent = () => {
           text: "Por favor, inténtelo de nuevo.",
         });
       }
-  
+
       const obj = {
         ...values,
         images: array,
       };
       console.log(obj);
-  
+
       // Muestra una alerta de que la creación está en proceso
       Swal.fire({
         icon: "info",
@@ -213,22 +213,24 @@ const ProductCreateProfileComponent = () => {
         title: "Por favor espere mientras procesamos la información",
         showConfirmButton: false,
       });
-  
+
       const response = fetchAddProduct(obj, dispatch);
-      response.then((res) => {
-        Swal.close();
-        Swal.fire({
-          icon: "success",
-          title: "Producto creado exitosamente",
+      response
+        .then((res) => {
+          Swal.close();
+          Swal.fire({
+            icon: "success",
+            title: "Producto creado exitosamente",
+          });
+        })
+        .catch((err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Algo salio mal",
+            text: "Por favor, intente nuevamente",
+          });
         });
-      }).catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: "Algo salio mal",
-          text: "Por favor, intente nuevamente",
-        });
-      });
-  
+
       setValues({
         name: "",
         price: "",
@@ -487,6 +489,7 @@ const ProductCreateProfileComponent = () => {
           >
             {imagePreviews.map((preview, index) => (
               <Button
+                key={index}
                 onClick={() => handleRemoveImage(index)}
                 sx={{
                   ":hover": {
@@ -497,7 +500,7 @@ const ProductCreateProfileComponent = () => {
                   },
                   maxWidth: "100px",
                   maxHeight: "100px",
-                  transition:"1s"
+                  transition: "1s",
                 }}
               >
                 <DeleteIcon
@@ -506,9 +509,9 @@ const ProductCreateProfileComponent = () => {
                     top: "50%",
                     right: "50%",
                     display: "none",
-                    width:"50px",
-                    height:"50px",
-                    color:"black",
+                    width: "50px",
+                    height: "50px",
+                    color: "black",
                     transform: "translate(50%, -50%)",
                   }}
                   className="MuiIconButton-root"

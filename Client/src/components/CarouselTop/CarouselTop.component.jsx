@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Card } from "@mui/material";
+import { Box } from "@mui/material";
 import CardCarousel from "../CardCarousel/CardCarousel.component";
 import { fetchAllProducts } from "../../services/productServices";
 

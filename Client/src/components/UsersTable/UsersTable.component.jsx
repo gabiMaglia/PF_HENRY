@@ -258,7 +258,6 @@ const UsersTable = () => {
           throw new Error(response.response.data);
         }
       } else {
-        console.log("error");
         throw new Error("El rol ingresado no es válido");
       }
     }

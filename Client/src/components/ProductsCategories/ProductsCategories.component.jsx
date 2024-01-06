@@ -45,19 +45,34 @@ const ProductsCategoriesComponent = () => {
         </Box>
       ) : (
         <Box>
+          <Box
+            sx={{
+            backgroundColor: "#000",
+            width: "100%",
+            height: "120px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          >
           <Typography
+            variant="h4"
+            sx={{
+              color: "#fff",
+              textTransform: "uppercase",
+              fontWeight: "900",
+            }}
             fontWeight={"bold"}
             fontSize={24}
+            m={4}
             align={"center"}
-            sx={{
-              padding: "30px",
-            }}
           >
             <span style={{ textTransform: "uppercase", fontWeight: "900" }}>
               Productos de la categoría:
             </span>{" "}
             {categoryName}
           </Typography>
+          </Box>
           <Box
             sx={{
               display: "flex",
@@ -66,8 +81,9 @@ const ProductsCategoriesComponent = () => {
               justifyContent: "center",
               padding: "0 50px 50px 50px",
               gap: "20px 70px",
-              width: "75%",
-              margin: "auto",
+              width: "85%",
+              marginInline: "auto",
+              p:4
             }}
           >
             {categoryProducts.map((product) => (
@@ -79,7 +95,6 @@ const ProductsCategoriesComponent = () => {
                   padding: 0,
                   m: 1,
                   cursor: "pointer",
-                  margin: 0,
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "space-between",

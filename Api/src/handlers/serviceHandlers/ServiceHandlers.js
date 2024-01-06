@@ -6,6 +6,8 @@ const {
   getServiceByClientController,
   getServiceByModelController,
   getFilterServiceController,
+  DeleteServiceController,
+  GetUndeletedServicesController
 } = require("../../controllers/serviceControllers/serviceController");
 
 const addServiceHandler = async (req, res) => {
@@ -59,6 +61,7 @@ const updateServiceStatus = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 const getAllServices = async (req, res) => {
   const { model } = req.query;
   if (!model) {
@@ -122,6 +125,33 @@ const getFilterService = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getUndeletedService=async(req,res)=>{
+  try{
+    const services=await GetUndeletedServicesController()
+    if (services.error) {
+      return res.status(404).json(services.response);
+    }
+    res.status(200).json(services);
+
+  }catch(error){
+    res.status(500).json({ error: error.message });
+
+  }
+}
+const deleteService=async(req,res)=>{
+  const {id}=req.params
+  try {
+    const service= await DeleteServiceController(id)
+    if (service.error) {
+      return res.status(404).json(service.response);
+    }
+    res.status(200).json(service);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    
+  }
+}
 
 module.exports = {
   addServiceHandler,
@@ -130,4 +160,6 @@ module.exports = {
   getServiceById,
   getServiceByClientid,
   getFilterService,
+  getUndeletedService,
+  deleteService
 };

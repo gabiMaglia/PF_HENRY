@@ -20,7 +20,6 @@ const mercadopagoWebhookHandler = async (req, res) => {
   try {
     const paymentId = req.body;
     await handlePaymentNotification(paymentId);
-    console.log("paymentID:" + paymentId);
     res.status(200).json(paymentId);
   } catch (error) {
     console.error("Error en el manejador de webhook de MercadoPago:", error);

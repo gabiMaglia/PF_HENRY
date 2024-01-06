@@ -3,7 +3,6 @@ const { verifyToken } = require("../jwt/tokenGenerator.js");
 function extractJwtToken(inputString) {
   const jwt = inputString.split(' ').pop()
   return jwt
-
 }
 
 // MIDDLEWARE QUE CHEKEA TOKEN
@@ -12,6 +11,7 @@ const checkAuthToken = async (req, res, next) => {
       const token = req.cookies.jwt
     ? req.cookies.jwt
     : extractJwtToken(req.headers.authorization)
+
     const tokenData = await verifyToken(token);
     if (!tokenData?.userId) {
       res.status(409);

@@ -1,10 +1,9 @@
 //MATERIAL UI
 import { Box, Typography, Divider, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 
 import sortCardByDate from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
@@ -88,9 +87,32 @@ const buttons = [
 ];
 
 const ShoppingProfileComponent = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [cardPerDates, setCardPerDates] = useState([]);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const param = queryParams.get("success");
+    if (param) {
+      console.log(param);
+      Swal.fire({
+        icon: "success",
+        title: "Gracias por elegir HyperMegaRed",
+        text: "¡Esperamos que disfrutes de tu nuevo producto!",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ir a inicio",
+        cancelButtonText: "Quedarse en mis compras",
+        cancelButtonColor: "green",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(PATHROUTES.HOME);
+          window.scrollTo(0, 0);
+        }
+      });
+    }
+  }, []);
 
   useEffect(() => {
     let newCardsPerDates = sortCardByDate(cardsContent, [...cardPerDates]);
