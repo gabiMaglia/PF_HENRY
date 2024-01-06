@@ -184,7 +184,7 @@ const FiltersSorting = () => {
                 Marca
               </Options>
               {brands.map((brand) => (
-                <Options key={brand.id} value={brand.id}>
+                <Options key={brand.name} value={brand.name}>
                   {brand.name}
                 </Options>
               ))}
