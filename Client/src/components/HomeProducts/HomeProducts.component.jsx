@@ -74,6 +74,7 @@ const HomeProducts = ({ allProducts }) => {
           }}
         />
         <Typography
+          variant="body1"
           sx={{
             display: "flex",
             justifyContent: "center",

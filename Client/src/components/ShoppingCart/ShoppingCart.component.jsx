@@ -82,7 +82,7 @@ export default function ShoppingCart() {
   const handleChange = (productId, value) => {
     const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
-    dispatch(fetchCount({ id: productId, count: newValue }), cookiesAccepted);
+    dispatch(fetchCount({ id: productId, count: newValue }, cookiesAccepted));
   };
 
   const handleIncrement = (productId) => {

@@ -31,7 +31,7 @@ async function postCart(userId, productId, productQuantity) {
       await cart.addProduct(product, {
         through: { quantity: productQuantity },
       });
-      cart.cartTotal = product.price;
+      cart.cartTotal = product.price * productQuantity;
       return cart;
     }
   } catch (error) {
@@ -233,20 +233,29 @@ const getCartById = async (userId) => {
   }
 };
 
-const deleteCartById = async (id) => {
+const deleteCartById = async (userId) => {
   try {
-    const cartToDelete = await Cart.findByPk(id);
+    const cartToDelete = await Cart.findOne({
+      where: {
+        UserId: userId,
+      },
+    });
 
-    await cartToDelete.destroy();
-    return { cartToDelete, deleted: true };
+    if (cartToDelete) {
+      await cartToDelete.destroy();
+      return { cartToDelete, deleted: true };
+    } else {
+      return { deleted: false, message: "Carrito no encontrado" };
+    }
   } catch (error) {
     console.log(error);
+    return { deleted: false, error: error.message };
   }
 };
 
 const editQuantity = async (userId, productId, productQuantity, cartMoney) => {
   try {
-    let cartToUpdate = await Cart.findOne({
+    const cartToUpdate = await Cart.findOne({
       where: {
         UserId: userId,
       },
@@ -261,7 +270,6 @@ const editQuantity = async (userId, productId, productQuantity, cartMoney) => {
         },
       ],
     });
-
     if (cartToUpdate) {
       const existingProduct = cartToUpdate.Products.find(
         (product) => product.id === productId

@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, INTEGER } = require("sequelize");
 const {
   Product,
   ProductBrand,
@@ -248,7 +248,6 @@ const updateProduct = async (productId, updateData) => {
     );
     await Promise.all(
       updateData.ProductCategory.map(async (category) => {
-        console.log(category);
         const [existingCategory, createdCategory] =
           await ProductCategory.findOrCreate({
             where: { name: category },
@@ -261,6 +260,9 @@ const updateProduct = async (productId, updateData) => {
         }
       })
     );
+  }
+  if (typeof updateData?.price !== "number") {
+    updateData.price = Number(updateData.price);
   }
 
   await productToUpdate.update(updateData);
@@ -350,7 +352,22 @@ const searchByName = async (name) => {
     throw new Error(`Error en la búsqueda: ${error.message}`);
   }
 };
-
+const productCarousel = async () => {
+  try {
+    const allProducts = await Product.findAll({
+      where: { carousel: true },
+      include: [
+        { model: ProductBrand, attributes: ["name"] },
+        { model: ProductCategory, attributes: ["name"] },
+        { model: ProductImage, attributes: ["address"] },
+        { model: ProductStock, attributes: ["amount"] },
+      ],
+    });
+    return allProducts;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 module.exports = {
   logicalDelete,
   postProduct,
@@ -360,4 +377,5 @@ module.exports = {
   deleteProduct,
   getProductById,
   searchByName,
+  productCarousel,
 };

@@ -7,7 +7,7 @@ const {
 const {
   createOrderHandler,
   getAllOrdersHandler,
-
+  deleteOrdersHandler,
   deleteOrderHandler,
 
   misComprasHandler,
@@ -22,5 +22,6 @@ pagosRouter.get("/misCompras/:id", misComprasHandler);
 pagosRouter.post("/order", createOrderHandler);
 pagosRouter.delete("/order/:id", deleteOrderHandler);
 pagosRouter.get("/order", getAllOrdersHandler);
+pagosRouter.delete("/order", deleteOrdersHandler);
 
 module.exports = pagosRouter;

@@ -33,7 +33,7 @@ const ProductPrice = styled(Typography)({
   fontWeight: "bold",
   marginTop: "auto",
   marginBottom: 24,
-  fontSize: 28,
+  fontSize: 24,
 });
 
 const CardProduct = ({ product }) => {
@@ -82,6 +82,11 @@ const CardProduct = ({ product }) => {
       Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
     }
   };
+
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   return (
     <>
       <ProductCard
@@ -101,7 +106,7 @@ const CardProduct = ({ product }) => {
             <Typography
               variant="subtitle2"
               onClick={handleCategoryClick}
-              sx={{ paddingTop: "20px", zIndex: "1000" }}
+              sx={{ paddingTop: "20px", zIndex: "1000", borderBottom: '1px solid black' }}
             >
               <span
                 style={{
@@ -134,6 +139,8 @@ const CardProduct = ({ product }) => {
               alt={name}
               src={imageUrl}
               sx={{
+              
+               
                 cursor: "pointer",
                 transition: "transform 0.3s",
                 "&:hover": {
@@ -147,7 +154,7 @@ const CardProduct = ({ product }) => {
                 component="div"
                 color="textPrimary"
                 align="center"
-                sx={{ marginTop: "-20px" }}
+                sx={{fontSize: '18px', marginTop: "-20px" }}
               >
                 {name}
               </Typography>
@@ -157,8 +164,8 @@ const CardProduct = ({ product }) => {
               align="center"
               sx={{ fontWeight: "900" }}
             >
- ${price.toLocaleString('es-ES',{ minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-             </ProductPrice>
+              {formatPrice(price)}
+            </ProductPrice>
           </Box>
         </Link>
       </ProductCard>

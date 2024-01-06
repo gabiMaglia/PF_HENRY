@@ -82,25 +82,6 @@ export const fetchChage = (inputValue) => async (dispatch) => {
   }
 };
 
-// export const fetchCart = (items) => async (dispatch) => {
-//  const products = items.map((item) => ({
-//       title: item.name,
-//       quantity: item.count,
-//       unit_price: item.price * item.count,
-//       currency_id: "ARS"
-//     }));
-//   try {
-//     const response = await axios.post(`${urlBack}/pagos`, products, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//   });
-//     dispatch(idShop(response.data))
-//   } catch (error) {
-//     console.error("no mando el response", error);
-//   }
-// };
-
 export const fetchProduct = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId } = aux;
@@ -154,8 +135,8 @@ export const fetchGetProduct = (cookiesAccepted) => async () => {
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
+  console.log(cookiesAccepted);
   const { userId } = aux;
-
   const data = {
     userId: userId,
     productId: product.id,
@@ -191,14 +172,12 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
   const { userId } = aux;
-
   const products = items.map((item) => ({
     title: item.name,
     quantity: item.count,
-    unit_price: item.price * item.count,
+    unit_price: item.price,
     currency_id: "ARS",
   }));
-  console.log(products);
   try {
     const response = await axios.post(
       `${urlBack}/pagos/order`,
@@ -210,7 +189,6 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
         },
       }
     );
-    console.log(response.data.Order.preferenceId);
     dispatch(idShop(response.data.Order.preferenceId));
   } catch (error) {
     return;
@@ -240,18 +218,20 @@ export const logicalDeleteProduct = async (id) => {
   }
 };
 
-export const fetchUpdateProduct = async (id)=>{
+export const fetchUpdateProduct = async (id, updateProduct) => {
   try {
-    const response = await axios.put(`${urlBack}/product/${id}`, {
-      withCredentials: true,
-    });
-    console.log("Respuesta del backend:", response);
+    const response = await axios.put(
+      `${urlBack}/product/${id}`,
+      updateProduct,
+      {
+        withCredentials: true,
+      }
+    );
     return response;
   } catch (error) {
-    console.error("Error al actualizar el producto:", error);
     return { error: true, message: error.message };
   }
-}
+};
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
