@@ -180,7 +180,10 @@ const ProductsServicesProfile = () => {
   };
 
   useEffect(() => {
-    if (user?.communication_preference === "Pendiente") {
+    if (
+      user?.communication_preference === "Pendiente" &&
+      authData.userRole === "customer"
+    ) {
       Swal.fire({
         icon: "info",
         title: "Gracias por confiar en HyperMegaRed",
