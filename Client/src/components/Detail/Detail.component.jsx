@@ -184,6 +184,21 @@ const Detail = () => {
       setStoredProducts(productById);
       dispatch(addItem());
       dispatch(fetchProduct(productById, cookiesAccepted));
+      Swal.fire({
+        icon: "success",
+        title: "Producto agregado exitosamente",
+        text: "El producto ha sido agregado al carrito.",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ir al carrito",
+        cancelButtonText: "Seguir comprando",
+        cancelButtonColor: "green",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(PATHROUTES.SHOPCART);
+          window.scrollTo(0, 0);
+        }
+      });
     }
     // if (productById && productById.id) {
     //   setStoredProducts(productById);

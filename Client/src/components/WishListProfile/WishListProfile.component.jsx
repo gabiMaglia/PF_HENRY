@@ -11,7 +11,6 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
@@ -36,8 +35,7 @@ const WhishListProfileComponent = () => {
     backgroundColor: "black",
   };
 
-  const [storedProducts, setStoredProducts] = useLocalStorage();
-
+  const [isLoading, setIsLoading] = useState(true); //Estado de carga
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const login = useSelector((state) => state.user.login);
@@ -93,8 +91,6 @@ const WhishListProfileComponent = () => {
     })
   );
 
-  const [isLoading, setIsLoading] = useState(true); //Estado de carga
-
   const resetSelection = () => {
     const reset = wishListCards.map((card) => {
       return { id: card.id, status: false }; // Recarga del estado de seleccionados
@@ -103,14 +99,14 @@ const WhishListProfileComponent = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     chargeWishListProduct(); //Recarga del estado global Wishlist al iniciar el componente
   }, []);
 
   useEffect(() => {
     resetSelection();
     if (wishListCards[0] && wishListCards[0].ProductImages) {
-      //Si ya cargo las imagenes
-      setIsLoading(false); //Deja de cargar
+      setIsLoading(false);
     } else {
       chargeWishListProduct(); //Sino recarga el estado global
     }
@@ -164,7 +160,7 @@ const WhishListProfileComponent = () => {
         },
       }}
     >
-      {wishListCards.length === 0 ? (
+      {wishListCards.length === 0 && !isLoading ? (
         <Box
           sx={{
             width: "100%",
@@ -245,13 +241,16 @@ const WhishListProfileComponent = () => {
                       pb: "1em",
                     }}
                   >
-                    <Checkbox
-                      name={`${index}`}
-                      checked={cardStatus[index]?.status}
-                      onChange={handleChange}
-                    />
+                    {cardStatus?.length > 0 && (
+                      <Checkbox
+                        name={`${index}`}
+                        checked={cardStatus[index]?.status}
+                        onChange={handleChange}
+                      />
+                    )}
                     <Box sx={{ flexGrow: "1" }}>
                       <UserPanelProductCard
+                        setIsLoading={setIsLoading}
                         handleCardClick={handleCardClick}
                         actionParam={card}
                         product={{
