@@ -180,11 +180,13 @@ const FiltersSorting = () => {
               <Options value="default" disabled>
                 Marca
               </Options>
-              {brands.map((brand) => (
-                <Options key={brand.name} value={brand.name}>
-                  {brand.name}
-                </Options>
-              ))}
+              {[...brands]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((brand) => (
+                  <Options key={brand.name} value={brand.name}>
+                    {brand.name}
+                  </Options>
+                ))}
             </Selects>
           </FormControl>
           <FormControl
