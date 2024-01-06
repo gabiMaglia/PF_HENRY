@@ -35,6 +35,7 @@ const mercadoPago = async (array, idOrder) => {
 const handlePaymentNotification = async (paymentId) => {
   try {
     if (paymentId?.type === "payment") {
+      console.log(paymentId);
       const payment = await axios.get(
         `https://api.mercadopago.com/v1/payments/${paymentId.data.id}`,
         {
@@ -44,6 +45,7 @@ const handlePaymentNotification = async (paymentId) => {
           },
         }
       );
+
       if (payment.data.status === "approved") {
         const orderId = payment.data.metadata.id_order;
         const order = await Order.findByPk(orderId, {

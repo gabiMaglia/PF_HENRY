@@ -59,6 +59,7 @@ const updateServiceStatus = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 const getAllServices = async (req, res) => {
   const { model } = req.query;
   if (!model) {
