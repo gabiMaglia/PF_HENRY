@@ -32,6 +32,10 @@ export default function SearchAppBar() {
   const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
 
+  useEffect(() => {
+    dispatch(addItem());
+  }, [dispatch]);
+
   const Img = styled("img")({
     width: 140,
     height: 140,
