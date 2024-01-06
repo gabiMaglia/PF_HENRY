@@ -110,7 +110,8 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
 
 export const fetchGetProduct = (cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId } = aux;
+  const { userId, userRol } = aux;
+  if(userRol === "customer"){
   try {
     const res = await axios.get(`${urlBack}/cart/${userId}`, {
       withCredentials: true,
@@ -131,6 +132,7 @@ export const fetchGetProduct = (cookiesAccepted) => async () => {
   } catch (error) {
     return;
   }
+}
 };
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
@@ -153,13 +155,13 @@ export const fetchCount = (product, cookiesAccepted) => async () => {
 
 export const fetchDelete = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId, userRol } = aux;
+  const { userId } = aux;
 
   const data = {
     userId: userId,
     productId: product,
   };
-  if(userRol === "customer"){
+  
   try {
     
     const res = await axios.put(`${urlBack}/cart/remove`, data, {
@@ -168,7 +170,7 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
   
   } catch (error) {
     return;
-  } }
+  } 
 }
 
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
