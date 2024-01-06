@@ -7,6 +7,8 @@ const {
 // AUTH ROUTERS
 const accountRouter = require("./userRouter/accountRouter/accountRouter");
 const googleRouter = require("./userRouter/accountRouter/googleRoutes");
+// GOOGLEPLACE ROUTER
+const googlePlacesRoutes = require("./googlePlacesRoutes");
 // USER ROUTERS
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
@@ -35,7 +37,8 @@ const mainRouter = Router();
 // auth
 mainRouter.use("/account", accountRouter);
 mainRouter.use("/auth", googleRouter);
-
+// GoogleRoute
+mainRouter.use("/places", googlePlacesRoutes);
 // UserRoutes
 mainRouter.use("/user", userRoutes);
 mainRouter.use("/user_role", userRoleRoutes);
