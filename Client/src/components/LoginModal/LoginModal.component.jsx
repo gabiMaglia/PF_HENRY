@@ -46,7 +46,7 @@ const LoginModal = ({
       dispatch(logUser({ userObject: data }));
     });
     await dispatch(fetchGetProduct(cookiesAccepted));
-    await dispatch(addItem());
+    dispatch(addItem());
   };
 
   const loginManagement = async (username, address, cookieStatus) => {
