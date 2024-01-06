@@ -1,6 +1,6 @@
 //HOOKS
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
 import {
   Box,
@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import styled from "@emotion/styled";
 //DATA BASE
-import data from "../../DataBase/categories.json";
+import { fetchCategories } from "../../services/categoriesServices";
 //UTILS
 import { brands } from "../../utils/objectsTexts";
 //SERVICES
@@ -29,7 +29,7 @@ import {
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();
-  const { categories } = data;
+  const { categories } = useSelector((state) => state.categories);
   const [selectedBrand, setSelectedBrand] = useState("default");
   const [selectedPrice, setSelectedPrice] = useState("default");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -96,6 +96,10 @@ const FiltersSorting = () => {
     fontWeight: 700,
   });
 
+  useEffect(() => {
+    dispatch(fetchCategories);
+  }, [dispatch]);
+
   return (
     <>
       <Container
@@ -135,7 +139,7 @@ const FiltersSorting = () => {
                 borderColor:
                   categorie.name === selectedCategory ? "white" : undefined,
                 borderStyle: "solid",
-                borderWidth: 2, // Puedes ajustar el ancho del borde según tus preferencias
+                borderWidth: 2,
                 "&:hover": { color: "black", backgroundColor: "#b54410" },
               }}
               onClick={() => handleCategoryClick(categorie.name)}
