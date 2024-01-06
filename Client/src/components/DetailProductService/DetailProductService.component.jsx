@@ -99,7 +99,7 @@ const DetailProductService = ({
     }
   };
 
-  const handleUpdateStatus = async (status, value) => {
+  const handleUpdateStatus = async (status, value, notification) => {
     if (
       data.statusPosition !== false &&
       (data.status !== "Esperando confirmación del cliente" ||
@@ -124,12 +124,13 @@ const DetailProductService = ({
         });
         return false;
       } else {
-        Swal.fire({
-          allowOutsideClick: false,
-          icon: "success",
-          title: "Servicio actualizado",
-          text: `${response?.data}`,
-        });
+        notification &&
+          Swal.fire({
+            allowOutsideClick: false,
+            icon: "success",
+            title: "Servicio actualizado",
+            text: `${response?.data}`,
+          });
         getService();
         return true;
       }
@@ -240,31 +241,35 @@ const DetailProductService = ({
         if (response === true) {
           handleUpdateStatus(
             "status",
-            serviceStatuses.progress[data.statusPosition + 1]
+            serviceStatuses.progress[data.statusPosition + 1],
+            false
           );
         }
         break;
       case "prev":
         handleUpdateStatus(
           "status",
-          serviceStatuses.progress[data.statusPosition - 1]
+          serviceStatuses.progress[data.statusPosition - 1],
+          true
         );
         break;
       case "cancel":
-        handleUpdateStatus("confirm_repair", false);
-        handleUpdateStatus("status", serviceStatuses.cancel);
+        handleUpdateStatus("confirm_repair", false, false);
+        handleUpdateStatus("status", serviceStatuses.cancel, true);
         break;
       case "approve":
-        handleUpdateStatus("confirm_repair", true);
+        handleUpdateStatus("confirm_repair", true, false);
         handleUpdateStatus(
           "status",
-          serviceStatuses.progress[data.statusPosition + 1]
+          serviceStatuses.progress[data.statusPosition + 1],
+          true
         );
         break;
       case "finished":
         handleUpdateStatus(
           "status",
-          serviceStatuses.progress[data.statusPosition + 1]
+          serviceStatuses.progress[data.statusPosition + 1],
+          true
         );
         break;
       default:
@@ -296,31 +301,39 @@ const DetailProductService = ({
     }
     if (authData.userRole === "technician") {
       if (data.status !== "Esperando confirmación del cliente") {
-        return (
-          <Box>
-            <Button name={"prev"} onClick={updateStep}>
-              <FastRewindIcon />
-              <Typography>Volver al paso anterior</Typography>
-            </Button>
-            <Button name={"next"} onClick={updateStep}>
-              <Typography>Pasar al siguiente</Typography>
-              <FastForwardIcon />
-            </Button>
-          </Box>
-        );
-      } else if (data.status !== "Listo para retirar") {
-        return (
-          <Box>
-            <Button name={"finished"} onClick={updateStep}>
-              <Typography>Dispositivo retirado</Typography>
-              <LocalShippingIcon />
-            </Button>
-          </Box>
-        );
+        if (data.status === "Listo para retirar") {
+          return (
+            <Box>
+              <Button
+                sx={{ minWidth: "100px" }}
+                name={"finished"}
+                onClick={updateStep}
+              >
+                <Typography>Dispositivo retirado</Typography>
+                <LocalShippingIcon />
+              </Button>
+            </Box>
+          );
+        } else {
+          return (
+            <Box>
+              {data.status !== "Local esperando llegada" && (
+                <Button name={"prev"} onClick={updateStep}>
+                  <FastRewindIcon />
+                  <Typography>Volver al paso anterior</Typography>
+                </Button>
+              )}
+              <Button name={"next"} onClick={updateStep}>
+                <Typography>Pasar al siguiente</Typography>
+                <FastForwardIcon />
+              </Button>
+            </Box>
+          );
+        }
       } else {
         return (
           <Typography variant="h6" sx={{ color: "red", mt: "1em" }}>
-            Espere a que el cliente confirme la compra
+            Espere a que el cliente confirme la reparación
           </Typography>
         );
       }
@@ -516,6 +529,8 @@ const DetailProductService = ({
                 gap: "4px",
                 justifyContent: "center",
                 alignItems: "center",
+                pl: "20px",
+                pr: "20px",
                 maxWidth: "50%",
                 backgroundColor: "#fd611a",
                 "&.cancel": {
