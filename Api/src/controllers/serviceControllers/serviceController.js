@@ -74,13 +74,15 @@ const addServiceController = async (
         });
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
-        await transporter.sendMail({
-          from: `Hyper Mega Red  ${destinationEmail}`,
-          to: clientObj.email, // list of receivers
-          subject: "ingreso a servicio ✔",
-          html: `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
-          <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
-        });
+        if (clientObj.communication_preference !== "Whatsapp") {
+          await transporter.sendMail({
+            from: `Hyper Mega Red  ${destinationEmail}`,
+            to: clientObj.email, // list of receivers
+            subject: "ingreso a servicio ✔",
+            html: `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
+           <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+          });
+        }
 
         //corta envio
         return createdService;
@@ -122,14 +124,15 @@ const updateServiceStatusController = async (id, field, value) => {
     });
     const clientObj = await User.findByPk(service.userId);
     const clientName = clientObj.name;
-
-    await transporter.sendMail({
-      from: `Hyper Mega Red  ${destinationEmail}`, // sender address
-      to: clientObj.email,
-      subject: "actualizacion de estado ✔",
-      html: `Estimado ${clientName}<br> Le informamos que se modificó el estado de su equipo ${service.product_model} a ${field}: ${value}.<br> Recuerde que también puede seguir el estado del mismo desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> >
-      <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
-    });
+    if (clientObj.communication_preference !== "Whatsapp") {
+      await transporter.sendMail({
+        from: `Hyper Mega Red  ${destinationEmail}`, // sender address
+        to: clientObj.email,
+        subject: "actualizacion de estado ✔",
+        html: `Estimado ${clientName}<br> Le informamos que se modificó el estado de su equipo ${service.product_model} a ${field}: ${value}.<br> Recuerde que también puede seguir el estado del mismo desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> >
+        <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+      });
+    }
     return `${field} actualizado a ${value}`;
   } else {
     return {
