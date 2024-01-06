@@ -163,7 +163,7 @@ const CardCarousel = ({ allProducts }) => {
                     >
                       PROMOCION: {formatPrice(product.price)}
                     </Typography>
-                    {/* <style jsx>{`
+                    <style jsx="true">{`
                       @keyframes blink {
                         50%,
                         5%,
@@ -175,7 +175,7 @@ const CardCarousel = ({ allProducts }) => {
                           opacity: 0.5;
                         }
                       }
-                    `}</style> */}
+                    `}</style>
                   </Container>
                 </CardContent>
                 <CardMedia
