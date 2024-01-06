@@ -23,6 +23,7 @@ import UserPanelItems from "../../utils/UserPanelItems.jsx";
 import { logoutUser } from "../../redux/slices/userSlice.js";
 import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
 import { logOutUser } from "../../services/authServices.js";
+import { resetCart } from "../../redux/slices/cartSlice.js";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const UserMenu = () => {
     logOutUser();
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
     navigate(PATHROUTES.HOME);
+    dispatch(resetCart());
   };
 
   const handleClose = () => {

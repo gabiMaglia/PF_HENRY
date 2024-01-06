@@ -20,6 +20,9 @@ const cartSlice = createSlice({
         state.items = Object.values(storedProducts).map((product) => ({ ...product }));
       }
     },
+    resetCart: (state) => {
+      state.items = [];
+    },
     updateItem: (state, action) => {
       const { id, count } = action.payload;
       const itemIndex = state.items.findIndex((item) => item.id === id);
@@ -69,6 +72,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addItem, updateItem, removeItem, totalItem, idShop } = cartSlice.actions;
+export const { addItem, updateItem, removeItem, totalItem, idShop, resetCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
