@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import styled from "@emotion/styled";
 //UTILS
-import { brands } from "../../utils/objectsTexts";
+// import { brands } from "../../utils/objectsTexts";
 //SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchBrands } from "../../services/brandsServices";
@@ -183,9 +183,9 @@ const FiltersSorting = () => {
               <Options value="default" disabled>
                 Marca
               </Options>
-              {brands.map((brand, i) => (
-                <Options key={brand} value={brand}>
-                  {brand}
+              {brands.map((brand) => (
+                <Options key={brand.id} value={brand.id}>
+                  {brand.name}
                 </Options>
               ))}
             </Selects>
