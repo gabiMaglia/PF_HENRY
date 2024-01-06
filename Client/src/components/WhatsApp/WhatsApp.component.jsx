@@ -15,6 +15,10 @@ const WhatsAppComponent = () => {
       statusMessage={statusMessage}
       chatMessage={chatMessage}
       placeholder={placeholder}
+      notification={true}
+      notificationSound={true}
+      allowClickAway={true}
+      allowEsc={true}
       avatar={avatar}
     />
   );

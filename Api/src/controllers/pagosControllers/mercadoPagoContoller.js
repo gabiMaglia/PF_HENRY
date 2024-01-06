@@ -16,7 +16,7 @@ const mercadoPago = async (array, idOrder) => {
       notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
-        success: `${frontend_Url}/customer/userPanel/shoppings`,
+        success: `${frontend_Url}/customer/userPanel/shoppings?success=true`,
         failure: `${frontend_Url}/cart`,
         pending: `${frontend_Url}/cart`,
       },
@@ -35,6 +35,7 @@ const mercadoPago = async (array, idOrder) => {
 const handlePaymentNotification = async (paymentId) => {
   try {
     if (paymentId?.type === "payment") {
+      console.log(paymentId);
       const payment = await axios.get(
         `https://api.mercadopago.com/v1/payments/${paymentId.data.id}`,
         {
@@ -60,7 +61,10 @@ const handlePaymentNotification = async (paymentId) => {
         });
 
         if (order) {
-          await order.update({ status: "Finalizado" });
+          await order.update({
+            status: "Finalizado",
+            cartTotal: payment.data.transaction_details.total_paid_amount,
+          });
 
           const products = await order.getProducts();
           Promise.all(

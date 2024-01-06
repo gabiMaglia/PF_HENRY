@@ -10,5 +10,5 @@ export const serviceStatuses = {
     "Listo para retirar",
     "Servicio finalizado",
   ],
-  cancel: ["Servicio cancelado"],
+  cancel: "Servicio cancelado",
 };

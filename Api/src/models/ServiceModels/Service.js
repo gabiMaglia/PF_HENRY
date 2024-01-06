@@ -8,6 +8,13 @@ module.exports = (sequelize) => {
       allowNull: false,
       primaryKey: true,
     },
+    communication_preference: {
+      type: DataTypes.STRING,
+      defaultValue: "Pendiente",
+      validate: {
+        isIn: ["Pendiente", "true", "false"],
+      },
+    },
     product_model: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -16,10 +23,10 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    isDelete:{
-      type:DataTypes.BOOLEAN,
-      allowNull:true,
-      defaultValue:false
-    }
+    isDelete: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
   });
 };
