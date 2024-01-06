@@ -227,7 +227,7 @@ const GetUndeletedServicesController=async()=>{
   if(services.length===0){
     return {
       error: true,
-      response: `service not found`,
+      response: `services not found`,
     };
   }
   const arrayOfServices = await Promise.all(
@@ -240,8 +240,14 @@ const GetUndeletedServicesController=async()=>{
   return arrayOfServices;
 } 
 
-const DeleteService=async(id)=>{
-  const service=await service.findByPk(id)
+const DeleteServiceController=async(id)=>{
+  const service=await Service.findByPk(id)
+  if(!service){
+    return {
+      error: true,
+      response: `service not found`,
+    };
+  }
   service.isDelete=!service.isDelete
   service.save()
   return service
@@ -255,6 +261,6 @@ module.exports = {
   getServiceByClientController,
   getServiceByModelController,
   getFilterServiceController,
-  DeleteService,
+  DeleteServiceController,
   GetUndeletedServicesController
 };
