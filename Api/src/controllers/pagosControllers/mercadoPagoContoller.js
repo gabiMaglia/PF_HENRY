@@ -62,7 +62,10 @@ const handlePaymentNotification = async (paymentId) => {
         });
 
         if (order) {
-          await order.update({ status: "Finalizado" });
+          await order.update({
+            status: "Finalizado",
+            cartTotal: payment.data.transaction_details.total_paid_amount,
+          });
 
           const products = await order.getProducts();
           Promise.all(
