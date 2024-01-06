@@ -124,13 +124,14 @@ const DetailProductService = ({
         });
         return false;
       } else {
-        notification &&
-          Swal.fire({
-            allowOutsideClick: false,
-            icon: "success",
-            title: "Servicio actualizado",
-            text: `${response?.data}`,
-          });
+        notification
+          ? Swal.fire({
+              allowOutsideClick: false,
+              icon: "success",
+              title: "Servicio actualizado",
+              text: `${response?.data}`,
+            })
+          : Swal.close();
         getService();
         return true;
       }
@@ -138,7 +139,6 @@ const DetailProductService = ({
   };
 
   const updateValidate = async () => {
-    let valid = true;
     let response = false;
     const budget = data.displayData.find(
       (item) => item.message === "Presupuesto:"
@@ -149,17 +149,14 @@ const DetailProductService = ({
     const final_diagnosis = data.displayData.find(
       (item) => item.message === "Informe de reparación:"
     ).data;
+    let newBudget = false;
+    let newDiagnosis = false;
     if (data.status === "En proceso de diagnostico") {
       if (budget === "Pendiente") {
         response = false;
-        valid = response;
         await Swal.fire({
-          allowOutsideClick: true,
-          showCancelButton: true,
           confirmButtonColor: "#fd611a",
           confirmButtonText: "Confirmar",
-          cancelButtonText: "Cancelar",
-          cancelButtonColor: "red",
           icon: "info",
           input: "text",
           title: "Para continuar con la reparación ingrese el presupuesto",
@@ -168,52 +165,51 @@ const DetailProductService = ({
             if (!value) {
               return "Debe ingresar el presupuesto para continuar";
             } else {
-              Swal.showLoading();
-              response = await handleUpdateStatus("budget", `$${value}`);
-              valid = response;
+              newBudget = value;
             }
           },
+        }).then(async (result) => {
+          if (technical_diagnosis === "Pendiente" && result.isConfirmed) {
+            response = false;
+            await Swal.fire({
+              allowOutsideClick: false,
+              icon: "info",
+              confirmButtonColor: "#fd611a",
+              confirmButtonText: "Confirmar",
+              input: "text",
+              title: "Para continuar con la reparación ingrese el diagnostico",
+              inputPlaceholder: "Diagnostico: ",
+              inputValidator: async (value) => {
+                if (!value) {
+                  return "Debe ingresar el diagnostico para continuar";
+                } else {
+                  newDiagnosis = value;
+                }
+              },
+            });
+          } else {
+            response = true;
+          }
         });
+        Swal.showLoading();
+        response = await handleUpdateStatus("budget", `$${newBudget}`);
+        Swal.showLoading();
+        response = await handleUpdateStatus(
+          "technical_diagnosis",
+          newDiagnosis
+        );
+      } else {
+        response = true;
       }
-      response = true;
-      if (technical_diagnosis === "Pendiente" && valid) {
-        response = false;
-        valid = response;
-        await Swal.fire({
-          allowOutsideClick: false,
-          icon: "info",
-          confirmButtonColor: "#fd611a",
-          confirmButtonText: "Confirmar",
-          cancelButtonColor: "red",
-          input: "text",
-          title: "Para continuar con la reparación ingrese el diagnostico",
-          showCancelButton: true,
-          cancelButtonText: "Cancelar",
-          inputPlaceholder: "Diagnostico: ",
-          inputValidator: async (value) => {
-            if (!value) {
-              return "Debe ingresar el diagnostico para continuar";
-            } else {
-              Swal.showLoading();
-              response = await handleUpdateStatus("technical_diagnosis", value);
-              valid = response;
-            }
-          },
-        });
-      }
-      response = true;
     } else if (data.status === "Pruebas finales") {
       if (final_diagnosis === "Pendiente") {
         response = false;
         await Swal.fire({
-          allowOutsideClick: false,
+          allowOutsideClick: true,
           icon: "info",
           confirmButtonColor: "#fd611a",
           confirmButtonText: "Confirmar",
           input: "text",
-          showCancelButton: true,
-          cancelButtonColor: "red",
-          cancelButtonText: "Cancelar",
           title: "Para continuar con la reparación ingrese el informe final",
           inputPlaceholder: "Informe de reparación: ",
           inputValidator: async (value) => {
@@ -226,10 +222,10 @@ const DetailProductService = ({
           },
         });
       }
-      response = true;
     } else {
       response = true;
     }
+    console.log(response);
     return response;
   };
 
@@ -239,7 +235,7 @@ const DetailProductService = ({
       case "next":
         const response = await updateValidate();
         if (response === true) {
-          handleUpdateStatus(
+          await handleUpdateStatus(
             "status",
             serviceStatuses.progress[data.statusPosition + 1],
             false
@@ -247,26 +243,26 @@ const DetailProductService = ({
         }
         break;
       case "prev":
-        handleUpdateStatus(
+        await handleUpdateStatus(
           "status",
           serviceStatuses.progress[data.statusPosition - 1],
           true
         );
         break;
       case "cancel":
-        handleUpdateStatus("confirm_repair", false, false);
-        handleUpdateStatus("status", serviceStatuses.cancel, true);
+        await handleUpdateStatus("confirm_repair", false, false);
+        await handleUpdateStatus("status", serviceStatuses.cancel, true);
         break;
       case "approve":
-        handleUpdateStatus("confirm_repair", true, false);
-        handleUpdateStatus(
+        await handleUpdateStatus("confirm_repair", true, false);
+        await handleUpdateStatus(
           "status",
           serviceStatuses.progress[data.statusPosition + 1],
           true
         );
         break;
       case "finished":
-        handleUpdateStatus(
+        await handleUpdateStatus(
           "status",
           serviceStatuses.progress[data.statusPosition + 1],
           true
@@ -531,7 +527,7 @@ const DetailProductService = ({
                 alignItems: "center",
                 pl: "20px",
                 pr: "20px",
-                maxWidth: "50%",
+                maxHeight: "45px",
                 backgroundColor: "#fd611a",
                 "&.cancel": {
                   backgroundColor: "red",

@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import {
@@ -34,7 +35,7 @@ const WhishListProfileComponent = () => {
     alignSelf: "center",
     backgroundColor: "black",
   };
-
+  const [storedProducts, setStoredProducts] = useLocalStorage();
   const [isLoading, setIsLoading] = useState(true); //Estado de carga
   const navigate = useNavigate();
   const dispatch = useDispatch();
