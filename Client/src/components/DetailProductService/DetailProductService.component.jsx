@@ -65,7 +65,6 @@ const DetailProductService = ({
           : false;
       const product = {
         date: date,
-        communication_preference: response.data.communication_preference,
         status: response.data.Service_status.status,
         name: response.data.product_model,
         image: response.data.Service_images[0].address,
