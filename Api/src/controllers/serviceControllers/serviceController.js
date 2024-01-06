@@ -222,6 +222,17 @@ const getFilterServiceController = async (status, user, technician) => {
   return arrayOfServices;
 };
 
+const GetUndeletedServicesController=async()=>{
+  const services=await Service.findAll({where:{isDelete:false}})
+  if(services.length===0){
+    return {
+      error: true,
+      response: `service not found`,
+    };
+  }
+  return services
+} 
+
 module.exports = {
   addServiceController,
   updateServiceStatusController,
