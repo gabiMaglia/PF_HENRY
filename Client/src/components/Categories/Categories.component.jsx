@@ -135,7 +135,7 @@ const FiltersSorting = () => {
                 borderColor:
                   categorie.name === selectedCategory ? "white" : undefined,
                 borderStyle: "solid",
-                borderWidth: 2, // Puedes ajustar el ancho del borde según tus preferencias
+                borderWidth: 2,
                 "&:hover": { color: "black", backgroundColor: "#b54410" },
               }}
               onClick={() => handleCategoryClick(categorie.name)}
