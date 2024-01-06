@@ -45,7 +45,6 @@ const handlePaymentNotification = async (paymentId) => {
           },
         }
       );
-
       if (payment.data.status === "approved") {
         const orderId = payment.data.metadata.id_order;
         const order = await Order.findByPk(orderId, {
