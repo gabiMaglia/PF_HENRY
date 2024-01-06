@@ -40,7 +40,6 @@ const columns = [
   {
     field: "warranty",
     headerName: "Garantía",
-    type: "number",
     width: 100,
     headerAlign: "center",
     editable: true,
@@ -102,7 +101,21 @@ const ProductsTable = () => {
       const response = await axios.get(`${urlBack}/product/`, {
         withCredentials: true,
       });
-      setProducts(response.data);
+      const newProducts = response.data.map((product) => {
+        return {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          warranty: product.warranty,
+          souldCount: product.soldCount,
+          is_deleted: product.is_deleted,
+          brand: product.ProductBrands[0].name,
+          category: product.ProductCategories[0].name,
+          stock: product.ProductStock.amount,
+        };
+      });
+
+      setProducts(newProducts);
     } catch (error) {
       console.error("Error fetching products:", error);
       setError("Error al obtener productos");
@@ -163,28 +176,6 @@ const ProductsTable = () => {
     }
   };
 
-  const productsWithBrandAndCategory = products.map((product) => {
-    const brand =
-      product.ProductBrands.length > 0
-        ? product.ProductBrands[0].name
-        : "Sin marca";
-    const category =
-      product.ProductCategories.length > 0
-        ? product.ProductCategories[0].name
-        : "Sin categoría";
-    const stock =
-      product.ProductStock?.amount !== undefined &&
-      product.ProductStock.amount !== 0
-        ? product.ProductStock.amount
-        : "Sin stock";
-    return {
-      ...product,
-      brand,
-      category,
-      stock,
-    };
-  });
-
   const processRowUpdate = async (newRow) => {
     try {
       if (availableModify) {
@@ -197,20 +188,8 @@ const ProductsTable = () => {
         Swal.showLoading();
         setAvailableModify(false);
         const productId = newRow.id;
-        const editProduct = {};
 
-        newRow?.name && (editProduct.name = newRow.name);
-        newRow?.price && (editProduct.price = newRow.price);
-        newRow?.warranty && (editProduct.warranty = newRow.warranty);
-        newRow?.soldCount && (editProduct.soldCount = newRow.soldCount);
-        newRow?.ProductStock &&
-          (editProduct.ProductStock = newRow.ProductStock.amount);
-        newRow?.ProductCategory &&
-          (editProduct.ProductCategory = newRow.ProductCategory);
-        newRow?.ProductBrand &&
-          (editProduct.ProductBrand = newRow.ProductBrand);
-
-        const response = await fetchUpdateProduct(productId, editProduct);
+        const response = await fetchUpdateProduct(productId, newRow);
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
@@ -293,7 +272,7 @@ const ProductsTable = () => {
         checkboxSelection
         disableRowSelectionOnClick
         rowSelectionModel={rowSelected}
-        rows={productsWithBrandAndCategory}
+        rows={products}
         columns={columns}
         pageSize={5}
         localeText={language.components.MuiDataGrid.defaultProps.localeText}

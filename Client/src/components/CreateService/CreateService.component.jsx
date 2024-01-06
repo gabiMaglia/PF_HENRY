@@ -383,7 +383,7 @@ const CreateService = () => {
             name="user_diagnosis"
             variant="outlined"
             minRows={8}
-            placeholder="Diagnóstico del técnico"
+            placeholder="Diagnóstico del cliente"
             onChange={handleChange}
             style={{
               width: "100%",

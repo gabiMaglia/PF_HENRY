@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+//MATERIAL UI
 import {
+  Card,
   CardContent,
   Typography,
   Box,
   CardMedia,
   useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Container } from "@mui/system";
+//PUBLIC
+import miVideo from "/carousel/prueba.mp4";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
@@ -41,6 +46,10 @@ const CardCarousel = ({ allProducts }) => {
     autoplaySpeed: 5000,
   };
 
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   return (
     <Box
       sx={{
@@ -49,9 +58,28 @@ const CardCarousel = ({ allProducts }) => {
         height: "260px",
         marginTop: "8px",
         overflow: "hidden",
-        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, #1afd94de 90%)`,
+        opacity: "1",
+        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, rgba(26, 253, 148, 0) 90%)`,
       }}
     >
+      <video
+        autoPlay
+        loop
+        muted
+        style={{
+          position: "absolute",
+          // margin: "10px",
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: 0.7,
+          zIndex: -1,
+        }}
+        playbackrate={0.4}
+      >
+        <source src={miVideo} type="video/mp4" />
+        Tu navegador no soporta el elemento de video.
+      </video>
       <Slider {...settings}>
         {productData.map((product) => (
           <Box
@@ -79,7 +107,7 @@ const CardCarousel = ({ allProducts }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center", // Alinea el contenido al centro
+                    alignItems: "center",
                     justifyContent: "center",
                     color: "white",
                     flex: "1",
@@ -89,11 +117,11 @@ const CardCarousel = ({ allProducts }) => {
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      alignItems: "center", // Alinea el contenido al centro
+                      alignItems: "center",
                       justifyContent: "center",
-                      width: "auto", // Ancho fijo para el contenedor del nombre
-                      height: "170px", // Alto fijo para el contenedor del nombre
-                      overflow: "hidden", // Oculta el contenido adicional si es demasiado largo
+                      width: "auto",
+                      height: "170px",
+                      overflow: "hidden",
                     }}
                   >
                     <Typography
@@ -125,6 +153,7 @@ const CardCarousel = ({ allProducts }) => {
                       color="#ff5000"
                       fontWeight="bold"
                       sx={{
+                        textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
                         p: "5px",
                         fontSize: {
                           xs: "1rem",
@@ -132,10 +161,24 @@ const CardCarousel = ({ allProducts }) => {
                           md: "2rem",
                         },
                         marginLeft: "auto",
+                        animation: "blink 1s infinite",
                       }}
                     >
-                      PROMOCION: ${product.price}
+                      PROMOCION: {formatPrice(product.price)}
                     </Typography>
+                    <style jsx="true">{`
+                      @keyframes blink {
+                        50%,
+                        5%,
+                        100% {
+                          opacity: 1;
+                        }
+                        90%,
+                        100% {
+                          opacity: 0.5;
+                        }
+                      }
+                    `}</style>
                   </Container>
                 </CardContent>
                 <CardMedia

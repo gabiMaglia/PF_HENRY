@@ -18,5 +18,6 @@ module.exports = {
     "no-unused-vars": "off",
     "no-useless-escape": "off",
     "no-case-declarations": "off",
+    "react/no-unknown-property": "off",
   },
 };

@@ -272,8 +272,7 @@ const ProductsServicesProfile = () => {
                 authData.userRole === "customer"
                   ? PATHROUTES.SUPPORT
                   : userRole === "technician" &&
-                    PATHROUTES.TECHNICIAN_USER_PANEL +
-                      PATHROUTES.SERVICE_CREATE
+                    PATHROUTES.TECHNICIAN_USER_PANEL + PATHROUTES.SERVICE_CREATE
               }
             >
               <Button
@@ -300,6 +299,7 @@ const ProductsServicesProfile = () => {
               authData={authData}
               setOpenDetail={setOpenDetail}
               setIsLoading={setIsLoading}
+              getAllServices={getAllServices}
             />
           </Box>
         ) : (
