@@ -110,8 +110,9 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
 
 export const fetchGetProduct = (cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId, userRol } = aux;
-  if(userRol === "customer"){
+  const { userId, userRole } = aux;
+  console.log(userRole)
+  if(userRole === "customer"){
   try {
     const res = await axios.get(`${urlBack}/cart/${userId}`, {
       withCredentials: true,
