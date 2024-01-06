@@ -101,7 +101,7 @@ const updateServiceStatusController = async (id, field, value) => {
   if (!serviceStatus) {
     return {
       error: true,
-      response: `status not found`,
+      response: `No se encontro el servicio`,
     };
   }
   const options = [
@@ -127,7 +127,7 @@ const updateServiceStatusController = async (id, field, value) => {
       html: `Estimado cliente<br><br>se modifico el estado de su equipo ${service.product_model} a ${field}:${value}<br><br> ante cualquier duda comuniquese con nuestro sector de tecnicos<br><br>
       <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
     });
-    return service;
+    return `${field} actualizado a ${value}`;
   } else {
     return {
       error: true,
