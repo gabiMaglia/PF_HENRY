@@ -69,10 +69,10 @@ const CardCarousel = ({ allProducts }) => {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          opacity: 0.7, // Ajusta la opacidad según tus preferencias
-          zIndex: -1, // Mueve el video detrás del componente
+          opacity: 0.7,
+          zIndex: -1,
         }}
-        playbackRate={0.4}
+        playbackrate={0.4}
       >
         <source src={miVideo} type="video/mp4" />
         Tu navegador no soporta el elemento de video.
@@ -158,13 +158,12 @@ const CardCarousel = ({ allProducts }) => {
                           md: "2rem",
                         },
                         marginLeft: "auto",
-                        animation: "blink 1s infinite", // Agregar la animación blink
+                        animation: "blink 1s infinite",
                       }}
                     >
                       PROMOCION: {formatPrice(product.price)}
                     </Typography>
-
-                    <style jsx>{`
+                    {/* <style jsx>{`
                       @keyframes blink {
                         50%,
                         5%,
@@ -176,7 +175,7 @@ const CardCarousel = ({ allProducts }) => {
                           opacity: 0.5;
                         }
                       }
-                    `}</style>
+                    `}</style> */}
                   </Container>
                 </CardContent>
                 <CardMedia
