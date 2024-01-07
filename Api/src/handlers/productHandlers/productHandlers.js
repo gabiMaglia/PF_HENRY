@@ -158,6 +158,8 @@ const searchByNameHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+//GET PRODUCTS CAROUSEL
 const getProductsCarouselHandler = async (req, res) => {
   try {
     const products = await productCarousel();
@@ -166,6 +168,7 @@ const getProductsCarouselHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 module.exports = {
   postProductHandler,
   getProductsHandler,
