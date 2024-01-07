@@ -110,6 +110,10 @@ const Detail = () => {
   const [fadeInKey, setFadeInKey] = useState(0);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
 
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   // Función para resetear la animación de fundido
   const resetFadeIn = () => {
     setFadeInKey((prevKey) => prevKey + 1);
@@ -329,7 +333,7 @@ const Detail = () => {
                 fontWeight="bold"
                 paddingTop={isLargeScreen ? 4 : 2}
               >
-                Precio: ${productById.price}
+                Precio: {formatPrice(productById.price)}
               </Typography>
             </Box>
 
