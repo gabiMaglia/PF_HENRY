@@ -30,17 +30,12 @@ const ProductCreateProfileComponent = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
   const { brands } = useSelector((state) => state.brands);
-  console.log(brands);
-
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [isOtherBrand, setIsOtherBrand] = useState(false);
-
-  const [categoryName, setCategoryName] = useState("selecciona una categoria");
-  const [brand, setBrand] = useState("selecciona una marca");
-
+  const [categoryName, setCategoryName] = useState("Selecciona una categoria");
+  const [brand, setBrand] = useState("Selecciona una marca");
   const [newCategory, setNewCategory] = useState("");
   const [newBrand, setNewBrand] = useState("");
-
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
   const [errors, setErrors] = useState({});
@@ -56,6 +51,7 @@ const ProductCreateProfileComponent = () => {
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
   });
+
   const [imagePreviews, setImagePreviews] = useState([]);
   useEffect(() => {
     fetchCategories(dispatch);
@@ -75,7 +71,7 @@ const ProductCreateProfileComponent = () => {
     setImageURL(e.target.value);
   };
 
-  const handleChange = (event) => {
+  const handleChange = async(event) => {
     const { name, value, files } = event.target;
 
     switch (name) {
@@ -86,7 +82,7 @@ const ProductCreateProfileComponent = () => {
             ...prevValues,
             images: [...prevValues.images, ...selectedImages],
           }));
-
+         await validationsCreate(values);
           const selectedPreviews = Array.from(files).map((file) =>
             URL.createObjectURL(file)
           );
@@ -102,25 +98,30 @@ const ProductCreateProfileComponent = () => {
         break;
 
       case "categoryName":
+        setNewCategory("");
         setValues((prevValues) => ({
           ...prevValues,
-          categoryName: isOtherCategory ? newCategory : [value],
+          categoryName: [value],
         }));
+       await validationsCreate(values);
         setIsOtherCategory(value === "otra");
         break;
-
       case "newCategory":
         setNewCategory(value);
         setValues((prevValues) => ({
           ...prevValues,
           categoryName: isOtherCategory ? [value] : prevValues.categoryName,
         }));
+       await validationsCreate(values);
         break;
+
       case "brandName":
+        setNewBrand("");
         setValues((prevValues) => ({
           ...prevValues,
-          brandName: isOtherBrand ? newBrand : value,
+          brandName: value,
         }));
+        await validationsCreate(values);
         setIsOtherBrand(value === "otra");
         break;
 
@@ -130,6 +131,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: isOtherBrand ? value : prevValues.brandName,
         }));
+        await validationsCreate(values);
         break;
 
       default:
@@ -201,7 +203,6 @@ const ProductCreateProfileComponent = () => {
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
     if (Object.keys(errorObject).length !== 0) {
-      console.log(values);
       Swal.fire({
         icon: "error",
         title: "datos incorrectos",
@@ -228,7 +229,7 @@ const ProductCreateProfileComponent = () => {
         ...values,
         images: array,
       };
-      console.log(obj);
+
 
       // Muestra una alerta de que la creación está en proceso
       Swal.fire({
@@ -266,13 +267,12 @@ const ProductCreateProfileComponent = () => {
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
       });
-      setBrand("selecciona una marca");
-      setCategoryName("selecciona una categoria");
+      setBrand("Selecciona una marca");
+      setCategoryName("Selecciona una categoria");
       setImagePreviews([]);
       setImageURL("");
     }
   };
-  console.log(values);
   const handleRemoveImage = (index) => {
     setValues((prevValues) => {
       const updatedImages = [...prevValues.images];
@@ -395,18 +395,30 @@ const ProductCreateProfileComponent = () => {
               variant="outlined"
               fullWidth
             >
-              <MenuItem value="selecciona una marca">
-                selecciona una marca
+              <MenuItem value="Selecciona una marca">
+                Selecciona una marca
               </MenuItem>
               {[...brands]
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((brand) => (
-                <MenuItem key={brand.name} value={brand.name}>
-                  {brand.name}
-                </MenuItem>
-              ))}
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((brand) => (
+                  <MenuItem key={brand.name} value={brand.name}>
+                    {brand.name}
+                  </MenuItem>
+                ))}
               <MenuItem value="otra">Otra</MenuItem>
             </Select>
+            {errors.e5 ? (
+              <Typography variant="caption" color="error">
+                {errors.e5}
+              </Typography>
+            ) : (
+              errors.e13 && (
+                <Typography variant="caption" color="error">
+                  {errors.e13}
+                </Typography>
+              )
+            )}
+
             {isOtherBrand && (
               <TextField
                 name="newBrand"
@@ -430,8 +442,8 @@ const ProductCreateProfileComponent = () => {
               fullWidth
               error={Boolean(errors.e6)}
             >
-              <MenuItem value="selecciona una categoria">
-                selecciona una categoria
+              <MenuItem value="Selecciona una categoria">
+                Selecciona una categoria
               </MenuItem>
               {categories.map((category) => (
                 <MenuItem key={category.name} value={category.name}>
@@ -440,7 +452,17 @@ const ProductCreateProfileComponent = () => {
               ))}
               <MenuItem value="otra">Otra</MenuItem>
             </Select>
-            {errors.e6 && <Typography color="error">{errors.e6}</Typography>}
+            {errors.e6 ? (
+              <Typography color="error" variant="caption">
+                {errors.e6}
+              </Typography>
+            ) : (
+              errors.e12 && (
+                <Typography variant="caption" color="error">
+                  {errors.e12}
+                </Typography>
+              )
+            )}
             {isOtherCategory && (
               <TextField
                 name="newCategory"
@@ -508,7 +530,13 @@ const ProductCreateProfileComponent = () => {
               <Typography variant="caption" color="error">
                 Ingrese una URL valida
               </Typography>
-            ) : null}
+            ) : (
+              errors.e11 && (
+                <Typography variant="caption" color="error">
+                  {errors.e11}
+                </Typography>
+              )
+            )}
             <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
               <Button
                 variant="outlined"
