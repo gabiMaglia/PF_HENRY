@@ -113,6 +113,10 @@ const WhishListProfileComponent = () => {
     }
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
+  useEffect(() => {
+    wishListCards?.length === 0 && setIsLoading(false);
+  }, [wishListCards]);
+
   const deleteProduct = (id) => {
     setIsLoading(true);
     fetchAddItemWish(dispatch, userId, id); // ELiminar un producto
