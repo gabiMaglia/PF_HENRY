@@ -1,8 +1,7 @@
-// HOOKS
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// MATERIAL -UI
 import { Button, CardMedia, TextField } from "@mui/material";
+import axios from "axios"; // Asegúrate de importar Axios
 
 const Review = ({ review }) => {
   const [googlePlacesApiKey, setGooglePlacesApiKey] = useState("");
@@ -19,10 +18,11 @@ const Review = ({ review }) => {
   };
 
   useEffect(() => {
-    fetch("/places/google-places-api-key")
-      .then((response) => response.json())
-      .then((data) => {
-        setGooglePlacesApiKey(data.apiKey);
+    axios
+      .get("/places/google-places-api-key")
+      .then((response) => {
+        console.log(response);
+        setGooglePlacesApiKey(response.data.apiKey);
       })
       .catch((error) => {
         console.error("Error fetching Google Places API key:", error);
