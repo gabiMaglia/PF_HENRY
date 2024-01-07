@@ -11,7 +11,7 @@ const sequelize = require("sequelize");
 require("dotenv").config();
 
 const destinationEmail = process.env.EMAIL_MAILER;
-const hypermegared = "https://pf-henry-sepia.vercel.app/"
+const hypermegared = "https://pf-henry-sepia.vercel.app/";
 
 const addServiceController = async (
   product_model,
@@ -60,7 +60,6 @@ const addServiceController = async (
           reparir_finish: false,
           ServiceId: newService.id,
         });
-
         if (product_image_url) {
           // No se sube la imagen a Cloudinary aca ya que obtenemos la URL que nos envia el front
           const newServiceImage = await Service_image.create({
@@ -75,13 +74,15 @@ const addServiceController = async (
         });
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
-        await transporter.sendMail({
-          from: `Hyper Mega Red  ${destinationEmail}`,
-          to: clientObj.email, // list of receivers
-          subject: "ingreso a servicio ✔",
-          html: `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
-          <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
-        });
+        if (clientObj.communication_preference !== "Whatsapp") {
+          await transporter.sendMail({
+            from: `Hyper Mega Red  ${destinationEmail}`,
+            to: clientObj.email, // list of receivers
+            subject: "ingreso a servicio ✔",
+            html: `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
+           <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+          });
+        }
 
         //corta envio
         return createdService;
@@ -122,14 +123,16 @@ const updateServiceStatusController = async (id, field, value) => {
       include: [Service_status],
     });
     const clientObj = await User.findByPk(service.userId);
-
-    await transporter.sendMail({
-      from: `Hyper Mega Red  ${destinationEmail}`, // sender address
-      to: clientObj.email,
-      subject: "actualizacion de estado ✔",
-      html: `Estimado ${clientName}<br> Le informamos que se modificó el estado de su equipo ${service.product_model} a ${field}: ${value}.<br> Recuerde que también puede seguir el estado del mismo desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> >
-      <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
-    });
+    const clientName = clientObj.name;
+    if (clientObj.communication_preference !== "Whatsapp") {
+      await transporter.sendMail({
+        from: `Hyper Mega Red  ${destinationEmail}`, // sender address
+        to: clientObj.email,
+        subject: "actualizacion de estado ✔",
+        html: `Estimado ${clientName}<br> Le informamos que se modificó el estado de su equipo ${service.product_model} a ${field}: ${value}.<br> Recuerde que también puede seguir el estado del mismo desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br>
+        <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+      });
+    }
     return `${field} actualizado a ${value}`;
   } else {
     return {
@@ -225,9 +228,9 @@ const getFilterServiceController = async (status, user, technician) => {
   return arrayOfServices;
 };
 
-const GetUndeletedServicesController=async()=>{
-  const services=await Service.findAll({where:{isDelete:false}})
-  if(services.length===0){
+const GetUndeletedServicesController = async () => {
+  const services = await Service.findAll({ where: { isDelete: false } });
+  if (services.length === 0) {
     return {
       error: true,
       response: `services not found`,
@@ -241,20 +244,20 @@ const GetUndeletedServicesController=async()=>{
     })
   );
   return arrayOfServices;
-} 
+};
 
-const DeleteServiceController=async(id)=>{
-  const service=await Service.findByPk(id)
-  if(!service){
+const DeleteServiceController = async (id) => {
+  const service = await Service.findByPk(id);
+  if (!service) {
     return {
       error: true,
       response: `service not found`,
     };
   }
-  service.isDelete=!service.isDelete
-  service.save()
-  return service
-}
+  service.isDelete = !service.isDelete;
+  service.save();
+  return service;
+};
 
 module.exports = {
   addServiceController,
@@ -265,5 +268,5 @@ module.exports = {
   getServiceByModelController,
   getFilterServiceController,
   DeleteServiceController,
-  GetUndeletedServicesController
+  GetUndeletedServicesController,
 };

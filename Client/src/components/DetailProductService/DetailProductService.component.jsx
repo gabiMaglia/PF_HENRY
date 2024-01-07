@@ -32,6 +32,7 @@ const DetailProductService = ({
   getAllServices = () => {},
 }) => {
   const [data, setData] = useState({});
+  const [communicationPreference, setComunicationPreference] = useState("");
   const theme = useTheme();
 
   const getName = async (id, product) => {
@@ -41,6 +42,7 @@ const DetailProductService = ({
       data: response.name + " " + response.surname,
     });
     setData(product);
+    setComunicationPreference(response.communication_preference);
     setIsLoading(false);
   };
 
@@ -99,7 +101,7 @@ const DetailProductService = ({
     }
   };
 
-  const handleUpdateStatus = async (status, value, notification) => {
+  const handleUpdateStatus = async (updatedArray) => {
     if (
       data.statusPosition !== false &&
       (data.status !== "Esperando confirmación del cliente" ||
@@ -114,24 +116,32 @@ const DetailProductService = ({
         showConfirmButton: false,
       });
       Swal.showLoading();
-      const response = await updateServiceStatus(data.statusId, status, value);
+      let response = await updateServiceStatus(data.statusId, updatedArray); // ACA
+      response?.length > 0 && (response = response[response.length - 1]);
       if (response?.error) {
+        Swal.hideLoading();
         Swal.fire({
           allowOutsideClick: false,
           icon: "error",
           title: "Error en la actualización del servicio",
-          text: `${response?.error?.response?.statusText}`,
+          text: `${response?.response?.message}`,
         });
         return false;
       } else {
-        notification
-          ? Swal.fire({
-              allowOutsideClick: false,
-              icon: "success",
-              title: "Servicio actualizado",
-              text: `${response?.data}`,
-            })
-          : Swal.close();
+        const preference =
+          authData.userRole === "technician" &&
+          communicationPreference === "Whatsapp"
+            ? "Notificar al cliente por Whatsapp"
+            : "";
+        Swal.hideLoading();
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "success",
+          title: "Servicio actualizado",
+          footer: `${preference}`,
+          confirmButtonColor: "#fd611a",
+          text: `${response?.data}`,
+        });
         getService();
         return true;
       }
@@ -151,6 +161,7 @@ const DetailProductService = ({
     ).data;
     let newBudget = false;
     let newDiagnosis = false;
+    let newReport = false;
     if (data.status === "En proceso de diagnostico") {
       if (budget === "Pendiente") {
         response = false;
@@ -192,12 +203,11 @@ const DetailProductService = ({
           }
         });
         Swal.showLoading();
-        response = await handleUpdateStatus("budget", `$${newBudget}`);
+        response = await handleUpdateStatus([
+          { status: "budget", value: `$${newBudget}` },
+          { status: "technical_diagnosis", value: newDiagnosis },
+        ]);
         Swal.showLoading();
-        response = await handleUpdateStatus(
-          "technical_diagnosis",
-          newDiagnosis
-        );
       } else {
         response = true;
       }
@@ -216,16 +226,24 @@ const DetailProductService = ({
             if (!value) {
               return "Debe ingresar el informe para continuar";
             } else {
-              Swal.showLoading();
-              response = await handleUpdateStatus("final_diagnosis", value);
+              newReport = value;
             }
           },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            Swal.showLoading();
+            response = await handleUpdateStatus([
+              { status: "final_diagnosis", value: newReport },
+            ]);
+            Swal.showLoading();
+          }
         });
+      } else {
+        response = true;
       }
     } else {
       response = true;
     }
-    console.log(response);
     return response;
   };
 
@@ -235,38 +253,44 @@ const DetailProductService = ({
       case "next":
         const response = await updateValidate();
         if (response === true) {
-          await handleUpdateStatus(
-            "status",
-            serviceStatuses.progress[data.statusPosition + 1],
-            false
-          );
+          await handleUpdateStatus([
+            {
+              status: "status",
+              value: serviceStatuses.progress[data.statusPosition + 1],
+            },
+          ]);
         }
         break;
       case "prev":
-        await handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition - 1],
-          true
-        );
+        await handleUpdateStatus([
+          {
+            status: "status",
+            value: serviceStatuses.progress[data.statusPosition - 1],
+          },
+        ]);
         break;
       case "cancel":
-        await handleUpdateStatus("confirm_repair", false, false);
-        await handleUpdateStatus("status", serviceStatuses.cancel, true);
+        await handleUpdateStatus([
+          { status: "confirm_repair", value: false },
+          { status: "status", value: serviceStatuses.cancel },
+        ]);
         break;
       case "approve":
-        await handleUpdateStatus("confirm_repair", true, false);
-        await handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition + 1],
-          true
-        );
+        await handleUpdateStatus([
+          { status: "confirm_repair", value: true },
+          {
+            status: "status",
+            value: serviceStatuses.progress[data.statusPosition + 1],
+          },
+        ]);
         break;
       case "finished":
-        await handleUpdateStatus(
-          "status",
-          serviceStatuses.progress[data.statusPosition + 1],
-          true
-        );
+        await handleUpdateStatus([
+          {
+            status: "status",
+            value: serviceStatuses.progress[data.statusPosition + 1],
+          },
+        ]);
         break;
       default:
         break;
@@ -280,19 +304,24 @@ const DetailProductService = ({
     ) {
       const final = data.status.split(" ")[1];
       return (
-        <Typography
+        <Button
           variant="h4"
           className={final}
           sx={{
-            border: "1px solid black",
+            cursor: "default",
             p: ".2em",
-            borderRadius: "20px",
-            "&.finalizado": { backgroundColor: "green" },
-            "&.cancelado": { backgroundColor: "red" },
+            "&.finalizado": {
+              backgroundColor: "green",
+              "&:hover": { backgroundColor: "green" },
+            },
+            "&.cancelado": {
+              backgroundColor: "red",
+              "&:hover": { backgroundColor: "red" },
+            },
           }}
         >
           {data.status}
-        </Typography>
+        </Button>
       );
     }
     if (authData.userRole === "technician") {
@@ -517,6 +546,28 @@ const DetailProductService = ({
                   </Box>
                 );
               })}
+            {authData.userRole === "technician" &&
+              communicationPreference === "Whatsapp" && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: "5px",
+                    mt: "2em",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: "bold", color: "#fd611a" }}
+                  >
+                    PREFERENCIA DE COMUNICACIÓN:
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: "#fd611a" }}>
+                    {communicationPreference}
+                  </Typography>
+                </Box>
+              )}
           </Box>
           <Box
             sx={{

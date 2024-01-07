@@ -28,7 +28,6 @@ import {
   fetchCart,
   fetchCount,
   fetchDelete,
-  fetchGetProduct,
 } from "../../services/productServices";
 
 export default function ShoppingCart() {

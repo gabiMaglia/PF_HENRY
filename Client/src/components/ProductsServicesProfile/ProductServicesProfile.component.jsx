@@ -24,7 +24,11 @@ import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
 import { filterService, getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
-import { getUsersByRole } from "../../services/userServices";
+import {
+  getUsersByRole,
+  getUserById,
+  PutUser,
+} from "../../services/userServices";
 import { serviceStatuses } from "../../utils/serviceStatuses.js";
 
 const ProductsServicesProfile = () => {
@@ -38,6 +42,7 @@ const ProductsServicesProfile = () => {
   const [openDetail, setOpenDetail] = useState(false);
   const [cardDetail, setCardDetail] = useState([]);
   const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({});
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -87,6 +92,10 @@ const ProductsServicesProfile = () => {
         return user.id;
       });
       setUsersId(usersId);
+    }
+    if (authData.userRole === "customer") {
+      const user = await getUserById(authData.userId);
+      setUser(user);
     }
   };
 
@@ -169,6 +178,33 @@ const ProductsServicesProfile = () => {
     open && setOpenDetail(open);
     id && setCardDetail(id);
   };
+
+  useEffect(() => {
+    if (
+      user?.communication_preference === "Pendiente" &&
+      authData.userRole === "customer"
+    ) {
+      Swal.fire({
+        icon: "info",
+        title: "Gracias por confiar en HyperMegaRed",
+        text: `Elije el medio de comunicación que prefieres para recibir información sobre el estado del servicio`,
+        confirmButtonText: "Email",
+        showDenyButton: true,
+        denyButtonText: "Whatsapp",
+        denyButtonColor: "#25d366",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await PutUser(user.id, authData.userRole, {
+            communication_preference: "Email",
+          });
+        } else if (result.isDenied) {
+          const response = await PutUser(user.id, authData.userRole, {
+            communication_preference: "Whatsapp",
+          });
+        }
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     getAllServices();

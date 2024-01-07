@@ -59,18 +59,26 @@ export const filterService = async (status, user, technician) => {
   }
 };
 
-export const updateServiceStatus = async (id, status, value) => {
-  const response = await axios.put(
-    `${url}/service/${id}`,
-    {
-      field: status,
-      value: value,
-    },
-    {
-      withCredentials: true,
-    }
-  );
-  return response;
+export const updateServiceStatus = async (id, updatedArray) => {
+  try {
+    const response = await Promise.all(
+      updatedArray.map((item) => {
+        return axios.put(
+          `${url}/service/${id}`,
+          {
+            field: item.status,
+            value: item.value,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      })
+    );
+    return response;
+  } catch (error) {
+    return { error: true, response: error };
+  }
 };
 
 //Estaba de antes no lo quise borrar por las dudas

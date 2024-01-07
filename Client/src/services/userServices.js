@@ -13,7 +13,6 @@ export const getAllUsers = async () => {
 };
 
 export const getUsersByRole = async (role, jwt) => {
-
   try {
     const AllUsers = await axios.get(`${url}/user_role/by_role/${role}`, {
       withCredentials: true,
@@ -87,6 +86,7 @@ export const PutUser = async (id, userRole, data) => {
     telephone: null,
     image: null,
     role: "customer",
+    communication_preference: "",
     userAddress: {
       country: null,
       state: null,

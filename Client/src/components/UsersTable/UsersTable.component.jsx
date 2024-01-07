@@ -65,6 +65,13 @@ const gridColumns = [
     editable: "true",
   },
   {
+    field: "communication_preference",
+    headerAlign: "center",
+    headerName: "Preferencia de comunicación",
+    minWidth: 200,
+    editable: "true",
+  },
+  {
     field: "isActive",
     headerAlign: "center",
     headerName: "Activo",
@@ -234,6 +241,7 @@ const UsersTable = () => {
           email: newRow.email,
           telephone: newRow.telephone,
           image: newRow.image,
+          communication_preference: newRow.communication_preference,
           isActive: newRow.isActive,
           isVerified: newRow.isVerified,
           userAddress: {},
@@ -318,6 +326,7 @@ const UsersTable = () => {
               isActive: false,
               isVerified: false,
               isDeleted: false,
+              communication_preference: false,
             },
           },
           filter: {

@@ -16,10 +16,10 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    isDelete:{
-      type:DataTypes.BOOLEAN,
-      allowNull:true,
-      defaultValue:false
-    }
+    isDelete: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
   });
 };
