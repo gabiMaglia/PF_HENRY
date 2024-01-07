@@ -26,7 +26,7 @@ import { addItem } from "../../redux/slices/cartSlice";
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  // const [cartItemCount, setCartItemCount] = useState(0);
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const { login } = useSelector((state) => state.user);
@@ -48,13 +48,13 @@ export default function SearchAppBar() {
     cursor: "pointer",
   });
 
-  let valueCart = 0;
+  // let valueCart = 0;
 
-  if (login === false) {
-    valueCart = 0;
-  } else {
-    valueCart = cartItemCount;
-  }
+  // if (login === false) {
+  //   valueCart = 0;
+  // } else {
+  //   valueCart = cartItemCount;
+  // }
 
   const getUserInfo = async (token) => {
     if (token !== undefined) {
@@ -83,7 +83,7 @@ export default function SearchAppBar() {
   useEffect(() => {
     const userToken = getDataFromSelectedPersistanceMethod(cookieStatus);
     if (userToken?.login) {
-      getUserInfo(userToken);
+      getUserInfo(userToken)
     }
   }, [cookieStatus]);
 
@@ -188,7 +188,8 @@ export default function SearchAppBar() {
                 fontSize: "0.7em",
               }}
             >
-              {valueCart}
+              {/* {valueCart} */}
+              {cartItemCount}
             </span>
           )}
         </Box>
