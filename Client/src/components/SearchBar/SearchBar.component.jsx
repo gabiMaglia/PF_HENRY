@@ -8,11 +8,15 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
+import { logUser } from "../../redux/slices/userSlice";
+import { addItem } from "../../redux/slices/cartSlice";
+//SERVICES
 import { fetchSearch, fetchChage } from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
 //HELPERS
@@ -21,9 +25,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
-import carrito from "/icons/carrito-de-compras.png";
-import { logUser } from "../../redux/slices/userSlice";
-import { addItem } from "../../redux/slices/cartSlice";
+// import carrito from "/icons/carrito-de-compras.png";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -168,7 +170,7 @@ export default function SearchAppBar() {
               ml: "2em",
             }}
           >
-            <Logo src={carrito} onClick={handleCartClick} />
+            <ShoppingCartIcon /*src={carrito}*/sx={{ fontSize: "32px" }} onClick={handleCartClick} />
             {cartItemCount > -1 && (
               <span
                 style={{
@@ -201,7 +203,7 @@ export default function SearchAppBar() {
             />{" "}
             Técnico
           </Box>
-        ) : null}
+        ) : <ShoppingCartIcon sx={{ fontSize: "32px" }} />}
         {login === false ? (
           <Box
             sx={{
