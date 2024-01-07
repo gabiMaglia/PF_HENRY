@@ -46,6 +46,10 @@ const WhishListProfileComponent = () => {
   const userId = authData ? authData.userId : null; //Información del usuario
   const wishListCards = useSelector((state) => state.wishlist.products); //Estado global Wishlist
 
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   const chargeWishListProduct = () => {
     fetchWishList(userId, dispatch); //Recarga de el estado global Wishlist
   };
@@ -260,7 +264,7 @@ const WhishListProfileComponent = () => {
                           image: card.ProductImages
                             ? card.ProductImages[0].address
                             : "",
-                          budget: `$${card.price}`,
+                          budget: `${formatPrice(card.price)}`,
                         }}
                         buttons={buttons}
                       />
