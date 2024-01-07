@@ -36,6 +36,7 @@ function esMayuscula(s) {
 }
 const validationsCreate=(values)=>{
    const {name,price,description,images,brandName,categoryName,warranty,stock}=values
+   console.log(categoryName)
    const error={}
    if(name.length===0||name===''){
       error.e1='el nombre del producto es requerido'
@@ -62,7 +63,7 @@ const validationsCreate=(values)=>{
    }else if(!esMayuscula(brandName)){
       error.e13='la primer letra debe ser mayuscula'
    }
-   if(!categoryName||categoryName[0]==="Selecciona una categoria"||categoryName[0]===''){
+   if(categoryName.length===0||categoryName[0]==="Selecciona una categoria"||categoryName[0]===''||categoryName==="Selecciona una categoria"){
       error.e6='seleccione la categoria de su producto'
    }else if(!esMayuscula(categoryName[0])){
       error.e12='la primer letra debe ser mayuscula'
