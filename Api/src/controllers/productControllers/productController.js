@@ -346,8 +346,6 @@ const searchByName = async (name) => {
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
-    console.log("Consulta SQL generada:", products.toString());
-    console.log("Productos encontrados:", products.map(product => product.get({ plain: true })));
     return products;
   } catch (error) {
     throw new Error(`Error en la búsqueda: ${error.message}`);
