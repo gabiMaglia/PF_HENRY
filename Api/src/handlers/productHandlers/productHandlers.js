@@ -146,7 +146,6 @@ const getProductByIdHandler = async (req, res) => {
 
 //SEARCH BAR
 const searchByNameHandler = async (req, res) => {
-  // const name = req.query.name;
   let name = req.query.name;
   name = pluralize.singular(name.toLowerCase());
   console.log("Nombre de búsqueda:", name);
