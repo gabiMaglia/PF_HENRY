@@ -82,7 +82,7 @@ const ProductCreateProfileComponent = () => {
             ...prevValues,
             images: [...prevValues.images, ...selectedImages],
           }));
-         await validationsCreate(values);
+          validationsCreate(values);
           const selectedPreviews = Array.from(files).map((file) =>
             URL.createObjectURL(file)
           );
@@ -103,7 +103,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           categoryName: [value],
         }));
-       await validationsCreate(values);
+        validationsCreate(values);
         setIsOtherCategory(value === "otra");
         break;
       case "newCategory":
@@ -112,7 +112,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           categoryName: isOtherCategory ? [value] : prevValues.categoryName,
         }));
-       await validationsCreate(values);
+        validationsCreate(values);
         break;
 
       case "brandName":
@@ -121,7 +121,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: value,
         }));
-        await validationsCreate(values);
+         validationsCreate(values);
         setIsOtherBrand(value === "otra");
         break;
 
@@ -131,7 +131,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: isOtherBrand ? value : prevValues.brandName,
         }));
-        await validationsCreate(values);
+         validationsCreate(values);
         break;
 
       default:
