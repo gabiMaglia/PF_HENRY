@@ -68,6 +68,18 @@ export default function SearchAppBar() {
     dispatch(fetchSearch(inputName));
   };
 
+<<<<<<< HEAD
+=======
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  }
+
+  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+  const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
+
+>>>>>>> b650a01d01c50897d21c4fdb9196ba5484074236
   const handleChange = (event) => {
     dispatch(fetchChage(event.target.value));
   };
@@ -127,6 +139,7 @@ export default function SearchAppBar() {
           value={inputName}
           placeholder=" Buscador"
           onChange={handleChange}
+          onKeyPress={handleKeyPress}
           sx={{
             width: { xs: 300, sm: 500, xl: 800 },
             fontSize: 20,
