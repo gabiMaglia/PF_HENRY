@@ -1,24 +1,39 @@
 // HOOKS
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // MATERIAL -UI
 import { Button, CardMedia, TextField } from "@mui/material";
 
 const Review = ({ review }) => {
-  if (!review) {
-    return <div>Error: review es undefined</div>;
-  }
-  const { reviewer, date, content, imageUrl } = review;
-  const navigate = useNavigate();
+  const [googlePlacesApiKey, setGooglePlacesApiKey] = useState("");
   const [comment, setComment] = useState("");
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
+    console.log("Google Places API Key:", googlePlacesApiKey);
     navigate("/review");
   };
 
-  const handleCommentChange = () => {
+  const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
+
+  useEffect(() => {
+    fetch("/places/google-places-api-key")
+      .then((response) => response.json())
+      .then((data) => {
+        setGooglePlacesApiKey(data.apiKey);
+      })
+      .catch((error) => {
+        console.error("Error fetching Google Places API key:", error);
+      });
+  }, []);
+
+  if (!review) {
+    return <div>Error: review es undefined</div>;
+  }
+
+  const { reviewer, date, content, imageUrl } = review;
 
   return (
     <Card style={{ minWidth: 275, marginBottom: 2 }}>
