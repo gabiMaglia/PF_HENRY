@@ -161,6 +161,7 @@ const DetailProductService = ({
     ).data;
     let newBudget = false;
     let newDiagnosis = false;
+    let newReport = false;
     if (data.status === "En proceso de diagnostico") {
       if (budget === "Pendiente") {
         response = false;
@@ -211,7 +212,6 @@ const DetailProductService = ({
         response = true;
       }
     } else if (data.status === "Pruebas finales") {
-      console.log("Pruebas finales");
       if (final_diagnosis === "Pendiente") {
         response = false;
         await Swal.fire({
@@ -226,12 +226,17 @@ const DetailProductService = ({
             if (!value) {
               return "Debe ingresar el informe para continuar";
             } else {
-              Swal.showLoading();
-              response = await handleUpdateStatus([
-                { status: "final_diagnosis", value: value },
-              ]);
+              newReport = value;
             }
           },
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            Swal.showLoading();
+            response = await handleUpdateStatus([
+              { status: "final_diagnosis", value: newReport },
+            ]);
+            Swal.showLoading();
+          }
         });
       } else {
         response = true;
@@ -541,27 +546,28 @@ const DetailProductService = ({
                   </Box>
                 );
               })}
-            {authData.userRole === "technician" && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                  gap: "5px",
-                  mt: "2em",
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: "bold", color: "#fd611a" }}
+            {authData.userRole === "technician" &&
+              communicationPreference === "Whatsapp" && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: "5px",
+                    mt: "2em",
+                  }}
                 >
-                  PREFERENCIA DE COMUNICACIÓN:
-                </Typography>
-                <Typography variant="body1" sx={{ color: "#fd611a" }}>
-                  {communicationPreference}
-                </Typography>
-              </Box>
-            )}
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: "bold", color: "#fd611a" }}
+                  >
+                    PREFERENCIA DE COMUNICACIÓN:
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: "#fd611a" }}>
+                    {communicationPreference}
+                  </Typography>
+                </Box>
+              )}
           </Box>
           <Box
             sx={{
