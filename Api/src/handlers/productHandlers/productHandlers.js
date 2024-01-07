@@ -1,3 +1,5 @@
+const pluralize = require("pluralize");
+
 const {
   getAllProducts,
   postProduct,
@@ -144,7 +146,9 @@ const getProductByIdHandler = async (req, res) => {
 
 //SEARCH BAR
 const searchByNameHandler = async (req, res) => {
-  const name = req.query.name;
+  let name = req.query.name;
+  name = pluralize.singular(name.toLowerCase());
+  console.log("Nombre de búsqueda:", name);
   try {
     const results = await searchByName(name);
     if (results.length > 0) {
@@ -158,6 +162,8 @@ const searchByNameHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+//GET PRODUCTS CAROUSEL
 const getProductsCarouselHandler = async (req, res) => {
   try {
     const products = await productCarousel();
@@ -166,6 +172,7 @@ const getProductsCarouselHandler = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 module.exports = {
   postProductHandler,
   getProductsHandler,
