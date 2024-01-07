@@ -32,6 +32,7 @@ const DetailProductService = ({
   getAllServices = () => {},
 }) => {
   const [data, setData] = useState({});
+  const [communicationPreference, setComunicationPreference] = useState("");
   const theme = useTheme();
 
   const getName = async (id, product) => {
@@ -41,6 +42,7 @@ const DetailProductService = ({
       data: response.name + " " + response.surname,
     });
     setData(product);
+    setComunicationPreference(response.communication_preference);
     setIsLoading(false);
   };
 
@@ -116,7 +118,6 @@ const DetailProductService = ({
       Swal.showLoading();
       let response = await updateServiceStatus(data.statusId, updatedArray); // ACA
       response?.length > 0 && (response = response[response.length - 1]);
-      console.log(response);
       if (response?.error) {
         Swal.hideLoading();
         Swal.fire({
@@ -127,11 +128,18 @@ const DetailProductService = ({
         });
         return false;
       } else {
+        const preference =
+          authData.userRole === "technician" &&
+          communicationPreference === "Whatsapp"
+            ? "Notificar al cliente por Whatsapp"
+            : "";
         Swal.hideLoading();
         Swal.fire({
           allowOutsideClick: false,
           icon: "success",
           title: "Servicio actualizado",
+          footer: `${preference}`,
+          confirmButtonColor: "#fd611a",
           text: `${response?.data}`,
         });
         getService();
@@ -291,19 +299,24 @@ const DetailProductService = ({
     ) {
       const final = data.status.split(" ")[1];
       return (
-        <Typography
+        <Button
           variant="h4"
           className={final}
           sx={{
-            border: "1px solid black",
+            cursor: "default",
             p: ".2em",
-            borderRadius: "20px",
-            "&.finalizado": { backgroundColor: "green" },
-            "&.cancelado": { backgroundColor: "red" },
+            "&.finalizado": {
+              backgroundColor: "green",
+              "&:hover": { backgroundColor: "green" },
+            },
+            "&.cancelado": {
+              backgroundColor: "red",
+              "&:hover": { backgroundColor: "red" },
+            },
           }}
         >
           {data.status}
-        </Typography>
+        </Button>
       );
     }
     if (authData.userRole === "technician") {
@@ -528,6 +541,27 @@ const DetailProductService = ({
                   </Box>
                 );
               })}
+            {authData.userRole === "technician" && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  gap: "5px",
+                  mt: "2em",
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "bold", color: "#fd611a" }}
+                >
+                  PREFERENCIA DE COMUNICACIÓN:
+                </Typography>
+                <Typography variant="body1" sx={{ color: "#fd611a" }}>
+                  {communicationPreference}
+                </Typography>
+              </Box>
+            )}
           </Box>
           <Box
             sx={{
