@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //MATERIAL UI
-import { Input, Box, Button, styled } from "@mui/material";
+import { Input, Box, Button, styled, Typography } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
@@ -170,7 +170,10 @@ export default function SearchAppBar() {
               ml: "2em",
             }}
           >
-            <ShoppingCartIcon /*src={carrito}*/sx={{ fontSize: "32px" }} onClick={handleCartClick} />
+            <ShoppingCartIcon
+              /*src={carrito}*/ sx={{ fontSize: "32px" }}
+              onClick={handleCartClick}
+            />
             {cartItemCount > -1 && (
               <span
                 style={{
@@ -194,16 +197,18 @@ export default function SearchAppBar() {
             <AdminPanelSettingsIcon
               sx={{ display: "flex", margin: "0 auto", fontSize: "32px" }}
             />{" "}
-            Admin
+            <Typography sx={{ fontSize: "14px" }}>Admin</Typography>
           </Box>
         ) : userRole === "technician" ? (
           <Box>
             <ManageAccountsIcon
               sx={{ display: "flex", margin: "0 auto", fontSize: "32px" }}
             />{" "}
-            Técnico
+            <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
-        ) : <ShoppingCartIcon sx={{ fontSize: "32px" }} />}
+        ) : (
+          <ShoppingCartIcon sx={{ fontSize: "32px" }} />
+        )}
         {login === false ? (
           <Box
             sx={{
