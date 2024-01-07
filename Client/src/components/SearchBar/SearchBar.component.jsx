@@ -207,7 +207,8 @@ export default function SearchAppBar() {
             <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
         ) : (
-          <ShoppingCartIcon sx={{ fontSize: "32px" }} />
+          /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
+          null
         )}
         {login === false ? (
           <Box
