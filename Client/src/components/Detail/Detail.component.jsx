@@ -1,9 +1,8 @@
-// Importación de React y hooks
+//HOOKS
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
-// Importación de componentes y utilidades de Material-UI
+//MATERIAL UI
 import {
   Typography,
   Box,
@@ -15,22 +14,23 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
-import Swal from "sweetalert2";
-
-// Importación del componente CarouselProducts
+//COMPONENTS
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
-
-// Importación de servicios y hooks personalizados
+//SERVICES
 import {
   fetchProductById,
   fetchAllProducts,
   fetchProduct,
 } from "../../services/productServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
-
-// Importación de acciones de Redux
+//REDUX
 import { resetState } from "../../redux/slices/productSlice";
 import { addItem } from "../../redux/slices/cartSlice";
+//HELPERS
+import PATHROUTES from "../../helpers/pathRoute";
+//SWEET ALERT
+import Swal from "sweetalert2";
+
 
 // Estilo personalizado para el botón
 const CustomButton = styled(Button)({
@@ -40,7 +40,6 @@ const CustomButton = styled(Button)({
     backgroundColor: "#cc4c14",
   },
 });
-
 // Estilo personalizado para el componente CardMedia que muestra la imagen del producto
 const ProductMedia = styled(CardMedia)({
   padding: 0,
@@ -49,7 +48,6 @@ const ProductMedia = styled(CardMedia)({
   objectFit: "cover",
   margin: 0,
 });
-
 // Estilo personalizado para el contenedor de las miniaturas de imágenes
 const ThumbnailContainer = styled(Container)({
   width: "80px",
@@ -68,7 +66,6 @@ const ThumbnailContainer = styled(Container)({
     objectFit: "cover",
   },
 });
-
 // Componente para gestionar la transición de fundido
 const FadeInTransition = ({ children }) => {
   const [opacity, setOpacity] = useState(0);
@@ -102,6 +99,7 @@ const Detail = () => {
 
   // Configuración de Redux
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { productById, isLoading } = useSelector((state) => state.product);
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -166,7 +164,6 @@ const Detail = () => {
         setSelectedImage(productById.ProductImages[0].address);
       }
     };
-
     setInitialImage();
   }, [productById]);
 
@@ -200,10 +197,6 @@ const Detail = () => {
         }
       });
     }
-    // if (productById && productById.id) {
-    //   setStoredProducts(productById);
-    //   dispatch(addItem());
-    // }
   };
 
   // Verificación del tamaño de pantalla
