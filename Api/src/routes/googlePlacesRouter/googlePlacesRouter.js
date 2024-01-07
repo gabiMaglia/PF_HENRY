@@ -1,7 +1,7 @@
-const express = require("express");
-const placesrouter = express.Router();
+const { Router } = require("express");
+const placesrouter = Router();
 
-Router.get("google-places-api-key", (req, res) => {
+placesrouter.get("google-places-api-key", (req, res) => {
   res.json({ apiKey: process.env.GOOGLE_PLACES_API_KEY });
 });
 
