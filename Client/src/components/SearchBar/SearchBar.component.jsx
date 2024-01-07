@@ -61,6 +61,12 @@ export default function SearchAppBar() {
     dispatch(fetchSearch(inputName));
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  }
+
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
 
@@ -123,6 +129,7 @@ export default function SearchAppBar() {
           value={inputName}
           placeholder=" Buscador"
           onChange={handleChange}
+          onKeyPress={handleKeyPress}
           sx={{
             width: { xs: 300, sm: 500, xl: 800 },
             fontSize: 20,
