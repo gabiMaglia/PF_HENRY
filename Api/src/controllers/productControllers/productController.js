@@ -352,6 +352,7 @@ const searchByName = async (name) => {
     throw new Error(`Error en la búsqueda: ${error.message}`);
   }
 };
+
 const productCarousel = async () => {
   try {
     const allProducts = await Product.findAll({
