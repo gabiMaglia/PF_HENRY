@@ -369,6 +369,7 @@ const productCarousel = async () => {
     console.log(error.message);
   }
 };
+
 module.exports = {
   logicalDelete,
   postProduct,
