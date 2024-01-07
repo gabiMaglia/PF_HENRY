@@ -27,34 +27,46 @@ async function validarFormatoImagen(rutaImagen) {
        return false;
    }
 }
+function esMayuscula(s) {
+   if (s && s.charCodeAt(0) >= 65 && s.charCodeAt(0) <= 90) {
+       return true;
+   } else {
+       return false;
+   }
+}
 const validationsCreate=(values)=>{
- const {name,price,description,images,brandName,categoryName,warranty,stock}=values
- const error={}
- if(name.length===0||name===''){
-    error.e1='el nombre del producto es requerido'
- }
- if(price.length===0||price===''){
-    error.e2='el precio del producto es requerido'
- }else if(!/^[0-9]*\.?[0-9]*$/.test(price)){
-    error.e9='el precio debe tener solamente numeros'
- }
- if(description.length===0||description===''){
-    error.e3='la descripcion del producto es requerida'
- }
- if(!images){
-   error.e11='Por Favor ingrese una imagen'
- }
- images.forEach((image)=>{
-    if(!validarFormatoImagen(image)){
-        error.e4='verifique el formato de sus imagenes'
-    }
- })
- if(brandName.length===0||brandName===''){
-    error.e5='la marca del producto es requerida'
- }
- if(!categoryName||categoryName==="selecciona una categoria"){
-    error.e6='seleccione la categoria de su producto'
- }
+   const {name,price,description,images,brandName,categoryName,warranty,stock}=values
+   const error={}
+   if(name.length===0||name===''){
+      error.e1='el nombre del producto es requerido'
+   }
+   if(price.length===0||price===''){
+      error.e2='el precio del producto es requerido'
+   }else if(!/^[0-9]*\.?[0-9]*$/.test(price)){
+      error.e9='el precio debe tener solamente numeros'
+   }
+   if(description.length===0||description===''){
+      error.e3='la descripcion del producto es requerida'
+   }
+   if(images.length===0){
+      error.e11='Por Favor ingrese una imagen'
+   }
+   images.forEach(async (image) => {
+      const esImagenValida = await validarFormatoImagen(image);
+      if (!esImagenValida) {
+         error.e4 = 'verifique el formato de sus imagenes';
+      }
+   });
+   if(brandName.length===0||brandName===''||brandName==='Selecciona una marca'){
+      error.e5='la marca del producto es requerida'
+   }else if(!esMayuscula(brandName)){
+      error.e13='la primer letra debe ser mayuscula'
+   }
+   if(!categoryName||categoryName[0]==="Selecciona una categoria"||categoryName[0]===''){
+      error.e6='seleccione la categoria de su producto'
+   }else if(!esMayuscula(categoryName[0])){
+      error.e12='la primer letra debe ser mayuscula'
+   }
  if(warranty.length===0||warranty===''){
     error.e7='especifique la garantia del producto'
  }
