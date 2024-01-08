@@ -107,7 +107,7 @@ const ProductsTable = () => {
           name: product.name,
           price: product.price,
           warranty: product.warranty,
-          souldCount: product.soldCount,
+          soldCount: product.soldCount,
           is_deleted: product.is_deleted,
           brand: product.ProductBrands[0].name,
           category: product.ProductCategories[0].name,
