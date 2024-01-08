@@ -110,6 +110,12 @@ export default function ShoppingCart() {
     dispatch(fetchCart(items, cookiesAccepted));
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
   };
+  const customization = {
+    visual: {
+      buttonBackground: "black",
+      borderRadius: "10px",
+    },
+  };
 
   return (
     <Container
@@ -268,7 +274,14 @@ export default function ShoppingCart() {
           </Button>
         </Box>
       </Box>
-      <Box>{id && <Wallet initialization={{ preferenceId: id }} />}</Box>
+      <Box>
+        {id && (
+          <Wallet
+            initialization={{ preferenceId: id }}
+            customization={customization}
+          />
+        )}
+      </Box>
     </Container>
   );
 }

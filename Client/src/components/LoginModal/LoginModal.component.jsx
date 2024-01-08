@@ -27,7 +27,7 @@ import { getUserById } from "../../services/userServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
-import { fetchGetProduct } from "../../services/productServices";
+import { fetchCartUser, fetchGetProduct } from "../../services/productServices";
 import { addItem } from "../../redux/slices/cartSlice";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
@@ -46,6 +46,7 @@ const LoginModal = ({
       dispatch(logUser({ userObject: data }));
     });
     await dispatch(fetchGetProduct(cookiesAccepted));
+    await dispatch(fetchCartUser(cookiesAccepted));
     dispatch(addItem());
   };
 

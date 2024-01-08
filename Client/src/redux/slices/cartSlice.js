@@ -5,6 +5,7 @@ const initialState = {
   items: [],
   total: 0,
   id: null,
+  cart: []
 };
 
 const cartSlice = createSlice({
@@ -69,9 +70,12 @@ const cartSlice = createSlice({
     idShop: (state, action) => {
       state.id = action.payload
     },
+    getCart: (state, action) => {
+      state.cart = action.payload
+    }
   },
 });
 
-export const { addItem, updateItem, removeItem, totalItem, idShop, resetCart } = cartSlice.actions;
+export const { addItem, updateItem, removeItem, totalItem, idShop, resetCart, getCart } = cartSlice.actions;
 export default cartSlice.reducer;
 
