@@ -12,7 +12,7 @@ import {
 } from "../redux/slices/productSlice";
 
 //REDUX
-import { idShop } from "../redux/slices/cartSlice";
+import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
@@ -241,6 +241,21 @@ export const fetchUpdateProduct = async (id, updateProduct) => {
     return { error: true, message: error.message };
   }
 };
+
+export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
+  console.log(userId)
+  try {
+    const response = await axios.get(`${urlBack}/pagos/misCompras/${userId}`, {
+      withCredentials: true
+    })
+    console.log(response)
+    dispatch(getCart(response.data))
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
