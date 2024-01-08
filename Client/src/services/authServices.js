@@ -42,18 +42,17 @@ export const googleLoginUser = async (cookieStatus) => {
       `${url}/auth/google`,
       "targetWindow",
       `toolbar=no,
-        location=no,
-        status=no,
-        menubar=no,
-        scrollbars=yes,
-        resizable=yes,
-        width=620,
-        height=700`
-    );
-    return new Promise((resolve) => {
-      window.addEventListener("message", (event) => {
-        console.log(event.data)
-        if (event.origin === `${url}` && event.data) {
+      location=no,
+      status=no,
+      menubar=no,
+      scrollbars=yes,
+      resizable=yes,
+      width=620,
+      height=700`
+      );
+      return new Promise((resolve) => {
+        window.addEventListener("message", (event) => {
+          if (event.origin === `${url}` && event.data) {
           if (event.data.error) {
             popup.close();
             resolve({ error: true , response: event.data.response });

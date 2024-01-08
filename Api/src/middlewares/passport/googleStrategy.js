@@ -7,6 +7,7 @@ const {
 } = require("../../controllers/accountControllers/authController");
 
 const verifyCallback = async (accessToken, refreshToken, profile, done) => {
+
   const email = profile.emails.find((email) => email.verified === true);
   const { given_name, family_name, picture, sub } = profile._json;
 
@@ -43,6 +44,7 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: `${process.env.API_URL}/auth/google/callback`,
     scope: ["profile", "email"],
   },
+
   verifyCallback
 );
 

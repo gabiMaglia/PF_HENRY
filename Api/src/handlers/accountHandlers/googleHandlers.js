@@ -6,6 +6,7 @@ const {
 const { User } = require("../../db");
 
 const googleAuthCallback = async (req, res) => {
+
   try {
     const authEmail = req.user.email;
     const responseLogin = await loginUser(
@@ -17,8 +18,6 @@ const googleAuthCallback = async (req, res) => {
         .status(401)
         .json({ response: "No existe un usuario registrado con ese email" });
     }
-    
-    req.session.token = responseLogin.tokenSession
    
     return res.status(200).send(`<!DOCTYPE html>
     <html lang="en">
