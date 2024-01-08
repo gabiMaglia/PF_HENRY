@@ -26,7 +26,7 @@ export const fetchAllProducts = () => async (dispatch) => {
     });
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
-    )
+    );
     dispatch(getProducts(filteredProducts));
     // dispatch(getProducts(response.data));
   } catch (error) {
@@ -52,7 +52,7 @@ export const fetchSearch = (name) => async (dispatch) => {
     });
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
-    )
+    );
     dispatch(getProducts(filteredProducts));
     // dispatch(search(response.data));
   } catch (error) {
@@ -119,28 +119,28 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
 export const fetchGetProduct = (cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId, userRole } = aux;
-  if(userRole === "customer"){
-  try {
-    const res = await axios.get(`${urlBack}/cart/${userId}`, {
-      withCredentials: true,
-    });
-    const products = res.data.Products.map((product) => ({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      ProductImages: product.ProductImages[0],
-      count: product.ProductCart.quantity,
-    }));
+  if (userRole === "customer") {
+    try {
+      const res = await axios.get(`${urlBack}/cart/${userId}`, {
+        withCredentials: true,
+      });
+      const products = res.data.Products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        ProductImages: product.ProductImages[0],
+        count: product.ProductCart.quantity,
+      }));
 
-    const storedProducts = getProducts();
+      const storedProducts = getProducts();
 
-    if (storedProducts.payload === undefined) {
-      window.localStorage.setItem("storedProducts", JSON.stringify(products));
+      if (storedProducts.payload === undefined) {
+        window.localStorage.setItem("storedProducts", JSON.stringify(products));
+      }
+    } catch (error) {
+      return;
     }
-  } catch (error) {
-    return;
   }
-}
 };
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
@@ -169,14 +169,13 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
     productId: product,
   };
   try {
-     const res = await axios.put(`${urlBack}/cart/remove`, data, {
+    const res = await axios.put(`${urlBack}/cart/remove`, data, {
       withCredentials: true,
     });
-    
   } catch (error) {
     return;
-  } 
-}
+  }
+};
 
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
