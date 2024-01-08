@@ -3,14 +3,20 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //MATERIAL UI
-import { Input, Box, Button, styled } from "@mui/material";
+import { Input, Box, Button, styled, Typography } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
 //REDUX
+import { logUser } from "../../redux/slices/userSlice";
+import { addItem } from "../../redux/slices/cartSlice";
+//SERVICES
 import { fetchSearch, fetchChage } from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
 //HELPERS
@@ -19,17 +25,19 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
-import carrito from "/icons/carrito-de-compras.png";
-import { logUser } from "../../redux/slices/userSlice";
-import { addItem } from "../../redux/slices/cartSlice";
+// import carrito from "/icons/carrito-de-compras.png";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cartItemCount = useSelector((state) => state.cart.items.length);
-  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const { login } = useSelector((state) => state.user);
   const { inputName } = useSelector((state) => state.product);
+  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
+  const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+  const userRole = authData ? authData.userRole : null;
 
   useEffect(() => {
     dispatch(addItem());
@@ -47,7 +55,6 @@ export default function SearchAppBar() {
     cursor: "pointer",
   });
 
-
   const getUserInfo = async (token) => {
     if (token !== undefined) {
       const response = await getUserById(token.userId);
@@ -61,8 +68,11 @@ export default function SearchAppBar() {
     dispatch(fetchSearch(inputName));
   };
 
-  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
-  const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  };
 
   const handleChange = (event) => {
     dispatch(fetchChage(event.target.value));
@@ -75,7 +85,7 @@ export default function SearchAppBar() {
   useEffect(() => {
     const userToken = getDataFromSelectedPersistanceMethod(cookieStatus);
     if (userToken?.login) {
-      getUserInfo(userToken)
+      getUserInfo(userToken);
     }
   }, [cookieStatus]);
 
@@ -123,6 +133,7 @@ export default function SearchAppBar() {
           value={inputName}
           placeholder=" Buscador"
           onChange={handleChange}
+          onKeyPress={handleKeyPress}
           sx={{
             width: { xs: 300, sm: 500, xl: 800 },
             fontSize: 20,
@@ -159,32 +170,51 @@ export default function SearchAppBar() {
           alignItems: "center",
         }}
       >
-        <Box
-          sx={{
-            position: "relative",
-            ml: "2em",
-          }}
-        >
-          <Logo src={carrito} onClick={handleCartClick} />
-          {cartItemCount > -1 && (
-            <span
-              style={{
-                position: "absolute",
-                top: "0",
-                right: "0",
-                transform: "translate(50%, -50%)",
-                backgroundColor: "red",
-                color: "white",
-                borderRadius: "50%",
-                padding: "0.2em 0.5em",
-                fontSize: "0.7em",
-              }}
-            >
-              {cartItemCount}
-            </span>
-          )}
-        </Box>
-
+        {userRole === "customer" ? (
+          <Box
+            sx={{
+              position: "relative",
+              ml: "2em",
+            }}
+          >
+            <ShoppingCartIcon
+              /*src={carrito}*/ sx={{ fontSize: "32px" }}
+              onClick={handleCartClick}
+            />
+            {cartItemCount > -1 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "0",
+                  right: "0",
+                  transform: "translate(50%, -50%)",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.2em 0.5em",
+                  fontSize: "0.7em",
+                }}
+              >
+                {cartItemCount}
+              </span>
+            )}
+          </Box>
+        ) : userRole === "admin" ? (
+          <Box>
+            <AdminPanelSettingsIcon
+              sx={{ display: "flex", margin: "0 auto", fontSize: "32px" }}
+            />{" "}
+            <Typography sx={{ fontSize: "14px" }}>Admin</Typography>
+          </Box>
+        ) : userRole === "technician" ? (
+          <Box>
+            <ManageAccountsIcon
+              sx={{ display: "flex", margin: "0 auto", fontSize: "32px" }}
+            />{" "}
+            <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
+          </Box>
+        ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
+        null}
         {login === false ? (
           <Box
             sx={{

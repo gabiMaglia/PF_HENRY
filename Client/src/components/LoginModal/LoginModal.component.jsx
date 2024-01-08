@@ -16,7 +16,7 @@ import {
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
 //STYLES
-import "./alertStyles.min.css";
+import "../../alertStyles.css";
 //HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX

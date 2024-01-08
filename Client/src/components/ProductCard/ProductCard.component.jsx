@@ -46,6 +46,10 @@ const CardProduct = ({ product }) => {
   const wishlistProducts = useSelector((state) => state.wishlist.products);
   const login = useSelector((state) => state.user.login);
 
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   useEffect(() => {
     if (login && wishlistProducts) {
       const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
@@ -81,10 +85,6 @@ const CardProduct = ({ product }) => {
     } else {
       Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
     }
-  };
-
-  const formatPrice = (price) => {
-    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
 
   return (
