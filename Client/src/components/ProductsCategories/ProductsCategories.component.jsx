@@ -18,9 +18,16 @@ const ProductsCategoriesComponent = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `${backUrl}/category/filter/${categoryName}`
+          `${backUrl}/category/filter/${categoryName}`,
+          {
+            withCredentials: true,
+          }
         );
-        setCategoryProducts(data);
+        const filteredData = data.filter(
+          (product) => product.is_deleted === false
+        );
+        setCategoryProducts(filteredData);
+        // setCategoryProducts(data);
         setLoading(false);
       } catch (error) {
         console.log(error, "Error al obtener los productos de la categoría");
@@ -47,31 +54,31 @@ const ProductsCategoriesComponent = () => {
         <Box>
           <Box
             sx={{
-            backgroundColor: "#000",
-            width: "100%",
-            height: "120px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          >
-          <Typography
-            variant="h4"
-            sx={{
-              color: "#fff",
-              textTransform: "uppercase",
-              fontWeight: "900",
+              backgroundColor: "#000",
+              width: "100%",
+              height: "120px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            fontWeight={"bold"}
-            fontSize={24}
-            m={4}
-            align={"center"}
           >
-            <span style={{ textTransform: "uppercase", fontWeight: "900" }}>
-              Productos de la categoría:
-            </span>{" "}
-            {categoryName}
-          </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                color: "#fff",
+                textTransform: "uppercase",
+                fontWeight: "900",
+              }}
+              fontWeight={"bold"}
+              fontSize={24}
+              m={4}
+              align={"center"}
+            >
+              <span style={{ textTransform: "uppercase", fontWeight: "900" }}>
+                Productos de la categoría:
+              </span>{" "}
+              {categoryName}
+            </Typography>
           </Box>
           <Box
             sx={{
@@ -83,7 +90,7 @@ const ProductsCategoriesComponent = () => {
               gap: "20px 70px",
               width: "85%",
               marginInline: "auto",
-              p:4
+              p: 4,
             }}
           >
             {categoryProducts.map((product) => (

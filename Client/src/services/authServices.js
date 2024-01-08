@@ -1,7 +1,6 @@
 import axios from "axios";
 import {
   createPersistency,
-  headerSetterForPetitions,
 } from "../utils/authMethodSpliter";
 
 // address = password
@@ -25,6 +24,7 @@ export const loginUser = async (username, password, cookieStatus) => {
         
       }
     );
+
 
     if (data.login) {
       const sortedData = dataSorterForApp(data);
@@ -52,11 +52,18 @@ export const googleLoginUser = async (cookieStatus) => {
     );
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
+        console.log(event.data)
         if (event.origin === `${url}` && event.data) {
-          const sortedData = dataSorterForApp(event.data);
-          createPersistency(sortedData, cookieStatus);
-          popup.close();
-          resolve({ data: event.data });
+          if (event.data.error) {
+            popup.close();
+            resolve({ error: true , response: event.data.response });
+          }else {
+            const sortedData = dataSorterForApp(event.data);
+            createPersistency(sortedData, cookieStatus);
+            popup.close();
+            resolve({ data: event.data });
+          }
+
         }
       });
     });

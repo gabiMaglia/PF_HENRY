@@ -52,16 +52,16 @@ server.use(express.urlencoded({ extended: true }));
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.use((req, res, next) => {
-  console.log({ isAuthenticated: req.isAuthenticated()} );
-  console.log({ user: req.user} );
-  next();
-});
-server.use((req, res, next) => {
-  // console.log({ headers: req.headers });
-  console.log({ cookie: req.headers.cookie });
-  next();
-});
+// server.use((req, res, next) => {
+//   console.log({ isAuthenticated: req.isAuthenticated()} );
+//   console.log({ user: req.user} );
+//   next();
+// });
+// server.use((req, res, next) => {
+//   // console.log({ headers: req.headers });
+//   console.log({ cookie: req.headers.cookie });
+//   next();
+// });
 // Entryp0nt de la ruta principal
 server.use("/", routes);
 
