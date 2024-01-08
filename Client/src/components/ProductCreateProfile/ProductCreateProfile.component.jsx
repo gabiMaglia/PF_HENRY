@@ -12,6 +12,8 @@ import {
   MenuItem,
   Input,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 //SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
@@ -38,8 +40,8 @@ const ProductCreateProfileComponent = () => {
   const [newBrand, setNewBrand] = useState("");
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
+  const [carrouselData, SetCarrouselData] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [values, setValues] = useState({
     name: "",
     price: "",
@@ -50,6 +52,7 @@ const ProductCreateProfileComponent = () => {
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
+    carrousel: carrouselData,
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -71,7 +74,7 @@ const ProductCreateProfileComponent = () => {
     setImageURL(e.target.value);
   };
 
-  const handleChange = async(event) => {
+  const handleChange = async (event) => {
     const { name, value, files } = event.target;
 
     switch (name) {
@@ -92,6 +95,8 @@ const ProductCreateProfileComponent = () => {
           ]);
         }
         break;
+      case "carrousel":
+        SetCarrouselData(!carrouselData);
 
       case "imageUrl":
         setImageURL(value);
@@ -121,7 +126,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: value,
         }));
-         validationsCreate(values);
+        validationsCreate(values);
         setIsOtherBrand(value === "otra");
         break;
 
@@ -131,7 +136,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: isOtherBrand ? value : prevValues.brandName,
         }));
-         validationsCreate(values);
+        validationsCreate(values);
         break;
 
       default:
@@ -230,7 +235,6 @@ const ProductCreateProfileComponent = () => {
         images: array,
       };
 
-
       // Muestra una alerta de que la creación está en proceso
       Swal.fire({
         icon: "info",
@@ -266,11 +270,13 @@ const ProductCreateProfileComponent = () => {
         categoryName: isOtherCategory ? newCategory : [categoryName],
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
+        carrousel: carrouselData,
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
       setImagePreviews([]);
-      setImageURL("");
+      setImageURL(""); 
+      SetCarrouselData(false)
     }
   };
   const handleRemoveImage = (index) => {
@@ -315,7 +321,7 @@ const ProductCreateProfileComponent = () => {
             display: "flex",
             flexDirection: "column",
             flexGrow: "1",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
           }}
         >
           <Box>
@@ -326,6 +332,7 @@ const ProductCreateProfileComponent = () => {
               onChange={handleChange}
               variant="outlined"
               required
+              sx={{ mt: 1, mb: 1 }}
               fullWidth
               helperText={errors.e1}
               error={Boolean(errors.e1)}
@@ -339,6 +346,7 @@ const ProductCreateProfileComponent = () => {
               onChange={handleChange}
               variant="outlined"
               required
+              sx={{ mt: 1, mb: 1 }}
               fullWidth
               helperText={errors.e2 ? errors.e2 : errors.e9}
               error={Boolean(errors.e2) || Boolean(errors.e9)}
@@ -353,6 +361,7 @@ const ProductCreateProfileComponent = () => {
               name="description"
               value={values.description}
               onChange={handleChange}
+              sx={{ mt: 1, mb: 1 }}
               variant="outlined"
               required
               helperText={errors.e3}
@@ -366,6 +375,7 @@ const ProductCreateProfileComponent = () => {
               fullWidth
               value={values.warranty}
               onChange={handleChange}
+              sx={{ mt: 1, mb: 1 }}
               variant="outlined"
               required
               helperText={errors.e7}
@@ -379,6 +389,7 @@ const ProductCreateProfileComponent = () => {
               value={values.stock}
               onChange={handleChange}
               variant="outlined"
+              sx={{ mt: 1, mb: 1 }}
               required
               fullWidth
               helperText={errors.e8 ? errors.e8 : errors.e10}
@@ -393,6 +404,7 @@ const ProductCreateProfileComponent = () => {
               value={isOtherBrand ? "otra" : values.brandName}
               onChange={handleChange}
               variant="outlined"
+              sx={{ mt: 1, mb: 1 }}
               fullWidth
             >
               <MenuItem value="Selecciona una marca">
@@ -423,6 +435,7 @@ const ProductCreateProfileComponent = () => {
               <TextField
                 name="newBrand"
                 label="Nueva Marca"
+                sx={{ mt: 1, mb: 1 }}
                 value={newBrand}
                 onChange={handleChange}
                 required
@@ -468,6 +481,7 @@ const ProductCreateProfileComponent = () => {
                 name="newCategory"
                 label="Nueva Categoria"
                 value={newCategory}
+                sx={{ mt: 1, mb: 1 }}
                 onChange={handleChange}
                 required
                 variant="outlined"
@@ -475,6 +489,13 @@ const ProductCreateProfileComponent = () => {
               />
             )}
           </Box>
+          <FormControlLabel
+            name="carrousel"
+            value={carrouselData}
+            onChange={handleChange}
+            control={<Checkbox />}
+            label="Desea añadir el producto al carrousel?"
+          />
           <Box>
             {!isUrlInput ? (
               <FormControl fullWidth>
@@ -485,6 +506,8 @@ const ProductCreateProfileComponent = () => {
                   inputRef={fileInputRef}
                   onChange={handleChange}
                   sx={{
+                    mt: 1,
+                    mb: 1,
                     padding: "15px",
                     marginBottom: "10px",
                     borderRadius: 2,
@@ -509,11 +532,12 @@ const ProductCreateProfileComponent = () => {
                   name="imageUrl"
                   value={imageURL}
                   required
+                  sx={{ mt: 1, mb: 1 }}
                   variant="outlined"
                   onChange={handlerImageChange}
                   fullWidth
                 />
-                <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
+                <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a",mt: 1, mb: 1 }}>
                   <Button
                     variant="outlined"
                     color="inherit"
@@ -537,7 +561,7 @@ const ProductCreateProfileComponent = () => {
                 </Typography>
               )
             )}
-            <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a" }}>
+            <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a",mt: 1, mb: 1 }}>
               <Button
                 variant="outlined"
                 color="inherit"
