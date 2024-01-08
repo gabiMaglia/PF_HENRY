@@ -41,7 +41,7 @@ mainRouter.use("/auth", googleRouter);
 mainRouter.use("/places", googleReviewsRoutes);
 // UserRoutes
 mainRouter.use("/user", userRoutes);
-mainRouter.use("/user_role", userRoleRoutes);
+mainRouter.use("/user_role", checkAuthToken, checkRoleAuthToken(["admin", "technician"]), userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);
