@@ -6,11 +6,14 @@ const {
 const useRouter = Router();
 useRouter.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    session: false,
+    scope: ["profile", "email"],
+  })
 );
 useRouter.get(
   "/google/callback",
-  passport.authenticate("google"),
+  passport.authenticate("google", { session: false }),
   googleAuthCallback
 );
 module.exports = useRouter;
