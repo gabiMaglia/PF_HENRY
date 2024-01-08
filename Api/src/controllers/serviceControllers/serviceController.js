@@ -72,6 +72,9 @@ const addServiceController = async (
         const createdService = await Service.findByPk(newService.id, {
           include: [Service_status, Service_image],
         });
+        createdService.dataValues.clientName = clientObj.name;
+        createdService.dataValues.technicianName = technicianObj.name;
+
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
         if (clientObj.communication_preference !== "Whatsapp") {
@@ -152,11 +155,25 @@ const getAllServicesController = async () => {
   }
   const arrayOfServices = await Promise.all(
     services.map(async (service) => {
-      return await Service.findByPk(service.id, {
+      const clientObj = await User.findByPk(service.userId);
+      const technicianObj = await User.findByPk(service.technicianId);
+
+      const clientName = clientObj ? clientObj.name : null;
+      const technicianName = technicianObj ? technicianObj.name : null;
+
+      const serviceWithNames = await Service.findByPk(service.id, {
         include: [Service_status, Service_image],
       });
+
+      if (serviceWithNames) {
+        serviceWithNames.dataValues.clientName = clientName;
+        serviceWithNames.dataValues.technicianName = technicianName;
+      }
+
+      return serviceWithNames;
     })
   );
+
   return arrayOfServices;
 };
 

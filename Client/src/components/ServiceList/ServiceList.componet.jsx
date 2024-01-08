@@ -38,13 +38,13 @@ const ServiceList = () => {
       headerAlign: "center",
     },
     {
-      field: "userId",
+      field: "clientName",
       headerName: "Usuario",
       minWidth: 300,
       headerAlign: "center",
     },
     {
-      field: "technicianId",
+      field: "technicianName",
       headerName: "Tecnico asignado",
       minWidth: 300,
       headerAlign: "center",
@@ -170,12 +170,7 @@ const ServiceList = () => {
           confirm_repair,
           status,
         } = service.Service_status;
-        const { data } = await axios.get(`${urlBack}/user/${service.userId}`);
-        const Client = data.name;
-        const response = await axios.get(
-          `${urlBack}/user/${service.technicianId}`
-        );
-        const Tech = response.data;
+
         return {
           ...service,
           user_diagnosis,
@@ -184,8 +179,7 @@ const ServiceList = () => {
           budget,
           confirm_repair,
           status,
-          userId: Client,
-          technicianId: Tech.name,
+
         };
       });
       const resolvedServicesData = await Promise.all(servicesData);
