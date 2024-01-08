@@ -116,9 +116,8 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchGetProduct = ({cookiesAccepted}) => async () => {
+export const fetchGetProduct = (cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-
   const { userId, userRole } = aux;
   if (userRole === "customer") {
     try {
