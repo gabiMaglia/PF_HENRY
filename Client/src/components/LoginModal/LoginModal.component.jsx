@@ -16,7 +16,7 @@ import {
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CancelIcon from "@mui/icons-material/Cancel";
 //STYLES
-import "./alertStyles.min.css";
+import "../../alertStyles.css";
 //HELPERS
 import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX
@@ -58,7 +58,9 @@ const LoginModal = ({
       response = await loginUser(username, address, cookieStatus);
     }
     !cookieStatus && rejectCookies();
+
     if (response.error) {
+
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -66,7 +68,7 @@ const LoginModal = ({
         },
         icon: "error",
         title: "Fallo en el inicio de sesion",
-        text: `${response.error.data.response || response.error.data}`,
+        text: `${  response.response || response.error.data?.response || response.error.data }`,
       });
     } else {
       Swal.fire({

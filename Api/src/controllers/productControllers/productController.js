@@ -346,12 +346,12 @@ const searchByName = async (name) => {
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
-
     return products;
   } catch (error) {
     throw new Error(`Error en la búsqueda: ${error.message}`);
   }
 };
+
 const productCarousel = async () => {
   try {
     const allProducts = await Product.findAll({
@@ -368,6 +368,7 @@ const productCarousel = async () => {
     console.log(error.message);
   }
 };
+
 module.exports = {
   logicalDelete,
   postProduct,
