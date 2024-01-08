@@ -12,6 +12,8 @@ import {
   MenuItem,
   Input,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 //SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
@@ -38,8 +40,8 @@ const ProductCreateProfileComponent = () => {
   const [newBrand, setNewBrand] = useState("");
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
+  const [carrouselData, SetCarrouselData] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [values, setValues] = useState({
     name: "",
     price: "",
@@ -50,6 +52,7 @@ const ProductCreateProfileComponent = () => {
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
+    carrousel: carrouselData,
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -71,7 +74,7 @@ const ProductCreateProfileComponent = () => {
     setImageURL(e.target.value);
   };
 
-  const handleChange = async(event) => {
+  const handleChange = async (event) => {
     const { name, value, files } = event.target;
 
     switch (name) {
@@ -92,6 +95,8 @@ const ProductCreateProfileComponent = () => {
           ]);
         }
         break;
+      case "carrousel":
+        SetCarrouselData(!carrouselData);
 
       case "imageUrl":
         setImageURL(value);
@@ -121,7 +126,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: value,
         }));
-         validationsCreate(values);
+        validationsCreate(values);
         setIsOtherBrand(value === "otra");
         break;
 
@@ -131,7 +136,7 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: isOtherBrand ? value : prevValues.brandName,
         }));
-         validationsCreate(values);
+        validationsCreate(values);
         break;
 
       default:
@@ -230,7 +235,6 @@ const ProductCreateProfileComponent = () => {
         images: array,
       };
 
-
       // Muestra una alerta de que la creación está en proceso
       Swal.fire({
         icon: "info",
@@ -266,11 +270,13 @@ const ProductCreateProfileComponent = () => {
         categoryName: isOtherCategory ? newCategory : [categoryName],
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
+        carrousel: carrouselData,
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
       setImagePreviews([]);
-      setImageURL("");
+      setImageURL(""); 
+      SetCarrouselData(false)
     }
   };
   const handleRemoveImage = (index) => {
@@ -475,6 +481,13 @@ const ProductCreateProfileComponent = () => {
               />
             )}
           </Box>
+          <FormControlLabel
+            name="carrousel"
+            value={carrouselData}
+            onChange={handleChange}
+            control={<Checkbox />}
+            label="Desea añadir el producto al carrousel?"
+          />
           <Box>
             {!isUrlInput ? (
               <FormControl fullWidth>
