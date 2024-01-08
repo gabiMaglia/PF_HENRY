@@ -92,7 +92,14 @@ const registerUser = async (userObj) => {
 };
 
 const loginUser = async (user) => {
+  console.log(user)
+  if (user.error) {
+    console.log('llegoAqui')
+    return
+  }
+  
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
+  
   if (!user.isActive) {
     return {
       error: true,

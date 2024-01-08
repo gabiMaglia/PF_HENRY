@@ -14,8 +14,7 @@ const verifyCallback = async (accessToken, refreshToken, profile, done) => {
 
   // IF EXITS IN DATABASE
   if (response) {
-   return done(null, profile._json);
- 
+    return done(null, profile._json);
   } else {
     // SAVE IN DATABASE
     await registerUser({
