@@ -18,9 +18,13 @@ const ProductsCategoriesComponent = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(
-          `${backUrl}/category/filter/${categoryName}`
+          `${backUrl}/category/filter/${categoryName}`, {
+            withCredentials: true,
+          }
         );
-        setCategoryProducts(data);
+        const filteredData = data.filter((product) => product.is_deleted === false);
+        setCategoryProducts(filteredData);
+        // setCategoryProducts(data);
         setLoading(false);
       } catch (error) {
         console.log(error, "Error al obtener los productos de la categoría");

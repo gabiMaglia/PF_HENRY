@@ -24,7 +24,11 @@ export const fetchAllProducts = () => async (dispatch) => {
     const response = await axios.get(`${urlBack}/product/`, {
       withCredentials: true,
     });
-    dispatch(getProducts(response.data));
+    const filteredProducts = response.data.filter(
+      (product) => product.is_deleted === false
+    )
+    dispatch(getProducts(filteredProducts));
+    // dispatch(getProducts(response.data));
   } catch (error) {
     return;
   }
@@ -46,7 +50,11 @@ export const fetchSearch = (name) => async (dispatch) => {
     const response = await axios.get(`${urlBack}/search?name=${name}`, {
       withCredentials: true,
     });
-    dispatch(search(response.data));
+    const filteredProducts = response.data.filter(
+      (product) => product.is_deleted === false
+    )
+    dispatch(getProducts(filteredProducts));
+    // dispatch(search(response.data));
   } catch (error) {
     Swal.fire("Producto no existente", "", "error");
   }
