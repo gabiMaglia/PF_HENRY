@@ -54,7 +54,6 @@ const loginHandler = async (req, res) => {
     if (response.error) {
       return res.status(401).json(response.response);
     }
-    req.session.token = response.tokenSession;
     return res.status(200).json(response);
   } catch (error) {
     return res.status(500).json(error.message);
@@ -83,14 +82,14 @@ const confirmAccountHandler = async (req, res) => {
 const logoutHandler = async (req, res, next) => {
   try {
 
-    req.logOut(req.user, function (err) {
-      if (err) {
-        console.log("error", err);
-        return next(err);
-      }
-      return res.clearCookie("connect", { path: "/" });
+    // req.logOut(req.user, function (err) {
+    //   if (err) {
+    //     console.log("error", err);
+    //     return next(err);
+    //   }
+    //   return res.clearCookie("connect", { path: "/" });
 
-    });
+    // });
   } catch (error) {
     return res.status(500).json(error.message);
   }

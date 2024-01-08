@@ -149,8 +149,8 @@ const getMisCompras = async (userId) => {
   try {
     const userOrders = await Order.findAll({
       where: { UserId: userId },
-      include: [
-        "status",
+      attributes:["status", "cartTotal"],
+      include:[
         {
           model: Product,
           attributes: ["id", "name", "price"],
@@ -165,7 +165,7 @@ const getMisCompras = async (userId) => {
             },
           ],
         },
-      ],
+      ]
     });
 
     if (!userOrders) {
