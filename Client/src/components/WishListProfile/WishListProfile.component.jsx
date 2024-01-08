@@ -91,7 +91,7 @@ const WhishListProfileComponent = () => {
   };
 
   const [cardStatus, setCardStatus] = useState(
-    wishListCards.map((card) => {
+    wishListCards?.map((card) => {
       return { id: card.id, status: false }; //Estado de productos seleccionados
     })
   );
@@ -116,6 +116,10 @@ const WhishListProfileComponent = () => {
       chargeWishListProduct(); //Sino recarga el estado global
     }
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
+
+  useEffect(() => {
+    wishListCards?.length === 0 && setIsLoading(false);
+  }, [wishListCards]);
 
   const deleteProduct = (id) => {
     setIsLoading(true);
@@ -165,7 +169,7 @@ const WhishListProfileComponent = () => {
         },
       }}
     >
-      {wishListCards.length === 0 && !isLoading ? (
+      {wishListCards?.length === 0 && !isLoading ? (
         <Box
           sx={{
             width: "100%",
@@ -226,7 +230,7 @@ const WhishListProfileComponent = () => {
             </Button>
           </Box>
           <Box sx={{ mt: "4em" }}>
-            {wishListCards.map((card, index) => {
+            {wishListCards?.map((card, index) => {
               return (
                 <Box
                   key={index}
