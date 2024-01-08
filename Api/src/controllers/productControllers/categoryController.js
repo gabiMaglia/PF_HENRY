@@ -4,6 +4,7 @@ const {
   ProductImage,
   ProductStock,
 } = require("../../db");
+
 const getAllCategories = async () => {
   const allCategories = await ProductCategory.findAll();
   if (allCategories) {
