@@ -139,7 +139,9 @@ export const fetchGetProduct = ({cookiesAccepted}) => async () => {
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
+
   const { userId, jwt } = aux;
+
   const data = {
     userId: userId,
     productId: product.id,
@@ -248,15 +250,15 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
 
 export const fetchCartUser = ({cookieAccepted}) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+
   const { userId, jwt } = aux;
-  
   try {
     const response = await axios.get(`${urlBack}/pagos/misCompras/${userId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     })
-   
+
     dispatch(getCart(response.data))
   } catch (error) {
     console.log(error.message)
