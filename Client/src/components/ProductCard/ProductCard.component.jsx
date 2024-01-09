@@ -61,7 +61,7 @@ const CardProduct = ({ product }) => {
 
   useEffect(() => {
     if (login && !wishlistProducts) {
-      fetchWishList(userId, dispatch);
+      fetchWishList(userId, dispatch, authData.jwt);
     }
   }, [userId, dispatch, login, wishlistProducts]);
 

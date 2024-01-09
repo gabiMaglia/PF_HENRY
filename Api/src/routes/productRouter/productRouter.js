@@ -11,6 +11,11 @@ const {
   getProductsCarouselHandler,
 } = require("../../handlers/productHandlers/productHandlers");
 
+const {
+  checkAuthToken,
+  checkRoleAuthToken,
+} = require("../../middlewares/tokenAuthMiddlewares");
+
 const productRouter = Router();
 
 productRouter.get("/", getProductsHandler);
@@ -18,10 +23,10 @@ productRouter.get("/carousel", getProductsCarouselHandler);
 
 productRouter.get("/search", searchByNameHandler);
 productRouter.get("/:id", getProductByIdHandler);
-productRouter.post("/", postProductHandler);
-productRouter.post("/several", postProductSeveralHandler);
-productRouter.put("/:id", updateProductHandler);
-productRouter.put("/logicalDelete/:id", logicalDeleteHandler);
-productRouter.delete("/:id", deleteProductHandler);
+productRouter.post("/",checkAuthToken, checkRoleAuthToken(["admin"]), postProductHandler);
+productRouter.post("/several", checkAuthToken, checkRoleAuthToken(["admin"]), postProductSeveralHandler);
+productRouter.put("/:id", checkAuthToken, checkRoleAuthToken(["admin", "technician"]), updateProductHandler);
+productRouter.put("/logicalDelete/:id", checkAuthToken, checkRoleAuthToken(["admin", 'technician']), logicalDeleteHandler);
+productRouter.delete("/:id", checkAuthToken, checkRoleAuthToken(["admin"]), deleteProductHandler);
 
 module.exports = productRouter;

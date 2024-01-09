@@ -34,9 +34,8 @@ const DetailProductService = ({
   const [data, setData] = useState({});
   const [communicationPreference, setComunicationPreference] = useState("");
   const theme = useTheme();
-
   const getName = async (id, product) => {
-    const response = await getUserById(id);
+    const response = await getUserById(id, authData.jwt);
     product.displayData.unshift({
       message: authData.userRole === "customer" ? "Tecnico:" : "Cliente:",
       data: response.name + " " + response.surname,

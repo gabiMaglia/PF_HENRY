@@ -6,13 +6,12 @@ const {
 const { User } = require("../../db");
 
 const googleAuthCallback = async (req, res) => {
-
   try {
     const authEmail = req.user.email;
     const responseLogin = await loginUser(
       await User.findOne({ where: { email: authEmail } })
     );
-
+      console.log('llegoo')
     if (!responseLogin) {
       return res
         .status(401)

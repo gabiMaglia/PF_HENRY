@@ -2,7 +2,6 @@
 import axios from "axios";
 //UTILS
 import {
-  search,
   getProductById,
   getProducts,
   filterByCategory,
@@ -21,9 +20,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${urlBack}/product/`);
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
@@ -36,9 +33,7 @@ export const fetchAllProducts = () => async (dispatch) => {
 
 export const fetchProductById = (id) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/product/${id}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${urlBack}/product/${id}`);
     dispatch(getProductById(response.data));
   } catch (error) {
     console.error("Error fetching product by ID:", error);
@@ -47,9 +42,7 @@ export const fetchProductById = (id) => async (dispatch) => {
 
 export const fetchSearch = (name) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/search?name=${name}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${urlBack}/search?name=${name}`);
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
@@ -62,9 +55,7 @@ export const fetchSearch = (name) => async (dispatch) => {
 
 export const fetchProductsByCategory = (category) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/category/filter/${category}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${urlBack}/category/filter/${category}`);
     dispatch(filterByCategory(response.data));
   } catch (error) {
     console.error("Error al buscar productos por categoría:", error);
@@ -73,9 +64,7 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
 
 export const fetchProductsByBrand = (brand) => async (dispatch) => {
   try {
-    const response = await axios.get(`${urlBack}/brand/filter/${brand}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`${urlBack}/brand/filter/${brand}`);
     dispatch(filterByBrand(response.data));
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
@@ -92,23 +81,26 @@ export const fetchChage = (inputValue) => async (dispatch) => {
 
 export const fetchProduct = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId } = aux;
-  const user = window.localStorage.getItem("userId");
+  const { userId, jwt } = aux;
   const { id } = product;
   const data = {
-    userId: userId ? userId : user,
+    userId: userId,
     productId: id,
     productQuantity: 1,
   };
 
   try {
     const res = await axios.post(`${urlBack}/cart/`, data, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
 
     if (res.data.Cart === "El usuario ya tiene carrito") {
-      const response = await axios.put(`${urlBack}/cart/add`, data, {
-        withCredentials: true,
+      await axios.put(`${urlBack}/cart/add`, data, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
       });
     }
   } catch (error) {
@@ -118,12 +110,13 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
 
 export const fetchGetProduct = ({cookiesAccepted}) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-
-  const { userId, userRole } = aux;
+  const { userId, userRole, jwt } = aux;
   if (userRole === "customer") {
     try {
       const res = await axios.get(`${urlBack}/cart/${userId}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
       });
       const products = res.data.Products.map((product) => ({
         id: product.id,
@@ -146,15 +139,19 @@ export const fetchGetProduct = ({cookiesAccepted}) => async () => {
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId } = aux;
+
+  const { userId, jwt } = aux;
+
   const data = {
     userId: userId,
     productId: product.id,
     productQuantity: product.count,
   };
   try {
-    const response = await axios.put(`${urlBack}/cart/edit`, data, {
-      withCredentials: true,
+    await axios.put(`${urlBack}/cart/edit`, data, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
   } catch (error) {
     return;
@@ -163,14 +160,16 @@ export const fetchCount = (product, cookiesAccepted) => async () => {
 
 export const fetchDelete = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId } = aux;
+  const { userId, jwt } = aux;
   const data = {
     userId: userId,
     productId: product,
   };
   try {
-    const res = await axios.put(`${urlBack}/cart/remove`, data, {
-      withCredentials: true,
+    await axios.put(`${urlBack}/cart/remove`, data, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
   } catch (error) {
     return;
@@ -179,7 +178,7 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
 
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  const { userId } = aux;
+  const { userId, jwt } = aux;
   const products = items.map((item) => ({
     title: item.name,
     quantity: item.count,
@@ -190,10 +189,11 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
     const response = await axios.post(
       `${urlBack}/pagos/order`,
       { array: products, userId: userId },
-      { withCredentials: true },
+
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
         },
       }
     );
@@ -202,10 +202,13 @@ export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
     return;
   }
 };
-export const fetchAddProduct = async (obj, dispatch) => {
+
+export const fetchAddProduct = async (obj, dispatch , jwt) => {
   try {
     const { data } = await axios.post(`${urlBack}/product`, obj, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
     if (data) {
       dispatch(addProduct(data.product));
@@ -215,10 +218,12 @@ export const fetchAddProduct = async (obj, dispatch) => {
   }
 };
 
-export const logicalDeleteProduct = async (id) => {
+export const logicalDeleteProduct = async (id, jwt) => {
   try {
     const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
     return response;
   } catch (error) {
@@ -226,13 +231,15 @@ export const logicalDeleteProduct = async (id) => {
   }
 };
 
-export const fetchUpdateProduct = async (id, updateProduct) => {
+export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
   try {
     const response = await axios.put(
       `${urlBack}/product/${id}`,
       updateProduct,
       {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        }
       }
     );
     return response;
@@ -241,14 +248,17 @@ export const fetchUpdateProduct = async (id, updateProduct) => {
   }
 };
 
-export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
+export const fetchCartUser = ({cookieAccepted}) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  const { userId } = aux;
 
+  const { userId, jwt } = aux;
   try {
     const response = await axios.get(`${urlBack}/pagos/misCompras/${userId}`, {
-      withCredentials: true
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     })
+
     dispatch(getCart(response.data))
   } catch (error) {
     console.log(error.message)

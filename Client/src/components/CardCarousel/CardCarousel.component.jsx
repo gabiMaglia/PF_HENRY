@@ -182,10 +182,10 @@ const CardCarousel = ({ allProducts }) => {
                 <CardMedia
                   component="img"
                   alt={product.name}
-                  height="200px"
                   image={product.ProductImages[0]?.address}
                   sx={{
-                    width: "250px",
+                    width: "200px",
+                    height: "auto",
                     border: "1px solid transparent",
                     marginTop: "8px",
                     marginRight: "3%",
