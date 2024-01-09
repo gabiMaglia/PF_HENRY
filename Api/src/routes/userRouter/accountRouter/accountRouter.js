@@ -7,7 +7,9 @@ const {
   confirmAccountHandler,
   deleteActivateUserByIdHandler,
 } = require("../../../handlers/accountHandlers/authHandler");
-
+const {
+  checkRoleAuthToken,
+} = require("../../../middlewares/tokenAuthMiddlewares");
 const useRouter = Router();
 
 useRouter.post(
@@ -15,9 +17,9 @@ useRouter.post(
   passport.authenticate("local", { session: false }),
   loginHandler
 );
-useRouter.post("/logout", logoutHandler);
 useRouter.post("/signin", signInHandler);
+useRouter.delete("/:id", checkRoleAuthToken(['admin']),  deleteActivateUserByIdHandler);
 useRouter.get("/confirm/:token", confirmAccountHandler);
-useRouter.delete("/:id", deleteActivateUserByIdHandler);
+useRouter.post("/logout", logoutHandler);
 
 module.exports = useRouter;

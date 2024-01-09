@@ -135,6 +135,7 @@ const UsersTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
+
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
       switch (user.rolId) {
@@ -179,7 +180,7 @@ const UsersTable = () => {
   };
 
   const handleDelete = async () => {
-    const response = await isDeleteChange(rowSelected);
+    const response = await isDeleteChange(rowSelected, authData.jwt);
     if (response.error) {
       Swal.fire({
         icon: "error",
