@@ -81,7 +81,7 @@ const CardProduct = ({ product }) => {
   const handleDesiredClick = (e) => {
     e.stopPropagation();
     if (login) {
-      fetchAddItemWish(dispatch, userId, product.id);
+      fetchAddItemWish(dispatch, userId, product.id, authData.jwt);
     } else {
       Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
     }
@@ -106,7 +106,11 @@ const CardProduct = ({ product }) => {
             <Typography
               variant="subtitle2"
               onClick={handleCategoryClick}
-              sx={{ paddingTop: "20px", zIndex: "1000", borderBottom: '1px solid black' }}
+              sx={{
+                paddingTop: "20px",
+                zIndex: "1000",
+                borderBottom: "1px solid black",
+              }}
             >
               <span
                 style={{
@@ -139,8 +143,6 @@ const CardProduct = ({ product }) => {
               alt={name}
               src={imageUrl}
               sx={{
-              
-               
                 cursor: "pointer",
                 transition: "transform 0.3s",
                 "&:hover": {
@@ -154,7 +156,7 @@ const CardProduct = ({ product }) => {
                 component="div"
                 color="textPrimary"
                 align="center"
-                sx={{fontSize: '18px', marginTop: "-20px" }}
+                sx={{ fontSize: "18px", marginTop: "-20px" }}
               >
                 {name}
               </Typography>

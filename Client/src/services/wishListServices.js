@@ -28,6 +28,7 @@ export const fetchWishList = async (userId, dispatch, jwt) => {
 };
 
 export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
+  console.log("Agrego");
   const request = {
     userID: userId,
     productID: productId,

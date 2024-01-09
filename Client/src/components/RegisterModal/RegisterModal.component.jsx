@@ -163,7 +163,10 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           confirmButtonText: "Volver al menu principal",
           confirmButtonColor: "#fd611a",
         }).then((result) => {
-          postEvent("sign_up", userInfo.email);
+          const firebaseParams = {
+            method: "local",
+          };
+          postEvent("sign_up", firebaseParams);
           resetModal();
         });
       }
