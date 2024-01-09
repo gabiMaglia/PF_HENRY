@@ -31,7 +31,8 @@ import PATHROUTES from "../../helpers/pathRoute";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { getAnalytics, logEvent } from "firebase/analytics";
+//FIREBASE
+import { postEvent } from "../../services/firebaseAnayticsServices";
 
 // Estilo personalizado para el botón
 const CustomButton = styled(Button)({
@@ -179,8 +180,7 @@ const Detail = () => {
             },
           ],
         };
-        const analytics = getAnalytics();
-        logEvent(analytics, "view_item", firebaseParams);
+        postEvent("view_item", firebaseParams);
       }
     };
     setInitialImage();

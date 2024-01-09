@@ -18,6 +18,8 @@ import { userRegisterValidate } from "../../helpers/userValidate";
 import { registerUser } from "../../services/authServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
+//FIREBASE
+import { postEvent } from "../../services/firebaseAnayticsServices";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -158,10 +160,10 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           title: "Registro exitoso",
           titleText: "",
           text: `Para poder iniciar sesion confirma el correo que deberia haber llegado a el email: ${userInfo.email}`,
-
           confirmButtonText: "Volver al menu principal",
           confirmButtonColor: "#fd611a",
         }).then((result) => {
+          postEvent("sign_up", userInfo.email);
           resetModal();
         });
       }
