@@ -93,8 +93,17 @@ const registerUser = async (userObj) => {
 
 const loginUser = async (user) => {
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
+  if (user.isDeleted) {
+    return {
+      deleted: true,
+      error: true,
+      response:
+        "El usuario fue eliminado, contactese con el administrador del sitio",
+    };
+  }
   if (!user.isActive) {
     return {
+      resendMail:true,
       error: true,
       response:
         "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",

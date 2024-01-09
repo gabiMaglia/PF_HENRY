@@ -5,7 +5,7 @@ const miAccessToken = process.env.MP_ACCESS_TOKEN;
 const axios = require("axios");
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
-backend_Url = `https://56fb-181-229-81-226.ngrok-free.app`;
+backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
 const conn = require("../../db");
 const { where } = require("sequelize");
 
@@ -63,7 +63,7 @@ const handlePaymentNotification = async (paymentId) => {
         if (order) {
           await order.update({
             status: "Finalizado",
-            cartTotal: payment.data.transaction_details.total_paid_amount,
+            cartTotal: Number(payment.data.transaction_details.total_paid_amount),
           });
 
           const products = await order.getProducts();

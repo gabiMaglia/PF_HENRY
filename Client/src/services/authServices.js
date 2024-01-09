@@ -1,7 +1,6 @@
 import axios from "axios";
 import {
   createPersistency,
-  headerSetterForPetitions,
 } from "../utils/authMethodSpliter";
 
 // address = password
@@ -26,6 +25,7 @@ export const loginUser = async (username, password, cookieStatus) => {
       }
     );
 
+
     if (data.login) {
       const sortedData = dataSorterForApp(data);
       createPersistency(sortedData, cookieStatus);
@@ -42,21 +42,27 @@ export const googleLoginUser = async (cookieStatus) => {
       `${url}/auth/google`,
       "targetWindow",
       `toolbar=no,
-        location=no,
-        status=no,
-        menubar=no,
-        scrollbars=yes,
-        resizable=yes,
-        width=620,
-        height=700`
-    );
-    return new Promise((resolve) => {
-      window.addEventListener("message", (event) => {
-        if (event.origin === `${url}` && event.data) {
-          const sortedData = dataSorterForApp(event.data);
-          createPersistency(sortedData, cookieStatus);
-          popup.close();
-          resolve({ data: event.data });
+      location=no,
+      status=no,
+      menubar=no,
+      scrollbars=yes,
+      resizable=yes,
+      width=620,
+      height=700`
+      );
+      return new Promise((resolve) => {
+        window.addEventListener("message", (event) => {
+          if (event.origin === `${url}` && event.data) {
+          if (event.data.error) {
+            popup.close();
+            resolve({ error: true , response: event.data.response });
+          }else {
+            const sortedData = dataSorterForApp(event.data);
+            createPersistency(sortedData, cookieStatus);
+            popup.close();
+            resolve({ data: event.data });
+          }
+
         }
       });
     });

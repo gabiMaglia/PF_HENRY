@@ -7,6 +7,7 @@ const {
 } = require("../../controllers/accountControllers/authController");
 
 const verifyCallback = async (accessToken, refreshToken, profile, done) => {
+
   const email = profile.emails.find((email) => email.verified === true);
   const { given_name, family_name, picture, sub } = profile._json;
 
@@ -14,8 +15,7 @@ const verifyCallback = async (accessToken, refreshToken, profile, done) => {
 
   // IF EXITS IN DATABASE
   if (response) {
-   return done(null, profile._json);
- 
+    return done(null, profile._json);
   } else {
     // SAVE IN DATABASE
     await registerUser({
@@ -44,6 +44,7 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: `${process.env.API_URL}/auth/google/callback`,
     scope: ["profile", "email"],
   },
+
   verifyCallback
 );
 

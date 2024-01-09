@@ -12,7 +12,7 @@ import {
 } from "../redux/slices/productSlice";
 
 //REDUX
-import { idShop } from "../redux/slices/cartSlice";
+import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
@@ -24,7 +24,11 @@ export const fetchAllProducts = () => async (dispatch) => {
     const response = await axios.get(`${urlBack}/product/`, {
       withCredentials: true,
     });
-    dispatch(getProducts(response.data));
+    const filteredProducts = response.data.filter(
+      (product) => product.is_deleted === false
+    );
+    dispatch(getProducts(filteredProducts));
+    // dispatch(getProducts(response.data));
   } catch (error) {
     return;
   }
@@ -46,7 +50,11 @@ export const fetchSearch = (name) => async (dispatch) => {
     const response = await axios.get(`${urlBack}/search?name=${name}`, {
       withCredentials: true,
     });
-    dispatch(search(response.data));
+    const filteredProducts = response.data.filter(
+      (product) => product.is_deleted === false
+    );
+    dispatch(getProducts(filteredProducts));
+    // dispatch(search(response.data));
   } catch (error) {
     Swal.fire("Producto no existente", "", "error");
   }
@@ -108,31 +116,32 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchGetProduct = (cookiesAccepted) => async () => {
+export const fetchGetProduct = ({cookiesAccepted}) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
+
   const { userId, userRole } = aux;
-  if(userRole === "customer"){
-  try {
-    const res = await axios.get(`${urlBack}/cart/${userId}`, {
-      withCredentials: true,
-    });
-    const products = res.data.Products.map((product) => ({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      ProductImages: product.ProductImages[0],
-      count: product.ProductCart.quantity,
-    }));
+  if (userRole === "customer") {
+    try {
+      const res = await axios.get(`${urlBack}/cart/${userId}`, {
+        withCredentials: true,
+      });
+      const products = res.data.Products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        ProductImages: product.ProductImages[0],
+        count: product.ProductCart.quantity,
+      }));
 
-    const storedProducts = getProducts();
+      const storedProducts = getProducts();
 
-    if (storedProducts.payload === undefined) {
-      window.localStorage.setItem("storedProducts", JSON.stringify(products));
+      if (storedProducts.payload === undefined) {
+        window.localStorage.setItem("storedProducts", JSON.stringify(products));
+      }
+    } catch (error) {
+      return;
     }
-  } catch (error) {
-    return;
   }
-}
 };
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
@@ -161,14 +170,13 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
     productId: product,
   };
   try {
-     const res = await axios.put(`${urlBack}/cart/remove`, data, {
+    const res = await axios.put(`${urlBack}/cart/remove`, data, {
       withCredentials: true,
     });
-    
   } catch (error) {
     return;
-  } 
-}
+  }
+};
 
 export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
@@ -233,6 +241,21 @@ export const fetchUpdateProduct = async (id, updateProduct) => {
     return { error: true, message: error.message };
   }
 };
+
+export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
+  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const { userId } = aux;
+  console.log(userId)
+  try {
+    const response = await axios.get(`${urlBack}/pagos/misCompras/${userId}`, {
+      withCredentials: true
+    })
+    console.log(response)
+    dispatch(getCart(response.data))
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {

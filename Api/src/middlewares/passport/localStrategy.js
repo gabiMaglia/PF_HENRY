@@ -34,6 +34,6 @@ const verifyCallback = async (username, password, done) => {
   }
 };
 
-const localStrategy = new LocalStrategy(verifyCallback);
+const localStrategy = new LocalStrategy('local', verifyCallback);
 
 module.exports = localStrategy;

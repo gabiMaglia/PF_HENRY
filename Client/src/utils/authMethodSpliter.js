@@ -44,19 +44,13 @@ export const clearPersistanceData = (cookieStatus, bool) => {
   }
 };
 
-export const headerSetterForPetitions = (cookiesStatus) => {
-  if (cookiesStatus) {
+export const customAxios = () => {
+  return (token) => {
     return axios.create({
-      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
-  } else {
-    return (token) => {
-      return axios.create({
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    };
-  }
+  };
 };
