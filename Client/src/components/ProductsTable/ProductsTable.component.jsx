@@ -60,23 +60,30 @@ const columns = [
     editable: true,
   },
   {
+    field: "carousel",
+    headerName: "Carousel",
+    width: 80,
+    headerAlign: "center",
+    editable: true,
+  },
+  {
     field: "brand",
     headerName: "Marca",
-    width: 150,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "category",
     headerName: "Categoría",
-    width: 150,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "stock",
     headerName: "Stock",
-    width: 150,
+    width: 80,
     headerAlign: "center",
     editable: true,
   },
@@ -108,6 +115,7 @@ const ProductsTable = () => {
           price: product.price,
           warranty: product.warranty,
           soldCount: product.soldCount,
+          carousel: product.carousel,
           is_deleted: product.is_deleted,
           brand: product.ProductBrands[0].name,
           category: product.ProductCategories[0].name,
@@ -267,7 +275,11 @@ const ProductsTable = () => {
           },
         }}
         getRowClassName={(params) => {
-          return params.row.is_deleted ? `row--deleted` : `row`;
+          return params.row.is_deleted
+            ? `row--deleted`
+            : params.row.carousel
+            ? `row--carousel`
+            : `row`;
         }}
         checkboxSelection
         disableRowSelectionOnClick
