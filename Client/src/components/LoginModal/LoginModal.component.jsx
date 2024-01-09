@@ -29,6 +29,7 @@ import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
 import { fetchCartUser, fetchGetProduct } from "../../services/productServices";
 import { addItem } from "../../redux/slices/cartSlice";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -37,16 +38,18 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
+
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const cookiesAccepted = useSelector((state) => state.cookies);
 
   const handledispatch = async (userId) => {
-    await getUserById(userId).then((data) => {
+    await getUserById(userId, authData.jwt).then((data) => {
       dispatch(logUser({ userObject: data }));
     });
-    await dispatch(fetchGetProduct(cookiesAccepted));
-    await dispatch(fetchCartUser(cookiesAccepted));
+    dispatch(fetchGetProduct(cookiesAccepted));
+    dispatch(fetchCartUser(cookiesAccepted));
     dispatch(addItem());
   };
 

@@ -57,7 +57,7 @@ export default function SearchAppBar() {
 
   const getUserInfo = async (token) => {
     if (token !== undefined) {
-      const response = await getUserById(token.userId);
+      const response = await getUserById(token.userId, authData.jwt);
       dispatch(logUser({ userObject: { ...response, rolId: token.userRole } }));
     }
   };

@@ -5,7 +5,6 @@ const {
   getUsersByRoleHandler
 } = require("../../handlers/userHandlers/userRoleHandler");
 const {
- 
   checkRoleAuthToken,
 } = require("../../middlewares/tokenAuthMiddlewares");
 

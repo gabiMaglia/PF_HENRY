@@ -30,7 +30,7 @@ import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //SWEET ALERT
 import Swal from "sweetalert2";
-
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 // Estilo personalizado para el botón
 const CustomButton = styled(Button)({
@@ -110,6 +110,7 @@ const Detail = () => {
   const [fadeInKey, setFadeInKey] = useState(0);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
 
+  const authData = getDataFromSelectedPersistanceMethod(cookiesAccepted)
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
@@ -184,6 +185,7 @@ const Detail = () => {
     } else {
       setStoredProducts(productById);
       dispatch(addItem());
+      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
       dispatch(fetchProduct(productById, cookiesAccepted));
       Swal.fire({
         icon: "success",

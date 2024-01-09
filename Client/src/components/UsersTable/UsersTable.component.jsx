@@ -16,7 +16,7 @@ import {
 } from "../CustomDataGrid/CustomDataGrid.component";
 //SERVICES
 import { getAllUsers, getUserRoles } from "../../services/userServices";
-import { PutUser, isDeleteChange } from "../../services/userServices";
+import { putUser, isDeleteChange } from "../../services/userServices";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
@@ -247,7 +247,7 @@ const UsersTable = () => {
           isVerified: newRow.isVerified,
           userAddress: {},
         };
-        const response = await PutUser(newRow.id, newRow.role, editedUser);
+        const response = await putUser(newRow.id, newRow.role, editedUser);
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>

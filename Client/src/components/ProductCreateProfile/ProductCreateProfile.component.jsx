@@ -26,6 +26,7 @@ import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
 import validationsCreate from "../../helpers/productValidate";
 import { display } from "@mui/system";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
@@ -54,7 +55,9 @@ const ProductCreateProfileComponent = () => {
     images: [],
     carousel: carouselData,
   });
-
+  
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const [imagePreviews, setImagePreviews] = useState([]);
   useEffect(() => {
     fetchCategories(dispatch);
@@ -199,6 +202,7 @@ const ProductCreateProfileComponent = () => {
 
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
+
     if (Object.keys(errorObject).length !== 0) {
       Swal.fire({
         icon: "error",
@@ -236,7 +240,7 @@ const ProductCreateProfileComponent = () => {
         showConfirmButton: false,
       });
 
-      const response = fetchAddProduct(obj, dispatch);
+      const response = fetchAddProduct(obj, dispatch, authData.jwt);
       response
         .then((res) => {
           Swal.close();

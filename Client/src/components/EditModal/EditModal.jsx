@@ -17,7 +17,7 @@ import { userEditValidate } from "../../helpers/userValidate";
 //STYLES
 import "../../alertStyles.css";
 //SERVICES
-import { PutUser } from "../../services/userServices";
+import { putUser } from "../../services/userServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 //REDUX
@@ -99,15 +99,15 @@ const EditModal = ({
     let response = {};
 
     if (dataName === "telefono") {
-      response = await PutUser(userId, userRole, {
+      response = await putUser(userId, userRole, {
         telephone: userData.phoneNumberAreaCode + userData.phoneNumber,
       });
     } else if (dataName === "dirección") {
-      response = await PutUser(userId, userRole, {
+      response = await putUser(userId, userRole, {
         userAddress: { ...userData },
       });
     } else {
-      response = await PutUser(userId, userRole, userData);
+      response = await putUser(userId, userRole, userData);
     }
     if (response.status === 200 || response.response.status === 200) {
       Swal.fire({

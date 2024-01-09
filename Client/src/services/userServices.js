@@ -62,30 +62,30 @@ export const getUserRoles = async (jwt) => {
 
 export const getUserById = async (id, jwt) => {
   try {
-    const ById = await axios.get(`${url}/user/${id}`, {
+    const byId = await axios.get(`${url}/user/${id}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    const { data } = ById;
+    const { data } = byId;
     return data;
-  } catch ({ ById }) {
-    return { error: ById };
+  } catch (error) {
+    return { error: error };
   }
 };
 
-export const PostUser = async () => {
+export const postUser = async () => {
   try {
-    const NewUser = await axios.post(`${url}/users/`, {
+    const newUser = await axios.post(`${url}/users/`, {
       withCredentials: true,
     });
-    return NewUser;
-  } catch ({ NewUser }) {
-    return { error: NewUser };
+    return newUser;
+  } catch (error) {
+    return { error: error };
   }
 };
 
-export const PutUser = async (id, userRole, data) => {
+export const putUser = async (id, userRole, data) => {
   let completeData = {
     name: null,
     surname: null,
@@ -121,15 +121,15 @@ export const PutUser = async (id, userRole, data) => {
   }
 };
 
-export const DeleteUser = async (jwt) => {
+export const deleteUser = async (jwt) => {
   try {
-    const DeleteUser = await axios.delete(`${url}/users/:id`, {
+    const deleteUser = await axios.delete(`${url}/users/:id`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    return DeleteUser;
-  } catch ({ DeleteUser }) {
-    return { error: DeleteUser };
+    return deleteUser;
+  } catch (error) {
+    return { error: error };
   }
 };

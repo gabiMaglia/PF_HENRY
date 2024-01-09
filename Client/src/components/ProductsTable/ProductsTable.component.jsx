@@ -6,9 +6,8 @@ import {
   GridLogicOperator,
   esES,
 } from "@mui/x-data-grid";
-
+import { useSelector } from 'react-redux'
 //COMPONENTS
-import Loading from "../Loading/Loading.component";
 import {
   StyledDataGrid,
   CustomToolbar,
@@ -20,6 +19,7 @@ import {
 } from "../../services/productServices";
 // SweetAlert
 import Swal from "sweetalert2";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -91,6 +91,9 @@ const ProductsTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
+  
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const language = esES;
 
@@ -148,7 +151,7 @@ const ProductsTable = () => {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            return logicalDeleteProduct(id);
+            return logicalDeleteProduct(id, authData.jwt);
           })
         );
         let msg = response.map((res) => res.data);
@@ -189,7 +192,7 @@ const ProductsTable = () => {
         setAvailableModify(false);
         const productId = newRow.id;
 
-        const response = await fetchUpdateProduct(productId, newRow);
+        const response = await fetchUpdateProduct(productId, newRow, authData.jwt);
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>

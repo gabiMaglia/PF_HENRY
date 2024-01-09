@@ -71,6 +71,7 @@ const WhishListProfileComponent = () => {
     } else {
       setStoredProducts(product);
       dispatch(addItem());
+      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
       dispatch(fetchProduct(product, cookiesAccepted));
       Swal.fire({
         icon: "success",
