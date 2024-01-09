@@ -109,7 +109,7 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchGetProduct = (cookiesAccepted) => async () => {
+export const fetchGetProduct = ({cookiesAccepted}) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId, userRole, jwt } = aux;
   if (userRole === "customer") {
@@ -248,7 +248,7 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
   }
 };
 
-export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
+export const fetchCartUser = ({cookieAccepted}) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
   const { userId, jwt } = aux;
   
