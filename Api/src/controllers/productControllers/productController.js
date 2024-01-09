@@ -39,6 +39,7 @@ const postProduct = async ({
   images,
   brandName,
   soldCount,
+  carousel,
 }) => {
   const transaction = await conn.transaction();
 
@@ -50,6 +51,7 @@ const postProduct = async ({
         price,
         warranty,
         soldCount,
+        carousel,
         is_deleted,
       },
       { transaction }
