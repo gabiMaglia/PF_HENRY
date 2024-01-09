@@ -10,7 +10,7 @@ const {
 
 const useRouter = Router();
 
-useRouter.get("/", checkRoleAuthToken(['admin', 'tecnician', 'customer']), getRolesHandler);
+useRouter.get("/", checkRoleAuthToken(['admin', 'technician', 'customer']), getRolesHandler);
 useRouter.post("/create", checkRoleAuthToken(['admin']), createRolesHandler);
 useRouter.get("/by_role/:role", checkRoleAuthToken(['admin', 'technician', 'customer']), getUsersByRoleHandler)
 
