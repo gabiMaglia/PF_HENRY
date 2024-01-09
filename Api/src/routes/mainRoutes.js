@@ -55,6 +55,6 @@ mainRouter.use("/pagos", checkAuthToken, pagosRouter);
 mainRouter.use("/cart", checkAuthToken, checkRoleAuthToken(['customer']), cartRouter);
 mainRouter.use("/wishList", checkAuthToken, checkRoleAuthToken(['customer']), WishListRouter);
 // ServicesRoute
-mainRouter.use("/service", serviceRouter);
+mainRouter.use("/service", checkAuthToken, serviceRouter);
 
 module.exports = mainRouter;
