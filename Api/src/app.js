@@ -20,6 +20,7 @@ server.use((req, res, next) => {
   const token = req.headers.authorization
   // const decodedToken = toke
   console.log(token)
+  next()
 })
 server.use("/", routes);
 
