@@ -29,7 +29,6 @@ import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
 import { fetchCartUser, fetchGetProduct } from "../../services/productServices";
 import { addItem } from "../../redux/slices/cartSlice";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -41,15 +40,14 @@ const LoginModal = ({
 
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const cookiesAccepted = useSelector((state) => state.cookies);
-
-  const handledispatch = async (userId) => {
-    await getUserById(userId, authData.jwt).then((data) => {
-      dispatch(logUser({ userObject: data }));
-    });
-    dispatch(fetchGetProduct(cookiesAccepted));
-    dispatch(fetchCartUser(cookiesAccepted));
+  
+  const handledispatch = async (userId, authData) => {
+    const user = await getUserById(userId, authData)
+    
+    dispatch(logUser({ userObject: user }));
+    fetchGetProduct(cookiesAccepted);
+    fetchCartUser(cookiesAccepted);
     dispatch(addItem());
   };
 
@@ -85,7 +83,8 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
-          handledispatch(response.data.userId);
+          console.log(response)
+          handledispatch(response.data.userId, response.data.tokenSession);
           setLoginModalIsOpen(false);
         }
       });
