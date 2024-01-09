@@ -170,7 +170,7 @@ const Detail = () => {
         //Envio de notificaciónes a FIREBASE
         const firebaseParams = {
           currency: "ARS",
-          value: productById.price,
+          value: productById?.name,
           items: [
             {
               item_id: productById?.id,

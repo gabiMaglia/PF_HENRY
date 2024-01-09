@@ -10,7 +10,8 @@ import {
   changeInput,
   addProduct,
 } from "../redux/slices/productSlice";
-
+//FIREBASE ANALYTICS
+import { getAnalytics, logEvent } from "firebase/analytics";
 //REDUX
 import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
@@ -100,6 +101,27 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
     productId: id,
     productQuantity: 1,
   };
+  // Envio de notificaciónes a FIREBASE
+  const firebaseParams = {
+    currency: "ARS",
+    value: product?.name,
+    items: [
+      {
+        item_id: product?.id,
+        item_name: product?.name,
+        item_category: product?.ProductCategories[0]?.name,
+        price: product?.price,
+      },
+    ],
+  };
+  const analytics = getAnalytics();
+  logEvent(analytics, "add_to_cart", firebaseParams);
+  console.log(
+    product?.id,
+    product?.name,
+    product?.ProductCategories[0]?.name,
+    product?.price
+  );
 
   try {
     const res = await axios.post(`${urlBack}/cart/`, data, {
@@ -116,33 +138,38 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchGetProduct = ({cookiesAccepted}) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
+export const fetchGetProduct =
+  ({ cookiesAccepted }) =>
+  async () => {
+    const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
 
-  const { userId, userRole } = aux;
-  if (userRole === "customer") {
-    try {
-      const res = await axios.get(`${urlBack}/cart/${userId}`, {
-        withCredentials: true,
-      });
-      const products = res.data.Products.map((product) => ({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        ProductImages: product.ProductImages[0],
-        count: product.ProductCart.quantity,
-      }));
+    const { userId, userRole } = aux;
+    if (userRole === "customer") {
+      try {
+        const res = await axios.get(`${urlBack}/cart/${userId}`, {
+          withCredentials: true,
+        });
+        const products = res.data.Products.map((product) => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          ProductImages: product.ProductImages[0],
+          count: product.ProductCart.quantity,
+        }));
 
-      const storedProducts = getProducts();
+        const storedProducts = getProducts();
 
-      if (storedProducts.payload === undefined) {
-        window.localStorage.setItem("storedProducts", JSON.stringify(products));
+        if (storedProducts.payload === undefined) {
+          window.localStorage.setItem(
+            "storedProducts",
+            JSON.stringify(products)
+          );
+        }
+      } catch (error) {
+        return;
       }
-    } catch (error) {
-      return;
     }
-  }
-};
+  };
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
@@ -245,17 +272,17 @@ export const fetchUpdateProduct = async (id, updateProduct) => {
 export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
   const { userId } = aux;
-  console.log(userId)
+  console.log(userId);
   try {
     const response = await axios.get(`${urlBack}/pagos/misCompras/${userId}`, {
-      withCredentials: true
-    })
-    console.log(response)
-    dispatch(getCart(response.data))
+      withCredentials: true,
+    });
+    console.log(response);
+    dispatch(getCart(response.data));
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
