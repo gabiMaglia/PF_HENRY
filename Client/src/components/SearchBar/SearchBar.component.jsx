@@ -65,7 +65,7 @@ export default function SearchAppBar() {
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate(PATHROUTES.PRODUCTS);
-    dispatch(fetchSearch(inputName));
+    fetchSearch(inputName);
   };
 
   const handleKeyPress = (event) => {

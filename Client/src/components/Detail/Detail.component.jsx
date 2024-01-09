@@ -109,8 +109,6 @@ const Detail = () => {
   const { login } = useSelector((state) => state.user);
   const [fadeInKey, setFadeInKey] = useState(0);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
-
-  const authData = getDataFromSelectedPersistanceMethod(cookiesAccepted)
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
@@ -125,7 +123,7 @@ const Detail = () => {
   }, [id, productById]);
 
   useEffect(() => {
-    dispatch(fetchAllProducts());
+    fetchAllProducts();
   }, []);
 
   useEffect(() => {

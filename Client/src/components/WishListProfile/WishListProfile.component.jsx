@@ -51,7 +51,7 @@ const WhishListProfileComponent = () => {
   };
 
   const chargeWishListProduct = () => {
-    fetchWishList(userId, dispatch); //Recarga de el estado global Wishlist
+    fetchWishList(userId, dispatch, authData.jwt); //Recarga de el estado global Wishlist
   };
 
   const handleCardClick = (id) => {

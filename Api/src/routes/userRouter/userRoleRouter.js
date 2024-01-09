@@ -10,8 +10,8 @@ const {
 
 const useRouter = Router();
 
-useRouter.get("/", checkRoleAuthToken(['admin', 'tecnician']), getRolesHandler);
+useRouter.get("/", checkRoleAuthToken(['admin', 'tecnician', 'customer']), getRolesHandler);
 useRouter.post("/create", checkRoleAuthToken(['admin']), createRolesHandler);
-useRouter.get("/by_role/:role", checkRoleAuthToken(['admin', 'thecnician']), getUsersByRoleHandler)
+useRouter.get("/by_role/:role", checkRoleAuthToken(['admin', 'thecnician', 'customer']), getUsersByRoleHandler)
 
 module.exports = useRouter;
