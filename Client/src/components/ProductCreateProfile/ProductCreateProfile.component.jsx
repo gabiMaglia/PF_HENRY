@@ -40,7 +40,7 @@ const ProductCreateProfileComponent = () => {
   const [newBrand, setNewBrand] = useState("");
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
-  const [carrouselData, SetCarrouselData] = useState(false);
+  const [carouselData, setCarouselData] = useState(false);
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     name: "",
@@ -52,7 +52,7 @@ const ProductCreateProfileComponent = () => {
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
-    carrousel: carrouselData,
+    carousel: carouselData,
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -103,8 +103,8 @@ const ProductCreateProfileComponent = () => {
           ]);
         }
         break;
-      case "carrousel":
-        SetCarrouselData(!carrouselData);
+      case "carousel":
+        setCarouselData(!carouselData);
         break;
       case "imageUrl":
         setImageURL(value);
@@ -256,13 +256,13 @@ const ProductCreateProfileComponent = () => {
         categoryName: isOtherCategory ? newCategory : [categoryName],
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
-        carrousel: carrouselData,
+        carousel: carouselData,
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
       setImagePreviews([]);
       setImageURL("");
-      SetCarrouselData(false);
+      setCarouselData(false);
     }
   };
   const handleRemoveImage = (index) => {
@@ -474,11 +474,11 @@ const ProductCreateProfileComponent = () => {
             )}
           </Box>
           <FormControlLabel
-            name="carrousel"
-            value={carrouselData}
+            name="carousel"
+            value={carouselData}
             onChange={handleChange}
             control={<Checkbox />}
-            label="Desea añadir el producto al carrousel?"
+            label="Desea añadir el producto al carousel?"
           />
           <Box>
             {!isUrlInput ? (
