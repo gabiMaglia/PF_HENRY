@@ -23,15 +23,13 @@ const CardCarousel = ({ allProducts }) => {
 
   useEffect(() => {
     if (Array.isArray(allProducts)) {
-      const filteredProducts = allProducts
-        .filter(
-          (product) =>
-            product?.ProductImages[0]?.address.endsWith(".png") &&
-            product.name &&
-            product.price
-        )
-        .slice(0, 5);
-
+      const filteredProducts = allProducts.filter(
+        (product) =>
+          product?.ProductImages[0]  &&
+          product.name &&
+          product.price &&
+          product.carousel === true
+      );
       setProductData(filteredProducts);
     }
   }, [allProducts]);
