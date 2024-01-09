@@ -18,6 +18,7 @@ import {
 //SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchAddProduct } from "../../services/productServices";
+import { fetchBrands } from "../../services/brandsServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 //UTILS
@@ -25,7 +26,6 @@ import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
 import validationsCreate from "../../helpers/productValidate";
 import { display } from "@mui/system";
-import { fetchBrands } from "../../services/brandsServices";
 
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
@@ -40,7 +40,7 @@ const ProductCreateProfileComponent = () => {
   const [newBrand, setNewBrand] = useState("");
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
-  const [carrouselData, SetCarrouselData] = useState(false);
+  const [carouselData, setCarouselData] = useState(false);
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     name: "",
@@ -52,7 +52,7 @@ const ProductCreateProfileComponent = () => {
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
-    carrousel: carrouselData,
+    carousel: carouselData,
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -74,6 +74,15 @@ const ProductCreateProfileComponent = () => {
     setImageURL(e.target.value);
   };
 
+  const setAndValidateValues = (name, value) => {
+    setValues((prevValues) => {
+      const updatedValues = { ...prevValues, [name]: value };
+      return updatedValues;
+    });
+    const errorObject = validationsCreate(values);
+    setErrors(errorObject);
+  };
+
   const handleChange = async (event) => {
     const { name, value, files } = event.target;
 
@@ -85,7 +94,6 @@ const ProductCreateProfileComponent = () => {
             ...prevValues,
             images: [...prevValues.images, ...selectedImages],
           }));
-          validationsCreate(values);
           const selectedPreviews = Array.from(files).map((file) =>
             URL.createObjectURL(file)
           );
@@ -95,59 +103,43 @@ const ProductCreateProfileComponent = () => {
           ]);
         }
         break;
-      case "carrousel":
-        SetCarrouselData(!carrouselData);
-
+      case "carousel":
+        setCarouselData(!carouselData);
+        break;
       case "imageUrl":
         setImageURL(value);
         break;
 
       case "categoryName":
         setNewCategory("");
-        setValues((prevValues) => ({
-          ...prevValues,
-          categoryName: [value],
-        }));
-        validationsCreate(values);
+        setAndValidateValues("categoryName", [value]);
         setIsOtherCategory(value === "otra");
         break;
       case "newCategory":
         setNewCategory(value);
-        setValues((prevValues) => ({
-          ...prevValues,
-          categoryName: isOtherCategory ? [value] : prevValues.categoryName,
-        }));
-        validationsCreate(values);
+        setAndValidateValues(
+          "categoryName",
+          isOtherCategory ? [value] : prevValues.categoryName
+        );
         break;
 
       case "brandName":
         setNewBrand("");
-        setValues((prevValues) => ({
-          ...prevValues,
-          brandName: value,
-        }));
-        validationsCreate(values);
+        setAndValidateValues("brandName", value);
         setIsOtherBrand(value === "otra");
         break;
 
       case "newBrand":
         setNewBrand(value);
-        setValues((prevValues) => ({
-          ...prevValues,
-          brandName: isOtherBrand ? value : prevValues.brandName,
-        }));
-        validationsCreate(values);
+        setAndValidateValues(
+          "brandName",
+          isOtherBrand ? value : prevValues.brandName
+        );
         break;
 
       default:
-        setValues((prevValues) => {
-          const updatedValues = { ...prevValues, [name]: value };
-          return updatedValues;
-        });
+        setAndValidateValues(name, value);
     }
-
-    const errorObject = validationsCreate(values);
-    setErrors(errorObject);
   };
   const handlerUpdateCloudinary = async (folderName) => {
     try {
@@ -232,6 +224,7 @@ const ProductCreateProfileComponent = () => {
 
       const obj = {
         ...values,
+        carousel: carouselData,
         images: array,
       };
 
@@ -270,13 +263,13 @@ const ProductCreateProfileComponent = () => {
         categoryName: isOtherCategory ? newCategory : [categoryName],
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
-        carrousel: carrouselData,
+        carousel: carouselData,
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
       setImagePreviews([]);
-      setImageURL(""); 
-      SetCarrouselData(false)
+      setImageURL("");
+      setCarouselData(false);
     }
   };
   const handleRemoveImage = (index) => {
@@ -314,6 +307,11 @@ const ProductCreateProfileComponent = () => {
       <Typography>
         Para crear un producto nuevo complete el siguiente formulario
       </Typography>
+      {errors.e0 && (
+        <Typography color="error" sx={{ fontSize: "large" }}>
+          {errors.e0}
+        </Typography>
+      )}
       <form onSubmit={handleSubmit}>
         <Box
           sx={{
@@ -331,7 +329,6 @@ const ProductCreateProfileComponent = () => {
               value={values.name}
               onChange={handleChange}
               variant="outlined"
-              required
               sx={{ mt: 1, mb: 1 }}
               fullWidth
               helperText={errors.e1}
@@ -345,7 +342,6 @@ const ProductCreateProfileComponent = () => {
               value={values.price}
               onChange={handleChange}
               variant="outlined"
-              required
               sx={{ mt: 1, mb: 1 }}
               fullWidth
               helperText={errors.e2 ? errors.e2 : errors.e9}
@@ -363,7 +359,6 @@ const ProductCreateProfileComponent = () => {
               onChange={handleChange}
               sx={{ mt: 1, mb: 1 }}
               variant="outlined"
-              required
               helperText={errors.e3}
               error={Boolean(errors.e3)}
             />
@@ -377,7 +372,6 @@ const ProductCreateProfileComponent = () => {
               onChange={handleChange}
               sx={{ mt: 1, mb: 1 }}
               variant="outlined"
-              required
               helperText={errors.e7}
               error={Boolean(errors.e7)}
             />
@@ -390,7 +384,6 @@ const ProductCreateProfileComponent = () => {
               onChange={handleChange}
               variant="outlined"
               sx={{ mt: 1, mb: 1 }}
-              required
               fullWidth
               helperText={errors.e8 ? errors.e8 : errors.e10}
               error={Boolean(errors.e8) || Boolean(errors.e10)}
@@ -438,7 +431,6 @@ const ProductCreateProfileComponent = () => {
                 sx={{ mt: 1, mb: 1 }}
                 value={newBrand}
                 onChange={handleChange}
-                required
                 variant="outlined"
                 fullWidth
               />
@@ -483,18 +475,17 @@ const ProductCreateProfileComponent = () => {
                 value={newCategory}
                 sx={{ mt: 1, mb: 1 }}
                 onChange={handleChange}
-                required
                 variant="outlined"
                 fullWidth
               />
             )}
           </Box>
           <FormControlLabel
-            name="carrousel"
-            value={carrouselData}
+            name="carousel"
+            value={carouselData}
             onChange={handleChange}
             control={<Checkbox />}
-            label="Desea añadir el producto al carrousel?"
+            label="Desea añadir el producto al carousel?"
           />
           <Box>
             {!isUrlInput ? (
@@ -531,13 +522,19 @@ const ProductCreateProfileComponent = () => {
                   label="URL de la imagen"
                   name="imageUrl"
                   value={imageURL}
-                  required
                   sx={{ mt: 1, mb: 1 }}
                   variant="outlined"
                   onChange={handlerImageChange}
                   fullWidth
                 />
-                <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a",mt: 1, mb: 1 }}>
+                <Box
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor: "#fd611a",
+                    mt: 1,
+                    mb: 1,
+                  }}
+                >
                   <Button
                     variant="outlined"
                     color="inherit"
@@ -561,7 +558,9 @@ const ProductCreateProfileComponent = () => {
                 </Typography>
               )
             )}
-            <Box sx={{ borderRadius: 2, backgroundColor: "#fd611a",mt: 1, mb: 1 }}>
+            <Box
+              sx={{ borderRadius: 2, backgroundColor: "#fd611a", mt: 1, mb: 1 }}
+            >
               <Button
                 variant="outlined"
                 color="inherit"

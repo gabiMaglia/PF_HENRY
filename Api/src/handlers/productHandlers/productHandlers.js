@@ -24,6 +24,7 @@ const postProductHandler = async (req, res) => {
     images,
     brandName,
     soldCount,
+    carousel,
   } = req.body;
 
   try {
@@ -35,7 +36,8 @@ const postProductHandler = async (req, res) => {
       !categoryName ||
       !brandName ||
       !images ||
-      !soldCount
+      !soldCount ||
+      !carousel
     ) {
       return res.status(400).json({ error: "Faltan datos requeridos..." });
     }
@@ -50,6 +52,7 @@ const postProductHandler = async (req, res) => {
       images,
       brandName,
       soldCount,
+      carousel,
     });
 
     res
