@@ -57,7 +57,7 @@ export default function SearchAppBar() {
 
   const getUserInfo = async (token) => {
     if (token !== undefined) {
-      const response = await getUserById(token.userId);
+      const response = await getUserById(token.userId, authData.jwt);
       dispatch(logUser({ userObject: { ...response, rolId: token.userRole } }));
     }
   };
@@ -65,7 +65,7 @@ export default function SearchAppBar() {
   const handleSubmit = (event) => {
     event.preventDefault();
     navigate(PATHROUTES.PRODUCTS);
-    dispatch(fetchSearch(inputName));
+    fetchSearch(inputName);
   };
 
   const handleKeyPress = (event) => {

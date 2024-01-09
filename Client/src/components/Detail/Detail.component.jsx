@@ -30,7 +30,7 @@ import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //SWEET ALERT
 import Swal from "sweetalert2";
-//FIREBASE ANALYTICS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { getAnalytics, logEvent } from "firebase/analytics";
 
 // Estilo personalizado para el botón
@@ -110,7 +110,6 @@ const Detail = () => {
   const { login } = useSelector((state) => state.user);
   const [fadeInKey, setFadeInKey] = useState(0);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
-
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
@@ -125,7 +124,7 @@ const Detail = () => {
   }, [id, productById]);
 
   useEffect(() => {
-    dispatch(fetchAllProducts());
+    fetchAllProducts();
   }, []);
 
   useEffect(() => {
@@ -200,6 +199,7 @@ const Detail = () => {
     } else {
       setStoredProducts(productById);
       dispatch(addItem());
+      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
       dispatch(fetchProduct(productById, cookiesAccepted));
       Swal.fire({
         icon: "success",

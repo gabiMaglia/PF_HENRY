@@ -16,7 +16,7 @@ import {
 } from "../CustomDataGrid/CustomDataGrid.component";
 //SERVICES
 import { getAllUsers, getUserRoles } from "../../services/userServices";
-import { PutUser, isDeleteChange } from "../../services/userServices";
+import { putUser, isDeleteChange } from "../../services/userServices";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
@@ -135,6 +135,7 @@ const UsersTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
+
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
       switch (user.rolId) {
@@ -179,7 +180,7 @@ const UsersTable = () => {
   };
 
   const handleDelete = async () => {
-    const response = await isDeleteChange(rowSelected);
+    const response = await isDeleteChange(rowSelected, authData.jwt);
     if (response.error) {
       Swal.fire({
         icon: "error",
@@ -246,7 +247,7 @@ const UsersTable = () => {
           isVerified: newRow.isVerified,
           userAddress: {},
         };
-        const response = await PutUser(newRow.id, newRow.role, editedUser);
+        const response = await putUser(newRow.id, newRow.role, editedUser);
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>

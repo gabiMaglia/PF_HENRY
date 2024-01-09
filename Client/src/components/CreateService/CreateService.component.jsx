@@ -204,14 +204,16 @@ const CreateService = () => {
               //Crea el servicio si es admin
               productInfo,
               productInfo.technicianId,
-              imageUrl
+              imageUrl,
+              authData.jwt
             );
           } else if (authData.userRole === "technician") {
             response = await createNewService(
               // Crea el servicio si es tecnico
               productInfo,
               authData.userId,
-              imageUrl
+              imageUrl,
+              authData.jwt
             );
           }
           if (!response.error && response.status === 200) {

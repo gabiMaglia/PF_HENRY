@@ -5,7 +5,7 @@ const initialState = {
   items: [],
   total: 0,
   id: null,
-  cart: []
+  cartUser: [],
 };
 
 const cartSlice = createSlice({
@@ -71,7 +71,7 @@ const cartSlice = createSlice({
       state.id = action.payload
     },
     getCart: (state, action) => {
-      state.cart = action.payload
+      state.cartUser = action.payload
     }
   },
 });
