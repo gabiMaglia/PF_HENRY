@@ -19,8 +19,6 @@ const UserPanelProductCard = ({
   actionParam = () => {},
 }) => {
   const theme = useTheme();
-  console.log(product);
-  console.log(product.name);
 
   return (
     <Box
