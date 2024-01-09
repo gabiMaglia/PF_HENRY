@@ -19,7 +19,8 @@ const UserPanelProductCard = ({
   actionParam = () => {},
 }) => {
   const theme = useTheme();
-  const [imageError, setImageError] = useState(false);
+  console.log(product);
+  console.log(product.name);
 
   return (
     <Box
@@ -35,12 +36,9 @@ const UserPanelProductCard = ({
         <CardMedia
           component="img"
           alt={product.name}
-          image={!imageError ? product.image : alternativeImage}
+          image={product.ProductImages[0].address}
           onClick={() => {
             handleCardClick(product.id);
-          }}
-          onError={() => {
-            setImageError(true);
           }}
           onLoad={() => {
             setIsLoading(false);
@@ -73,9 +71,6 @@ const UserPanelProductCard = ({
         }}
       >
         <Box
-          onClick={() => {
-            handleCardClick(product.id, actionParam && actionParam);
-          }}
           sx={{
             flexGrow: "1",
             display: "flex",
@@ -103,7 +98,7 @@ const UserPanelProductCard = ({
               {product.name}
             </Typography>
           )}
-          {product.budget && (
+          {product.price && (
             <Typography
               variant="body2"
               color="text.secondary"
@@ -117,24 +112,16 @@ const UserPanelProductCard = ({
                 },
               }}
             >
-              {product.budget}
-            </Typography>
-          )}
-          {product.state && (
-            <Typography
-              variant="body2"
-              color="text.primary"
-              sx={{
-                [theme.breakpoints.down("sm")]: {
-                  fontSize: ".8em",
-                },
-              }}
-            >
-              {product.state}
+              ${product.price}
             </Typography>
           )}
         </Box>
-        <Hidden mdDown>
+      </CardContent>
+    </Box>
+  );
+};
+{
+  /* <Hidden mdDown>
           <Box
             sx={{
               width: "10em",
@@ -182,10 +169,21 @@ const UserPanelProductCard = ({
               );
             })}
           </Box>
-        </Hidden>
-      </CardContent>
-    </Box>
-  );
-};
+        </Hidden> */
+}
 
 export default UserPanelProductCard;
+
+// {product.status && (
+//   <Typography
+//     variant="body2"
+//     color="text.primary"
+//     sx={{
+//       [theme.breakpoints.down("sm")]: {
+//         fontSize: ".8em",
+//       },
+//     }}
+//   >
+//     {product.status}
+//   </Typography>
+// )}
