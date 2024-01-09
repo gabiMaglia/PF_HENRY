@@ -56,7 +56,7 @@ const ProductsServicesProfile = () => {
   };
 
   const getAllServices = async () => {
-    const services = await getServices(authData.userId);
+    const services = await getServices(authData.userId, authData.jwt);
     if (services.error) {
       Swal.fire({
         allowOutsideClick: false,

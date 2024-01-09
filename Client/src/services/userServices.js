@@ -74,10 +74,12 @@ export const getUserById = async (id, jwt) => {
   }
 };
 
-export const postUser = async () => {
+export const postUser = async (jwt) => {
   try {
     const newUser = await axios.post(`${url}/users/`, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
     return newUser;
   } catch (error) {
