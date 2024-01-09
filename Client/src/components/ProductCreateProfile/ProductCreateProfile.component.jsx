@@ -125,18 +125,10 @@ const ProductCreateProfileComponent = () => {
         break;
       case "newCategory":
         setNewCategory(value);
-<<<<<<< HEAD
-        setValues((prevValues) => ({
-          ...prevValues,
-          categoryName: isOtherCategory ? [value] : prevValues.categoryName,
-        }));
-        validationsCreate(values);
-=======
         setAndValidateValues(
           "categoryName",
           isOtherCategory ? [value] : prevValues.categoryName
         );
->>>>>>> 22cafa66741f1b874815a611385d95e1b5e3e16a
         break;
 
       case "brandName":
@@ -151,18 +143,11 @@ const ProductCreateProfileComponent = () => {
 
       case "newBrand":
         setNewBrand(value);
-<<<<<<< HEAD
         setValues((prevValues) => ({
           ...prevValues,
           brandName: isOtherBrand ? value : prevValues.brandName,
         }));
         validationsCreate(values);
-=======
-        setAndValidateValues(
-          "brandName",
-          isOtherBrand ? value : prevValues.brandName
-        );
->>>>>>> 22cafa66741f1b874815a611385d95e1b5e3e16a
         break;
 
       default:
