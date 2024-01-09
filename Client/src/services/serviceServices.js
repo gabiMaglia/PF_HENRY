@@ -16,12 +16,14 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   }
 };
 
-export const getServices = async (id) => {
+export const getServices = async (id, jwt) => {
   try {
     let completeUrl = `${url}/service`;
     id &&
       ((completeUrl = `${url}/service/client/${id}`),
-      { withCredentials: true });
+      { headers: {
+        Authorization: `Bearer ${jwt}`,
+      }, });
     const response = await axios.get(completeUrl);
     return response;
   } catch (error) {

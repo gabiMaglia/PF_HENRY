@@ -78,6 +78,10 @@ export default function ShoppingCart() {
     );
   }
 
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
+
   const handleChange = (productId, value) => {
     const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
@@ -223,7 +227,9 @@ export default function ShoppingCart() {
               }}
             />
 
-            <Typography>Precio: ${item.price * item.count}</Typography>
+            <Typography>
+              Precio: {formatPrice(item.price * item.count)}
+            </Typography>
             <Button onClick={() => handleDelete(item.id)}>
               <DeleteForeverIcon sx={{ color: "#fd611a" }} />
             </Button>
@@ -246,7 +252,7 @@ export default function ShoppingCart() {
             }}
           >
             <Typography sx={{ mr: 8, ml: 8, fontSize: 28, fontWeight: "bold" }}>
-              Total: ${total}
+              Total: {formatPrice(total)}
             </Typography>
           </Box>
           <Button
