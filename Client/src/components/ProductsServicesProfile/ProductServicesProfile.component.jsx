@@ -118,11 +118,12 @@ const ProductsServicesProfile = () => {
       response = await filterService(
         filters.status,
         usersId[userPosition],
-        authData.userId
+        authData.userId,
+        authData.jwt
       );
     } else {
       if (authData.userRole === "customer") {
-        response = await filterService(newValue, authData.userId);
+        response = await filterService(newValue, authData.userId, authData.jwt );
       } else {
         users.forEach((user, index) => {
           user === filters.users && (userPosition = index);
@@ -130,12 +131,14 @@ const ProductsServicesProfile = () => {
         response = await filterService(
           newValue,
           usersId[userPosition],
-          authData.userId
+          authData.userId,
+          authData.jwt
         );
         response = await filterService(
           newValue,
           usersId[userPosition],
-          authData.userId
+          authData.userId,
+          authData.jwt
         );
       }
     }
