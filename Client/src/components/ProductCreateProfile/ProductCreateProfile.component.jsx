@@ -85,7 +85,7 @@ const ProductCreateProfileComponent = () => {
   
   const handleChange = async (event) => {
     const { name, value, files } = event.target;
-  
+
     switch (name) {
       case "images":
         if (!isUrlInput) {
@@ -94,6 +94,7 @@ const ProductCreateProfileComponent = () => {
             ...prevValues,
             images: [...prevValues.images, ...selectedImages],
           }));
+          validationsCreate(values);
           const selectedPreviews = Array.from(files).map((file) =>
             URL.createObjectURL(file)
           );
@@ -109,31 +110,53 @@ const ProductCreateProfileComponent = () => {
       case "imageUrl":
         setImageURL(value);
         break;
-  
+
       case "categoryName":
         setNewCategory("");
-        setAndValidateValues("categoryName", [value]);
+        setValues((prevValues) => ({
+          ...prevValues,
+          categoryName: [value],
+        }));
+        validationsCreate(values);
         setIsOtherCategory(value === "otra");
         break;
       case "newCategory":
         setNewCategory(value);
-        setAndValidateValues("categoryName", isOtherCategory ? [value] : prevValues.categoryName);
+        setValues((prevValues) => ({
+          ...prevValues,
+          categoryName: isOtherCategory ? [value] : prevValues.categoryName,
+        }));
+        validationsCreate(values);
         break;
-  
+
       case "brandName":
         setNewBrand("");
-        setAndValidateValues("brandName", value);
+        setValues((prevValues) => ({
+          ...prevValues,
+          brandName: value,
+        }));
+        validationsCreate(values);
         setIsOtherBrand(value === "otra");
         break;
-  
+
       case "newBrand":
         setNewBrand(value);
-        setAndValidateValues("brandName", isOtherBrand ? value : prevValues.brandName);
+        setValues((prevValues) => ({
+          ...prevValues,
+          brandName: isOtherBrand ? value : prevValues.brandName,
+        }));
+        validationsCreate(values);
         break;
-  
+
       default:
-        setAndValidateValues(name, value);
+        setValues((prevValues) => {
+          const updatedValues = { ...prevValues, [name]: value };
+          return updatedValues;
+        });
     }
+
+    const errorObject = validationsCreate(values);
+    setErrors(errorObject);
   };
   const handlerUpdateCloudinary = async (folderName) => {
     try {
