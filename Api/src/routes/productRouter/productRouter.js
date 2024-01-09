@@ -23,7 +23,7 @@ productRouter.get("/carousel", getProductsCarouselHandler);
 
 productRouter.get("/search", searchByNameHandler);
 productRouter.get("/:id", getProductByIdHandler);
-productRouter.post("/",checkAuthToken, checkRoleAuthToken(["admin"]), postProductHandler);
+productRouter.post("/", checkAuthToken, checkRoleAuthToken(["admin"]), postProductHandler);
 productRouter.post("/several", checkAuthToken, checkRoleAuthToken(["admin"]), postProductSeveralHandler);
 productRouter.put("/:id", checkAuthToken, checkRoleAuthToken(["admin", "technician"]), updateProductHandler);
 productRouter.put("/logicalDelete/:id", checkAuthToken, checkRoleAuthToken(["admin", 'technician']), logicalDeleteHandler);

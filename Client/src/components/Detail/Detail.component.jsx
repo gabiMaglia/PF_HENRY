@@ -112,7 +112,6 @@ const Detail = () => {
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
-
   // Función para resetear la animación de fundido
   const resetFadeIn = () => {
     setFadeInKey((prevKey) => prevKey + 1);
@@ -135,7 +134,7 @@ const Detail = () => {
         if (id && id !== productById?.id) {
           setIsLoadingDetail(true);
           const startTime = Date.now();
-          await dispatch(fetchProductById(id));
+          fetchProductById(id);
           const minimumLoadingTime = 2000;
           const remainingTime = Math.max(
             0,
