@@ -15,7 +15,7 @@ const HomeComponent = () => {
   const dispatch = useDispatch();
   const { allProducts } = useSelector((state) => state.product);
   useEffect(() => {
-    (fetchAllProducts());
+    fetchAllProducts();
   }, [dispatch]);
 
   return (

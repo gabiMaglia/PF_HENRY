@@ -279,16 +279,19 @@ export const fetchCartUser =
   ({ cookieAccepted }) =>
   async (dispatch) => {
     const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-    const { userId } = aux;
-    console.log(userId);
+
+    const { userId, jwt } = aux;
+
     try {
       const response = await axios.get(
         `${urlBack}/pagos/misCompras/${userId}`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
         }
       );
-      console.log(response);
+
       dispatch(getCart(response.data));
     } catch (error) {
       console.log(error.message);

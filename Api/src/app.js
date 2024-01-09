@@ -6,6 +6,7 @@ const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");
 var cors = require("cors");
 const passport = require("passport");
+const { verifyToken } = require("./jwt/tokenGenerator.js");
 const server = express();
 
 server.name = "API";
@@ -17,9 +18,11 @@ server.use(express.urlencoded({ extended: true }));
 server.use(passport.initialize());
 // Entryp0nt de la ruta principal
 server.use((req, res, next) => {
+  if (req.headers.authorization){
   const token = req.headers.authorization
-  // const decodedToken = toke
-  console.log(token)
+  verifyToken(token.split(' ').pop()).then(data => console.log(data))
+  
+  }
   next()
 })
 server.use("/", routes);
