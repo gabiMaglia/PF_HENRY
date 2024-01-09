@@ -2,7 +2,6 @@
 import axios from "axios";
 //UTILS
 import {
-  search,
   getProductById,
   getProducts,
   filterByCategory,
@@ -140,7 +139,6 @@ export const fetchGetProduct = ({cookiesAccepted}) => async () => {
 
 export const fetchCount = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  console.log(cookiesAccepted);
   const { userId, jwt } = aux;
   const data = {
     userId: userId,
