@@ -30,7 +30,8 @@ import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //SWEET ALERT
 import Swal from "sweetalert2";
-
+//FIREBASE ANALYTICS
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 // Estilo personalizado para el botón
 const CustomButton = styled(Button)({
@@ -166,6 +167,21 @@ const Detail = () => {
         productById.ProductImages.length > 0
       ) {
         setSelectedImage(productById.ProductImages[0].address);
+        //Envio de notificaciónes a FIREBASE
+        const firebaseParams = {
+          currency: "ARS",
+          value: productById.price,
+          items: [
+            {
+              item_id: productById?.id,
+              item_name: productById?.name,
+              item_category: productById?.ProductCategories[0]?.name,
+              price: productById?.price,
+            },
+          ],
+        };
+        const analytics = getAnalytics();
+        logEvent(analytics, "view_item", firebaseParams);
       }
     };
     setInitialImage();
