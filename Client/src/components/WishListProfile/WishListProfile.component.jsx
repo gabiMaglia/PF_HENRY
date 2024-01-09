@@ -51,7 +51,7 @@ const WhishListProfileComponent = () => {
   };
 
   const chargeWishListProduct = () => {
-    fetchWishList(userId, dispatch); //Recarga de el estado global Wishlist
+    fetchWishList(userId, dispatch, authData.jwt); //Recarga de el estado global Wishlist
   };
 
   const handleCardClick = (id) => {
@@ -71,6 +71,7 @@ const WhishListProfileComponent = () => {
     } else {
       setStoredProducts(product);
       dispatch(addItem());
+      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
       dispatch(fetchProduct(product, cookiesAccepted));
       Swal.fire({
         icon: "success",

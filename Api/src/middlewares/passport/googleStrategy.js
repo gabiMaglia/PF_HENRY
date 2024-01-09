@@ -7,12 +7,11 @@ const {
 } = require("../../controllers/accountControllers/authController");
 
 const verifyCallback = async (accessToken, refreshToken, profile, done) => {
-
   const email = profile.emails.find((email) => email.verified === true);
   const { given_name, family_name, picture, sub } = profile._json;
-
+  console.log(profile)
   const response = await User.findOne({ where: { email: email.value } });
-
+  console.log(response)
   // IF EXITS IN DATABASE
   if (response) {
     return done(null, profile._json);

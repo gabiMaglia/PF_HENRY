@@ -147,35 +147,10 @@ const sectionSocial = [
   },
 ];
 
-const brands = [
-  "Aero Cool",
-  "Adata",
-  "Amd",
-  "Antec",
-  "Asrock",
-  "Asus",
-  "Aureox",
-  "Cooler Master",
-  "Genius",
-  "HyperX",
-  "Intel",
-  "Kingston",
-  "Lg",
-  "Logitech",
-  "Msi",
-  "Ryzen",
-  "Samsung",
-  "Seagate",
-  "Sony",
-  "T-Force",
-  "Western Digital",
-];
-
 export {
   questionsStore,
   questionsService,
   textSupport,
   sectionInformation,
   sectionSocial,
-  brands,
 };

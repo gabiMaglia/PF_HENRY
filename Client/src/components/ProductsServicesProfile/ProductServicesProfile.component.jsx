@@ -27,7 +27,7 @@ import logo from "../../../public/icons/logo.svg";
 import {
   getUsersByRole,
   getUserById,
-  PutUser,
+  putUser,
 } from "../../services/userServices";
 import { serviceStatuses } from "../../utils/serviceStatuses.js";
 
@@ -56,7 +56,7 @@ const ProductsServicesProfile = () => {
   };
 
   const getAllServices = async () => {
-    const services = await getServices(authData.userId);
+    const services = await getServices(authData.userId, authData.jwt);
     if (services.error) {
       Swal.fire({
         allowOutsideClick: false,
@@ -94,7 +94,7 @@ const ProductsServicesProfile = () => {
       setUsersId(usersId);
     }
     if (authData.userRole === "customer") {
-      const user = await getUserById(authData.userId);
+      const user = await getUserById(authData.userId, authData.jwt);
       setUser(user);
     }
   };
@@ -118,11 +118,12 @@ const ProductsServicesProfile = () => {
       response = await filterService(
         filters.status,
         usersId[userPosition],
-        authData.userId
+        authData.userId,
+        authData.jwt
       );
     } else {
       if (authData.userRole === "customer") {
-        response = await filterService(newValue, authData.userId);
+        response = await filterService(newValue, authData.userId, authData.jwt );
       } else {
         users.forEach((user, index) => {
           user === filters.users && (userPosition = index);
@@ -130,12 +131,14 @@ const ProductsServicesProfile = () => {
         response = await filterService(
           newValue,
           usersId[userPosition],
-          authData.userId
+          authData.userId,
+          authData.jwt
         );
         response = await filterService(
           newValue,
           usersId[userPosition],
-          authData.userId
+          authData.userId,
+          authData.jwt
         );
       }
     }
@@ -194,11 +197,11 @@ const ProductsServicesProfile = () => {
         denyButtonColor: "#25d366",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await PutUser(user.id, authData.userRole, {
+          const response = await putUser(user.id, authData.userRole, {
             communication_preference: "Email",
           });
         } else if (result.isDenied) {
-          const response = await PutUser(user.id, authData.userRole, {
+          const response = await putUser(user.id, authData.userRole, {
             communication_preference: "Whatsapp",
           });
         }

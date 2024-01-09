@@ -6,9 +6,8 @@ import {
   GridLogicOperator,
   esES,
 } from "@mui/x-data-grid";
-
+import { useSelector } from 'react-redux'
 //COMPONENTS
-import Loading from "../Loading/Loading.component";
 import {
   StyledDataGrid,
   CustomToolbar,
@@ -20,6 +19,7 @@ import {
 } from "../../services/productServices";
 // SweetAlert
 import Swal from "sweetalert2";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -60,23 +60,30 @@ const columns = [
     editable: true,
   },
   {
+    field: "carousel",
+    headerName: "Carousel",
+    width: 80,
+    headerAlign: "center",
+    editable: true,
+  },
+  {
     field: "brand",
     headerName: "Marca",
-    width: 150,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "category",
     headerName: "Categoría",
-    width: 150,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "stock",
     headerName: "Stock",
-    width: 150,
+    width: 80,
     headerAlign: "center",
     editable: true,
   },
@@ -91,6 +98,9 @@ const ProductsTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
+  
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const language = esES;
 
@@ -108,6 +118,7 @@ const ProductsTable = () => {
           price: product.price,
           warranty: product.warranty,
           soldCount: product.soldCount,
+          carousel: product.carousel,
           is_deleted: product.is_deleted,
           brand: product.ProductBrands[0].name,
           category: product.ProductCategories[0].name,
@@ -148,7 +159,7 @@ const ProductsTable = () => {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            return logicalDeleteProduct(id);
+            return logicalDeleteProduct(id, authData.jwt);
           })
         );
         let msg = response.map((res) => res.data);
@@ -189,7 +200,7 @@ const ProductsTable = () => {
         setAvailableModify(false);
         const productId = newRow.id;
 
-        const response = await fetchUpdateProduct(productId, newRow);
+        const response = await fetchUpdateProduct(productId, newRow, authData.jwt);
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
@@ -267,7 +278,11 @@ const ProductsTable = () => {
           },
         }}
         getRowClassName={(params) => {
-          return params.row.is_deleted ? `row--deleted` : `row`;
+          return params.row.is_deleted
+            ? `row--deleted`
+            : params.row.carousel
+            ? `row--carousel`
+            : `row`;
         }}
         checkboxSelection
         disableRowSelectionOnClick

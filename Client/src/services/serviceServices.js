@@ -3,12 +3,14 @@ import axios from "axios";
 
 const url = import.meta.env.VITE_BACKEND_URL;
 
-export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
+export const createNewService = async (serviceInfo, technicianId, imageUrl, jwt) => {
   try {
     serviceInfo.product_image = imageUrl;
     serviceInfo.technicianId = technicianId;
     const response = await axios.post(`${url}/service`, serviceInfo, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      }
     });
     return response;
   } catch (error) {
@@ -16,24 +18,31 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl) => {
   }
 };
 
-export const getServices = async (id) => {
+export const getServices = async (id, jwt) => {
   try {
     let completeUrl = `${url}/service`;
     id &&
-      ((completeUrl = `${url}/service/client/${id}`),
-      { withCredentials: true });
-    const response = await axios.get(completeUrl);
+      ((completeUrl = `${url}/service/client/${id}`));
+      
+        
+    const response = await axios.get(completeUrl, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      }
+    });
     return response;
   } catch (error) {
     return { error };
   }
 };
 
-export const getServicesById = async (id) => {
+export const getServicesById = async (id, jwt) => {
   try {
     if (id) {
       const response = await axios.get(`${url}/service/${id}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        }
       });
       return response;
     }
@@ -42,7 +51,7 @@ export const getServicesById = async (id) => {
   }
 };
 
-export const filterService = async (status, user, technician) => {
+export const filterService = async (status, user, technician, jwt) => {
   try {
     const response = await axios.get(`${url}/service/filter`, {
       params: {
@@ -50,7 +59,9 @@ export const filterService = async (status, user, technician) => {
         user: user,
         technician: technician,
       },
-      withCredentials: "true",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      }
     });
 
     return response;
@@ -59,7 +70,7 @@ export const filterService = async (status, user, technician) => {
   }
 };
 
-export const updateServiceStatus = async (id, updatedArray) => {
+export const updateServiceStatus = async (id, updatedArray, jwt) => {
   try {
     const response = await Promise.all(
       updatedArray.map((item) => {
@@ -70,7 +81,9 @@ export const updateServiceStatus = async (id, updatedArray) => {
             value: item.value,
           },
           {
-            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            }
           }
         );
       })
@@ -81,25 +94,3 @@ export const updateServiceStatus = async (id, updatedArray) => {
   }
 };
 
-//Estaba de antes no lo quise borrar por las dudas
-export const GetAllRoles = async () => {
-  try {
-    const GetRol = await axios.get(`${url}/user_role`, {
-      withCredentials: true,
-    });
-    return GetRol;
-  } catch ({ GetRol }) {
-    return { error: GetRol };
-  }
-};
-
-export const CreateNewRole = async () => {
-  try {
-    const PostRol = await axios.post(`${url}/user_role/create`, {
-      withCredentials: true,
-    });
-    return PostRol;
-  } catch ({ PostRol }) {
-    return { error: PostRol };
-  }
-};

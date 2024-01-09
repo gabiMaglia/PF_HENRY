@@ -34,9 +34,8 @@ const DetailProductService = ({
   const [data, setData] = useState({});
   const [communicationPreference, setComunicationPreference] = useState("");
   const theme = useTheme();
-
   const getName = async (id, product) => {
-    const response = await getUserById(id);
+    const response = await getUserById(id, authData.jwt);
     product.displayData.unshift({
       message: authData.userRole === "customer" ? "Tecnico:" : "Cliente:",
       data: response.name + " " + response.surname,
@@ -47,7 +46,7 @@ const DetailProductService = ({
   };
 
   const getService = async () => {
-    const response = await getServicesById(id);
+    const response = await getServicesById(id, authData.jwt);
     if (response.error) {
       Swal.fire({
         allowOutsideClick: false,
@@ -116,7 +115,7 @@ const DetailProductService = ({
         showConfirmButton: false,
       });
       Swal.showLoading();
-      let response = await updateServiceStatus(data.statusId, updatedArray); // ACA
+      let response = await updateServiceStatus(data.statusId, updatedArray, authData.jwt); // ACA
       response?.length > 0 && (response = response[response.length - 1]);
       if (response?.error) {
         Swal.hideLoading();

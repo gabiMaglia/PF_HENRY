@@ -23,15 +23,13 @@ const CardCarousel = ({ allProducts }) => {
 
   useEffect(() => {
     if (Array.isArray(allProducts)) {
-      const filteredProducts = allProducts
-        .filter(
-          (product) =>
-            product?.ProductImages[0]?.address.endsWith(".png") &&
-            product.name &&
-            product.price
-        )
-        .slice(0, 5);
-
+      const filteredProducts = allProducts.filter(
+        (product) =>
+          product?.ProductImages[0]  &&
+          product.name &&
+          product.price &&
+          product.carousel === true
+      );
       setProductData(filteredProducts);
     }
   }, [allProducts]);
@@ -184,10 +182,10 @@ const CardCarousel = ({ allProducts }) => {
                 <CardMedia
                   component="img"
                   alt={product.name}
-                  height="200px"
                   image={product.ProductImages[0]?.address}
                   sx={{
-                    width: "250px",
+                    width: "200px",
+                    height: "auto",
                     border: "1px solid transparent",
                     marginTop: "8px",
                     marginRight: "3%",
