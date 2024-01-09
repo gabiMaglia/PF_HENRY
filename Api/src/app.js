@@ -16,9 +16,11 @@ server.use(express.urlencoded({ extended: true }));
 // Passport
 server.use(passport.initialize());
 // Entryp0nt de la ruta principal
-// server.use(req, res, next) => {
-
-// }
+server.use((req, res, next) => {
+  const token = req.headers.authorization
+  // const decodedToken = toke
+  console.log(token)
+})
 server.use("/", routes);
 
 
