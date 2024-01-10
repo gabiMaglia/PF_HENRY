@@ -21,7 +21,7 @@ const ShoppingProfileComponent = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchCartUser(cookiesAccepted);
+    dispatch(fetchCartUser(cookiesAccepted));
   }, []);
 
   const handleClick = () => {
