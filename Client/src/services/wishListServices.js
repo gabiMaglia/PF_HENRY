@@ -44,6 +44,12 @@ export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
       throw new Error("No se pudo añadir el producto a la lista de deseos");
     }
   } catch (error) {
-    Swal.fire("Error", error.message, "error");
+    Swal.fire({
+      icon: "info",
+      title: "Acceso Privado",
+      text: "Tu rol de usuario no posee lista de deseos.",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Ok",
+    });
   }
 };
