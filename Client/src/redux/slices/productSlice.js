@@ -40,6 +40,7 @@ const productSlice = createSlice({
     search: (state, action) => {
       const searchProduct = action.payload;
       state.productsToShow = searchProduct.slice(0, PRODUCT_PER_PAGE);
+      state.allProducts = searchProduct
       state.currentPage = 0; 
       state.totalPages = Math.ceil(searchProduct.length / PRODUCT_PER_PAGE);
     },
