@@ -16,7 +16,7 @@ import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesP
 import CreateService from "../CreateService/CreateService.component";
 import UsersTable from "../UsersTable/UsersTable.component";
 import ProductsTable from "../ProductsTable/ProductsTable.component";
-import ServiceList from "../ServiceList/ServiceList.componet";
+import ServicesTable from "../ServicesTable/ServicesTable.component";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -216,7 +216,7 @@ const UserPanelComponent = () => {
           }
           element={
             userRole === "admin" ? (
-              <ServiceList />
+              <ServicesTable />
             ) : userRole === "customer" ? (
               <ProductsServicesProfile />
             ) : (
