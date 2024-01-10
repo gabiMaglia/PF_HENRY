@@ -122,7 +122,7 @@ const Detail = () => {
   }, [id, productById]);
 
   useEffect(() => {
-    fetchAllProducts();
+    dispatch(fetchAllProducts());
   }, []);
 
   useEffect(() => {
@@ -134,7 +134,7 @@ const Detail = () => {
         if (id && id !== productById?.id) {
           setIsLoadingDetail(true);
           const startTime = Date.now();
-          fetchProductById(id);
+          dispatch(fetchProductById(id));
           const minimumLoadingTime = 2000;
           const remainingTime = Math.max(
             0,

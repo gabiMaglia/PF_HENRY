@@ -121,45 +121,47 @@ const FiltersSorting = () => {
             width: { xs: "100%", md: "80%", lg: "60%", xl: "50%" },
           }}
         >
-          {categories.map((categorie) => (
-            <Button
-              key={categorie.id}
-              sx={{
-                padding: (1, 1, 1, 1),
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "center",
-                backgroundColor:
-                  categorie.name === selectedCategory ? "#b54410" : "#fd611a",
-                width: 90,
-                height: 90,
-                ml: { xs: 3, lg: -2.1 },
-                mt: 2,
-                borderColor:
-                  categorie.name === selectedCategory ? "white" : undefined,
-                borderStyle: "solid",
-                borderWidth: 2,
-                "&:hover": { color: "black", backgroundColor: "#b54410" },
-              }}
-              onClick={() => handleCategoryClick(categorie.name)}
-            >
-              <CategorieMedia
-                component="img"
-                src={categorie.image}
-                alt={categorie.name}
+          {[...categories]
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((categorie) => (
+              <Button
+                key={categorie.id}
                 sx={{
+                  padding: (1, 1, 1, 1),
                   display: "flex",
-                  flexWrap: "wrap",
-                  backgroundColor: "none",
+                  flexDirection: "column",
+                  textAlign: "center",
+                  backgroundColor:
+                    categorie.name === selectedCategory ? "#b54410" : "#fd611a",
+                  width: 90,
+                  height: 90,
+                  ml: { xs: 3, lg: -2.1 },
+                  mt: 2,
+                  borderColor:
+                    categorie.name === selectedCategory ? "white" : undefined,
+                  borderStyle: "solid",
+                  borderWidth: 2,
+                  "&:hover": { color: "black", backgroundColor: "#b54410" },
                 }}
-              ></CategorieMedia>
-              <Typography
-                sx={{ color: "black", fontSize: 10, fontWeight: 700 }}
+                onClick={() => handleCategoryClick(categorie.name)}
               >
-                {categorie.name}
-              </Typography>
-            </Button>
-          ))}
+                <CategorieMedia
+                  component="img"
+                  src={categorie.image}
+                  alt={categorie.name}
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    backgroundColor: "none",
+                  }}
+                ></CategorieMedia>
+                <Typography
+                  sx={{ color: "black", fontSize: 10, fontWeight: 700 }}
+                >
+                  {categorie.name}
+                </Typography>
+              </Button>
+            ))}
         </Box>
       </Container>
       <Box display="flex" alignItems="center">
