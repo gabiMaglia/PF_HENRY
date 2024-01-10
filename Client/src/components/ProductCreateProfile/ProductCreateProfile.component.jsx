@@ -205,9 +205,9 @@ const ProductCreateProfileComponent = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(authData.jwt)
     let array = [];
-
+    
     const errorObject = validationsCreate(values);
     console.log(errorObject)
     setErrors(errorObject);
@@ -226,7 +226,7 @@ const ProductCreateProfileComponent = () => {
         const array2 = await handlerUpdateCloudinary("products");
         array = array2;
       }
-
+      
       if (array.error) {
         Swal.fire({
           icon: "error",
@@ -234,13 +234,13 @@ const ProductCreateProfileComponent = () => {
           text: "Por favor, inténtelo de nuevo.",
         });
       }
-
+      
       const obj = {
         ...values,
         carousel: carouselData,
         images: array,
       };
-
+      
       // Muestra una alerta de que la creación está en proceso
       Swal.fire({
         icon: "info",
