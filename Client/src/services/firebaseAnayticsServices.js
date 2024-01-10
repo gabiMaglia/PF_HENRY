@@ -134,3 +134,24 @@ export const finalServiceEvent = ({ data }, final) => {
   };
   postEvent(final, firebaseParams);
 };
+
+export const userViewCartEvent = (items, total) => {
+  console.log(items, total);
+  const cartItems = items.map((item) => {
+    // return     {
+    //   item_id: product?.id,
+    //   item_name: product?.name,
+    //   item_category: product?.ProductCategories[0]?.name,
+    //   item_brand: product?.ProductBrands[0]?.name,
+    //   price: product?.price,
+    // },
+  });
+
+  const firebaseParams = {
+    currency: "ARS",
+    value: total,
+    items: cartItems,
+  };
+
+  postEvent("view_cart", firebaseParams);
+};

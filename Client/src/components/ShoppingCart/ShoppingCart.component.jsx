@@ -30,6 +30,9 @@ import {
   fetchDeleteCartProduct,
 } from "../../services/productServices";
 
+//FIREBASE
+import { userViewCartEvent } from "../../services/firebaseAnayticsServices";
+
 export default function ShoppingCart() {
   const dispatch = useDispatch();
 
@@ -37,6 +40,10 @@ export default function ShoppingCart() {
   const { cookiesAccepted } = useSelector((state) => state.cookies);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
+
+  useEffect(() => {
+    userViewCartEvent(items, total);
+  }, []);
 
   useEffect(() => {
     dispatch(addItem());

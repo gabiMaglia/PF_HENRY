@@ -53,14 +53,9 @@ const LoginModal = ({
 
   const loginManagement = async (username, address, cookieStatus) => {
     let response;
-<<<<<<< HEAD
     let method;
 
-=======
-    
->>>>>>> 72be9416bf20671a0951afb3d0c3a1db9cff3fc7
     if (!username || !address) {
-     
       response = await googleLoginUser(cookieStatus);
       method = "google";
     } else {
@@ -94,11 +89,7 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
-<<<<<<< HEAD
           userLogin(method);
-=======
-          console.log(response);
->>>>>>> 72be9416bf20671a0951afb3d0c3a1db9cff3fc7
           handledispatch(response.data.userId, response.data.tokenSession);
           setLoginModalIsOpen(false);
         }

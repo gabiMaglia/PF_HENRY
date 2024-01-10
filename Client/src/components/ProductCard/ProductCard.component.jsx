@@ -65,12 +65,6 @@ const CardProduct = ({ product }) => {
     navigate(`/products/filters/${categoryName}`);
   };
 
-<<<<<<< HEAD
-  const handleDesiredClick = (e) => {
-    e.stopPropagation();
-    if (login) {
-      fetchAddItemWish(dispatch, userId, product.id, authData.jwt);
-=======
   const handleDesiredClick = () => {
     if (login && userRole === "customer") {
       fetchAddItemWish(dispatch, userId, product.id, authData.jwt);
@@ -82,7 +76,6 @@ const CardProduct = ({ product }) => {
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Ok",
       });
->>>>>>> 72be9416bf20671a0951afb3d0c3a1db9cff3fc7
     } else {
       Swal.fire({
         icon: "info",
