@@ -30,11 +30,17 @@ const ServicesTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-
+console.log(authData.jwt)
   const columns = [
     {
       field: "id",
       headerName: "ID",
+      minWidth: 300,
+      headerAlign: "center",
+    },
+    {
+      field: "clientName",
+      headerName: "Usuario",
       minWidth: 300,
       headerAlign: "center",
     },
@@ -47,12 +53,6 @@ const ServicesTable = () => {
     {
       field: "product_income_date",
       headerName: "fecha de ingreso",
-      minWidth: 300,
-      headerAlign: "center",
-    },
-    {
-      field: "clientName",
-      headerName: "Usuario",
       minWidth: 300,
       headerAlign: "center",
     },
@@ -113,7 +113,7 @@ const ServicesTable = () => {
         setServices(data);
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error Fetching Services:", error.message);
@@ -232,6 +232,13 @@ const ServicesTable = () => {
         columns={columns}
         pageSize={5}
         checkboxSelection
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              id: false,
+            },
+          },
+        }}
       />
       {loading && <LoadingProgress />}
     </Box>

@@ -27,7 +27,7 @@ import { getUserById } from "../../services/userServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
-import { fetchCartUser, fetchGetProduct } from "../../services/productServices";
+import { fetchProductCartGet } from "../../services/productServices";
 import { addItem } from "../../redux/slices/cartSlice";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
@@ -37,17 +37,15 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
-
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const cookiesAccepted = useSelector((state) => state.cookies);
-  
+
   const handledispatch = async (userId, authData) => {
-    const user = await getUserById(userId, authData)
-    
+    const user = await getUserById(userId, authData);
+
     dispatch(logUser({ userObject: user }));
-    fetchGetProduct(cookiesAccepted);
-    fetchCartUser(cookiesAccepted);
+    await dispatch(fetchProductCartGet(cookiesAccepted));
     dispatch(addItem());
   };
 
@@ -70,7 +68,11 @@ const LoginModal = ({
         },
         icon: "error",
         title: "Fallo en el inicio de sesion",
-        text: `${  response.response || response.error.data?.response || response.error.data }`,
+        text: `${
+          response.response ||
+          response.error.data?.response ||
+          response.error.data
+        }`,
       });
     } else {
       Swal.fire({
@@ -83,7 +85,7 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log(response)
+          console.log(response);
           handledispatch(response.data.userId, response.data.tokenSession);
           setLoginModalIsOpen(false);
         }
