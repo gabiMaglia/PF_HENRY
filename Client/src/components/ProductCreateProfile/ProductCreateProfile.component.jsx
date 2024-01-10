@@ -18,6 +18,7 @@ import {
 //SERVICES
 import { fetchCategories } from "../../services/categoriesServices";
 import { fetchAddProduct } from "../../services/productServices";
+import { fetchBrands } from "../../services/brandsServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 //UTILS
@@ -25,7 +26,7 @@ import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
 import validationsCreate from "../../helpers/productValidate";
 import { display } from "@mui/system";
-import { fetchBrands } from "../../services/brandsServices";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCreateProfileComponent = () => {
   const fileInputRef = useRef(null);
@@ -40,7 +41,7 @@ const ProductCreateProfileComponent = () => {
   const [newBrand, setNewBrand] = useState("");
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
-  const [carrouselData, SetCarrouselData] = useState(false);
+  const [carouselData, setCarouselData] = useState(false);
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     name: "",
@@ -52,9 +53,11 @@ const ProductCreateProfileComponent = () => {
     categoryName: isOtherCategory ? newCategory : categoryName,
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
-    carrousel: carrouselData,
+    carousel: carouselData,
   });
-
+  
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const [imagePreviews, setImagePreviews] = useState([]);
   useEffect(() => {
     fetchCategories(dispatch);
@@ -82,10 +85,10 @@ const ProductCreateProfileComponent = () => {
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
   };
-  
+
   const handleChange = async (event) => {
     const { name, value, files } = event.target;
-  
+
     switch (name) {
       case "images":
         if (!isUrlInput) {
@@ -103,13 +106,13 @@ const ProductCreateProfileComponent = () => {
           ]);
         }
         break;
-      case "carrousel":
-        SetCarrouselData(!carrouselData);
+      case "carousel":
+        setCarouselData(!carouselData);
         break;
       case "imageUrl":
         setImageURL(value);
         break;
-  
+
       case "categoryName":
         setNewCategory("");
         setAndValidateValues("categoryName", [value]);
@@ -117,20 +120,26 @@ const ProductCreateProfileComponent = () => {
         break;
       case "newCategory":
         setNewCategory(value);
-        setAndValidateValues("categoryName", isOtherCategory ? [value] : prevValues.categoryName);
+        setAndValidateValues(
+          "categoryName",
+          isOtherCategory ? [value] : prevValues.categoryName
+        );
         break;
-  
+
       case "brandName":
         setNewBrand("");
         setAndValidateValues("brandName", value);
         setIsOtherBrand(value === "otra");
         break;
-  
+
       case "newBrand":
         setNewBrand(value);
-        setAndValidateValues("brandName", isOtherBrand ? value : prevValues.brandName);
+        setAndValidateValues(
+          "brandName",
+          isOtherBrand ? value : prevValues.brandName
+        );
         break;
-  
+
       default:
         setAndValidateValues(name, value);
     }
@@ -193,6 +202,7 @@ const ProductCreateProfileComponent = () => {
 
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
+
     if (Object.keys(errorObject).length !== 0) {
       Swal.fire({
         icon: "error",
@@ -218,6 +228,7 @@ const ProductCreateProfileComponent = () => {
 
       const obj = {
         ...values,
+        carousel: carouselData,
         images: array,
       };
 
@@ -229,7 +240,7 @@ const ProductCreateProfileComponent = () => {
         showConfirmButton: false,
       });
 
-      const response = fetchAddProduct(obj, dispatch);
+      const response = fetchAddProduct(obj, dispatch, authData.jwt);
       response
         .then((res) => {
           Swal.close();
@@ -256,13 +267,13 @@ const ProductCreateProfileComponent = () => {
         categoryName: isOtherCategory ? newCategory : [categoryName],
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
-        carrousel: carrouselData,
+        carousel: carouselData,
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
       setImagePreviews([]);
       setImageURL("");
-      SetCarrouselData(false);
+      setCarouselData(false);
     }
   };
   const handleRemoveImage = (index) => {
@@ -474,11 +485,11 @@ const ProductCreateProfileComponent = () => {
             )}
           </Box>
           <FormControlLabel
-            name="carrousel"
-            value={carrouselData}
+            name="carousel"
+            value={carouselData}
             onChange={handleChange}
             control={<Checkbox />}
-            label="Desea añadir el producto al carrousel?"
+            label="Desea añadir el producto al carousel?"
           />
           <Box>
             {!isUrlInput ? (

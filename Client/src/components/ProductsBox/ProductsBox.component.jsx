@@ -21,6 +21,7 @@ import { fetchProduct } from "../../services/productServices";
 import Swal from "sweetalert2";
 // UTILS
 import PATHROUTES from "../../helpers/pathRoute";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductBox = () => {
   const navigate = useNavigate();
@@ -32,9 +33,9 @@ const ProductBox = () => {
 
   const { login } = useSelector((state) => state.user);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
-
+  const authData = getDataFromSelectedPersistanceMethod(cookiesAccepted)
   const isThereAnyProducts = productsToShow.length === 0;
-
+  
   const handleAddToCart = (product) => {
     if (login === false) {
       Swal.fire({
@@ -47,6 +48,7 @@ const ProductBox = () => {
     } else {
       setStoredProducts(product);
       dispatch(addItem());
+      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
       dispatch(fetchProduct(product, cookiesAccepted));
       Swal.fire({
         icon: "success",

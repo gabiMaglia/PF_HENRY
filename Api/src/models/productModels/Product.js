@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    carrousel: {
+    carousel: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
       defaultValue: false,

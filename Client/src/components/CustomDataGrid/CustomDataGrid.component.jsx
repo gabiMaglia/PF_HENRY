@@ -99,6 +99,24 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
       },
     },
   },
+  "& .row--carousel": {
+    backgroundColor: "#2759a6",
+    "&:hover": {
+      backgroundColor: "#2759a6e",
+    },
+    "&:active": {
+      backgroundColor: "#2759a6e",
+    },
+    "&:focus-within": {
+      backgroundColor: "#2759a6e",
+    },
+    "&.Mui-selected": {
+      backgroundColor: "#2759a6",
+      "&:hover": {
+        backgroundColor: "#2759a6e",
+      },
+    },
+  },
   "& .MuiCheckbox-root svg": {
     width: ".5em",
     height: ".5em",

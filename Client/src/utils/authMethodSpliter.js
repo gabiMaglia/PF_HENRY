@@ -37,14 +37,14 @@ export const getDataFromSelectedPersistanceMethod = (cookieStatus) => {
 export const clearPersistanceData = (cookieStatus, bool) => {
   rejectCookies(bool);
   if (!cookieStatus) {
-    window.localStorage.removeItem("jwt"),
+      window.localStorage.removeItem("jwt"),
       window.localStorage.removeItem("login"),
       window.localStorage.removeItem("userId"),
       window.localStorage.removeItem("userRole");
   }
 };
 
-export const customAxios = () => {
+export const customAxios = (token) => {
   return (token) => {
     return axios.create({
       headers: {

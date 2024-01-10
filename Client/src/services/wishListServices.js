@@ -10,10 +10,12 @@ import Swal from "sweetalert2";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
-export const fetchWishList = async (userId, dispatch) => {
+export const fetchWishList = async (userId, dispatch, jwt) => {
   try {
     const response = await axios.get(`${urlBack}/wishlist/${userId}`, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
     if (response.data) {
       dispatch(getWishlist(response.data.Products));
@@ -25,14 +27,16 @@ export const fetchWishList = async (userId, dispatch) => {
   }
 };
 
-export const fetchAddItemWish = async (dispatch, userId, productId) => {
+export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
   const request = {
     userID: userId,
     productID: productId,
   };
   try {
     const { data } = await axios.post(`${urlBack}/wishlist`, request, {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
     });
     if (data) {
       dispatch(addProductToWishlist(data.Products));

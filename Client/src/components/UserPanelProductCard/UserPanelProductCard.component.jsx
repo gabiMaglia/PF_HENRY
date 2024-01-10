@@ -189,3 +189,4 @@ const UserPanelProductCard = ({
 };
 
 export default UserPanelProductCard;
+

@@ -37,16 +37,17 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
+
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const cookiesAccepted = useSelector((state) => state.cookies);
-
-  const handledispatch = async (userId) => {
-    await getUserById(userId).then((data) => {
-      dispatch(logUser({ userObject: data }));
-    });
-    await dispatch(fetchGetProduct(cookiesAccepted));
-    await dispatch(fetchCartUser(cookiesAccepted));
+  
+  const handledispatch = async (userId, authData) => {
+    const user = await getUserById(userId, authData)
+    
+    dispatch(logUser({ userObject: user }));
+    fetchGetProduct(cookiesAccepted);
+    fetchCartUser(cookiesAccepted);
     dispatch(addItem());
   };
 
@@ -82,7 +83,8 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
-          handledispatch(response.data.userId);
+          console.log(response)
+          handledispatch(response.data.userId, response.data.tokenSession);
           setLoginModalIsOpen(false);
         }
       });
