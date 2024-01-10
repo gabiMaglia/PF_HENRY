@@ -49,24 +49,33 @@ export const googleLoginUser = async (cookieStatus) => {
       width=620,
       height=700`
       );
+      if (!popup) {
+        throw new Error("Failed to open the authentication window");
+      }
+  
       return new Promise((resolve) => {
         window.addEventListener("message", (event) => {
+        
           if (event.origin === `${url}` && event.data) {
-          if (event.data.error) {
-            popup.close();
-            resolve({ error: true , response: event.data.response });
-          }else {
-            const sortedData = dataSorterForApp(event.data);
-            createPersistency(sortedData, cookieStatus);
-            popup.close();
-            resolve({ data: event.data });
+          
+            if (event.data.error) {
+              popup.close();
+              resolve({ error: true , response: event.data.response });
+       
+            }else {
+              const sortedData = dataSorterForApp(event.data);
+              createPersistency(sortedData, cookieStatus);
+              popup.close();
+              resolve({ data: event.data });
+            }
+            
           }
-
-        }
+        });
       });
-    });
-  } catch ({ response }) {
-    return { error: response };
+    } catch ( error ) {
+      console.error("Error during Google authentication:", error.response);
+      return { error: error.response.message || "An error occurred during authentication" };
+
   }
 };
 export const registerUser = async (userObj) => {

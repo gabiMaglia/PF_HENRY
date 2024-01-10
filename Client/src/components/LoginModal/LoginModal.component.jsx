@@ -53,8 +53,9 @@ const LoginModal = ({
 
   const loginManagement = async (username, address, cookieStatus) => {
     let response;
-
+    
     if (!username || !address) {
+     
       response = await googleLoginUser(cookieStatus);
     } else {
       response = await loginUser(username, address, cookieStatus);
@@ -62,7 +63,6 @@ const LoginModal = ({
     !cookieStatus && rejectCookies();
 
     if (response.error) {
-
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
