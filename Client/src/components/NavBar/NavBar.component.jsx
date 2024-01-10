@@ -22,6 +22,7 @@ const NavBar = () => {
     { text: "PRODUCTOS", link: PATHROUTE.PRODUCTS },
     { text: "SOPORTE", link: PATHROUTE.SUPPORT },
     { text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
+    { text: "SOBRE NOSOTROS", link: PATHROUTE.REVIEW },
   ];
 
   const { pathname } = useLocation();
@@ -72,32 +73,24 @@ const NavBar = () => {
               vertical: "top",
               horizontal: "left",
             }}
-        
             open={Boolean(anchorElNav)}
             onClose={handleCloseNavMenu}
             sx={{
               display: { xs: "block", md: "none" },
-             
             }}
             PaperProps={{
               sx: {
-                width: '100%',
+                width: "100%",
               },
             }}
           >
             {navPages.map((item, i) => (
-          
-              <MenuItem
-                key={i}
-                onClick={handleCloseNavMenu}
-              >
+              <MenuItem key={i} onClick={handleCloseNavMenu}>
                 <Link
                   to={item.link}
                   style={{ textDecoration: "none", color: "black" }}
                 >
-                  <Typography variant="h6">
-                    {item.text}
-                  </Typography>
+                  <Typography variant="h6">{item.text}</Typography>
                 </Link>
               </MenuItem>
             ))}
@@ -108,7 +101,7 @@ const NavBar = () => {
             flexGrow: 1,
             display: { xs: "none", md: "flex" },
             justifyContent: "space-evenly",
-            height: 40
+            height: 40,
           }}
         >
           {navPages.map((item, i) => (
