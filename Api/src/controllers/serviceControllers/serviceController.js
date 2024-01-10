@@ -41,7 +41,8 @@ const addServiceController = async (
         response: "Id no valido",
       };
     }
-    const clientName = clientObj.name;
+    const clientName = `${clientObj.name} ${clientObj.surname}`;
+    const clientEmail = clientObj.email;
     const rolTech = await UserRole.findByPk(technicianObj.rolId);
     const rolCust = await UserRole.findByPk(clientObj.rolId);
 
@@ -72,8 +73,9 @@ const addServiceController = async (
         const createdService = await Service.findByPk(newService.id, {
           include: [Service_status, Service_image],
         });
-        createdService.dataValues.clientName = clientObj.name;
-        createdService.dataValues.technicianName = technicianObj.name;
+        createdService.dataValues.clientName = `${clientObj.name} ${clientObj.surname}`;
+        createdService.dataValues.clientEmail = clientObj.email;
+        createdService.dataValues.technicianName = `${technicianObj.name} ${technicianObj.surname}`;
 
         const date = new Date(newService.createdAt).toISOString().split("T")[0];
         //envio del mail
@@ -103,6 +105,7 @@ const addServiceController = async (
     }
   }
 };
+
 const updateServiceStatusController = async (id, field, value) => {
   const serviceStatus = await Service_status.findOne({ where: { id } });
   if (!serviceStatus) {
@@ -126,7 +129,7 @@ const updateServiceStatusController = async (id, field, value) => {
       include: [Service_status],
     });
     const clientObj = await User.findByPk(service.userId);
-    const clientName = clientObj.name;
+    const clientName = `${clientObj.name} ${clientObj.surname}`;
     if (clientObj.communication_preference !== "Whatsapp") {
       await transporter.sendMail({
         from: `Hyper Mega Red  ${destinationEmail}`, // sender address
@@ -158,8 +161,9 @@ const getAllServicesController = async () => {
       const clientObj = await User.findByPk(service.userId);
       const technicianObj = await User.findByPk(service.technicianId);
 
-      const clientName = clientObj ? clientObj.name : null;
-      const technicianName = technicianObj ? technicianObj.name : null;
+      const clientName = clientObj ? `${clientObj.name} ${clientObj.surname}` : null;
+      const clientEmail = clientObj ? clientObj.email : null;
+      const technicianName = technicianObj ? `${technicianObj.name} ${technicianObj.surname}` : null;
 
       const serviceWithNames = await Service.findByPk(service.id, {
         include: [Service_status, Service_image],
@@ -167,6 +171,7 @@ const getAllServicesController = async () => {
 
       if (serviceWithNames) {
         serviceWithNames.dataValues.clientName = clientName;
+        serviceWithNames.dataValues.clientEmail = clientEmail;
         serviceWithNames.dataValues.technicianName = technicianName;
       }
 
