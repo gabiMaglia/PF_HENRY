@@ -19,6 +19,7 @@ const HomeProducts = ({ allProducts }) => {
     }
     return newArray;
   };
+  
 
   useEffect(() => {
     const fetchData = async () => {
