@@ -10,7 +10,7 @@ import {
   addProduct,
 } from "../redux/slices/productSlice";
 //FIREBASE ANALYTICS
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { addProductToCart } from "./firebaseAnayticsServices";
 //REDUX
 import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
@@ -90,26 +90,7 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
     productQuantity: 1,
   };
   // Envio de notificaciónes a FIREBASE
-  const firebaseParams = {
-    currency: "ARS",
-    value: product?.name,
-    items: [
-      {
-        item_id: product?.id,
-        item_name: product?.name,
-        item_category: product?.ProductCategories[0]?.name,
-        price: product?.price,
-      },
-    ],
-  };
-  const analytics = getAnalytics();
-  logEvent(analytics, "add_to_cart", firebaseParams);
-  console.log(
-    product?.id,
-    product?.name,
-    product?.ProductCategories[0]?.name,
-    product?.price
-  );
+  addProductToCart(product);
 
   try {
     const res = await axios.post(`${urlBack}/cart/`, data, {

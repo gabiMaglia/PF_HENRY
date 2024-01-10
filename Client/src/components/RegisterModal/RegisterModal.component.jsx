@@ -19,7 +19,7 @@ import { registerUser } from "../../services/authServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 //FIREBASE
-import { postEvent } from "../../services/firebaseAnayticsServices";
+import { userRegister } from "../../services/firebaseAnayticsServices";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -163,10 +163,7 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           confirmButtonText: "Volver al menu principal",
           confirmButtonColor: "#fd611a",
         }).then((result) => {
-          const firebaseParams = {
-            method: "local",
-          };
-          postEvent("sign_up", firebaseParams);
+          userRegister(); // Envio de evento a firebase
           resetModal();
         });
       }

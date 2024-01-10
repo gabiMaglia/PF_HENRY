@@ -29,6 +29,8 @@ import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
 import { fetchCartUser, fetchGetProduct } from "../../services/productServices";
 import { addItem } from "../../redux/slices/cartSlice";
+//FIREBASE
+import { userLogin } from "../../services/firebaseAnayticsServices";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -37,14 +39,13 @@ const LoginModal = ({
   setLoginModalIsOpen,
   setRegisterModalIsOpen,
 }) => {
-
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const cookiesAccepted = useSelector((state) => state.cookies);
-  
+
   const handledispatch = async (userId, authData) => {
-    const user = await getUserById(userId, authData)
-    
+    const user = await getUserById(userId, authData);
+
     dispatch(logUser({ userObject: user }));
     fetchGetProduct(cookiesAccepted);
     fetchCartUser(cookiesAccepted);
@@ -53,16 +54,18 @@ const LoginModal = ({
 
   const loginManagement = async (username, address, cookieStatus) => {
     let response;
+    let method;
 
     if (!username || !address) {
       response = await googleLoginUser(cookieStatus);
+      method = "google";
     } else {
       response = await loginUser(username, address, cookieStatus);
+      method = "local";
     }
     !cookieStatus && rejectCookies();
 
     if (response.error) {
-
       Swal.fire({
         allowOutsideClick: false,
         customClass: {
@@ -70,7 +73,11 @@ const LoginModal = ({
         },
         icon: "error",
         title: "Fallo en el inicio de sesion",
-        text: `${  response.response || response.error.data?.response || response.error.data }`,
+        text: `${
+          response.response ||
+          response.error.data?.response ||
+          response.error.data
+        }`,
       });
     } else {
       Swal.fire({
@@ -83,7 +90,7 @@ const LoginModal = ({
         confirmButtonColor: "#fd611a",
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log(response)
+          userLogin(method);
           handledispatch(response.data.userId, response.data.tokenSession);
           setLoginModalIsOpen(false);
         }

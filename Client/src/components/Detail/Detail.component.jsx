@@ -32,8 +32,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //FIREBASE
-import { postEvent } from "../../services/firebaseAnayticsServices";
-
+import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 // Estilo personalizado para el botón
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -167,19 +166,7 @@ const Detail = () => {
       ) {
         setSelectedImage(productById.ProductImages[0].address);
         //Envio de notificaciónes a FIREBASE
-        const firebaseParams = {
-          currency: "ARS",
-          value: productById?.name,
-          items: [
-            {
-              item_id: productById?.id,
-              item_name: productById?.name,
-              item_category: productById?.ProductCategories[0]?.name,
-              price: productById?.price,
-            },
-          ],
-        };
-        postEvent("view_item", firebaseParams);
+        viewDetailProduct(productById);
       }
     };
     setInitialImage();
