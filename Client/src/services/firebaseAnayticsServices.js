@@ -4,7 +4,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const postEvent = (event, params) => {
   //Envio de notificaciónes a FIREBASE
-  console.log(event, params);
+  // console.log(event, params);
 
   const analytics = getAnalytics();
   logEvent(analytics, event, params);
@@ -41,7 +41,7 @@ export const itemToWishlist = async (productId, wishlistProducts, jwt) => {
   }
 };
 
-export const viewDetailProduct = (product) => {
+export const viewDetailProduct = (product, carousel) => {
   const firebaseParams = {
     currency: "ARS",
     value: product?.price,
@@ -55,7 +55,12 @@ export const viewDetailProduct = (product) => {
       },
     ],
   };
-  postEvent("view_item", firebaseParams);
+  if (carousel) {
+    firebaseParams.promotion_name = "CarouselTop";
+    postEvent("select_promotion", firebaseParams);
+  } else {
+    postEvent("view_item", firebaseParams);
+  }
 };
 
 export const addProductToCart = (product) => {
