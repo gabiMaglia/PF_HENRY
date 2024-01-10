@@ -7,9 +7,11 @@ const {
   getServiceByModelController,
   getFilterServiceController,
   DeleteServiceController,
-  GetUndeletedServicesController
+  GetUndeletedServicesController,
+  updateServiceController
 } = require("../../controllers/serviceControllers/serviceController");
 
+//HANDLE ADD SERVICE
 const addServiceHandler = async (req, res) => {
   const {
     product_model,
@@ -41,6 +43,8 @@ const addServiceHandler = async (req, res) => {
   }
 };
 
+
+//HANDLE UPDATE STATUS SERVICE
 const updateServiceStatus = async (req, res) => {
   const { id } = req.params;
   const { field, value } = req.body;
@@ -62,6 +66,7 @@ const updateServiceStatus = async (req, res) => {
   }
 };
 
+//HANDLE GET ALL SERVICES
 const getAllServices = async (req, res) => {
   const { model } = req.query;
   if (!model) {
@@ -87,6 +92,7 @@ const getAllServices = async (req, res) => {
   }
 };
 
+//HANDLE GET SERVICE BY ID
 const getServiceById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -112,7 +118,7 @@ const getServiceByClientid = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
+//HANDLE FILTER SERVICE
 const getFilterService = async (req, res) => {
   const { status, user, technician } = req.query;
   try {
@@ -125,6 +131,8 @@ const getFilterService = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+//HANDLE UNDELETE SERVICE
 const getUndeletedService=async(req,res)=>{
   try{
     const services=await GetUndeletedServicesController()
@@ -138,6 +146,8 @@ const getUndeletedService=async(req,res)=>{
 
   }
 }
+
+//HANDLE DELETE SERVICE
 const deleteService=async(req,res)=>{
   const {id}=req.params
   try {
@@ -153,6 +163,45 @@ const deleteService=async(req,res)=>{
   }
 }
 
+//HANDLE UPDATE SERVICE
+const updateService = async (req, res) => {
+  const { id } = req.params;
+  const {
+    product_model,
+    product_income_date,
+    user_diagnosis,
+    technicianId,
+    budget,
+    confirm_repair,
+    status,
+    technical_diagnosis,
+    final_diagnosis,
+  } = req.body;
+
+  try {
+    const updatedService = await updateServiceController(
+      id,
+      product_model,
+      product_income_date,
+      user_diagnosis,
+      technicianId,
+      budget,
+      confirm_repair,
+      status,
+      technical_diagnosis,
+      final_diagnosis
+    );
+
+    if (updatedService.error) {
+      return res.status(404).json(updatedService.response);
+    }
+
+    res.status(200).json(updatedService);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
@@ -161,5 +210,6 @@ module.exports = {
   getServiceByClientid,
   getFilterService,
   getUndeletedService,
-  deleteService
+  deleteService,
+  updateService
 };

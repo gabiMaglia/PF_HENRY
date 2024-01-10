@@ -8,6 +8,7 @@ import {
 } from "@mui/x-data-grid";
 import { useSelector } from 'react-redux'
 //COMPONENTS
+import LoadingProgress from "../Loading/Loading.component";
 import {
   StyledDataGrid,
   CustomToolbar,
@@ -302,6 +303,7 @@ const ProductsTable = () => {
           },
         }}
       />
+      {loading && <LoadingProgress />}
     </Box>
   );
 };

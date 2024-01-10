@@ -32,6 +32,8 @@ const registerUser = async (userObj) => {
     email: userObj.email,
     telephone: userObj.telephone,
     image: userObj.image,
+    isActive: userObj.isActive,
+    isVerified: userObj.isVerified,
   });
 
   // UserCredentials

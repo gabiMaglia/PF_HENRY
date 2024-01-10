@@ -16,6 +16,7 @@ import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
+import { useSelector } from "react-redux";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -42,16 +43,18 @@ export const fetchProductById = (id) => async (dispatch) => {
 };
 
 export const fetchSearch = (name) => async (dispatch) => {
-  console.log(name)
   try {
     const response = await axios.get(`${urlBack}/search?name=${name}`);
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
-    dispatch(search(filteredProducts));
-    console.log(filteredProducts)
+    if(filteredProducts.length == 0){
+      Swal.fire("Producto no existente", "", "error");
+    }else{
+    dispatch(search(filteredProducts));}
+
   } catch (error) {
-    Swal.fire("Producto no existente", "", "error");
+    console.log("error catch", error)
   }
 };
 
@@ -81,7 +84,7 @@ export const fetchProductsByBrand = (brand) => async (dispatch) => {
   }
 };
 
-export const fetchProduct = (product, cookiesAccepted) => async () => {
+export const fetchProductCartPost = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId, jwt } = aux;
   const { id } = product;
@@ -110,7 +113,7 @@ export const fetchProduct = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchGetProduct = ({cookiesAccepted}) => async () => {
+export const fetchProductCartGet = (cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId, userRole, jwt } = aux;
   if (userRole === "customer") {
@@ -139,7 +142,7 @@ export const fetchGetProduct = ({cookiesAccepted}) => async () => {
   }
 };
 
-export const fetchCount = (product, cookiesAccepted) => async () => {
+export const fetchCountCartPut = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
 
   const { userId, jwt } = aux;
@@ -160,7 +163,7 @@ export const fetchCount = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchDelete = (product, cookiesAccepted) => async () => {
+export const fetchDeleteCartProduct = (product, cookiesAccepted) => async () => {
   const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
   const { userId, jwt } = aux;
   const data = {
@@ -178,7 +181,7 @@ export const fetchDelete = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchCart = (items, cookieAccepted) => async (dispatch) => {
+export const fetchCartMercadoPago = (items, cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
   const { userId, jwt } = aux;
   const products = items.map((item) => ({
@@ -250,7 +253,7 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
   }
 };
 
-export const fetchCartUser = ({cookieAccepted}) => async (dispatch) => {
+export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
 
   const { userId, jwt } = aux;
