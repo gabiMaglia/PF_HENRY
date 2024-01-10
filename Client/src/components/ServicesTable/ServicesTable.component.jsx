@@ -17,7 +17,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import Swal from "sweetalert2";
 
 
-const ServiceList = () => {
+const ServicesTable = () => {
   const editingRow = useRef(null);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -232,16 +232,10 @@ const ServiceList = () => {
         columns={columns}
         pageSize={5}
         checkboxSelection
-        sx={{
-          minHeight: "800px",
-          maxHeight: "800px",
-          marginTop: "50px",
-          textAlign: "center",
-        }}
       />
       {loading && <LoadingProgress />}
     </Box>
   );
 };
 
-export default ServiceList;
+export default ServicesTable;

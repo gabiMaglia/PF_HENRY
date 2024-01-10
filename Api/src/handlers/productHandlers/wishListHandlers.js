@@ -10,7 +10,6 @@ const getWishList = async (req, res) => {
     if (list.error) {
       return res.status(404).json(list.response);
     }
-
     res.status(200).json(list);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -25,7 +24,6 @@ const addWishItem = async (req, res) => {
       return res.status(404).json(response.response);
     }
     res.status(200).json(response);
-
   } catch (error) {
     console.log(error.message)
     res.status(400).json({ error: error.message });
