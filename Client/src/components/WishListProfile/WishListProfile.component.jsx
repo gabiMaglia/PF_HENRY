@@ -19,6 +19,7 @@ import {
   fetchWishList,
   fetchAddItemWish,
 } from "../../services/wishListServices";
+import { fetchProductCartPost } from "../../services/productServices";
 import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
@@ -65,6 +66,7 @@ const WhishListProfileComponent = () => {
     } else {
       setStoredProducts(product);
       dispatch(addItem());
+      dispatch(fetchProductCartPost(product, cookieStatus));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",

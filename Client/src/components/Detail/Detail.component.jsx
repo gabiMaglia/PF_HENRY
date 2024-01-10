@@ -130,7 +130,6 @@ const Detail = () => {
     // Función asíncrona para cargar los datos del producto
     const fetchDataAsync = async () => {
       dispatch(resetState());
-
       try {
         if (id && id !== productById?.id) {
           setIsLoadingDetail(true);

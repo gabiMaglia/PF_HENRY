@@ -95,6 +95,7 @@ export const fetchProductCartPost = (product, cookiesAccepted) => async () => {
     productId: id,
     productQuantity: 1,
   };
+
   // Envio de notificaciónes a FIREBASE
   addProductToCart(product);
 
