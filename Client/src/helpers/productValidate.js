@@ -10,19 +10,25 @@ function validarImagen(url) {
 async function validarFormatoImagen(rutaImagen) {
    const extensionesValidas = ['.jpg', '.jpeg', '.png', '.gif'];
    let extension = '';
+   if (typeof rutaImagen === 'string'){
+      const partesRuta =  rutaImagen.split('.');
+      extension = '.' + partesRuta[partesRuta.length - 1];
+   }else{
 
-   if (!rutaImagen.name && rutaImagen.includes('http')) {
-       const url = new URL(rutaImagen);
-       const partesRuta = url.pathname.split('.');
-       extension = '.' + partesRuta[partesRuta.length - 1];
-   } else {
-       const partesRuta = rutaImagen.name.split('.');
-       extension = '.' + partesRuta[partesRuta.length - 1];
+      if (  !rutaImagen.name && rutaImagen.includes('http')) {
+         const url = new URL(rutaImagen);
+         const partesRuta = url.pathname.split('.');
+         extension = '.' + partesRuta[partesRuta.length - 1];
+      } else {
+         const partesRuta =  rutaImagen.name.split('.');
+         extension = '.' + partesRuta[partesRuta.length - 1];
+      }
+      
    }
-
-   if (extensionesValidas.includes(extension.toLowerCase())) {
-       const esImagenValida = await validarImagen(rutaImagen);
-       return esImagenValida;
+      if (extensionesValidas.includes(extension.toLowerCase())) {
+         const esImagenValida = await validarImagen(rutaImagen);
+         console.log('hola')
+         return true;
    } else {
        return false;
    }
@@ -34,9 +40,9 @@ function esMayuscula(s) {
        return false;
    }
 }
-const validationsCreate=(values)=>{
+export const validationsCreate=(values)=>{
    const {name,price,description,images,brandName,categoryName,warranty,stock}=values
-   console.log(categoryName)
+   console.log(images)
    const error={}
    if(name.length===0||name===''){
       error.e1='el nombre del producto es requerido'
@@ -79,4 +85,95 @@ const validationsCreate=(values)=>{
  return error
 }
 
-export default validationsCreate
+
+export const validateField = async (fieldName, value) => {
+   const error={}
+
+
+   switch (fieldName) {
+     case "name":
+       if (value.length === 0 || value === "") {
+         error.e1= "El nombre del producto es requerido";
+       }
+       break;
+ 
+     case "price":
+       if (value.length === 0 || value === "") {
+         error.e2= "El precio del producto es requerido";
+       } else if (!/^[0-9]*\.?[0-9]*$/.test(value)) {
+         error.e9 ="El precio debe tener solamente números";
+       }
+       break;
+ 
+     case "description":
+       if (value.length === 0 || value === "") {
+         error.e3='la descripcion del producto es requerida'
+       }
+       break;
+ 
+     case "images":
+      case"imageUrl":
+       if (value.length === 0) {
+         error.e11='Por Favor ingrese una imagen'
+       }
+       // Validar cada imagen individualmente
+       const invalidImages = await validarFormatoImagen(value);
+   
+      console.log(invalidImages)
+         
+       
+       if (!invalidImages) {
+         error.e4 = 'verifique el formato de sus imagenes';
+       }
+       break;
+ 
+     case "brandName":
+      case "newBrand":
+       if (
+         value.length === 0 ||
+         value === "" ||
+         value === "Selecciona una marca"
+       ) {
+         error.e5='la marca del producto es requerida'
+       } else if (!esMayuscula(value)) {
+         error.e13='la primer letra debe ser mayuscula'
+       }
+       break;
+ 
+     case "categoryName":
+      case "newCategory":
+      console.log(value)
+       if (
+         value.length === 0 ||
+         value[0] === "Selecciona una categoria" ||
+         value[0] === "" ||
+         value === "Selecciona una categoria"
+       ) {
+         error.e6='seleccione la categoria de su producto'
+       } else if (!esMayuscula(value[0])) {
+         error.e12='la primer letra debe ser mayuscula'
+       }
+       break;
+ 
+     case "warranty":
+       if (value.length === 0 || value === "") {
+         error.e7='especifique la garantia del producto'
+       }
+       break;
+ 
+     case "stock":
+       if (value.length === 0 || value === "" || value === "0") {
+         error.e8='el stock del producto es requerido'
+       } else if (!/^[0-9]*\.?[0-9]*$/.test(value)) {
+         error.e10='el stock debe tener solamente numeros'
+       }
+       break;
+ 
+ 
+     default:
+       break;
+   }
+   console.log(error)
+ 
+   return error; 
+ };
