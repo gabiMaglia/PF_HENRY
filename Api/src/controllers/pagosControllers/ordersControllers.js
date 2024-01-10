@@ -36,8 +36,13 @@ async function createOrder(
       ],
     });
     if (!cart) {
-      throw new Error("El usuario no tiene un carrito");
+      return "El usuario no tiene un carrito";
     }
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return "Usuario no encontrado";
+    }
+    const userEmail = user.email;
 
     const idOrder = uuidv4();
     const preferenceResult = await mercadoPago(array, idOrder);
@@ -47,6 +52,7 @@ async function createOrder(
     const order = await Order.create({
       id: idOrder,
       UserId: userId,
+      userEmail,
       totalAmount,
       shippingAddress: shippingAddress ?? null,
       paymentMethod,
@@ -75,9 +81,6 @@ async function createOrder(
         },
       ],
     });
-
-    // Eliminar el carrito después de crear la orden
-    // await cart.destroy();
 
     for (const product of cart.Products) {
       await cart.removeProduct(product);
@@ -149,8 +152,8 @@ const getMisCompras = async (userId) => {
   try {
     const userOrders = await Order.findAll({
       where: { UserId: userId },
-      attributes:["status", "cartTotal"],
-      include:[
+      attributes: ["status", "cartTotal"],
+      include: [
         {
           model: Product,
           attributes: ["id", "name", "price"],
@@ -165,7 +168,7 @@ const getMisCompras = async (userId) => {
             },
           ],
         },
-      ]
+      ],
     });
 
     if (!userOrders) {
