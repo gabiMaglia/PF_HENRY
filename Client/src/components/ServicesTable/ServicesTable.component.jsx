@@ -16,7 +16,6 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 //SWEET ALERT
 import Swal from "sweetalert2";
 
-
 const ServicesTable = () => {
   const editingRow = useRef(null);
   const [services, setServices] = useState([]);
@@ -30,6 +29,8 @@ const ServicesTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
+
+  console.log(authData.jwt);
 
   const columns = [
     {
