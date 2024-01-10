@@ -33,7 +33,7 @@ const ProductBox = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const userRole = authData.userRole;
+  const userRole = authData?.userRole? authData.userRole : null ;
   const isThereAnyProducts = productsToShow.length === 0;
 
   const handleAddToCart = (product) => {

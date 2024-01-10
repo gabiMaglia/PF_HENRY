@@ -16,7 +16,6 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 //SWEET ALERT
 import Swal from "sweetalert2";
 
-
 const ServicesTable = () => {
   const editingRow = useRef(null);
   const [services, setServices] = useState([]);
@@ -30,7 +29,9 @@ const ServicesTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-console.log(authData.jwt)
+
+  console.log(authData.jwt);
+
   const columns = [
     {
       field: "id",
@@ -41,14 +42,21 @@ console.log(authData.jwt)
     {
       field: "clientName",
       headerName: "Usuario",
-      minWidth: 300,
+      minWidth: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "clientEmail",
+      headerName: "Email",
+      minWidth: 200,
       headerAlign: "center",
     },
     {
       field: "product_model",
       headerName: "Modelo",
-      minWidth: 300,
+      minWidth: 200,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "product_income_date",
@@ -59,8 +67,9 @@ console.log(authData.jwt)
     {
       field: "technicianName",
       headerName: "Tecnico asignado",
-      minWidth: 300,
+      minWidth: 200,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "user_diagnosis",
@@ -71,31 +80,33 @@ console.log(authData.jwt)
     {
       field: "budget",
       headerName: "Presupuesto",
-      minWidth: 300,
+      minWidth: 180,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "confirm_repair",
       headerName: "Reparacion confirmada",
-      minWidth: 300,
+      minWidth: 250,
       headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Estado",
-      minWidth: 300,
+      minWidth: 200,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "technical_diagnosis",
       headerName: "Diagnostico tecnico",
-      minWidth: 300,
+      minWidth: 250,
       headerAlign: "center",
     },
     {
       field: "final_diagnosis",
-      headerName: "diagnostico final",
-      minWidth: 300,
+      headerName: "Diagnostico final",
+      minWidth: 250,
       headerAlign: "center",
     },
   ];
@@ -129,24 +140,23 @@ console.log(authData.jwt)
     editingRow.current = rows.find((row) => row.id === params.id) || null;
   };
 
-  const handleCellEditStop = (params) => {
-    if (
-      params.reason === GridCellEditStopReasons.escapeKeyDown ||
-      params.reason === GridCellEditStopReasons.cellFocusOut
-    ) {
-      setAvailableModify(false);
-    } else {
-      setAvailableModify(true);
-    }
-  };
+  // const handleCellEditStop = (params) => {
+  //   if (
+  //     params.reason === GridCellEditStopReasons.escapeKeyDown ||
+  //     params.reason === GridCellEditStopReasons.cellFocusOut
+  //   ) {
+  //     setAvailableModify(false);
+  //   } else {
+  //     setAvailableModify(true);
+  //   }
+  // };
 
   const handleDelete = async (selectedRows) => {
     try {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            //TODO
-            return logicalDeleteService(id);
+            // return logicalDeleteService(id);
           })
         );
         let msg = response.map((res) => res.data);
@@ -173,6 +183,50 @@ console.log(authData.jwt)
       });
     }
   };
+
+  // const processRowUpdate = async (newRow) => {
+  //   try {
+  //     if (availableModify) {
+  //       Swal.fire({
+  //         icon: "info",
+  //         allowOutsideClick: false,
+  //         title: "Por favor espere mientras procesamos la información",
+  //         showConfirmButton: false,
+  //       });
+  //       Swal.showLoading();
+  //       setAvailableModify(false);
+  //       const serviceId = newRow.id;
+
+  //       const response = await fetchUpdateService(
+  //         serviceId,
+  //         newRow,
+  //         authData.jwt
+  //       );
+  //       if (response.status === 200) {
+  //         setRows((prevRows) =>
+  //           prevRows.map((row) =>
+  //             row.id === editingRow.current?.id ? newRow : row
+  //           )
+  //         );
+  //         setServices((prevServices) =>
+  //           prevServices.map((service) =>
+  //             serviceId === newRow.id ? { ...service, ...newRow } : service
+  //           )
+  //         );
+  //         Swal.fire({
+  //           icon: "success",
+  //           title: "Edición exitosa",
+  //           text: "El producto ha sido editado correctamente.",
+  //         });
+  //         return newRow;
+  //       } else {
+  //         throw new Error("Error al actualizar el servicio", response.message);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     throw new Error("Error al comunicarse con el servidor", error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -216,6 +270,15 @@ console.log(authData.jwt)
       }}
     >
       <StyledDataGrid
+        onCellEditStart={handleCellEditStart}
+        // onCellEditStop={handleCellEditStop}
+        // processRowUpdate={processRowUpdate}
+        // onProcessRowUpdateError={handleErrorInput}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelected(newRowSelectionModel);
+        }}
+        ignoreDiacritics
+        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
         slots={{
           toolbar: CustomToolbar,
         }}
@@ -228,14 +291,21 @@ console.log(authData.jwt)
             selectedRows: rowSelected,
           },
         }}
+        checkboxSelection
+        rowSelectionModel={rowSelected}
         rows={serviceWithStatus}
         columns={columns}
         pageSize={5}
-        checkboxSelection
+        // localeText={language.components.MuiDataGrid.defaultProps.localeText}
+        editMode="cell"
         initialState={{
           columns: {
             columnVisibilityModel: {
               id: false,
+              product_income_date: false,
+              status: false,
+              technical_diagnosis: false,
+              final_diagnosis: false,
             },
           },
         }}
