@@ -15,7 +15,7 @@ import { getServices } from "../../services/serviceServices";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
 import Swal from "sweetalert2";
-import { set } from "../../../../Api/src/config/mailer";
+
 
 const ServicesTable = () => {
   const editingRow = useRef(null);
