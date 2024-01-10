@@ -77,8 +77,8 @@ export const addProductToCart = (product) => {
       },
     ],
   };
-  const analytics = getAnalytics();
-  logEvent(analytics, "add_to_cart", firebaseParams);
+
+  postEvent("add_to_cart", firebaseParams);
 };
 
 export const userRegister = () => {
@@ -103,3 +103,5 @@ export const userSubmitForm = (form) => {
   };
   postEvent("generate_lead", firebaseParams);
 };
+
+export const createServiceEvent = () => {};
