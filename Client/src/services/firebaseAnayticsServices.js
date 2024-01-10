@@ -97,7 +97,6 @@ export const userLogin = (method) => {
 };
 
 export const userSubmitForm = (form) => {
-  console.log(form);
   const firebaseParams = {
     currency: "ARS",
     value: form,
