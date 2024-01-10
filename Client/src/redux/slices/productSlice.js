@@ -38,10 +38,10 @@ const productSlice = createSlice({
       state.productsToShow = state.allProducts.slice(startIndex, endIndex);
     },
     search: (state, action) => {
-      state.productsToShow = action.payload;
-      state.inputName = "";
-      state.currentPage = 0;
-      state.totalPages = Math.ceil(action.payload.length / PRODUCT_PER_PAGE);
+      const searchProduct = action.payload;
+      state.productsToShow = searchProduct.slice(0, PRODUCT_PER_PAGE);
+      state.currentPage = 0; 
+      state.totalPages = Math.ceil(searchProduct.length / PRODUCT_PER_PAGE);
     },
     changeInput: (state, action) => {
       state.inputName = action.payload;
@@ -105,7 +105,7 @@ const productSlice = createSlice({
       state.allProductsBackup = state.allProductsTotal;
       state.productsToShow = state.allProductsTotal.slice(0, PRODUCT_PER_PAGE);
       state.totalPages = Math.ceil(
-        state.allProductsBackup.length / PRODUCT_PER_PAGE
+        state.allProductsTotal.length / PRODUCT_PER_PAGE
       );
       state.inputName = "";
     },
