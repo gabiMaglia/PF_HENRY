@@ -15,6 +15,7 @@ import { getServices } from "../../services/serviceServices";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
 import Swal from "sweetalert2";
+import { set } from "../../../../Api/src/config/mailer";
 
 const ServicesTable = () => {
   const editingRow = useRef(null);
@@ -29,8 +30,6 @@ const ServicesTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-
-  console.log(authData.jwt);
 
   const columns = [
     {
@@ -56,6 +55,7 @@ const ServicesTable = () => {
       headerName: "Modelo",
       minWidth: 200,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "product_income_date",
@@ -68,6 +68,7 @@ const ServicesTable = () => {
       headerName: "Tecnico asignado",
       minWidth: 200,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "user_diagnosis",
@@ -80,6 +81,7 @@ const ServicesTable = () => {
       headerName: "Presupuesto",
       minWidth: 180,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "confirm_repair",
@@ -92,6 +94,7 @@ const ServicesTable = () => {
       headerName: "Estado",
       minWidth: 200,
       headerAlign: "center",
+      editable: true,
     },
     {
       field: "technical_diagnosis",
@@ -136,16 +139,16 @@ const ServicesTable = () => {
     editingRow.current = rows.find((row) => row.id === params.id) || null;
   };
 
-  const handleCellEditStop = (params) => {
-    if (
-      params.reason === GridCellEditStopReasons.escapeKeyDown ||
-      params.reason === GridCellEditStopReasons.cellFocusOut
-    ) {
-      setAvailableModify(false);
-    } else {
-      setAvailableModify(true);
-    }
-  };
+  // const handleCellEditStop = (params) => {
+  //   if (
+  //     params.reason === GridCellEditStopReasons.escapeKeyDown ||
+  //     params.reason === GridCellEditStopReasons.cellFocusOut
+  //   ) {
+  //     setAvailableModify(false);
+  //   } else {
+  //     setAvailableModify(true);
+  //   }
+  // };
 
   const handleDelete = async (selectedRows) => {
     try {
@@ -153,7 +156,7 @@ const ServicesTable = () => {
         const response = await Promise.all(
           selectedRows.map((id) => {
             //TODO
-            return logicalDeleteService(id);
+            // return logicalDeleteService(id);
           })
         );
         let msg = response.map((res) => res.data);
@@ -180,6 +183,50 @@ const ServicesTable = () => {
       });
     }
   };
+
+  // const processRowUpdate = async (newRow) => {
+  //   try {
+  //     if (availableModify) {
+  //       Swal.fire({
+  //         icon: "info",
+  //         allowOutsideClick: false,
+  //         title: "Por favor espere mientras procesamos la información",
+  //         showConfirmButton: false,
+  //       });
+  //       Swal.showLoading();
+  //       setAvailableModify(false);
+  //       const serviceId = newRow.id;
+
+  //       const response = await fetchUpdateService(
+  //         serviceId,
+  //         newRow,
+  //         authData.jwt
+  //       );
+  //       if (response.status === 200) {
+  //         setRows((prevRows) =>
+  //           prevRows.map((row) =>
+  //             row.id === editingRow.current?.id ? newRow : row
+  //           )
+  //         );
+  //         setServices((prevServices) =>
+  //           prevServices.map((service) =>
+  //             serviceId === newRow.id ? { ...service, ...newRow } : service
+  //           )
+  //         );
+  //         Swal.fire({
+  //           icon: "success",
+  //           title: "Edición exitosa",
+  //           text: "El producto ha sido editado correctamente.",
+  //         });
+  //         return newRow;
+  //       } else {
+  //         throw new Error("Error al actualizar el servicio", response.message);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     throw new Error("Error al comunicarse con el servidor", error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -223,6 +270,15 @@ const ServicesTable = () => {
       }}
     >
       <StyledDataGrid
+        onCellEditStart={handleCellEditStart}
+        // onCellEditStop={handleCellEditStop}
+        // processRowUpdate={processRowUpdate}
+        // onProcessRowUpdateError={handleErrorInput}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelected(newRowSelectionModel);
+        }}
+        ignoreDiacritics
+        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
         slots={{
           toolbar: CustomToolbar,
         }}
@@ -235,10 +291,13 @@ const ServicesTable = () => {
             selectedRows: rowSelected,
           },
         }}
+        checkboxSelection
+        rowSelectionModel={rowSelected}
         rows={serviceWithStatus}
         columns={columns}
         pageSize={5}
-        checkboxSelection
+        // localeText={language.components.MuiDataGrid.defaultProps.localeText}
+        editMode="cell"
         initialState={{
           columns: {
             columnVisibilityModel: {
