@@ -13,6 +13,12 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: "pending",
     },
+    userEmail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      isEmail: true,
+      unique: true,
+    },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
@@ -50,7 +56,6 @@ module.exports = (sequelize) => {
     //   type: DataTypes.JSONB,
     //   allowNull: false,
     // },
-
   });
 
   // Define el hook después de la actualización

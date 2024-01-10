@@ -36,8 +36,7 @@ const postProductHandler = async (req, res) => {
       !categoryName ||
       !brandName ||
       !images ||
-      !soldCount ||
-      !carousel
+      !soldCount
     ) {
       return res.status(400).json({ error: "Faltan datos requeridos..." });
     }

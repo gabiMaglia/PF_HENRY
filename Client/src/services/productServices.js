@@ -43,12 +43,14 @@ export const fetchProductById = (id) => async (dispatch) => {
 };
 
 export const fetchSearch = (name) => async (dispatch) => {
+  console.log(name);
   try {
     const response = await axios.get(`${urlBack}/search?name=${name}`);
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
     dispatch(search(filteredProducts));
+    console.log(filteredProducts);
   } catch (error) {
     Swal.fire("Producto no existente", "", "error");
   }
@@ -262,7 +264,6 @@ export const fetchCartUser =
     const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
 
     const { userId, jwt } = aux;
-
     try {
       const response = await axios.get(
         `${urlBack}/pagos/misCompras/${userId}`,
