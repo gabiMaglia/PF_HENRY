@@ -26,7 +26,7 @@ export const itemToWishlist = async (productId, wishlistProducts, jwt) => {
   if (data) {
     const firebaseParams = {
       currency: "ARS",
-      value: "Creación",
+      value: data?.price,
       items: [
         {
           item_id: data?.id,
@@ -74,6 +74,71 @@ export const addProductToCart = (product) => {
   };
 
   postEvent("add_to_cart", firebaseParams);
+};
+
+export const removeProductFromCart = async (product) => {
+  try {
+    const { data } = await axios.get(`${urlBack}/product/${product}`);
+    if (data) {
+      const firebaseParams = {
+        currency: "ARS",
+        value: data?.price,
+        items: [
+          {
+            item_id: data?.id,
+            item_name: data?.name,
+            item_category: data?.ProductCategories[0]?.name,
+            item_brand: data?.ProductBrands[0]?.name,
+            price: data?.price,
+          },
+        ],
+      };
+
+      postEvent("remove_from_cart", firebaseParams);
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+export const generatePurchaseOrderEvent = async (items, total) => {
+  try {
+    console.log(items, total);
+    const responses = await Promise.all(
+      items.map((item) => {
+        const { data } = axios.get(`${urlBack}/product/${item.id}`);
+        return data;
+      })
+    );
+    const items = responses.map((item) => {
+      return {
+        item_id: item?.id,
+        item_name: item?.name,
+        item_category: item?.ProductCategories[0]?.name,
+        item_brand: item?.ProductBrands[0]?.name,
+        price: item?.price,
+      };
+    });
+    console.log(items);
+  } catch (error) {
+    return error;
+  }
+
+  // const firebaseParams = {
+  //   currency: "ARS",
+  //   value: data?.total,
+  //   items: [
+  //     {
+  //       item_id: data?.id,
+  //       item_name: data?.name,
+  //       item_category: data?.ProductCategories[0]?.name,
+  //       item_brand: data?.ProductBrands[0]?.name,
+  //       price: data?.price,
+  //     },
+  //   ],
+  // };
+
+  // postEvent("begin_checkout", firebaseParams);
 };
 
 export const userRegister = () => {
@@ -136,15 +201,13 @@ export const finalServiceEvent = ({ data }, final) => {
 };
 
 export const userViewCartEvent = (items, total) => {
-  console.log(items, total);
-  const cartItems = items.map((item) => {
-    // return     {
-    //   item_id: product?.id,
-    //   item_name: product?.name,
-    //   item_category: product?.ProductCategories[0]?.name,
-    //   item_brand: product?.ProductBrands[0]?.name,
-    //   price: product?.price,
-    // },
+  const cartItems = items.map((product) => {
+    return {
+      item_id: product?.id,
+      item_name: product?.name,
+      quantity: product.count,
+      price: product?.price,
+    };
   });
 
   const firebaseParams = {

@@ -31,7 +31,11 @@ import {
 } from "../../services/productServices";
 
 //FIREBASE
-import { userViewCartEvent } from "../../services/firebaseAnayticsServices";
+import {
+  userViewCartEvent,
+  removeProductFromCart,
+  generatePurchaseOrderEvent,
+} from "../../services/firebaseAnayticsServices";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
@@ -117,10 +121,12 @@ export default function ShoppingCart() {
   const handleDelete = (product) => {
     dispatch(removeItem(product));
     dispatch(fetchDeleteCartProduct(product, cookiesAccepted));
+    removeProductFromCart(product); // Evento eliminar producto del carrito
   };
 
   const handleShop = (e) => {
     dispatch(fetchCartMercadoPago(items, cookiesAccepted));
+    generatePurchaseOrderEvent(items, total); //Evento de generación de orden de compra
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
   };
   const customization = {
@@ -129,7 +135,6 @@ export default function ShoppingCart() {
       borderRadius: "10px",
     },
   };
-
   return (
     <Container
       display="flex"
