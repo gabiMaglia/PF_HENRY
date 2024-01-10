@@ -13,7 +13,6 @@ import {
   fetchWishList,
 } from "../../services/wishListServices";
 //UTILS
-import { getAuthDataCookie } from "../../utils/cookiesFunctions";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCard = styled(Card)({
@@ -38,7 +37,6 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
-  // const authData = getAuthDataCookie("authData");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isDesired, setIsDesired] = useState(false);
@@ -53,28 +51,42 @@ const CardProduct = ({ product }) => {
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
-  
+
   const categoryName =
-  ProductCategories && ProductCategories.length > 0
-  ? ProductCategories[0].name
-  : null;
-  
+    ProductCategories && ProductCategories.length > 0
+      ? ProductCategories[0].name
+      : null;
+
   const imageUrl =
-  ProductImages && ProductImages.length > 0 ? ProductImages[0].address : null;
-  
+    ProductImages && ProductImages.length > 0 ? ProductImages[0].address : null;
+
   const handleCategoryClick = (e) => {
     e.stopPropagation();
     navigate(`/products/filters/${categoryName}`);
   };
-  
+
   const handleDesiredClick = () => {
     if (login && userRole === "customer") {
       fetchAddItemWish(dispatch, userId, product.id, authData.jwt);
+    } else if (login && userRole !== "customer") {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Denegado",
+        text: "Tu rol de usuario no posee lista de deseos.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
     } else {
-      Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Debe registrarse para añadir a la lista de deseos.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
     }
   };
- 
+
   useEffect(() => {
     if (login) {
       if (wishlistProducts) {
@@ -107,7 +119,11 @@ const CardProduct = ({ product }) => {
             <Typography
               variant="subtitle2"
               onClick={handleCategoryClick}
-              sx={{ paddingTop: "20px", zIndex: "1000", borderBottom: '1px solid black' }}
+              sx={{
+                paddingTop: "20px",
+                zIndex: "1000",
+                borderBottom: "1px solid black",
+              }}
             >
               <span
                 style={{
@@ -140,8 +156,6 @@ const CardProduct = ({ product }) => {
               alt={name}
               src={imageUrl}
               sx={{
-              
-               
                 cursor: "pointer",
                 transition: "transform 0.3s",
                 "&:hover": {
@@ -155,7 +169,7 @@ const CardProduct = ({ product }) => {
                 component="div"
                 color="textPrimary"
                 align="center"
-                sx={{fontSize: '18px', marginTop: "-20px" }}
+                sx={{ fontSize: "18px", marginTop: "-20px" }}
               >
                 {name}
               </Typography>

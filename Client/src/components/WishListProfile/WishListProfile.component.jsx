@@ -20,7 +20,7 @@ import {
   fetchAddItemWish,
 } from "../../services/wishListServices";
 import { addItem } from "../../redux/slices/cartSlice";
-import { fetchProduct } from "../../services/productServices";
+// import { fetchProduct } from "../../services/productServices";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
@@ -35,27 +35,26 @@ const WhishListProfileComponent = () => {
     alignSelf: "center",
     backgroundColor: "black",
   };
-  const [storedProducts, setStoredProducts] = useLocalStorage();
-  const [isLoading, setIsLoading] = useState(true); //Estado de carga
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [storedProducts, setStoredProducts] = useLocalStorage();
+  const [isLoading, setIsLoading] = useState(true);
   const login = useSelector((state) => state.user.login);
-  const { cookiesAccepted } = useSelector((state) => state.cookies);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-  const userId = authData ? authData.userId : null; //Información del usuario
-  const wishListCards = useSelector((state) => state.wishlist.products); //Estado global Wishlist
+  const userId = authData ? authData.userId : null;
+  const wishListCards = useSelector((state) => state.wishlist.products);
 
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
 
-  const chargeWishListProduct = () => {
-    fetchWishList(userId, dispatch, authData.jwt); //Recarga de el estado global Wishlist
-  };
+  // const chargeWishListProduct = () => {
+  //   fetchWishList(userId, dispatch, authData.jwt);
+  // };
 
   const handleCardClick = (id) => {
-    const path = PATHROUTES.DETAIL.replace(":id", id); // Redireccionamient al detail
+    const path = PATHROUTES.DETAIL.replace(":id", id);
     navigate(path);
   };
 
@@ -72,7 +71,7 @@ const WhishListProfileComponent = () => {
       setStoredProducts(product);
       dispatch(addItem());
       // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      dispatch(fetchProduct(product, cookiesAccepted));
+      // dispatch(fetchProduct(product, cookiesAccepted));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",
@@ -93,20 +92,21 @@ const WhishListProfileComponent = () => {
 
   const [cardStatus, setCardStatus] = useState(
     wishListCards?.map((card) => {
-      return { id: card.id, status: false }; //Estado de productos seleccionados
+      return { id: card.id, status: false };
     })
   );
 
   const resetSelection = () => {
     const reset = wishListCards.map((card) => {
-      return { id: card.id, status: false }; // Recarga del estado de seleccionados
+      return { id: card.id, status: false };
     });
     setCardStatus(reset);
   };
 
   useEffect(() => {
     setIsLoading(true);
-    chargeWishListProduct(); //Recarga del estado global Wishlist al iniciar el componente
+    fetchWishList(userId, dispatch, authData.jwt);
+    // chargeWishListProduct();
   }, []);
 
   useEffect(() => {
@@ -114,7 +114,8 @@ const WhishListProfileComponent = () => {
     if (wishListCards[0] && wishListCards[0].ProductImages) {
       setIsLoading(false);
     } else {
-      chargeWishListProduct(); //Sino recarga el estado global
+      fetchWishList(userId, dispatch, authData.jwt);
+      // chargeWishListProduct();
     }
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
@@ -124,14 +125,13 @@ const WhishListProfileComponent = () => {
 
   const deleteProduct = (id) => {
     setIsLoading(true);
-    fetchAddItemWish(dispatch, userId, id); // ELiminar un producto
+    fetchAddItemWish(dispatch, userId, id);
   };
 
   const handleClickDeleteButton = () => {
     cardStatus.forEach((card) => {
-      //Recorrer el estado de productos seleccionados
       if (card.status) {
-        deleteProduct(card.id); // Eliminar los seleccionados
+        deleteProduct(card.id);
       }
     });
   };
@@ -141,7 +141,7 @@ const WhishListProfileComponent = () => {
     let newCardStatus = [...cardStatus];
     if (name === "all") {
       newCardStatus = newCardStatus.map((card) => {
-        return { id: card.id, status: checked }; //Manejo del estado de seleccionados
+        return { id: card.id, status: checked };
       });
     } else {
       newCardStatus[name].status = checked;
@@ -152,7 +152,7 @@ const WhishListProfileComponent = () => {
   const buttons = [
     {
       text: "Agregar al carrito",
-      action: handleAddToCart, // Botones que renderiza la card
+      action: handleAddToCart,
       color: "#fd611a",
     },
   ];
