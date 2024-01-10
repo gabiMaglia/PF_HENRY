@@ -8,6 +8,7 @@ import {
   filterByBrand,
   changeInput,
   addProduct,
+  search,
 } from "../redux/slices/productSlice";
 
 //REDUX
@@ -46,10 +47,17 @@ export const fetchSearch = (name) => async (dispatch) => {
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
-    dispatch(getProducts(filteredProducts));
-    // dispatch(search(response.data));
+    dispatch(search(filteredProducts));
   } catch (error) {
     Swal.fire("Producto no existente", "", "error");
+  }
+};
+
+export const fetchChage = (inputValue) => async (dispatch) => {
+  try {
+    dispatch(changeInput(inputValue));
+  } catch (error) {
+    return;
   }
 };
 
@@ -68,14 +76,6 @@ export const fetchProductsByBrand = (brand) => async (dispatch) => {
     dispatch(filterByBrand(response.data));
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
-  }
-};
-
-export const fetchChage = (inputValue) => async (dispatch) => {
-  try {
-    dispatch(changeInput(inputValue));
-  } catch (error) {
-    return;
   }
 };
 
