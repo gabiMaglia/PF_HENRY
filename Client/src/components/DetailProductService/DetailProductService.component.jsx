@@ -24,6 +24,9 @@ import { getUserById } from "../../services/userServices";
 import Swal from "sweetalert2";
 import { serviceStatuses } from "../../utils/serviceStatuses.js";
 
+// FIREBASE
+import { finalServiceEvent } from "../../services/firebaseAnayticsServices.js";
+
 const DetailProductService = ({
   id,
   authData,
@@ -32,8 +35,10 @@ const DetailProductService = ({
   getAllServices = () => {},
 }) => {
   const [data, setData] = useState({});
+  const [actualUserName, setActualUserName] = useState("");
   const [communicationPreference, setComunicationPreference] = useState("");
   const theme = useTheme();
+
   const getName = async (id, product) => {
     const response = await getUserById(id, authData.jwt);
     product.displayData.unshift({
@@ -97,6 +102,13 @@ const DetailProductService = ({
       authData.userRole === "customer"
         ? getName(response.data.technicianId, product)
         : getName(response.data.userId, product);
+
+      const actualUserData = await getUserById(
+        response.data.technicianId,
+        authData.jwt
+      );
+      actualUserData &&
+        setActualUserName(actualUserData.name + " " + actualUserData.surname);
     }
   };
 
@@ -115,7 +127,11 @@ const DetailProductService = ({
         showConfirmButton: false,
       });
       Swal.showLoading();
-      let response = await updateServiceStatus(data.statusId, updatedArray, authData.jwt); // ACA
+      let response = await updateServiceStatus(
+        data.statusId,
+        updatedArray,
+        authData.jwt
+      ); // ACA
       response?.length > 0 && (response = response[response.length - 1]);
       if (response?.error) {
         Swal.hideLoading();
@@ -248,6 +264,7 @@ const DetailProductService = ({
 
   const updateStep = async (e) => {
     const { name } = e.currentTarget;
+    let result = false;
     switch (name) {
       case "next":
         const response = await updateValidate();
@@ -269,27 +286,66 @@ const DetailProductService = ({
         ]);
         break;
       case "cancel":
-        await handleUpdateStatus([
+        result = await handleUpdateStatus([
           { status: "confirm_repair", value: false },
           { status: "status", value: serviceStatuses.cancel },
         ]);
+        result &&
+          finalServiceEvent(
+            {
+              data: {
+                product_model: data?.name,
+                id: data?.statusId,
+                Service_status: { budget: data?.displayData[4]?.data },
+                technicianName: data?.displayData[0]?.data,
+                clientName: actualUserName,
+              },
+            },
+            "cancel_service"
+          );
         break;
       case "approve":
-        await handleUpdateStatus([
+        result = await handleUpdateStatus([
           { status: "confirm_repair", value: true },
           {
             status: "status",
             value: serviceStatuses.progress[data.statusPosition + 1],
           },
         ]);
+        result &&
+          finalServiceEvent(
+            {
+              data: {
+                product_model: data?.name,
+                id: data?.statusId,
+                Service_status: { budget: data?.displayData[4]?.data },
+                technicianName: data?.displayData[0]?.data,
+                clientName: actualUserName,
+              },
+            },
+            "approve_service"
+          );
         break;
       case "finished":
-        await handleUpdateStatus([
+        result = await handleUpdateStatus([
           {
             status: "status",
             value: serviceStatuses.progress[data.statusPosition + 1],
           },
         ]);
+        result &&
+          finalServiceEvent(
+            {
+              data: {
+                product_model: data?.name,
+                id: data?.statusId,
+                Service_status: { budget: data?.displayData[4]?.data },
+                technicianName: actualUserName,
+                clientName: data?.displayData[0]?.data,
+              },
+            },
+            "finished_service"
+          );
         break;
       default:
         break;

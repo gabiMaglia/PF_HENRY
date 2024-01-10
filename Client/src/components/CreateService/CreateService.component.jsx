@@ -231,7 +231,7 @@ const CreateService = () => {
               confirmButtonColor: "#fd611a",
               cancelButtonText: "Quedarse en el formulario",
             }).then((value) => {
-              createServiceEvent(productInfo);
+              createServiceEvent(response);
               if (value.isConfirmed) {
                 navigate(
                   authData.userRole === "admin"

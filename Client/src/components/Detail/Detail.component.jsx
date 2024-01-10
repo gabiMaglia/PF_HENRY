@@ -111,7 +111,7 @@ const Detail = () => {
   const [fadeInKey, setFadeInKey] = useState(0);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
   const formatPrice = (price) => {
-    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+    return "$" + price?.toFixed(0)?.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
   // Función para resetear la animación de fundido
   const resetFadeIn = () => {

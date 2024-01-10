@@ -4,6 +4,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const postEvent = (event, params) => {
   //Envio de notificaciónes a FIREBASE
+  console.log(event, params);
 
   const analytics = getAnalytics();
   logEvent(analytics, event, params);
@@ -11,52 +12,45 @@ export const postEvent = (event, params) => {
 
 export const itemToWishlist = async (productId, wishlistProducts, jwt) => {
   let product = wishlistProducts.filter((item) => item.id === productId);
+  let action;
   if (product.length > 0) {
-    product = product[0];
+    action = "add_to_wishlist";
+  } else {
+    action = "remove_from_wishlist";
+  }
+  const { data } = await axios.get(`${urlBack}/product/${productId}`, {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+  if (data) {
     const firebaseParams = {
       currency: "ARS",
-      value: product?.name,
+      value: "Creación",
       items: [
         {
-          item_id: product?.id,
-          item_name: product?.name,
-          price: product?.price,
+          item_id: data?.id,
+          item_name: data?.name,
+          item_brand: data?.ProductCategories[0]?.name,
+          item_category: data?.ProductBrands[0]?.name,
+          price: data?.price,
         },
       ],
     };
-    postEvent("add_to_wishlist", firebaseParams);
-  } else {
-    const { data } = await axios.get(`${urlBack}/product/${productId}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-    if (data) {
-      const firebaseParams = {
-        currency: "ARS",
-        value: data?.name,
-        items: [
-          {
-            item_id: data?.id,
-            item_name: data?.name,
-            price: data?.price,
-          },
-        ],
-      };
-      postEvent("remove_from_wishlist", firebaseParams);
-    }
+    postEvent(action, firebaseParams);
   }
 };
 
 export const viewDetailProduct = (product) => {
   const firebaseParams = {
     currency: "ARS",
-    value: product?.name,
+    value: product?.price,
     items: [
       {
         item_id: product?.id,
         item_name: product?.name,
         item_category: product?.ProductCategories[0]?.name,
+        item_brand: product?.ProductBrands[0]?.name,
         price: product?.price,
       },
     ],
@@ -67,12 +61,13 @@ export const viewDetailProduct = (product) => {
 export const addProductToCart = (product) => {
   const firebaseParams = {
     currency: "ARS",
-    value: product?.name,
+    value: product?.price,
     items: [
       {
         item_id: product?.id,
         item_name: product?.name,
         item_category: product?.ProductCategories[0]?.name,
+        item_brand: product?.ProductBrands[0]?.name,
         price: product?.price,
       },
     ],
@@ -89,7 +84,6 @@ export const userRegister = () => {
 };
 
 export const userLogin = (method) => {
-  console.log(method);
   const firebaseParams = {
     method,
   };
@@ -104,4 +98,39 @@ export const userSubmitForm = (form) => {
   postEvent("generate_lead", firebaseParams);
 };
 
-export const createServiceEvent = () => {};
+export const createServiceEvent = ({ data }) => {
+  const firebaseParams = {
+    currency: "ARS",
+    value: data?.product_model,
+    items: [
+      {
+        item_id: data?.id,
+        item_name: data?.product_model,
+        price: data?.Service_status?.budget,
+        technician_name: data?.technicianName,
+        client_name: data?.clientName,
+      },
+    ],
+  };
+  postEvent("create_service", firebaseParams);
+};
+
+export const finalServiceEvent = ({ data }, final) => {
+  const firebaseParams = {
+    currency: "ARS",
+    value:
+      final === "finished_service"
+        ? data?.Service_status?.budget
+        : data?.product_model,
+    items: [
+      {
+        item_id: data?.id,
+        item_name: data?.product_model,
+        price: data?.Service_status?.budget,
+        technician_name: data?.technicianName,
+        client_name: data?.clientName,
+      },
+    ],
+  };
+  postEvent(final, firebaseParams);
+};
