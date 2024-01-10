@@ -8,8 +8,7 @@ const tokenSign = async (userId, username, userRole) => {
     username,
     userRole,
   };
-
-  const token = jwt.sign(userForToken, SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(userForToken, SECRET, { expiresIn: "6h" });
   return token;
 };
 const verifyToken = async (token) => {
