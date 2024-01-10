@@ -1,10 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+//HOOKS
+import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+//MATERIAL UI
 import { Box } from "@mui/material";
-import LoadingProgress from "../Loading/Loading.component";
-import Swal from "sweetalert2";
-import { StyledDataGrid,CustomToolbar } from "../CustomDataGrid/CustomDataGrid.component";
 import { esES } from "@mui/material/locale";
+//COMPONENT
+import LoadingProgress from "../Loading/Loading.component";
+import {
+  StyledDataGrid,
+  CustomToolbar,
+} from "../CustomDataGrid/CustomDataGrid.component";
+//SERVICES
+import { getServices } from "../../services/serviceServices";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+//SWEET ALERT
+import Swal from "sweetalert2";
+
 
 const ServiceList = () => {
   const editingRow = useRef(null);
@@ -16,8 +27,10 @@ const ServiceList = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-  const urlBack = import.meta.env.VITE_BACKEND_URL;
+
   const columns = [
     {
       field: "id",
@@ -87,9 +100,9 @@ const ServiceList = () => {
     },
   ];
 
-  const getServices = async () => {
+  const getAllServices = async () => {
     try {
-      const { data } = await axios.get(`${urlBack}/service`);
+      const { data } = await getServices(false, authData.jwt);
       if (data.length === 0) {
         Swal.fire({
           icon: "info",
@@ -98,17 +111,18 @@ const ServiceList = () => {
         });
       } else {
         setServices(data);
-        setTimeout(()=>{setLoading(false);},3000)
-        
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
       }
     } catch (error) {
       console.error("Error Fetching Services:", error.message);
       setError("Error al obtener los productos");
-    } 
+    }
   };
 
   useEffect(() => {
-    getServices();
+    getAllServices();
   }, []);
 
   const handleCellEditStart = (params) => {
@@ -131,7 +145,7 @@ const ServiceList = () => {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            //TODO 
+            //TODO
             return logicalDeleteService(id);
           })
         );
@@ -142,7 +156,7 @@ const ServiceList = () => {
           title: "Eliminación exitosa",
           text: msg,
         });
-        getServices();
+        getAllServices();
         return selectedRows;
       } else {
         Swal.fire({
@@ -180,7 +194,6 @@ const ServiceList = () => {
           budget,
           confirm_repair,
           status,
-
         };
       });
       const resolvedServicesData = await Promise.all(servicesData);
@@ -203,18 +216,18 @@ const ServiceList = () => {
       }}
     >
       <StyledDataGrid
-      slots={{
-        toolbar:CustomToolbar
-      }}
-      slotProps={{
-        toolbar: {
-          setFilterButtonEl,
-          handleDelete,
-          dataName: "Lista de Servicios",
-          showQuickFilter: true,
-          selectedRows: rowSelected,
-        }
-      }}
+        slots={{
+          toolbar: CustomToolbar,
+        }}
+        slotProps={{
+          toolbar: {
+            setFilterButtonEl,
+            handleDelete,
+            dataName: "Lista de Servicios",
+            showQuickFilter: true,
+            selectedRows: rowSelected,
+          },
+        }}
         rows={serviceWithStatus}
         columns={columns}
         pageSize={5}
