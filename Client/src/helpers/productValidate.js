@@ -27,7 +27,6 @@ async function validarFormatoImagen(rutaImagen) {
    }
       if (extensionesValidas.includes(extension.toLowerCase())) {
          const esImagenValida = await validarImagen(rutaImagen);
-         console.log('hola')
          return true;
    } else {
        return false;
@@ -42,7 +41,6 @@ function esMayuscula(s) {
 }
 export const validationsCreate=(values)=>{
    const {name,price,description,images,brandName,categoryName,warranty,stock}=values
-   console.log(images)
    const error={}
    if(name.length===0||name===''){
       error.e1='el nombre del producto es requerido'
@@ -118,10 +116,6 @@ export const validateField = async (fieldName, value) => {
        }
        // Validar cada imagen individualmente
        const invalidImages = await validarFormatoImagen(value);
-   
-      console.log(invalidImages)
-         
-       
        if (!invalidImages) {
          error.e4 = 'verifique el formato de sus imagenes';
        }
@@ -142,7 +136,6 @@ export const validateField = async (fieldName, value) => {
  
      case "categoryName":
       case "newCategory":
-      console.log(value)
        if (
          value.length === 0 ||
          value[0] === "Selecciona una categoria" ||
@@ -173,7 +166,6 @@ export const validateField = async (fieldName, value) => {
      default:
        break;
    }
-   console.log(error)
  
    return error; 
  };

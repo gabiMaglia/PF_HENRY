@@ -82,7 +82,6 @@ const ProductCreateProfileComponent = () => {
     const { name, value, files } = event.target;
     const fieldError = await validateField(name, value);
     setErrors(fieldError);
-    console.log(fieldError);
     switch (name) {
       case "images":
         if (!isUrlInput) {
@@ -205,13 +204,10 @@ const ProductCreateProfileComponent = () => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(authData.jwt)
     let array = [];
     
     const errorObject = validationsCreate(values);
-    console.log(errorObject)
     setErrors(errorObject);
-    console.log(errors)
     if (Object.keys(errors).length !== 0) {
       Swal.fire({
         icon: "error",
