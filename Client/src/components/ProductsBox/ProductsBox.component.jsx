@@ -16,12 +16,12 @@ import ProductCard from "../ProductCard/ProductCard.component";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 //REDUX
 import { addItem } from "../../redux/slices/cartSlice";
-// import { fetchProduct } from "../../services/productServices";
 //ALERT
 import Swal from "sweetalert2";
 // UTILS
 import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { fetchProductCartPost } from "../../services/productServices";
 
 const ProductBox = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const ProductBox = () => {
       setStoredProducts(product);
       dispatch(addItem());
       // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      // dispatch(fetchProduct(product, cookiesAccepted));
+      dispatch(fetchProductCartPost(product, cookieStatus));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",
