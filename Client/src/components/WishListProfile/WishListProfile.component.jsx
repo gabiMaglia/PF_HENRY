@@ -20,7 +20,6 @@ import {
   fetchAddItemWish,
 } from "../../services/wishListServices";
 import { addItem } from "../../redux/slices/cartSlice";
-// import { fetchProduct } from "../../services/productServices";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
@@ -49,10 +48,6 @@ const WhishListProfileComponent = () => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
 
-  // const chargeWishListProduct = () => {
-  //   fetchWishList(userId, dispatch, authData.jwt);
-  // };
-
   const handleCardClick = (id) => {
     const path = PATHROUTES.DETAIL.replace(":id", id);
     navigate(path);
@@ -70,8 +65,6 @@ const WhishListProfileComponent = () => {
     } else {
       setStoredProducts(product);
       dispatch(addItem());
-      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      // dispatch(fetchProduct(product, cookiesAccepted));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",
@@ -106,7 +99,6 @@ const WhishListProfileComponent = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchWishList(userId, dispatch, authData.jwt);
-    // chargeWishListProduct();
   }, []);
 
   useEffect(() => {
@@ -115,7 +107,6 @@ const WhishListProfileComponent = () => {
       setIsLoading(false);
     } else {
       fetchWishList(userId, dispatch, authData.jwt);
-      // chargeWishListProduct();
     }
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
@@ -125,7 +116,7 @@ const WhishListProfileComponent = () => {
 
   const deleteProduct = (id) => {
     setIsLoading(true);
-    fetchAddItemWish(dispatch, userId, id);
+    fetchAddItemWish(dispatch, userId, id, authData.jwt);
   };
 
   const handleClickDeleteButton = () => {
