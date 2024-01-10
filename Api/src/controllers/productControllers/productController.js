@@ -348,7 +348,7 @@ const searchByName = async (name) => {
         { model: ProductStock, attributes: ["amount"] },
       ],
     });
-    return products;
+    return products.length > 0 ? products : [];
   } catch (error) {
     throw new Error(`Error en la búsqueda: ${error.message}`);
   }

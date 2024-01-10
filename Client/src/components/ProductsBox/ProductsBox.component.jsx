@@ -16,26 +16,26 @@ import ProductCard from "../ProductCard/ProductCard.component";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 //REDUX
 import { addItem } from "../../redux/slices/cartSlice";
-import { fetchProduct } from "../../services/productServices";
 //ALERT
 import Swal from "sweetalert2";
 // UTILS
 import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { fetchProductCartPost } from "../../services/productServices";
 
 const ProductBox = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow, isLoading } = useSelector((state) => state.product);
-
   const [animationComplete, setAnimationComplete] = useState(false);
-
   const { login } = useSelector((state) => state.user);
-  const { cookiesAccepted } = useSelector((state) => state.cookies);
-  const authData = getDataFromSelectedPersistanceMethod(cookiesAccepted)
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
+  const userRole = authData.userRole;
   const isThereAnyProducts = productsToShow.length === 0;
-  
+
   const handleAddToCart = (product) => {
     if (login === false) {
       Swal.fire({
@@ -45,11 +45,19 @@ const ProductBox = () => {
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Ok",
       });
+    } else if (userRole !== "customer") {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Tu rol de usuario no posee carrito.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
     } else {
       setStoredProducts(product);
       dispatch(addItem());
       // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      dispatch(fetchProduct(product, cookiesAccepted));
+      dispatch(fetchProductCartPost(product, cookieStatus));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",
@@ -71,7 +79,7 @@ const ProductBox = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationComplete(true);
-    }, 1000); // Puedes ajustar el tiempo de la animación
+    }, 1000);
 
     return () => {
       clearTimeout(timeout);
@@ -121,8 +129,7 @@ const ProductBox = () => {
         gap: 4,
         mt: 2,
         p: 2,
-        minHeight: '25vw',
-       
+        minHeight: "25vw",
       }}
     >
       {isThereAnyProducts ? (
@@ -183,7 +190,7 @@ const ProductCardWithFade = ({ product, index }) => {
   useEffect(() => {
     const fadeInTimeout = setTimeout(() => {
       setOpacity(1);
-    }, index * 200); // Puedes ajustar el tiempo de la animación
+    }, index * 200);
 
     return () => {
       clearTimeout(fadeInTimeout);

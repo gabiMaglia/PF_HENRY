@@ -25,9 +25,9 @@ import {
 } from "../../redux/slices/cartSlice";
 //SERVICES
 import {
-  fetchCart,
-  fetchCount,
-  fetchDelete,
+  fetchCartMercadoPago,
+  fetchCountCartPut,
+  fetchDeleteCartProduct,
 } from "../../services/productServices";
 
 export default function ShoppingCart() {
@@ -85,7 +85,9 @@ export default function ShoppingCart() {
   const handleChange = (productId, value) => {
     const newValue = parseInt(value) || 1;
     dispatch(updateItem({ id: productId, count: newValue }));
-    dispatch(fetchCount({ id: productId, count: newValue }, cookiesAccepted));
+    dispatch(
+      fetchCountCartPut({ id: productId, count: newValue }, cookiesAccepted)
+    );
   };
 
   const handleIncrement = (productId) => {
@@ -107,11 +109,11 @@ export default function ShoppingCart() {
 
   const handleDelete = (product) => {
     dispatch(removeItem(product));
-    dispatch(fetchDelete(product, cookiesAccepted));
+    dispatch(fetchDeleteCartProduct(product, cookiesAccepted));
   };
 
   const handleShop = (e) => {
-    dispatch(fetchCart(items, cookiesAccepted));
+    dispatch(fetchCartMercadoPago(items, cookiesAccepted));
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
   };
   const customization = {

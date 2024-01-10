@@ -20,7 +20,7 @@ import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import {
   fetchProductById,
   fetchAllProducts,
-  fetchProduct,
+  fetchProductCartPost,
 } from "../../services/productServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 //REDUX
@@ -186,7 +186,7 @@ const Detail = () => {
       setStoredProducts(productById);
       dispatch(addItem());
       // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      dispatch(fetchProduct(productById, cookiesAccepted));
+      dispatch(fetchProductCartPost(productById, cookiesAccepted));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",

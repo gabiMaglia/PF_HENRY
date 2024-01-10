@@ -17,7 +17,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import Swal from "sweetalert2";
 
 
-const ServiceList = () => {
+const ServicesTable = () => {
   const editingRow = useRef(null);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,11 +30,17 @@ const ServiceList = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-
+console.log(authData.jwt)
   const columns = [
     {
       field: "id",
       headerName: "ID",
+      minWidth: 300,
+      headerAlign: "center",
+    },
+    {
+      field: "clientName",
+      headerName: "Usuario",
       minWidth: 300,
       headerAlign: "center",
     },
@@ -47,12 +53,6 @@ const ServiceList = () => {
     {
       field: "product_income_date",
       headerName: "fecha de ingreso",
-      minWidth: 300,
-      headerAlign: "center",
-    },
-    {
-      field: "clientName",
-      headerName: "Usuario",
       minWidth: 300,
       headerAlign: "center",
     },
@@ -113,7 +113,7 @@ const ServiceList = () => {
         setServices(data);
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        }, 1000);
       }
     } catch (error) {
       console.error("Error Fetching Services:", error.message);
@@ -232,11 +232,12 @@ const ServiceList = () => {
         columns={columns}
         pageSize={5}
         checkboxSelection
-        sx={{
-          minHeight: "800px",
-          maxHeight: "800px",
-          marginTop: "50px",
-          textAlign: "center",
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              id: false,
+            },
+          },
         }}
       />
       {loading && <LoadingProgress />}
@@ -244,4 +245,4 @@ const ServiceList = () => {
   );
 };
 
-export default ServiceList;
+export default ServicesTable;
