@@ -28,14 +28,15 @@ const ProductBox = () => {
   const dispatch = useDispatch();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const { productsToShow, isLoading } = useSelector((state) => state.product);
-
   const [animationComplete, setAnimationComplete] = useState(false);
-
   const { login } = useSelector((state) => state.user);
-  const { cookiesAccepted } = useSelector((state) => state.cookies);
-  const authData = getDataFromSelectedPersistanceMethod(cookiesAccepted)
+  // const { cookiesAccepted } = useSelector((state) => state.cookies);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
+  const userRole = authData.userRole;
   const isThereAnyProducts = productsToShow.length === 0;
-  
+
   const handleAddToCart = (product) => {
     if (login === false) {
       Swal.fire({
@@ -45,11 +46,19 @@ const ProductBox = () => {
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Ok",
       });
+    } else if (userRole !== "customer") {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Tu rol de usuario no posee carrito.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
     } else {
       setStoredProducts(product);
       dispatch(addItem());
       // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      dispatch(fetchProduct(product, cookiesAccepted));
+      // dispatch(fetchProduct(product, cookiesAccepted));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",
@@ -121,8 +130,7 @@ const ProductBox = () => {
         gap: 4,
         mt: 2,
         p: 2,
-        minHeight: '25vw',
-       
+        minHeight: "25vw",
       }}
     >
       {isThereAnyProducts ? (

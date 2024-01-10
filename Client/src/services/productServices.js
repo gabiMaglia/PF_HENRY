@@ -51,6 +51,7 @@ export const fetchSearch = (name) => async (dispatch) => {
     dispatch(search(filteredProducts));
     console.log(filteredProducts)
   } catch (error) {
+    console.log("error catch", error)
     Swal.fire("Producto no existente", "", "error");
   }
 };
