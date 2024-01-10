@@ -1,10 +1,8 @@
-//HOOKS
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-//MATERIAL UI
 import {
   Card,
   CardContent,
@@ -14,23 +12,26 @@ import {
   useTheme,
 } from "@mui/material";
 import { Container } from "@mui/system";
-//PUBLIC
 import miVideo from "/carousel/prueba.mp4";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const theme = useTheme();
 
   useEffect(() => {
-    if (Array.isArray(allProducts)) {
+    if (Array.isArray(allProducts) && allProducts.length > 0) {
       const filteredProducts = allProducts.filter(
         (product) =>
-          product?.ProductImages[0]  &&
+          product?.ProductImages[0] &&
           product.name &&
           product.price &&
           product.carousel === true
       );
       setProductData(filteredProducts);
+      setDataLoaded(true);
+    } else {
+      setDataLoaded(false);
     }
   }, [allProducts]);
 
@@ -48,7 +49,7 @@ const CardCarousel = ({ allProducts }) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
 
-  return (
+  return dataLoaded ? (
     <Box
       sx={{
         position: "relative",
@@ -58,6 +59,12 @@ const CardCarousel = ({ allProducts }) => {
         overflow: "hidden",
         opacity: "1",
         background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, rgba(26, 253, 148, 0) 90%)`,
+        visibility: "visible", // Show the component
+        display: "none", // Default to hidden
+        "@media (min-width: 901px)": {
+          // Only show the component when the screen size is greater than 900px
+          display: "block",
+        },
       }}
     >
       <video
@@ -66,7 +73,6 @@ const CardCarousel = ({ allProducts }) => {
         muted
         style={{
           position: "absolute",
-          // margin: "10px",
           width: "100%",
           height: "100%",
           objectFit: "cover",
@@ -199,7 +205,7 @@ const CardCarousel = ({ allProducts }) => {
         ))}
       </Slider>
     </Box>
-  );
+  ) : null;
 };
 
 export default CardCarousel;

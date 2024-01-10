@@ -5,9 +5,12 @@ const miAccessToken = process.env.MP_ACCESS_TOKEN;
 const axios = require("axios");
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
-backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
+const backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
 const conn = require("../../db");
 const { where } = require("sequelize");
+const transporter = require("../../config/mailer");
+
+const hyperEmail = process.env.EMAIL_MAILER;
 
 const mercadoPago = async (array, idOrder) => {
   try {
@@ -61,12 +64,15 @@ const handlePaymentNotification = async (paymentId) => {
         });
 
         if (order) {
+          const products = await order.getProducts();
+
           await order.update({
             status: "Finalizado",
-            cartTotal: Number(payment.data.transaction_details.total_paid_amount),
+            cartTotal: Number(
+              payment.data.transaction_details.total_paid_amount
+            ),
           });
 
-          const products = await order.getProducts();
           Promise.all(
             products.map(async (product) => {
               const { id, soldCount } = product;
@@ -99,14 +105,26 @@ const handlePaymentNotification = async (paymentId) => {
     console.error("Error al manejar la notificación de pago:", error);
   }
 };
-
-// const webhook = async (paymentId, status) => {
-//   if (status === "approved") {
-//     console.log(`Pago aprobado: ${paymentId}`);
-//   } else {
-//     console.log(`Estado de pago no manejado: ${status}`);
-//   }
-// };
+const sendOrderConfirmationEmail = async (order, products) => {
+  try {
+    await transporter.sendMail({
+      from: `Hyper Mega Red  ${hyperEmail}`,
+      to: order.userEmail,
+      subject: "Compra finalizada con éxito ✔",
+      html: `Gracias por tu compra. Resumen de la compra: ${JSON.stringify(
+        products,
+        null,
+        2
+      )}
+     <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+    });
+  } catch (error) {
+    console.error(
+      "Error al enviar el correo electrónico de confirmación de la orden:",
+      error
+    );
+  }
+};
 
 module.exports = {
   mercadoPago,

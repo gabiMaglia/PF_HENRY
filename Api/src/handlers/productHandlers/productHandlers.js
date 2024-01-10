@@ -36,8 +36,7 @@ const postProductHandler = async (req, res) => {
       !categoryName ||
       !brandName ||
       !images ||
-      !soldCount ||
-      !carousel
+      !soldCount
     ) {
       return res.status(400).json({ error: "Faltan datos requeridos..." });
     }
@@ -151,16 +150,17 @@ const getProductByIdHandler = async (req, res) => {
 const searchByNameHandler = async (req, res) => {
   let name = req.query.name;
   name = pluralize.singular(name.toLowerCase());
-  console.log("Nombre de búsqueda:", name);
   try {
     const results = await searchByName(name);
     if (results.length > 0) {
       res.status(200).json(results);
     } else {
-      res
-        .status(404)
-        .json({ error: `No se encontraron resultados para ${name}` });
-    }
+    //   res
+    //     .status(404)
+    //     .json({ error: `No se encontraron resultados para ${name}` });
+    // }
+    res.status(200).json([]);
+  }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

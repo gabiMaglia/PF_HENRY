@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Avatar } from "@mui/material";
 import { googleReviewsServices } from "../../services/googleReviewsServices";
 
 const ReviewsComponent = () => {
@@ -27,6 +27,10 @@ const ReviewsComponent = () => {
         <Box>
           {reviews.map((review, index) => (
             <Box key={index} variant="body1">
+              <Avatar
+                sx={{ width: "100px", height: "100px" }}
+                src={review.profile_photo_url}
+              />
               <Typography>Autor {review.author_name}</Typography>
               <Typography>Comentario {review.text}</Typography>
               <Typography>

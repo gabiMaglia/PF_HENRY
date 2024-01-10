@@ -25,7 +25,6 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
-// import carrito from "/icons/carrito-de-compras.png";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -48,13 +47,6 @@ export default function SearchAppBar() {
     height: 140,
   });
 
-  const Logo = styled("img")({
-    width: 30,
-    height: 30,
-    position: "relative",
-    cursor: "pointer",
-  });
-
   const getUserInfo = async (token) => {
     if (token !== undefined) {
       const response = await getUserById(token.userId, authData.jwt);
@@ -62,10 +54,10 @@ export default function SearchAppBar() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    await fetchSearch(inputName)(dispatch);
     navigate(PATHROUTES.PRODUCTS);
-    fetchSearch(inputName);
   };
 
   const handleKeyPress = (event) => {

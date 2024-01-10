@@ -8,6 +8,7 @@ import {
   filterByBrand,
   changeInput,
   addProduct,
+  search,
 } from "../redux/slices/productSlice";
 
 //REDUX
@@ -41,15 +42,25 @@ export const fetchProductById = (id) => async (dispatch) => {
 };
 
 export const fetchSearch = (name) => async (dispatch) => {
+  console.log(name)
   try {
     const response = await axios.get(`${urlBack}/search?name=${name}`);
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
-    dispatch(getProducts(filteredProducts));
-    // dispatch(search(response.data));
+    dispatch(search(filteredProducts));
+    console.log(filteredProducts)
   } catch (error) {
+    console.log("error catch", error)
     Swal.fire("Producto no existente", "", "error");
+  }
+};
+
+export const fetchChage = (inputValue) => async (dispatch) => {
+  try {
+    dispatch(changeInput(inputValue));
+  } catch (error) {
+    return;
   }
 };
 
@@ -68,14 +79,6 @@ export const fetchProductsByBrand = (brand) => async (dispatch) => {
     dispatch(filterByBrand(response.data));
   } catch (error) {
     console.error("Error al buscar productos por marca:", error);
-  }
-};
-
-export const fetchChage = (inputValue) => async (dispatch) => {
-  try {
-    dispatch(changeInput(inputValue));
-  } catch (error) {
-    return;
   }
 };
 
@@ -250,16 +253,15 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
 
 export const fetchCartUser = ({cookieAccepted}) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  
+
   const { userId, jwt } = aux;
-  
   try {
     const response = await axios.get(`${urlBack}/pagos/misCompras/${userId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     })
-   
+
     dispatch(getCart(response.data))
   } catch (error) {
     console.log(error.message)
