@@ -23,8 +23,6 @@ export const loginUser = async (username, password, cookieStatus) => {
         withCredentials: true,
       }
     );
-
-
     if (data.login) {
       const sortedData = dataSorterForApp(data);
       createPersistency(sortedData, cookieStatus);
@@ -52,7 +50,7 @@ export const googleLoginUser = async (cookieStatus) => {
       if (!popup) {
         throw new Error("Failed to open the authentication window");
       }
-  
+      console.log('object')
       return new Promise((resolve) => {
         window.addEventListener("message", (event) => {
         
