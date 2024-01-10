@@ -14,6 +14,7 @@ import {
 } from "../../services/wishListServices";
 //UTILS
 import { getAuthDataCookie } from "../../utils/cookiesFunctions";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCard = styled(Card)({
   width: 300,
@@ -37,55 +38,55 @@ const ProductPrice = styled(Typography)({
 });
 
 const CardProduct = ({ product }) => {
-  const authData = getAuthDataCookie("authData");
-  const userId = authData ? authData.userId : null;
+  // const authData = getAuthDataCookie("authData");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isDesired, setIsDesired] = useState(false);
-  const { id, name, price, ProductImages, ProductCategories } = product;
   const wishlistProducts = useSelector((state) => state.wishlist.products);
   const login = useSelector((state) => state.user.login);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+  const userId = authData ? authData.userId : null;
+  const userRole = authData ? authData.userRole : null;
+  const { id, name, price, ProductImages, ProductCategories } = product;
 
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
-
-  useEffect(() => {
-    if (login && wishlistProducts) {
-      const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
-      setIsDesired(isProductInWishlist);
-    } else {
-      setIsDesired(false);
-    }
-  }, [wishlistProducts, id, login]);
-
-  useEffect(() => {
-    if (login && !wishlistProducts) {
-      fetchWishList(userId, dispatch, authData.jwt);
-    }
-  }, [userId, dispatch, login, wishlistProducts]);
-
+  
   const categoryName =
-    ProductCategories && ProductCategories.length > 0
-      ? ProductCategories[0].name
-      : null;
-
+  ProductCategories && ProductCategories.length > 0
+  ? ProductCategories[0].name
+  : null;
+  
   const imageUrl =
-    ProductImages && ProductImages.length > 0 ? ProductImages[0].address : null;
-
+  ProductImages && ProductImages.length > 0 ? ProductImages[0].address : null;
+  
   const handleCategoryClick = (e) => {
     e.stopPropagation();
     navigate(`/products/filters/${categoryName}`);
   };
-
-  const handleDesiredClick = (e) => {
-    e.stopPropagation();
-    if (login) {
-      fetchAddItemWish(dispatch, userId, product.id);
+  
+  const handleDesiredClick = () => {
+    if (login && userRole === "customer") {
+      fetchAddItemWish(dispatch, userId, product.id, authData.jwt);
     } else {
       Swal.fire("Error", "debe registrarse para añadir a la lista de deseos");
     }
   };
+ 
+  useEffect(() => {
+    if (login) {
+      if (wishlistProducts) {
+        const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
+        setIsDesired(isProductInWishlist);
+      } else {
+        fetchWishList(userId, dispatch, authData.jwt);
+      }
+    } else {
+      setIsDesired(false);
+    }
+  }, [userId, dispatch, login, wishlistProducts]);
 
   return (
     <>
