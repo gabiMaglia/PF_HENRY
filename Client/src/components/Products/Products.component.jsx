@@ -18,10 +18,11 @@ const Products = () => {
     (state) => state.product
   );
   const [value, setValue] = useState(1);
+  
   useEffect(() => {
     inputName !== ""
-      ? dispatch(fetchSearch(inputName))
-      : dispatch(fetchAllProducts());
+      ? fetchSearch(inputName)
+      : fetchAllProducts();
   }, [dispatch]);
 
   const handlePageChange = (event, value) => {
