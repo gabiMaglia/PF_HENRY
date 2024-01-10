@@ -155,7 +155,6 @@ const ServicesTable = () => {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            //TODO
             // return logicalDeleteService(id);
           })
         );
