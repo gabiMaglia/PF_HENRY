@@ -41,13 +41,19 @@ console.log(authData.jwt)
     {
       field: "clientName",
       headerName: "Usuario",
-      minWidth: 300,
+      minWidth: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "clientEmail",
+      headerName: "Email",
+      minWidth: 200,
       headerAlign: "center",
     },
     {
       field: "product_model",
       headerName: "Modelo",
-      minWidth: 300,
+      minWidth: 200,
       headerAlign: "center",
     },
     {
@@ -59,7 +65,7 @@ console.log(authData.jwt)
     {
       field: "technicianName",
       headerName: "Tecnico asignado",
-      minWidth: 300,
+      minWidth: 200,
       headerAlign: "center",
     },
     {
@@ -71,31 +77,31 @@ console.log(authData.jwt)
     {
       field: "budget",
       headerName: "Presupuesto",
-      minWidth: 300,
+      minWidth: 180,
       headerAlign: "center",
     },
     {
       field: "confirm_repair",
       headerName: "Reparacion confirmada",
-      minWidth: 300,
+      minWidth: 250,
       headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Estado",
-      minWidth: 300,
+      minWidth: 200,
       headerAlign: "center",
     },
     {
       field: "technical_diagnosis",
       headerName: "Diagnostico tecnico",
-      minWidth: 300,
+      minWidth: 250,
       headerAlign: "center",
     },
     {
       field: "final_diagnosis",
-      headerName: "diagnostico final",
-      minWidth: 300,
+      headerName: "Diagnostico final",
+      minWidth: 250,
       headerAlign: "center",
     },
   ];
@@ -236,6 +242,10 @@ console.log(authData.jwt)
           columns: {
             columnVisibilityModel: {
               id: false,
+              product_income_date: false,
+              status: false,
+              technical_diagnosis: false,
+              final_diagnosis: false,
             },
           },
         }}
