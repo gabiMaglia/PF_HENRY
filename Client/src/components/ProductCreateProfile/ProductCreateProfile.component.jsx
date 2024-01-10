@@ -24,7 +24,7 @@ import Swal from "sweetalert2";
 //UTILS
 import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
-import validationsCreate from "../../helpers/productValidate";
+import {validateField, validationsCreate} from "../../helpers/productValidate";
 import { display } from "@mui/system";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
@@ -55,7 +55,7 @@ const ProductCreateProfileComponent = () => {
     images: [],
     carousel: carouselData,
   });
-  
+
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -63,32 +63,26 @@ const ProductCreateProfileComponent = () => {
     fetchCategories(dispatch);
     fetchBrands(dispatch);
   }, []);
-  const handlerAddImage = ({ target }) => {
+  const handlerAddImage = async ({ target }) => {
     setValues({
       ...values,
       images: [...values.images, imageURL],
     });
-
     setImagePreviews([...imagePreviews, imageURL]);
     setImageURL("");
+    const fieldError = await validateField("images", imageURL);
+    setErrors(fieldError);
   };
 
   const handlerImageChange = (e) => {
     setImageURL(e.target.value);
   };
 
-  const setAndValidateValues = (name, value) => {
-    setValues((prevValues) => {
-      const updatedValues = { ...prevValues, [name]: value };
-      return updatedValues;
-    });
-    const errorObject = validationsCreate(values);
-    setErrors(errorObject);
-  };
-
   const handleChange = async (event) => {
     const { name, value, files } = event.target;
-
+    const fieldError = await validateField(name, value);
+    setErrors(fieldError);
+    console.log(fieldError);
     switch (name) {
       case "images":
         if (!isUrlInput) {
@@ -97,19 +91,21 @@ const ProductCreateProfileComponent = () => {
             ...prevValues,
             images: [...prevValues.images, ...selectedImages],
           }));
-          validationsCreate(values);
           const selectedPreviews = Array.from(files).map((file) =>
-            URL.createObjectURL(file)
+          URL.createObjectURL(file)
           );
           setImagePreviews((prevPreviews) => [
             ...prevPreviews,
             ...selectedPreviews,
           ]);
+         
         }
         break;
+
       case "carousel":
         setCarouselData(!carouselData);
         break;
+
       case "imageUrl":
         setImageURL(value);
         break;
@@ -120,15 +116,15 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           categoryName: [value],
         }));
-        validationsCreate(values);
         setIsOtherCategory(value === "otra");
         break;
+
       case "newCategory":
         setNewCategory(value);
-        setAndValidateValues(
-          "categoryName",
-          isOtherCategory ? [value] : prevValues.categoryName
-        );
+        setValues((prevValues) => ({
+          ...prevValues,
+          categoryName: isOtherCategory ? [value] : prevValues.categoryName,
+        }));
         break;
 
       case "brandName":
@@ -137,7 +133,6 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: value,
         }));
-        validationsCreate(values);
         setIsOtherBrand(value === "otra");
         break;
 
@@ -147,18 +142,15 @@ const ProductCreateProfileComponent = () => {
           ...prevValues,
           brandName: isOtherBrand ? value : prevValues.brandName,
         }));
-        validationsCreate(values);
         break;
 
       default:
-        setValues((prevValues) => {
-          const updatedValues = { ...prevValues, [name]: value };
-          return updatedValues;
-        });
+        setValues((prevValues) => ({
+          ...prevValues,
+          [name]: value,
+        }));
     }
 
-    const errorObject = validationsCreate(values);
-    setErrors(errorObject);
   };
   const handlerUpdateCloudinary = async (folderName) => {
     try {
@@ -217,9 +209,10 @@ const ProductCreateProfileComponent = () => {
     let array = [];
 
     const errorObject = validationsCreate(values);
+    console.log(errorObject)
     setErrors(errorObject);
-
-    if (Object.keys(errorObject).length !== 0) {
+    console.log(errors)
+    if (Object.keys(errors).length !== 0) {
       Swal.fire({
         icon: "error",
         title: "datos incorrectos",
@@ -257,6 +250,7 @@ const ProductCreateProfileComponent = () => {
       });
 
       const response = fetchAddProduct(obj, dispatch, authData.jwt);
+      
       response
         .then((res) => {
           Swal.close();
@@ -588,7 +582,9 @@ const ProductCreateProfileComponent = () => {
                 sx={{ color: "white" }}
                 onClick={() => setIsUrlInput(!isUrlInput)}
               >
-                {!isUrlInput ? "Ingresar URL" : "Cargar desde archivo"}
+                {!isUrlInput
+                  ? "Ingresar URL de imagen"
+                  : "Cargar desde archivo"}
               </Button>
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -639,6 +635,11 @@ const ProductCreateProfileComponent = () => {
                     />
                   </Button>
                 ))}
+                {imagePreviews.length !== values.images.length && (
+                  <Typography variant="caption" color="error">
+                    Error: Alguna imagen no se ha renderizado correctamente.
+                  </Typography>
+                )}
               </Box>
               <Box
                 sx={{
