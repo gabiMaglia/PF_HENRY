@@ -16,7 +16,7 @@ import ProductCard from "../ProductCard/ProductCard.component";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 //REDUX
 import { addItem } from "../../redux/slices/cartSlice";
-import { fetchProduct } from "../../services/productServices";
+// import { fetchProduct } from "../../services/productServices";
 //ALERT
 import Swal from "sweetalert2";
 // UTILS
@@ -30,7 +30,6 @@ const ProductBox = () => {
   const { productsToShow, isLoading } = useSelector((state) => state.product);
   const [animationComplete, setAnimationComplete] = useState(false);
   const { login } = useSelector((state) => state.user);
-  // const { cookiesAccepted } = useSelector((state) => state.cookies);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
@@ -80,7 +79,7 @@ const ProductBox = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationComplete(true);
-    }, 1000); // Puedes ajustar el tiempo de la animación
+    }, 1000);
 
     return () => {
       clearTimeout(timeout);
@@ -191,7 +190,7 @@ const ProductCardWithFade = ({ product, index }) => {
   useEffect(() => {
     const fadeInTimeout = setTimeout(() => {
       setOpacity(1);
-    }, index * 200); // Puedes ajustar el tiempo de la animación
+    }, index * 200);
 
     return () => {
       clearTimeout(fadeInTimeout);
