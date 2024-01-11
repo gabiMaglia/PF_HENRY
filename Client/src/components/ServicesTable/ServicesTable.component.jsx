@@ -215,9 +215,9 @@ const ServicesTable = () => {
           title: "Por favor espere mientras procesamos la información",
           showConfirmButton: false,
         });
-        Swal.showLoading();
         setAvailableModify(false);
         const serviceId = newRow.id;
+        Swal.showLoading();
 
         const response = await updateService(serviceId, newRow, authData.jwt);
         if (response.status === 200) {
@@ -238,7 +238,11 @@ const ServicesTable = () => {
           });
           return newRow;
         } else {
-          throw new Error("Error al actualizar el servicio", response.message);
+          Swal.fire({
+            icon: "error",
+            title: "Error al actualizar el servicio",
+            text: response.message || "Error desconocido",
+          });
         }
       }
     } catch (error) {
@@ -246,15 +250,15 @@ const ServicesTable = () => {
     }
   };
 
-  const handleErrorInput = (error) => {
-    Swal.fire({
-      icon: "error",
-      title: "Error en la edición del servicio",
-      allowOutsideClick: false,
-      allowEnterKey: false,
-      text: `${error}`,
-    });
-  };
+  // const handleErrorInput = (error) => {
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Error en la edición del servicio",
+  //     allowOutsideClick: false,
+  //     allowEnterKey: false,
+  //     text: `${error}`,
+  //   });
+  // };
 
   // useEffect(() => {
   //   const fetchServices = async () => {
@@ -303,7 +307,7 @@ const ServicesTable = () => {
         onCellEditStart={handleCellEditStart}
         onCellEditStop={handleCellEditStop}
         processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleErrorInput}
+        // onProcessRowUpdateError={handleErrorInput}
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setRowSelected(newRowSelectionModel);
         }}

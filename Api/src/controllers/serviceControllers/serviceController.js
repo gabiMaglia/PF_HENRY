@@ -294,66 +294,6 @@ const DeleteServiceController = async (id) => {
   return service;
 };
 
-// //UPDATE SERVICE
-// const updateServiceController = async (id, update) => {
-//   const {
-//     product_model,
-//     product_income_date,
-//     isDelete,
-//     user_diagnosis,
-//     technicianId,
-//     budget,
-//     confirm_repair,
-//     status,
-//     technical_diagnosis,
-//     final_diagnosis,
-//   } = update;
-//   try {
-//     const service = await Service.findByPk(id, {
-//       include: [Service_status],
-//     });
-//     if (!service) {
-//       return {
-//         error: true,
-//         response: "Service not found",
-//       };
-//     }
-//     service.product_model = product_model;
-//     service.product_income_date = product_income_date;
-//     service.isDelete = isDelete;
-//     const serviceStatus = service.Service_status;
-//     if (serviceStatus) {
-//       serviceStatus.user_diagnosis = user_diagnosis;
-//       serviceStatus.budget = budget;
-//       serviceStatus.confirm_repair = confirm_repair;
-//       serviceStatus.status = status;
-//       serviceStatus.technical_diagnosis = technical_diagnosis;
-//       serviceStatus.final_diagnosis = final_diagnosis;
-
-//       await serviceStatus.save();
-//     }
-//     if (technicianId) {
-//       const technicianObj = await User.findByPk(technicianId);
-//       if (!technicianObj) {
-//         return {
-//           error: true,
-//           response: "Technician not found",
-//         };
-//       }
-
-//       await service.setTechnician(technicianObj);
-//     }
-//     await service.save();
-//     return {
-//       response: "Service updated successfully",
-//     };
-//   } catch (error) {
-//     return {
-//       error: true,
-//       response: error.message,
-//     };
-//   }
-// };
 //UPDATE SERVICE
 const updateServiceController = async (
   id,

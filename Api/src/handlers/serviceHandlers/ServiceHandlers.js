@@ -158,22 +158,6 @@ const deleteService = async (req, res) => {
   }
 };
 
-// //HANDLE UPDATE SERVICE
-// const updateService = async (req, res) => {
-//   const { id } = req.params;
-//   const { update } = req.body;
-//   try {
-//     const updatedService = await updateServiceController(id, update);
-
-//     if (updatedService.error) {
-//       return res.status(404).json(updatedService.response);
-//     }
-
-//     res.status(200).json(updatedService);
-//   } catch (error) {
-//     return res.status(500).json({ error: error.message });
-//   }
-// };
 //HANDLE UPDATE SERVICE
 const updateService = async (req, res) => {
   const { id } = req.params;
