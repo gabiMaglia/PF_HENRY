@@ -127,7 +127,6 @@ export default function ShoppingCart() {
   const handleShop = (e) => {
     dispatch(fetchCartMercadoPago(items, cookiesAccepted));
     generatePurchaseOrderEvent(items, total); //Evento de generación de orden de compra
-    window.localStorage.setItem("storedProducts", JSON.stringify([]));
   };
   const customization = {
     visual: {
