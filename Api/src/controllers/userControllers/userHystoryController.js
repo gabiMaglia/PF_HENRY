@@ -19,3 +19,6 @@ const PostHistoryController = async (UserId, value) => {
   }
   return newHistory
 };
+
+
+module.exports=PostHistoryController
