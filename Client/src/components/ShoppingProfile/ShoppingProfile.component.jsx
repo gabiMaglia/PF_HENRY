@@ -143,7 +143,7 @@ const ShoppingProfileComponent = () => {
                   Estado: {cartDate.status}
                 </Typography>
               )}
-              {cartDate.Products.map((card, index) => {
+              {cartDate.products.map((card, index) => {
                 return (
                   <Box
                     key={card.id}
@@ -153,7 +153,7 @@ const ShoppingProfileComponent = () => {
                     }}
                   >
                     <UserPanelProductCard product={card} buttons={buttons} />
-                    {index + 1 !== cartDate.Products.length && (
+                    {index + 1 !== cartDate.products.length && (
                       <Divider
                         sx={{
                           width: "90%",
