@@ -299,6 +299,7 @@ const updateServiceController = async (
   id,
   product_model,
   product_income_date,
+  isDelete,
   user_diagnosis,
   technicianId,
   budget,
@@ -319,6 +320,7 @@ const updateServiceController = async (
     }
     service.product_model = product_model;
     service.product_income_date = product_income_date;
+    service.isDelete = isDelete;
     const serviceStatus = service.Service_status;
     if (serviceStatus) {
       serviceStatus.user_diagnosis = user_diagnosis;

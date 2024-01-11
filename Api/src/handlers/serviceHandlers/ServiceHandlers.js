@@ -169,6 +169,7 @@ const updateService = async (req, res) => {
   const {
     product_model,
     product_income_date,
+    isDelete,
     user_diagnosis,
     technicianId,
     budget,
@@ -183,6 +184,7 @@ const updateService = async (req, res) => {
       id,
       product_model,
       product_income_date,
+      isDelete,
       user_diagnosis,
       technicianId,
       budget,
