@@ -215,9 +215,9 @@ const ServicesTable = () => {
           title: "Por favor espere mientras procesamos la información",
           showConfirmButton: false,
         });
+        Swal.showLoading();
         setAvailableModify(false);
         const serviceId = newRow.id;
-        Swal.showLoading();
 
         const response = await updateService(serviceId, newRow, authData.jwt);
         if (response.status === 200) {
@@ -228,7 +228,7 @@ const ServicesTable = () => {
           );
           setServices((prevServices) =>
             prevServices.map((service) =>
-              serviceId === newRow.id ? { ...service, ...newRow } : service
+              service.id === newRow.id ? { ...service, ...newRow } : service
             )
           );
           Swal.fire({
@@ -317,6 +317,12 @@ const ServicesTable = () => {
           toolbar: CustomToolbar,
         }}
         slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
+          panel: {
+            anchorEl: filterButtonEl,
+          },
           toolbar: {
             setFilterButtonEl,
             handleDelete,
@@ -325,7 +331,15 @@ const ServicesTable = () => {
             selectedRows: rowSelected,
           },
         }}
+        getRowClassName={(params) => {
+          return params.row.isDeleted
+            ? `row--deleted`
+            : params.row.carousel
+            ? `row--carousel`
+            : `row`;
+        }}
         checkboxSelection
+        disableRowSelectionOnClick
         rowSelectionModel={rowSelected}
         rows={services}
         columns={columns}
