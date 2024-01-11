@@ -17,7 +17,6 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
       isEmail: true,
-      unique: true,
     },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
