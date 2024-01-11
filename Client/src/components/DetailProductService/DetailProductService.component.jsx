@@ -29,7 +29,6 @@ import { serviceStatuses } from "../../utils/serviceStatuses.js";
 //SWEET ALERT
 import Swal from "sweetalert2";
 
-
 const formatBudget = (budget) => {
   const numericBudget = parseFloat(budget);
   if (isNaN(numericBudget)) {

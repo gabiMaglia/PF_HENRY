@@ -20,15 +20,6 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 //SWEET ALERT
 import Swal from "sweetalert2";
 
-// const formatBudget = (budget) => {
-//   const numericBudget = parseFloat(budget);
-//   console.log("Numeric Budget:", numericBudget);
-//   if (isNaN(numericBudget)) {
-//     return "Invalid Budget";
-//   }
-//   return `$${numericBudget.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
-// };
-
 const columns = [
   {
     field: "id",
@@ -80,7 +71,6 @@ const columns = [
     minWidth: 180,
     headerAlign: "center",
     editable: true,
-    // valueGetter: (params) => formatBudget(params.row.budget),
   },
   {
     field: "confirm_repair",
@@ -226,8 +216,6 @@ const ServicesTable = () => {
         Swal.showLoading();
         setAvailableModify(false);
         const serviceId = newRow.id;
-
-        // newRow.budget = formatBudget(newRow.budget);
 
         const response = await updateService(serviceId, newRow, authData.jwt);
         
