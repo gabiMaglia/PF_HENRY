@@ -225,3 +225,11 @@ export const userViewCartEvent = (items, total) => {
 
   postEvent("view_cart", firebaseParams);
 };
+
+export const userSearchEvent = (input) => {
+  postEvent("search", { search_term: input });
+};
+
+export const clickImportantEvent = (params) => {
+  postEvent("select_content", params);
+};

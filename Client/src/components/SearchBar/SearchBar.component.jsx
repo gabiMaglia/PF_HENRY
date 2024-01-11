@@ -25,6 +25,8 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //IMAGES - ICONS
 import img from "/icons/logo.svg";
+//FIREBASE
+import { userSearchEvent } from "../../services/firebaseAnayticsServices";
 
 export default function SearchAppBar() {
   const navigate = useNavigate();
@@ -57,6 +59,7 @@ export default function SearchAppBar() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     await fetchSearch(inputName)(dispatch);
+    userSearchEvent(inputName);
     navigate(PATHROUTES.PRODUCTS);
   };
 
