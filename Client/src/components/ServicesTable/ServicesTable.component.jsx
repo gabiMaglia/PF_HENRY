@@ -153,26 +153,6 @@ const ServicesTable = () => {
       setLoading(false);
     }
   };
-  // const getAllServices = async () => {
-  //   try {
-  //     const { data } = await getServices(false, authData.jwt);
-  //     if (data.length === 0) {
-  //       Swal.fire({
-  //         icon: "info",
-  //         title: "servicios no encontrados",
-  //         text: "la lista de servicios tecnicos esta vacia.",
-  //       });
-  //     } else {
-  //       setServices(data);
-  //       setTimeout(() => {
-  //         setLoading(false);
-  //       }, 1000);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error Fetching Services:", error.message);
-  //     setError("Error al obtener los servicios");
-  //   }
-  // };
 
   useEffect(() => {
     getAllServices();

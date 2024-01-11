@@ -3,14 +3,19 @@ import axios from "axios";
 
 const url = import.meta.env.VITE_BACKEND_URL;
 
-export const createNewService = async (serviceInfo, technicianId, imageUrl, jwt) => {
+export const createNewService = async (
+  serviceInfo,
+  technicianId,
+  imageUrl,
+  jwt
+) => {
   try {
     serviceInfo.product_image = imageUrl;
     serviceInfo.technicianId = technicianId;
     const response = await axios.post(`${url}/service`, serviceInfo, {
       headers: {
         Authorization: `Bearer ${jwt}`,
-      }
+      },
     });
     return response;
   } catch (error) {
@@ -21,14 +26,12 @@ export const createNewService = async (serviceInfo, technicianId, imageUrl, jwt)
 export const getServices = async (id, jwt) => {
   try {
     let completeUrl = `${url}/service`;
-    id &&
-      ((completeUrl = `${url}/service/client/${id}`));
-      
-        
+    id && (completeUrl = `${url}/service/client/${id}`);
+
     const response = await axios.get(completeUrl, {
       headers: {
         Authorization: `Bearer ${jwt}`,
-      }
+      },
     });
     return response;
   } catch (error) {
@@ -42,7 +45,7 @@ export const getServicesById = async (id, jwt) => {
       const response = await axios.get(`${url}/service/${id}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
-        }
+        },
       });
       return response;
     }
@@ -61,7 +64,7 @@ export const filterService = async (status, user, technician, jwt) => {
       },
       headers: {
         Authorization: `Bearer ${jwt}`,
-      }
+      },
     });
 
     return response;
@@ -83,7 +86,7 @@ export const updateServiceStatus = async (id, updatedArray, jwt) => {
           {
             headers: {
               Authorization: `Bearer ${jwt}`,
-            }
+            },
           }
         );
       })
@@ -94,19 +97,22 @@ export const updateServiceStatus = async (id, updatedArray, jwt) => {
   }
 };
 
-export const updateService = async (id, updateService, jwt) => {
-  console.log("UPDATE SERVICE", updateService)
+export const updateService = async (id, update, jwt) => {
+  console.log("UPDATE SERVICE", update);
   try {
-    const response = await axios.put(`${url}/service/update/service/${id}`, updateService, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-    console.log("UPDATE SERVICE DOS", updateService)
-    console.log("ANTES DEL RTURN", response.data)
+    const response = await axios.put(
+      `${url}/service/update/service/${id}`,
+      update,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    console.log("UPDATE SERVICE DOS", update);
+    console.log("ANTES DEL RTURN", response.data);
     return response.data;
   } catch (error) {
     return { error: true, message: error.message };
   }
-}
-
+};
