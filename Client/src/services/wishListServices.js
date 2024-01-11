@@ -7,6 +7,8 @@ import {
 } from "../redux/slices/wishListSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
+//FIREBASE
+import { itemToWishlist } from "./firebaseAnayticsServices";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -40,6 +42,7 @@ export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
     });
     if (data) {
       dispatch(addProductToWishlist(data.Products));
+      itemToWishlist(productId, data.Products, jwt);
     } else {
       throw new Error("No se pudo añadir el producto a la lista de deseos");
     }

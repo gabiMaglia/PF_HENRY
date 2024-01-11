@@ -1,7 +1,8 @@
 import axios from "axios";
-import {
-  createPersistency,
-} from "../utils/authMethodSpliter";
+import { createPersistency } from "../utils/authMethodSpliter";
+
+// FIREBASE
+import { userLogoutEvent } from "./firebaseAnayticsServices";
 
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
@@ -46,34 +47,32 @@ export const googleLoginUser = async (cookieStatus) => {
       resizable=yes,
       width=620,
       height=700`
-      );
-      if (!popup) {
-        throw new Error("Failed to open the authentication window");
-      }
-      console.log('object')
-      return new Promise((resolve) => {
-        window.addEventListener("message", (event) => {
-        
-          if (event.origin === `${url}` && event.data) {
-          
-            if (event.data.error) {
-              popup.close();
-              resolve({ error: true , response: event.data.response });
-       
-            }else {
-              const sortedData = dataSorterForApp(event.data);
-              createPersistency(sortedData, cookieStatus);
-              popup.close();
-              resolve({ data: event.data });
-            }
-            
+    );
+    if (!popup) {
+      throw new Error("Failed to open the authentication window");
+    }
+    console.log("object");
+    return new Promise((resolve) => {
+      window.addEventListener("message", (event) => {
+        if (event.origin === `${url}` && event.data) {
+          if (event.data.error) {
+            popup.close();
+            resolve({ error: true, response: event.data.response });
+          } else {
+            const sortedData = dataSorterForApp(event.data);
+            createPersistency(sortedData, cookieStatus);
+            popup.close();
+            resolve({ data: event.data });
           }
-        });
+        }
       });
-    } catch ( error ) {
-      console.error("Error during Google authentication:", error.response);
-      return { error: error.response.message || "An error occurred during authentication" };
-
+    });
+  } catch (error) {
+    console.error("Error during Google authentication:", error.response);
+    return {
+      error:
+        error.response.message || "An error occurred during authentication",
+    };
   }
 };
 export const registerUser = async (userObj) => {
@@ -88,6 +87,7 @@ export const registerUser = async (userObj) => {
 };
 export const logOutUser = async () => {
   try {
+    userLogoutEvent();
     const response = await axios.post(`${url}/account/logout`);
     return { error: false, data: response };
   } catch ({ response }) {
