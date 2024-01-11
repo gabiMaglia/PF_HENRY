@@ -9,7 +9,6 @@ const ReviewsComponent = () => {
     const fetchReviews = async () => {
       try {
         const data = await googleReviewsServices();
-        console.log("Informacion que llega al componente", data);
         setReviews(data);
       } catch (error) {
         console.log("Error al recibir reseñas:", error);

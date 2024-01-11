@@ -220,7 +220,11 @@ const ProductsTable = () => {
           });
           return newRow;
         } else {
-          throw new Error("Error al actualizar el producto", response.message);
+          Swal.fire({
+            icon: "error",
+            title: "Error al actualizar el producto",
+            text: response.message || "Error desconocido",
+          });
         }
       }
     } catch (error) {
