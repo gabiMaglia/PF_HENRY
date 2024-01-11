@@ -8,7 +8,7 @@ const {
   getFilterServiceController,
   DeleteServiceController,
   GetUndeletedServicesController,
-  updateServiceController
+  updateServiceController,
 } = require("../../controllers/serviceControllers/serviceController");
 
 //HANDLE ADD SERVICE
@@ -42,7 +42,6 @@ const addServiceHandler = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
 
 //HANDLE UPDATE STATUS SERVICE
 const updateServiceStatus = async (req, res) => {
@@ -133,66 +132,39 @@ const getFilterService = async (req, res) => {
 };
 
 //HANDLE UNDELETE SERVICE
-const getUndeletedService=async(req,res)=>{
-  try{
-    const services=await GetUndeletedServicesController()
+const getUndeletedService = async (req, res) => {
+  try {
+    const services = await GetUndeletedServicesController();
     if (services.error) {
       return res.status(404).json(services.response);
     }
     res.status(200).json(services);
-
-  }catch(error){
+  } catch (error) {
     res.status(500).json({ error: error.message });
-
   }
-}
+};
 
 //HANDLE DELETE SERVICE
-const deleteService=async(req,res)=>{
-  const {id}=req.params
+const deleteService = async (req, res) => {
+  const { id } = req.params;
   try {
-    const service= await DeleteServiceController(id)
+    const service = await DeleteServiceController(id);
     if (service.error) {
       return res.status(404).json(service.response);
     }
     res.status(200).json(service);
-
   } catch (error) {
     res.status(500).json({ error: error.message });
-    
   }
-}
+};
 
 //HANDLE UPDATE SERVICE
 const updateService = async (req, res) => {
   const { id } = req.params;
-  const {
-    product_model,
-    product_income_date,
-    isDelete,
-    user_diagnosis,
-    technicianId,
-    budget,
-    confirm_repair,
-    status,
-    technical_diagnosis,
-    final_diagnosis,
-  } = req.body;
+  const { update } = req.body;
 
   try {
-    const updatedService = await updateServiceController(
-      id,
-      product_model,
-      product_income_date,
-      isDelete,
-      user_diagnosis,
-      technicianId,
-      budget,
-      confirm_repair,
-      status,
-      technical_diagnosis,
-      final_diagnosis
-    );
+    const updatedService = await updateServiceController(id, update);
 
     if (updatedService.error) {
       return res.status(404).json(updatedService.response);
@@ -213,5 +185,5 @@ module.exports = {
   getFilterService,
   getUndeletedService,
   deleteService,
-  updateService
+  updateService,
 };

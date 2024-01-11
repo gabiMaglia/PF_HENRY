@@ -295,19 +295,19 @@ const DeleteServiceController = async (id) => {
 };
 
 //UPDATE SERVICE
-const updateServiceController = async (
-  id,
-  product_model,
-  product_income_date,
-  isDelete,
-  user_diagnosis,
-  technicianId,
-  budget,
-  confirm_repair,
-  status,
-  technical_diagnosis,
-  final_diagnosis
-) => {
+const updateServiceController = async (id, update) => {
+  const {
+    product_model,
+    product_income_date,
+    isDelete,
+    user_diagnosis,
+    technicianId,
+    budget,
+    confirm_repair,
+    status,
+    technical_diagnosis,
+    final_diagnosis,
+  } = update;
   try {
     const service = await Service.findByPk(id, {
       include: [Service_status],
