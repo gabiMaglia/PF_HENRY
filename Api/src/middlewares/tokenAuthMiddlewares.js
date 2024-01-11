@@ -9,7 +9,7 @@ function extractJwtToken(inputString) {
 const checkAuthToken = async (req, res, next) => {
   try {
     const token = extractJwtToken(req.headers.authorization);
-    const tokenData = await verifyToken(token);
+    const tokenData =  verifyToken(token);
     if (!tokenData?.userId) {
       res.status(409);
       res.send({ error: "No tienes acceso a esta ruta" });
@@ -17,8 +17,8 @@ const checkAuthToken = async (req, res, next) => {
       next();
     }
   } catch (error) {
-    res.status(409);
-    res.send({ error: "No tienes acceso a esta ruta" });
+    res.status(500);
+    res.send({ error: "ServerError" });
   }
 };
 
@@ -26,7 +26,7 @@ const checkAuthToken = async (req, res, next) => {
 const checkRoleAuthToken = (role) => async (req, res, next) => {
   try {
     const token = extractJwtToken(req.headers.authorization);
-    const tokenData = await verifyToken(token);
+    const tokenData =  verifyToken(token);
     if (![].concat(role).includes(tokenData.userRole)) {
       res.status(409);
       res.send({ error: "No tienes acceso a esta ruta (rol incorrecto)" });
@@ -34,8 +34,8 @@ const checkRoleAuthToken = (role) => async (req, res, next) => {
       next();
     }
   } catch (error) {
-    res.status(409);
-    res.send({ error: "No tienes acceso a esta ruta (rol incorrecto)" });
+    res.status(500);
+    res.send({ error: "ServerError" });
   }
 };
 

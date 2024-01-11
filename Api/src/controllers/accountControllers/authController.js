@@ -2,7 +2,7 @@ require("dotenv").config();
 const {
   sendConfirmationEmail,
 } = require("../../utils/sendConfirmationEmail.js");
-const { tokenSign } = require("../../jwt/tokenGenerator.js");
+const { tokenSign, refreshToken } = require("../../jwt/tokenGenerator.js");
 const { UserAddress, UserCredentials, User, UserRole } = require("../../db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -122,6 +122,12 @@ const loginUser = async (user) => {
     user: `${user.name} ${user.surname}`,
   };
 };
+const refreshSession = (token) => {
+ const newToken = refreshToken(token)
+ if (newToken) return newToken;
+ else return {error: true , message: 'TokenVencido' } 
+}
+
 const sendEmailToResetPassword = async () => {};
 
 const resetPassword = async (userId) => {
@@ -150,5 +156,6 @@ module.exports = {
   loginUser,
   confirmAccountController,
   resetPassword,
+  refreshSession,
   deleteActivateUserById,
 };
