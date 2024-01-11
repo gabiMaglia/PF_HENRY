@@ -1,5 +1,7 @@
+//HOOKS
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
+//MATERIAL UI
 import { Box } from "@mui/material";
 import {
   GridCellEditStopReasons,
@@ -18,7 +20,7 @@ import {
   logicalDeleteProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
-// SweetAlert
+// SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
