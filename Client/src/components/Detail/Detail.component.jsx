@@ -31,7 +31,8 @@ import PATHROUTES from "../../helpers/pathRoute";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-
+//FIREBASE
+import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 // Estilo personalizado para el botón
 const CustomButton = styled(Button)({
   backgroundColor: "#fd611a",
@@ -110,7 +111,7 @@ const Detail = () => {
   const [fadeInKey, setFadeInKey] = useState(0);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
   const formatPrice = (price) => {
-    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+    return "$" + price?.toFixed(0)?.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
   // Función para resetear la animación de fundido
   const resetFadeIn = () => {
@@ -129,7 +130,6 @@ const Detail = () => {
     // Función asíncrona para cargar los datos del producto
     const fetchDataAsync = async () => {
       dispatch(resetState());
-
       try {
         if (id && id !== productById?.id) {
           setIsLoadingDetail(true);
@@ -164,6 +164,8 @@ const Detail = () => {
         productById.ProductImages.length > 0
       ) {
         setSelectedImage(productById.ProductImages[0].address);
+        //Envio de notificaciónes a FIREBASE
+        viewDetailProduct(productById);
       }
     };
     setInitialImage();

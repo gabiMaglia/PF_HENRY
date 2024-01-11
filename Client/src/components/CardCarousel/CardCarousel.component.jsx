@@ -11,6 +11,9 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
+//FIREBASE
+import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
+
 import { Container } from "@mui/system";
 import miVideo from "/carousel/prueba.mp4";
 
@@ -95,6 +98,7 @@ const CardCarousel = ({ allProducts }) => {
           >
             <Link
               to={`/product/${product.id}`}
+              onClick={() => viewDetailProduct(product, true)}
               style={{ textDecoration: "none" }}
             >
               <Box

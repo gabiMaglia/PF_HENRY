@@ -25,6 +25,8 @@ import {
 import { textSupport } from "../../utils/objectsTexts";
 //SWEET ALERT
 import Swal from "sweetalert2";
+//FIREBASE
+import { userSubmitForm } from "../../services/firebaseAnayticsServices";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
@@ -164,6 +166,7 @@ const SupportComponent = () => {
         setArea("");
         setPostRequest(null);
         setFormComplete(false);
+        userSubmitForm("Soporte");
       } else {
         const errorMsg = postRequest?.response;
         Swal.fire({
