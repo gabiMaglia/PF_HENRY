@@ -20,6 +20,15 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 //SWEET ALERT
 import Swal from "sweetalert2";
 
+// const formatBudget = (budget) => {
+//   const numericBudget = parseFloat(budget);
+//   console.log("Numeric Budget:", numericBudget);
+//   if (isNaN(numericBudget)) {
+//     return "Invalid Budget";
+//   }
+//   return `$${numericBudget.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+// };
+
 const columns = [
   {
     field: "id",
@@ -53,15 +62,8 @@ const columns = [
     headerAlign: "center",
   },
   {
-    field: "isDelete",
-    headerName: "Borrado",
-    minWidth: 300,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
     field: "technicianName",
-    headerName: "Tecnico asignado",
+    headerName: "Técnico",
     minWidth: 200,
     headerAlign: "center",
     editable: true,
@@ -69,7 +71,7 @@ const columns = [
   {
     field: "user_diagnosis",
     headerName: "Falla reportada",
-    minWidth: 300,
+    minWidth: 250,
     headerAlign: "center",
   },
   {
@@ -78,11 +80,12 @@ const columns = [
     minWidth: 180,
     headerAlign: "center",
     editable: true,
+    // valueGetter: (params) => formatBudget(params.row.budget),
   },
   {
     field: "confirm_repair",
-    headerName: "Reparacion confirmada",
-    minWidth: 250,
+    headerName: "Confirmado",
+    minWidth: 150,
     headerAlign: "center",
   },
   {
@@ -103,6 +106,13 @@ const columns = [
     headerName: "Diagnostico final",
     minWidth: 250,
     headerAlign: "center",
+  },
+  {
+    field: "isDelete",
+    headerName: "Borrado",
+    minWidth: 150,
+    headerAlign: "center",
+    editable: true,
   },
 ];
 
@@ -217,6 +227,8 @@ const ServicesTable = () => {
         setAvailableModify(false);
         const serviceId = newRow.id;
 
+        // newRow.budget = formatBudget(newRow.budget);
+
         const response = await updateService(serviceId, newRow, authData.jwt);
         if (response.status === 200) {
           setRows((prevRows) =>
@@ -301,8 +313,8 @@ const ServicesTable = () => {
         getRowClassName={(params) => {
           return params.row.isDelete
             ? `row--deleted`
-            : params.row.carousel
-            ? `row--carousel`
+            : params.row.confirm_repair
+            ? `row--confirm_repair`
             : `row`;
         }}
         checkboxSelection
@@ -318,9 +330,10 @@ const ServicesTable = () => {
             columnVisibilityModel: {
               id: false,
               product_income_date: false,
-              status: false,
               technical_diagnosis: false,
               final_diagnosis: false,
+              isDelete: false,
+              confirm_repair: false,
             },
           },
         }}
