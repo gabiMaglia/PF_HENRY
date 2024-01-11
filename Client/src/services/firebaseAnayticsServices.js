@@ -233,3 +233,11 @@ export const userSearchEvent = (input) => {
 export const clickImportantEvent = (params) => {
   postEvent("select_content", params);
 };
+
+export const filtersOrSortEvents = (data, type) => {
+  const firebaseParams = {
+    value: data,
+    filter: type,
+  };
+  postEvent("filters_or_sort", firebaseParams);
+};

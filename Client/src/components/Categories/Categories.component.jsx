@@ -23,6 +23,8 @@ import {
   filterByBrand,
   filterByCategory,
 } from "../../redux/slices/productSlice";
+//FIREBASE
+import { filtersOrSortEvents } from "../../services/firebaseAnayticsServices";
 
 const FiltersSorting = () => {
   const dispatch = useDispatch();
@@ -37,6 +39,7 @@ const FiltersSorting = () => {
     setSelectedCategory(categoryName);
     setSelectedBrand("default");
     setSelectedPrice("default");
+    filtersOrSortEvents(categoryName, "Category");
   };
 
   const handleSelectBrand = (e) => {
@@ -46,11 +49,13 @@ const FiltersSorting = () => {
   const handleFilterBrand = () => {
     dispatch(filterByBrand(selectedBrand));
     dispatch(orderPrice(selectedPrice));
+    filtersOrSortEvents(selectedBrand, "Brand");
   };
 
   const handleOrderPrice = (e) => {
     dispatch(orderPrice(e.target.value));
     setSelectedPrice(e.target.value);
+    filtersOrSortEvents(e.target.value, "Price");
   };
 
   const clearFilters = () => {
