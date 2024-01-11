@@ -30,6 +30,13 @@ import {
   fetchDeleteCartProduct,
 } from "../../services/productServices";
 
+//FIREBASE
+import {
+  userViewCartEvent,
+  removeProductFromCart,
+  generatePurchaseOrderEvent,
+} from "../../services/firebaseAnayticsServices";
+
 export default function ShoppingCart() {
   const dispatch = useDispatch();
 
@@ -37,6 +44,10 @@ export default function ShoppingCart() {
   const { cookiesAccepted } = useSelector((state) => state.cookies);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
+
+  useEffect(() => {
+    userViewCartEvent(items, total);
+  }, []);
 
   useEffect(() => {
     dispatch(addItem());
@@ -110,11 +121,12 @@ export default function ShoppingCart() {
   const handleDelete = (product) => {
     dispatch(removeItem(product));
     dispatch(fetchDeleteCartProduct(product, cookiesAccepted));
+    removeProductFromCart(product); // Evento eliminar producto del carrito
   };
 
   const handleShop = (e) => {
     dispatch(fetchCartMercadoPago(items, cookiesAccepted));
-    window.localStorage.setItem("storedProducts", JSON.stringify([]));
+    generatePurchaseOrderEvent(items, total); //Evento de generación de orden de compra
   };
   const customization = {
     visual: {
@@ -122,7 +134,6 @@ export default function ShoppingCart() {
       borderRadius: "10px",
     },
   };
-
   return (
     <Container
       display="flex"

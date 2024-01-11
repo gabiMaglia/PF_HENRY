@@ -15,6 +15,7 @@ import Support from "./views/publics/Support/Support.view";
 import Questions from "./views/publics/Questions/Questions.view";
 import Detail from "./views/publics/Detail/Detail.view";
 import Categories from "./views/publics/Categories/Categories.view";
+import Review from "./views/publics/Reviews/Reviews.view";
 //PRIVATES VIEWS
 import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
@@ -35,6 +36,7 @@ const App = () => {
         <Route path={PATHROUTES.QUESTIONS} element={<Questions />} />
         <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
         <Route path={PATHROUTES.DETAIL} element={<Detail />} />
+        <Route path={PATHROUTES.REVIEW} element={<Review />} />
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
         </Route>

@@ -13,3 +13,53 @@ body {
   overflow-x: hidden;
   padding-right: 0 !important;
 }
+
+
+
+.hover-underline-animation-dark {
+  display: inline-block;
+  position: relative;
+  color: #040404;
+}
+
+.hover-underline-animation-dark:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: #000000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation-dark:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.hover-underline-animation-light {
+  display: inline-block;
+  position: relative;
+  color: #e8e7e7;
+}
+
+.hover-underline-animation-light:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #e8e7e7;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation-light:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}

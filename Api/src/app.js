@@ -7,7 +7,7 @@ const morgan = require("morgan");
 var cors = require("cors");
 const passport = require("passport");
 
-const { sessionFlag } = require("./middlewares/jwtSession.js");
+const { sessionFlag, refreshTokenCheck } = require("./middlewares/jwtSession.js");
 const server = express();
 
 server.name = "API";
@@ -19,6 +19,7 @@ server.use(express.urlencoded({ extended: true }));
 server.use(passport.initialize());
 // checkea quien hace cada peticion y lo muestra por consola
 server.use(sessionFlag)
+server.use(refreshTokenCheck)
 // Entryp0nt de la ruta principal
 server.use("/", routes);
 

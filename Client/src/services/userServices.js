@@ -49,7 +49,6 @@ export const isDeleteChange = async (id, jwt) => {
 export const getUserRoles = async (jwt) => {
   try {
     const roles = await axios.get(`${url}/user_role`, {
-    
       headers: {
         Authorization: `Bearer ${jwt}`,
       },

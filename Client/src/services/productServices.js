@@ -10,7 +10,8 @@ import {
   addProduct,
   search,
 } from "../redux/slices/productSlice";
-
+//FIREBASE ANALYTICS
+import { addProductToCart } from "./firebaseAnayticsServices";
 //REDUX
 import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
@@ -48,13 +49,14 @@ export const fetchSearch = (name) => async (dispatch) => {
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
     );
-    if(filteredProducts.length == 0){
-      Swal.fire("Producto no existente", "", "error");
-    }else{
-    dispatch(search(filteredProducts));}
 
+    if (filteredProducts.length == 0) {
+      Swal.fire("Producto no existente", "", "error");
+    } else {
+      dispatch(search(filteredProducts));
+    }
   } catch (error) {
-    console.log("error catch", error)
+    console.log("error catch", error);
   }
 };
 
@@ -93,6 +95,9 @@ export const fetchProductCartPost = (product, cookiesAccepted) => async () => {
     productId: id,
     productQuantity: 1,
   };
+
+  // Envio de notificaciónes a FIREBASE
+  addProductToCart(product);
 
   try {
     const res = await axios.post(`${urlBack}/cart/`, data, {
@@ -163,52 +168,54 @@ export const fetchCountCartPut = (product, cookiesAccepted) => async () => {
   }
 };
 
-export const fetchDeleteCartProduct = (product, cookiesAccepted) => async () => {
-  const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
-  const { userId, jwt } = aux;
-  const data = {
-    userId: userId,
-    productId: product,
-  };
-  try {
-    await axios.put(`${urlBack}/cart/remove`, data, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-  } catch (error) {
-    return;
-  }
-};
-
-export const fetchCartMercadoPago = (items, cookieAccepted) => async (dispatch) => {
-  const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
-  const { userId, jwt } = aux;
-  const products = items.map((item) => ({
-    title: item.name,
-    quantity: item.count,
-    unit_price: item.price,
-    currency_id: "ARS",
-  }));
-  try {
-    const response = await axios.post(
-      `${urlBack}/pagos/order`,
-      { array: products, userId: userId },
-
-      {
+export const fetchDeleteCartProduct =
+  (product, cookiesAccepted) => async () => {
+    const aux = getDataFromSelectedPersistanceMethod(cookiesAccepted);
+    const { userId, jwt } = aux;
+    const data = {
+      userId: userId,
+      productId: product,
+    };
+    try {
+      await axios.put(`${urlBack}/cart/remove`, data, {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${jwt}`,
         },
-      }
-    );
-    dispatch(idShop(response.data.Order.preferenceId));
-  } catch (error) {
-    return;
-  }
-};
+      });
+    } catch (error) {
+      return;
+    }
+  };
 
-export const fetchAddProduct = async (obj, dispatch , jwt) => {
+export const fetchCartMercadoPago =
+  (items, cookieAccepted) => async (dispatch) => {
+    const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+    const { userId, jwt } = aux;
+    const products = items.map((item) => ({
+      title: item.name,
+      quantity: item.count,
+      unit_price: item.price,
+      currency_id: "ARS",
+    }));
+    try {
+      const response = await axios.post(
+        `${urlBack}/pagos/order`,
+        { array: products, userId: userId },
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      dispatch(idShop(response.data.Order.preferenceId));
+    } catch (error) {
+      return;
+    }
+  };
+
+export const fetchAddProduct = async (obj, dispatch, jwt) => {
   try {
     const { data } = await axios.post(`${urlBack}/product`, obj, {
       headers: {
@@ -244,7 +251,7 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
       {
         headers: {
           Authorization: `Bearer ${jwt}`,
-        }
+        },
       }
     );
     return response;
@@ -263,8 +270,19 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
         Authorization: `Bearer ${jwt}`,
       },
     })
-
-    dispatch(getCart(response.data))
+    console.log(response.data)
+    const orders = response.data.map((order)=> ({
+      status: order.status,
+      cartTotal: order.cartTotal,
+      products: order.Products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.ProductImages[0].address,
+      })),
+    }))
+    console.log(orders)
+    dispatch(getCart(orders))
   } catch (error) {
     console.log(error.message)
   }
