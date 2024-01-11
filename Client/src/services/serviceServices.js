@@ -94,3 +94,19 @@ export const updateServiceStatus = async (id, updatedArray, jwt) => {
   }
 };
 
+export const updateService = async (id, updateService, jwt) => {
+  console.log("UPDATE SERVICE", updateService)
+  try {
+    const response = await axios.put(`${url}/service/update/service/${id}`, updateService, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log("UPDATE SERVICE DOS", updateService)
+    console.log("ANTES DEL RTURN", response.data)
+    return response.data;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
+
