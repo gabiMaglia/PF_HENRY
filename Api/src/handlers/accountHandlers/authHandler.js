@@ -2,6 +2,7 @@ const {
   loginUser,
   registerUser,
   confirmAccountController,
+  refreshSession,
   deleteActivateUserById,
 } = require("../../controllers/accountControllers/authController");
 
@@ -79,6 +80,16 @@ const confirmAccountHandler = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+const refreshSessionHandler = (req, res) => {
+  const  token  = req.headers.authorization;
+  try {
+    const response = refreshSession(token);
+    return res.status(200).json({jwt : response});
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+  
+}
 const logoutHandler = async (req, res, next) => {
   try {
 
@@ -112,5 +123,6 @@ module.exports = {
   signInHandler,
   forgetPassword,
   confirmAccountHandler,
+  refreshSessionHandler,
   deleteActivateUserByIdHandler,
 };

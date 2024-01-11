@@ -4,8 +4,9 @@ const { User } = require("../db");
 const sessionFlag = (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization;
-    verifyToken(token.split(" ").pop()).then((data) => {
-      User.findByPk(data && data.userId).then((user) => {
+    const decodedToken = verifyToken(token.split(" ").pop());
+    if (decodedToken) {
+      User.findByPk(decodedToken.userId).then((user) => {
         const fechaActual = new Date();
         const formatoCompleto = `${fechaActual.getFullYear()}-${(
           fechaActual.getMonth() + 1
@@ -21,15 +22,14 @@ const sessionFlag = (req, res, next) => {
           .getMinutes()
           .toString()
           .padStart(2, "0")}`;
-
-        const conectionData = data && {
+        const conectionData = {
           Usuario: `${user.name} ${user.surname}`,
-          Rol: data.userRole,
+          Rol: decodedToken.userRole,
           Conexion: formatoCompleto,
         };
         console.log(conectionData);
       });
-    });
+    }
   }
   next();
 };
@@ -37,15 +37,16 @@ const sessionFlag = (req, res, next) => {
 const refreshTokenCheck = (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization;
-
-    verifyToken(token.split(" ").pop()).then((data) => {
-      const remainingTime = data?.exp - Math.floor(Date.now() / 1000);
-
+    const decodedTOken = verifyToken(token.split(" ").pop());
+    if (decodedTOken?.exp) {
+      const remainingTime = decodedTOken.exp - Math.floor(Date.now() / 1000);
       const hour = Math.floor((remainingTime % 86400) / 3600);
       const minutes = Math.floor((remainingTime % 3600) / 60);
 
       console.log(`Te quedaan ${hour} horas y ${minutes} minutos`);
-    });
+    } else {
+      console.log("tokenVencido");
+    }
   }
   next();
 };
