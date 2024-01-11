@@ -72,6 +72,7 @@ const handlePaymentNotification = async (paymentId) => {
               payment.data.transaction_details.total_paid_amount
             ),
           });
+          await sendOrderConfirmationEmail(order, products);
 
           Promise.all(
             products.map(async (product) => {
