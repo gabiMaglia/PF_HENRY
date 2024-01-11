@@ -41,7 +41,8 @@ const refreshTokenCheck = (req, res, next) => {
   
 }
 
+
 module.exports = {
   sessionFlag,
-  refreshTokenCheck
+  refreshTokenCheck,
 };
