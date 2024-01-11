@@ -1,4 +1,4 @@
-import { Autocomplete, Box, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import {
   getUsersByRole,
   getUserById,
@@ -8,23 +8,17 @@ import { filterService } from "../../services/serviceServices";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { serviceStatuses } from "../../utils/serviceStatuses.js";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const statuses = [...serviceStatuses.progress, serviceStatuses.cancel];
 
-const ToolbarServiceProfile = (
-  authData,
+const ToolbarServiceProfile = ({
+  authData = () => {},
   getAllServices = () => {},
   setCardPerDates = () => {},
   setIsLoading = () => {},
-  sortCards = () => {}
-) => {
-  console.log(
-    authData,
-    getAllServices,
-    setCardPerDates,
-    setIsLoading,
-    sortCards
-  );
+  sortCards = () => {},
+}) => {
   const [filters, setFilters] = useState({
     users: null,
     status: null,
@@ -32,6 +26,37 @@ const ToolbarServiceProfile = (
   const [usersId, setUsersId] = useState([]);
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
+
+  const handleComunicationPreferenceChange = (change) => {
+    if (
+      (user?.communication_preference === "Pendiente" || change) &&
+      authData.userRole === "customer"
+    ) {
+      Swal.fire({
+        icon: "info",
+        title: "Gracias por confiar en HyperMegaRed",
+        text: `Elije el medio de comunicación que prefieres para recibir información sobre el estado del servicio`,
+        confirmButtonText: "Email",
+        showDenyButton: true,
+        denyButtonText: "Whatsapp",
+        denyButtonColor: "#25d366",
+        showCancelButton: change,
+        cancelButtonText: "Cancelar",
+        footer:
+          "Podras cambiarlo cuando quieras en la configuración de los servicios",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await putUser(user.id, authData.userRole, {
+            communication_preference: "Email",
+          });
+        } else if (result.isDenied) {
+          const response = await putUser(user.id, authData.userRole, {
+            communication_preference: "Whatsapp",
+          });
+        }
+      });
+    }
+  };
 
   const getUsers = async () => {
     const users = await getUsersByRole("customer", authData.jwt);
@@ -81,7 +106,12 @@ const ToolbarServiceProfile = (
       );
     } else {
       if (authData.userRole === "customer") {
-        response = await filterService(newValue, authData.userId, authData.jwt);
+        response = await filterService(
+          newValue,
+          authData.userId,
+          null,
+          authData.jwt
+        );
       } else {
         users.forEach((user, index) => {
           user === filters.users && (userPosition = index);
@@ -136,34 +166,11 @@ const ToolbarServiceProfile = (
   };
 
   useEffect(() => {
-    getUsers;
+    getUsers();
   }, []);
 
   useEffect(() => {
-    if (
-      user?.communication_preference === "Pendiente" &&
-      authData.userRole === "customer"
-    ) {
-      Swal.fire({
-        icon: "info",
-        title: "Gracias por confiar en HyperMegaRed",
-        text: `Elije el medio de comunicación que prefieres para recibir información sobre el estado del servicio`,
-        confirmButtonText: "Email",
-        showDenyButton: true,
-        denyButtonText: "Whatsapp",
-        denyButtonColor: "#25d366",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          const response = await putUser(user.id, authData.userRole, {
-            communication_preference: "Email",
-          });
-        } else if (result.isDenied) {
-          const response = await putUser(user.id, authData.userRole, {
-            communication_preference: "Whatsapp",
-          });
-        }
-      });
-    }
+    handleComunicationPreferenceChange();
   }, [user]);
 
   return (
@@ -175,41 +182,60 @@ const ToolbarServiceProfile = (
         mt: ".5em",
         backgroundColor: "white",
         pt: ".5em",
+        pl: "1em",
         pb: ".5em",
         zIndex: "10",
-        gap: "15%",
         display: "flex",
         justifyContent: "center",
       }}
     >
-      {authData.userRole === "technician" && (
+      <Box
+        sx={{
+          flexGrow: "1",
+          gap: "5%",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {authData.userRole === "technician" && (
+          <Autocomplete
+            id={"users"}
+            selectOnFocus
+            sx={{ flexGrow: "1" }}
+            onChange={(e, newValue, clear) => {
+              handleFilterChange(newValue, clear, "users");
+            }}
+            value={filters.users ? filters.users : null}
+            options={users}
+            renderInput={(params) => (
+              <TextField name="users" {...params} label="Filtrar por usuario" />
+            )}
+          />
+        )}
         <Autocomplete
-          id={"users"}
-          sx={{ width: "40%" }}
+          id={"status"}
           selectOnFocus
+          sx={{ flexGrow: "1", mr: ".5em" }}
           onChange={(e, newValue, clear) => {
-            handleFilterChange(newValue, clear, "users");
+            handleFilterChange(newValue, clear, "status");
           }}
-          value={filters.users}
-          options={users}
+          value={filters.status ? filters.status : null}
+          options={statuses}
           renderInput={(params) => (
-            <TextField name="users" {...params} label="Filtrar por usuario" />
+            <TextField name="status" {...params} label="Filtrar por estados" />
           )}
         />
+      </Box>
+      {authData.userRole === "customer" && (
+        <Button
+          sx={{ mr: ".5em" }}
+          onClick={() => {
+            handleComunicationPreferenceChange(true);
+          }}
+        >
+          <SettingsIcon fontSize="large" sx={{ color: "black" }} />
+        </Button>
       )}
-      <Autocomplete
-        id={"status"}
-        sx={{ width: "40%" }}
-        selectOnFocus
-        onChange={(e, newValue, clear) => {
-          handleFilterChange(newValue, clear, "status");
-        }}
-        value={filters.status ? filters.status : null}
-        options={statuses}
-        renderInput={(params) => (
-          <TextField name="status" {...params} label="Filtrar por estados" />
-        )}
-      />
     </Box>
   );
 };

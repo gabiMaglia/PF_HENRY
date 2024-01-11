@@ -95,7 +95,6 @@ const ProductsServicesProfile = () => {
         setIsLoading={setIsLoading}
         sortCards={sortCards}
       />
-
       <Box
         sx={{
           position: "relative",
