@@ -338,7 +338,6 @@ const updateServiceController = async (
           response: "Technician not found",
         };
       }
-
       await service.setTechnician(technicianObj);
     }
     await service.save();
