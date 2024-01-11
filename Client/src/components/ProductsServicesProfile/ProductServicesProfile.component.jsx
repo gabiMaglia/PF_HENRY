@@ -1,7 +1,6 @@
 //HOOKS
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-
 //MATERIAL UI
 import {
   Box,
@@ -20,16 +19,18 @@ import Loading from "../Loading/Loading.component";
 import DetailProductService from "../DetailProductService/DetailProductService.component";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
+//HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
-import { filterService, getServices } from "../../services/serviceServices";
-import logo from "../../../public/icons/logo.svg";
+//SERVICES
 import {
   getUsersByRole,
   getUserById,
   putUser,
 } from "../../services/userServices";
-import { serviceStatuses } from "../../utils/serviceStatuses.js";
+import { filterService, getServices } from "../../services/serviceServices";
+import logo from "../../../public/icons/logo.svg";
 
 const ProductsServicesProfile = () => {
   const [filters, setFilters] = useState({

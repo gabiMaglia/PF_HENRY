@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+//HOOKS
+import { useEffect, useState } from "react";
+//MATERIAL UI
 import {
   Card,
   CardContent,
@@ -7,10 +9,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import {
-  getServicesById,
-  updateServiceStatus,
-} from "../../services/serviceServices";
+import useTheme from "@mui/system/useTheme";
 //ICONS
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
@@ -18,14 +17,21 @@ import FastForwardIcon from "@mui/icons-material/FastForward";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-
-import useTheme from "@mui/system/useTheme";
+//SERVICES
+import {
+  getServicesById,
+  updateServiceStatus,
+} from "../../services/serviceServices";
 import { getUserById } from "../../services/userServices";
-import Swal from "sweetalert2";
-import { serviceStatuses } from "../../utils/serviceStatuses.js";
-
-// FIREBASE
 import { finalServiceEvent } from "../../services/firebaseAnayticsServices.js";
+//UTILS
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
+//SWEET ALERT
+import Swal from "sweetalert2";
+
+const formatPrice = (newBudget) => {
+  return "$" + newBudget.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+};
 
 const DetailProductService = ({
   id,
