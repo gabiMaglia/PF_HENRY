@@ -49,7 +49,7 @@ const ShoppingProfileComponent = () => {
     const queryParams = new URLSearchParams(location.search);
     const param = queryParams.get("success");
     if (param) {
-      console.log(param);
+      window.localStorage.setItem("storedProducts", JSON.stringify([]));
       Swal.fire({
         icon: "success",
         title: "Gracias por elegir HyperMegaRed",

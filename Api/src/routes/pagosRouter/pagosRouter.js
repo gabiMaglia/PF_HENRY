@@ -3,6 +3,7 @@ const {
   mercadoPagoHandler,
   mercadopagoWebhookHandler,
 } = require("../../handlers/pagosHandlers/mercadoPagoHandler");
+const { checkAuthToken } = require("../../middlewares/tokenAuthMiddlewares");
 
 const {
   createOrderHandler,
@@ -15,13 +16,13 @@ const {
 
 const pagosRouter = Router();
 
-pagosRouter.post("/", mercadoPagoHandler);
+pagosRouter.post("/", checkAuthToken, mercadoPagoHandler);
 pagosRouter.post("/mercadopago-webhook", mercadopagoWebhookHandler);
 
-pagosRouter.get("/misCompras/:id", misComprasHandler);
-pagosRouter.post("/order", createOrderHandler);
-pagosRouter.delete("/order/:id", deleteOrderHandler);
-pagosRouter.get("/order", getAllOrdersHandler);
-pagosRouter.delete("/order", deleteOrdersHandler);
+pagosRouter.get("/misCompras/:id", checkAuthToken, misComprasHandler);
+pagosRouter.post("/order", checkAuthToken, createOrderHandler);
+pagosRouter.delete("/order/:id", checkAuthToken, deleteOrderHandler);
+pagosRouter.get("/order", checkAuthToken, getAllOrdersHandler);
+pagosRouter.delete("/order", checkAuthToken, deleteOrdersHandler);
 
 module.exports = pagosRouter;
