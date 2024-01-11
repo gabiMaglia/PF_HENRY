@@ -162,7 +162,6 @@ const deleteService = async (req, res) => {
 const updateService = async (req, res) => {
   const { id } = req.params;
   const { update } = req.body;
-
   try {
     const updatedService = await updateServiceController(id, update);
 
