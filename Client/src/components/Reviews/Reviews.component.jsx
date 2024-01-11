@@ -1,5 +1,8 @@
+// HOOKS
 import { useEffect, useState } from "react";
+// MATERIAL UI
 import { Box, Typography, Avatar, Rating } from "@mui/material";
+// SERVICES
 import { googleReviewsServices } from "../../services/googleReviewsServices";
 
 const ReviewsComponent = () => {
@@ -19,10 +22,25 @@ const ReviewsComponent = () => {
 
   return (
     <>
-      <Box sx={{ padding: "2em", backgroundColor: "#f5f5f5" }}>
-        <Typography variant="h4" align="center" gutterBottom>
+      <Box
+        sx={{
+          backgroundColor: "#000",
+          width: "100%",
+          height: "120px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{ color: "#fff", textTransform: "uppercase", fontWeight: "900" }}
+        >
           Reseñas de nuestros clientes
         </Typography>
+      </Box>
+      <Box sx={{ padding: "2em", backgroundColor: "#f5f5f5" }}>
+        <Typography variant="h4" align="center" gutterBottom></Typography>
         <Box
           sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         >
