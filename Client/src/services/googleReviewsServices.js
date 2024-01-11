@@ -7,7 +7,6 @@ export const googleReviewsServices = async () => {
     const { data } = await axios.get(`${urlBack}/places/google-reviews`, {
       withCredentials: true,
     });
-    console.log(data);
     return data;
   } catch (error) {
     console.log("Error al pedir las reseñas", error);

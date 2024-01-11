@@ -5,6 +5,7 @@ const sessionFlag = (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization;
     verifyToken(token.split(" ").pop()).then( (data) => {   
+     
        User.findByPk(data && data.userId).then((user) => {
         
         const fechaActual = new Date();
@@ -22,6 +23,24 @@ const sessionFlag = (req, res, next) => {
   next();
 };
 
+const refreshTokenCheck = (req, res, next) => {
+  if (req.headers.authorization) {
+    const token = req.headers.authorization;
+   
+    verifyToken(token.split(" ").pop()).then( (data) => {   
+      const remainingTime = data.exp - Math.floor(Date.now() / 1000)
+   
+      const hour = Math.floor((remainingTime % 86400) / 3600);
+      const minutes = Math.floor((remainingTime % 3600) / 60);
+      
+      console.log(`Te quedaan ${hour} horas y ${minutes} minutos`)
+    
+    })
+  }
+  next()
+}
+
 module.exports = {
   sessionFlag,
+  refreshTokenCheck
 };

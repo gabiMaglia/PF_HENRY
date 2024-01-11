@@ -21,6 +21,8 @@ const Products = () => {
 
   useEffect(() => {
     inputName !== "" ? fetchSearch(inputName) : dispatch(fetchAllProducts());
+    setValue(1);
+    dispatch(selectPage(value));
   }, [dispatch]);
 
   const handlePageChange = (event, value) => {
@@ -42,7 +44,13 @@ const Products = () => {
 
       <ProductBox products={productsToShow} />
 
-      <Stack spacing={2} sx={{ mt: { xs: 2, lg: 3 }, mb: { xs: 10 } }}>
+      <Stack
+        spacing={2}
+        sx={{
+          mt: { xs: 2, lg: 3 },
+          mb: { xs: 10 },
+        }}
+      >
         <Pagination
           variant="outlined"
           shape="rounded"
@@ -53,7 +61,10 @@ const Products = () => {
           onChange={handlePageChange}
           showFirstButton
           showLastButton
-          sx={{ color: "black", boundaryCount: { xs: 2, md: 3 } }}
+          sx={{
+            color: "black",
+            boundaryCount: { xs: 2, md: 4 },
+          }}
         />
       </Stack>
     </Box>
