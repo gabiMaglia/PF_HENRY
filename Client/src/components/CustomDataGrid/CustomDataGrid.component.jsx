@@ -100,20 +100,20 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     },
   },
   "& .row--carousel": {
-    backgroundColor: "#2759a6",
+    backgroundColor: "#567fbe",
     "&:hover": {
-      backgroundColor: "#2759a6e",
+      backgroundColor: "#567fbee",
     },
     "&:active": {
-      backgroundColor: "#2759a6e",
+      backgroundColor: "#567fbee",
     },
     "&:focus-within": {
-      backgroundColor: "#2759a6e",
+      backgroundColor: "#567fbee",
     },
     "&.Mui-selected": {
-      backgroundColor: "#2759a6",
+      backgroundColor: "#567fbe",
       "&:hover": {
-        backgroundColor: "#2759a6e",
+        backgroundColor: "#567fbee",
       },
     },
   },

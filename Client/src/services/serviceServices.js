@@ -101,7 +101,7 @@ export const updateService = async (id, update, jwt) => {
   console.log("UPDATE SERVICE", update);
   try {
     const response = await axios.put(
-      `${url}/service/update/service/${id}`,
+      `${url}/service/update/servic/${id}`,
       update,
       {
         headers: {

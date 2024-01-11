@@ -230,7 +230,8 @@ const ServicesTable = () => {
         // newRow.budget = formatBudget(newRow.budget);
 
         const response = await updateService(serviceId, newRow, authData.jwt);
-        if (response.status === 200) {
+        console.log(response)
+        if (response && !response.error) {
           setRows((prevRows) =>
             prevRows.map((row) =>
               row.id === editingRow.current?.id ? newRow : row
@@ -260,14 +261,14 @@ const ServicesTable = () => {
     }
   };
 
-  const handleErrorInput = (error) => {
+  const handleErrorInput = () => {
     Swal.fire({
       icon: "error",
-      title: "Error en la edición del servicio",
+      title: "Error en la edición",
       allowOutsideClick: false,
       allowEnterKey: false,
-      text: `${error}`,
-    });
+      text: "Ha ocurrido un error al intentar editar el servicio.",
+    })
   };
 
   return (
@@ -313,8 +314,11 @@ const ServicesTable = () => {
         getRowClassName={(params) => {
           return params.row.isDelete
             ? `row--deleted`
-            : params.row.confirm_repair
+            : params.row.confirm_repair === false
             ? `row--confirm_repair`
+            : params.row.confirm_repair === true &&
+              params.row.status === "Servicio finalizado"
+            ? `row--status`
             : `row`;
         }}
         checkboxSelection
