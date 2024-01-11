@@ -11,11 +11,14 @@ import GoogleMap from "../../components/GoogleMap/GoogleMap.component";
 //REDUX
 import { fetchAllProducts } from "../../services/productServices";
 
+import { getToken } from "../../services/reportingAnalyticsServices";
+
 const HomeComponent = () => {
   const dispatch = useDispatch();
   const { allProducts } = useSelector((state) => state.product);
   useEffect(() => {
     fetchAllProducts();
+    getToken();
   }, [dispatch]);
 
   return (
