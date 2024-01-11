@@ -1,7 +1,6 @@
 //HOOKS
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 //MATERIAL UI
 import { Box } from "@mui/material";
 import {
@@ -113,15 +112,14 @@ const ServicesTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rows, setRows] = useState([]);
-  const [serviceWithStatus, setServiceWithStatus] = useState([]);
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
+
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-  const language = esES;
 
-  const urlBack = import.meta.env.VITE_BACKEND_URL;
+  const language = esES;
 
   // console.log(authData.jwt);
 
@@ -194,7 +192,7 @@ const ServicesTable = () => {
         Swal.fire({
           icon: "warning",
           title: "No hay servicios seleccionados",
-          text: "Por favor, selecciona al menos un Servicio para eliminar.",
+          text: "Por favor, selecciona al menos un servicio para eliminar.",
         });
       }
     } catch (error) {
@@ -250,46 +248,15 @@ const ServicesTable = () => {
     }
   };
 
-  // const handleErrorInput = (error) => {
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: "Error en la edición del servicio",
-  //     allowOutsideClick: false,
-  //     allowEnterKey: false,
-  //     text: `${error}`,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   const fetchServices = async () => {
-  //     const servicesData = await services.map(async (service) => {
-  //       const serviceStatus = service.Service_status || {};
-  //       console.log(serviceStatus, "ESTADO DEL SERVICIO");
-  //       const {
-  //         user_diagnosis,
-  //         technical_diagnosis,
-  //         final_diagnosis,
-  //         budget,
-  //         confirm_repair,
-  //         status,
-  //       } = serviceStatus;
-
-  //       return {
-  //         ...service,
-  //         user_diagnosis,
-  //         technical_diagnosis,
-  //         final_diagnosis,
-  //         budget,
-  //         confirm_repair,
-  //         status,
-  //       };
-  //     });
-  //     const resolvedServicesData = await Promise.all(servicesData);
-  //     setServiceWithStatus(resolvedServicesData);
-  //   };
-
-  //   fetchServices();
-  // }, [services]);
+  const handleErrorInput = (error) => {
+    Swal.fire({
+      icon: "error",
+      title: "Error en la edición del servicio",
+      allowOutsideClick: false,
+      allowEnterKey: false,
+      text: `${error}`,
+    });
+  };
 
   return (
     <Box
@@ -307,7 +274,7 @@ const ServicesTable = () => {
         onCellEditStart={handleCellEditStart}
         onCellEditStop={handleCellEditStop}
         processRowUpdate={processRowUpdate}
-        // onProcessRowUpdateError={handleErrorInput}
+        onProcessRowUpdateError={handleErrorInput}
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setRowSelected(newRowSelectionModel);
         }}
@@ -332,7 +299,7 @@ const ServicesTable = () => {
           },
         }}
         getRowClassName={(params) => {
-          return params.row.isDeleted
+          return params.row.isDelete
             ? `row--deleted`
             : params.row.carousel
             ? `row--carousel`
