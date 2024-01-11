@@ -230,8 +230,8 @@ const ServicesTable = () => {
         // newRow.budget = formatBudget(newRow.budget);
 
         const response = await updateService(serviceId, newRow, authData.jwt);
-        console.log(response)
-        if (response && !response.error) {
+        
+        if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
               row.id === editingRow.current?.id ? newRow : row
@@ -251,8 +251,8 @@ const ServicesTable = () => {
         } else {
           Swal.fire({
             icon: "error",
-            title: "Error al actualizar el servicio",
-            text: response.message || "Error desconocido",
+            title: "Error al actualizar",
+            text: "Hubo un error al actualizar el servicio.",
           });
         }
       }
@@ -262,13 +262,13 @@ const ServicesTable = () => {
   };
 
   const handleErrorInput = () => {
-    Swal.fire({
-      icon: "error",
-      title: "Error en la edición",
-      allowOutsideClick: false,
-      allowEnterKey: false,
-      text: "Ha ocurrido un error al intentar editar el servicio.",
-    })
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "Error en la edición",
+    //   allowOutsideClick: false,
+    //   allowEnterKey: false,
+    //   text: "Ha ocurrido un error al intentar editar el servicio.",
+    // })
   };
 
   return (
@@ -314,11 +314,11 @@ const ServicesTable = () => {
         getRowClassName={(params) => {
           return params.row.isDelete
             ? `row--deleted`
-            : params.row.confirm_repair === false
-            ? `row--confirm_repair`
             : params.row.confirm_repair === true &&
               params.row.status === "Servicio finalizado"
-            ? `row--status`
+            ? `row--finalized`
+            : params.row.confirm_repair === true
+            ? `row--accepted`
             : `row`;
         }}
         checkboxSelection

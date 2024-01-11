@@ -98,10 +98,9 @@ export const updateServiceStatus = async (id, updatedArray, jwt) => {
 };
 
 export const updateService = async (id, update, jwt) => {
-  console.log("UPDATE SERVICE", update);
   try {
     const response = await axios.put(
-      `${url}/service/update/servic/${id}`,
+      `${url}/service/update/service/${id}`,
       update,
       {
         headers: {
@@ -109,9 +108,7 @@ export const updateService = async (id, update, jwt) => {
         },
       }
     );
-    console.log("UPDATE SERVICE DOS", update);
-    console.log("ANTES DEL RTURN", response.data);
-    return response.data;
+    return response;
   } catch (error) {
     return { error: true, message: error.message };
   }

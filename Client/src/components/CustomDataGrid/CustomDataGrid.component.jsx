@@ -117,7 +117,7 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
       },
     },
   },
-  "& .row--confirm_repair": {
+  "& .row--accepted": {
     backgroundColor: "#cccccc",
     "&:hover": {
       backgroundColor: "#cccccce",
@@ -135,7 +135,7 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
       },
     },
   },
-  "& .row--status": {
+  "& .row--finalized": {
     backgroundColor: "#5dbe8c",
     "&:hover": {
       backgroundColor: "#cccccce",
