@@ -124,6 +124,17 @@ const textSupport = [
   },
 ];
 
+const reviewsUsers = [
+  {
+    title: "¡Nuestros clientes opinan!",
+    content: [
+      {
+        text: "En Hyper Mega Red, la satisfacción de nuestros clientes es nuestra máxima prioridad. Nos enorgullece compartir las experiencias positivas que han tenido con nuestros productos y servicios. Sus testimonios son un reflejo de nuestro compromiso con la excelencia y la dedicación para superar las expectativas. A continuación, presentamos algunas de las reseñas que hemos recibido:",
+      },
+    ],
+  },
+];
+
 const sectionInformation = [
   {
     title: "INFORMACION",
@@ -143,10 +154,10 @@ const sectionSocial = [
   {
     title: "SEGUINOS EN",
     items: [
-      { icon: Facebook, text: "FACEBOOK", link: '#' },
-      { icon: Instagram, text: "INSTAGRAM", link: '#'  },
-      { icon: YouTube, text: "YOUTUBE", link: '#' },
-      { icon: Twitter, text: "TWITTER", link: '#'  },
+      { icon: Facebook, text: "FACEBOOK", link: "#" },
+      { icon: Instagram, text: "INSTAGRAM", link: "#" },
+      { icon: YouTube, text: "YOUTUBE", link: "#" },
+      { icon: Twitter, text: "TWITTER", link: "#" },
     ],
   },
 ];
@@ -155,6 +166,7 @@ export {
   questionsStore,
   questionsService,
   textSupport,
+  reviewsUsers,
   sectionInformation,
   sectionSocial,
 };
