@@ -7,7 +7,7 @@ const { Sequelize } = require("sequelize");
 // Models import
 const UserModel = require("./models/userModels/User");
 const UserCredentialsModel = require("./models/userModels/UserCredentials");
-const UserSessionModel = require("./models/Session");
+const UserSessionModel = require("./models/BlackListedTokens");
 const UserRoleModel = require("./models/userModels/UserRole");
 const UserAddressModel = require("./models/userModels/UserAddress");
 const ServiceStatusModel = require("./models/ServiceModels/Service_status");
@@ -22,7 +22,8 @@ const WishListModel = require("./models/productModels/WishList");
 const CartModel = require("./models/productModels/Cart");
 const OrderModel = require("./models/productModels/Order");
 const ProductCartModel = require("./models/productModels/ProductCart");
-
+const HistoryModel=require("./models/userModels/UserHistory")
+const BlackListedTokensModel = require ('./models/BlackListedTokens')
 // Inicializacion de la instancia de sequelize
 const OrderProductModel = require("./models/productModels/OrderProduct");
 
@@ -44,7 +45,8 @@ ServiceStatusModel(sequelize);
 ServiceImageModel(sequelize);
 ServiceModel(sequelize);
 WishListModel(sequelize);
-
+HistoryModel(sequelize)
+BlackListedTokensModel(sequelize)
 // INICIALIZAMOS LOS MODELOS PRODUCT
 ProductModel(sequelize);
 ProductBrandModel(sequelize);
@@ -61,7 +63,7 @@ OrderProductModel(sequelize);
 const {
   User,
   UserRole,
-  Session,
+  BlackListedTokens,
   UserAddress,
   UserCredentials,
   Product,
@@ -77,6 +79,7 @@ const {
   Order,
   ProductCart,
   OrderProduct,
+  History
 } = sequelize.models;
 
 // Creacion del session store encargado de guardar en la base de datos las sesiones
@@ -120,6 +123,10 @@ WishList.belongsTo(User);
 
 WishList.belongsToMany(Product, { through: "WishlistProduct" });
 Product.belongsToMany(WishList, { through: "WishlistProduct" });
+
+//HISTORY
+User.hasMany(History)
+History.belongsTo(User)
 
 //CART
 Cart.belongsTo(User);

@@ -21,7 +21,7 @@ import getFirstLetters from "../../helpers/getFirstLetters";
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
-import { clearPersistanceData } from "../../utils/authMethodSpliter.js";
+import { clearPersistanceData, getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter.js";
 import { logOutUser } from "../../services/authServices.js";
 import { resetCart } from "../../redux/slices/cartSlice.js";
 
@@ -29,7 +29,7 @@ const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus)
   const { name, surname } = useSelector((state) => state.user);
 
   const initialLetersUsers = {
@@ -46,9 +46,9 @@ const UserMenu = () => {
   };
 
   const logout = async () => {
-    clearPersistanceData(cookieStatus, true);
+    clearPersistanceData(cookieStatus);
+    await logOutUser(authData.jwt)
     dispatch(logoutUser());
-    logOutUser();
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
     navigate(PATHROUTES.HOME);
     dispatch(resetCart());

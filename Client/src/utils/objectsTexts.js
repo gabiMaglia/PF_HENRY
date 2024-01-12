@@ -15,7 +15,10 @@ const questionsStore = [
     title: "¿Que garantia tienen los productos?",
     content: [
       "Todos nuestros productos electrónicos cuentan con 180 DÍAS de garantía.",
-      "Productos Samsung, Motorola y Apple cuentan con la garantía oficial de 1 (UN) AÑO desde la fecha de compra original.",
+      "- Productos Samsung, Motorola y LG cuentan con la garantía oficial de 1 (UN) AÑO desde la fecha de compra original.",
+      "- Todos los productos tienen 5 días de prueba. En caso de fallas de fábrica, se pueden cambiar directamente en nuestro punto de venta de lunes a viernes en el horario de atención habitual.",
+      "- Luego de los 5 días si el producto falla se deberá solicitar la garantía directamente con el fabricante.",
+      "- Para que la garantía sea válida el producto no debe ser manipulado por ninguna persona ajena al servicio oficial bajo ninguna circunstancia.",
     ],
   },
   {
@@ -44,13 +47,14 @@ const questionsStore = [
       "- OCA",
       "- Andreani",
       "- Correo Argentino",
+      "- Mercado Envíos",
     ],
   },
 ];
 
 const questionsService = [
   {
-    title: "¿Cómo puedo contratar un servicio técino?",
+    title: "¿Cómo puedo contratar un servicio técnico?",
     content: [
       "Tienes varias maneras de contratar un servicio técnico.",
       "- Desde nuestro WhatsApp, haciendo click en el botón flotante.",

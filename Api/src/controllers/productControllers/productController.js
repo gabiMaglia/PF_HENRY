@@ -339,6 +339,11 @@ const searchByName = async (name) => {
               [Op.iLike]: `%${name}%`,
             },
           },
+          {
+            '$ProductCategories.name$': {
+              [Op.iLike]: `%${name}%`,
+            }
+          }
         ],
       },
       include: [

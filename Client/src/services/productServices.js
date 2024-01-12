@@ -28,7 +28,6 @@ export const fetchAllProducts = () => async (dispatch) => {
       (product) => product.is_deleted === false
     );
     dispatch(getProducts(filteredProducts));
-    // dispatch(getProducts(response.data));
   } catch (error) {
     return;
   }
@@ -262,6 +261,9 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
 
 export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
 
   const { userId, jwt } = aux;
   try {
@@ -271,18 +273,22 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       },
     })
     console.log(response.data)
+    if(response.data){
     const orders = response.data.map((order)=> ({
       status: order.status,
+      date: order.purchaseDate.split("T")[0],
       cartTotal: order.cartTotal,
+      paymentMethod: order.paymentMethod,
       products: order.Products.map((product) => ({
         id: product.id,
         name: product.name,
-        price: product.price,
+        budget: formatPrice(product.price),
         image: product.ProductImages[0].address,
+        count: product.OrderProduct.quantity
       })),
     }))
     console.log(orders)
-    dispatch(getCart(orders))
+    dispatch(getCart(orders))}
   } catch (error) {
     console.log(error.message)
   }

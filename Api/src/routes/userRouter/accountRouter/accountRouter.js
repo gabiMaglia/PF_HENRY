@@ -5,6 +5,7 @@ const {
   logoutHandler,
   signInHandler,
   confirmAccountHandler,
+  refreshSessionHandler,
   deleteActivateUserByIdHandler,
 } = require("../../../handlers/accountHandlers/authHandler");
 const {
@@ -20,6 +21,7 @@ useRouter.post(
 useRouter.post("/signin", signInHandler);
 useRouter.delete("/:id", checkRoleAuthToken(['admin']),  deleteActivateUserByIdHandler);
 useRouter.get("/confirm/:token", confirmAccountHandler);
-useRouter.post("/logout", logoutHandler);
+useRouter.get("/refresh", refreshSessionHandler);
+useRouter.get("/logout", logoutHandler);
 
 module.exports = useRouter;

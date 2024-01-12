@@ -14,10 +14,9 @@ import { fetchCartUser } from "../../services/productServices";
 const ShoppingProfileComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [cardPerDates, setCardPerDates] = useState([]);
   const { cartUser } = useSelector((state) => state.cart);
   const cookiesAccepted = useSelector((state) => state.cookies);
-  console.log(cartUser);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -122,27 +121,41 @@ const ShoppingProfileComponent = () => {
                 border: "1px solid black",
                 borderRadius: "10px",
                 mb: "1em",
+                padding: 2,
               }}
             >
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  mt: 1,
+                }}
               >
-                {cartDate.date}
-              </Typography>
-              {cartDate.status && (
                 <Typography
                   variant="body2"
-                  color="text.primary"
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
+                    fontWeight: "bold",
                     fontSize: 18,
+                    ml: 2,
                   }}
                 >
-                  Estado: {cartDate.status}
+                  {cartDate.date}
                 </Typography>
-              )}
+                {cartDate.status && (
+                  <Typography
+                    variant="body2"
+                    color="text.primary"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: 18,
+                      ml: 64,
+                    }}
+                  >
+                    Estado: {cartDate.status}
+                  </Typography>
+                )}
+              </Box>
               {cartDate.products.map((card, index) => {
                 return (
                   <Box
@@ -167,7 +180,17 @@ const ShoppingProfileComponent = () => {
                 );
               })}
               {cartDate.cartTotal && (
-                <Typography variant="body2" color="text.primary">
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    ml: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   total: ${cartDate.cartTotal}
                 </Typography>
               )}

@@ -22,7 +22,7 @@ const NavBar = () => {
     { text: "PRODUCTOS", link: PATHROUTE.PRODUCTS },
     { text: "SOPORTE", link: PATHROUTE.SUPPORT },
     { text: "PREGUNTAS FRECUENTES", link: PATHROUTE.QUESTIONS },
-    { text: "SOBRE NOSOTROS", link: PATHROUTE.REVIEW },
+    { text: "RESEÑAS", link: PATHROUTE.REVIEW },
   ];
 
   const { pathname } = useLocation();
