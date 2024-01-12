@@ -107,41 +107,32 @@ export const removeProductFromCart = async (product) => {
 };
 
 export const generatePurchaseOrderEvent = async (items, total) => {
-  // try {
-  //   console.log(items, total);
-  //   const responses = await Promise.all(
-  //     items.map((item) => {
-  //       const { data } = axios.get(`${urlBack}/product/${item.id}`);
-  //       return data;
-  //     })
-  //   );
-  //   const items = responses.map((item) => {
-  //     return {
-  //       item_id: item?.id,
-  //       item_name: item?.name,
-  //       item_category: item?.ProductCategories[0]?.name,
-  //       item_brand: item?.ProductBrands[0]?.name,
-  //       price: item?.price,
-  //     };
-  //   });
-  //   console.log(items);
-  // } catch (error) {
-  //   return error;
-  // }
-  // // const firebaseParams = {
-  // //   currency: "ARS",
-  // //   value: data?.total,
-  // //   items: [
-  // //     {
-  // //       item_id: data?.id,
-  // //       item_name: data?.name,
-  // //       item_category: data?.ProductCategories[0]?.name,
-  // //       item_brand: data?.ProductBrands[0]?.name,
-  // //       price: data?.price,
-  // //     },
-  // //   ],
-  // // };
-  // // postEvent("begin_checkout", firebaseParams);
+  try {
+    const responses = await Promise.all(
+      items.map((item) => {
+        const response = axios.get(`${urlBack}/product/${item.id}`);
+        return response;
+      })
+    );
+    const completeItems = responses.map((item) => {
+      return {
+        item_id: item?.data?.id,
+        item_name: item?.data?.name,
+        item_category: item?.data?.ProductCategories[0]?.name,
+        item_brand: item?.data?.ProductBrands[0]?.name,
+        price: item?.data?.price,
+      };
+    });
+    const firebaseParams = {
+      currency: "ARS",
+      value: total,
+      items: completeItems,
+    };
+    postEvent("begin_checkout", firebaseParams);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 export const userRegister = () => {
