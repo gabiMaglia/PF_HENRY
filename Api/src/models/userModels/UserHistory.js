@@ -11,8 +11,13 @@ module.exports=(sequelize)=>{
               },
               value:{
                 type:DataTypes.STRING,
-                allowNull:true
-            }
+                allowNull:false
+              },
+              isDelete:{
+                type:DataTypes.BOOLEAN,
+                allowNull:true,
+                defaultValue:false
+              }
         },{
             timestamps: false,
           }
