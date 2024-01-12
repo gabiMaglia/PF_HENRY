@@ -140,6 +140,10 @@ const handlePaymentNotification = async (paymentId) => {
               })
             );
           }
+        } else {
+          if (order) {
+            await order.destroy();
+          }
         }
       }
     }
@@ -156,7 +160,7 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
       <h2>${product.name}</h2>
 
       <h3>${product.price}</h3>
-
+<img src=${product.ProductImages[0].address}>
     </div>
   `
       )
