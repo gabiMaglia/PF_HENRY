@@ -8,7 +8,8 @@ const {
   getFilterService,
   getUndeletedService,
   deleteService,
-  updateService
+  updateService,
+  logicalDelete
 } = require("../../handlers/serviceHandlers/ServiceHandlers");
 const useRouter = Router();
 
@@ -17,6 +18,7 @@ useRouter.get("/undeleted", getUndeletedService)
 useRouter.put("/delete/:id", deleteService)
 useRouter.put("/:id", updateServiceStatus);
 useRouter.put("/update/service/:id", updateService);
+useRouter.put("/logicalDelete/service/:id", logicalDelete);
 useRouter.get("/", getAllServices);
 useRouter.get("/filter", getFilterService);
 useRouter.get("/client/:id", getServiceByClientid);
