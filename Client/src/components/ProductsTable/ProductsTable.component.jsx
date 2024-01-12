@@ -1,5 +1,7 @@
+//HOOKS
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
+//MATERIAL UI
 import { Box } from "@mui/material";
 import {
   GridCellEditStopReasons,
@@ -18,9 +20,17 @@ import {
   logicalDeleteProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
-// SweetAlert
+// SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+
+const formatPrice = (price) => {
+  const numericPrice = parseFloat(price);
+  if (isNaN(numericPrice)) {
+    return "Invalid Budget";
+  }
+  return `$${numericPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+};
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -34,7 +44,7 @@ const columns = [
   {
     field: "price",
     headerName: "Precio",
-    width: 80,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
@@ -116,7 +126,7 @@ const ProductsTable = () => {
         return {
           id: product.id,
           name: product.name,
-          price: product.price,
+          price: formatPrice(product.price),
           warranty: product.warranty,
           soldCount: product.soldCount,
           carousel: product.carousel,
