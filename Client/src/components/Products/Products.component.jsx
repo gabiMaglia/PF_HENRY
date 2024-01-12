@@ -19,14 +19,19 @@ const Products = () => {
   );
   const [value, setValue] = useState(1);
 
-  useEffect(() => {
-    inputName !== "" ? fetchSearch(inputName) : dispatch(fetchAllProducts());
-  }, [dispatch]);
-
   const handlePageChange = (event, value) => {
     setValue(value);
     dispatch(selectPage(value));
   };
+  
+  useEffect(() => {
+    inputName !== "" ? fetchSearch(inputName) : dispatch(fetchAllProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
 
   return (
     <Box
