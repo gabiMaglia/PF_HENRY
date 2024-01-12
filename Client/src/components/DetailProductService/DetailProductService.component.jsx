@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+//HOOKS
+import { useEffect, useState } from "react";
+//MATERIAL UI
 import {
   Card,
   CardContent,
@@ -7,10 +9,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import {
-  getServicesById,
-  updateServiceStatus,
-} from "../../services/serviceServices";
+import useTheme from "@mui/system/useTheme";
 //ICONS
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
@@ -18,14 +17,25 @@ import FastForwardIcon from "@mui/icons-material/FastForward";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-
-import useTheme from "@mui/system/useTheme";
+//SERVICES
+import {
+  getServicesById,
+  updateServiceStatus,
+} from "../../services/serviceServices";
 import { getUserById } from "../../services/userServices";
-import Swal from "sweetalert2";
-import { serviceStatuses } from "../../utils/serviceStatuses.js";
-
-// FIREBASE
 import { finalServiceEvent } from "../../services/firebaseAnayticsServices.js";
+//UTILS
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
+//SWEET ALERT
+import Swal from "sweetalert2";
+
+const formatBudget = (budget) => {
+  const numericBudget = parseFloat(budget);
+  if (isNaN(numericBudget)) {
+    return "Invalid Budget";
+  }
+  return `$${numericBudget.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+};
 
 const DetailProductService = ({
   id,
@@ -131,7 +141,7 @@ const DetailProductService = ({
         data.statusId,
         updatedArray,
         authData.jwt
-      ); // ACA
+      ); 
       response?.length > 0 && (response = response[response.length - 1]);
       if (response?.error) {
         Swal.hideLoading();
@@ -219,7 +229,7 @@ const DetailProductService = ({
         });
         Swal.showLoading();
         response = await handleUpdateStatus([
-          { status: "budget", value: `$${newBudget}` },
+          { status: "budget", value: formatBudget(newBudget) },
           { status: "technical_diagnosis", value: newDiagnosis },
         ]);
         Swal.showLoading();

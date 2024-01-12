@@ -28,7 +28,6 @@ export const fetchAllProducts = () => async (dispatch) => {
       (product) => product.is_deleted === false
     );
     dispatch(getProducts(filteredProducts));
-    // dispatch(getProducts(response.data));
   } catch (error) {
     return;
   }
