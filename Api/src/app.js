@@ -20,8 +20,8 @@ server.use(express.urlencoded({ extended: true }));
 // Passport
 server.use(passport.initialize());
 // checkea quien hace cada peticion y lo muestra por consola
-env && server.use(sessionFlag)
 env && server.use(tokenRemainingTime)
+env && server.use(sessionFlag)
 // Entryp0nt de la ruta principal
 server.use("/", routes);
 

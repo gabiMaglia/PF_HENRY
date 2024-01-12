@@ -2,29 +2,29 @@ require("dotenv").config();
 const SECRET = process.env.JWT_SECRET_KEY;
 const jwt = require("jsonwebtoken");
 
-
 const tokenSign = (userId, username, userRole) => {
-  
   const userForToken = {
     userId: userId,
     username,
     userRole,
   };
-  const token = jwt.sign(userForToken, SECRET, { expiresIn: "1d" });
+  const token = jwt.sign(userForToken, SECRET, { expiresIn: "1m" });
   return token;
 };
 
 const verifyToken = (token) => {
   try {
-    return jwt.verify(token, SECRET);
+    const decodedToken = jwt.verify(token, SECRET);
+    return decodedToken;
   } catch (error) {
-    return null;
+    console.log(error.name)
+    return error.name;
   }
 };
 
 const refreshToken = (token) => {
   try {
-    const decodedToken = verifyToken(token.split(' ').pop());
+    const decodedToken = verifyToken(token.split(" ").pop());
 
     const newToken = tokenSign(
       decodedToken.userId,
