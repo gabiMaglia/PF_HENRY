@@ -129,7 +129,21 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      {/* ... (código existente) */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "pointer",
+        }}
+      >
+        <Img
+          src={img}
+          alt="Logotipo"
+          onClick={() => {
+            navigate(PATHROUTES.HOME);
+          }}
+        />
+      </Box>
       <Box
         sx={{
           mt: { xs: 2 },

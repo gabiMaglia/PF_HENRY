@@ -33,7 +33,7 @@ const ProductBox = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const userRole = authData?.userRole? authData.userRole : null ;
+  const userRole = authData?.userRole ? authData.userRole : null;
   const isThereAnyProducts = productsToShow.length === 0;
 
   const handleAddToCart = (product) => {
@@ -124,7 +124,11 @@ const ProductBox = () => {
     <Container
       sx={{
         display: "grid",
-        gridTemplateColumns: { md: "repeat(1, 1fr)", lg: "repeat(3, 1fr)" },
+        gridTemplateColumns: {
+          sm: "repeat(1,1fr)",
+          md: "repeat(2,1fr)",
+          lg: "repeat(3,1fr)",
+        },
         flexDirection: "row",
         gap: 4,
         mt: 2,

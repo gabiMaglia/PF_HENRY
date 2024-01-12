@@ -50,7 +50,7 @@ async function createOrder(
     const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
-    d;
+    
     const order = await Order.create({
       id: idOrder,
       UserId: userId,
