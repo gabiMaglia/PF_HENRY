@@ -122,7 +122,6 @@ const CardProduct = ({ product }) => {
               sx={{
                 paddingTop: "20px",
                 zIndex: "1000",
-                // borderBottom: "1px solid black",
               }}
             >
               <span
