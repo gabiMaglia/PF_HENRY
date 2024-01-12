@@ -4,12 +4,11 @@ const {
 } = require("../../controllers/pagosControllers/mercadoPagoContoller");
 
 const mercadoPagoHandler = async (req, res) => {
-  const array = req.body;
+  const { array, userId } = req.body;
   console.log(array);
 
   try {
-    const response = await mercadoPago(array);
-
+    const response = await mercadoPago(array, userId);
     res.status(200).json(response.id);
   } catch (error) {
     console.log(error);
