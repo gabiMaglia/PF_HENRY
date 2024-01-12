@@ -52,7 +52,7 @@ module.exports = (sequelize) => {
     },
     purchaseDate: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
     },
 
     // products: {
