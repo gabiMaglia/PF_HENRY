@@ -262,7 +262,7 @@ const WhishListProfileComponent = () => {
                           image: card.ProductImages
                             ? card.ProductImages[0].address
                             : "",
-                          budget: `${formatPrice(card.price)}`,
+                          budget: card.price,
                         }}
                         buttons={buttons}
                       />
