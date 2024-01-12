@@ -20,6 +20,9 @@ const UserPanelProductCard = ({
 }) => {
   const theme = useTheme();
   const [imageError, setImageError] = useState(false);
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
 
   return (
     <Box
@@ -132,7 +135,7 @@ const UserPanelProductCard = ({
                 },
               }}
             >
-              precio: {product.budget}
+              precio: {formatPrice(Number(product.budget))}
             </Typography>
           )}
           {product.state && (
@@ -174,7 +177,7 @@ const UserPanelProductCard = ({
                   }}
                   onClick={() => {
                     button.action(
-                      product.id,
+                      product,
                       button.actionParam && button.actionParam,
                       actionParam && actionParam
                     );

@@ -93,7 +93,6 @@ export const fetchProductCartPost = (product, cookiesAccepted) => async () => {
     productId: id,
     productQuantity: 1,
   };
-
   // Envio de notificaciónes a FIREBASE
   addProductToCart(product);
 
@@ -271,7 +270,6 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
         Authorization: `Bearer ${jwt}`,
       },
     })
-    console.log(response.data)
     if(response.data){
     const orders = response.data.map((order)=> ({
       status: order.status,
@@ -281,12 +279,13 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       products: order.Products.map((product) => ({
         id: product.id,
         name: product.name,
-        budget: formatPrice(product.price),
+        budget: product.price,
         image: product.ProductImages[0].address,
-        count: product.OrderProduct.quantity
+        count: product.OrderProduct.quantity,
+        ProductCategories: [{name: product.ProductCategories[0].name}],
+        ProductBrands: [{name: product.ProductBrands[0].name}]
       })),
     }))
-    console.log(orders)
     dispatch(getCart(orders))}
   } catch (error) {
     console.log(error.message)
