@@ -146,15 +146,38 @@ const handlePaymentNotification = async (paymentId) => {
 };
 const sendOrderConfirmationEmail = async (products, userEmail) => {
   try {
+    const productsHtml = products
+      .map(
+        (product) => `
+    <tr>
+      <td>${product.name}</td>
+      <td>${product.price}</td>
+    </tr>
+  `
+      )
+      .join("");
+
+    const emailBody = `
+    <p>Gracias por tu compra. Aquí está el resumen de la compra:</p>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Nombre del Producto</th>
+          <th>Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${productsHtml}
+      </tbody>
+    </table>
+    <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>
+  `;
+
     await transporter.sendMail({
       from: `Hyper Mega Red  ${hyperEmail}`,
       to: userEmail,
       subject: "Compra finalizada con éxito ✔",
-      html: `Gracias por tu compra. Resumen de la compra: ${JSON.stringify(
-        products,
-        null,
-        2
-      )}
+      html: `${emailBody} 
      <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
     });
   } catch (error) {
