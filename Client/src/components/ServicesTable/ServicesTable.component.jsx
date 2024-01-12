@@ -55,7 +55,7 @@ const columns = [
   {
     field: "technicianId",
     headerName: "ID Técnico ",
-    minWidth: 200,
+    minWidth: 300,
     headerAlign: "center",
     editable: true,
   },
