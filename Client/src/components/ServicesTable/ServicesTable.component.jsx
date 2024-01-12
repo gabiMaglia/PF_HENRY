@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 const columns = [
   {
     field: "id",
-    headerName: "ID",
+    headerName: "ID Servicio",
     minWidth: 300,
     headerAlign: "center",
   },
@@ -53,11 +53,17 @@ const columns = [
     headerAlign: "center",
   },
   {
+    field: "technicianId",
+    headerName: "ID Técnico ",
+    minWidth: 300,
+    headerAlign: "center",
+    editable: true,
+  },
+  {
     field: "technicianName",
     headerName: "Técnico",
     minWidth: 200,
     headerAlign: "center",
-    editable: true,
   },
   {
     field: "user_diagnosis",
@@ -146,6 +152,7 @@ const ServicesTable = () => {
           product_model: service.product_model,
           product_income_date: service.product_income_date,
           isDelete: service.isDelete,
+          technicianId: service.technicianId,
           technicianName: service.technicianName,
           user_diagnosis: service.Service_status?.user_diagnosis,
           budget: service.Service_status?.budget,
@@ -338,6 +345,7 @@ const ServicesTable = () => {
               final_diagnosis: false,
               isDelete: false,
               confirm_repair: false,
+              technicianId: false,
             },
           },
         }}
