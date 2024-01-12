@@ -12,7 +12,6 @@ const sessionFlag = (req, res, next) => {
       User.findByPk(decodedToken.userId).then((user) => {
         const fechaActual = new Date();
         const formatoCompleto = dateFormater(fechaActual)
-       
         const conectionData = {
           Usuario: `${user.name} ${user.surname}`,
           Rol: decodedToken.userRole,
