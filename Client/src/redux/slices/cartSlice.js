@@ -71,7 +71,11 @@ const cartSlice = createSlice({
       state.id = action.payload
     },
     getCart: (state, action) => {
-      state.cartUser = action.payload
+      const sortCartUser = action.payload
+      state.cartUser = sortCartUser.sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+      })
     }
   },
 });
