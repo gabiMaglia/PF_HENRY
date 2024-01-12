@@ -97,7 +97,7 @@ const questionsService = [
 
 const textSupport = [
   {
-    title: "Bienvenido al Soporte Técnico de Hyper Mega Red",
+    title: "Soporte Técnico - Hyper Mega Red",
     content: [
       {
         text: "Entendemos lo crucial que es contar con un soporte técnico eficiente y rápido para resolver cualquier inconveniente que puedas tener con los productos de informática. Nuestro equipo de expertos está aquí para ayudarte. A continuación, te proporcionamos información clave para facilitar el proceso de asistencia técnica:",
