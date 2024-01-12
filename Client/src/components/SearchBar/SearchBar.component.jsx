@@ -9,6 +9,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Autocomplete } from "@mui/material";
 //COMPONENTS
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
@@ -39,6 +40,22 @@ export default function SearchAppBar() {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userRole = authData ? authData.userRole : null;
+  const suggestions = [
+    "Auriculares",
+    "Coolers",
+    "Discos",
+    "Gabinetes",
+    "Memorias Ram",
+    "Monitores",
+    "Mothers",
+    "Mouses",
+    "Placas de video",
+    "Procesadores",
+    "Teclados",
+  ];
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
     dispatch(addItem());
@@ -84,6 +101,23 @@ export default function SearchAppBar() {
     }
   }, [cookieStatus]);
 
+  const handleAutocomplete = (value) => {
+    const matchingSuggestions = suggestions.filter((suggestion) =>
+      suggestion.toLowerCase().includes(value.toLowerCase())
+    );
+    setAutocompleteSuggestions(matchingSuggestions);
+    setShowAutocomplete(matchingSuggestions.length > 0);
+  };
+
+  const handleAutocompleteSelect = (selectedSuggestion) => {
+    dispatch(fetchChage(selectedSuggestion));
+    setShowAutocomplete(false);
+  };
+
+  useEffect(() => {
+    handleAutocomplete(inputName);
+  }, [inputName]);
+
   return (
     <Box
       sx={{
@@ -95,21 +129,7 @@ export default function SearchAppBar() {
         justifyContent: "center",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-      >
-        <Img
-          src={img}
-          alt="Logotipo"
-          onClick={() => {
-            navigate(PATHROUTES.HOME);
-          }}
-        />
-      </Box>
+      {/* ... (código existente) */}
       <Box
         sx={{
           mt: { xs: 2 },
@@ -121,13 +141,19 @@ export default function SearchAppBar() {
           alignItems: "center",
           ml: 5,
           mr: 5,
+          position: "relative",
         }}
       >
         <Input
           type="text"
           value={inputName}
           placeholder=" Buscador"
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+            handleAutocomplete(e.target.value);
+          }}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
           onKeyPress={handleKeyPress}
           sx={{
             width: { xs: 300, sm: 500, xl: 800 },
@@ -137,6 +163,36 @@ export default function SearchAppBar() {
           }}
           disableUnderline
         />
+        {isInputFocused && showAutocomplete && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              zIndex: 1,
+              backgroundColor: "white",
+              boxShadow: 3,
+              borderRadius: 2,
+              maxHeight: 200,
+              overflowY: "auto",
+            }}
+          >
+            {autocompleteSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                onClick={() => handleAutocompleteSelect(suggestion)}
+                style={{
+                  padding: "8px",
+                  cursor: "pointer",
+                  borderBottom: "1px solid #ccc",
+                }}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </Box>
+        )}
         <Button
           type="submit"
           onClick={handleSubmit}
@@ -257,7 +313,7 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
-      {/* <ConnectedProductBox cartItemCount={cartItemCount} /> */}
+      {/* <ConnectedProductBox cartItemCount={cartItemCount} */}
     </Box>
   );
 }
