@@ -71,8 +71,11 @@ const getAllServices = async (req, res) => {
   if (!model) {
     try {
       const servicios = await getAllServicesController();
-      if (servicios.error) {
-        return res.status(404).json(servicios.response);
+
+      if (servicios.length === 0) {
+        return res
+          .status(200)
+          .json({ message: "No hay datos cargados en la DB" });
       }
       return res.status(200).json(servicios);
     } catch (error) {
@@ -86,6 +89,7 @@ const getAllServices = async (req, res) => {
       }
       return res.status(200).json(servicios);
     } catch (error) {
+      console.log("error", error);
       res.status(500).json({ error: error.message });
     }
   }
