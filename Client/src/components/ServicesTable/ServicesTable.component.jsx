@@ -53,15 +53,8 @@ const columns = [
     headerAlign: "center",
   },
   {
-    field: "isDelete",
-    headerName: "Borrado",
-    minWidth: 300,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
     field: "technicianName",
-    headerName: "Tecnico asignado",
+    headerName: "Técnico",
     minWidth: 200,
     headerAlign: "center",
     editable: true,
@@ -69,7 +62,7 @@ const columns = [
   {
     field: "user_diagnosis",
     headerName: "Falla reportada",
-    minWidth: 300,
+    minWidth: 250,
     headerAlign: "center",
   },
   {
@@ -81,8 +74,8 @@ const columns = [
   },
   {
     field: "confirm_repair",
-    headerName: "Reparacion confirmada",
-    minWidth: 250,
+    headerName: "Confirmado",
+    minWidth: 150,
     headerAlign: "center",
   },
   {
@@ -103,6 +96,13 @@ const columns = [
     headerName: "Diagnostico final",
     minWidth: 250,
     headerAlign: "center",
+  },
+  {
+    field: "isDelete",
+    headerName: "Borrado",
+    minWidth: 150,
+    headerAlign: "center",
+    editable: true,
   },
 ];
 
@@ -218,6 +218,7 @@ const ServicesTable = () => {
         const serviceId = newRow.id;
 
         const response = await updateService(serviceId, newRow, authData.jwt);
+        
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
@@ -238,8 +239,8 @@ const ServicesTable = () => {
         } else {
           Swal.fire({
             icon: "error",
-            title: "Error al actualizar el servicio",
-            text: response.message || "Error desconocido",
+            title: "Error al actualizar",
+            text: "Hubo un error al actualizar el servicio.",
           });
         }
       }
@@ -248,14 +249,14 @@ const ServicesTable = () => {
     }
   };
 
-  const handleErrorInput = (error) => {
-    Swal.fire({
-      icon: "error",
-      title: "Error en la edición del servicio",
-      allowOutsideClick: false,
-      allowEnterKey: false,
-      text: `${error}`,
-    });
+  const handleErrorInput = () => {
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "Error en la edición",
+    //   allowOutsideClick: false,
+    //   allowEnterKey: false,
+    //   text: "Ha ocurrido un error al intentar editar el servicio.",
+    // })
   };
 
   return (
@@ -301,8 +302,11 @@ const ServicesTable = () => {
         getRowClassName={(params) => {
           return params.row.isDelete
             ? `row--deleted`
-            : params.row.carousel
-            ? `row--carousel`
+            : params.row.confirm_repair === true &&
+              params.row.status === "Servicio finalizado"
+            ? `row--finalized`
+            : params.row.confirm_repair === true
+            ? `row--accepted`
             : `row`;
         }}
         checkboxSelection
@@ -318,9 +322,10 @@ const ServicesTable = () => {
             columnVisibilityModel: {
               id: false,
               product_income_date: false,
-              status: false,
               technical_diagnosis: false,
               final_diagnosis: false,
+              isDelete: false,
+              confirm_repair: false,
             },
           },
         }}

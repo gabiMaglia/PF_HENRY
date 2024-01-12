@@ -28,7 +28,6 @@ export const fetchAllProducts = () => async (dispatch) => {
       (product) => product.is_deleted === false
     );
     dispatch(getProducts(filteredProducts));
-    // dispatch(getProducts(response.data));
   } catch (error) {
     return;
   }
@@ -270,9 +269,11 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
         Authorization: `Bearer ${jwt}`,
       },
     })
-    console.log(response.data)
+    console.log(response)
+    if(response.data){
     const orders = response.data.map((order)=> ({
       status: order.status,
+      date: order.purchaseDate,
       cartTotal: order.cartTotal,
       products: order.Products.map((product) => ({
         id: product.id,
@@ -282,7 +283,7 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       })),
     }))
     console.log(orders)
-    dispatch(getCart(orders))
+    dispatch(getCart(orders))}
   } catch (error) {
     console.log(error.message)
   }

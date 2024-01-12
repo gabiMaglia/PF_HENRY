@@ -1,7 +1,6 @@
 //HOOKS
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-
 //MATERIAL UI
 import { Box, Divider, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -14,9 +13,17 @@ import DetailProductService from "../DetailProductService/DetailProductService.c
 import ToolbarServiceProfile from "../ToolbarServiceProfile/ToolbarServiceProfile.component.jsx";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { serviceStatuses } from "../../utils/serviceStatuses.js";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
+//HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
-import { getServices } from "../../services/serviceServices";
+//SERVICES
+import {
+  getUsersByRole,
+  getUserById,
+  putUser,
+} from "../../services/userServices";
+import { filterService, getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
 
 const ProductsServicesProfile = () => {

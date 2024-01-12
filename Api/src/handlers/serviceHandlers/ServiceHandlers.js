@@ -172,7 +172,6 @@ const updateService = async (req, res) => {
     technical_diagnosis,
     final_diagnosis,
   } = req.body;
-
   try {
     const updatedService = await updateServiceController(
       id,
@@ -186,11 +185,9 @@ const updateService = async (req, res) => {
       technical_diagnosis,
       final_diagnosis
     );
-
     if (updatedService.error) {
       return res.status(404).json(updatedService.response);
     }
-
     res.status(200).json(updatedService);
   } catch (error) {
     return res.status(500).json({ error: error.message });
