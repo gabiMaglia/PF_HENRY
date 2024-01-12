@@ -10,13 +10,14 @@ import SideBar from "../SideBar/SideBar.component";
 import UserProfile from "../UserProfile/UserProfile.component";
 import ShopingProfile from "../ShoppingProfile/ShoppingProfile.component";
 import WishListProfile from "../WishListProfile/WishListProfile.component";
-
+import AnalyticsInfo from "../AnalyticsInfo/AnalyticsInfo.component";
 import ProductCreateProfile from "../ProductCreateProfile/ProductCreateProfile.component";
 import ProductsServicesProfile from "../ProductsServicesProfile/ProductServicesProfile.component";
 import CreateService from "../CreateService/CreateService.component";
 import UsersTable from "../UsersTable/UsersTable.component";
 import ProductsTable from "../ProductsTable/ProductsTable.component";
 import ServicesTable from "../ServicesTable/ServicesTable.component";
+import GetAnalyticsToken from "../utils/GetAnalyticsToken/GetAnalyticsToken";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -83,6 +84,10 @@ const UserPanelComponent = () => {
     },
     {
       path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.USERS_LIST,
+      roles: ["admin"],
+    },
+    {
+      path: PATHROUTES.ADMIN_USER_PANEL + PATHROUTES.ANALYTICS_INFO,
       roles: ["admin"],
     },
     //TECHNICIANS
@@ -242,7 +247,9 @@ const UserPanelComponent = () => {
         />
         <Route
           path={
-            userRole === "admin" ? PATHROUTES.SERVICE_CREATE : PATHROUTES.PROFILE
+            userRole === "admin"
+              ? PATHROUTES.SERVICE_CREATE
+              : PATHROUTES.PROFILE
           }
           element={userRole === "admin" ? <CreateService /> : <UserProfile />}
         />
@@ -251,6 +258,30 @@ const UserPanelComponent = () => {
             userRole === "admin" ? PATHROUTES.USERS_LIST : PATHROUTES.PROFILE
           }
           element={userRole === "admin" ? <UsersTable /> : <UserProfile />}
+        />
+        <Route
+          path={
+            userRole === "admin" ? PATHROUTES.USERS_LIST : PATHROUTES.PROFILE
+          }
+          element={userRole === "admin" ? <UsersTable /> : <UserProfile />}
+        />
+        <Route
+          path={
+            userRole === "admin"
+              ? PATHROUTES.ANALYTICS_INFO
+              : PATHROUTES.PROFILE
+          }
+          element={userRole === "admin" ? <AnalyticsInfo /> : <UserProfile />}
+        />
+        <Route
+          path={
+            userRole === "admin"
+              ? PATHROUTES.GET_ANALYTICS_TOKEN
+              : PATHROUTES.PROFILE
+          }
+          element={
+            userRole === "admin" ? <GetAnalyticsToken /> : <UserProfile />
+          }
         />
       </Routes>
       <Box
