@@ -57,8 +57,8 @@ const questionsService = [
     title: "¿Cómo puedo contratar un servicio técnico?",
     content: [
       "Tienes varias maneras de contratar un servicio técnico.",
-      "- Desde nuestro WhatsApp, haciendo click en el botón flotante.",
-      "- Desde nuestra página de soporte, completando el formulario.",
+      "- Desde nuestro <a href='https://wa.me/+5491132069043' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>WhatsApp</a> o haciendo click en el botón flotante.",
+      "- Desde nuestra página de <a href='https://pf-henry-sepia.vercel.app/support' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>soporte</a>, completando el formulario.",
       "- Desde nuestras redes sociales.",
       "- Acercandote directamente a nustro local.",
     ],
@@ -66,8 +66,8 @@ const questionsService = [
   {
     title: "¿Como sigo el estado de mi servicio?",
     content: [
-      "Puedes seguir el estado del servicio ingresando con tu usuario y contraseña al sitio y en el panel de usuario dirigirte a Productos en Servicio. Ahí tendras toda la info necesaria sobre el estado de tus productos en servicio",
-      "También recibirás notificaciones del estado de tus servicios via e-mail o WhatsApp, dependiendo de la opción que elijas como medio de comunicación al momento de contratar un servicio.",
+      "- Puedes seguir el estado del servicio ingresando con tu usuario y contraseña al sitio y en el panel de usuario dirigirte a Productos en Servicio. Ahí tendras toda la info necesaria sobre el estado de tus productos en servicio",
+      "- También recibirás notificaciones del estado de tus servicios via e-mail o <a href='https://wa.me/+5491132069043' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>WhatsApp</a>, dependiendo de la opción que elijas como medio de comunicación al momento de contratar un servicio.",
     ],
   },
   {

@@ -1,6 +1,8 @@
 require("dotenv").config();
 require("./config/passport.js");
 
+const env = process.env.NODE_ENV
+
 const express = require("express");
 const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");
@@ -18,8 +20,8 @@ server.use(express.urlencoded({ extended: true }));
 // Passport
 server.use(passport.initialize());
 // checkea quien hace cada peticion y lo muestra por consola
-server.use(sessionFlag)
-server.use(tokenRemainingTime)
+env && server.use(sessionFlag)
+env && server.use(tokenRemainingTime)
 // Entryp0nt de la ruta principal
 server.use("/", routes);
 

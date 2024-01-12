@@ -5,23 +5,59 @@ import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.c
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../../redux/slices/cartSlice";
+import { addItem, getCart } from "../../redux/slices/cartSlice";
+import { useLocalStorage } from "../../Hook/useLocalStorage";
 
 import sortCardByDate from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
-import { fetchCartUser } from "../../services/productServices";
+import {
+  fetchCartUser,
+  fetchProductCartPost,
+} from "../../services/productServices";
 
 const ShoppingProfileComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { cartUser } = useSelector((state) => state.cart);
   const cookiesAccepted = useSelector((state) => state.cookies);
+  const [storedProducts, setStoredProducts] = useLocalStorage();
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCartUser(cookiesAccepted));
-  }, []);
+  }, [dispatch]);
+
+  const handleClickShop = async (product) => {
+    const productCart = {
+      id: product.id,
+      name: product.name,
+      ProductImages: [{ address: product.image }],
+      price: product.budget,
+      ProductCategories: [{ name: product.ProductCategories[0].name }],
+      ProductBrands: [{ name: product.ProductBrands[0].name }],
+    };
+
+    setStoredProducts(productCart);
+    dispatch(addItem());
+    dispatch(fetchProductCartPost(productCart, cookieStatus));
+    Swal.fire({
+      icon: "success",
+      title: "Producto agregado exitosamente",
+      text: "El producto ha sido agregado al carrito.",
+      confirmButtonColor: "#fd611a",
+      confirmButtonText: "Ir al carrito",
+      cancelButtonText: "Seguir comprando",
+      cancelButtonColor: "green",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(PATHROUTES.SHOPCART);
+        window.scrollTo(0, 0);
+      }
+    });
+  };
 
   const handleClick = () => {
     Swal.fire({
@@ -41,7 +77,7 @@ const ShoppingProfileComponent = () => {
 
   const buttons = [
     { text: "Detalle compra", action: handleClick, color: "black" },
-    { text: "Volver a comprar", action: handleClick, color: "#fd611a" },
+    { text: "Volver a comprar", action: handleClickShop, color: "#fd611a" },
   ];
 
   useEffect(() => {
@@ -67,19 +103,12 @@ const ShoppingProfileComponent = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   let newCardsPerDates = sortCardByDate(cartUser, [...cardPerDates]);
-  //   setCardPerDates(newCardsPerDates);
-  // }, [cartUser]);
-  // console.log(cardPerDates);
-
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        justifyContent: "center",
         mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -118,10 +147,11 @@ const ShoppingProfileComponent = () => {
             <Box
               key={cartDate.date}
               sx={{
+                width: "100%",
                 border: "1px solid black",
                 borderRadius: "10px",
                 mb: "1em",
-                padding: 2,
+                padding: "1em",
               }}
             >
               <Box
@@ -140,7 +170,7 @@ const ShoppingProfileComponent = () => {
                     ml: 2,
                   }}
                 >
-                  {cartDate.date}
+                  {cartDate.date.split("T")[0]}
                 </Typography>
                 {cartDate.status && (
                   <Typography
@@ -191,7 +221,7 @@ const ShoppingProfileComponent = () => {
                     justifyContent: "center",
                   }}
                 >
-                  total: ${cartDate.cartTotal}
+                  total: {cartDate.cartTotal}
                 </Typography>
               )}
             </Box>

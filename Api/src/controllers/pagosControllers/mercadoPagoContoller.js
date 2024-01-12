@@ -5,6 +5,7 @@ const {
   ProductCart,
   OrderProduct,
   ProductStock,
+  ProductImage,
   User,
 } = require("../../db");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
@@ -20,10 +21,10 @@ const transporter = require("../../config/mailer");
 
 const hyperEmail = process.env.EMAIL_MAILER;
 
-const mercadoPago = async (array, idOrder) => {
+const mercadoPago = async (array, idUser) => {
   try {
     let body = {
-      metadata: { idOrder },
+      metadata: { idUser },
       notification_url: `${backend_Url}/pagos/mercadopago-webhook`,
       items: array,
       back_urls: {
@@ -55,73 +56,70 @@ const handlePaymentNotification = async (paymentId) => {
           },
         }
       );
-      let order;
-      let orderId;
-      if (payment?.data?.metadata?.id_order) {
-        orderId = payment.data.metadata.id_order;
-        order = await Order.findByPk(orderId, {
-          include: [
-            {
-              model: Product,
-              attributes: ["id", "name"],
-              through: {
-                model: OrderProduct,
-                attributes: ["quantity"],
-              },
-            },
-            {
-              model: User,
-              attributes: ["id", "name", "email"],
-            },
-          ],
-        });
+      let user;
+      let userId;
+      if (payment?.data?.metadata?.id_user) {
+        userId = payment.data.metadata.id_user;
+        user = await User.findByPk(userId);
 
         const cart = await Cart.findOne({
           where: {
-            UserId: order.User.dataValues.id,
+            UserId: userId,
           },
           include: [
             {
               model: Product,
-              attributes: ["id"],
+              attributes: ["id", "name", "price"],
               through: {
                 model: ProductCart,
                 attributes: ["quantity"],
               },
+              include: [
+                {
+                  model: ProductImage,
+                  attributes: ["address"],
+                },
+              ],
             },
           ],
         });
+
+        const order = await Order.create({
+          UserId: userId,
+        });
+
+        for (const product of cart.Products) {
+          const quantity = product.ProductCart.quantity;
+
+          await order.addProduct(product, { through: { quantity: quantity } });
+        }
 
         for (const product of cart.Products) {
           await cart.removeProduct(product);
         }
 
-        if (payment.data.status === "approved") {
+        if (
+          payment.data.status === "approved" ||
+          payment.data.status === "pending"
+        ) {
           if (order) {
-            const products = await order.getProducts({
-              include: ProductImage,
-            });
-            console.log(products);
             await order.update({
-              status: "Finalizado",
+              status: payment.data.status,
               cartTotal: Number(
                 payment.data.transaction_details.total_paid_amount
               ),
               paymentMethod: payment.data.payment_method.type,
             });
-            await sendOrderConfirmationEmail(
-              products,
-              order.User.dataValues.email
-            );
+            await sendOrderConfirmationEmail(cart.Products, user.email);
 
             Promise.all(
-              products.map(async (product) => {
+              cart.Products.map(async (product) => {
                 const { id, soldCount } = product;
-                const orderProduct = await OrderProduct.findOne({
-                  where: { ProductId: id, OrderId: orderId },
+                const cartProduct = await ProductCart.findOne({
+                  where: { ProductId: id, CartId: cart.id },
                 });
-                if (orderProduct) {
-                  const productQuantity = orderProduct.quantity;
+                if (cartProduct) {
+                  const productQuantity = cartProduct.quantity;
 
                   const productStock = await ProductStock.findOne({
                     where: { ProductId: id },

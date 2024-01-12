@@ -17,6 +17,7 @@ import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 import { Container } from "@mui/system";
 import miVideo from "/carousel/prueba.mp4";
 
+
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -61,7 +62,7 @@ const CardCarousel = ({ allProducts }) => {
         marginTop: "8px",
         overflow: "hidden",
         opacity: "1",
-        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 40%, rgba(26, 253, 148, 0) 90%)`,
+        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 50%, rgba(26, 253, 148, 0) 96%)`,
         visibility: "visible", // Show the component
         display: "none", // Default to hidden
         "@media (min-width: 901px)": {
@@ -142,9 +143,10 @@ const CardCarousel = ({ allProducts }) => {
                           sm: "2.8rem",
                           md: "3.2rem",
                         },
+                        letterSpacing: '8px'
                       }}
                     >
-                      {product.name}
+                      {product.name.toUpperCase()}
                     </Typography>
                   </Container>
                   <Container
@@ -156,10 +158,11 @@ const CardCarousel = ({ allProducts }) => {
                       alignContent: "flex-end",
                     }}
                   >
+                    
                     <Typography
                       variant="h4"
                       color="#ff5000"
-                      fontWeight="bold"
+                      fontWeight="medium"
                       sx={{
                         textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
                         p: "5px",
@@ -172,7 +175,8 @@ const CardCarousel = ({ allProducts }) => {
                         animation: "blink 1s infinite",
                       }}
                     >
-                      PROMOCION: {formatPrice(product.price)}
+                      
+                      OFF {formatPrice(product.price)}
                     </Typography>
                     <style jsx="true">{`
                       @keyframes blink {

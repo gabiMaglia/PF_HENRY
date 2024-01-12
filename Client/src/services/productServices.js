@@ -93,7 +93,6 @@ export const fetchProductCartPost = (product, cookiesAccepted) => async () => {
     productId: id,
     productQuantity: 1,
   };
-
   // Envio de notificaciónes a FIREBASE
   addProductToCart(product);
 
@@ -270,29 +269,28 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
-    });
-    console.log(response.data);
-    if (response.data) {
-      const orders = response.data.map((order) => ({
-        status: order.status,
-        date: order.purchaseDate.split("T")[0],
-        cartTotal: order.cartTotal,
-        paymentMethod: order.paymentMethod,
-        products: order.Products.map((product) => ({
-          id: product.id,
-          name: product.name,
-          budget: formatPrice(product.price),
-          image: product.ProductImages[0].address,
-          count: product.OrderProduct.quantity,
-        })),
-      }));
-      console.log(orders);
-      dispatch(getCart(orders));
-    }
+    })
+    if(response.data){
+    const orders = response.data.map((order)=> ({
+      status: order.status,
+      date: order.purchaseDate,
+      cartTotal: formatPrice(Number(order.cartTotal)),
+      paymentMethod: order.paymentMethod,
+      products: order.Products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        budget: product.price,
+        image: product.ProductImages[0].address,
+        count: product.OrderProduct.quantity,
+        ProductCategories: [{name: product.ProductCategories[0].name}],
+        ProductBrands: [{name: product.ProductBrands[0].name}]
+      })),
+    }))
+    dispatch(getCart(orders))}
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
   }
-};
+}
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {
