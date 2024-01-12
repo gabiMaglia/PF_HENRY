@@ -65,6 +65,8 @@ const ReviewsComponent = () => {
                 width: isMobile ? "100%" : "300px",
                 height: "400px",
                 overflow: "auto",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": { transform: "scale(1.05)" },
               }}
             >
               <Avatar
