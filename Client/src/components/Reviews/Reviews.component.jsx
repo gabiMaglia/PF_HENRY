@@ -43,7 +43,7 @@ const ReviewsComponent = () => {
           Reseñas de nuestros clientes
         </Typography>
       </Box>
-      <Box sx={{ padding: "2em", backgroundColor: "#f5f5f5" }}>
+      <Box sx={{ padding: "2em", backgroundColor: "#f5f5f5",  }}>
         <Typography variant="h4" align="center" gutterBottom></Typography>
         <Box
           sx={{
@@ -65,6 +65,8 @@ const ReviewsComponent = () => {
                 width: isMobile ? "100%" : "300px",
                 height: "400px",
                 overflow: "auto",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover":{ transform: "scale(1.05)" },
               }}
             >
               <Avatar
