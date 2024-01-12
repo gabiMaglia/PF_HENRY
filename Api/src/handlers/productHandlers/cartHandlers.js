@@ -87,7 +87,8 @@ const cartByIdHandler = async (req, res) => {
     if (cart) {
       res.status(200).json(cart);
     } else {
-      res.status(404).json({ error: `Cart ${id} was not found.` });
+      // res.status(404).json({ error: `Cart ${id} was not found.` });
+      res.status(200).json([]);
     }
   } catch (error) {
     res.status(400).json({ error: error.message });

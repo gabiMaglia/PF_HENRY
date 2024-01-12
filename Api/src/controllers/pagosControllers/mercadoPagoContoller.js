@@ -98,7 +98,10 @@ const handlePaymentNotification = async (paymentId) => {
 
         if (payment.data.status === "approved") {
           if (order) {
-            const products = await order.getProducts();
+            const products = await order.getProducts({
+              include: ProductImage,
+            });
+            console.log(products);
             await order.update({
               status: "Finalizado",
               cartTotal: Number(
@@ -146,15 +149,33 @@ const handlePaymentNotification = async (paymentId) => {
 };
 const sendOrderConfirmationEmail = async (products, userEmail) => {
   try {
+    const productsHtml = products
+      .map(
+        (product) => `
+    <div>
+      <h2>${product.name}</h2>
+
+      <h3>${product.price}</h3>
+
+    </div>
+  `
+      )
+      .join("");
+
+    const emailBody = `
+    <p>Gracias por tu compra. Aquí está el resumen de la compra:</p>
+    
+        ${productsHtml}
+        <p>${products}</p>
+
+    <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>
+  `;
+
     await transporter.sendMail({
       from: `Hyper Mega Red  ${hyperEmail}`,
       to: userEmail,
       subject: "Compra finalizada con éxito ✔",
-      html: `Gracias por tu compra. Resumen de la compra: ${JSON.stringify(
-        products,
-        null,
-        2
-      )}
+      html: `${emailBody} 
      <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
     });
   } catch (error) {

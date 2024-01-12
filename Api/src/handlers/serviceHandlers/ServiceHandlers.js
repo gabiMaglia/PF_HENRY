@@ -9,6 +9,7 @@ const {
   DeleteServiceController,
   GetUndeletedServicesController,
   updateServiceController,
+  logicalDeleteServiceController
 } = require("../../controllers/serviceControllers/serviceController");
 
 //HANDLE ADD SERVICE
@@ -71,8 +72,11 @@ const getAllServices = async (req, res) => {
   if (!model) {
     try {
       const servicios = await getAllServicesController();
-      if (servicios.error) {
-        return res.status(404).json(servicios.response);
+
+      if (servicios.length === 0) {
+        return res
+          .status(200)
+          .json({ message: "No hay datos cargados en la DB" });
       }
       return res.status(200).json(servicios);
     } catch (error) {
@@ -86,6 +90,7 @@ const getAllServices = async (req, res) => {
       }
       return res.status(200).json(servicios);
     } catch (error) {
+      console.log("error", error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -194,6 +199,20 @@ const updateService = async (req, res) => {
   }
 };
 
+//HANDLE LOGICAL DELETE SERVICE
+const logicalDelete = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await logicalDeleteServiceController(id);
+    if (result.error) {
+      res.status(400).json({ error: result.response });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
@@ -204,4 +223,5 @@ module.exports = {
   getUndeletedService,
   deleteService,
   updateService,
+  logicalDelete
 };
