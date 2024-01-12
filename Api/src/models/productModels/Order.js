@@ -16,8 +16,7 @@ module.exports = (sequelize) => {
     userEmail: {
       type: DataTypes.STRING,
       allowNull: true,
-      isEmail: true,
-      unique: true,
+      unique: false,
     },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
@@ -49,6 +48,10 @@ module.exports = (sequelize) => {
     },
     customerNotes: {
       type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    purchaseDate: {
+      type: DataTypes.DATE,
       allowNull: true,
     },
 

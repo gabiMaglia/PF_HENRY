@@ -52,7 +52,7 @@ async function createOrder(
     const order = await Order.create({
       id: idOrder,
       UserId: userId,
-      userEmail,
+      // userEmail,
       totalAmount,
       shippingAddress: shippingAddress ?? null,
       paymentMethod,
@@ -61,6 +61,7 @@ async function createOrder(
       shippingDetails: shippingDetails ?? null,
       customerNotes: customerNotes ?? null,
       preferenceId,
+      purchaseDate: new Date(),
     });
     await Promise.all(
       cart.Products.map(async (product) => {
@@ -82,9 +83,6 @@ async function createOrder(
       ],
     });
 
-    for (const product of cart.Products) {
-      await cart.removeProduct(product);
-    }
     return newOrder;
   } catch (error) {
     console.error(error);
@@ -152,7 +150,7 @@ const getMisCompras = async (userId) => {
   try {
     const userOrders = await Order.findAll({
       where: { UserId: userId },
-      attributes: ["status", "cartTotal"],
+      attributes: ["status", "cartTotal", "paymentMethod", "purchaseDate"],
       include: [
         {
           model: Product,
