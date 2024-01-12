@@ -94,9 +94,8 @@ const refreshSessionHandler = async (req, res) => {
 const logoutHandler = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-  
     await logOutUser(token)
-    return res.status(200).send("Ha cerrado sesion correctamente");
+    return res.status(200).send(`Ha cerrado sesion correctamente`);
   } catch (error) {
     return res.status(500).json(error.message);
   }

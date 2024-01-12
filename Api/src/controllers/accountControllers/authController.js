@@ -143,7 +143,8 @@ const logOutUser = async(token) => {
   const badToken = await BlackListedTokens.findOrCreate({
     where: { token: token.split(" ").pop() },
   });
-  return badToken
+  
+  return badToken[0].token
 
 
 }
