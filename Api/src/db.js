@@ -22,7 +22,7 @@ const WishListModel = require("./models/productModels/WishList");
 const CartModel = require("./models/productModels/Cart");
 const OrderModel = require("./models/productModels/Order");
 const ProductCartModel = require("./models/productModels/ProductCart");
-
+const HistoryModel=require("./models/userModels/UserHistory")
 // Inicializacion de la instancia de sequelize
 const OrderProductModel = require("./models/productModels/OrderProduct");
 
@@ -44,6 +44,7 @@ ServiceStatusModel(sequelize);
 ServiceImageModel(sequelize);
 ServiceModel(sequelize);
 WishListModel(sequelize);
+HistoryModel(sequelize)
 
 // INICIALIZAMOS LOS MODELOS PRODUCT
 ProductModel(sequelize);
@@ -77,6 +78,7 @@ const {
   Order,
   ProductCart,
   OrderProduct,
+  History
 } = sequelize.models;
 
 // Creacion del session store encargado de guardar en la base de datos las sesiones
@@ -120,6 +122,10 @@ WishList.belongsTo(User);
 
 WishList.belongsToMany(Product, { through: "WishlistProduct" });
 Product.belongsToMany(WishList, { through: "WishlistProduct" });
+
+//HISTORY
+User.hasMany(History)
+History.belongsTo(User)
 
 //CART
 Cart.belongsTo(User);
