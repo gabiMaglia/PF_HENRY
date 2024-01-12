@@ -35,7 +35,7 @@ export const getUserCode = async () => {
     popup.window.opener = window;
   } catch {
     (error) => {
-      return error;
+      return { error: true };
     };
   }
 };
@@ -45,9 +45,10 @@ export const getTokenAccess = async (authCode) => {
     ...credentials.web,
     grant_type: "authorization_code",
     code: authCode,
+    redirect_uri: `${frontUrl}/admin/userPanel/analyticsToken`,
   };
   try {
-    const respuestaToken = await axios.post(
+    const responseToken = await axios.post(
       "https://oauth2.googleapis.com/token",
       new URLSearchParams(actualCredentials),
       {
@@ -56,14 +57,62 @@ export const getTokenAccess = async (authCode) => {
         },
       }
     );
+    if (responseToken.status !== 200) {
+      return { error: true };
+    } else {
+      const tokenAccess = responseToken.data.access_token;
+      const refreshToken = responseToken.data.refresh_token;
 
-    const tokenAccess = respuestaToken.data.access_token;
-    const refreshToken = respuestaToken.data.refresh_token;
-
-    console.log("Token de acceso:", tokenAccess);
-    console.log("Refresh token:", refreshToken);
-    return { tokenAccess, refreshToken };
+      return { tokenAccess, refreshToken };
+    }
   } catch (error) {
-    return error;
+    return { error: true };
   }
 };
+
+export const getAnalyticsData = async (tokenAccess) => {
+  try {
+    console.log(tokenAccess);
+    const response = await axios.post(
+      "https://analyticsreporting.googleapis.com/v4/reports:batchGet",
+      {
+        reportRequests: [
+          {
+            viewId: import.meta.env.VITE_REPORTING_ANALYTICS_VIEW_ID,
+            dateRanges: [
+              {
+                startDate: "7daysAgo",
+                endDate: "today",
+              },
+            ],
+            metrics: [
+              {
+                expression: "ga:pageviews",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokenAccess}`,
+        },
+      }
+    );
+    if (response.status !== 200) {
+      console.log(response);
+      return { error: true };
+    } else {
+      console.log(response);
+      return response;
+    }
+  } catch (error) {
+    console.log(error);
+    return { error: true };
+  }
+};
+
+// {
+//   "tokenAccess": "ya29.a0AfB_byBFDZZQnCb0RL9NDULG4tKi03scf1yq3oy1KWl8da_0QRdFv1GcDpSdnMnRalKW2iX8IWBF-7hGChFNMkJHrIDrsjqQIIxKp1RwD8rOq0BMCQCbo7A4NkeOopo3JGhlPNfaWBfNGNWA7ouYr4ar7aZR5fTLgfaAaCgYKAU4SARISFQHGX2MiLewJp1iXUkTMs4R5n3s5Kg0171",
+//   "refreshToken": "1//0hQXtvJy98segCgYIARAAGBESNwF-L9IrwC7Zx6o1li7yJf8SHBSUQY6SKxapW7OSGmlAiVRFt0dpGpiYz9-PrMQcvt-u0o5fbyg"
+// }
