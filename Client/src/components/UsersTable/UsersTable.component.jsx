@@ -323,11 +323,8 @@ const UsersTable = () => {
           columns: {
             columnVisibilityModel: {
               id: false,
-              telephone: false,
-              isActive: false,
               isVerified: false,
               isDeleted: false,
-              communication_preference: false,
             },
           },
           filter: {
