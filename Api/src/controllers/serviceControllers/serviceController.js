@@ -84,8 +84,7 @@ const addServiceController = async (
             from: `Hyper Mega Red  ${destinationEmail}`,
             to: clientObj.email, // list of receivers
             subject: "ingreso a servicio ✔",
-            html: 
-            `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
+            html: `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
             <a href="${hypermegared}"><img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/></a>
             `,
           });
@@ -347,6 +346,21 @@ const updateServiceController = async (
   }
 };
 
+//LOGICAL DELETE SERVICE
+const logicalDeleteServiceController = async (id) => {
+  if (!id) {
+    return { error: true, response: "El id es requerido" };
+  }
+  const service = await Service.findByPk(id);
+  if (!service) {
+    return { error: true, response: "Servicio no encontrado" };
+  }
+  await service.update({ isDelete: !service.isDelete });
+  return `${service.product_model} ${
+    service.isDelete ? " activado" : " desactivado"
+  } `;
+};
+
 module.exports = {
   addServiceController,
   updateServiceStatusController,
@@ -358,4 +372,5 @@ module.exports = {
   DeleteServiceController,
   GetUndeletedServicesController,
   updateServiceController,
+  logicalDeleteServiceController
 };

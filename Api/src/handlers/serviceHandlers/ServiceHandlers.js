@@ -9,6 +9,7 @@ const {
   DeleteServiceController,
   GetUndeletedServicesController,
   updateServiceController,
+  logicalDeleteServiceController
 } = require("../../controllers/serviceControllers/serviceController");
 
 //HANDLE ADD SERVICE
@@ -198,6 +199,20 @@ const updateService = async (req, res) => {
   }
 };
 
+//HANDLE LOGICAL DELETE SERVICE
+const logicalDelete = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await logicalDeleteServiceController(id);
+    if (result.error) {
+      res.status(400).json({ error: result.response });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   addServiceHandler,
   updateServiceStatus,
@@ -208,4 +223,5 @@ module.exports = {
   getUndeletedService,
   deleteService,
   updateService,
+  logicalDelete
 };
