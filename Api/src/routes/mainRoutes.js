@@ -13,6 +13,7 @@ const googleReviewsRoutes = require("./googleRouter/googleReviewsRouter");
 const userRoutes = require("./userRouter/userRouter");
 const userRoleRoutes = require("./userRouter/userRoleRouter");
 const userCredentialsRoutes = require("./userRouter/userCredentialsRouter");
+const userHistoryRoutes=require('./userRouter/userHistoryRouter')
 // MAIL ROUTERS
 const mailRouter = require("./mailingRouter/mailRouter");
 // PRODUCT ROUTERS
@@ -38,22 +39,35 @@ mainRouter.use("/auth", googleRouter);
 mainRouter.use("/places", googleReviewsRoutes);
 // UserRoutes
 mainRouter.use("/user", userRoutes);
-mainRouter.use("/user_role", checkAuthToken,  userRoleRoutes);
+mainRouter.use("/user_role", checkAuthToken, userRoleRoutes);
 mainRouter.use("/user_credentials", userCredentialsRoutes);
+mainRouter.use('/history',userHistoryRoutes)
 // MailingRoute
 mainRouter.use("/mailer/", mailRouter);
 // ProductRoute
 mainRouter.use("/product", productRouter);
 mainRouter.use("/brand", brandRouter);
 mainRouter.use("/category", categoryRouter);
-mainRouter.use("/stock", stockRouter);  
+mainRouter.use("/stock", stockRouter);
 mainRouter.use("/image", imageRouter);
 mainRouter.use("/search", searchBarRouter);
 mainRouter.use("/filter", filterRouter);
 mainRouter.use("/order", orderRouter);
-mainRouter.use("/pagos", checkAuthToken, pagosRouter);
-mainRouter.use("/cart", checkAuthToken, checkRoleAuthToken(['customer']), cartRouter);
-mainRouter.use("/wishList", checkAuthToken, checkRoleAuthToken(['customer']), WishListRouter);
+
+mainRouter.use("/pagos", pagosRouter);
+
+mainRouter.use(
+  "/cart",
+  checkAuthToken,
+  checkRoleAuthToken(["customer"]),
+  cartRouter
+);
+mainRouter.use(
+  "/wishList",
+  checkAuthToken,
+  checkRoleAuthToken(["customer"]),
+  WishListRouter
+);
 // ServicesRoute
 mainRouter.use("/service", checkAuthToken, serviceRouter);
 

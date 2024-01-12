@@ -1,4 +1,12 @@
-const { Order, Product, OrderProduct, ProductStock } = require("../../db");
+const {
+  Order,
+  Product,
+  Cart,
+  ProductCart,
+  OrderProduct,
+  ProductStock,
+  User,
+} = require("../../db");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
 const frontend_Url = process.env.FRONTEND_URL;
 const miAccessToken = process.env.MP_ACCESS_TOKEN;
@@ -38,7 +46,6 @@ const mercadoPago = async (array, idOrder) => {
 const handlePaymentNotification = async (paymentId) => {
   try {
     if (paymentId?.type === "payment") {
-      console.log(paymentId);
       const payment = await axios.get(
         `https://api.mercadopago.com/v1/payments/${paymentId.data.id}`,
         {
@@ -48,9 +55,11 @@ const handlePaymentNotification = async (paymentId) => {
           },
         }
       );
-      if (payment.data.status === "approved") {
-        const orderId = payment.data.metadata.id_order;
-        const order = await Order.findByPk(orderId, {
+      let order;
+      let orderId;
+      if (payment?.data?.metadata?.id_order) {
+        orderId = payment.data.metadata.id_order;
+        order = await Order.findByPk(orderId, {
           include: [
             {
               model: Product,
@@ -60,44 +69,74 @@ const handlePaymentNotification = async (paymentId) => {
                 attributes: ["quantity"],
               },
             },
+            {
+              model: User,
+              attributes: ["id", "name", "email"],
+            },
           ],
         });
 
-        if (order) {
-          const products = await order.getProducts();
+        const cart = await Cart.findOne({
+          where: {
+            UserId: order.User.dataValues.id,
+          },
+          include: [
+            {
+              model: Product,
+              attributes: ["id"],
+              through: {
+                model: ProductCart,
+                attributes: ["quantity"],
+              },
+            },
+          ],
+        });
 
-          await order.update({
-            status: "Finalizado",
-            cartTotal: Number(
-              payment.data.transaction_details.total_paid_amount
-            ),
-          });
+        for (const product of cart.Products) {
+          await cart.removeProduct(product);
+        }
 
-          Promise.all(
-            products.map(async (product) => {
-              const { id, soldCount } = product;
-              const orderProduct = await OrderProduct.findOne({
-                where: { ProductId: id, OrderId: orderId },
-              });
-              if (orderProduct) {
-                const productQuantity = orderProduct.quantity;
+        if (payment.data.status === "approved") {
+          if (order) {
+            const products = await order.getProducts();
+            await order.update({
+              status: "Finalizado",
+              cartTotal: Number(
+                payment.data.transaction_details.total_paid_amount
+              ),
+              paymentMethod: payment.data.payment_method.type,
+            });
+            await sendOrderConfirmationEmail(
+              products,
+              order.User.dataValues.email
+            );
 
-                const productStock = await ProductStock.findOne({
-                  where: { ProductId: id },
+            Promise.all(
+              products.map(async (product) => {
+                const { id, soldCount } = product;
+                const orderProduct = await OrderProduct.findOne({
+                  where: { ProductId: id, OrderId: orderId },
                 });
+                if (orderProduct) {
+                  const productQuantity = orderProduct.quantity;
 
-                if (productStock) {
-                  await productStock.update({
-                    amount: productStock.amount - productQuantity,
+                  const productStock = await ProductStock.findOne({
+                    where: { ProductId: id },
                   });
 
-                  await product.update({
-                    soldCount: soldCount + productQuantity,
-                  });
+                  if (productStock) {
+                    await productStock.update({
+                      amount: productStock.amount - productQuantity,
+                    });
+
+                    await product.update({
+                      soldCount: soldCount + productQuantity,
+                    });
+                  }
                 }
-              }
-            })
-          );
+              })
+            );
+          }
         }
       }
     }
@@ -105,11 +144,11 @@ const handlePaymentNotification = async (paymentId) => {
     console.error("Error al manejar la notificación de pago:", error);
   }
 };
-const sendOrderConfirmationEmail = async (order, products) => {
+const sendOrderConfirmationEmail = async (products, userEmail) => {
   try {
     await transporter.sendMail({
       from: `Hyper Mega Red  ${hyperEmail}`,
-      to: order.userEmail,
+      to: userEmail,
       subject: "Compra finalizada con éxito ✔",
       html: `Gracias por tu compra. Resumen de la compra: ${JSON.stringify(
         products,
