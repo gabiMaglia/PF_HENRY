@@ -72,7 +72,6 @@ export const getTokenAccess = async (authCode) => {
 
 export const getAnalyticsData = async (tokenAccess) => {
   try {
-    console.log(tokenAccess);
     const response = await axios.post(
       "https://analyticsreporting.googleapis.com/v4/reports:batchGet",
       {
@@ -81,13 +80,18 @@ export const getAnalyticsData = async (tokenAccess) => {
             viewId: import.meta.env.VITE_REPORTING_ANALYTICS_VIEW_ID,
             dateRanges: [
               {
-                startDate: "7daysAgo",
+                startDate: "30daysAgo",
                 endDate: "today",
+              },
+            ],
+            dimensions: [
+              {
+                name: "ga:productName", // Reemplaza con la dimensión que usaste para 'eventCategory'
               },
             ],
             metrics: [
               {
-                expression: "ga:pageviews",
+                expression: "ga:productDetailViews",
               },
             ],
           },
@@ -111,8 +115,3 @@ export const getAnalyticsData = async (tokenAccess) => {
     return { error: true };
   }
 };
-
-// {
-//   "tokenAccess": "ya29.a0AfB_byBFDZZQnCb0RL9NDULG4tKi03scf1yq3oy1KWl8da_0QRdFv1GcDpSdnMnRalKW2iX8IWBF-7hGChFNMkJHrIDrsjqQIIxKp1RwD8rOq0BMCQCbo7A4NkeOopo3JGhlPNfaWBfNGNWA7ouYr4ar7aZR5fTLgfaAaCgYKAU4SARISFQHGX2MiLewJp1iXUkTMs4R5n3s5Kg0171",
-//   "refreshToken": "1//0hQXtvJy98segCgYIARAAGBESNwF-L9IrwC7Zx6o1li7yJf8SHBSUQY6SKxapW7OSGmlAiVRFt0dpGpiYz9-PrMQcvt-u0o5fbyg"
-// }

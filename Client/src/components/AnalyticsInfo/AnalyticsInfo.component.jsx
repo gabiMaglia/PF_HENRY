@@ -5,16 +5,27 @@ import {
   getAnalyticsData,
 } from "../../services/reportingAnalyticsServices";
 import { useEffect, useState } from "react";
+import {
+  setAuthDataCookie,
+  getAuthDataCookie,
+} from "../../utils/cookiesFunctions";
 
 const AnalyticsInfo = () => {
+  const tokens = getAuthDataCookie("analytics");
+
   const [authCode, setAuthCode] = useState("");
 
+  const getAllAnalyticsData = async () => {
+    if (tokens) {
+      const response = await getAnalyticsData(tokens.tokenAccess);
+    }
+  };
+
   const getTokens = async () => {
-    if (authCode) {
+    if (authCode && !tokens) {
       const tokens = await getTokenAccess(authCode);
       if (!tokens.error) {
-        console.log(tokens);
-        const response = await getAnalyticsData(tokens.tokenAccess);
+        setAuthDataCookie("analytics", tokens);
       }
     }
   };
@@ -25,11 +36,9 @@ const AnalyticsInfo = () => {
     if (param) {
       setAuthCode(param);
     }
-  }, []);
-
-  useEffect(() => {
     getTokens();
-  }, [authCode]);
+    getAllAnalyticsData();
+  }, []);
 
   return (
     <Box>
