@@ -196,7 +196,7 @@ export const fetchCartMercadoPago =
     }));
     try {
       const response = await axios.post(
-        `${urlBack}/pagos/order`,
+        `${urlBack}/pagos`,
         { array: products, userId: userId },
 
         {
