@@ -90,7 +90,6 @@ const addServiceController = async (
             `,
           });
         }
-
         //corta envio
         return createdService;
       } else {
@@ -154,10 +153,7 @@ const updateServiceStatusController = async (id, field, value) => {
 const getAllServicesController = async () => {
   const services = await Service.findAll();
   if (services.length === 0) {
-    return {
-      error: true,
-      response: "error service not found",
-    };
+    return [];
   }
   const arrayOfServices = await Promise.all(
     services.map(async (service) => {
@@ -181,11 +177,9 @@ const getAllServicesController = async () => {
         serviceWithNames.dataValues.clientEmail = clientEmail;
         serviceWithNames.dataValues.technicianName = technicianName;
       }
-
       return serviceWithNames;
     })
   );
-
   return arrayOfServices;
 };
 

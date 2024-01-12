@@ -33,6 +33,11 @@ export const getServices = async (id, jwt) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+
+    if(response.status === 404){
+      return { data: [] }
+    }
+    
     return response;
   } catch (error) {
     return { error };

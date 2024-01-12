@@ -126,6 +126,18 @@ const ServicesTable = () => {
   const getAllServices = async () => {
     try {
       const response = await getServices(false, authData.jwt);
+      if (
+        !response.data ||
+        !Array.isArray(response.data) ||
+        response.data.length === 0
+      ) {
+        Swal.fire({
+          icon: "warning",
+          title: "No se encontaron datos en la DB",
+          text: "Por favor, verifica que tengas servicios cargados.",
+        });
+        return;
+      }
       const newServices = response.data.map((service) => {
         return {
           id: service.id,
@@ -145,8 +157,8 @@ const ServicesTable = () => {
       });
       setServices(newServices);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      setError("Error al obtener productos");
+      console.error("Error fetching services:", error);
+      setError("Error al obtener servicios");
     } finally {
       setLoading(false);
     }
@@ -218,7 +230,7 @@ const ServicesTable = () => {
         const serviceId = newRow.id;
 
         const response = await updateService(serviceId, newRow, authData.jwt);
-        
+
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
