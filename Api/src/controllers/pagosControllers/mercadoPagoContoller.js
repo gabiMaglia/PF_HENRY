@@ -98,7 +98,10 @@ const handlePaymentNotification = async (paymentId) => {
 
         if (payment.data.status === "approved") {
           if (order) {
-            const products = await order.getProducts();
+            const products = await order.getProducts({
+              include: ProductImage,
+            });
+            console.log(products);
             await order.update({
               status: "Finalizado",
               cartTotal: Number(
@@ -149,27 +152,22 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
     const productsHtml = products
       .map(
         (product) => `
-    <tr>
-      <td>${product.name}</td>
-      <td>${product.price}</td>
-    </tr>
+    <div>
+      <h2>${product.name}</h2>
+
+      <h3>${product.price}</h3>
+
+    </div>
   `
       )
       .join("");
 
     const emailBody = `
     <p>Gracias por tu compra. Aquí está el resumen de la compra:</p>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Nombre del Producto</th>
-          <th>Precio</th>
-        </tr>
-      </thead>
-      <tbody>
+    
         ${productsHtml}
-      </tbody>
-    </table>
+        <p>${products}</p>
+
     <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>
   `;
 
