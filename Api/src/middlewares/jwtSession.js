@@ -24,7 +24,7 @@ const sessionFlag = (req, res, next) => {
   next();
 };
 
-const refreshTokenCheck = (req, res, next) => {
+const tokenRemainingTime = (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization;
     const decodedTOken = verifyToken(token.split(" ").pop());
@@ -43,5 +43,5 @@ const refreshTokenCheck = (req, res, next) => {
 
 module.exports = {
   sessionFlag,
-  refreshTokenCheck,
+  tokenRemainingTime,
 };

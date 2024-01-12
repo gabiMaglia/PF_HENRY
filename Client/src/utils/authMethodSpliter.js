@@ -35,8 +35,8 @@ export const getDataFromSelectedPersistanceMethod = (cookieStatus) => {
 };
 
 export const clearPersistanceData = (cookieStatus, bool) => {
-  rejectCookies(bool);
-  if (!cookieStatus) {
+  if (cookieStatus) rejectCookies(bool);
+  else {
       window.localStorage.removeItem("jwt"),
       window.localStorage.removeItem("login"),
       window.localStorage.removeItem("userId"),

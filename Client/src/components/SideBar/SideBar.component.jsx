@@ -17,16 +17,21 @@ import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
+import { clearPersistanceData, getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter.js";
+import { logOutUser } from "../../services/authServices.js";
 
 const SideBar = () => {
   const dispatch = useDispatch();
   const { name, surname } = useSelector((state) => state.user);
-
+  
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+  
   const items = UserPanelItems(name, surname);
 
-  const logout = () => {
-    removeAuthDataCookie("authData");
-    removeAuthDataCookie("jwt");
+  const logout = async (authData) => {
+    clearPersistanceData(cookieStatus)
+    await logOutUser(authData.jwt)
     dispatch(logoutUser());
   };
 
@@ -81,7 +86,7 @@ const SideBar = () => {
               }}
               onClick={() => {
                 if (item.action === "logout") {
-                  logout();
+                  logout(authData);
                 }
               }}
             >

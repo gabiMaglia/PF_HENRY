@@ -3,7 +3,14 @@ const {
   sendConfirmationEmail,
 } = require("../../utils/sendConfirmationEmail.js");
 const { tokenSign, refreshToken } = require("../../jwt/tokenGenerator.js");
-const { UserAddress, UserCredentials, User, UserRole } = require("../../db.js");
+const {
+  UserAddress,
+  UserCredentials,
+  User,
+  UserRole,
+  BlackListedTokens,
+} = require("../../db.js");
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -12,13 +19,13 @@ const confirmAccountController = async (token) => {
   if (!tokenDecode.userID) {
     return {
       error: true,
-      response: "Invalid username or password",
+      response: "Credenciales incorrectas",
     };
   } else {
     const user = await User.findByPk(tokenDecode.userID);
     user.update({ isActive: true, isVerified: true });
     return {
-      response: `${user.name} succesfully autenticated`,
+      response: `${user.name} se encuentra correctamente autenticado`,
     };
   }
 };
@@ -105,7 +112,7 @@ const loginUser = async (user) => {
   }
   if (!user.isActive) {
     return {
-      resendMail:true,
+      resendMail: true,
       error: true,
       response:
         "El usuario no se encuentra activo, verifique su casilla de correo para verificar su direccion de email",
@@ -113,7 +120,7 @@ const loginUser = async (user) => {
   }
   const { role_name } = await UserRole.findByPk(user.rolId);
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
-  const tokenSession = await tokenSign(user.id, user.username, role_name);
+  const tokenSession = tokenSign(user.id, user.username, role_name);
   // RETORNAMOS AL FRONTEND EL TOKEN EL USUARIO Y EL ROL Y LA VERIFICACION DE MATCH DE PASSWORDS
   return {
     login: true,
@@ -122,10 +129,23 @@ const loginUser = async (user) => {
     user: `${user.name} ${user.surname}`,
   };
 };
-const refreshSession = (token) => {
- const newToken = refreshToken(token)
- if (newToken) return newToken;
- else return {error: true , message: 'TokenVencido' } 
+const refreshSession = async (token) => {
+  const newToken = refreshToken(token);
+  if (newToken) {
+    await BlackListedTokens.findOrCreate({
+      where: { token: token.split(" ").pop() },
+    });
+    return newToken;
+  } else return { error: true, message: "TokenVencido" };
+};
+
+const logOutUser = async(token) => {
+  const badToken = await BlackListedTokens.findOrCreate({
+    where: { token: token.split(" ").pop() },
+  });
+  return badToken
+
+
 }
 
 const sendEmailToResetPassword = async () => {};
@@ -147,15 +167,16 @@ const deleteActivateUserById = async (id) => {
   const newState = user.isDeleted;
   user.update({ isDeleted: !newState });
   return {
-    response: `${user.name} ${newState && 'Dado de alta' || 'Eliminado'}`,
+    response: `${user.name} ${(newState && "Dado de alta") || "Eliminado"}`,
   };
 };
 
 module.exports = {
   registerUser,
   loginUser,
+  refreshSession,
+  logOutUser,
   confirmAccountController,
   resetPassword,
-  refreshSession,
   deleteActivateUserById,
 };
