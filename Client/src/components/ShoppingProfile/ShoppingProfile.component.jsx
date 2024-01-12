@@ -14,15 +14,14 @@ import { fetchCartUser } from "../../services/productServices";
 const ShoppingProfileComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [cardPerDates, setCardPerDates] = useState([]);
   const { cartUser } = useSelector((state) => state.cart);
   const cookiesAccepted = useSelector((state) => state.cookies);
-  console.log(cartUser);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCartUser(cookiesAccepted));
-  }, []);
+  }, [dispatch]);
 
   const handleClick = () => {
     Swal.fire({
@@ -68,19 +67,12 @@ const ShoppingProfileComponent = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   let newCardsPerDates = sortCardByDate(cartUser, [...cardPerDates]);
-  //   setCardPerDates(newCardsPerDates);
-  // }, [cartUser]);
-  // console.log(cardPerDates);
-
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        justifyContent: "center",
         mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -119,30 +111,45 @@ const ShoppingProfileComponent = () => {
             <Box
               key={cartDate.date}
               sx={{
+                width: "100%",
                 border: "1px solid black",
                 borderRadius: "10px",
                 mb: "1em",
+                padding: "1em",
               }}
             >
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", pl: "1em", pt: "1em" }}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  mt: 1,
+                }}
               >
-                {cartDate.date}
-              </Typography>
-              {cartDate.status && (
                 <Typography
                   variant="body2"
-                  color="text.primary"
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
+                    fontWeight: "bold",
                     fontSize: 18,
+                    ml: 2,
                   }}
                 >
-                  Estado: {cartDate.status}
+                  {cartDate.date.split("T")[0]}
                 </Typography>
-              )}
+                {cartDate.status && (
+                  <Typography
+                    variant="body2"
+                    color="text.primary"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: 18,
+                      ml: 64,
+                    }}
+                  >
+                    Estado: {cartDate.status}
+                  </Typography>
+                )}
+              </Box>
               {cartDate.products.map((card, index) => {
                 return (
                   <Box
@@ -167,8 +174,18 @@ const ShoppingProfileComponent = () => {
                 );
               })}
               {cartDate.cartTotal && (
-                <Typography variant="body2" color="text.primary">
-                  total: ${cartDate.cartTotal}
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    ml: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  total: {cartDate.cartTotal}
                 </Typography>
               )}
             </Box>

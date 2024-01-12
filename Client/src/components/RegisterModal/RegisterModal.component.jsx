@@ -14,6 +14,9 @@ import {
 import CancelIcon from "@mui/icons-material/Cancel";
 //HELPERS
 import { userRegisterValidate } from "../../helpers/userValidate";
+//STYLES
+import "../../alertStyles.css";
+//SERVICES
 //REDUX
 import { registerUser } from "../../services/authServices";
 //SWEET ALERT

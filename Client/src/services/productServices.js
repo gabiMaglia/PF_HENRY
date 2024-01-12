@@ -17,7 +17,6 @@ import { idShop, getCart } from "../redux/slices/cartSlice";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
-import { useSelector } from "react-redux";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
@@ -231,7 +230,7 @@ export const fetchAddProduct = async (obj, dispatch, jwt) => {
 
 export const logicalDeleteProduct = async (id, jwt) => {
   try {
-    const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`, {
+    const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`, null, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -261,6 +260,9 @@ export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
 
 export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
   const aux = getDataFromSelectedPersistanceMethod(cookieAccepted);
+  const formatPrice = (price) => {
+    return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+  };
 
   const { userId, jwt } = aux;
   try {
@@ -270,18 +272,22 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       },
     })
     console.log(response.data)
+    if(response.data){
     const orders = response.data.map((order)=> ({
       status: order.status,
-      cartTotal: order.cartTotal,
+      date: order.purchaseDate,
+      cartTotal: formatPrice(Number(order.cartTotal)),
+      paymentMethod: order.paymentMethod,
       products: order.Products.map((product) => ({
         id: product.id,
         name: product.name,
-        price: product.price,
+        budget: formatPrice(product.price),
         image: product.ProductImages[0].address,
+        count: product.OrderProduct.quantity
       })),
     }))
     console.log(orders)
-    dispatch(getCart(orders))
+    dispatch(getCart(orders))}
   } catch (error) {
     console.log(error.message)
   }

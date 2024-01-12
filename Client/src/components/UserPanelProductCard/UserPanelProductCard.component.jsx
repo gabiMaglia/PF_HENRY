@@ -48,12 +48,14 @@ const UserPanelProductCard = ({
           sx={{
             cursor: "pointer",
             transition: "transform 0.3s",
+            border: "1px solid black",
+            borderRadius: "5px",
             "&:hover": {
               transform: "scale(1.1)",
             },
             ml: ".5em",
-            width: "8em",
-            height: "5em",
+            width: "6em",
+            height: "6em",
             objectFit: "contain",
             [theme.breakpoints.down("sm")]: {
               width: "6em",
@@ -103,6 +105,19 @@ const UserPanelProductCard = ({
               {product.name}
             </Typography>
           )}
+          {product.count && (
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: "bold",
+                [theme.breakpoints.down("sm")]: {
+                  fontSize: ".8em",
+                },
+              }}
+            >
+              cantidad: {product.count}
+            </Typography>
+          )}
           {product.budget && (
             <Typography
               variant="body2"
@@ -117,7 +132,7 @@ const UserPanelProductCard = ({
                 },
               }}
             >
-              {product.budget}
+              precio: {product.budget}
             </Typography>
           )}
           {product.state && (
@@ -189,4 +204,3 @@ const UserPanelProductCard = ({
 };
 
 export default UserPanelProductCard;
-

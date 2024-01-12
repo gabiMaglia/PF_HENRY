@@ -15,7 +15,7 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //SERVICES
-import { getServices, updateService } from "../../services/serviceServices";
+import { getServices, updateService, logicalDeleteService } from "../../services/serviceServices";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
 import Swal from "sweetalert2";
@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 const columns = [
   {
     field: "id",
-    headerName: "ID",
+    headerName: "ID Servicio",
     minWidth: 300,
     headerAlign: "center",
   },
@@ -53,11 +53,17 @@ const columns = [
     headerAlign: "center",
   },
   {
+    field: "technicianId",
+    headerName: "ID Técnico ",
+    minWidth: 300,
+    headerAlign: "center",
+    editable: true,
+  },
+  {
     field: "technicianName",
     headerName: "Técnico",
     minWidth: 200,
     headerAlign: "center",
-    editable: true,
   },
   {
     field: "user_diagnosis",
@@ -126,6 +132,18 @@ const ServicesTable = () => {
   const getAllServices = async () => {
     try {
       const response = await getServices(false, authData.jwt);
+      if (
+        !response.data ||
+        !Array.isArray(response.data) ||
+        response.data.length === 0
+      ) {
+        Swal.fire({
+          icon: "warning",
+          title: "No se encontaron datos en la DB",
+          text: "Por favor, verifica que tengas servicios cargados.",
+        });
+        return;
+      }
       const newServices = response.data.map((service) => {
         return {
           id: service.id,
@@ -134,6 +152,7 @@ const ServicesTable = () => {
           product_model: service.product_model,
           product_income_date: service.product_income_date,
           isDelete: service.isDelete,
+          technicianId: service.technicianId,
           technicianName: service.technicianName,
           user_diagnosis: service.Service_status?.user_diagnosis,
           budget: service.Service_status?.budget,
@@ -145,8 +164,8 @@ const ServicesTable = () => {
       });
       setServices(newServices);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      setError("Error al obtener productos");
+      console.error("Error fetching services:", error);
+      setError("Error al obtener servicios");
     } finally {
       setLoading(false);
     }
@@ -176,7 +195,7 @@ const ServicesTable = () => {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            // return logicalDeleteService(id);
+            return logicalDeleteService(id, authData.jwt);
           })
         );
         let msg = response.map((res) => res.data);
@@ -218,7 +237,7 @@ const ServicesTable = () => {
         const serviceId = newRow.id;
 
         const response = await updateService(serviceId, newRow, authData.jwt);
-        
+
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
@@ -326,6 +345,7 @@ const ServicesTable = () => {
               final_diagnosis: false,
               isDelete: false,
               confirm_repair: false,
+              technicianId: false,
             },
           },
         }}

@@ -301,7 +301,6 @@ const logicalDelete = async (id) => {
     return { error: true, response: "Producto no encontrado" };
   }
   await product.update({ is_deleted: !product.is_deleted });
-
   return `${product.name} ${
     product.is_deleted ? " activado" : " desactivado"
   } `;
@@ -339,6 +338,11 @@ const searchByName = async (name) => {
               [Op.iLike]: `%${name}%`,
             },
           },
+          {
+            '$ProductCategories.name$': {
+              [Op.iLike]: `%${name}%`,
+            }
+          }
         ],
       },
       include: [

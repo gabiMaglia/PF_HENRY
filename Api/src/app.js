@@ -1,13 +1,15 @@
 require("dotenv").config();
 require("./config/passport.js");
 
+const env = process.env.NODE_ENV
+
 const express = require("express");
 const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");
 var cors = require("cors");
 const passport = require("passport");
 
-const { sessionFlag, refreshTokenCheck } = require("./middlewares/jwtSession.js");
+const { sessionFlag, tokenRemainingTime } = require("./middlewares/jwtSession.js");
 const server = express();
 
 server.name = "API";
@@ -18,8 +20,8 @@ server.use(express.urlencoded({ extended: true }));
 // Passport
 server.use(passport.initialize());
 // checkea quien hace cada peticion y lo muestra por consola
-server.use(sessionFlag)
-server.use(refreshTokenCheck)
+env && server.use(sessionFlag)
+env && server.use(tokenRemainingTime)
 // Entryp0nt de la ruta principal
 server.use("/", routes);
 

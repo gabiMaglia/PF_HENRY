@@ -85,10 +85,16 @@ export const registerUser = async (userObj) => {
     return { error: response.data };
   }
 };
-export const logOutUser = async () => {
+export const logOutUser = async (jwt) => {
   try {
+    console.log(jwt)
     userLogoutEvent();
-    const response = await axios.post(`${url}/account/logout`);
+    const response = await axios.get(`${url}/account/logout`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    console.log(response);
     return { error: false, data: response };
   } catch ({ response }) {
     return { error: response.data };
