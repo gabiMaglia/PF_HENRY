@@ -34,10 +34,10 @@ export const getServices = async (id, jwt) => {
       },
     });
 
-    if(response.status === 404){
-      return { data: [] }
+    if (response.status === 404) {
+      return { data: [] };
     }
-    
+
     return response;
   } catch (error) {
     return { error };
@@ -113,6 +113,19 @@ export const updateService = async (id, update, jwt) => {
         },
       }
     );
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
+export const logicalDeleteService = async (id, jwt) => {
+  try {
+    const response = await axios.put(`${url}/service/logicalDelete/service/${id}`, null, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
     return response;
   } catch (error) {
     return { error: true, message: error.message };

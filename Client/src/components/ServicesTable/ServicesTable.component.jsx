@@ -15,7 +15,7 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //SERVICES
-import { getServices, updateService } from "../../services/serviceServices";
+import { getServices, updateService, logicalDeleteService } from "../../services/serviceServices";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
 import Swal from "sweetalert2";
@@ -188,7 +188,7 @@ const ServicesTable = () => {
       if (selectedRows.length > 0) {
         const response = await Promise.all(
           selectedRows.map((id) => {
-            // return logicalDeleteService(id);
+            return logicalDeleteService(id, authData.jwt);
           })
         );
         let msg = response.map((res) => res.data);
