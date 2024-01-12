@@ -69,8 +69,7 @@ const deleteHistoryController=async(id,value)=>{
   const userHistory=await getHistoryUserController(id)
   if(userHistory.error){
     return {
-      error: true,
-      response: "algo salio mal.",
+      error:userHistory.response
     }
   }
   const historyValue= await History.findOne({
@@ -79,11 +78,23 @@ const deleteHistoryController=async(id,value)=>{
       value:value
     }
   })
-  historyValue.isDelete=true
-  await historyValue.save()
-   const response=await History.findAll({
+  if(!historyValue){
+    return {
+      error: true,
+      response: "Error el valor no existe.",
+    }
+  }
+    historyValue.isDelete=true
+    await historyValue.save()
+   const history=await History.findAll({
     where:{UserId:id}
    })
+   if(!history){
+    return {
+      error: true,
+      response: "Error al traer el historial.",
+    }
+   }
    return response
 }
 
