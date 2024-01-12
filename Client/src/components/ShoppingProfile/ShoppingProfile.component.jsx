@@ -21,7 +21,7 @@ const ShoppingProfileComponent = () => {
 
   useEffect(() => {
     dispatch(fetchCartUser(cookiesAccepted));
-  }, []);
+  }, [dispatch]);
 
   const handleClick = () => {
     Swal.fire({
@@ -67,19 +67,12 @@ const ShoppingProfileComponent = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   let newCardsPerDates = sortCardByDate(cartUser, [...cardPerDates]);
-  //   setCardPerDates(newCardsPerDates);
-  // }, [cartUser]);
-  // console.log(cardPerDates);
-
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        justifyContent: "center",
         mt: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -118,10 +111,11 @@ const ShoppingProfileComponent = () => {
             <Box
               key={cartDate.date}
               sx={{
+                width: "100%",
                 border: "1px solid black",
                 borderRadius: "10px",
                 mb: "1em",
-                padding: 2,
+                padding: "1em",
               }}
             >
               <Box
@@ -140,7 +134,7 @@ const ShoppingProfileComponent = () => {
                     ml: 2,
                   }}
                 >
-                  {cartDate.date}
+                  {cartDate.date.split("T")[0]}
                 </Typography>
                 {cartDate.status && (
                   <Typography
@@ -191,7 +185,7 @@ const ShoppingProfileComponent = () => {
                     justifyContent: "center",
                   }}
                 >
-                  total: ${cartDate.cartTotal}
+                  total: {cartDate.cartTotal}
                 </Typography>
               )}
             </Box>
