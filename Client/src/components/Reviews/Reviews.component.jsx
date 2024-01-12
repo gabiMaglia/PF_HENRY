@@ -2,10 +2,14 @@
 import { useEffect, useState } from "react";
 // MATERIAL UI
 import { Box, Typography, Avatar, Rating } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 // SERVICES
 import { googleReviewsServices } from "../../services/googleReviewsServices";
+import { useTheme } from "@emotion/react";
 
 const ReviewsComponent = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -42,7 +46,12 @@ const ReviewsComponent = () => {
       <Box sx={{ padding: "2em", backgroundColor: "#f5f5f5" }}>
         <Typography variant="h4" align="center" gutterBottom></Typography>
         <Box
-          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            flexDirection: isMobile ? "column" : "row",
+          }}
         >
           {reviews.map((review, index) => (
             <Box
@@ -53,7 +62,7 @@ const ReviewsComponent = () => {
                 padding: "1em",
                 borderRadius: "8px",
                 boxShadow: "0 4px 6px 0 hsla(0, 0%, 0%, 0.2)",
-                width: "300px",
+                width: isMobile ? "100%" : "300px",
                 height: "400px",
                 overflow: "auto",
               }}
