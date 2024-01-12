@@ -70,7 +70,7 @@ const misComprasHandler = async (req, res) => {
     if (misCompras) {
       res.status(200).json(misCompras);
     }else{
-      return []
+      res.status(200).json([]);
     }
   } catch (error) {
     throw new Error(error);
