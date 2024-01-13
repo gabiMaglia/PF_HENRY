@@ -50,7 +50,7 @@ async function createOrder(
     const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
-    
+
     const order = await Order.create({
       id: idOrder,
       UserId: userId,
@@ -180,7 +180,7 @@ const getMisCompras = async (userId) => {
     });
 
     if (!userOrders) {
-      throw new Error("User not found or has no orders");
+      console.log("User not found or has no orders");
     }
 
     return userOrders;
