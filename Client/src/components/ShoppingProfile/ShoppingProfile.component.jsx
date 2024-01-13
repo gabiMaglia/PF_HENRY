@@ -2,18 +2,12 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, getCart } from "../../redux/slices/cartSlice";
-import { useLocalStorage } from "../../Hook/useLocalStorage";
 
-import sortCardByDate from "../../utils/sortCardsByDate";
 import PATHROUTES from "../../helpers/pathRoute";
-import {
-  fetchCartUser,
-  fetchProductCartPost,
-} from "../../services/productServices";
+import { fetchCartUser } from "../../services/productServices";
 //FIREBASE
 import { completePurchaseEvent } from "../../services/firebaseAnayticsServices";
 
@@ -22,8 +16,6 @@ const ShoppingProfileComponent = () => {
   const navigate = useNavigate();
   const { cartUser } = useSelector((state) => state.cart);
   const cookiesAccepted = useSelector((state) => state.cookies);
-  const [storedProducts, setStoredProducts] = useLocalStorage();
-  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
 
   const dispatch = useDispatch();
 
@@ -32,33 +24,8 @@ const ShoppingProfileComponent = () => {
   }, [dispatch]);
 
   const handleClickShop = async (product) => {
-    const productCart = {
-      id: product.id,
-      name: product.name,
-      ProductImages: [{ address: product.image }],
-      price: product.budget,
-      ProductCategories: [{ name: product.ProductCategories[0].name }],
-      ProductBrands: [{ name: product.ProductBrands[0].name }],
-    };
-
-    setStoredProducts(productCart);
-    dispatch(addItem());
-    dispatch(fetchProductCartPost(productCart, cookieStatus));
-    Swal.fire({
-      icon: "success",
-      title: "Producto agregado exitosamente",
-      text: "El producto ha sido agregado al carrito.",
-      confirmButtonColor: "#fd611a",
-      confirmButtonText: "Ir al carrito",
-      cancelButtonText: "Seguir comprando",
-      cancelButtonColor: "green",
-      showCancelButton: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(PATHROUTES.SHOPCART);
-        window.scrollTo(0, 0);
-      }
-    });
+    const { id } = product;
+    navigate(`/product/${id}`);
   };
 
   const handleClick = () => {

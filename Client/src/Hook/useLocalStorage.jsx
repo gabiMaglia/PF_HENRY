@@ -11,6 +11,7 @@ export function useLocalStorage() {
   });
 
   const addProductToCart = (product) => {
+    console.log(product);
     try {
       setStoredProducts((prevProducts) => {
         const productId = product.id;
@@ -33,6 +34,7 @@ export function useLocalStorage() {
             ProductImages: product.ProductImages[0],
             price: product.price,
             count: 1,
+            stock: product.ProductStock.amount,
           };
           const newProducts = [...prevProducts, newProduct];
           window.localStorage.setItem(

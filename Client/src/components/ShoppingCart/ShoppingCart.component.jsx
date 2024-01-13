@@ -42,6 +42,7 @@ export default function ShoppingCart() {
 
   const { items, total, id } = useSelector((state) => state.cart);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
+  console.log(items);
 
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 
@@ -179,7 +180,7 @@ export default function ShoppingCart() {
 
             <BaseNumberInput
               min={1}
-              max={10}
+              max={item.stock}
               id={item.id}
               value={item.count}
               onChange={(event, value) => handleChange(item.id, value)}
