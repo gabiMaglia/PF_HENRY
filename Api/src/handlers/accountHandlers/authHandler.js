@@ -4,6 +4,7 @@ const {
   confirmAccountController,
   refreshSession,
   logOutUser,
+  checkAuthToken,
   deleteActivateUserById,
 } = require("../../controllers/accountControllers/authController");
 
@@ -100,7 +101,17 @@ const logoutHandler = async (req, res, next) => {
     return res.status(500).json(error.message);
   }
 };
-
+const jwtCheckHandler = async(req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    const tokenResponse = await checkAuthToken(token)
+    console.log(tokenResponse)
+    return res.status(200).json(tokenResponse);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+    
+}
 const deleteActivateUserByIdHandler = async (req, res) => {
   try {
   
@@ -120,4 +131,5 @@ module.exports = {
   confirmAccountHandler,
   refreshSessionHandler,
   deleteActivateUserByIdHandler,
+  jwtCheckHandler
 };

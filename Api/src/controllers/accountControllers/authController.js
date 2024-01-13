@@ -2,7 +2,7 @@ require("dotenv").config();
 const {
   sendConfirmationEmail,
 } = require("../../utils/sendConfirmationEmail.js");
-const { tokenSign, refreshToken } = require("../../jwt/tokenGenerator.js");
+const { tokenSign, refreshToken, tokenDecoder, tokenVerifier } = require("../../jwt/tokenGenerator.js");
 const {
   UserAddress,
   UserCredentials,
@@ -13,6 +13,7 @@ const {
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { checkTokenStatus, checkBlacklistedToken, extractJwtToken } = require("../../jwt/tokenUtils.js");
 
 const confirmAccountController = async (token) => {
   const tokenDecode = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -148,7 +149,6 @@ const logOutUser = async(token) => {
 
 
 }
-
 const sendEmailToResetPassword = async () => {};
 
 const resetPassword = async (userId) => {
@@ -172,6 +172,16 @@ const deleteActivateUserById = async (id) => {
   };
 };
 
+
+const checkAuthToken = async(token) => {
+  // console.log(token)
+  const cleanToken = extractJwtToken(token)
+  console.log(cleanToken)
+  // const response = await tokenVerifier(cleanToken)
+  return cleanToken  
+  
+}
+
 module.exports = {
   registerUser,
   loginUser,
@@ -179,5 +189,6 @@ module.exports = {
   logOutUser,
   confirmAccountController,
   resetPassword,
+  checkAuthToken,
   deleteActivateUserById,
 };
