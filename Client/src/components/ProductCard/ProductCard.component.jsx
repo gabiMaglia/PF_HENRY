@@ -116,7 +116,8 @@ const CardProduct = ({ product }) => {
       >
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {categoryName && (
-            <Typography className="hover-underline-animation-dark"
+            <Typography
+              className="hover-underline-animation-dark"
               variant="subtitle2"
               onClick={handleCategoryClick}
               sx={{
