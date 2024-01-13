@@ -1,6 +1,6 @@
 //HOOKS
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 //MATERIAL UI
 import {
@@ -13,17 +13,17 @@ import {
 } from "@mui/material";
 import { Menu, ArrowBack } from "@mui/icons-material";
 //UTILS
-import { removeAuthDataCookie } from "../../utils/cookiesFunctions";
+import PATHROUTES from "../../helpers/pathRoute";
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
 import { clearPersistanceData, getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter.js";
 import { logOutUser } from "../../services/authServices.js";
-
+import { resetCart } from "../../redux/slices/cartSlice.js";
 const SideBar = () => {
   const dispatch = useDispatch();
   const { name, surname } = useSelector((state) => state.user);
-  
+  const navigate = useNavigate()  
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   
@@ -33,6 +33,9 @@ const SideBar = () => {
     clearPersistanceData(cookieStatus)
     await logOutUser(authData.jwt)
     dispatch(logoutUser());
+    window.localStorage.setItem("storedProducts", JSON.stringify([]));
+    navigate(PATHROUTES.HOME);
+    dispatch(resetCart());
   };
 
   const actualLocation = useLocation().pathname;
