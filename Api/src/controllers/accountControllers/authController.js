@@ -2,7 +2,7 @@ require("dotenv").config();
 const {
   sendConfirmationEmail,
 } = require("../../utils/sendConfirmationEmail.js");
-const { tokenSign, refreshToken, tokenDecoder, tokenVerifier } = require("../../jwt/tokenGenerator.js");
+const { tokenSign, refreshToken, tokenDecoder, tokenVerifier, verifyToken } = require("../../jwt/tokenGenerator.js");
 const {
   UserAddress,
   UserCredentials,
@@ -13,7 +13,7 @@ const {
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { checkTokenStatus, checkBlacklistedToken, extractJwtToken } = require("../../jwt/tokenUtils.js");
+const { checkTokenStatus, checkBlacklistedToken, extractJwtToken, sessionFlag, tokenRemainingTime } = require("../../jwt/tokenUtils.js");
 
 const confirmAccountController = async (token) => {
   const tokenDecode = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -144,10 +144,7 @@ const logOutUser = async(token) => {
   const badToken = await BlackListedTokens.findOrCreate({
     where: { token: token.split(" ").pop() },
   });
-  
   return badToken[0].token
-
-
 }
 const sendEmailToResetPassword = async () => {};
 
@@ -174,11 +171,15 @@ const deleteActivateUserById = async (id) => {
 
 
 const checkAuthToken = async(token) => {
- 
   const cleanToken = extractJwtToken(token)
-  // const response = await tokenVerifier(cleanToken)
-  console.log(cleanToken)
-  return cleanToken  
+  const response = await verifyToken(cleanToken)
+  if (response.error) return {error:true, name: response.name}
+  else{
+    const dataFromToken = await sessionFlag(response)
+    console.log(dataFromToken)
+    const timeLeft = await tokenRemainingTime(response)
+    return {response, dataFromToken, timeLeft}  
+  }
   
 }
 

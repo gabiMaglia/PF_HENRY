@@ -12,14 +12,8 @@ const checkAuthToken = async (req, res, next) => {
     if (!req.headers.authorization)
       return res.status(409).send({ error: "inicie sesion para continuar" });
     const token = extractJwtToken(req.headers.authorization);
-    // chekamos que el token no esta dado de baja
-    // const blackListedTokens = await BlackListedTokens.findAll();
-    // const sortedBlackListedTokens = blackListedTokens.map((e) => e.token);
-    // const isBlackListed = sortedBlackListedTokens.includes(token);
     // chekamos que sea valido
     const tokenData = await verifyToken(token);
-    console.log(tokenData)
-    // si no es valido o esta listado 
     if (!tokenData?.userId) {
       res.status(409);
       res.send({ error: "No tienes acceso a esta ruta" });
