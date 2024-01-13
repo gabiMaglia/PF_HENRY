@@ -13,8 +13,8 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     price: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: true,
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
     description: {
       type: DataTypes.TEXT,
