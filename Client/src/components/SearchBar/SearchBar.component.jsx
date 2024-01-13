@@ -235,9 +235,8 @@ export default function SearchAppBar() {
           mt: { xs: 2 },
           alignItems: "center",
           justifyContent: "space-around",
-          gap: "1em",
+          gap: "3em",
           [`@media (max-width:1200px)`]: {
-            gap: "3em",
             width: "50%",
           },
         }}
