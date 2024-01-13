@@ -66,10 +66,9 @@ const misComprasHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const misCompras = await getMisCompras(id);
-    console.log(misCompras)
     if (misCompras) {
       res.status(200).json(misCompras);
-    }else{
+    } else {
       res.status(200).json([]);
     }
   } catch (error) {

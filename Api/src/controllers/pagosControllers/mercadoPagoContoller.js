@@ -14,7 +14,8 @@ const miAccessToken = process.env.MP_ACCESS_TOKEN;
 const axios = require("axios");
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
-const backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
+// const backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
+const backend_Url = `https://7c03-2800-a4-2720-7100-299a-abad-2cda-a060.ngrok-free.app`;
 const conn = require("../../db");
 const { where } = require("sequelize");
 const transporter = require("../../config/mailer");
@@ -29,8 +30,8 @@ const mercadoPago = async (array, idUser) => {
       items: array,
       back_urls: {
         success: `${frontend_Url}/customer/userPanel/shoppings?success=true`,
-        failure: `${frontend_Url}/cart`,
-        pending: `${frontend_Url}/cart`,
+        failure: `${frontend_Url}/shoppingCart?payment=false`,
+        pending: `${frontend_Url}/shoppingCart?payment=pending`,
       },
     };
 
@@ -56,6 +57,7 @@ const handlePaymentNotification = async (paymentId) => {
           },
         }
       );
+
       let user;
       let userId;
       if (payment?.data?.metadata?.id_user) {
@@ -69,7 +71,7 @@ const handlePaymentNotification = async (paymentId) => {
           include: [
             {
               model: Product,
-              attributes: ["id", "name", "price"],
+              attributes: ["id", "name", "price", "soldCount"],
               through: {
                 model: ProductCart,
                 attributes: ["quantity"],
@@ -86,6 +88,9 @@ const handlePaymentNotification = async (paymentId) => {
 
         const order = await Order.create({
           UserId: userId,
+          paymentId: paymentId.data.id,
+          status: "pending",
+          purchaseDate: Date(),
         });
 
         for (const product of cart.Products) {
@@ -94,9 +99,9 @@ const handlePaymentNotification = async (paymentId) => {
           await order.addProduct(product, { through: { quantity: quantity } });
         }
 
-        for (const product of cart.Products) {
-          await cart.removeProduct(product);
-        }
+        // for (const product of cart.Products) {
+        //   await cart.removeProduct(product);
+        // }
 
         if (
           payment.data.status === "approved" ||
@@ -114,6 +119,7 @@ const handlePaymentNotification = async (paymentId) => {
 
             Promise.all(
               cart.Products.map(async (product) => {
+                console.log(product.ProductImages[0].dataValues);
                 const { id, soldCount } = product;
                 const cartProduct = await ProductCart.findOne({
                   where: { ProductId: id, CartId: cart.id },
@@ -131,7 +137,7 @@ const handlePaymentNotification = async (paymentId) => {
                     });
 
                     await product.update({
-                      soldCount: soldCount + productQuantity,
+                      soldCount: Number(soldCount + productQuantity),
                     });
                   }
                 }
@@ -166,7 +172,6 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
         ${productsHtml}
         <p>${products}</p>
 
-    <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>
   `;
 
     await transporter.sendMail({
