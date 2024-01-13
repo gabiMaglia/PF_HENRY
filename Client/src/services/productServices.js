@@ -196,7 +196,7 @@ export const fetchCartMercadoPago =
     }));
     try {
       const response = await axios.post(
-        `${urlBack}/pagos/order`,
+        `${urlBack}/pagos`,
         { array: products, userId: userId },
 
         {
@@ -206,7 +206,7 @@ export const fetchCartMercadoPago =
           },
         }
       );
-      dispatch(idShop(response.data.Order.preferenceId));
+      dispatch(idShop(response.data));
     } catch (error) {
       return;
     }
@@ -229,11 +229,15 @@ export const fetchAddProduct = async (obj, dispatch, jwt) => {
 
 export const logicalDeleteProduct = async (id, jwt) => {
   try {
-    const response = await axios.put(`${urlBack}/product/logicalDelete/${id}`, null, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
+    const response = await axios.put(
+      `${urlBack}/product/logicalDelete/${id}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     return { error: true, message: error.message };
@@ -269,28 +273,29 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
-    })
-    if(response.data){
-    const orders = response.data.map((order)=> ({
-      status: order.status,
-      date: order.purchaseDate,
-      cartTotal: formatPrice(Number(order.cartTotal)),
-      paymentMethod: order.paymentMethod,
-      products: order.Products.map((product) => ({
-        id: product.id,
-        name: product.name,
-        budget: product.price,
-        image: product.ProductImages[0].address,
-        count: product.OrderProduct.quantity,
-        ProductCategories: [{name: product.ProductCategories[0].name}],
-        ProductBrands: [{name: product.ProductBrands[0].name}]
-      })),
-    }))
-    dispatch(getCart(orders))}
+    });
+    if (response.data) {
+      const orders = response.data.map((order) => ({
+        status: order.status,
+        date: order.purchaseDate,
+        cartTotal: formatPrice(Number(order.cartTotal)),
+        paymentMethod: order.paymentMethod,
+        products: order.Products.map((product) => ({
+          id: product.id,
+          name: product.name,
+          budget: product.price,
+          image: product.ProductImages[0].address,
+          count: product.OrderProduct.quantity,
+          ProductCategories: [{ name: product.ProductCategories[0].name }],
+          ProductBrands: [{ name: product.ProductBrands[0].name }],
+        })),
+      }));
+      dispatch(getCart(orders));
+    }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
 // export const fetchProductsByOrder = (order) => async (dispatch) => {
 //   try {

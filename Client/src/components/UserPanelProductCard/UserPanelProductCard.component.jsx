@@ -135,7 +135,9 @@ const UserPanelProductCard = ({
                 },
               }}
             >
-              precio: {formatPrice(Number(product.budget))}
+              {typeof product.budget !== "string"
+                ? formatPrice(Number(product.budget))
+                : product.budget}
             </Typography>
           )}
           {product.state && (
