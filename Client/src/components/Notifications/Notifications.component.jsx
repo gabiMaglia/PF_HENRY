@@ -9,22 +9,38 @@ import {
   ListItem,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import CloseIcon from "@mui/icons-material/Close";
 import { getOffers } from "../../services/wishListServices";
+import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { Link } from "react-router-dom";
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const Notification = () => {
-  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const [offers, setOffers] = useState([]);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const wishListCards = useSelector((state) => state.wishlist.products);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const getAllOffers = async () => {
-    const response = await getOffers(authData.userId, authData.jwt);
-    setOffers(response);
+  const getAllOffers = () => {
+    if (wishListCards?.length > 0) {
+      const offers = wishListCards.filter((product) => {
+        if (product.carousel) {
+          return product;
+        }
+      });
+      setOffers(offers);
+    }
+  };
+
+  const getAllOffersBack = async () => {
+    if (wishListCards?.length > 0) {
+      const response = await getOffers(authData.userId, authData.jwt);
+      if (!response?.error) {
+        setOffers(response);
+      }
+    }
   };
 
   const handleClick = (event, close) => {
@@ -37,6 +53,10 @@ const Notification = () => {
 
   useEffect(() => {
     getAllOffers();
+  }, [wishListCards]);
+
+  useEffect(() => {
+    getAllOffersBack();
   }, []);
 
   return (

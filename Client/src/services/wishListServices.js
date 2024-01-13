@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { itemToWishlist } from "./firebaseAnayticsServices";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
+const urlFront = import.meta.env.VITE_FRONT_URL;
 
 export const fetchWishList = async (userId, dispatch, jwt) => {
   try {

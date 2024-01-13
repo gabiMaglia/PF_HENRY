@@ -39,6 +39,7 @@ const WhishListProfileComponent = () => {
   const dispatch = useDispatch();
   const [storedProducts, setStoredProducts] = useLocalStorage();
   const [isLoading, setIsLoading] = useState(true);
+  const [firstCharge, setFirstCharge] = useState(false);
   const login = useSelector((state) => state.user.login);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
@@ -113,7 +114,10 @@ const WhishListProfileComponent = () => {
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
   useEffect(() => {
-    wishListCards?.length === 0 && setIsLoading(false);
+    setFirstCharge(true);
+    if (wishListCards?.length === 0 && firstCharge) {
+      setIsLoading(false);
+    }
   }, [wishListCards]);
 
   const deleteProduct = (id) => {
@@ -149,7 +153,6 @@ const WhishListProfileComponent = () => {
       color: "#fd611a",
     },
   ];
-
   return (
     <Box
       sx={{
