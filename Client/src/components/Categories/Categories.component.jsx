@@ -80,6 +80,8 @@ const FiltersSorting = () => {
   const Buttons = styled(Button)({
     marginLeft: 20,
     width: 100,
+
+    ml: { xs: 1, lg: -2.1 },
     backgroundColor: "black",
     color: "white",
     "&:hover": {
@@ -119,11 +121,17 @@ const FiltersSorting = () => {
           sx={{
             mt: 2,
             display: "grid",
-            gridTemplateColumns: { xs: "repeat(3,1fr)", lg: "repeat(6,1fr)" },
+            //gridGap: { xs: 0, lg: 0 }, // Ajusta el espacio entre filas según el tamaño de la pantalla
+            gridTemplateColumns: {
+              xs: "repeat(3,1fr)",
+              sm: "repeat(4,1fr)",
+              md: "repeat(6, 1fr)",
+              lg: "repeat(6,1fr)",
+            },
             flexDirection: "row",
-            ml: { xs: 1, lg: 10 },
+            //ml: { xs: 1, lg: 10 },
             mb: 2,
-            width: { xs: "100%", md: "80%", lg: "60%", xl: "50%" },
+            width: { xs: "auto", md: "auto", lg: "auto", xl: "auto" },
           }}
         >
           {[...categories]
@@ -138,9 +146,10 @@ const FiltersSorting = () => {
                   textAlign: "center",
                   backgroundColor:
                     categorie.name === selectedCategory ? "#b54410" : "#fd611a",
-                  width: 90,
-                  height: 90,
-                  ml: { xs: 3, lg: -2.1 },
+                  width: 100,
+                  height: 100,
+                  ml: { xs: 1, sm: 1, md: 1, lg: 1 },
+                  mr: { xs: 1, sm: 1, md: 1, lg: 1 },
                   mt: 2,
                   borderColor:
                     categorie.name === selectedCategory ? "white" : undefined,
