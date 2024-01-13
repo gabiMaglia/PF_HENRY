@@ -70,7 +70,7 @@ const getOfferNotification = async (id) => {
   if (!id) {
     return { error: true, response: "No se encontro el usuario" };
   }
-  const wishlist = await WishList.findOne({
+  const [list, created] = await WishList.findOrCreate({
     where: { UserId: id },
     include: [
       {
@@ -78,7 +78,10 @@ const getOfferNotification = async (id) => {
       },
     ],
   });
-  const productsInOffer = wishlist.Products.filter((product) => {
+  if (!list?.Products) {
+    return { error: true, response: "No se encontro lista de usuarios" };
+  }
+  const productsInOffer = list.Products.filter((product) => {
     if (product.carousel) {
       return product;
     }

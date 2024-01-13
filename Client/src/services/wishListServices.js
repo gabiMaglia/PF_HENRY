@@ -53,13 +53,13 @@ export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
 
 export const getOffers = async (userId, jwt) => {
   try {
-    const response = await axios.get(`${urlBack}/wishlist/offers/${userId}`, {
+    const response = await axios.get(`${urlBack}/wishList/offer/${userId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
     return response.data;
   } catch (error) {
-    return { error: true, message: error.message };
+    return { error: true, message: error.response };
   }
 };

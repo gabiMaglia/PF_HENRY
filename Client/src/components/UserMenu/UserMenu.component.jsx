@@ -80,7 +80,7 @@ const UserMenu = () => {
               alignContent: "center",
               [`@media (max-width:1200px)`]: {
                 flexDirection: "row-reverse",
-                gap: "0px",
+                gap: "10px",
               },
             }}
             aria-controls={open ? "account-menu" : undefined}
