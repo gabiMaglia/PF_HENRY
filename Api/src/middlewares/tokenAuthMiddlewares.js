@@ -1,5 +1,4 @@
 const { verifyToken } = require("../jwt/tokenGenerator.js");
-const { BlackListedTokens } = require("../db.js");
 
 function extractJwtToken(inputString) {
   const jwt = inputString.split(" ").pop();

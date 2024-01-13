@@ -60,6 +60,12 @@ Edit user cred by id "localhost:3001/user_credentials/:id"   Edita las credencia
         "password" : "lala1234"   
     }
 }
+//////////////////////////////////////////////////////////////////////////////////////
+//SESSION ENDPOINTS
+GET LOGOUT localhost:3001/account/logout //mandar token por auth header
+GET REFRESHTOKEN localhost:3001/account/refresh //mandar token por auth header
+GET CHECKTOKENSTATUS localhost:3001/account/jwt-check //mandar token por auth header
+//////////////////////////////////////////////////////////////////////////////////////
 
 Edit user espera el mismo objeto salvo las credenciales, cualquier datos e puede obviar,
 si no llega en la query sera autocompletado por la info del objeto alojado en la base de datos

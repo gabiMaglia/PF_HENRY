@@ -13,6 +13,7 @@ const checkBlacklistedToken = async (token) => {
 };
 const sessionFlag = async (tokenData) => {
   const data = await User.findByPk(tokenData.userId);
+  
   const fechaActual = new Date();
   const formatoCompleto = dateFormater(fechaActual);
   const conectionData = {
@@ -20,15 +21,21 @@ const sessionFlag = async (tokenData) => {
     Rol: tokenData.userRole,
     Conexion: formatoCompleto,
   };
-
+  
   return conectionData;
+
 };
-const tokenRemainingTime = async (tokenData) => {
-  const remainingTime = tokenData.exp - Math.floor(Date.now() / 1000);
+const tokenRemainingTime = (tokenData) => {
+  const birthTime = tokenData.exp
+  const remainingTime = birthTime - Math.floor(Date.now() / 1000);
   const hour = Math.floor((remainingTime % 86400) / 3600);
   const minutes = Math.floor((remainingTime % 3600) / 60);
   const seconds = remainingTime % 60;
-  return {time: remainingTime, message :`Te quedaan ${hour} horas, ${minutes} minutos y ${seconds} segundos `};
+  const response = {
+    time: remainingTime,
+    message: `Te quedaan ${hour} horas, ${minutes} minutos y ${seconds} segundos `,
+  };
+  return response;
 };
 
 module.exports = {

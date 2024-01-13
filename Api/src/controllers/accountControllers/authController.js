@@ -2,7 +2,11 @@ require("dotenv").config();
 const {
   sendConfirmationEmail,
 } = require("../../utils/sendConfirmationEmail.js");
-const { tokenSign, refreshToken, tokenDecoder, tokenVerifier, verifyToken } = require("../../jwt/tokenGenerator.js");
+const {
+  tokenSign,
+  refreshToken,
+  verifyToken,
+} = require("../../jwt/tokenGenerator.js");
 const {
   UserAddress,
   UserCredentials,
@@ -13,7 +17,12 @@ const {
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { checkTokenStatus, checkBlacklistedToken, extractJwtToken, sessionFlag, tokenRemainingTime } = require("../../jwt/tokenUtils.js");
+const {
+  extractJwtToken,
+  sessionFlag,
+  tokenRemainingTime,
+} = require("../../jwt/tokenUtils.js");
+let blacklistCounter = 100;
 
 const confirmAccountController = async (token) => {
   const tokenDecode = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -136,16 +145,26 @@ const refreshSession = async (token) => {
     await BlackListedTokens.findOrCreate({
       where: { token: token.split(" ").pop() },
     });
+    blacklistCounter = blacklistCounter - 1;
+    if (blacklistCounter < 0) {
+      await BlackListedTokens.truncate();
+      blacklistCounter = 100
+    }
     return newToken;
   } else return { error: true, message: "TokenVencido" };
 };
 
-const logOutUser = async(token) => {
+const logOutUser = async (token) => {
   const badToken = await BlackListedTokens.findOrCreate({
     where: { token: token.split(" ").pop() },
   });
-  return badToken[0].token
-}
+  blacklistCounter = blacklistCounter - 1;
+  if (blacklistCounter < 0) {
+    await BlackListedTokens.truncate();
+    blacklistCounter = 100
+  }
+  return badToken[0].token;
+};
 const sendEmailToResetPassword = async () => {};
 
 const resetPassword = async (userId) => {
@@ -169,19 +188,16 @@ const deleteActivateUserById = async (id) => {
   };
 };
 
-
-const checkAuthToken = async(token) => {
-  const cleanToken = extractJwtToken(token)
-  const response = await verifyToken(cleanToken)
-  if (response.error) return {error:true, name: response.name}
-  else{
-    const dataFromToken = await sessionFlag(response)
-    console.log(dataFromToken)
-    const timeLeft = await tokenRemainingTime(response)
-    return {response, dataFromToken, timeLeft}  
+const checkAuthToken = async (token) => {
+  const cleanToken = extractJwtToken(token);
+  const response = await verifyToken(cleanToken);
+  if (response.error) return { error: true, name: response.name };
+  else {
+    const dataFromToken = await sessionFlag(response);
+    const timeLeft = tokenRemainingTime(response);
+    return { response, dataFromToken, timeLeft };
   }
-  
-}
+};
 
 module.exports = {
   registerUser,
