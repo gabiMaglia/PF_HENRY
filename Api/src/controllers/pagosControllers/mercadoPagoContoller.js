@@ -63,7 +63,6 @@ const handlePaymentNotification = async (paymentId) => {
       if (payment?.data?.metadata?.id_user) {
         userId = payment.data.metadata.id_user;
         user = await User.findByPk(userId);
-
         const cart = await Cart.findOne({
           where: {
             UserId: userId,
@@ -99,10 +98,6 @@ const handlePaymentNotification = async (paymentId) => {
           await order.addProduct(product, { through: { quantity: quantity } });
         }
 
-        // for (const product of cart.Products) {
-        //   await cart.removeProduct(product);
-        // }
-
         if (
           payment.data.status === "approved" ||
           payment.data.status === "pending"
@@ -115,11 +110,9 @@ const handlePaymentNotification = async (paymentId) => {
               ),
               paymentMethod: payment.data.payment_method.type,
             });
-            await sendOrderConfirmationEmail(cart.Products, user.email);
 
             Promise.all(
               cart.Products.map(async (product) => {
-                console.log(product.ProductImages[0].dataValues);
                 const { id, soldCount } = product;
                 const cartProduct = await ProductCart.findOne({
                   where: { ProductId: id, CartId: cart.id },
@@ -144,6 +137,11 @@ const handlePaymentNotification = async (paymentId) => {
               })
             );
           }
+
+          await sendOrderConfirmationEmail(cart.Products, user.email);
+          for (const product of cart.Products) {
+            await cart.removeProduct(product);
+          }
         }
       }
     }
@@ -160,8 +158,8 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
       <h2>${product.name}</h2>
 
       <h3>${product.price}</h3>
-
-    </div>
+      <img src="${escapeHTML(product.ProductImages[0].dataValues.address)}">    
+      </div>
   `
       )
       .join("");
@@ -188,6 +186,22 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
     );
   }
 };
+
+function escapeHTML(value) {
+  return typeof value === "string"
+    ? value.replace(
+        /[&<>"']/g,
+        (match) =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          }[match])
+      )
+    : value;
+}
 
 module.exports = {
   mercadoPago,
