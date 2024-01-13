@@ -6,6 +6,8 @@ const {
   OrderProduct,
   User,
   ProductImage,
+  ProductCategory,
+  ProductBrand,
 } = require("../../db");
 const { v4: uuidv4 } = require("uuid");
 const { mercadoPago } = require("./mercadoPagoContoller");
@@ -48,7 +50,7 @@ async function createOrder(
     const preferenceResult = await mercadoPago(array, idOrder);
 
     const preferenceId = preferenceResult.id;
-
+    
     const order = await Order.create({
       id: idOrder,
       UserId: userId,
@@ -163,6 +165,14 @@ const getMisCompras = async (userId) => {
             {
               model: ProductImage,
               attributes: ["address"],
+            },
+            {
+              model: ProductCategory,
+              attributes: ["name"],
+            },
+            {
+              model: ProductBrand,
+              attributes: ["name"],
             },
           ],
         },

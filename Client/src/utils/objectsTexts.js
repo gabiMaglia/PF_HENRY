@@ -57,8 +57,8 @@ const questionsService = [
     title: "¿Cómo puedo contratar un servicio técnico?",
     content: [
       "Tienes varias maneras de contratar un servicio técnico.",
-      "- Desde nuestro WhatsApp, haciendo click en el botón flotante.",
-      "- Desde nuestra página de soporte, completando el formulario.",
+      "- Desde nuestro <a href='https://wa.me/+5491132069043' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>WhatsApp</a> o haciendo click en el botón flotante.",
+      "- Desde nuestra página de <a href='https://pf-henry-sepia.vercel.app/support' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>soporte</a>, completando el formulario.",
       "- Desde nuestras redes sociales.",
       "- Acercandote directamente a nustro local.",
     ],
@@ -66,8 +66,8 @@ const questionsService = [
   {
     title: "¿Como sigo el estado de mi servicio?",
     content: [
-      "Puedes seguir el estado del servicio ingresando con tu usuario y contraseña al sitio y en el panel de usuario dirigirte a Productos en Servicio. Ahí tendras toda la info necesaria sobre el estado de tus productos en servicio",
-      "También recibirás notificaciones del estado de tus servicios via e-mail o WhatsApp, dependiendo de la opción que elijas como medio de comunicación al momento de contratar un servicio.",
+      "- Puedes seguir el estado del servicio ingresando con tu usuario y contraseña al sitio y en el panel de usuario dirigirte a Productos en Servicio. Ahí tendras toda la info necesaria sobre el estado de tus productos en servicio",
+      "- También recibirás notificaciones del estado de tus servicios via e-mail o <a href='https://wa.me/+5491132069043' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>WhatsApp</a>, dependiendo de la opción que elijas como medio de comunicación al momento de contratar un servicio.",
     ],
   },
   {
@@ -97,7 +97,7 @@ const questionsService = [
 
 const textSupport = [
   {
-    title: "Bienvenido al Soporte Técnico de Hyper Mega Red",
+    title: "Soporte Técnico - Hyper Mega Red",
     content: [
       {
         text: "Entendemos lo crucial que es contar con un soporte técnico eficiente y rápido para resolver cualquier inconveniente que puedas tener con los productos de informática. Nuestro equipo de expertos está aquí para ayudarte. A continuación, te proporcionamos información clave para facilitar el proceso de asistencia técnica:",
@@ -124,6 +124,17 @@ const textSupport = [
   },
 ];
 
+const reviewsUsers = [
+  {
+    title: "¡Nuestros clientes opinan!",
+    content: [
+      {
+        text: "En Hyper Mega Red, la satisfacción de nuestros clientes es nuestra máxima prioridad. Nos enorgullece compartir las experiencias positivas que han tenido con nuestros productos y servicios. Sus testimonios son un reflejo de nuestro compromiso con la excelencia y la dedicación para superar las expectativas. A continuación, presentamos algunas de las reseñas que hemos recibido:",
+      },
+    ],
+  },
+];
+
 const sectionInformation = [
   {
     title: "INFORMACION",
@@ -143,10 +154,10 @@ const sectionSocial = [
   {
     title: "SEGUINOS EN",
     items: [
-      { icon: Facebook, text: "FACEBOOK", link: '#' },
-      { icon: Instagram, text: "INSTAGRAM", link: '#'  },
-      { icon: YouTube, text: "YOUTUBE", link: '#' },
-      { icon: Twitter, text: "TWITTER", link: '#'  },
+      { icon: Facebook, text: "FACEBOOK", link: "#" },
+      { icon: Instagram, text: "INSTAGRAM", link: "#" },
+      { icon: YouTube, text: "YOUTUBE", link: "#" },
+      { icon: Twitter, text: "TWITTER", link: "#" },
     ],
   },
 ];
@@ -155,6 +166,7 @@ export {
   questionsStore,
   questionsService,
   textSupport,
+  reviewsUsers,
   sectionInformation,
   sectionSocial,
 };

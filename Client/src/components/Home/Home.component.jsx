@@ -1,5 +1,5 @@
 //HOOKS
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
 import { Box } from "@mui/material";
@@ -9,14 +9,15 @@ import CarouselBottom from "../../components/CarouselBottom/CarouselBottom.compo
 import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
 import GoogleMap from "../../components/GoogleMap/GoogleMap.component";
 //REDUX
-import { fetchAllProducts } from "../../services/productServices";
+// import { fetchAllProducts } from "../../services/productServices";
 
 const HomeComponent = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { allProducts } = useSelector((state) => state.product);
-  useEffect(() => {
-    fetchAllProducts();
-  }, [dispatch]);
+
+  // useEffect(() => {
+  //   fetchAllProducts();
+  // }, [dispatch]);
 
   return (
     <>
