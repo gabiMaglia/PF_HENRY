@@ -174,10 +174,10 @@ const deleteActivateUserById = async (id) => {
 
 
 const checkAuthToken = async(token) => {
-  // console.log(token)
+ 
   const cleanToken = extractJwtToken(token)
-  console.log(cleanToken)
   // const response = await tokenVerifier(cleanToken)
+  console.log(cleanToken)
   return cleanToken  
   
 }
