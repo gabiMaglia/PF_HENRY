@@ -131,6 +131,7 @@ export const fetchProductCartGet = (cookiesAccepted) => async () => {
         price: product.price,
         ProductImages: product.ProductImages[0],
         count: product.ProductCart.quantity,
+        stock: product.ProductStock.amount,
       }));
 
       const storedProducts = getProducts();
@@ -274,6 +275,9 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
+    console.log(userId)
+    console.log(jwt)
+    console.log(response.data)
     if (response.data) {
       const orders = response.data.map((order) => ({
         status: order.status,
@@ -290,6 +294,7 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
           ProductBrands: [{ name: product.ProductBrands[0].name }],
         })),
       }));
+      console.log(orders)
       dispatch(getCart(orders));
     }
   } catch (error) {
