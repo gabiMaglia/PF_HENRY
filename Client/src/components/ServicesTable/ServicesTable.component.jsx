@@ -346,6 +346,7 @@ const ServicesTable = () => {
               isDelete: false,
               confirm_repair: false,
               technicianId: false,
+              clientEmail: false,
             },
           },
         }}

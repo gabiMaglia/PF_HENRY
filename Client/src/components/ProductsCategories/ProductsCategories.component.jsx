@@ -88,7 +88,7 @@ const ProductsCategoriesComponent = () => {
               justifyContent: "center",
               padding: "0 50px 50px 50px",
               gap: "20px 70px",
-              width: "85%",
+              width: "75%",
               marginInline: "auto",
               p: 4,
             }}
