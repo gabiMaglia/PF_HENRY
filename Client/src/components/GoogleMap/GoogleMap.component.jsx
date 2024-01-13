@@ -6,7 +6,7 @@ const MapContainer = () => {
     <CardMedia
       component="iframe"
       title="Mi Iframe"
-      src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13370.635403521792!2d-60.6168978!3d-33.09175865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses-419!2sar!4v1702589341249!5m2!1ses-419!2sar"
+      src="https://www.google.com/maps/place/HyperMegaRed/@-34.7230191,-58.3995237,17z/data=!3m1!4b1!4m6!3m5!1s0x95bccd28827c30bb:0xd13d20b43c2d99cc!8m2!3d-34.7230235!4d-58.3969488!16s%2Fg%2F11vph2mhb9?authuser=0&entry=ttu"
       sx={{
         border: "none",
         maxWidth: "100%",
