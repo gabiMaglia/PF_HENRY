@@ -232,7 +232,6 @@ const SupportComponent = () => {
               flexDirection: "column",
               justifyContent: "center",
               padding: "50px",
-              marginTop:"30px",
               "@media (max-width: 1140px)": {
                 width: "100%",
                 marginBottom: "-10px",
