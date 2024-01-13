@@ -4,7 +4,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const postEvent = (event, params) => {
   //Envio de notificaciónes a FIREBASE
-  console.log(event, params);
+  // console.log(event, params);
 
   const analytics = getAnalytics();
   logEvent(analytics, event, params);
