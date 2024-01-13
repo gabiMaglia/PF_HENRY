@@ -8,7 +8,7 @@ import {
   GridLogicOperator,
   esES,
 } from "@mui/x-data-grid";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 //COMPONENTS
 import LoadingProgress from "../Loading/Loading.component";
 import {
@@ -23,14 +23,6 @@ import {
 // SWEET ALERT
 import Swal from "sweetalert2";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-
-const formatPrice = (price) => {
-  const numericPrice = parseFloat(price);
-  if (isNaN(numericPrice)) {
-    return "Invalid Budget";
-  }
-  return `$${numericPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
-};
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -47,6 +39,15 @@ const columns = [
     width: 100,
     headerAlign: "center",
     editable: true,
+    valueFormatter: (params) => {
+      const numericPrice = parseFloat(params.value);
+      if (isNaN(numericPrice)) {
+        return "Formato precio invalido";
+      }
+      return `$${numericPrice
+        .toFixed(0)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+    },
   },
   {
     field: "warranty",
@@ -109,10 +110,10 @@ const ProductsTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
-  
+
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-
+  console.log(authData.jwt);
   const language = esES;
 
   const urlBack = import.meta.env.VITE_BACKEND_URL;
@@ -126,7 +127,7 @@ const ProductsTable = () => {
         return {
           id: product.id,
           name: product.name,
-          price: formatPrice(product.price),
+          price: product.price,
           warranty: product.warranty,
           soldCount: product.soldCount,
           carousel: product.carousel,
@@ -211,7 +212,11 @@ const ProductsTable = () => {
         setAvailableModify(false);
         const productId = newRow.id;
 
-        const response = await fetchUpdateProduct(productId, newRow, authData.jwt);
+        const response = await fetchUpdateProduct(
+          productId,
+          newRow,
+          authData.jwt
+        );
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>
