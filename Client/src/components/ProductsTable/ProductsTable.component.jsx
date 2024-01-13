@@ -82,14 +82,14 @@ const columns = [
   {
     field: "brand",
     headerName: "Marca",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "category",
     headerName: "Categoría",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
