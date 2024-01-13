@@ -68,7 +68,7 @@ const columns = [
   {
     field: "soldCount",
     headerName: "Vendidos",
-    width: 80,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
