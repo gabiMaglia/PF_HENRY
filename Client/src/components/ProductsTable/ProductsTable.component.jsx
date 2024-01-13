@@ -16,13 +16,14 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+//SERVICES
 import {
   logicalDeleteProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
 // SWEET ALERT
 import Swal from "sweetalert2";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
