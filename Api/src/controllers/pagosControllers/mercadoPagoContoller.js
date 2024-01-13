@@ -159,11 +159,15 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
       .map(
         (product) => `
         <div style="display: flex; flex-direction: column; align-items: center; text-align: center; border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
-      <img style="width: 90px; height: auto; margin-bottom: 20px;" src="${escapeHTML(
+      <img style="width: 90px; height: auto; margin-bottom: 5px;" src="${escapeHTML(
         product.ProductImages[0].dataValues.address
       )}" alt="${escapeHTML(product.name)}">
-      <h2 style="margin-bottom: 20px;">${escapeHTML(product.name)}</h2>
-      <h2 style="margin-bottom: 20px;">${escapeHTML(product.price)}</h2>
+      <h2 style="margin-bottom: 8px;
+      
+      margin-left: 10px; ">${escapeHTML(product.name)}</h2>
+      <h2 style="margin-bottom: 8px; margin-left: 10px;">$${escapeHTML(
+        product.price
+      )}</h2>
       <h3 style="margin-left: 40px;">Cantidad: ${escapeHTML(
         product.ProductCart.dataValues.quantity
       )}</h3>
