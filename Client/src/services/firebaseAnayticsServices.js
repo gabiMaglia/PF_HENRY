@@ -4,7 +4,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const postEvent = (event, params) => {
   //Envio de notificaciónes a FIREBASE
-  // console.log(event, params);
+  console.log(event, params);
 
   const analytics = getAnalytics();
   logEvent(analytics, event, params);
@@ -128,9 +128,12 @@ export const generatePurchaseOrderEvent = async (items, total) => {
       value: total,
       items: completeItems,
     };
+    window.localStorage.setItem(
+      "purchaseOrder",
+      JSON.stringify(firebaseParams)
+    );
     postEvent("begin_checkout", firebaseParams);
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
@@ -231,4 +234,14 @@ export const filtersOrSortEvents = (data, type) => {
     filter: type,
   };
   postEvent("filters_or_sort", firebaseParams);
+};
+
+export const completePurchaseEvent = (event) => {
+  try {
+    let firebaseParams = window.localStorage.getItem("purchaseOrder");
+    firebaseParams = JSON.parse(firebaseParams);
+    postEvent(event, firebaseParams);
+  } catch (error) {
+    return error;
+  }
 };

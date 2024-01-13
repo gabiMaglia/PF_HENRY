@@ -14,6 +14,8 @@ import {
   fetchCartUser,
   fetchProductCartPost,
 } from "../../services/productServices";
+//FIREBASE
+import { completePurchaseEvent } from "../../services/firebaseAnayticsServices";
 
 const ShoppingProfileComponent = () => {
   const location = useLocation();
@@ -100,6 +102,7 @@ const ShoppingProfileComponent = () => {
           window.scrollTo(0, 0);
         }
       });
+      completePurchaseEvent("purchase"); // Evento de compra exitosa Firebase
     }
   }, []);
 
