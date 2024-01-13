@@ -92,25 +92,20 @@ const handlePaymentNotification = async (paymentId) => {
           purchaseDate: Date(),
         });
 
-        for (const product of cart.Products) {
-          const quantity = product.ProductCart.quantity;
-
-          await order.addProduct(product, { through: { quantity: quantity } });
-        }
+        await Promise.all(
+          cart.Products.map(async (product) => {
+            const quantity = product.ProductCart.quantity;
+            await order.addProduct(product, {
+              through: { quantity: quantity },
+            });
+          })
+        );
 
         if (
           payment.data.status === "approved" ||
           payment.data.status === "pending"
         ) {
           if (order) {
-            await order.update({
-              status: payment.data.status,
-              cartTotal: Number(
-                payment.data.transaction_details.total_paid_amount
-              ),
-              paymentMethod: payment.data.payment_method.type,
-            });
-
             Promise.all(
               cart.Products.map(async (product) => {
                 console.log(product.ProductCart);
@@ -137,6 +132,14 @@ const handlePaymentNotification = async (paymentId) => {
                 }
               })
             );
+
+            await order.update({
+              status: payment.data.status,
+              cartTotal: Number(
+                payment.data.transaction_details.total_paid_amount
+              ),
+              paymentMethod: payment.data.payment_method.type,
+            });
           }
 
           await sendOrderConfirmationEmail(cart.Products, user.email);
