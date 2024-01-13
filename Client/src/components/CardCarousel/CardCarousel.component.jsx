@@ -19,7 +19,6 @@ import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 
 import miVideo from "/carousel/prueba.mp4";
 
-
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -66,7 +65,7 @@ const CardCarousel = ({ allProducts }) => {
         opacity: "1",
         background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 50%, rgba(26, 253, 148, 0) 96%)`,
         visibility: "visible",
-        display: "none", 
+        display: "none",
         "@media (min-width: 901px)": {
           display: "block",
         },
@@ -144,7 +143,7 @@ const CardCarousel = ({ allProducts }) => {
                           sm: "2.8rem",
                           md: "3.2rem",
                         },
-                        letterSpacing: '8px'
+                        letterSpacing: "8px",
                       }}
                     >
                       {product.name.toUpperCase()}
@@ -178,7 +177,7 @@ const CardCarousel = ({ allProducts }) => {
                         borderRadius: "5px",
                       }}
                     >
-                      OFERTA  {formatPrice(product.price)}
+                      OFERTA {formatPrice(product.price)}
                     </Typography>
                     <style jsx="true">{`
                       @keyframes blink {

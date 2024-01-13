@@ -54,9 +54,9 @@ const ProductBox = () => {
         confirmButtonText: "Ok",
       });
     } else {
+      console.log(product);
       setStoredProducts(product);
       dispatch(addItem());
-      // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
       dispatch(fetchProductCartPost(product, cookieStatus));
       Swal.fire({
         icon: "success",
