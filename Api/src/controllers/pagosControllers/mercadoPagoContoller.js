@@ -113,6 +113,7 @@ const handlePaymentNotification = async (paymentId) => {
 
             Promise.all(
               cart.Products.map(async (product) => {
+                console.log(product.ProductCart);
                 const { id, soldCount } = product;
                 const cartProduct = await ProductCart.findOne({
                   where: { ProductId: id, CartId: cart.id },
@@ -151,24 +152,26 @@ const handlePaymentNotification = async (paymentId) => {
 };
 const sendOrderConfirmationEmail = async (products, userEmail) => {
   try {
-    const productsHtml = products
+    const emailBody = `<div style="width: 100%">
+    <h1>Gracias por tu compra. Aquí está el resumen de la compra:</h1>
+    
+    ${products
       .map(
         (product) => `
-    <div>
-      <h2>${product.name}</h2>
-
-      <h3>${product.price}</h3>
-      <img src="${escapeHTML(product.ProductImages[0].dataValues.address)}">    
-      </div>
-  `
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+      <img style="width: 90px; height: auto; margin-bottom: 20px;" src="${escapeHTML(
+        product.ProductImages[0].dataValues.address
+      )}" alt="${escapeHTML(product.name)}">
+      <h2 style="margin-bottom: 20px;">${escapeHTML(product.name)}</h2>
+      <h2 style="margin-bottom: 20px;">${escapeHTML(product.price)}</h2>
+      <h3 style="margin-left: 40px;">Cantidad: ${escapeHTML(
+        product.ProductCart.dataValues.quantity
+      )}</h3>
+    </div>
+    `
       )
-      .join("");
-
-    const emailBody = `
-    <p>Gracias por tu compra. Aquí está el resumen de la compra:</p>
-    
-        ${productsHtml}
-        <p>${products}</p>
+      .join("")}
+  </div>
 
   `;
 
