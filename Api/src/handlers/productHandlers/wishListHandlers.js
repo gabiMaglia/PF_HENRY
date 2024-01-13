@@ -40,7 +40,7 @@ const getOfferNotificationHandler = async (req, res) => {
     }
     res.status(200).json(response);
   } catch (error) {
-    res.stauts(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 module.exports = {
