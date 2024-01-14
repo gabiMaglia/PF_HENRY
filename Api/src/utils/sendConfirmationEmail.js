@@ -10,6 +10,7 @@ const sendConfirmationEmail = async (
 ) => {
   let jwtToken = jwt.sign({ userID }, token);
   const confirmationUrl = `${gateway}/account/confirm/${jwtToken}`;
+  console.log(confirmationUrl);
 
   return transporter
     .sendMail({
@@ -17,35 +18,126 @@ const sendConfirmationEmail = async (
       to: userEmail,
       subject: "Confirm your account to log in!",
       html: `
-      <div style="
-      background-color:#fd611a;
-        width:800px; height:800px;
-        filter: brightness(85%);">
-         <div style=" width:500px; height:800px; background: linear-gradient(to bottom, black, white);
-         margin:0 150px  0 150px;">
-             <p style="
-        font-size: 1.2em; 
-        text-align: center;
-        padding:100px 0 0 0;
-        color:white;
-        font-weight:bold;">Por favor confirme su email</p>
-             <br>
-             <div style="
-        align-items: center; >
-        <a href="${confirmationUrl}=""">
-                 <button style="width: 200px; height: 50px; background-color: rgb(253, 97, 26); color: white; font-size: 1em; font-weight: bold; border-radius: 10px; cursor: pointer;" onmouseover="this.style.backgroundColor='white'; this.style.color='#fd611a';" onmouseout="this.style.backgroundColor='#fd611a'; this.style.color='white';">
-                     Confirmar Email
-                 </button>
+      <div
+      style="
+  background: linear-gradient(to top, #fd611a, white);
+  width: 100%;
+  max-width: 600px;
+  filter: brightness(80%);
+  height: auto;
+  border-radius: 20px;
+"
+      >
+      <table
+        style="
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        background: linear-gradient(to bottom, black, white);
+        margin: 2px auto;
+        border: solid 1px white;
+        align-items: center;
+        "
+      >
+        <tr>
+          <td>
+            <a href="https://pf-henry-sepia.vercel.app/">
+            <img src="https://res.cloudinary.com/hypermegared/image/upload/v1704925814/jwnogqatk0b1jdmpfrzz.png" alt="logo" style="width: 100px;height: 100px; margin: 0 200px 0 200px ;">
             </a>
-             </div>
-             <br>
-             <a href="https://pf-henry-sepia.vercel.app/&quot;">
-                 <img src="https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg" style=" margin-bottom: 20px; display: block; max-width:500px">
-             </a>
-             <br>
-             <p style="font-size: 1em; text-align: center; color:black">Si tienes algun problema con el enlace de arriba, copia y pega el siguiente <b>${confirmationUrl}</b> </p>
-         </div>
-     </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p
+              style="
+                font-size: 10px;
+                text-align: center;
+                margin: 15px 50px 0 50px;
+                color: white;
+                font-weight: bold;
+              "
+            >
+              Al hacer clic en el siguiente botón, confirmas que deseas ingresar a
+              nuestro sitio web. Si no has solicitado este acceso, por favor, no
+              hagas clic en el botón. Gracias.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p
+              style="
+                font-size: 1.2em;
+                text-align: center;
+                color: white;
+                font-weight: bold;
+              "
+            >
+              Por favor confirme su email
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="${confirmationUrl}" >
+              <button
+                style="
+                  align-items: center;
+                  width: 200px;
+                  height: 50px;
+                  background-color: rgb(253, 97, 26);
+                  color: white;
+                  font-size: 1em;
+                  font-weight: bold;
+                  border-radius: 10px;
+                  margin: 0 150px 0 150px;
+                "
+              >
+                Confirmar Email
+              </button>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p
+              style="
+                font-size: 15px;
+                text-align: center;
+                color: black;
+                font-weight: bolder;
+                margin: 15px 50px 0px 50px;
+                text-shadow: 0.5px 0px 0px rgb(255, 255, 255),
+                  0px 0.5px 0px rgb(255, 255, 255), -0.5px 0px 0px rgb(255, 255, 255),
+                  0px -0.5px 0px rgb(255, 255, 255);
+              "
+            >
+              Si tienes algun problema con el boton de arriba, copia y pega el
+              siguiente 
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align:start; margin: 0 150px 0 150px;max-width: 300px;">
+            <b style="max-width: 300px; font-size: small; color: black;word-break: break-all;">${confirmationUrl}</b>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://pf-henry-sepia.vercel.app/">
+              <img
+                src="https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg"
+                style="
+                  display: block;
+                  max-width: 500px;
+                  margin-top: 5px;
+                "
+              />
+            </a>
+          </td>
+        </tr>
+      </table>
+      </div>
     `,
     })
     .then(() => userEmail);
