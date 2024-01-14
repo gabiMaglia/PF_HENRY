@@ -1,5 +1,5 @@
 //HOOKS
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 //MATERIAL UI
 import { Box, Divider, Typography, Button } from "@mui/material";
@@ -25,9 +25,6 @@ const ProductsServicesProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [openDetail, setOpenDetail] = useState(false);
   const [cardDetail, setCardDetail] = useState([]);
-
-  const dispatch = useDispatch();
-
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 

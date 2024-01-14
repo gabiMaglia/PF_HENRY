@@ -65,7 +65,7 @@ const userSlice = createSlice({
     },
     updateInfo: (state, { payload }) => {
       const { userObject } = payload;
-      const { UserAddress } = userObject;
+      const UserAddress = userObject?.UserAddress;
       userObject?.name && (state.name = userObject.name);
       userObject?.surname && (state.surname = userObject.surname);
       userObject?.communication_preference &&
@@ -76,12 +76,16 @@ const userSlice = createSlice({
       userObject?.telephone && (state.telephone = userObject.telephone);
       userObject?.image && (state.image = userObject.image);
       userObject?.rolId && (state.role = userObject.rolId);
-      UserAddress?.country && (state.userAddress.country = UserAddress.country);
-      UserAddress?.state && (state.userAddress.state = UserAddress.state);
-      UserAddress?.city && (state.userAddress.city = UserAddress.city);
-      UserAddress?.street && (state.userAddress.street = UserAddress.street);
-      UserAddress?.number && (state.userAddress.number = UserAddress.number);
-      UserAddress?.zipCode && (state.userAddress.zipCode = UserAddress.zipCode);
+      if (UserAddress) {
+        UserAddress?.country &&
+          (state.userAddress.country = UserAddress.country);
+        UserAddress?.state && (state.userAddress.state = UserAddress.state);
+        UserAddress?.city && (state.userAddress.city = UserAddress.city);
+        UserAddress?.street && (state.userAddress.street = UserAddress.street);
+        UserAddress?.number && (state.userAddress.number = UserAddress.number);
+        UserAddress?.zipCode &&
+          (state.userAddress.zipCode = UserAddress.zipCode);
+      }
     },
   },
 });

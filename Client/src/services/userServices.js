@@ -115,7 +115,6 @@ export const putUser = async (id, userRole, data) => {
     });
 
     const responseData = putUser;
-
     return responseData;
   } catch (error) {
     return error;
