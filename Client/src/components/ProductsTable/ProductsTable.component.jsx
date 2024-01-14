@@ -16,13 +16,14 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+//SERVICES
 import {
   logicalDeleteProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
 // SWEET ALERT
 import Swal from "sweetalert2";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -67,7 +68,7 @@ const columns = [
   {
     field: "soldCount",
     headerName: "Vendidos",
-    width: 80,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
@@ -81,14 +82,14 @@ const columns = [
   {
     field: "brand",
     headerName: "Marca",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "category",
     headerName: "Categoría",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
