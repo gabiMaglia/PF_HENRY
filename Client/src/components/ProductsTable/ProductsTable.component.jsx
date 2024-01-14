@@ -213,9 +213,21 @@ const ProductsTable = () => {
         setAvailableModify(false);
         const productId = newRow.id;
 
+        const updateData = {
+          name: newRow.name,
+          price: newRow.price,
+          warranty: newRow.warranty,
+          soldCount: newRow.soldCount,
+          carousel: newRow.carousel,
+          stock: newRow.stock,
+          brandName: newRow.brand,
+          categoryName: newRow.category,
+        };
+
         const response = await fetchUpdateProduct(
           productId,
-          newRow,
+          // newRow,
+          updateData,
           authData.jwt
         );
         if (response.status === 200) {
