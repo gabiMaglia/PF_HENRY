@@ -59,8 +59,7 @@ const ProductsServicesProfile = () => {
   const handleOpenDetail = (id, open) => {
     open && setOpenDetail(open);
     if (id) {
-      const newId = typeof id === "object" ? id.id : id;
-      setCardDetail(newId);
+      setCardDetail(id);
     }
   };
 
