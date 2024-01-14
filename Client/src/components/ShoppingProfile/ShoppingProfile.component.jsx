@@ -45,7 +45,6 @@ const ShoppingProfileComponent = () => {
   };
 
   const buttons = [
-    { text: "Detalle compra", action: handleClick, color: "black" },
     { text: "Volver a comprar", action: handleClickShop, color: "#fd611a" },
   ];
 
@@ -129,6 +128,7 @@ const ShoppingProfileComponent = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
+                  justifyContent: "space-between",
                   mt: 1,
                 }}
               >
@@ -149,12 +149,39 @@ const ShoppingProfileComponent = () => {
                     sx={{
                       fontWeight: "bold",
                       fontSize: 18,
-                      ml: 64,
+                      // ml: 64,
                     }}
                   >
                     Estado: {cartDate.status}
                   </Typography>
                 )}
+                <Button
+                  variant="contained"
+                  onClick={handleClick}
+                  style={{
+                    backgroundColor: "black",
+                    color: "white",
+                  }}
+                  sx={{
+                    width: "11.5em",
+                    maxHeight: "3.5em",
+                    mr: 2,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: ".8em",
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                    variant="body2"
+                  >
+                    Detalle compra
+                  </Typography>
+                </Button>
               </Box>
               {cartDate.products.map((card, index) => {
                 return (
