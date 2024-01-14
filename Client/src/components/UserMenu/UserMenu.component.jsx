@@ -36,8 +36,8 @@ const UserMenu = () => {
   const { name, surname } = useSelector((state) => state.user);
 
   const initialLetersUsers = {
-    name: getFirstLetters(name),
-    surname: getFirstLetters(surname),
+    name: getFirstLetters(name?.split(" ")[0]),
+    surname: getFirstLetters(surname?.split(" ")[0]),
   };
 
   const items = UserPanelItems(name, surname);
@@ -104,7 +104,7 @@ const UserMenu = () => {
               </Typography>
             </Avatar>
             <Typography sx={{ maxWidth: "8em", textAlign: "center" }}>
-              {name} <br /> {surname}
+              {name?.split(" ")[0]} <br /> {surname?.split(" ")[0]}
             </Typography>
           </IconButton>
         </Tooltip>

@@ -192,14 +192,15 @@ const updateProduct = async (productId, updateData) => {
     return { error: true, response: "Producto no encontrado" };
   }
 
-  if (updateData.ProductStock) {
+  //Update stock
+  if (updateData.stock) {
     await productToUpdate.ProductStock.update({
-      amount: updateData.ProductStock,
+      amount: updateData.stock,
     });
   }
 
   //Update brand
-  if (updateData.ProductBrand) {
+  if (updateData.brandName) {
     await Promise.all(
       productToUpdate.ProductBrands.map(async (brand) => {
         return productToUpdate.removeProductBrand(brand);
@@ -207,7 +208,7 @@ const updateProduct = async (productId, updateData) => {
     );
 
     const [brand, createdBrand] = await ProductBrand.findOrCreate({
-      where: { name: updateData.ProductBrand },
+      where: { name: updateData.brandName },
     });
 
     if (brand) {
@@ -217,6 +218,29 @@ const updateProduct = async (productId, updateData) => {
     } else {
       await productToUpdate.addProductBrand(createdBrand, {
         through: "ProductProductBrand",
+      });
+    }
+  }
+
+  //Update category
+  if (updateData.categoryName) {
+    await Promise.all(
+      productToUpdate.ProductCategories.map(async (category) => {
+        return productToUpdate.removeProductCategory(category);
+      })
+    );
+
+    const [category, createdCategory] = await ProductCategory.findOrCreate({
+      where: { name: updateData.categoryName },
+    });
+
+    if (category) {
+      await productToUpdate.addProductCategory(category, {
+        through: "ProductProductCategory",
+      });
+    } else {
+      await productToUpdate.addProductCategory(createdCategory, {
+        through: "ProductProductCategory",
       });
     }
   }
@@ -241,28 +265,7 @@ const updateProduct = async (productId, updateData) => {
       }
     });
   }
-
-  if (updateData.ProductCategory) {
-    await Promise.all(
-      productToUpdate.ProductCategories.map(async (category) => {
-        return productToUpdate.removeProductCategory(category);
-      })
-    );
-    await Promise.all(
-      updateData.ProductCategory.map(async (category) => {
-        const [existingCategory, createdCategory] =
-          await ProductCategory.findOrCreate({
-            where: { name: category },
-          });
-
-        if (existingCategory) {
-          return productToUpdate.addProductCategory(existingCategory);
-        } else {
-          return productToUpdate.addProductCategory(createdCategory);
-        }
-      })
-    );
-  }
+ 
   if (typeof updateData?.price !== "number") {
     updateData.price = Number(updateData.price);
   }
@@ -277,6 +280,7 @@ const updateProduct = async (productId, updateData) => {
       { model: ProductStock, attributes: ["amount"] },
     ],
   });
+
   return updatedProduct;
 };
 
@@ -301,8 +305,8 @@ const logicalDelete = async (id) => {
     return { error: true, response: "Producto no encontrado" };
   }
   await product.update({ is_deleted: !product.is_deleted });
-  return `${product.name} ${
-    product.is_deleted ? " activado" : " desactivado"
+  return `Producto ${product.name} ${
+    product.is_deleted ? "desactivado" : "activado"
   } `;
 };
 
