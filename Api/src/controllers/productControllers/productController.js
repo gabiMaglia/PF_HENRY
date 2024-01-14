@@ -192,14 +192,14 @@ const updateProduct = async (productId, updateData) => {
     return { error: true, response: "Producto no encontrado" };
   }
 
-  if (updateData.ProductStock) {
+  if (updateData.stock) {
     await productToUpdate.ProductStock.update({
-      amount: updateData.ProductStock,
+      amount: updateData.stock,
     });
   }
 
   //Update brand
-  if (updateData.ProductBrand) {
+  if (updateData.brandName) {
     await Promise.all(
       productToUpdate.ProductBrands.map(async (brand) => {
         return productToUpdate.removeProductBrand(brand);
@@ -207,7 +207,7 @@ const updateProduct = async (productId, updateData) => {
     );
 
     const [brand, createdBrand] = await ProductBrand.findOrCreate({
-      where: { name: updateData.ProductBrand },
+      where: { name: updateData.brandName },
     });
 
     if (brand) {
