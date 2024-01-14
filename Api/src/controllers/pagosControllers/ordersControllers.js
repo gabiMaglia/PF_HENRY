@@ -202,7 +202,6 @@ const deleteOrdersController = async (req, res) => {
       },
     ],
   });
-  console.log(orders[0].OrderProducts);
   Promise.all(orders.map((order) => order.destroy()));
 };
 
