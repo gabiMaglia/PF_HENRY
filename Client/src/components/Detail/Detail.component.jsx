@@ -114,7 +114,7 @@ const Detail = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const userRole = authData.userRole;
+  const userRole = authData?.userRole;
 
   const formatPrice = (price) => {
     return "$" + price?.toFixed(0)?.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
