@@ -20,13 +20,13 @@ const sendConfirmationEmail = async (
       html: `
       <div
       style="
-  background: linear-gradient(to top, #fd611a, white);
-  width: 100%;
-  max-width: 600px;
-  filter: brightness(80%);
-  height: auto;
-  border-radius: 20px;
-"
+       background: linear-gradient(to top, #fd611a, white);
+       width: 100%;
+       max-width: 600px;
+       filter: brightness(80%);
+       height: auto;
+       border-radius: 20px;
+      "
       >
       <table
         style="
