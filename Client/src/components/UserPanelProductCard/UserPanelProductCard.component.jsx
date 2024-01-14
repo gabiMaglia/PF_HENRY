@@ -179,7 +179,7 @@ const UserPanelProductCard = ({
                   }}
                   onClick={() => {
                     button.action(
-                      product,
+                      product.id,
                       button.actionParam && button.actionParam,
                       actionParam && actionParam
                     );
