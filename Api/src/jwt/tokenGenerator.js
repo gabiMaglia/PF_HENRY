@@ -1,30 +1,34 @@
 require("dotenv").config();
 const SECRET = process.env.JWT_SECRET_KEY;
 const jwt = require("jsonwebtoken");
-
+const { checkBlacklistedToken } = require("./tokenUtils");
 
 const tokenSign = (userId, username, userRole) => {
-  
   const userForToken = {
     userId: userId,
     username,
     userRole,
   };
-  const token = jwt.sign(userForToken, SECRET, { expiresIn: "1d" });
+  const token = jwt.sign(userForToken, SECRET, { expiresIn: "1h" });
   return token;
 };
 
-const verifyToken = (token) => {
+const verifyToken = async (token) => {
   try {
-    return jwt.verify(token, SECRET);
+    const isBlackListed = await checkBlacklistedToken(token);
+    if (isBlackListed) return { error: true, name: "blackListedToken" };
+    const decodedToken = jwt.verify(token, SECRET);
+    return decodedToken;
   } catch (error) {
-    return null;
+    console.log(error.name);
+    return { error: true, name: error.name };
   }
 };
 
-const refreshToken = (token) => {
+const refreshToken = async (token) => {
   try {
-    const decodedToken = verifyToken(token.split(' ').pop());
+    const decodedToken = await verifyToken(token.split(" ").pop());
+    if (decodedToken.error) return { error: true, message: decodedToken.name };
 
     const newToken = tokenSign(
       decodedToken.userId,

@@ -292,7 +292,6 @@ const DeleteServiceController = async (id) => {
 const updateServiceController = async (
   id,
   product_model,
-  product_income_date,
   user_diagnosis,
   technicianId,
   budget,
@@ -301,49 +300,40 @@ const updateServiceController = async (
   technical_diagnosis,
   final_diagnosis
 ) => {
-  try {
-    const service = await Service.findByPk(id, {
-      include: [Service_status],
-    });
-    if (!service) {
-      return {
-        error: true,
-        response: "Service not found",
-      };
-    }
-    service.product_model = product_model;
-    service.product_income_date = product_income_date;
-    const serviceStatus = service.Service_status;
-    if (serviceStatus) {
-      serviceStatus.user_diagnosis = user_diagnosis;
-      serviceStatus.budget = budget;
-      serviceStatus.confirm_repair = confirm_repair;
-      serviceStatus.status = status;
-      serviceStatus.technical_diagnosis = technical_diagnosis;
-      serviceStatus.final_diagnosis = final_diagnosis;
-
-      await serviceStatus.save();
-    }
-    if (technicianId) {
-      const technicianObj = await User.findByPk(technicianId);
-      if (!technicianObj) {
-        return {
-          error: true,
-          response: "Technician not found",
-        };
-      }
-      await service.setTechnician(technicianObj);
-    }
-    await service.save();
-    return {
-      response: "Service updated successfully",
-    };
-  } catch (error) {
+  const service = await Service.findByPk(id, {
+    include: [Service_status],
+  });
+  if (!service) {
     return {
       error: true,
-      response: error.message,
+      response: "Service not found",
     };
   }
+  product_model && (service.product_model = product_model);
+  const serviceStatus = service.Service_status;
+  if (serviceStatus) {
+    user_diagnosis && (serviceStatus.user_diagnosis = user_diagnosis);
+    budget && (serviceStatus.budget = budget);
+    confirm_repair && (serviceStatus.confirm_repair = confirm_repair);
+    status && (serviceStatus.status = status);
+    technical_diagnosis &&
+      (serviceStatus.technical_diagnosis = technical_diagnosis);
+    final_diagnosis && (serviceStatus.final_diagnosis = final_diagnosis);
+
+    await serviceStatus.save();
+  }
+  if (technicianId) {
+    const technicianObj = await User.findByPk(technicianId);
+    if (!technicianObj) {
+      return {
+        error: true,
+        response: "Technician not found",
+      };
+    }
+    await service.setTechnician(technicianObj);
+  }
+  await service.save();
+  return service;
 };
 
 //LOGICAL DELETE SERVICE
@@ -356,8 +346,8 @@ const logicalDeleteServiceController = async (id) => {
     return { error: true, response: "Servicio no encontrado" };
   }
   await service.update({ isDelete: !service.isDelete });
-  return `${service.product_model} ${
-    service.isDelete ? " activado" : " desactivado"
+  return `Servicio ${service.product_model} ${
+    service.isDelete ? " desactivado" : " activado"
   } `;
 };
 
@@ -372,5 +362,5 @@ module.exports = {
   DeleteServiceController,
   GetUndeletedServicesController,
   updateServiceController,
-  logicalDeleteServiceController
+  logicalDeleteServiceController,
 };

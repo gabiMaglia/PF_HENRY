@@ -116,13 +116,13 @@ const CardProduct = ({ product }) => {
       >
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {categoryName && (
-            <Typography className="hover-underline-animation-dark"
+            <Typography
+              className="hover-underline-animation-dark"
               variant="subtitle2"
               onClick={handleCategoryClick}
               sx={{
                 paddingTop: "20px",
-                zIndex: "1000",
-                // borderBottom: "1px solid black",
+                zIndex: "999",
               }}
             >
               <span

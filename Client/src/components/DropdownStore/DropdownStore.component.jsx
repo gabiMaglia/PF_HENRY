@@ -34,7 +34,7 @@ const DropdownStoreComponent = () => {
       <Box>
         <Typography
           variant="h4"
-          sx={{ textAlign: "center", marginTop: "25px", fontWeight: "600" }}
+          sx={{ textAlign: "center", marginTop: "25px", fontWeight: "800" }}
         >
           Tienda Online
         </Typography>

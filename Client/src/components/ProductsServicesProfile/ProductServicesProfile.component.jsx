@@ -13,17 +13,11 @@ import DetailProductService from "../DetailProductService/DetailProductService.c
 import ToolbarServiceProfile from "../ToolbarServiceProfile/ToolbarServiceProfile.component.jsx";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { serviceStatuses } from "../../utils/serviceStatuses.js";
 import { sortServiceCardByDate } from "../../utils/sortCardsByDate";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //SERVICES
-import {
-  getUsersByRole,
-  getUserById,
-  putUser,
-} from "../../services/userServices";
-import { filterService, getServices } from "../../services/serviceServices";
+import { getServices } from "../../services/serviceServices";
 import logo from "../../../public/icons/logo.svg";
 
 const ProductsServicesProfile = () => {
@@ -64,7 +58,9 @@ const ProductsServicesProfile = () => {
 
   const handleOpenDetail = (id, open) => {
     open && setOpenDetail(open);
-    id && setCardDetail(id);
+    if (id) {
+      setCardDetail(id);
+    }
   };
 
   useEffect(() => {

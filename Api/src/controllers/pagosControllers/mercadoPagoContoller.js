@@ -15,6 +15,7 @@ const axios = require("axios");
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
 const backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
+// const backend_Url = `https://7c03-2800-a4-2720-7100-299a-abad-2cda-a060.ngrok-free.app`;
 const conn = require("../../db");
 const { where } = require("sequelize");
 const transporter = require("../../config/mailer");
@@ -29,8 +30,8 @@ const mercadoPago = async (array, idUser) => {
       items: array,
       back_urls: {
         success: `${frontend_Url}/customer/userPanel/shoppings?success=true`,
-        failure: `${frontend_Url}/cart`,
-        pending: `${frontend_Url}/cart`,
+        failure: `${frontend_Url}/shoppingCart?payment=false`,
+        pending: `${frontend_Url}/shoppingCart?payment=pending`,
       },
     };
 
@@ -56,12 +57,12 @@ const handlePaymentNotification = async (paymentId) => {
           },
         }
       );
+
       let user;
       let userId;
       if (payment?.data?.metadata?.id_user) {
         userId = payment.data.metadata.id_user;
         user = await User.findByPk(userId);
-
         const cart = await Cart.findOne({
           where: {
             UserId: userId,
@@ -69,7 +70,7 @@ const handlePaymentNotification = async (paymentId) => {
           include: [
             {
               model: Product,
-              attributes: ["id", "name", "price"],
+              attributes: ["id", "name", "price", "soldCount"],
               through: {
                 model: ProductCart,
                 attributes: ["quantity"],
@@ -86,32 +87,25 @@ const handlePaymentNotification = async (paymentId) => {
 
         const order = await Order.create({
           UserId: userId,
+          paymentId: paymentId.data.id,
+          status: "pending",
+          purchaseDate: Date(),
         });
 
-        for (const product of cart.Products) {
-          const quantity = product.ProductCart.quantity;
-
-          await order.addProduct(product, { through: { quantity: quantity } });
-        }
-
-        for (const product of cart.Products) {
-          await cart.removeProduct(product);
-        }
+        await Promise.all(
+          cart.Products.map(async (product) => {
+            const quantity = product.ProductCart.quantity;
+            await order.addProduct(product, {
+              through: { quantity: quantity },
+            });
+          })
+        );
 
         if (
           payment.data.status === "approved" ||
           payment.data.status === "pending"
         ) {
           if (order) {
-            await order.update({
-              status: payment.data.status,
-              cartTotal: Number(
-                payment.data.transaction_details.total_paid_amount
-              ),
-              paymentMethod: payment.data.payment_method.type,
-            });
-            await sendOrderConfirmationEmail(cart.Products, user.email);
-
             Promise.all(
               cart.Products.map(async (product) => {
                 const { id, soldCount } = product;
@@ -131,12 +125,25 @@ const handlePaymentNotification = async (paymentId) => {
                     });
 
                     await product.update({
-                      soldCount: soldCount + productQuantity,
+                      soldCount: Number(soldCount + productQuantity),
                     });
                   }
                 }
               })
             );
+
+            await order.update({
+              status: payment.data.status,
+              cartTotal: Number(
+                payment.data.transaction_details.total_paid_amount
+              ),
+              paymentMethod: payment.data.payment_method.type,
+            });
+          }
+
+          await sendOrderConfirmationEmail(cart.Products, user.email);
+          for (const product of cart.Products) {
+            await cart.removeProduct(product);
           }
         }
       }
@@ -147,26 +154,31 @@ const handlePaymentNotification = async (paymentId) => {
 };
 const sendOrderConfirmationEmail = async (products, userEmail) => {
   try {
-    const productsHtml = products
+    const emailBody = `<div style="width: 100%">
+    <h1>Gracias por tu compra. Aquí está el resumen de la compra:</h1>
+    
+    ${products
       .map(
         (product) => `
-    <div>
-      <h2>${product.name}</h2>
-
-      <h3>${product.price}</h3>
-
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
+      <img style="width: 90px; height: auto; margin-bottom: 5px;" src="${escapeHTML(
+        product.ProductImages[0].dataValues.address
+      )}" alt="${escapeHTML(product.name)}">
+      <h2 style="margin-bottom: 8px;
+      
+      margin-left: 4%; ">${escapeHTML(product.name)}</h2>
+      <h2 style="margin-bottom: 8px; margin-left: 10%;">$${escapeHTML(
+        product.price
+      )}</h2>
+      <h3 style="margin-left: 15%;">Cantidad: ${escapeHTML(
+        product.ProductCart.dataValues.quantity
+      )}</h3>
     </div>
-  `
+    `
       )
-      .join("");
+      .join("")}
+  </div>
 
-    const emailBody = `
-    <p>Gracias por tu compra. Aquí está el resumen de la compra:</p>
-    
-        ${productsHtml}
-        <p>${products}</p>
-
-    <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>
   `;
 
     await transporter.sendMail({
@@ -174,7 +186,7 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
       to: userEmail,
       subject: "Compra finalizada con éxito ✔",
       html: `${emailBody} 
-     <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+     <img style="height: 180px; width:auto; " src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
     });
   } catch (error) {
     console.error(
@@ -183,6 +195,22 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
     );
   }
 };
+
+function escapeHTML(value) {
+  return typeof value === "string"
+    ? value.replace(
+        /[&<>"']/g,
+        (match) =>
+          ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+          }[match])
+      )
+    : value;
+}
 
 module.exports = {
   mercadoPago,

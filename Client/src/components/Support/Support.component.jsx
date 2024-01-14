@@ -172,7 +172,7 @@ const SupportComponent = () => {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: errorMsg || "Hubo un error en el servidor.",
+          text: "Hubo un error en el servidor.",
         });
       }
     } catch (error) {
@@ -353,7 +353,7 @@ const SupportComponent = () => {
           {textSupport.map((item, index) => (
             <Box key={index}>
               <Typography
-                variant="h5"
+                variant="h4"
                 sx={{
                   marginBottom: "10px",
                   fontWeight: "bold",
@@ -367,6 +367,7 @@ const SupportComponent = () => {
                   key={pIndex}
                   sx={{
                     marginBottom: "10px",
+                    textAlign: "justify",
                     "@media (max-width: 480px)": { margin: "20px 0" },
                   }}
                 >

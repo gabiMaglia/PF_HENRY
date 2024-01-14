@@ -8,7 +8,7 @@ import {
   GridLogicOperator,
   esES,
 } from "@mui/x-data-grid";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 //COMPONENTS
 import LoadingProgress from "../Loading/Loading.component";
 import {
@@ -16,21 +16,14 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+//SERVICES
 import {
   logicalDeleteProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
 // SWEET ALERT
 import Swal from "sweetalert2";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-
-const formatPrice = (price) => {
-  const numericPrice = parseFloat(price);
-  if (isNaN(numericPrice)) {
-    return "Invalid Budget";
-  }
-  return `$${numericPrice.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
-};
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -47,6 +40,15 @@ const columns = [
     width: 100,
     headerAlign: "center",
     editable: true,
+    valueFormatter: (params) => {
+      const numericPrice = parseFloat(params.value);
+      if (isNaN(numericPrice)) {
+        return "Formato precio invalido";
+      }
+      return `$${numericPrice
+        .toFixed(0)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+    },
   },
   {
     field: "warranty",
@@ -66,7 +68,7 @@ const columns = [
   {
     field: "soldCount",
     headerName: "Vendidos",
-    width: 80,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
@@ -80,14 +82,14 @@ const columns = [
   {
     field: "brand",
     headerName: "Marca",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "category",
     headerName: "Categoría",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
@@ -109,10 +111,10 @@ const ProductsTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
-  
+
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-
+  console.log(authData.jwt);
   const language = esES;
 
   const urlBack = import.meta.env.VITE_BACKEND_URL;
@@ -126,7 +128,7 @@ const ProductsTable = () => {
         return {
           id: product.id,
           name: product.name,
-          price: formatPrice(product.price),
+          price: product.price,
           warranty: product.warranty,
           soldCount: product.soldCount,
           carousel: product.carousel,
@@ -177,7 +179,7 @@ const ProductsTable = () => {
         msg = msg.join(", ");
         Swal.fire({
           icon: "success",
-          title: "Eliminación exitosa",
+          title: "Operación Exitosa",
           text: msg,
         });
         getProducts();
@@ -211,7 +213,23 @@ const ProductsTable = () => {
         setAvailableModify(false);
         const productId = newRow.id;
 
-        const response = await fetchUpdateProduct(productId, newRow, authData.jwt);
+        const updateData = {
+          name: newRow.name,
+          price: newRow.price,
+          warranty: newRow.warranty,
+          soldCount: newRow.soldCount,
+          carousel: newRow.carousel,
+          stock: newRow.stock,
+          brandName: newRow.brand,
+          categoryName: newRow.category,
+        };
+
+        const response = await fetchUpdateProduct(
+          productId,
+          // newRow,
+          updateData,
+          authData.jwt
+        );
         if (response.status === 200) {
           setRows((prevRows) =>
             prevRows.map((row) =>

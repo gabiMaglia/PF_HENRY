@@ -121,11 +121,15 @@ export const updateService = async (id, update, jwt) => {
 
 export const logicalDeleteService = async (id, jwt) => {
   try {
-    const response = await axios.put(`${url}/service/logicalDelete/service/${id}`, null, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
+    const response = await axios.put(
+      `${url}/service/logicalDelete/service/${id}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     return { error: true, message: error.message };

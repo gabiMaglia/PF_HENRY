@@ -33,6 +33,7 @@ export function useLocalStorage() {
             ProductImages: product.ProductImages[0],
             price: product.price,
             count: 1,
+            stock: product.ProductStock.amount,
           };
           const newProducts = [...prevProducts, newProduct];
           window.localStorage.setItem(

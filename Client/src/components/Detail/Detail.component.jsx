@@ -30,6 +30,7 @@ import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //SWEET ALERT
 import Swal from "sweetalert2";
+//UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //FIREBASE
 import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
@@ -109,7 +110,12 @@ const Detail = () => {
   const { allProducts } = useSelector((state) => state.product);
   const { login } = useSelector((state) => state.user);
   const [fadeInKey, setFadeInKey] = useState(0);
-  const { cookiesAccepted } = useSelector((state) => state.cookies);
+  // const { cookiesAccepted } = useSelector((state) => state.cookies);
+  const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
+  const userRole = authData.userRole;
+
   const formatPrice = (price) => {
     return "$" + price?.toFixed(0)?.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
   };
@@ -181,11 +187,19 @@ const Detail = () => {
         confirmButtonColor: "#3085d6",
         confirmButtonText: "Ok",
       });
+    } else if (userRole !== "customer") {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Denegado",
+        text: "Tu rol de usurario no tiene carrito de compras.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
     } else {
       setStoredProducts(productById);
       dispatch(addItem());
       // TODO CHEKEAR PORQUE SE ESTA HACIENDO UN DISPATCH DE ESTO
-      dispatch(fetchProductCartPost(productById, cookiesAccepted));
+      dispatch(fetchProductCartPost(productById, cookieStatus));
       Swal.fire({
         icon: "success",
         title: "Producto agregado exitosamente",

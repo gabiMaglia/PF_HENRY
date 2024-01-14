@@ -131,6 +131,7 @@ export const fetchProductCartGet = (cookiesAccepted) => async () => {
         price: product.price,
         ProductImages: product.ProductImages[0],
         count: product.ProductCart.quantity,
+        stock: product.ProductStock.amount,
       }));
 
       const storedProducts = getProducts();

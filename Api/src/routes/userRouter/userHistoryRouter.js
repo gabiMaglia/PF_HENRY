@@ -1,9 +1,11 @@
 const {Router}=require('express')
-const {PostHistory}=require('../../handlers/userHandlers/userHistoryHandler')
+const {PostHistory,getHistoryByUser,deleteHistory}=require('../../handlers/userHandlers/userHistoryHandler')
 
 const useRouter=Router()
 
-useRouter.post('/',PostHistory)
+useRouter.post('/:id',PostHistory)
+useRouter.get('/:id',getHistoryByUser)
+useRouter.put('/:id',deleteHistory)
 
 
 

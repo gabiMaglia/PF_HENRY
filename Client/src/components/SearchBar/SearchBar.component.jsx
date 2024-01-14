@@ -14,6 +14,7 @@ import { Autocomplete } from "@mui/material";
 import LoginModal from "../LoginModal/LoginModal.component";
 import RegisterModal from "../RegisterModal/RegisterModal.component";
 import UserMenu from "../UserMenu/UserMenu.component";
+import Notification from "../Notifications/Notifications.component";
 //REDUX
 import { logUser } from "../../redux/slices/userSlice";
 import { addItem } from "../../redux/slices/cartSlice";
@@ -233,6 +234,11 @@ export default function SearchAppBar() {
           flexDirection: "row",
           mt: { xs: 2 },
           alignItems: "center",
+          justifyContent: "space-around",
+          gap: "3em",
+          [`@media (max-width:1200px)`]: {
+            width: "50%",
+          },
         }}
       >
         {userRole === "customer" ? (
@@ -280,15 +286,22 @@ export default function SearchAppBar() {
           </Box>
         ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
         null}
+        {userRole === "customer" && login === true && (
+          <Box>
+            <Notification />
+          </Box>
+        )}
         {login === false ? (
           <Box
             sx={{
               flexGrow: 0,
               maxWidth: "xl",
-              ml: 4,
-              mr: 4,
+              ml: "4em",
               borderRadius: 2,
               backgroundColor: "#fd611a",
+              [`@media (max-width:1200px)`]: {
+                ml: 0,
+              },
             }}
           >
             <Button
@@ -305,14 +318,7 @@ export default function SearchAppBar() {
             </Button>
           </Box>
         ) : (
-          <Box
-            sx={{
-              flexGrow: 0,
-              maxWidth: "xl",
-              ml: 4,
-              mr: 4,
-            }}
-          >
+          <Box>
             <UserMenu />
           </Box>
         )}
