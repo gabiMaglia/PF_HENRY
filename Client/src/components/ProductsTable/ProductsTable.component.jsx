@@ -179,7 +179,7 @@ const ProductsTable = () => {
         msg = msg.join(", ");
         Swal.fire({
           icon: "success",
-          title: "Eliminación exitosa",
+          title: "Operación Exitosa",
           text: msg,
         });
         getProducts();

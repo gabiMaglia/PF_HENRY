@@ -108,7 +108,6 @@ const columns = [
     headerName: "Borrado",
     minWidth: 150,
     headerAlign: "center",
-    editable: true,
   },
 ];
 
@@ -202,7 +201,7 @@ const ServicesTable = () => {
         msg = msg.join(", ");
         Swal.fire({
           icon: "success",
-          title: "Eliminación exitosa",
+          title: "Operación Exitosa",
           text: msg,
         });
         getAllServices();
