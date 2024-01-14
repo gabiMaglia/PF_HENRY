@@ -14,6 +14,7 @@ import {
   CardMedia,
   CircularProgress,
 } from "@mui/material";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 //COMPONENTS
 import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 //SERVICES
@@ -23,6 +24,10 @@ import {
   fetchProductCartPost,
 } from "../../services/productServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
+import {
+  fetchAddItemWish,
+  fetchWishList,
+} from "../../services/wishListServices";
 //REDUX
 import { resetState } from "../../redux/slices/productSlice";
 import { addItem } from "../../redux/slices/cartSlice";
@@ -98,6 +103,7 @@ const FadeInTransition = ({ children }) => {
 const Detail = () => {
   // Obtención del parámetro de la URL
   const { id } = useParams();
+  const wishlistProducts = useSelector((state) => state.wishlist.products);
 
   // Configuración de Redux
   const dispatch = useDispatch();
@@ -110,11 +116,12 @@ const Detail = () => {
   const { allProducts } = useSelector((state) => state.product);
   const { login } = useSelector((state) => state.user);
   const [fadeInKey, setFadeInKey] = useState(0);
+  const [isDesired, setIsDesired] = useState(false);
   // const { cookiesAccepted } = useSelector((state) => state.cookies);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-  const userRole = authData.userRole;
+  const userRole = authData?.userRole;
 
   const formatPrice = (price) => {
     return "$" + price?.toFixed(0)?.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
@@ -124,6 +131,29 @@ const Detail = () => {
     setFadeInKey((prevKey) => prevKey + 1);
   };
 
+  const handleDesiredClick = () => {
+    console.log(productById);
+    if (login && userRole === "customer") {
+      fetchAddItemWish(dispatch, authData.userId, productById.id, authData.jwt);
+    } else if (login && userRole !== "customer") {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Denegado",
+        text: "Tu rol de usuario no posee lista de deseos.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "Acceso Privado",
+        text: "Debe registrarse para añadir a la lista de deseos.",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
+    }
+  };
+
   useEffect(() => {
     resetFadeIn();
   }, [id, productById]);
@@ -131,6 +161,19 @@ const Detail = () => {
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, []);
+
+  useEffect(() => {
+    if (login) {
+      if (wishlistProducts) {
+        const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
+        setIsDesired(isProductInWishlist);
+      } else {
+        fetchWishList(authData.userId, dispatch, authData.jwt);
+      }
+    } else {
+      setIsDesired(false);
+    }
+  }, [authData?.userId, dispatch, login, wishlistProducts]);
 
   useEffect(() => {
     // Función asíncrona para cargar los datos del producto
@@ -278,6 +321,7 @@ const Detail = () => {
             overflow: "hidden",
             margin: isSmallScreen ? "auto" : 0,
             maxWidth: isSmallScreen ? "100%" : 900,
+            position: "relative",
           }}
         >
           {isLargeScreen &&
@@ -370,6 +414,17 @@ const Detail = () => {
               </CustomButton>
             </Container>
           </Container>
+          <BookmarkIcon
+            onClick={handleDesiredClick}
+            sx={{
+              position: "absolute",
+              top: "30px",
+              right: "20px",
+              transform: "translateY(-50%)",
+              cursor: login ? "pointer" : "not-allowed",
+              color: isDesired ? "#fd611a" : "gray",
+            }}
+          />
         </Container>
         <Container sx={{ marginTop: 2 }}>
           <Divider sx={{ marginY: 2 }} />
