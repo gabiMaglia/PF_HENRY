@@ -1,4 +1,4 @@
-// //HOOKS
+//HOOKS
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 //MATERIAL UI
@@ -406,7 +406,7 @@ const ProductCreateProfileComponent = () => {
               label="Marca"
               MenuProps={{
                 style: {
-                  maxHeight: '200px',  // Ajusta este valor según tus necesidades
+                  maxHeight: '200px',  
                 },
               }}
               value={isOtherBrand ? "otra" : values.brandName}
@@ -458,7 +458,7 @@ const ProductCreateProfileComponent = () => {
               label="Categoria"
               MenuProps={{
                 style: {
-                  maxHeight: '200px',  // Ajusta este valor según tus necesidades
+                  maxHeight: '200px',  
                 },
               }}
               value={isOtherCategory ? "otra" : values.categoryName}
