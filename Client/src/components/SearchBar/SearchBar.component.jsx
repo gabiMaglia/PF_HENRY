@@ -57,6 +57,7 @@ export default function SearchAppBar() {
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     dispatch(addItem());
@@ -111,6 +112,7 @@ export default function SearchAppBar() {
   };
 
   const handleAutocompleteSelect = (selectedSuggestion) => {
+    setInputValue(selectedSuggestion);
     dispatch(fetchChage(selectedSuggestion));
     setShowAutocomplete(false);
   };
@@ -161,10 +163,10 @@ export default function SearchAppBar() {
       >
         <Input
           type="text"
-          value={inputName}
+          value={inputValue}
           placeholder=" Buscador"
           onChange={(e) => {
-            handleChange(e);
+            setInputValue(e.target.value);
             handleAutocomplete(e.target.value);
           }}
           onFocus={() => setIsInputFocused(true)}
@@ -196,7 +198,7 @@ export default function SearchAppBar() {
             {autocompleteSuggestions.map((suggestion, index) => (
               <div
                 key={index}
-                onClick={() => handleAutocompleteSelect(suggestion)}
+                onMouseDown={() => handleAutocompleteSelect(suggestion)}
                 style={{
                   padding: "8px",
                   cursor: "pointer",
