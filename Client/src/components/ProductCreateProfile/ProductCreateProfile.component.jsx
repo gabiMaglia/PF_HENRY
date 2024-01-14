@@ -404,6 +404,11 @@ const ProductCreateProfileComponent = () => {
               id="brandSelect"
               name="brandName"
               label="Marca"
+              MenuProps={{
+                style: {
+                  maxHeight: '200px',  
+                },
+              }}
               value={isOtherBrand ? "otra" : values.brandName}
               onChange={handleChange}
               variant="outlined"
@@ -451,6 +456,11 @@ const ProductCreateProfileComponent = () => {
               id="categorySelect"
               name="categoryName"
               label="Categoria"
+              MenuProps={{
+                style: {
+                  maxHeight: '200px',  
+                },
+              }}
               value={isOtherCategory ? "otra" : values.categoryName}
               onChange={handleChange}
               variant="outlined"
