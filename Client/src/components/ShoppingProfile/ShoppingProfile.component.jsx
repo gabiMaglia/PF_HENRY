@@ -157,7 +157,7 @@ const ShoppingProfileComponent = () => {
                 )}
                 <Button
                   variant="contained"
-                  onChange={handleClick}
+                  onClick={handleClick}
                   style={{
                     backgroundColor: "black",
                     color: "white",
