@@ -63,8 +63,28 @@ const userSlice = createSlice({
       state.userAddress.number = "";
       state.userAddress.zipCode = "";
     },
+    updateInfo: (state, { payload }) => {
+      const { userObject } = payload;
+      const { UserAddress } = userObject;
+      userObject?.name && (state.name = userObject.name);
+      userObject?.surname && (state.surname = userObject.surname);
+      userObject?.communication_preference &&
+        (state.communication_preference = userObject.communication_preference);
+      userObject?.birthdate && (state.birthdate = userObject.birthdate);
+      userObject?.email && (state.email = userObject.email);
+      userObject?.dni && (state.dni = userObject.dni);
+      userObject?.telephone && (state.telephone = userObject.telephone);
+      userObject?.image && (state.image = userObject.image);
+      userObject?.rolId && (state.role = userObject.rolId);
+      UserAddress?.country && (state.userAddress.country = UserAddress.country);
+      UserAddress?.state && (state.userAddress.state = UserAddress.state);
+      UserAddress?.city && (state.userAddress.city = UserAddress.city);
+      UserAddress?.street && (state.userAddress.street = UserAddress.street);
+      UserAddress?.number && (state.userAddress.number = UserAddress.number);
+      UserAddress?.zipCode && (state.userAddress.zipCode = UserAddress.zipCode);
+    },
   },
 });
 
-export const { logUser, logoutUser } = userSlice.actions;
+export const { logUser, logoutUser, updateInfo } = userSlice.actions;
 export default userSlice.reducer;
