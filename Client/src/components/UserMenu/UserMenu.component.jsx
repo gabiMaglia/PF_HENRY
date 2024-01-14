@@ -21,7 +21,10 @@ import getFirstLetters from "../../helpers/getFirstLetters";
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
-import { clearPersistanceData, getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter.js";
+import {
+  clearPersistanceData,
+  getDataFromSelectedPersistanceMethod,
+} from "../../utils/authMethodSpliter.js";
 import { logOutUser } from "../../services/authServices.js";
 import { resetCart } from "../../redux/slices/cartSlice.js";
 
@@ -29,12 +32,12 @@ const UserMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const authData = getDataFromSelectedPersistanceMethod(cookieStatus)
+  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const { name, surname } = useSelector((state) => state.user);
 
   const initialLetersUsers = {
-    name: getFirstLetters(name),
-    surname: getFirstLetters(surname),
+    name: getFirstLetters(name?.split(" ")[0]),
+    surname: getFirstLetters(surname?.split(" ")[0]),
   };
 
   const items = UserPanelItems(name, surname);
@@ -47,7 +50,7 @@ const UserMenu = () => {
 
   const logout = async () => {
     clearPersistanceData(cookieStatus);
-    await logOutUser(authData.jwt)
+    await logOutUser(authData.jwt);
     dispatch(logoutUser());
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
     navigate(PATHROUTES.HOME);
@@ -72,13 +75,12 @@ const UserMenu = () => {
             onClick={handleClick}
             size="small"
             sx={{
-              ml: 2,
               display: "flex",
               flexDirection: "column",
               alignContent: "center",
               [`@media (max-width:1200px)`]: {
                 flexDirection: "row-reverse",
-                gap: "1em",
+                gap: "10px",
               },
             }}
             aria-controls={open ? "account-menu" : undefined}
@@ -102,7 +104,7 @@ const UserMenu = () => {
               </Typography>
             </Avatar>
             <Typography sx={{ maxWidth: "8em", textAlign: "center" }}>
-              {name} <br /> {surname}
+              {name?.split(" ")[0]} <br /> {surname?.split(" ")[0]}
             </Typography>
           </IconButton>
         </Tooltip>

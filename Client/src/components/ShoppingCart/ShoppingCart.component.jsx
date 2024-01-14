@@ -179,7 +179,7 @@ export default function ShoppingCart() {
 
             <BaseNumberInput
               min={1}
-              max={10}
+              max={item.stock}
               id={item.id}
               value={item.count}
               onChange={(event, value) => handleChange(item.id, value)}

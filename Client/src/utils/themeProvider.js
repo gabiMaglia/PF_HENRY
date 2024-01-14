@@ -1,51 +1,49 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from "@mui/material";
 
 // COMBINACION 1
 // font-family: 'Advent Pro', sans-serif;
 // font-family: 'Oxygen', sans-serif;
 // font-family: 'Oxygen Mono', monospace;
-// COMBINACION @
+// COMBINACION 2
 // font-family: 'Bebas Neue', sans-serif;
 // font-family: 'Montserrat', sans-serif;
 
 export const theme = createTheme({
   typography: {
     h1: {
-      fontFamily: 'Roboto, sans-serif'
+      fontFamily: "Bebas Neue",
     },
     h2: {
-      fontFamily: 'Bebas Neue'
+      fontFamily: "Bebas Neue",
     },
     h4: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       //  cardCarouselPromotionn
       // support
       // Questions
     },
     h5: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // homeProduct
-      //Support 
+      //Support
     },
     h6: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // navItems
     },
     subtitle2: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // ProductCardSubtitle
       // ProductPrice
     },
     body1: {
-      fontFamily: 'Montserrat'
-      //Loadings Flags 
+      fontFamily: "Montserrat",
+      //Loadings Flags
     },
     body2: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // support
     },
-    span : {
-
-    },
+    span: {},
   },
 });

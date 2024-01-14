@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+//HOOKS
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+//MATREIAL UI
 import {
   Card,
   CardContent,
@@ -11,12 +13,11 @@ import {
   CardMedia,
   useTheme,
 } from "@mui/material";
+import { Container } from "@mui/system";
 //FIREBASE
 import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 
-import { Container } from "@mui/system";
 import miVideo from "/carousel/prueba.mp4";
-
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
@@ -63,10 +64,9 @@ const CardCarousel = ({ allProducts }) => {
         overflow: "hidden",
         opacity: "1",
         background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 50%, rgba(26, 253, 148, 0) 96%)`,
-        visibility: "visible", // Show the component
-        display: "none", // Default to hidden
+        visibility: "visible",
+        display: "none",
         "@media (min-width: 901px)": {
-          // Only show the component when the screen size is greater than 900px
           display: "block",
         },
       }}
@@ -143,7 +143,7 @@ const CardCarousel = ({ allProducts }) => {
                           sm: "2.8rem",
                           md: "3.2rem",
                         },
-                        letterSpacing: '8px'
+                        letterSpacing: "8px",
                       }}
                     >
                       {product.name.toUpperCase()}
@@ -158,11 +158,9 @@ const CardCarousel = ({ allProducts }) => {
                       alignContent: "flex-end",
                     }}
                   >
-                    
                     <Typography
                       variant="h4"
                       color="#ff5000"
-                      fontWeight="medium"
                       sx={{
                         textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
                         p: "5px",
@@ -173,10 +171,13 @@ const CardCarousel = ({ allProducts }) => {
                         },
                         marginLeft: "auto",
                         animation: "blink 1s infinite",
+                        fontWeight: "700",
+                        boxShadow: "0px 0px 10px rgb(255 255 255 / 90%)",
+                        padding: "10px",
+                        borderRadius: "5px",
                       }}
                     >
-                      
-                      OFF {formatPrice(product.price)}
+                      OFERTA {formatPrice(product.price)}
                     </Typography>
                     <style jsx="true">{`
                       @keyframes blink {
@@ -202,7 +203,7 @@ const CardCarousel = ({ allProducts }) => {
                     height: "auto",
                     border: "1px solid transparent",
                     marginTop: "8px",
-                    marginRight: "3%",
+                    marginRight: "10%",
                     boxShadow: "0px 0px 10px rgba(252, 252, 252, 0.5)",
                     borderRadius: "5px",
                   }}

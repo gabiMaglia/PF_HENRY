@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { itemToWishlist } from "./firebaseAnayticsServices";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
+const urlFront = import.meta.env.VITE_FRONT_URL;
 
 export const fetchWishList = async (userId, dispatch, jwt) => {
   try {
@@ -48,5 +49,18 @@ export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
     }
   } catch (error) {
     Swal.fire("Error", error.message, "error");
+  }
+};
+
+export const getOffers = async (userId, jwt) => {
+  try {
+    const response = await axios.get(`${urlBack}/wishList/offer/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { error: true, message: error.response };
   }
 };

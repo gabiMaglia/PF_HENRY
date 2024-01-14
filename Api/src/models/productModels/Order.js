@@ -13,22 +13,17 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: "pending",
     },
-    userEmail: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: false,
-    },
     totalAmount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
     },
-    preferenceId: {
+    paymentId: {
       type: DataTypes.STRING,
       allowNull: true,
     },
     cartTotal: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
     },
     shippingAddress: {
       type: DataTypes.STRING,
@@ -52,7 +47,7 @@ module.exports = (sequelize) => {
     },
     purchaseDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
 
     // products: {

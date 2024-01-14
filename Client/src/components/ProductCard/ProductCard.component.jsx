@@ -116,12 +116,13 @@ const CardProduct = ({ product }) => {
       >
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {categoryName && (
-            <Typography className="hover-underline-animation-dark"
+            <Typography
+              className="hover-underline-animation-dark"
               variant="subtitle2"
               onClick={handleCategoryClick}
               sx={{
                 paddingTop: "20px",
-                zIndex: "1000",
+                zIndex: "999",
               }}
             >
               <span
@@ -139,7 +140,7 @@ const CardProduct = ({ product }) => {
           <BookmarkIcon
             onClick={handleDesiredClick}
             sx={{
-              cursor: login ? null : "not-allowed",
+              cursor: login ? "pointer" : "not-allowed",
               position: "relative",
               top: "20px",
               right: "-30px",
