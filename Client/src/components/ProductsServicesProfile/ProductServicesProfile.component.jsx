@@ -25,7 +25,6 @@ const ProductsServicesProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [openDetail, setOpenDetail] = useState(false);
   const [cardDetail, setCardDetail] = useState([]);
-
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
