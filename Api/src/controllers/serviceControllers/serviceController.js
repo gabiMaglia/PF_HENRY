@@ -346,8 +346,8 @@ const logicalDeleteServiceController = async (id) => {
     return { error: true, response: "Servicio no encontrado" };
   }
   await service.update({ isDelete: !service.isDelete });
-  return `${service.product_model} ${
-    service.isDelete ? " activado" : " desactivado"
+  return `Servicio ${service.product_model} ${
+    service.isDelete ? " desactivado" : " activado"
   } `;
 };
 
