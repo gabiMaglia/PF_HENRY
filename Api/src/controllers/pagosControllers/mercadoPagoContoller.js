@@ -166,11 +166,11 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
       )}" alt="${escapeHTML(product.name)}">
       <h2 style="margin-bottom: 8px;
       
-      margin-left: 10px; ">${escapeHTML(product.name)}</h2>
-      <h2 style="margin-bottom: 8px; margin-left: 10px;">$${escapeHTML(
+      margin-left: 4%; ">${escapeHTML(product.name)}</h2>
+      <h2 style="margin-bottom: 8px; margin-left: 10%;">$${escapeHTML(
         product.price
       )}</h2>
-      <h3 style="margin-left: 40px;">Cantidad: ${escapeHTML(
+      <h3 style="margin-left: 15%;">Cantidad: ${escapeHTML(
         product.ProductCart.dataValues.quantity
       )}</h3>
     </div>
@@ -186,7 +186,7 @@ const sendOrderConfirmationEmail = async (products, userEmail) => {
       to: userEmail,
       subject: "Compra finalizada con éxito ✔",
       html: `${emailBody} 
-     <img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
+     <img style="height: 180px; width:auto; " src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/>`,
     });
   } catch (error) {
     console.error(
