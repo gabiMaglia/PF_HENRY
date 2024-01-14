@@ -299,6 +299,9 @@ export default function SearchAppBar() {
               ml: "4em",
               borderRadius: 2,
               backgroundColor: "#fd611a",
+              [`@media (max-width:1200px)`]: {
+                ml: 0,
+              },
             }}
           >
             <Button
