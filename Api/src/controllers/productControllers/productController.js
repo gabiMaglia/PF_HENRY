@@ -192,6 +192,7 @@ const updateProduct = async (productId, updateData) => {
     return { error: true, response: "Producto no encontrado" };
   }
 
+  //Update stock
   if (updateData.stock) {
     await productToUpdate.ProductStock.update({
       amount: updateData.stock,
@@ -264,28 +265,7 @@ const updateProduct = async (productId, updateData) => {
       }
     });
   }
-
-  // if (updateData.ProductCategory) {
-  //   await Promise.all(
-  //     productToUpdate.ProductCategories.map(async (category) => {
-  //       return productToUpdate.removeProductCategory(category);
-  //     })
-  //   );
-  //   await Promise.all(
-  //     updateData.ProductCategory.map(async (category) => {
-  //       const [existingCategory, createdCategory] =
-  //         await ProductCategory.findOrCreate({
-  //           where: { name: category },
-  //         });
-
-  //       if (existingCategory) {
-  //         return productToUpdate.addProductCategory(existingCategory);
-  //       } else {
-  //         return productToUpdate.addProductCategory(createdCategory);
-  //       }
-  //     })
-  //   );
-  // }
+ 
   if (typeof updateData?.price !== "number") {
     updateData.price = Number(updateData.price);
   }
@@ -300,6 +280,7 @@ const updateProduct = async (productId, updateData) => {
       { model: ProductStock, attributes: ["amount"] },
     ],
   });
+
   return updatedProduct;
 };
 
