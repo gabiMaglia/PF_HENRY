@@ -203,7 +203,7 @@ const CardCarousel = ({ allProducts }) => {
                     height: "auto",
                     border: "1px solid transparent",
                     marginTop: "8px",
-                    marginRight: "3%",
+                    marginRight: "10%",
                     boxShadow: "0px 0px 10px rgba(252, 252, 252, 0.5)",
                     borderRadius: "5px",
                   }}

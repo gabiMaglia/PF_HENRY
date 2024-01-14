@@ -67,7 +67,10 @@ const Notification = () => {
         cursor: "pointer",
       }}
     >
-      <NotificationsIcon onClick={handleClick} fontSize="medium" />
+      <NotificationsIcon
+        onClick={handleClick}
+        sx={{ fontSize: "32px", marginLeft: "-15px" }}
+      />
       {offers?.length > 0 && (
         <span
           style={{
