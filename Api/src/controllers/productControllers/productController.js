@@ -221,6 +221,29 @@ const updateProduct = async (productId, updateData) => {
     }
   }
 
+  //Update category
+  if (updateData.categoryName) {
+    await Promise.all(
+      productToUpdate.ProductCategories.map(async (category) => {
+        return productToUpdate.removeProductCategory(category);
+      })
+    );
+
+    const [category, createdCategory] = await ProductCategory.findOrCreate({
+      where: { name: updateData.categoryName },
+    });
+
+    if (category) {
+      await productToUpdate.addProductCategory(category, {
+        through: "ProductProductCategory",
+      });
+    } else {
+      await productToUpdate.addProductCategory(createdCategory, {
+        through: "ProductProductCategory",
+      });
+    }
+  }
+
   // Update Image
   if (updateData.ProductImage) {
     productToUpdate.ProductImages.map(async (image) => {
@@ -242,27 +265,27 @@ const updateProduct = async (productId, updateData) => {
     });
   }
 
-  if (updateData.ProductCategory) {
-    await Promise.all(
-      productToUpdate.ProductCategories.map(async (category) => {
-        return productToUpdate.removeProductCategory(category);
-      })
-    );
-    await Promise.all(
-      updateData.ProductCategory.map(async (category) => {
-        const [existingCategory, createdCategory] =
-          await ProductCategory.findOrCreate({
-            where: { name: category },
-          });
+  // if (updateData.ProductCategory) {
+  //   await Promise.all(
+  //     productToUpdate.ProductCategories.map(async (category) => {
+  //       return productToUpdate.removeProductCategory(category);
+  //     })
+  //   );
+  //   await Promise.all(
+  //     updateData.ProductCategory.map(async (category) => {
+  //       const [existingCategory, createdCategory] =
+  //         await ProductCategory.findOrCreate({
+  //           where: { name: category },
+  //         });
 
-        if (existingCategory) {
-          return productToUpdate.addProductCategory(existingCategory);
-        } else {
-          return productToUpdate.addProductCategory(createdCategory);
-        }
-      })
-    );
-  }
+  //       if (existingCategory) {
+  //         return productToUpdate.addProductCategory(existingCategory);
+  //       } else {
+  //         return productToUpdate.addProductCategory(createdCategory);
+  //       }
+  //     })
+  //   );
+  // }
   if (typeof updateData?.price !== "number") {
     updateData.price = Number(updateData.price);
   }
