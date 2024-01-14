@@ -309,6 +309,13 @@ const CreateService = () => {
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        gap: "1em",
+        pb: "1em",
+        pt: "1em",
       }}
     >
       <Typography variant="h4" sx={{ mt: "1%", color: "#fd611a" }}>
@@ -324,6 +331,7 @@ const CreateService = () => {
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          gap: "1em",
           flexGrow: "1",
           justifyContent: "space-around",
         }}
