@@ -54,7 +54,6 @@ const ProductBox = () => {
         confirmButtonText: "Ok",
       });
     } else {
-      console.log(product);
       setStoredProducts(product);
       dispatch(addItem());
       dispatch(fetchProductCartPost(product, cookieStatus));

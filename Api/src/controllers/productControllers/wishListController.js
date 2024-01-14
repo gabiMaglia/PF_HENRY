@@ -1,18 +1,26 @@
-const { WishList, User, Product,ProductCategory,ProductImage,ProductStock, ProductBrand} = require("../../db");
+const {
+  WishList,
+  User,
+  Product,
+  ProductCategory,
+  ProductImage,
+  ProductStock,
+  ProductBrand,
+} = require("../../db");
 
 const getWishListController = async (id) => {
   const [List, created] = await WishList.findOrCreate({
     where: { UserId: id },
     include: [
-      { 
+      {
         model: Product,
         include: [
           { model: ProductBrand, attributes: ["name"] },
-        { model: ProductCategory, attributes: ["name"] },
-        { model: ProductImage, attributes: ["address"] },
-        { model: ProductStock, attributes: ["amount"] },
-        ]
-      }
+          { model: ProductCategory, attributes: ["name"] },
+          { model: ProductImage, attributes: ["address"] },
+          { model: ProductStock, attributes: ["amount"] },
+        ],
+      },
     ],
   });
   return List;
@@ -58,4 +66,31 @@ const postwishItemController = async (userId, productId) => {
   }
 };
 
-module.exports = { getWishListController, postwishItemController };
+const getOfferNotification = async (id) => {
+  if (!id) {
+    return { error: true, response: "No se encontro el usuario" };
+  }
+  const [list, created] = await WishList.findOrCreate({
+    where: { UserId: id },
+    include: [
+      {
+        model: Product,
+      },
+    ],
+  });
+  if (!list?.Products) {
+    return { error: true, response: "No se encontro lista de usuarios" };
+  }
+  const productsInOffer = list.Products.filter((product) => {
+    if (product.carousel) {
+      return product;
+    }
+  });
+  return productsInOffer;
+};
+
+module.exports = {
+  getWishListController,
+  postwishItemController,
+  getOfferNotification,
+};

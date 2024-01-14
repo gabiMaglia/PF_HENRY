@@ -16,13 +16,14 @@ import {
   CustomToolbar,
 } from "../CustomDataGrid/CustomDataGrid.component";
 //UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+//SERVICES
 import {
   logicalDeleteProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
 // SWEET ALERT
 import Swal from "sweetalert2";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const columns = [
   { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
@@ -67,7 +68,7 @@ const columns = [
   {
     field: "soldCount",
     headerName: "Vendidos",
-    width: 80,
+    width: 100,
     headerAlign: "center",
     editable: true,
   },
@@ -81,14 +82,14 @@ const columns = [
   {
     field: "brand",
     headerName: "Marca",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
   {
     field: "category",
     headerName: "Categoría",
-    width: 100,
+    width: 150,
     headerAlign: "center",
     editable: true,
   },
@@ -178,7 +179,7 @@ const ProductsTable = () => {
         msg = msg.join(", ");
         Swal.fire({
           icon: "success",
-          title: "Eliminación exitosa",
+          title: "Operación Exitosa",
           text: msg,
         });
         getProducts();
@@ -212,9 +213,21 @@ const ProductsTable = () => {
         setAvailableModify(false);
         const productId = newRow.id;
 
+        const updateData = {
+          name: newRow.name,
+          price: newRow.price,
+          warranty: newRow.warranty,
+          soldCount: newRow.soldCount,
+          carousel: newRow.carousel,
+          stock: newRow.stock,
+          brandName: newRow.brand,
+          categoryName: newRow.category,
+        };
+
         const response = await fetchUpdateProduct(
           productId,
-          newRow,
+          // newRow,
+          updateData,
           authData.jwt
         );
         if (response.status === 200) {

@@ -108,7 +108,6 @@ const handlePaymentNotification = async (paymentId) => {
           if (order) {
             Promise.all(
               cart.Products.map(async (product) => {
-                console.log(product.ProductCart);
                 const { id, soldCount } = product;
                 const cartProduct = await ProductCart.findOne({
                   where: { ProductId: id, CartId: cart.id },

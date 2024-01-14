@@ -4,14 +4,15 @@ import { createTheme } from '@mui/material';
 // font-family: 'Advent Pro', sans-serif;
 // font-family: 'Oxygen', sans-serif;
 // font-family: 'Oxygen Mono', monospace;
-// COMBINACION @
+// COMBINACION 2
 // font-family: 'Bebas Neue', sans-serif;
 // font-family: 'Montserrat', sans-serif;
 
 export const theme = createTheme({
   typography: {
     h1: {
-      fontFamily: 'Roboto, sans-serif'
+      fontFamily: 'Bebas Neue'
+
     },
     h2: {
       fontFamily: 'Bebas Neue'
