@@ -122,7 +122,7 @@ const CardProduct = ({ product }) => {
               onClick={handleCategoryClick}
               sx={{
                 paddingTop: "20px",
-                zIndex: "1000",
+                zIndex: "999",
               }}
             >
               <span
