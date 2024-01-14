@@ -2,7 +2,7 @@
 import { Box, Typography, Divider, Button } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserPanelProductCard from "../UserPanelProductCard/UserPanelProductCard.component";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,12 +10,15 @@ import PATHROUTES from "../../helpers/pathRoute";
 import { fetchCartUser } from "../../services/productServices";
 //FIREBASE
 import { completePurchaseEvent } from "../../services/firebaseAnayticsServices";
+import DetailProductShopping from "../DetailProductShopping/DetailProductShopping.component";
 
 const ShoppingProfileComponent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { cartUser } = useSelector((state) => state.cart);
   const cookiesAccepted = useSelector((state) => state.cookies);
+  const [openDetail, setOpenDetail] = useState(false);
+  const [detail, setDetail] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -23,25 +26,13 @@ const ShoppingProfileComponent = () => {
     dispatch(fetchCartUser(cookiesAccepted));
   }, [dispatch]);
 
-  const handleClickShop = async (product) => {
-    const { id } = product;
+  const handleClickShop = async (id) => {
     navigate(`/product/${id}`);
   };
 
-  const handleClick = () => {
-    Swal.fire({
-      icon: "warning",
-      iconColor: "#fd611a",
-      title: "Funcionalidad en construcción",
-      showCancelButton: true,
-      confirmButtonColor: "#fd611a",
-      confirmButtonText: "Ir a inicio",
-      cancelButtonText: `Cancelar`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(PATHROUTES.HOME);
-      }
-    });
+  const handleClick = (cartDate) => {
+    setOpenDetail(!openDetail);
+    setDetail(cartDate);
   };
 
   const buttons = [
@@ -79,12 +70,32 @@ const ShoppingProfileComponent = () => {
         flexDirection: "column",
         width: "100%",
         mt: "1.2em",
+        pb: "1.2em",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
           display: "none",
         },
       }}
     >
+      {/* {openDetail && (
+        <Box
+          sx={{
+            zIndex: "10",
+            width: "100%",
+            height: "auto",
+            backgroundColor: "white",
+            position: "absolute",
+            border: "solid 1px",
+            borderRadius: "5px",
+            mb: "24em",
+          }}
+        >
+          <DetailProductShopping
+            setOpenDetail={setOpenDetail}
+            productsDetail={detail}
+          />
+        </Box>
+      )} */}
       {cartUser.length === 0 ? (
         <Box
           sx={{
@@ -109,6 +120,15 @@ const ShoppingProfileComponent = () => {
               Ir a comprar
             </Button>
           </Link>
+        </Box>
+      ) : openDetail ? (
+        <Box
+          sx={{ width: "100%", height: "100%", pb: 10, position: "relative" }}
+        >
+          <DetailProductShopping
+            setOpenDetail={setOpenDetail}
+            productsDetail={detail}
+          />
         </Box>
       ) : (
         cartUser.map((cartDate) => {
@@ -149,7 +169,6 @@ const ShoppingProfileComponent = () => {
                     sx={{
                       fontWeight: "bold",
                       fontSize: 18,
-                      // ml: 64,
                     }}
                   >
                     Estado: {cartDate.status}
@@ -157,7 +176,7 @@ const ShoppingProfileComponent = () => {
                 )}
                 <Button
                   variant="contained"
-                  onClick={handleClick}
+                  onClick={() => handleClick(cartDate)}
                   style={{
                     backgroundColor: "black",
                     color: "white",
@@ -192,7 +211,12 @@ const ShoppingProfileComponent = () => {
                       flexDirection: "column",
                     }}
                   >
-                    <UserPanelProductCard product={card} buttons={buttons} />
+                    <UserPanelProductCard
+                      product={card}
+                      buttons={buttons}
+                      handleCardClick={handleClickShop}
+                      actionParam={card.id}
+                    />
                     {index + 1 !== cartDate.products.length && (
                       <Divider
                         sx={{
