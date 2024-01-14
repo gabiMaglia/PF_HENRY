@@ -140,7 +140,7 @@ const CardProduct = ({ product }) => {
           <BookmarkIcon
             onClick={handleDesiredClick}
             sx={{
-              cursor: login ? null : "not-allowed",
+              cursor: login ? "pointer" : "not-allowed",
               position: "relative",
               top: "20px",
               right: "-30px",
