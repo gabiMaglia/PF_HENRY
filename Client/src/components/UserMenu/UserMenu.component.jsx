@@ -66,7 +66,9 @@ const UserMenu = () => {
   };
 
   return (
-      loading?<CircularProgress/>:(
+      loading?<CircularProgress sx={{
+        color:"#fd611a"
+      }}/>:(
     <Box>
       <Box
         sx={{
