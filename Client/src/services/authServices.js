@@ -93,7 +93,7 @@ export const checkSessionStatus = async (jwt) => {
 };
 export const refreshSessionToken = async (jwt) => {
   try {
-    console.log(jwt)
+ 
     const response = await axios.get(`${url}/account/refresh`, {
       headers: {
         Authorization: `Bearer ${jwt}`,

@@ -27,17 +27,14 @@ const useCheckAuthData = () => {
           if (response.error) {
             alert("ha expirado la sesion, vuelva a iniciar sesion");
             await logOutUser.logout();
-            console.log(response);
           } else {
             if (response.timeLeftInSeconds < 840) {
               const resultado = window.confirm(
                 "le queda poco tiempo a su session desea renovar el token?"
               );
               if (resultado) {
-                console.log("llego a la renov");
                 const newToken = await refreshSessionToken(data.jwt);
                 updateJwt(newToken, cookieStatus);
-                console.log(newToken);
               } else {
                 null;
               }

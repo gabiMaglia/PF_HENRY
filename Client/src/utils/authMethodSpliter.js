@@ -23,7 +23,6 @@ export const createPersistency = (sortedData, cookieStatus) => {
 };
 export const updateJwt = (jwt, cookieStatus) => {
   if (cookieStatus) {
-    console.log('pasoporaca')
     const cookie = getAuthDataCookie("authData");
     cookie.jwt = jwt
     setAuthDataCookie('authData', cookie)
