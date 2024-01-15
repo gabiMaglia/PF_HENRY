@@ -26,7 +26,7 @@ async function validarFormatoImagen(rutaImagen) {
       
    }
       if (extensionesValidas.includes(extension.toLowerCase())) {
-         const esImagenValida = await validarImagen(rutaImagen);
+         await validarImagen(rutaImagen);
          return true;
    } else {
        return false;

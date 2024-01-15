@@ -8,15 +8,9 @@ const DetailProductShopping = ({ setOpenDetail, productsDetail }) => {
   return (
     <Box
       sx={{
-        zIndex: "10",
+        padding: 2,
         width: "100%",
         height: "auto",
-        pb: "1.2em",
-        mb: "1.2em",
-        backgroundColor: "white",
-        position: "absolute",
-        border: "solid 1px",
-        borderRadius: "5px",
       }}
     >
       <Box
@@ -48,11 +42,11 @@ const DetailProductShopping = ({ setOpenDetail, productsDetail }) => {
       </Box>
       <Box
         sx={{
-          mt: 10,
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
           alignItems: "center",
+          mt: 5,
         }}
       >
         {productsDetail.products.map((product) => {
@@ -61,13 +55,14 @@ const DetailProductShopping = ({ setOpenDetail, productsDetail }) => {
               key={product.id}
               sx={{ mb: 5, width: "80%", textAlign: "center" }}
             >
-              <Typography variant="h5">
-                Nombre de producto: {product.name}
-              </Typography>
-              <Typography variant="h6" sx={{ mt: 2 }}>
+              <Typography variant="h6">{product.name}</Typography>
+              <Typography variant="body2" sx={{ mt: 2, fontSize: 16 }}>
                 Cantidad: {product.count}
               </Typography>
-              <Typography variant="h6" sx={{ mt: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{ mt: 2, color: "#fd611a", fontSize: 16 }}
+              >
                 Precio por unidad: {formatPrice(product.budget)}
               </Typography>
               <Divider
@@ -82,13 +77,20 @@ const DetailProductShopping = ({ setOpenDetail, productsDetail }) => {
             </Box>
           );
         })}
-        <Typography variant="h5">
+        <Typography
+          variant="body2"
+          sx={{ fontWeight: 700, fontSize: { md: 18 } }}
+        >
           Metodo de pago:
           {productsDetail.paymentMethod == "credit_card"
             ? " Tarjeta de credito"
+            : productsDetail.paymentMethod == "ticket"
+            ? " Pago facil - Rapipago "
+            : productsDetail.paymentMethod == "debit_card"
+            ? " Tarjeta de debito"
             : " Efectivo"}
         </Typography>
-        <Typography variant="h5" sx={{ mt: 2 }}>
+        <Typography variant="h5" sx={{ mt: 2, fontWeight: 700 }}>
           Total: {productsDetail.cartTotal}
         </Typography>
       </Box>

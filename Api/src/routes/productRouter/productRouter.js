@@ -5,6 +5,7 @@ const {
   getProductByIdHandler,
   updateProductHandler,
   logicalDeleteHandler,
+  addToCarouselHandler,
   deleteProductHandler,
   searchByNameHandler,
   postProductSeveralHandler,
@@ -27,6 +28,7 @@ productRouter.post("/", checkAuthToken, checkRoleAuthToken(["admin"]), postProdu
 productRouter.post("/several", checkAuthToken, checkRoleAuthToken(["admin"]), postProductSeveralHandler);
 productRouter.put("/:id", checkAuthToken, checkRoleAuthToken(["admin", "technician"]), updateProductHandler);
 productRouter.put("/logicalDelete/:id", checkAuthToken, checkRoleAuthToken(["admin", 'technician']), logicalDeleteHandler);
+productRouter.put("/addToCarousel/:id", checkAuthToken, checkRoleAuthToken(["admin"]), addToCarouselHandler);
 productRouter.delete("/:id", checkAuthToken, checkRoleAuthToken(["admin"]), deleteProductHandler);
 
 module.exports = productRouter;

@@ -20,6 +20,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 //SERVICES
 import {
   logicalDeleteProduct,
+  addToCarouselProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
 // SWEET ALERT
@@ -63,7 +64,6 @@ const columns = [
     type: Boolean,
     width: 100,
     headerAlign: "center",
-    editable: true,
   },
   {
     field: "soldCount",
@@ -77,7 +77,6 @@ const columns = [
     headerName: "Carousel",
     width: 80,
     headerAlign: "center",
-    editable: true,
   },
   {
     field: "brand",
@@ -173,6 +172,39 @@ const ProductsTable = () => {
         const response = await Promise.all(
           selectedRows.map((id) => {
             return logicalDeleteProduct(id, authData.jwt);
+          })
+        );
+        let msg = response.map((res) => res.data);
+        msg = msg.join(", ");
+        Swal.fire({
+          icon: "success",
+          title: "Operación Exitosa",
+          text: msg,
+        });
+        getProducts();
+        return selectedRows;
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "No hay productos seleccionados",
+          text: "Por favor, selecciona al menos un producto para eliminar.",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al realizar el borrado lógico",
+        text: "Ha ocurrido un error al intentar eliminar los productos.",
+      });
+    }
+  };
+
+  const handleCarousel = async (selectedRows) => {
+    try {
+      if (selectedRows.length > 0) {
+        const response = await Promise.all(
+          selectedRows.map((id) => {
+            return addToCarouselProduct(id, authData.jwt);
           })
         );
         let msg = response.map((res) => res.data);
@@ -305,6 +337,7 @@ const ProductsTable = () => {
           toolbar: {
             setFilterButtonEl,
             handleDelete,
+            handleCarousel,
             dataName: "Lista de productos",
             showQuickFilter: true,
             selectedRows: rowSelected,

@@ -22,6 +22,7 @@ const {
   sessionFlag,
   tokenRemainingTime,
 } = require("../../jwt/tokenUtils.js");
+
 let blacklistCounter = 100;
 
 const confirmAccountController = async (token) => {
@@ -109,7 +110,6 @@ const registerUser = async (userObj) => {
 
   return completeUser;
 };
-
 const loginUser = async (user) => {
   // VERIFICAMOS QUE SEA UNA CUENTA ACTIVA
   if (user.isDeleted) {

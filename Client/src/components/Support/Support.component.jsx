@@ -11,7 +11,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-// import Textarea from "@mui/joy/Textarea";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 
 //HELPERS
@@ -77,18 +76,18 @@ const SupportComponent = () => {
   });
 
   //HANDLES CHANGES
-
   const handleChangeName = (value) => {
     setName(value);
     setErrorName(() => {
       const error = value.trim() !== "" && !validateName(value);
       return {
         error,
-        message: error ? "El nombre debe tener al menos 3 caracteres" : "",
+        message: error ? "El nombre debe tener al menos 3 caracteres y no puede contener números" : "",
       };
     });
     updateFormComplete();
   };
+  
   const handleChangePhone = (value) => {
     setPhone(value);
     setErrorPhone(() => {
@@ -100,6 +99,7 @@ const SupportComponent = () => {
     });
     updateFormComplete();
   };
+  
   const handleChangeEmail = (value) => {
     setEmail(value);
     setErrorEmail(() => {
@@ -111,6 +111,7 @@ const SupportComponent = () => {
     });
     updateFormComplete();
   };
+
   const handleChangeArea = (value) => {
     setArea(value);
     setErrorArea(() => {
@@ -122,6 +123,7 @@ const SupportComponent = () => {
     });
     updateFormComplete();
   };
+
   const updateFormComplete = () => {
     setFormComplete(
       validateName(name) &&
@@ -134,7 +136,6 @@ const SupportComponent = () => {
   //HANDLE SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (
       !validateName(name) ||
       !validatePhone(phone) ||
@@ -148,7 +149,6 @@ const SupportComponent = () => {
       });
       return;
     }
-
     try {
       setIsLoading(true);
 

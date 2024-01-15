@@ -1,4 +1,5 @@
 //HOOKS
+import { useState } from "react"; 
 import { Routes, Route } from "react-router-dom";
 //COMPONENTS
 import SearchBar from "./components/SearchBar/SearchBar.component";
@@ -8,6 +9,7 @@ import WhatsApp from "./components/WhatsApp/WhatsApp.component";
 import ButtonScrollTop from "./components/ButtonScrollTop/ButtonScrollTop.component";
 import ProtectedRoutes from "./components/utils/ProtectedRoutes/ProtectedRoutes.component";
 import CookiesPopup from "./components/CookiesPopup/CookiesPopup.component";
+import LoginModal from "./components/LoginModal/LoginModal.component";
 //PUBLICS VIEWS
 import Home from "./views/publics/Home/Home.view";
 import Products from "./views/publics/Products/Products.view";
@@ -24,13 +26,21 @@ import PATHROUTES from "./helpers/pathRoute";
 import useCheckAuthData from "./Hook/useCheckAuthData";
 import { useEffect } from "react";
 
-const App =  () => {
+const App = () => {
   // CustomHook que hace el check de token
-  const checkTokenData = useCheckAuthData()
+  // const checkTokenData = useCheckAuthData();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const checkAuthData = useCheckAuthData(openLoginModal);
 
   useEffect (()=> {
-    checkTokenData.checkToken()
-  }, [checkTokenData])
+    // checkTokenData.checkToken()
+    checkAuthData.checkToken()
+  }, [checkAuthData])
 
   return (
     <>
@@ -71,6 +81,10 @@ const App =  () => {
           ></Route>
         </Route>
       </Routes>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        setLoginModalIsOpen={setIsLoginModalOpen}
+      />
       <WhatsApp />
       <ButtonScrollTop />
       <Footer />

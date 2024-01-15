@@ -245,6 +245,23 @@ export const logicalDeleteProduct = async (id, jwt) => {
   }
 };
 
+export const addToCarouselProduct = async (id, jwt) => {
+  try {
+    const response = await axios.put(
+      `${urlBack}/product/addToCarousel/${id}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
 export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
   try {
     const response = await axios.put(
@@ -276,7 +293,7 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       },
     });
     if (response.data) {
-      const orders = response.data.map((order) => ({
+      const orders = response.data.filter((order) => order.Products.length > 0).map((order) => ({
         status: order.status,
         date: order.purchaseDate,
         cartTotal: formatPrice(Number(order.cartTotal)),

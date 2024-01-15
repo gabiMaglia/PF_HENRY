@@ -1,9 +1,7 @@
 import axios from "axios";
 import { createPersistency } from "../utils/authMethodSpliter";
-
 // FIREBASE
 import { userLogoutEvent } from "./firebaseAnayticsServices";
-
 // address = password
 const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
@@ -11,7 +9,6 @@ const dataSorterForApp = (data) => {
   const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
   return { ...data, userRole: decodeToken.userRole };
 };
-
 export const loginUser = async (username, password, cookieStatus) => {
   try {
     const { data } = await axios.post(
@@ -51,7 +48,6 @@ export const googleLoginUser = async (cookieStatus) => {
     if (!popup) {
       throw new Error("Failed to open the authentication window");
     }
-    console.log("object");
     return new Promise((resolve) => {
       window.addEventListener("message", (event) => {
         if (event.origin === `${url}` && event.data) {
@@ -104,7 +100,6 @@ export const refreshSessionToken = async (jwt) => {
     return { error: response.data };
   }
 };
-
 export const registerUser = async (userObj) => {
   try {
     const registerData = await axios.post(`${url}/account/signin`, {
