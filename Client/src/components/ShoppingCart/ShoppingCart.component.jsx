@@ -15,6 +15,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Unstable_NumberInput as BaseNumberInput } from "@mui/base/Unstable_NumberInput";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import Swal from "sweetalert2";
 
 //REDUX
 import {
@@ -125,8 +126,20 @@ export default function ShoppingCart() {
   };
 
   const handleShop = (e) => {
-    dispatch(fetchCartMercadoPago(items, cookiesAccepted));
-    generatePurchaseOrderEvent(items, total); //Evento de generación de orden de compra
+    const filter = items.filter((item) => item.stock < 1);
+    console.log(filter);
+    if (filter.length === 0) {
+      dispatch(fetchCartMercadoPago(items, cookiesAccepted));
+      generatePurchaseOrderEvent(items, total); //Evento de generación de orden de compra
+    } else {
+      Swal.fire({
+        icon: "info",
+        title: "Producto sin stock",
+        text: "Producto momentaneamente no disponible",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Ok",
+      });
+    }
   };
   const customization = {
     visual: {
