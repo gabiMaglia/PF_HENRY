@@ -24,13 +24,13 @@ import PATHROUTES from "./helpers/pathRoute";
 import useCheckAuthData from "./Hook/useCheckAuthData";
 import { useEffect } from "react";
 
-const App =  () => {
+const App = () => {
   // CustomHook que hace el check de token
-  const checkTokenData = useCheckAuthData()
+  const checkTokenData = useCheckAuthData();
 
-  useEffect (()=> {
-    checkTokenData.checkToken()
-  }, [checkTokenData])
+  useEffect(() => {
+    checkTokenData.checkToken();
+  }, [checkTokenData]);
 
   return (
     <>
