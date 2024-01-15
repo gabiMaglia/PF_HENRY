@@ -1,5 +1,5 @@
 //HOOKS
-import { useState } from "react"; 
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 //COMPONENTS
 import SearchBar from "./components/SearchBar/SearchBar.component";
@@ -37,10 +37,10 @@ const App = () => {
 
   const checkAuthData = useCheckAuthData(openLoginModal);
 
-  useEffect (()=> {
+  useEffect(() => {
     // checkTokenData.checkToken()
-    checkAuthData.checkToken()
-  }, [checkAuthData])
+    checkAuthData.checkToken();
+  }, [checkAuthData]);
 
   return (
     <>

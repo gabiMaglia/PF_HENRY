@@ -28,6 +28,7 @@ const ShoppingProfileComponent = () => {
 
   useEffect(() => {
     dispatch(fetchCartUser(cookiesAccepted));
+    dispatch(addItem());
   }, [dispatch]);
 
   const handleClickShop = async (id) => {
@@ -59,8 +60,11 @@ const ShoppingProfileComponent = () => {
         showCancelButton: true,
       }).then((result) => {
         if (result.isConfirmed) {
+          dispatch(addItem());
           navigate(PATHROUTES.HOME);
           window.scrollTo(0, 0);
+        } else {
+          dispatch(addItem());
         }
       });
       completePurchaseEvent("purchase"); // Evento de compra exitosa Firebase
