@@ -306,7 +306,22 @@ const logicalDelete = async (id) => {
   }
   await product.update({ is_deleted: !product.is_deleted });
   return `Producto ${product.name} ${
-    product.is_deleted ? "desactivado" : "activado"
+    product.is_deleted ? "Desactivado" : "Activado"
+  } `;
+};
+
+//ADD TO CAROUSEL
+const addToCarousel = async (id) => {
+  if (!id) {
+    return { error: true, response: "El id es requerido" };
+  }
+  const product = await Product.findByPk(id);
+  if (!product) {
+    return { error: true, response: "Producto no encontrado" };
+  }
+  await product.update({ carousel: !product.carousel });
+  return `Producto ${product.name} ${
+    product.carousel ? "Agregado al Carousel" : "Eliminado del Carousel"
   } `;
 };
 
@@ -381,6 +396,7 @@ const productCarousel = async () => {
 
 module.exports = {
   logicalDelete,
+  addToCarousel,
   postProduct,
   postProductSeveral,
   getAllProducts,

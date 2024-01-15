@@ -9,6 +9,7 @@ const {
   getProductById,
   searchByName,
   logicalDelete,
+  addToCarousel
 } = require("../../controllers/productControllers/productController");
 
 //Post Product
@@ -129,6 +130,20 @@ const logicalDeleteHandler = async (req, res) => {
   }
 };
 
+//ADD TO CAROUSEL
+const addToCarouselHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await addToCarousel(id);
+    if (result.error) {
+      res.status(400).json({ error: result.response });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 //GET BY ID
 const getProductByIdHandler = async (req, res) => {
   const { id } = req.params;
@@ -181,6 +196,7 @@ module.exports = {
   getProductsHandler,
   updateProductHandler,
   logicalDeleteHandler,
+  addToCarouselHandler,
   deleteProductHandler,
   getProductByIdHandler,
   searchByNameHandler,
