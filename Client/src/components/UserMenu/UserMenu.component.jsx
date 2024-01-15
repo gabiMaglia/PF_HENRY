@@ -13,6 +13,7 @@ import {
   IconButton,
   Typography,
   Tooltip,
+  CircularProgress 
 } from "@mui/material";
 //HELPERS
 import getFirstLetters from "../../helpers/getFirstLetters";
@@ -21,6 +22,11 @@ import UserPanelItems from "../../utils/UserPanelItems.jsx";
 import useLogoutUser from "../../Hook/useLogoutUser.jsx";
 
 const UserMenu = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading]=useState(false)
+
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const { name, surname } = useSelector((state) => state.user);
 
@@ -39,7 +45,15 @@ const UserMenu = () => {
   const logOutUser = useLogoutUser(cookieStatus)
 
   const logout = async () => {
-   await logOutUser.logout()
+    setLoading(true)
+    clearPersistanceData(cookieStatus);
+    await logOutUser(authData.jwt);
+    dispatch(logoutUser());
+    window.localStorage.setItem("storedProducts", JSON.stringify([]));
+    navigate(PATHROUTES.HOME);
+    dispatch(resetCart());
+    setLoading(false)
+
   };
 
   const handleClose = () => {
@@ -47,6 +61,7 @@ const UserMenu = () => {
   };
 
   return (
+      loading?<CircularProgress/>:(
     <Box>
       <Box
         sx={{
@@ -160,7 +175,7 @@ const UserMenu = () => {
                 }}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <Typography
+                <Typography 
                   sx={{
                     width: "5em",
                     whiteSpace: "normal",
@@ -175,7 +190,7 @@ const UserMenu = () => {
           );
         })}
       </Menu>
-    </Box>
+    </Box>)
   );
 };
 
