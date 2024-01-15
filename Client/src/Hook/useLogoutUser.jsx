@@ -22,6 +22,7 @@ const useLogoutUser = (cookieStatus) => {
     dispatch(resetCart());
   };
   return {logout}
+  
 };
 
 export default useLogoutUser;
