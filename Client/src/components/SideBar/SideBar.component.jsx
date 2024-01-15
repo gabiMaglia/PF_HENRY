@@ -20,7 +20,7 @@ const SideBar = () => {
   const { name, surname } = useSelector((state) => state.user);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const items = UserPanelItems(name, surname);
-  const logoutUser = useLogoutUser(cookieStatus)
+  const logoutUser = useLogoutUser(cookieStatus);
   const actualLocation = useLocation().pathname;
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
   const sideBarBoxStyle = sideBarIsOpen

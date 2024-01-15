@@ -36,10 +36,10 @@ const UserMenu = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const logOutUser = useLogoutUser(cookieStatus)
+  const logOutUser = useLogoutUser(cookieStatus);
 
   const logout = async () => {
-   await logOutUser.logout()
+    await logOutUser.logout();
   };
 
   const handleClose = () => {

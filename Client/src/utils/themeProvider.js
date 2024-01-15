@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from "@mui/material";
 
 // COMBINACION 1
 // font-family: 'Advent Pro', sans-serif;
@@ -11,42 +11,39 @@ import { createTheme } from '@mui/material';
 export const theme = createTheme({
   typography: {
     h1: {
-      fontFamily: 'Bebas Neue'
-
+      fontFamily: "Bebas Neue",
     },
     h2: {
-      fontFamily: 'Bebas Neue'
+      fontFamily: "Bebas Neue",
     },
     h4: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       //  cardCarouselPromotionn
       // support
       // Questions
     },
     h5: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // homeProduct
-      //Support 
+      //Support
     },
     h6: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // navItems
     },
     subtitle2: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // ProductCardSubtitle
       // ProductPrice
     },
     body1: {
-      fontFamily: 'Montserrat'
-      //Loadings Flags 
+      fontFamily: "Montserrat",
+      //Loadings Flags
     },
     body2: {
-      fontFamily: 'Montserrat'
+      fontFamily: "Montserrat",
       // support
     },
-    span : {
-
-    },
+    span: {},
   },
 });
