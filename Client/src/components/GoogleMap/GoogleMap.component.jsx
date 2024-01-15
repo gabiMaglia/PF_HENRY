@@ -1,21 +1,49 @@
-import { CardMedia } from "@mui/material";
+//HOOKS
+import GoogleMapReact from "google-map-react";
+//MATERIAL UI
+import { Box, Typography, Link } from "@mui/material";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+
+const apikey = import.meta.env.VITE_GOOGLE_MAPS;
+
+const AnyReactComponent = ({ text }) => (
+  <Box>
+    <LocationOnIcon sx={{ fontSize: "32px", color: "#fd611a" }} />
+    <Typography variant="body2" sx={{ fontWeight: "800", color: "#000" }}>
+      {text}
+    </Typography>
+  </Box>
+);
 
 const MapContainer = () => {
-
+  const defaultProps = {
+    center: {
+      lat: -34.7229901,
+      lng: -58.3971712,
+    },
+    zoom: 15,
+  };
   return (
     <>
-        <CardMedia
-          component="iframe"
-          title="Mi Iframe"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3279.292569396898!2d-58.399523723452!3d-34.723019063810014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccd28827c30bb%3A0xd13d20b43c2d99cc!2sHyperMegaRed!5e0!3m2!1ses!2sar!4v1705110555065!5m2!1ses!2sar"
-          sx={{
-            border: "none",
-            maxWidth: "100%",
-            height: "250px",
-            margin: "0",
-            cursor: "pointer"
-          }}
-        />
+      <Link
+        href="https://maps.app.goo.gl/rGM9QV8Z8RGH2mYu8"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Box sx={{ height: "30vh", width: "100%" }}>
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: apikey }}
+            defaultCenter={defaultProps.center}
+            defaultZoom={defaultProps.zoom}
+          >
+            <AnyReactComponent
+              lat={-34.7229901}
+              lng={-58.3971712}
+              text="Hyper Mega Red"
+            />
+          </GoogleMapReact>
+        </Box>
+      </Link>
     </>
   );
 };
