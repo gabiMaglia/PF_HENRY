@@ -15,7 +15,7 @@ const useCheckAuthData = (openLoginModal) => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const logOutUser = useLogoutUser(cookieStatus);
   const data = getDataFromSelectedPersistanceMethod(cookieStatus);
-  
+
   if (data === undefined) {
     const checkToken = () => {
       console.log("usuario anonimo");
@@ -28,17 +28,20 @@ const useCheckAuthData = (openLoginModal) => {
           const response = await checkSessionStatus(data.jwt);
           console.log(response);
           if (response.error) {
-            Swal.fire({
+            const resultado = await Swal.fire({
               icon: "info",
               title: "Tiempo de sesión expirado",
-              text: "Su sesión a expirado. Vuelva a iniciar sesión",
-              // showCancelButton: true,
-              confirmButtonText: "Aceptar",
-              // cancelButtonText: "Cancelar",
-            }).then(async () => {
+              text: "Su sesión a expirado. Desea volver a iniciar sesion?",
+              showCancelButton: true,
+              confirmButtonText: "Si",
+              cancelButtonText: "No gracias",
+            });
+            if (resultado.isConfirmed) {
               await logOutUser.logout();
               openLoginModal();
-            });
+            } else {
+              await logOutUser.logout();
+            }
           } else {
             if (response.timeLeftInSeconds < 840) {
               const resultado = await Swal.fire({
