@@ -140,7 +140,7 @@ const loginUser = async (user) => {
   };
 };
 const refreshSession = async (token) => {
-  const newToken = refreshToken(token);
+  const newToken = await refreshToken(token);
   if (newToken) {
     await BlackListedTokens.findOrCreate({
       where: { token: token.split(" ").pop() },
@@ -148,7 +148,7 @@ const refreshSession = async (token) => {
     blacklistCounter = blacklistCounter - 1;
     if (blacklistCounter < 0) {
       await BlackListedTokens.truncate();
-      blacklistCounter = 100
+      blacklistCounter = 100;
     }
     return newToken;
   } else return { error: true, message: "TokenVencido" };
@@ -161,7 +161,7 @@ const logOutUser = async (token) => {
   blacklistCounter = blacklistCounter - 1;
   if (blacklistCounter < 0) {
     await BlackListedTokens.truncate();
-    blacklistCounter = 100
+    blacklistCounter = 100;
   }
   return badToken[0].token;
 };
@@ -195,7 +195,14 @@ const checkAuthToken = async (token) => {
   else {
     const dataFromToken = await sessionFlag(response);
     const timeLeft = tokenRemainingTime(response);
-    return { response, dataFromToken, timeLeft };
+    return {
+      error: false,
+      userId: response.userId,
+      usuario: dataFromToken.Usuario,
+      role: response.userRole,
+      timeLeft: timeLeft.message,
+      timeLeftInSeconds: timeLeft.time,
+    };
   }
 };
 
