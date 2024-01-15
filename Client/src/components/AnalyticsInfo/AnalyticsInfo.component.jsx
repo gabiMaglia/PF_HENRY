@@ -11,9 +11,8 @@ const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
-
-  const startDate = "7daysAgo";
-  const endDate = "today";
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const handleOpenConfig = () => {
     setOpenConfig(!openConfig);
@@ -89,6 +88,8 @@ const AnalyticsInfo = () => {
         open={openConfig}
         setOpen={handleOpenConfig}
         getData={googleLogin}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>

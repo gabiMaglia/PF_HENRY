@@ -5,7 +5,7 @@ export const fetchAnalyticsData = async (accessToken, startDate, endDate) => {
   try {
     const dimensions = [{ name: "itemBrand" }];
     const metrics = [{ name: "itemsAddedToCart" }];
-
+    console.log(accessToken, startDate, endDate);
     const requestBody = {
       dateRanges: [{ startDate, endDate }],
       metrics,
