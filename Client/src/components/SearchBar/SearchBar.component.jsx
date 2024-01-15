@@ -36,6 +36,7 @@ export default function SearchAppBar() {
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const { login } = useSelector((state) => state.user);
   const { historyUser } = useSelector((state) => state.historyUser);
+  console.log(historyUser)
   const { inputName } = useSelector((state) => state.product);
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
@@ -46,8 +47,18 @@ export default function SearchAppBar() {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const prueba = historyUser && historyUser.map((history) => history.value);
+  const [prueba,setPrueba] =useState([]) 
   const [suggestions, setSuggestions] = useState([]);
+
+  useEffect(() => {
+    if (typeof historyUser === 'string' || historyUser instanceof String) {
+      setPrueba([historyUser])
+    } else {
+      setPrueba(historyUser.length && historyUser.map((history) => history.value))
+    }
+  }, [historyUser]);
+
+
 
   useEffect(() => {
     dispatch(addItem());
@@ -60,7 +71,7 @@ export default function SearchAppBar() {
     const newSuggestions = login
       ? prueba.length
         ? prueba
-        : ["sin historial"]
+        : [historyUser]
       : ["sin historial, debe loguearse para tener historial"];
     setSuggestions(newSuggestions);
   }, [login]);
@@ -90,7 +101,6 @@ export default function SearchAppBar() {
     }
   };
 
-  const handleChange = (event) => {};
 
   const handleCartClick = () => {
     navigate(PATHROUTES.SHOPCART);
