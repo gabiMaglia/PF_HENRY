@@ -15,6 +15,7 @@ const useCheckAuthData = (openLoginModal) => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const logOutUser = useLogoutUser(cookieStatus);
   const data = getDataFromSelectedPersistanceMethod(cookieStatus);
+  
   if (data === undefined) {
     const checkToken = () => {
       console.log("usuario anonimo");
@@ -27,23 +28,19 @@ const useCheckAuthData = (openLoginModal) => {
           const response = await checkSessionStatus(data.jwt);
           console.log(response);
           if (response.error) {
-            // alert("ha expirado la sesion, vuelva a iniciar sesion");
             Swal.fire({
               icon: "info",
               title: "Tiempo de sesión expirado",
               text: "Su sesión a expirado. Vuelva a iniciar sesión",
-              showCancelButton: true,
-              confirmButtonText: "Iniciar",
-              cancelButtonText: "Cancelar",
+              // showCancelButton: true,
+              confirmButtonText: "Aceptar",
+              // cancelButtonText: "Cancelar",
             }).then(async () => {
               await logOutUser.logout();
               openLoginModal();
             });
           } else {
             if (response.timeLeftInSeconds < 840) {
-              // const resultado = window.confirm(
-              //   "le queda poco tiempo a su session desea renovar el token?"
-              // );
               const resultado = await Swal.fire({
                 icon: "warning",
                 title: "Tiempo de sesión agotándose",
