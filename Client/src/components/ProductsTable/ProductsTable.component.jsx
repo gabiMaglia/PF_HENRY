@@ -78,7 +78,6 @@ const columns = [
     headerName: "Carousel",
     width: 80,
     headerAlign: "center",
-    editable: true,
   },
   {
     field: "brand",
