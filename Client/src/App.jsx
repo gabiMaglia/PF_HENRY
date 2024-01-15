@@ -30,7 +30,7 @@ const App =  () => {
 
   useEffect (()=> {
     checkTokenData.checkToken()
-  }, [])
+  }, [checkTokenData])
 
   return (
     <>

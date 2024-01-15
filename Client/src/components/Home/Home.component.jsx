@@ -8,6 +8,7 @@ import HomeProducts from "../HomeProducts/HomeProducts.component";
 import CarouselBottom from "../../components/CarouselBottom/CarouselBottom.component";
 import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
 import GoogleMap from "../../components/GoogleMap/GoogleMap.component";
+
 //REDUX
 // import { fetchAllProducts } from "../../services/productServices";
 
