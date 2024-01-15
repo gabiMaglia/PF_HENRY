@@ -1,5 +1,5 @@
 import axios from "axios";
-const PROPERTY_ID = import.meta.env.VITE_REPORTING_ANALYTICS_PROYECT_ID;
+const PROPERTY_ID = import.meta.env.VITE_REPORTING_ANALYTICS_PROJECT_ID;
 
 export const fetchAnalyticsData = async (accessToken, startDate, endDate) => {
   try {
