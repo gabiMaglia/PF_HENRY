@@ -125,6 +125,7 @@ export const fetchProductCartGet = (cookiesAccepted) => async () => {
           Authorization: `Bearer ${jwt}`,
         },
       });
+      console.log(res.data)
       const products = res.data.Products.map((product) => ({
         id: product.id,
         name: product.name,
@@ -133,9 +134,9 @@ export const fetchProductCartGet = (cookiesAccepted) => async () => {
         count: product.ProductCart.quantity,
         stock: product.ProductStock.amount,
       }));
-
+      console.log(products)
       const storedProducts = getProducts();
-
+console.log(storedProducts.payload)
       if (storedProducts.payload === undefined) {
         window.localStorage.setItem("storedProducts", JSON.stringify(products));
       }

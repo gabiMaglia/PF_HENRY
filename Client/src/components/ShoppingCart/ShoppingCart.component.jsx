@@ -42,7 +42,7 @@ export default function ShoppingCart() {
 
   const { items, total, id } = useSelector((state) => state.cart);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
-
+  console.log(items);
   initMercadoPago(import.meta.env.VITE_MP_PUBLIC_KEY, { locale: "es-AR" });
 
   useEffect(() => {

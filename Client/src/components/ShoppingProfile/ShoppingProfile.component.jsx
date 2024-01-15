@@ -28,8 +28,6 @@ const ShoppingProfileComponent = () => {
 
   useEffect(() => {
     dispatch(fetchCartUser(cookiesAccepted));
-    dispatch(fetchProductCartGet(cookiesAccepted));
-    dispatch(addItem());
   }, [dispatch]);
 
   const handleClickShop = async (id) => {
