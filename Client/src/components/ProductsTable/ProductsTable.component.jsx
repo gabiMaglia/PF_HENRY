@@ -341,6 +341,7 @@ const ProductsTable = () => {
             dataName: "Lista de productos",
             showQuickFilter: true,
             selectedRows: rowSelected,
+            showCarouselIcon: true,
           },
         }}
         getRowClassName={(params) => {

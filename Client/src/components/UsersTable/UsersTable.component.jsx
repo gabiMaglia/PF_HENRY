@@ -53,7 +53,7 @@ const gridColumns = [
   {
     field: "email",
     headerName: "Email",
-    minWidth: 200,
+    minWidth: 300,
     headerAlign: "center",
     editable: "true",
   },

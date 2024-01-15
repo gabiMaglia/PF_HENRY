@@ -18,6 +18,7 @@ export const CustomToolbar = ({
   handleCarousel,
   dataName,
   selectedRows,
+  showCarouselIcon,
 }) => {
   return (
     <GridToolbarContainer
@@ -32,9 +33,11 @@ export const CustomToolbar = ({
         <Button color="inherit" onClick={() => handleDelete(selectedRows)}>
           <DeleteIcon sx={{ color: "black" }} />
         </Button>
-        <Button color="inherit" onClick={() => handleCarousel(selectedRows)}>
-          <ViewCarouselIcon sx={{ color: "black" }} />
-        </Button>
+        {showCarouselIcon && (
+          <Button color="inherit" onClick={() => handleCarousel(selectedRows)}>
+            <ViewCarouselIcon sx={{ color: "black" }} />
+          </Button>
+        )}
         <Typography variant="h5" sx={{ flexGrow: "1" }}>
           {dataName}
         </Typography>
