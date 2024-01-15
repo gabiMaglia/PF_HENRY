@@ -71,7 +71,7 @@ export default function SearchAppBar() {
     const newSuggestions = login
       ? prueba.length
         ? prueba
-        : [historyUser]
+        : ['el usuario no tiene registro de historial']
       : ["sin historial, debe loguearse para tener historial"];
     setSuggestions(newSuggestions);
   }, [login]);
