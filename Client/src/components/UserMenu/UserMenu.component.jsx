@@ -13,6 +13,7 @@ import {
   IconButton,
   Typography,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 //HELPERS
 import getFirstLetters from "../../helpers/getFirstLetters";
@@ -23,6 +24,7 @@ import useLogoutUser from "../../Hook/useLogoutUser.jsx";
 const UserMenu = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const { name, surname } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
 
   const initialLetersUsers = {
     name: getFirstLetters(name?.split(" ")[0]),
@@ -39,6 +41,7 @@ const UserMenu = () => {
   const logOutUser = useLogoutUser(cookieStatus);
 
   const logout = async () => {
+    setLoading(true);
     await logOutUser.logout();
   };
 
@@ -46,7 +49,13 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
 
-  return (
+  return loading ? (
+    <CircularProgress
+      sx={{
+        color: "#fd611a",
+      }}
+    />
+  ) : (
     <Box>
       <Box
         sx={{

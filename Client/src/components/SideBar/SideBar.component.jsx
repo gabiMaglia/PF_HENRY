@@ -25,6 +25,10 @@ const SideBar = () => {
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
   const sideBarBoxStyle = sideBarIsOpen
     ? {
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
         minWidth: "10em",
         maxWidth: "18em",
         width: "25%",
@@ -32,6 +36,10 @@ const SideBar = () => {
         borderRight: ".1px solid grey",
       }
     : {
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
         minWidth: "5em",
         maxWidth: "8em",
         width: "5%",
