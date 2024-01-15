@@ -9,6 +9,7 @@ import cartReducer from "./slices/cartSlice";
 import categoriesReducer from "./slices/categoriesSlice";
 import brandsReducer from "./slices/brandsSlice";
 import wishlistReducer from "./slices/wishListSlice";
+import historyUserReducer from "./slices/historySlice";
 
 import thunkMiddleware from "redux-thunk";
 
@@ -21,6 +22,7 @@ const store = configureStore({
     categories: categoriesReducer,
     brands: brandsReducer,
     wishlist: wishlistReducer,
+    historyUser: historyUserReducer,
   },
   middleware: [thunkMiddleware],
 });

@@ -29,39 +29,41 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import img from "/icons/logo.svg";
 //FIREBASE
 import { userSearchEvent } from "../../services/firebaseAnayticsServices";
-
+import { fetchHistoryUSer } from "../../services/historyUserService";
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const { login } = useSelector((state) => state.user);
+  const { historyUser } = useSelector((state) => state.historyUser);
   const { inputName } = useSelector((state) => state.product);
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userRole = authData ? authData.userRole : null;
-  const suggestions = [
-    "Auriculares",
-    "Coolers",
-    "Discos",
-    "Gabinetes",
-    "Memorias Ram",
-    "Monitores",
-    "Mothers",
-    "Mouses",
-    "Placas de video",
-    "Procesadores",
-    "Teclados",
-  ];
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const prueba = historyUser && historyUser.map((history) => history.value);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     dispatch(addItem());
-  }, [dispatch]);
+    if (login) {
+      fetchHistoryUSer(authData.userId, dispatch);
+    }
+  }, [login]);
+
+  useEffect(() => {
+    const newSuggestions = login
+      ? prueba.length
+        ? prueba
+        : ["sin historial"]
+      : ["sin historial, debe loguearse para tener historial"];
+    setSuggestions(newSuggestions);
+  }, [login]);
 
   const Img = styled("img")({
     width: 140,
@@ -88,9 +90,7 @@ export default function SearchAppBar() {
     }
   };
 
-  const handleChange = (event) => {
-    dispatch(fetchChage(event.target.value));
-  };
+  const handleChange = (event) => {};
 
   const handleCartClick = () => {
     navigate(PATHROUTES.SHOPCART);
@@ -104,9 +104,16 @@ export default function SearchAppBar() {
   }, [cookieStatus]);
 
   const handleAutocomplete = (value) => {
+    if (!value) {
+      setAutocompleteSuggestions([]);
+      setShowAutocomplete(false);
+      return;
+    }
+
     const matchingSuggestions = suggestions.filter((suggestion) =>
       suggestion.toLowerCase().includes(value.toLowerCase())
     );
+
     setAutocompleteSuggestions(matchingSuggestions);
     setShowAutocomplete(matchingSuggestions.length > 0);
   };
@@ -166,6 +173,7 @@ export default function SearchAppBar() {
           value={inputValue}
           placeholder=" Buscador"
           onChange={(e) => {
+            dispatch(fetchChage(e.target.value));
             setInputValue(e.target.value);
             handleAutocomplete(e.target.value);
           }}
