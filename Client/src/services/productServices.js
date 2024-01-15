@@ -293,7 +293,7 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       },
     });
     if (response.data) {
-      const orders = response.data.map((order) => ({
+      const orders = response.data.filter((order) => order.Products.length > 0).map((order) => ({
         status: order.status,
         date: order.purchaseDate,
         cartTotal: formatPrice(Number(order.cartTotal)),
