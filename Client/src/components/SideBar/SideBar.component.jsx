@@ -30,16 +30,8 @@ const SideBar = () => {
         width: "25%",
         minHeight: "500px",
         borderRight: ".1px solid grey",
-        overflow: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
       }
     : {
-        overflow: "scroll",
-        "&::-webkit-scrollbar": {
-          display: "none",
-        },
         minWidth: "5em",
         maxWidth: "8em",
         width: "5%",

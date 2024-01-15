@@ -36,10 +36,10 @@ const UserMenu = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const logOutUser = useLogoutUser(cookieStatus)
+  const logOutUser = useLogoutUser(cookieStatus);
 
   const logout = async () => {
-   await logOutUser.logout()
+    await logOutUser.logout();
   };
 
   const handleClose = () => {
@@ -103,16 +103,16 @@ const UserMenu = () => {
         PaperProps={{
           elevation: 0,
           sx: {
-            overflow: "scroll",
+            overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-            mt: 0,
+            mt: 1.5,
             width: "12em",
-            maxHeight: "70vh",
             mr: "0em",
             pr: 0,
             "&::-webkit-scrollbar": {
               display: "none",
             },
+            scrollbarWidth: "none",
             "& .MuiAvatar-root": {
               width: 32,
               height: 32,
@@ -121,16 +121,16 @@ const UserMenu = () => {
             },
             "&:before": {
               content: '""',
-              display: "block",
+              display: "flex",
               flexDirection: "column",
               position: "absolute",
-              top: 10,
+              top: 0,
               right: 60,
               width: 10,
               height: 10,
               bgcolor: "background.paper",
               transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 10,
+              zIndex: 0,
               justifyContent: "center",
               [`@media (max-width:1200px)`]: {
                 right: 25,
