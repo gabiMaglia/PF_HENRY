@@ -141,7 +141,6 @@ const loginUser = async (user) => {
 };
 const refreshSession = async (token) => {
   const newToken = await refreshToken(token);
-  console.log(newToken)
   if (newToken) {
     await BlackListedTokens.findOrCreate({
       where: { token: token.split(" ").pop() },
