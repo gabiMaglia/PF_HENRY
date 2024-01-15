@@ -28,7 +28,16 @@ const boxModalStyle = {
   gap: "1em",
 };
 
-const Config = ({ open, setOpen, getData }) => {
+const Config = ({ open, setOpen, getData, config, setConfig }) => {
+  const handleMetricsDimensionChange = (value, name) => {
+    setConfig({ ...config, [name]: value });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setConfig({ ...config, [name]: value });
+  };
+
   return (
     <Modal
       open={open}
@@ -67,8 +76,18 @@ const Config = ({ open, setOpen, getData }) => {
             justifyContent: "center",
           }}
         >
-          <Input type="date" />
-          <Input type="date" />
+          <Input
+            type="date"
+            value={config.startDate}
+            name="startDate"
+            onChange={handleChange}
+          />
+          <Input
+            type="date"
+            value={config.endDate}
+            name="endDate"
+            onChange={handleChange}
+          />
         </Box>
 
         <Typography variant="body2">
@@ -84,15 +103,24 @@ const Config = ({ open, setOpen, getData }) => {
         >
           <Autocomplete
             sx={{ flexGrow: "1" }}
+            onChange={(e, value) =>
+              handleMetricsDimensionChange(value, "metrics")
+            }
+            value={config.metrics}
             options={metrics?.map((metric) => {
-              return metric.label;
+              return metric?.label ? metric?.label : "";
             })}
             renderInput={(params) => <TextField {...params} label="Metricas" />}
           />
           <Autocomplete
             sx={{ flexGrow: "1" }}
+            value={config.dimensions}
+            name="dimensions"
+            onChange={(e, value) =>
+              handleMetricsDimensionChange(value, "dimensions")
+            }
             options={dimensions?.map((dimension) => {
-              return dimension.label;
+              return dimension?.label ? dimension?.label : "";
             })}
             renderInput={(params) => (
               <TextField {...params} label="Dimensiones" />

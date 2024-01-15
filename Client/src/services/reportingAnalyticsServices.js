@@ -1,35 +1,42 @@
 import axios from "axios";
 const PROPERTY_ID = import.meta.env.VITE_REPORTING_ANALYTICS_PROJECT_ID;
+import { metrics, dimensions } from "../components/AnalyticsInfo/dataTypes";
 
-export const fetchAnalyticsData = async (accessToken, startDate, endDate) => {
+const getObjects = (obj, type) => {
+  const completeData = type === "metrics" ? [...metrics] : [...dimensions];
+  const completeObject = completeData.find((object) => {
+    if (object.label === obj) {
+      return object;
+    }
+  });
+  return completeObject;
+};
+
+export const fetchAnalyticsData = async (
+  accessToken,
+  startDate,
+  endDate,
+  metrics,
+  dimensions
+) => {
   try {
-    const dimensions = [{ name: "itemBrand" }];
-    const metrics = [{ name: "itemsAddedToCart" }];
-    console.log(accessToken, startDate, endDate);
-    const requestBody = {
-      dateRanges: [{ startDate, endDate }],
-      metrics,
-      dimensions,
+    const metricsComplete = getObjects(metrics, "metrics");
+    const dimensionsComplete = getObjects(dimensions, "dimensions");
+
+    const reqDimensions = {
+      name: dimensionsComplete?.name,
+    };
+    const reqMetrics = {
+      name: metricsComplete?.name,
     };
 
-    // const dimensions = [{ name: "eventName" }, { name: "date" }];
-    // const metrics = [{ name: "eventCount" }];
-    // const dimensionFilter = {
-    //   filter: {
-    //     fieldName: "eventName",
-    //     stringFilter: {
-    //       value: "create_service", // Filtra por el nombre del evento
-    //       matchType: "EXACT",
-    //     },
-    //   },
-    // };
-
-    // const requestBody = {
-    //   dateRanges: [{ startDate, endDate }],
-    //   metrics,
-    //   dimensions,
-    //   dimensionFilter,
-    // };
+    const requestBody = {
+      dateRanges: [{ startDate, endDate }],
+      metrics: [reqMetrics],
+      dimensions: [reqDimensions],
+    };
+    dimensionsComplete?.dimensionFilter &&
+      (requestBody.dimensionFilter = dimensionsComplete?.dimensionFilter);
 
     const headers = {
       "Content-Type": "application/json",
@@ -48,3 +55,26 @@ export const fetchAnalyticsData = async (accessToken, startDate, endDate) => {
     console.error(error);
   }
 };
+// const dimensions = [{ name: "eventName" }, { name: "date" }];
+// const metrics = [{ name: "eventCount" }];
+// const dimensionFilter = {
+//   filter: {
+//     fieldName: "eventName",
+//     stringFilter: {
+//       value: "create_service", // Filtra por el nombre del evento
+//       matchType: "EXACT",
+//     },
+//   },
+// };);
+
+// const dimensions = [{ name: "eventName" }, { name: "date" }];
+// const metrics = [{ name: "eventCount" }];
+// const dimensionFilter = {
+//   filter: {
+//     fieldName: "eventName",
+//     stringFilter: {
+//       value: "create_service", // Filtra por el nombre del evento
+//       matchType: "EXACT",
+//     },
+//   },
+// };

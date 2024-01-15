@@ -11,8 +11,12 @@ const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [config, setConfig] = useState({
+    startDate: "",
+    endDate: "",
+    metrics: "",
+    dimensions: "",
+  });
 
   const handleOpenConfig = () => {
     setOpenConfig(!openConfig);
@@ -26,8 +30,10 @@ const AnalyticsInfo = () => {
       if (accessToken) {
         const newData = await fetchAnalyticsData(
           accessToken,
-          startDate,
-          endDate
+          config.startDate,
+          config.endDate,
+          config.metrics,
+          config.dimensions
         );
         setOpenConfig(false);
         setData(newData);
@@ -77,19 +83,40 @@ const AnalyticsInfo = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        gap: "4em",
+        gap: "2em",
         textAlign: "center",
       }}
     >
-      <Typography variant="h4">ESTADISTICAS</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h3">ESTADISTICAS</Typography>
+        {config?.startDate?.length > 0 && (
+          <Box>
+            <Typography variant="caption">Fecha inicio</Typography>
+            <Typography variant="body1">{config.startDate}</Typography>
+          </Box>
+        )}
+        {config?.endDate?.length > 0 && (
+          <Box>
+            <Typography variant="caption">Fecha fin</Typography>
+            <Typography variant="body1">{config.endDate}</Typography>
+          </Box>
+        )}
+      </Box>
       {/* {data && <LinearGraphic data={data} />} */}
       {data && <BarGraphic labels={data?.labels} datasets={data?.datasets} />}
       <Config
         open={openConfig}
         setOpen={handleOpenConfig}
         getData={googleLogin}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
+        config={config}
+        setConfig={setConfig}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>
