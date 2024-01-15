@@ -75,6 +75,36 @@ export const googleLoginUser = async (cookieStatus) => {
     };
   }
 };
+export const checkSessionStatus = async (jwt) => {
+  try {
+    const response = await axios.get(`${url}/account/jwt-check`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+      
+    });
+    if (response.error) return {error:true, message: response.error.name}
+    // console.log(response.data)
+    return response.data
+
+  } catch ({ response }) {
+    return { error: response.data };
+  }
+};
+export const refreshSessionToken = async (jwt) => {
+  try {
+ 
+    const response = await axios.get(`${url}/account/refresh`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+    return response.data.jwt
+  } catch ({ response }) {
+    return { error: response.data };
+  }
+};
+
 export const registerUser = async (userObj) => {
   try {
     const registerData = await axios.post(`${url}/account/signin`, {

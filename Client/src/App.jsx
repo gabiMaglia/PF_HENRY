@@ -21,8 +21,17 @@ import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
 //HELPERS
 import PATHROUTES from "./helpers/pathRoute";
+import useCheckAuthData from "./Hook/useCheckAuthData";
+import { useEffect } from "react";
 
-const App = () => {
+const App =  () => {
+  // CustomHook que hace el check de token
+  const checkTokenData = useCheckAuthData()
+
+  useEffect (()=> {
+    checkTokenData.checkToken()
+  }, [])
+
   return (
     <>
       <CookiesPopup />

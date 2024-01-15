@@ -1,28 +1,32 @@
 import axios from "axios";
+const PROPERTY_ID = import.meta.env.VITE_REPORTING_ANALYTICS_PROYECT_ID;
+const frontUrl = import.meta.env.VITE_FRONT_URL;
 
-const credentials = {
-  web: {
-    client_id: import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID,
-    project_id: import.meta.env.VITE_REPORTING_ANALYTICS_PROJECT_ID,
-    auth_uri: import.meta.env.VITE_REPORTING_ANALYTICS_AUTH_URI,
-    token_uri: import.meta.env.VITE_REPORTING_ANALYTICS_TOKEN_URI,
-    auth_provider_x509_cert_url: import.meta.env
-      .VITE_REPORTING_ANALYTICS_AUTH_PROVIDER_x509_CERT_URL,
-    client_secret: import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_SECRET,
-    javascript_origins: [
-      import.meta.env.VITE_REPORTING_ANALYTICS_JAVASCRIPT_ORIGIN_1,
-      import.meta.env.VITE_REPORTING_ANALYTICS_JAVASCRIPT_ORIGIN_2,
-    ],
-  },
-};
+export const fetchAnalyticsData = async (accessToken, startDate, endDate) => {
+  try {
+    const dimensions = [{ name: "itemBrand" }];
+    const metrics = [{ name: "itemsAddedToCart" }];
 
-export const getToken = async () => {
-  const respuestaToken = await axios.post(
-    "https://analyticsreporting.googleapis.com/v4/reports:batchGet",
-    {
-      ...credentials,
-    }
-  );
+    const requestBody = {
+      dateRanges: [{ startDate, endDate }],
+      metrics,
+      dimensions,
+    };
 
-  console.log(respuestaToken);
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const apiResponse = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
+      requestBody,
+      { headers }
+    );
+    const responseData = apiResponse.data;
+    console.log("responseData", responseData);
+    return responseData;
+  } catch (error) {
+    console.error(error);
+  }
 };

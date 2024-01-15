@@ -21,6 +21,17 @@ export const createPersistency = (sortedData, cookieStatus) => {
     window.localStorage.setItem("userRole", sortedData.userRole);
   }
 };
+export const updateJwt = (jwt, cookieStatus) => {
+  if (cookieStatus) {
+    const cookie = getAuthDataCookie("authData");
+    cookie.jwt = jwt
+    setAuthDataCookie('authData', cookie)
+  } else {
+    window.localStorage.removeItem("jwt", jwt);
+    window.localStorage.setItem("jwt", jwt);
+   
+  }
+};
 
 export const getDataFromSelectedPersistanceMethod = (cookieStatus) => {
   if (cookieStatus) {
@@ -44,13 +55,4 @@ export const clearPersistanceData = (cookieStatus, bool) => {
   }
 };
 
-export const customAxios = (token) => {
-  return (token) => {
-    return axios.create({
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  };
-};
+

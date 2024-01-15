@@ -1,0 +1,129 @@
+import {
+  Typography,
+  Modal,
+  Divider,
+  Button,
+  Box,
+  Input,
+  Autocomplete,
+  TextField,
+} from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { metrics, dimensions } from "../dataTypes";
+
+const boxModalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  minWidth: "350px",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  textAlign: "center",
+  borderRadius: "1em",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1em",
+};
+
+const Config = ({ open, setOpen, getData }) => {
+  return (
+    <Modal
+      open={open}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+      onClose={setOpen}
+    >
+      <Box sx={boxModalStyle}>
+        <Button
+          sx={{
+            padding: "0px",
+            color: "black",
+            width: ".01px",
+            height: ".01px",
+          }}
+        >
+          <CancelIcon
+            sx={{
+              position: "fixed",
+              top: ".5em",
+              right: ".5em",
+            }}
+            onClick={setOpen}
+          />
+        </Button>
+        <Divider sx={{ color: "#fd611a", fontWeight: "bold" }}>
+          <Typography variant="h6">Configuración</Typography>
+        </Divider>
+
+        <Typography variant="body2">Seleccione un rango de fechas</Typography>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            gap: "3em",
+            justifyContent: "center",
+          }}
+        >
+          <Input type="date" />
+          <Input type="date" />
+        </Box>
+
+        <Typography variant="body2">
+          Seleccione el tipo de dato que desea buscar
+        </Typography>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            gap: "3em",
+            justifyContent: "center",
+          }}
+        >
+          <Autocomplete
+            sx={{ flexGrow: "1" }}
+            options={metrics?.map((metric) => {
+              return metric.label;
+            })}
+            renderInput={(params) => <TextField {...params} label="Metricas" />}
+          />
+          <Autocomplete
+            sx={{ flexGrow: "1" }}
+            options={dimensions?.map((dimension) => {
+              return dimension.label;
+            })}
+            renderInput={(params) => (
+              <TextField {...params} label="Dimensiones" />
+            )}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            gap: "3em",
+            justifyContent: "center",
+          }}
+        ></Box>
+        <Box>
+          <Box sx={{ backgroundColor: "#fd611a" }}>
+            <Button
+              fullWidth
+              onClick={() => {
+                getData();
+              }}
+            >
+              <Typography variant="body1" color="white">
+                Buscar datos
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};
+
+export default Config;
