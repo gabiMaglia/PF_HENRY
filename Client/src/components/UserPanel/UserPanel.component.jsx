@@ -17,7 +17,7 @@ import CreateService from "../CreateService/CreateService.component";
 import UsersTable from "../UsersTable/UsersTable.component";
 import ProductsTable from "../ProductsTable/ProductsTable.component";
 import ServicesTable from "../ServicesTable/ServicesTable.component";
-import GetAnalyticsToken from "../utils/GetAnalyticsToken/GetAnalyticsToken";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
@@ -271,16 +271,16 @@ const UserPanelComponent = () => {
               ? PATHROUTES.ANALYTICS_INFO
               : PATHROUTES.PROFILE
           }
-          element={userRole === "admin" ? <AnalyticsInfo /> : <UserProfile />}
-        />
-        <Route
-          path={
-            userRole === "admin"
-              ? PATHROUTES.GET_ANALYTICS_TOKEN
-              : PATHROUTES.PROFILE
-          }
           element={
-            userRole === "admin" ? <GetAnalyticsToken /> : <UserProfile />
+            userRole === "admin" ? (
+              <GoogleOAuthProvider
+                clientId={import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID}
+              >
+                <AnalyticsInfo />
+              </GoogleOAuthProvider>
+            ) : (
+              <UserProfile />
+            )
           }
         />
       </Routes>

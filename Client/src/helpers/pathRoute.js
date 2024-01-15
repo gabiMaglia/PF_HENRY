@@ -22,7 +22,6 @@ const PATHROUTES = {
   PRODUCTS_LIST: "/productsList",
   SERVICE_LIST: "/servicesList",
   ANALYTICS_INFO: "/analytics",
-  GET_ANALYTICS_TOKEN: "/analyticsToken",
   //TECHNICIAN
   SERVICE_CREATE: "/serviceCreate",
 };

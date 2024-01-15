@@ -17,21 +17,24 @@ import PATHROUTES from "../../helpers/pathRoute";
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
 import { logoutUser } from "../../redux/slices/userSlice.js";
-import { clearPersistanceData, getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter.js";
+import {
+  clearPersistanceData,
+  getDataFromSelectedPersistanceMethod,
+} from "../../utils/authMethodSpliter.js";
 import { logOutUser } from "../../services/authServices.js";
 import { resetCart } from "../../redux/slices/cartSlice.js";
 const SideBar = () => {
   const dispatch = useDispatch();
   const { name, surname } = useSelector((state) => state.user);
-  const navigate = useNavigate()  
+  const navigate = useNavigate();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-  
+
   const items = UserPanelItems(name, surname);
 
   const logout = async (authData) => {
-    clearPersistanceData(cookieStatus)
-    await logOutUser(authData.jwt)
+    clearPersistanceData(cookieStatus);
+    await logOutUser(authData.jwt);
     dispatch(logoutUser());
     window.localStorage.setItem("storedProducts", JSON.stringify([]));
     navigate(PATHROUTES.HOME);
@@ -49,6 +52,10 @@ const SideBar = () => {
         width: "25%",
         minHeight: "500px",
         borderRight: ".1px solid grey",
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }
     : {
         minWidth: "5em",
@@ -56,6 +63,10 @@ const SideBar = () => {
         width: "5%",
         minHeight: "500px",
         borderRight: ".1px solid grey",
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       };
 
   const handleMenuClick = () => {

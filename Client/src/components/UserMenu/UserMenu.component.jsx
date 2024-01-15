@@ -118,16 +118,16 @@ const UserMenu = () => {
         PaperProps={{
           elevation: 0,
           sx: {
-            overflow: "visible",
+            overflow: "scroll",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-            mt: 1.5,
+            mt: 0,
             width: "12em",
+            maxHeight: "70vh",
             mr: "0em",
             pr: 0,
             "&::-webkit-scrollbar": {
               display: "none",
             },
-            scrollbarWidth: "none",
             "& .MuiAvatar-root": {
               width: 32,
               height: 32,
@@ -136,16 +136,16 @@ const UserMenu = () => {
             },
             "&:before": {
               content: '""',
-              display: "flex",
+              display: "block",
               flexDirection: "column",
               position: "absolute",
-              top: 0,
+              top: 10,
               right: 60,
               width: 10,
               height: 10,
               bgcolor: "background.paper",
               transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0,
+              zIndex: 10,
               justifyContent: "center",
               [`@media (max-width:1200px)`]: {
                 right: 25,
