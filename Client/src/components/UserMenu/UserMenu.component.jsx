@@ -1,7 +1,7 @@
 //HOOKS
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 //MATERIAL UI
 import {
   Box,
@@ -15,24 +15,13 @@ import {
   Tooltip,
 } from "@mui/material";
 //HELPERS
-import PATHROUTES from "../../helpers/pathRoute";
 import getFirstLetters from "../../helpers/getFirstLetters";
 //UTILS
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
-//REDUX
-import { logoutUser } from "../../redux/slices/userSlice.js";
-import {
-  clearPersistanceData,
-  getDataFromSelectedPersistanceMethod,
-} from "../../utils/authMethodSpliter.js";
-import { logOutUser } from "../../services/authServices.js";
-import { resetCart } from "../../redux/slices/cartSlice.js";
+import useLogoutUser from "../../Hook/useLogoutUser.jsx";
 
 const UserMenu = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const { name, surname } = useSelector((state) => state.user);
 
   const initialLetersUsers = {
@@ -47,14 +36,10 @@ const UserMenu = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const logOutUser = useLogoutUser(cookieStatus)
 
   const logout = async () => {
-    clearPersistanceData(cookieStatus);
-    await logOutUser(authData.jwt);
-    dispatch(logoutUser());
-    window.localStorage.setItem("storedProducts", JSON.stringify([]));
-    navigate(PATHROUTES.HOME);
-    dispatch(resetCart());
+   await logOutUser.logout()
   };
 
   const handleClose = () => {

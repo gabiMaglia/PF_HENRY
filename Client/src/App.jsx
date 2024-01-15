@@ -25,7 +25,13 @@ import useCheckAuthData from "./Hook/useCheckAuthData";
 import { useEffect } from "react";
 
 const App =  () => {
-  
+  // CustomHook que hace el check de token
+  const checkTokenData = useCheckAuthData()
+
+  useEffect (()=> {
+    checkTokenData.checkToken()
+  }, [])
+
   return (
     <>
       <CookiesPopup />

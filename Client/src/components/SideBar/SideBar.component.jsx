@@ -1,7 +1,7 @@
 //HOOKS
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 //MATERIAL UI
 import {
   Box,
@@ -13,35 +13,16 @@ import {
 } from "@mui/material";
 import { Menu, ArrowBack } from "@mui/icons-material";
 //UTILS
-import PATHROUTES from "../../helpers/pathRoute";
 import UserPanelItems from "../../utils/UserPanelItems.jsx";
 //REDUX
-import { logoutUser } from "../../redux/slices/userSlice.js";
-import { clearPersistanceData, getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter.js";
-import { logOutUser } from "../../services/authServices.js";
-import { resetCart } from "../../redux/slices/cartSlice.js";
+import useLogoutUser from "../../Hook/useLogoutUser.jsx";
 const SideBar = () => {
-  const dispatch = useDispatch();
   const { name, surname } = useSelector((state) => state.user);
-  const navigate = useNavigate()  
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-  
   const items = UserPanelItems(name, surname);
-
-  const logout = async (authData) => {
-    clearPersistanceData(cookieStatus)
-    await logOutUser(authData.jwt)
-    dispatch(logoutUser());
-    window.localStorage.setItem("storedProducts", JSON.stringify([]));
-    navigate(PATHROUTES.HOME);
-    dispatch(resetCart());
-  };
-
+  const logoutUser = useLogoutUser(cookieStatus)
   const actualLocation = useLocation().pathname;
-
   const [sideBarIsOpen, setSideBarIsOpen] = useState(false);
-
   const sideBarBoxStyle = sideBarIsOpen
     ? {
         minWidth: "10em",
@@ -89,7 +70,7 @@ const SideBar = () => {
               }}
               onClick={() => {
                 if (item.action === "logout") {
-                  logout(authData);
+                  logoutUser.logout();
                 }
               }}
             >

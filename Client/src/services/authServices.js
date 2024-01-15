@@ -84,20 +84,22 @@ export const checkSessionStatus = async (jwt) => {
       
     });
     if (response.error) return {error:true, message: response.error.name}
-    return {response}
+    // console.log(response.data)
+    return response.data
+
   } catch ({ response }) {
     return { error: response.data };
   }
 };
 export const refreshSessionToken = async (jwt) => {
   try {
-    const {jwt} = await axios.get(`${url}/account/refresh`, {
+    console.log(jwt)
+    const response = await axios.get(`${url}/account/refresh`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(jwt)
-    return jwt
+    return response.data.jwt
   } catch ({ response }) {
     return { error: response.data };
   }
