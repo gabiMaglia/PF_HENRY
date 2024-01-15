@@ -64,7 +64,6 @@ const columns = [
     type: Boolean,
     width: 100,
     headerAlign: "center",
-    editable: true,
   },
   {
     field: "soldCount",
