@@ -185,27 +185,42 @@ const ProductsTable = () => {
   };
 
   const handleCategoryChange = async (productId, newCategory, currentRow) => {
-    const response = await fetchUpdateProduct(
-      productId,
-      {
-        price: currentRow.price,
-        categoryName: newCategory,
-      },
-      authData.jwt
-    );
-    if (response.status === 200) {
+    try {
       Swal.fire({
-        icon: "success",
-        title: "Operación Exitosa",
-        text: "Categoria actualizada correctamente",
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
       });
-      getProducts();
-      return newCategory;
-    } else {
+      Swal.showLoading();
+      const response = await fetchUpdateProduct(
+        productId,
+        {
+          price: currentRow.price,
+          categoryName: newCategory,
+        },
+        authData.jwt
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Operación Exitosa",
+          text: "Categoria actualizada correctamente",
+        });
+        getProducts();
+        return newCategory;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Operación fallida",
+          text: "No se pudo actualizar la categoria",
+        });
+      }
+    } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Operación fallida",
-        text: "No se pudo actualizar la categoria",
+        title: "Error Desconocido",
+        text: "Ha ocurrido un error al intentar actualizar la categoría",
       });
     }
   };
