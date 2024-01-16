@@ -104,7 +104,6 @@ const CardCarousel = ({ allProducts }) => {
             >
               <Box
                 sx={{
-                  
                   paddingInline: "5rem",
                   display: "flex",
                   justifyContent: "space-between",
@@ -187,8 +186,7 @@ const CardCarousel = ({ allProducts }) => {
                     flex: '1',
                     display: 'flex',
                     justifyContent: 'center',
-                    position: 'relative'
-                    
+                    position: 'relative',
                   }}
                   >
                   <CardMedia
@@ -196,7 +194,9 @@ const CardCarousel = ({ allProducts }) => {
                     alt={product.name}
                     image={product.ProductImages[0]?.address}
                     sx={{
-                      maxWidth: "390px",  
+                      maxWidth: "250px",
+                      position: 'relative',
+                      right: "-30px"  
                     }}
                   />
                     <DiscountBanner text={'Hasta un 30% de descuento!'} rotate={50} />
