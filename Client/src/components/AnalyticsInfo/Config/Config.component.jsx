@@ -14,6 +14,13 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const boxModalStyle = {
+  height: "auto",
+  maxHeight: "90%",
+  overflow: "scroll",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+  scrollbarWidth: "none",
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -40,6 +47,8 @@ const Config = ({
   dimensionStatus,
   setMetricStatus,
   setDimensionStatus,
+  graphicType,
+  setGraphicType,
 }) => {
   const handleMetricsDimensionChange = (value, name, position) => {
     const newData =
@@ -52,11 +61,21 @@ const Config = ({
     }
   };
 
-  const deleteMetric = (index) => {
-    if (metricStatus.length > 1) {
-      let newData = [...metricStatus];
+  const handleChangeGraphicsType = (value) => {
+    setGraphicType(value);
+  };
+
+  const deleteMetricDimensions = (index, type) => {
+    if (type === "metrics") {
+      if (metricStatus.length > 1) {
+        let newData = [...metricStatus];
+        newData.splice(index, 1);
+        setMetricStatus(newData);
+      }
+    } else {
+      let newData = [...dimensionStatus];
       newData.splice(index, 1);
-      setMetricStatus(newData);
+      setDimensionStatus(newData);
     }
   };
 
@@ -93,6 +112,17 @@ const Config = ({
         <Divider sx={{ color: "#fd611a", fontWeight: "bold" }}>
           <Typography variant="h6">Configuración</Typography>
         </Divider>
+        <Box>
+          <Autocomplete
+            sx={{ width: "100%" }}
+            onChange={(e, value) => handleChangeGraphicsType(value)}
+            value={graphicType}
+            options={["Linea", "Barras", "Circular"]}
+            renderInput={(params) => (
+              <TextField {...params} label="Tipo de grafico" />
+            )}
+          />
+        </Box>
 
         <Typography variant="body2">Seleccione un rango de fechas</Typography>
         <Box
@@ -163,7 +193,7 @@ const Config = ({
                   />
                   <DeleteIcon
                     cursor="pointer"
-                    onClick={() => deleteMetric(index)}
+                    onClick={() => deleteMetricDimensions(index, "metrics")}
                   />
                 </Box>
               );
@@ -184,29 +214,62 @@ const Config = ({
             </Box>
           </Box>
 
-          <Autocomplete
-            sx={{ flexGrow: "1" }}
-            value={dimensionStatus[0]}
-            name="dimensions"
-            onChange={(e, value) =>
-              handleMetricsDimensionChange(value, "dimensions", 0)
-            }
-            options={dimensions?.map((dimension) => {
-              return dimension?.label ? dimension?.label : "";
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1em",
+              flexGrow: "1",
+            }}
+          >
+            {dimensionStatus.map((dimension, index) => {
+              return (
+                <Box
+                  key={`${dimensionStatus[index]}-${index}`}
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Autocomplete
+                    sx={{ width: "100%" }}
+                    onChange={(e, value) =>
+                      handleMetricsDimensionChange(value, "dimensions", index)
+                    }
+                    value={dimensionStatus[index]}
+                    options={dimensions?.map((dimension) => {
+                      return dimension?.label ? dimension?.label : "";
+                    })}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Dimensiones" />
+                    )}
+                  />
+                  <DeleteIcon
+                    cursor="pointer"
+                    onClick={() => deleteMetricDimensions(index, "dimensions")}
+                  />
+                </Box>
+              );
             })}
-            renderInput={(params) => (
-              <TextField {...params} label="Dimensiones" />
-            )}
-          />
+            <Box
+              sx={{
+                backgroundColor: "#fd611a",
+                width: "80px",
+                borderRadius: "10px",
+              }}
+            >
+              <Button
+                onClick={() => setDimensionStatus([...dimensionStatus, null])}
+                sx={{ color: "white" }}
+              >
+                <AddIcon />
+              </Button>
+            </Box>
+          </Box>
         </Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            gap: "3em",
-            justifyContent: "center",
-          }}
-        ></Box>
         <Box>
           <Box sx={{ backgroundColor: "#fd611a" }}>
             <Button
