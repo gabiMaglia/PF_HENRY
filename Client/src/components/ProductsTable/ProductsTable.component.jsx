@@ -107,7 +107,7 @@ const ProductsTable = () => {
     {
       field: "category",
       headerName: "Categoría",
-      width: 150,
+      width: 200,
       headerAlign: "center",
       editable: true,
       renderCell: (params) => (
