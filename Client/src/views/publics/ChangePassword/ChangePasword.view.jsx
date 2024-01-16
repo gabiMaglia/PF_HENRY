@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { changeUserPassword } from "../../../services/authServices";
 import { useNavigate, useParams } from "react-router-dom";

@@ -110,7 +110,7 @@ export const registerUser = async (userObj) => {
     return { error: response.data };
   }
 };
-export const senResetPasswordEmail = async(email) => {
+export const sendResetPasswordEmail = async(email) => {
   try {
     const response = await axios.get(`${url}/send_reset_pass/${email}`);
     return response
