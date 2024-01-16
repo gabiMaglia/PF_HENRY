@@ -8,6 +8,8 @@ const {
   refreshSessionHandler,
   jwtCheckHandler,
   deleteActivateUserByIdHandler,
+  forgetPasswordHandler,
+  changePasswordHandler,
 } = require("../../../handlers/accountHandlers/authHandler");
 const {
   checkRoleAuthToken,
@@ -25,5 +27,9 @@ useRouter.get("/jwt-check", jwtCheckHandler);
 useRouter.get("/confirm/:token", confirmAccountHandler);
 useRouter.get("/refresh", refreshSessionHandler);
 useRouter.get("/logout", logoutHandler);
+
+useRouter.get('/send_reset_pass/:email', forgetPasswordHandler )
+useRouter.post('/reset/:token', changePasswordHandler )
+
 
 module.exports = useRouter;

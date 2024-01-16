@@ -110,6 +110,25 @@ export const registerUser = async (userObj) => {
     return { error: response.data };
   }
 };
+export const senResetPasswordEmail = async(email) => {
+  try {
+    const response = await axios.get(`${url}/send_reset_pass/${email}`);
+    return response
+  } catch ({response}) {
+    return { error: response.data };
+  }
+} 
+export const changeUserPassword = async(password, password2, token ) => {
+  try {
+    console.log({services: {password, password2, token}})
+    const response = await axios.post(`${url}/account/reset/${token}`, {
+      password, password2, token
+    });
+    return { error: false, data: response  };
+  } catch ({response}) {
+    return { error: response.data };
+  }
+}
 export const logOutUser = async (jwt) => {
   try {
     userLogoutEvent();

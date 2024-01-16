@@ -39,6 +39,7 @@ const CardCarousel = ({ allProducts }) => {
     }
   }, [allProducts]);
 
+
   const settings = {
     dots: false,
     infinite: true,

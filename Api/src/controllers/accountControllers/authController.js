@@ -1,6 +1,6 @@
 require("dotenv").config();
 const {
-  sendConfirmationEmail,
+  sendConfirmationEmail, sendResetPasswordEmail,
 } = require("../../utils/sendConfirmationEmail.js");
 const {
   tokenSign,
@@ -165,20 +165,47 @@ const logOutUser = async (token) => {
   }
   return badToken[0].token;
 };
-const sendEmailToResetPassword = async () => {};
-
-const resetPassword = async (userId) => {
+// PASSWORD RESET
+const sendEmailToResetPassword = async (email) => {
+  const user = await User.findOne({where: {email: email}})
+ const response = await sendResetPasswordEmail(
+    process.env.EMAIL_MAILER,
+    email,
+    user.id,
+    process.env.JWT_SECRET_KEY,
+    process.env.FRONTEND_URL
+  );
+  return response
+};
+const resetPassword = async (newPassword, token) => {
+  const isValid = await verifyToken(token);
+  console.log(isValid)
+  if(!isValid) {
+    return {
+      error: true,
+      response: "Token incorrectas",
+    };
+  }
   const user = await UserCredentials.findOne({
-    where: { UserId: userId },
+    where: { UserId: isValid.userId },
   });
+  
   if (!user) {
     return {
       error: true,
       response: "Credenciales no encontradas",
     };
+  }else {
+    await user.update({password: await bcrypt.hash(newPassword, 8)})
+    await user.save()
+    return {
+      error: false,
+      response: 'Password actualizado'
+    }
   }
-};
 
+};
+// 
 const deleteActivateUserById = async (id) => {
   const user = await User.findByPk(id);
   const newState = user.isDeleted;
@@ -213,6 +240,7 @@ module.exports = {
   logOutUser,
   confirmAccountController,
   resetPassword,
+  sendEmailToResetPassword,
   checkAuthToken,
   deleteActivateUserById,
 };
