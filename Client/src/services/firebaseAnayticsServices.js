@@ -31,8 +31,8 @@ export const itemToWishlist = async (productId, wishlistProducts, jwt) => {
         {
           item_id: data?.id,
           item_name: data?.name,
-          item_brand: data?.ProductCategories[0]?.name,
-          item_category: data?.ProductBrands[0]?.name,
+          item_brand: data?.ProductBrands[0]?.name,
+          item_category: data?.ProductCategories[0]?.name,
           price: data?.price,
         },
       ],
