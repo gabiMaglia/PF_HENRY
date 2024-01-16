@@ -25,6 +25,7 @@ import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
 import PATHROUTES from "./helpers/pathRoute";
 import useCheckAuthData from "./Hook/useCheckAuthData";
 import { useEffect } from "react";
+import ChangePasword from "./views/publics/ChangePassword/ChangePasword.view";
 
 const App = () => {
   // CustomHook que hace el check de token
@@ -56,6 +57,7 @@ const App = () => {
         <Route path={PATHROUTES.CATEGORIES} element={<Categories />} />
         <Route path={PATHROUTES.DETAIL} element={<Detail />} />
         <Route path={PATHROUTES.REVIEW} element={<Review />} />
+        <Route path={PATHROUTES.CHANGEPASS} element={<ChangePasword />} />
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
         </Route>

@@ -29,6 +29,20 @@ const getUserByDni = async (dni) => {
   }
   return user;
 };
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({
+    where: { email: email },
+    include: [{ model: UserRole, as: "role" }, UserAddress],
+  });
+
+  if (!user) {
+    return {
+      error: true,
+      response: `Users not found`,
+    };
+  }
+  return user;
+};
 
 const getUserById = async (id) => {
   const user = await User.findByPk(id, {
@@ -190,6 +204,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   getUserByDni,
+  getUserByEmail,
   postUser,
   editUserById,
 };
