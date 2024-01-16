@@ -2,13 +2,13 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 //MATERIAL UI
-import { Box } from "@mui/material";
+import { Box, Select, MenuItem } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
   esES,
 } from "@mui/x-data-grid";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 //COMPONENTS
 import LoadingProgress from "../Loading/Loading.component";
 import {
@@ -25,84 +25,12 @@ import {
 } from "../../services/productServices";
 // SWEET ALERT
 import Swal from "sweetalert2";
-
-const columns = [
-  { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
-  {
-    field: "name",
-    headerName: "Nombre",
-    width: 350,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
-    field: "price",
-    headerName: "Precio",
-    width: 100,
-    headerAlign: "center",
-    editable: true,
-    valueFormatter: (params) => {
-      const numericPrice = parseFloat(params.value);
-      if (isNaN(numericPrice)) {
-        return "Formato precio invalido";
-      }
-      return `$${numericPrice
-        .toFixed(0)
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
-    },
-  },
-  {
-    field: "warranty",
-    headerName: "Garantía",
-    width: 100,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
-    field: "is_deleted",
-    headerName: "Borrado",
-    type: Boolean,
-    width: 100,
-    headerAlign: "center",
-  },
-  {
-    field: "soldCount",
-    headerName: "Vendidos",
-    width: 100,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
-    field: "carousel",
-    headerName: "Carousel",
-    width: 80,
-    headerAlign: "center",
-  },
-  {
-    field: "brand",
-    headerName: "Marca",
-    width: 150,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
-    field: "category",
-    headerName: "Categoría",
-    width: 150,
-    headerAlign: "center",
-    editable: true,
-  },
-  {
-    field: "stock",
-    headerName: "Stock",
-    width: 80,
-    headerAlign: "center",
-    editable: true,
-  },
-];
+import { fetchCategories } from "../../services/categoriesServices";
 
 const ProductsTable = () => {
   const editingRow = useRef(null);
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories.categories);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -113,10 +41,97 @@ const ProductsTable = () => {
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-  console.log(authData.jwt);
   const language = esES;
 
   const urlBack = import.meta.env.VITE_BACKEND_URL;
+
+  const columns = [
+    { field: "id", headerName: "ID", minWidth: 300, headerAlign: "center" },
+    {
+      field: "name",
+      headerName: "Nombre",
+      width: 350,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
+      field: "price",
+      headerName: "Precio",
+      width: 100,
+      headerAlign: "center",
+      editable: true,
+      valueFormatter: (params) => {
+        const numericPrice = parseFloat(params.value);
+        if (isNaN(numericPrice)) {
+          return "Formato precio invalido";
+        }
+        return `$${numericPrice
+          .toFixed(0)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+      },
+    },
+    {
+      field: "warranty",
+      headerName: "Garantía",
+      width: 100,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
+      field: "is_deleted",
+      headerName: "Borrado",
+      type: Boolean,
+      width: 100,
+      headerAlign: "center",
+    },
+    {
+      field: "soldCount",
+      headerName: "Vendidos",
+      width: 100,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
+      field: "carousel",
+      headerName: "Carousel",
+      width: 80,
+      headerAlign: "center",
+    },
+    {
+      field: "brand",
+      headerName: "Marca",
+      width: 150,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
+      field: "category",
+      headerName: "Categoría",
+      width: 150,
+      headerAlign: "center",
+      editable: true,
+      renderCell: (params) => (
+        <Select
+          value={params.value}
+          onChange={(e) => handleCategoryChange(params.id, e.target.value, params.row)}
+          sx={{ width: "100%" }}
+        >
+          {categories.map((category) => (
+            <MenuItem key={category.id} value={category.name}>
+              {category.name}
+            </MenuItem>
+          ))}
+        </Select>
+      ),
+    },
+    {
+      field: "stock",
+      headerName: "Stock",
+      width: 80,
+      headerAlign: "center",
+      editable: true,
+    },
+  ];
 
   const getProducts = async () => {
     try {
@@ -149,6 +164,7 @@ const ProductsTable = () => {
 
   useEffect(() => {
     getProducts();
+    fetchCategories(dispatch);
   }, []);
 
   const handleCellEditStart = (params) => {
@@ -164,6 +180,20 @@ const ProductsTable = () => {
     } else {
       setAvailableModify(true);
     }
+  };
+
+  const handleCategoryChange = (productId, newCategory, currentRow) => {
+    console.log("Product ID", productId);
+    console.log("New Category", newCategory);
+    console.log("Current Row", currentRow)
+
+    setRows((prevRows) => {
+      const updatedRows = prevRows.map((row) =>
+        row.id === productId ? { ...row, category: newCategory } : row
+      );
+      console.log("Updated Rows", updatedRows);
+      return updatedRows;
+    });
   };
 
   const handleDelete = async (selectedRows) => {
