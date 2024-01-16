@@ -21,8 +21,8 @@ import CarouselProducts from "../CarouselProducts/CarouselProducts.component";
 import {
   fetchProductById,
   fetchAllProducts,
-  fetchProductCartPost,
 } from "../../services/productServices";
+import { fetchProductCartPost } from "../../services/cartServices";
 import { useLocalStorage } from "../../Hook/useLocalStorage";
 import {
   fetchAddItemWish,
@@ -438,10 +438,10 @@ const Detail = () => {
         </Container>
         <Container sx={{ marginTop: 2 }}>
           <Divider sx={{ marginY: 2 }} />
-          <Typography fontSize={18} fontWeight={"bold"}>
+          <Typography variant="h5" fontWeight={"bold"}>
             Descripción:
           </Typography>
-          <Typography>{productById.description}</Typography>
+          <Typography variant="h6">{productById.description}</Typography>
         </Container>
         <Container>
           <Divider sx={{ marginY: 2 }} />
