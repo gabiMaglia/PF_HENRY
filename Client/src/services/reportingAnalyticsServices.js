@@ -2,12 +2,14 @@ import axios from "axios";
 const PROPERTY_ID = import.meta.env.VITE_REPORTING_ANALYTICS_PROJECT_ID;
 import { metrics, dimensions } from "../components/AnalyticsInfo/dataTypes";
 
-const getObjects = (obj, type) => {
+const getObjects = (objs, type) => {
   const completeData = type === "metrics" ? [...metrics] : [...dimensions];
-  const completeObject = completeData.find((object) => {
-    if (object.label === obj) {
-      return object;
-    }
+  const completeObject = objs.map((obj) => {
+    return completeData.find((object) => {
+      if (object.label === obj) {
+        return object;
+      }
+    });
   });
   return completeObject;
 };
@@ -23,20 +25,36 @@ export const fetchAnalyticsData = async (
     const metricsComplete = getObjects(metrics, "metrics");
     const dimensionsComplete = getObjects(dimensions, "dimensions");
 
-    const reqDimensions = {
-      name: dimensionsComplete?.name,
-    };
-    const reqMetrics = {
-      name: metricsComplete?.name,
-    };
+    const reqDimensions = dimensionsComplete.map((dimension) => {
+      return {
+        name: dimension?.name,
+      };
+    });
+    const reqMetrics = metricsComplete.map((metric) => {
+      return {
+        name: metric?.name,
+      };
+    });
+    let filters = dimensionsComplete.map((dimension) => {
+      if (dimension?.dimensionFilter) {
+        return dimension?.dimensionFilter;
+      }
+    })[0];
+    if (!filters) {
+      filters = metricsComplete.map((metric) => {
+        if (metric?.dimensionFilter) {
+          return metric?.dimensionFilter;
+        }
+      })[0];
+    }
 
     const requestBody = {
       dateRanges: [{ startDate, endDate }],
-      metrics: [reqMetrics],
-      dimensions: [reqDimensions],
+      metrics: reqMetrics ? reqMetrics : "",
+      dimensions: reqDimensions,
     };
-    dimensionsComplete?.dimensionFilter &&
-      (requestBody.dimensionFilter = dimensionsComplete?.dimensionFilter);
+    filters && (requestBody.dimensionFilter = filters);
+    console.log(requestBody);
 
     const headers = {
       "Content-Type": "application/json",

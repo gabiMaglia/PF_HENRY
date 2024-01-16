@@ -14,9 +14,11 @@ const AnalyticsInfo = () => {
   const [config, setConfig] = useState({
     startDate: "",
     endDate: "",
-    metrics: "",
-    dimensions: "",
   });
+  const [metricStatus, setMetricStatus] = useState([null]);
+  const [dimensionStatus, setDimensionStatus] = useState([null]);
+  const [firstCharge, setFirstCharge] = useState(true);
+  const [token, setToken] = useState(null);
 
   const handleOpenConfig = () => {
     setOpenConfig(!openConfig);
@@ -32,10 +34,11 @@ const AnalyticsInfo = () => {
           accessToken,
           config.startDate,
           config.endDate,
-          config.metrics,
-          config.dimensions
+          metricStatus,
+          dimensionStatus
         );
         setOpenConfig(false);
+        setToken(accessToken);
         setData(newData);
       }
     },
@@ -45,11 +48,19 @@ const AnalyticsInfo = () => {
   });
 
   const getData = async () => {
-    if (googleLogin.tokenResponse?.access_token) {
+    if (token && !firstCharge) {
       const newData = await fetchAnalyticsData(
-        googleLogin.tokenResponse.access_token
+        token,
+        config.startDate,
+        config.endDate,
+        metricStatus,
+        dimensionStatus
       );
       setData(newData);
+      setOpenConfig(false);
+    } else {
+      googleLogin();
+      setFirstCharge(false);
     }
   };
 
@@ -68,9 +79,30 @@ const AnalyticsInfo = () => {
         return row?.dimensionValues[0].value;
       });
 
-      const datasets = filterData?.map((row) => {
-        return row?.metricValues[0].value;
+      let metricsValues = filterData?.map((row) => {
+        return row?.metricValues.map((data) => {
+          return data?.value;
+        });
       });
+
+      let maxElements = 0;
+      for (let i = 0; i < metricsValues.length; i++) {
+        if (metricsValues[i].length > maxElements) {
+          maxElements = metricsValues[i].length;
+        }
+      }
+
+      const datasets = [];
+
+      for (let i = 0; i < maxElements; i++) {
+        datasets.push({
+          id: i,
+          label: metricStatus[i],
+          data: metricsValues.map((dataset) => {
+            return dataset[i];
+          }),
+        });
+      }
       setData({ labels, datasets });
     }
   }, [data]);
@@ -109,14 +141,30 @@ const AnalyticsInfo = () => {
           </Box>
         )}
       </Box>
-      {/* {data && <LinearGraphic data={data} />} */}
-      {data && <BarGraphic labels={data?.labels} datasets={data?.datasets} />}
+      {/* {data && (
+        <LinearGraphic
+          labels={data?.labels}
+          datasets={data?.datasets}
+          label={{ metricStatus, dimensionStatus }}
+        />
+      )} */}
+      {data && (
+        <BarGraphic
+          labels={data?.labels}
+          datasets={data?.datasets}
+          label={{ metricStatus, dimensionStatus }}
+        />
+      )}
       <Config
         open={openConfig}
         setOpen={handleOpenConfig}
-        getData={googleLogin}
+        getData={getData}
         config={config}
+        metricStatus={metricStatus}
+        dimensionStatus={dimensionStatus}
         setConfig={setConfig}
+        setMetricStatus={setMetricStatus}
+        setDimensionStatus={setDimensionStatus}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>

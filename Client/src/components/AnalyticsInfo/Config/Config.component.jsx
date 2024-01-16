@@ -10,14 +10,16 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { metrics, dimensions } from "../dataTypes";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const boxModalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "50%",
-  minWidth: "350px",
+  width: "80%",
+  minWidth: "400px",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -28,9 +30,32 @@ const boxModalStyle = {
   gap: "1em",
 };
 
-const Config = ({ open, setOpen, getData, config, setConfig }) => {
-  const handleMetricsDimensionChange = (value, name) => {
-    setConfig({ ...config, [name]: value });
+const Config = ({
+  open,
+  setOpen,
+  getData,
+  config,
+  setConfig,
+  metricStatus,
+  dimensionStatus,
+  setMetricStatus,
+  setDimensionStatus,
+}) => {
+  const handleMetricsDimensionChange = (value, name, position) => {
+    const newData =
+      name === "metrics" ? [...metricStatus] : [...dimensionStatus];
+    newData[position] = value;
+    if (name === "metrics") {
+      setMetricStatus(newData);
+    } else {
+      setDimensionStatus(newData);
+    }
+  };
+
+  const deleteMetric = (index) => {
+    let newData = [...metricStatus];
+    newData.splice(index, 1);
+    setMetricStatus(newData);
   };
 
   const handleChange = (e) => {
@@ -101,23 +126,68 @@ const Config = ({ open, setOpen, getData, config, setConfig }) => {
             justifyContent: "center",
           }}
         >
-          <Autocomplete
-            sx={{ flexGrow: "1" }}
-            onChange={(e, value) =>
-              handleMetricsDimensionChange(value, "metrics")
-            }
-            value={config.metrics}
-            options={metrics?.map((metric) => {
-              return metric?.label ? metric?.label : "";
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1em",
+              flexGrow: "1",
+            }}
+          >
+            {metricStatus.map((metric, index) => {
+              return (
+                <Box
+                  key={`${metricStatus[index]}-${index}`}
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Autocomplete
+                    sx={{ width: "100%" }}
+                    onChange={(e, value) =>
+                      handleMetricsDimensionChange(value, "metrics", index)
+                    }
+                    value={metricStatus[index]}
+                    options={metrics?.map((metric) => {
+                      return metric?.label ? metric?.label : "";
+                    })}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Metricas" />
+                    )}
+                  />
+                  <DeleteIcon
+                    cursor="pointer"
+                    onClick={() => deleteMetric(index)}
+                  />
+                </Box>
+              );
             })}
-            renderInput={(params) => <TextField {...params} label="Metricas" />}
-          />
+            <Box
+              sx={{
+                backgroundColor: "#fd611a",
+                width: "80px",
+                borderRadius: "10px",
+              }}
+            >
+              <Button
+                onClick={() => setMetricStatus([...metricStatus, null])}
+                sx={{ color: "white" }}
+              >
+                <AddIcon />
+              </Button>
+            </Box>
+          </Box>
+
           <Autocomplete
             sx={{ flexGrow: "1" }}
-            value={config.dimensions}
+            value={dimensionStatus[0]}
             name="dimensions"
             onChange={(e, value) =>
-              handleMetricsDimensionChange(value, "dimensions")
+              handleMetricsDimensionChange(value, "dimensions", 0)
             }
             options={dimensions?.map((dimension) => {
               return dimension?.label ? dimension?.label : "";
