@@ -22,20 +22,10 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { useTheme } from "@mui/system";
 
 const UserPanelComponent = () => {
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 0,
-        xxs: 480,
-        sm: 600,
-        md: 900,
-        lg: 1200,
-        xl: 1536,
-      },
-    },
-  });
+  const theme = useTheme()
   const navigate = useNavigate();
   const actualLocation = useLocation().pathname;
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
