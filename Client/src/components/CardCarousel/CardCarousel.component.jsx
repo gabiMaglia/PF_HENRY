@@ -16,7 +16,7 @@ import { Container } from "@mui/system";
 import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 
 import miVideo from "/carousel/prueba.mp4";
-import DiscountBanner from "./CarouselParts/discountBanner";
+import DiscountBanner from "./CarouselParts/DiscountBanner";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
