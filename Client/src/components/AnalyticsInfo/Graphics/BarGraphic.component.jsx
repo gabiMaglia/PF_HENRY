@@ -26,18 +26,15 @@ ChartJS.register(
 
 const BarGraphic = ({ labels, datasets }) => {
   return (
-    <Bar
-      data={{
-        labels: labels,
-        datasets: [
-          {
-            id: 1,
-            label: "Marcas añadidas al carrito",
-            data: datasets,
-          },
-        ],
-      }}
-    />
+    labels &&
+    datasets && (
+      <Bar
+        data={{
+          labels: labels,
+          datasets,
+        }}
+      />
+    )
   );
 };
 
