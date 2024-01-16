@@ -24,7 +24,10 @@ import Swal from "sweetalert2";
 //UTILS
 import { handleImageUpload } from "../../utils/cloudinaryUpload";
 //HELPERS
-import {validateField, validationsCreate} from "../../helpers/productValidate";
+import {
+  validateField,
+  validationsCreate,
+} from "../../helpers/productValidate";
 import { display } from "@mui/system";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
@@ -91,13 +94,12 @@ const ProductCreateProfileComponent = () => {
             images: [...prevValues.images, ...selectedImages],
           }));
           const selectedPreviews = Array.from(files).map((file) =>
-          URL.createObjectURL(file)
+            URL.createObjectURL(file)
           );
           setImagePreviews((prevPreviews) => [
             ...prevPreviews,
             ...selectedPreviews,
           ]);
-         
         }
         break;
 
@@ -149,7 +151,6 @@ const ProductCreateProfileComponent = () => {
           [name]: value,
         }));
     }
-
   };
   const handlerUpdateCloudinary = async (folderName) => {
     try {
@@ -205,7 +206,7 @@ const ProductCreateProfileComponent = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     let array = [];
-    
+
     const errorObject = validationsCreate(values);
     setErrors(errorObject);
     if (Object.keys(errors).length !== 0) {
@@ -222,7 +223,7 @@ const ProductCreateProfileComponent = () => {
         const array2 = await handlerUpdateCloudinary("products");
         array = array2;
       }
-      
+
       if (array.error) {
         Swal.fire({
           icon: "error",
@@ -230,13 +231,13 @@ const ProductCreateProfileComponent = () => {
           text: "Por favor, inténtelo de nuevo.",
         });
       }
-      
+
       const obj = {
         ...values,
         carousel: carouselData,
         images: array,
       };
-      
+
       // Muestra una alerta de que la creación está en proceso
       Swal.fire({
         icon: "info",
@@ -246,7 +247,7 @@ const ProductCreateProfileComponent = () => {
       });
 
       const response = fetchAddProduct(obj, dispatch, authData.jwt);
-      
+
       response
         .then((res) => {
           Swal.close();
@@ -406,7 +407,7 @@ const ProductCreateProfileComponent = () => {
               label="Marca"
               MenuProps={{
                 style: {
-                  maxHeight: '200px',  
+                  maxHeight: "200px",
                 },
               }}
               value={isOtherBrand ? "otra" : values.brandName}
@@ -458,7 +459,7 @@ const ProductCreateProfileComponent = () => {
               label="Categoria"
               MenuProps={{
                 style: {
-                  maxHeight: '200px',  
+                  maxHeight: "200px",
                 },
               }}
               value={isOtherCategory ? "otra" : values.categoryName}
