@@ -7,10 +7,7 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 
 import PATHROUTES from "../../helpers/pathRoute";
-import {
-  fetchCartUser,
-  fetchProductCartGet,
-} from "../../services/productServices";
+import { fetchCartUser } from "../../services/cartServices";
 //FIREBASE
 import { completePurchaseEvent } from "../../services/firebaseAnayticsServices";
 import DetailProductShopping from "../DetailProductShopping/DetailProductShopping.component";
