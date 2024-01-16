@@ -42,7 +42,7 @@ const ProductsTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-
+  console.log(authData.jwt);
   const urlBack = import.meta.env.VITE_BACKEND_URL;
 
   const columns = [
@@ -113,7 +113,9 @@ const ProductsTable = () => {
       renderCell: (params) => (
         <Select
           value={params.value}
-          onChange={(e) => handleCategoryChange(params.id, e.target.value, params.row)}
+          onChange={(e) =>
+            handleCategoryChange(params.id, e.target.value, params.row)
+          }
           sx={{ width: "100%" }}
         >
           {categories.map((category) => (
@@ -182,18 +184,29 @@ const ProductsTable = () => {
     }
   };
 
-  const handleCategoryChange = (productId, newCategory, currentRow) => {
-    console.log("Product ID", productId);
-    console.log("New Category", newCategory);
-    console.log("Current Row", currentRow)
-
-    setRows((prevRows) => {
-      const updatedRows = prevRows.map((row) =>
-        row.id === productId ? { ...row, category: newCategory } : row
-      );
-      console.log("Updated Rows", updatedRows);
-      return updatedRows;
-    });
+  const handleCategoryChange = async (productId, newCategory, currentRow) => {
+    const response = await fetchUpdateProduct(
+      productId,
+      {
+        categoryName: newCategory,
+      },
+      authData.jwt
+    );
+    if (response.status === 200) {
+      Swal.fire({
+        icon: "success",
+        title: "Operación Exitosa",
+        text: "Categoria actualizada correctamente",
+      });
+      getProducts();
+      return newCategory;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Operación fallida",
+        text: "No se pudo actualizar la categoria",
+      });
+    }
   };
 
   const handleDelete = async (selectedRows) => {
@@ -288,7 +301,6 @@ const ProductsTable = () => {
 
         const response = await fetchUpdateProduct(
           productId,
-          // newRow,
           updateData,
           authData.jwt
         );
