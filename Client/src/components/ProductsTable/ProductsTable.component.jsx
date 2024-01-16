@@ -188,6 +188,7 @@ const ProductsTable = () => {
     const response = await fetchUpdateProduct(
       productId,
       {
+        price: currentRow.price,
         categoryName: newCategory,
       },
       authData.jwt
