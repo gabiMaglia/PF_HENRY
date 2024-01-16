@@ -53,9 +53,11 @@ const Config = ({
   };
 
   const deleteMetric = (index) => {
-    let newData = [...metricStatus];
-    newData.splice(index, 1);
-    setMetricStatus(newData);
+    if (metricStatus.length > 1) {
+      let newData = [...metricStatus];
+      newData.splice(index, 1);
+      setMetricStatus(newData);
+    }
   };
 
   const handleChange = (e) => {
