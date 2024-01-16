@@ -32,6 +32,7 @@ const ReviewsComponent = () => {
         sx={{
           backgroundColor: "#000",
           width: "100%",
+
           height: "120px",
           display: "flex",
           justifyContent: "center",
@@ -40,7 +41,14 @@ const ReviewsComponent = () => {
       >
         <Typography
           variant="h4"
-          sx={{ color: "#fff", textTransform: "uppercase", fontWeight: "900" }}
+          sx={{
+            color: "#fff",
+            fontSize: "1.7rem",
+            textAlign: "center",
+            textTransform: "uppercase",
+            fontWeight: "800",
+            margin: "10px",
+          }}
         >
           Reseñas de nuestros clientes
         </Typography>

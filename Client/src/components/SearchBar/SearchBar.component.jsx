@@ -165,7 +165,7 @@ export default function SearchAppBar() {
       </Box>
       <Box
         sx={{
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           border: 2,
           borderRadius: 2,
           borderTopRightRadius: 50,
@@ -251,7 +251,7 @@ export default function SearchAppBar() {
         sx={{
           display: "flex",
           flexDirection: "row",
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           alignItems: "center",
           justifyContent: "space-around",
           gap: "3em",
