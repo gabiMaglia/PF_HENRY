@@ -20,6 +20,7 @@ const QuestionsComponent = () => {
           variant="h4"
           sx={{
             color: "#fff",
+            textAlign: "center",
             textTransform: "uppercase",
             fontWeight: "800",
             "@media (max-width: 480px)": {
@@ -31,8 +32,8 @@ const QuestionsComponent = () => {
         </Typography>
       </Box>
       {/* CIERRE BOX TITULO */}
-        <DropdownStoreComponent />
-        <DropdownStoreService />
+      <DropdownStoreComponent />
+      <DropdownStoreService />
     </>
   );
 };
