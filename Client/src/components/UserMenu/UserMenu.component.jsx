@@ -13,6 +13,7 @@ import {
   IconButton,
   Typography,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 //HELPERS
 import getFirstLetters from "../../helpers/getFirstLetters";
@@ -23,6 +24,7 @@ import useLogoutUser from "../../Hook/useLogoutUser.jsx";
 const UserMenu = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const { name, surname } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
 
   const initialLetersUsers = {
     name: getFirstLetters(name?.split(" ")[0]),
@@ -39,6 +41,7 @@ const UserMenu = () => {
   const logOutUser = useLogoutUser(cookieStatus);
 
   const logout = async () => {
+    setLoading(true);
     await logOutUser.logout();
   };
 
@@ -46,7 +49,13 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
 
-  return (
+  return loading ? (
+    <CircularProgress
+      sx={{
+        color: "#fd611a",
+      }}
+    />
+  ) : (
     <Box>
       <Box
         sx={{
@@ -81,14 +90,14 @@ const UserMenu = () => {
             >
               <Typography
                 sx={{
-                  fontWeight: "bold",
+                  fontWeight: "bolder",
                   color: "white",
                 }}
               >
                 {initialLetersUsers.name + initialLetersUsers.surname}
               </Typography>
             </Avatar>
-            <Typography sx={{ maxWidth: "8em", textAlign: "center" }}>
+            <Typography sx={{ fontWeight:600, maxWidth: "8em", textAlign: "center" }}>
               {name?.split(" ")[0]} <br /> {surname?.split(" ")[0]}
             </Typography>
           </IconButton>
@@ -103,7 +112,7 @@ const UserMenu = () => {
         PaperProps={{
           elevation: 0,
           sx: {
-            overflow: "visible",
+            overflow: "scroll",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
             width: "12em",
@@ -147,6 +156,9 @@ const UserMenu = () => {
               to={item.path}
               key={item.name}
               style={{ textDecoration: "none", color: "inherit" }}
+              sx= {{
+             
+              }}
             >
               <MenuItem
                 onClick={() => {

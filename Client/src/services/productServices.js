@@ -125,6 +125,7 @@ export const fetchProductCartGet = (cookiesAccepted) => async () => {
           Authorization: `Bearer ${jwt}`,
         },
       });
+      console.log(res.data)
       const products = res.data.Products.map((product) => ({
         id: product.id,
         name: product.name,
@@ -133,9 +134,9 @@ export const fetchProductCartGet = (cookiesAccepted) => async () => {
         count: product.ProductCart.quantity,
         stock: product.ProductStock.amount,
       }));
-
+      console.log(products)
       const storedProducts = getProducts();
-
+console.log(storedProducts.payload)
       if (storedProducts.payload === undefined) {
         window.localStorage.setItem("storedProducts", JSON.stringify(products));
       }
@@ -245,6 +246,23 @@ export const logicalDeleteProduct = async (id, jwt) => {
   }
 };
 
+export const addToCarouselProduct = async (id, jwt) => {
+  try {
+    const response = await axios.put(
+      `${urlBack}/product/addToCarousel/${id}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
 export const fetchUpdateProduct = async (id, updateProduct, jwt) => {
   try {
     const response = await axios.put(
@@ -276,7 +294,7 @@ export const fetchCartUser = (cookieAccepted) => async (dispatch) => {
       },
     });
     if (response.data) {
-      const orders = response.data.map((order) => ({
+      const orders = response.data.filter((order) => order.Products.length > 0).map((order) => ({
         status: order.status,
         date: order.purchaseDate,
         cartTotal: formatPrice(Number(order.cartTotal)),

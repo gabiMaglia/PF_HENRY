@@ -7,10 +7,14 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 
 import PATHROUTES from "../../helpers/pathRoute";
-import { fetchCartUser } from "../../services/productServices";
+import {
+  fetchCartUser,
+  fetchProductCartGet,
+} from "../../services/productServices";
 //FIREBASE
 import { completePurchaseEvent } from "../../services/firebaseAnayticsServices";
 import DetailProductShopping from "../DetailProductShopping/DetailProductShopping.component";
+import { addItem } from "../../redux/slices/cartSlice";
 
 const ShoppingProfileComponent = () => {
   const location = useLocation();
@@ -24,6 +28,7 @@ const ShoppingProfileComponent = () => {
 
   useEffect(() => {
     dispatch(fetchCartUser(cookiesAccepted));
+    dispatch(addItem());
   }, [dispatch]);
 
   const handleClickShop = async (id) => {
@@ -55,8 +60,11 @@ const ShoppingProfileComponent = () => {
         showCancelButton: true,
       }).then((result) => {
         if (result.isConfirmed) {
+          dispatch(addItem());
           navigate(PATHROUTES.HOME);
           window.scrollTo(0, 0);
+        } else {
+          dispatch(addItem());
         }
       });
       completePurchaseEvent("purchase"); // Evento de compra exitosa Firebase
@@ -69,33 +77,16 @@ const ShoppingProfileComponent = () => {
         display: "flex",
         flexDirection: "column",
         width: "100%",
+        height: "auto",
         mt: "1.2em",
-        pb: "1.2em",
+        mb: "2em",
+        position: "relative",
         overflow: "scroll",
         "&::-webkit-scrollbar": {
           display: "none",
         },
       }}
     >
-      {/* {openDetail && (
-        <Box
-          sx={{
-            zIndex: "10",
-            width: "100%",
-            height: "auto",
-            backgroundColor: "white",
-            position: "absolute",
-            border: "solid 1px",
-            borderRadius: "5px",
-            mb: "24em",
-          }}
-        >
-          <DetailProductShopping
-            setOpenDetail={setOpenDetail}
-            productsDetail={detail}
-          />
-        </Box>
-      )} */}
       {cartUser.length === 0 ? (
         <Box
           sx={{
@@ -123,7 +114,16 @@ const ShoppingProfileComponent = () => {
         </Box>
       ) : openDetail ? (
         <Box
-          sx={{ width: "100%", height: "100%", pb: 10, position: "relative" }}
+          sx={{
+            zIndex: "10",
+            width: "100%",
+            height: "auto",
+            mb: "5em",
+            backgroundColor: "white",
+            position: "absolute",
+            border: "solid 1px",
+            borderRadius: "25px",
+          }}
         >
           <DetailProductShopping
             setOpenDetail={setOpenDetail}
@@ -146,9 +146,9 @@ const ShoppingProfileComponent = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
+                  flexDirection: { xs: "column", lg: "row" },
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: { xs: "center", lg: "space-between" },
                   mt: 1,
                 }}
               >
@@ -156,8 +156,9 @@ const ShoppingProfileComponent = () => {
                   variant="body2"
                   sx={{
                     fontWeight: "bold",
-                    fontSize: 18,
-                    ml: 2,
+                    fontSize: { xs: 14, lg: 18 },
+                    ml: { xs: 0, lg: 2 },
+                    mb: { xs: 1 },
                   }}
                 >
                   {cartDate.date.split("T")[0]}
@@ -168,7 +169,8 @@ const ShoppingProfileComponent = () => {
                     color="text.primary"
                     sx={{
                       fontWeight: "bold",
-                      fontSize: 18,
+                      fontSize: { xs: 14, lg: 18 },
+                      mb: { xs: 1 },
                     }}
                   >
                     Estado: {cartDate.status}
@@ -182,9 +184,9 @@ const ShoppingProfileComponent = () => {
                     color: "white",
                   }}
                   sx={{
-                    width: "11.5em",
-                    maxHeight: "3.5em",
-                    mr: 2,
+                    width: { xs: "9.5em", lg: "11.5em" },
+                    maxHeight: { xs: "2.5em", lg: "3.5em" },
+                    mr: { xs: 0, lg: 2 },
                   }}
                 >
                   <Typography
@@ -198,7 +200,7 @@ const ShoppingProfileComponent = () => {
                     }}
                     variant="body2"
                   >
-                    Detalle compra
+                    Detalle de compra
                   </Typography>
                 </Button>
               </Box>

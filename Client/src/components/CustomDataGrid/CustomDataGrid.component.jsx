@@ -9,15 +9,17 @@ import {
   GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import { styled } from "@mui/material/styles";
 
 export const CustomToolbar = ({
   setFilterButtonEl,
   handleDelete,
+  handleCarousel,
   dataName,
   selectedRows,
+  showCarouselIcon,
 }) => {
-
   return (
     <GridToolbarContainer
       sx={{
@@ -31,6 +33,11 @@ export const CustomToolbar = ({
         <Button color="inherit" onClick={() => handleDelete(selectedRows)}>
           <DeleteIcon sx={{ color: "black" }} />
         </Button>
+        {showCarouselIcon && (
+          <Button color="inherit" onClick={() => handleCarousel(selectedRows)}>
+            <ViewCarouselIcon sx={{ color: "black" }} />
+          </Button>
+        )}
         <Typography variant="h5" sx={{ flexGrow: "1" }}>
           {dataName}
         </Typography>

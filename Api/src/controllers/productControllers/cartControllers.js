@@ -1,4 +1,4 @@
-const { Product, Cart, User, ProductCart, ProductImage } = require("../../db");
+const { Product, Cart, User, ProductCart, ProductImage, ProductStock } = require("../../db");
 
 async function postCart(userId, productId, productQuantity) {
   try {
@@ -221,6 +221,10 @@ const getCartById = async (userId) => {
             model: ProductImage,
             attributes: ["address"],
           },
+          {
+            model: ProductStock, 
+            attributes: ["amount"],
+          }  
         ],
       },
     ],

@@ -90,22 +90,32 @@ const ReviewsComponent = () => {
         })}
         <Box
           sx={{
-            display: "flex",
-            flexWrap: "wrap",
+            display: "grid",
             justifyContent: "center",
-            flexDirection: isMobile ? "column" : "row",
+            alignContent: "space-evenly",
+            alignItems: "center",
+            justifyItems: "center",
+            gridTemplateColumns: {
+              xs: "repeat(1, 1fr)",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+            },
+            gap: "16px",
+            margin: "auto",
+            maxWidth: "1200px",
+            width: { xs: "200px", md: "500px" },
           }}
         >
           {reviews.map((review, index) => (
             <Box
               key={index}
               sx={{
-                margin: "1em",
                 backgroundColor: "whiter",
                 padding: "1em",
                 borderRadius: "8px",
                 boxShadow: "0 4px 6px 0 hsla(0, 0%, 0%, 0.2)",
-                width: isMobile ? "100%" : "300px",
+                width: isMobile ? "300px" : "300px",
                 height: "300px",
                 overflow: "auto",
                 transition: "transform 0.3s ease-in-out",
@@ -129,6 +139,44 @@ const ReviewsComponent = () => {
               <Typography variant="body2">{review.text}</Typography>
             </Box>
           ))}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            alignContent: "space-around",
+            justifyContent: "space-around",
+            alignItems: "center",
+            padding: "30px 0",
+            width: { xs: "auto", md: "auto" },
+            marginBottom: { xs: "60px" },
+            backgroundColor: "#f5f5f5",
+          }}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              fontSize: "1.2em",
+              fontWeight: "500",
+              textAlign: "justify",
+              //marginTop: "25px",
+            }}
+          >
+            Si quieres dejar tu propia reseña pulsa{" "}
+            <a
+              href="https://maps.app.goo.gl/rGM9QV8Z8RGH2mYu8"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: theme.palette.primary.main,
+                textDecoration: "none",
+              }}
+            >
+              aquí
+            </a>
+            .
+          </Typography>
         </Box>
       </Box>
     </>
