@@ -19,7 +19,7 @@ import {
   fetchWishList,
   fetchAddItemWish,
 } from "../../services/wishListServices";
-import { fetchProductCartPost } from "../../services/productServices";
+import { fetchProductCartPost } from "../../services/cartServices";
 import { addItem } from "../../redux/slices/cartSlice";
 import PATHROUTES from "../../helpers/pathRoute";
 //COMPONENTS

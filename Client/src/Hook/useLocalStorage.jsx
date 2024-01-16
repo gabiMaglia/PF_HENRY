@@ -11,7 +11,6 @@ export function useLocalStorage() {
   });
 
   const addProductToCart = (product) => {
-    console.log(product);
     try {
       setStoredProducts((prevProducts) => {
         const productId = product.id;

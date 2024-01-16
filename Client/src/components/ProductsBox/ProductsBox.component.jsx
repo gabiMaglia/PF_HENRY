@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 // UTILS
 import PATHROUTES from "../../helpers/pathRoute";
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
-import { fetchProductCartPost } from "../../services/productServices";
+import { fetchProductCartPost } from "../../services/cartServices";
 
 const ProductBox = () => {
   const navigate = useNavigate();

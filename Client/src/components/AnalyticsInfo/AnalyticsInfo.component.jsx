@@ -11,9 +11,14 @@ const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
-
-  const startDate = "7daysAgo";
-  const endDate = "today";
+  const [config, setConfig] = useState({
+    startDate: "",
+    endDate: "",
+  });
+  const [metricStatus, setMetricStatus] = useState([null]);
+  const [dimensionStatus, setDimensionStatus] = useState([null]);
+  const [firstCharge, setFirstCharge] = useState(true);
+  const [token, setToken] = useState(null);
 
   const handleOpenConfig = () => {
     setOpenConfig(!openConfig);
@@ -27,10 +32,13 @@ const AnalyticsInfo = () => {
       if (accessToken) {
         const newData = await fetchAnalyticsData(
           accessToken,
-          startDate,
-          endDate
+          config.startDate,
+          config.endDate,
+          metricStatus,
+          dimensionStatus
         );
         setOpenConfig(false);
+        setToken(accessToken);
         setData(newData);
       }
     },
@@ -40,11 +48,19 @@ const AnalyticsInfo = () => {
   });
 
   const getData = async () => {
-    if (googleLogin.tokenResponse?.access_token) {
+    if (token && !firstCharge) {
       const newData = await fetchAnalyticsData(
-        googleLogin.tokenResponse.access_token
+        token,
+        config.startDate,
+        config.endDate,
+        metricStatus,
+        dimensionStatus
       );
       setData(newData);
+      setOpenConfig(false);
+    } else {
+      googleLogin();
+      setFirstCharge(false);
     }
   };
 
@@ -63,9 +79,30 @@ const AnalyticsInfo = () => {
         return row?.dimensionValues[0].value;
       });
 
-      const datasets = filterData?.map((row) => {
-        return row?.metricValues[0].value;
+      let metricsValues = filterData?.map((row) => {
+        return row?.metricValues.map((data) => {
+          return data?.value;
+        });
       });
+
+      let maxElements = 0;
+      for (let i = 0; i < metricsValues.length; i++) {
+        if (metricsValues[i].length > maxElements) {
+          maxElements = metricsValues[i].length;
+        }
+      }
+
+      const datasets = [];
+
+      for (let i = 0; i < maxElements; i++) {
+        datasets.push({
+          id: i,
+          label: metricStatus[i],
+          data: metricsValues.map((dataset) => {
+            return dataset[i];
+          }),
+        });
+      }
       setData({ labels, datasets });
     }
   }, [data]);
@@ -78,17 +115,56 @@ const AnalyticsInfo = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        gap: "4em",
+        gap: "2em",
         textAlign: "center",
       }}
     >
-      <Typography variant="h4">ESTADISTICAS</Typography>
-      {/* {data && <LinearGraphic data={data} />} */}
-      {data && <BarGraphic labels={data?.labels} datasets={data?.datasets} />}
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h3">ESTADISTICAS</Typography>
+        {config?.startDate?.length > 0 && (
+          <Box>
+            <Typography variant="caption">Fecha inicio</Typography>
+            <Typography variant="body1">{config.startDate}</Typography>
+          </Box>
+        )}
+        {config?.endDate?.length > 0 && (
+          <Box>
+            <Typography variant="caption">Fecha fin</Typography>
+            <Typography variant="body1">{config.endDate}</Typography>
+          </Box>
+        )}
+      </Box>
+      {/* {data && (
+        <LinearGraphic
+          labels={data?.labels}
+          datasets={data?.datasets}
+          label={{ metricStatus, dimensionStatus }}
+        />
+      )} */}
+      {data && (
+        <BarGraphic
+          labels={data?.labels}
+          datasets={data?.datasets}
+          label={{ metricStatus, dimensionStatus }}
+        />
+      )}
       <Config
         open={openConfig}
         setOpen={handleOpenConfig}
-        getData={googleLogin}
+        getData={getData}
+        config={config}
+        metricStatus={metricStatus}
+        dimensionStatus={dimensionStatus}
+        setConfig={setConfig}
+        setMetricStatus={setMetricStatus}
+        setDimensionStatus={setDimensionStatus}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>
