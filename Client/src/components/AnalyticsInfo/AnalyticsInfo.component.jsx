@@ -5,15 +5,33 @@ import { fetchAnalyticsData } from "../../services/reportingAnalyticsServices";
 import { useEffect } from "react";
 import LinearGraphic from "./Graphics/LinearGraphic.component";
 import BarGraphic from "./Graphics/BarGraphic.component";
+import DoughnutGraphics from "./Graphics/DoughnutGraphics.component";
 import Config from "./Config/Config.component";
 const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
+
+const colors = [
+  `#FD611A`,
+  `#E24802`,
+  `#A53501`,
+  `#912E01`,
+  `#5F1E01`,
+  `#4A1801`,
+  `#2C0E00`,
+  `#040100`,
+];
 
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
-
-  const startDate = "7daysAgo";
-  const endDate = "today";
+  const [config, setConfig] = useState({
+    startDate: "",
+    endDate: "",
+  });
+  const [metricStatus, setMetricStatus] = useState([null]);
+  const [dimensionStatus, setDimensionStatus] = useState([null]);
+  const [firstCharge, setFirstCharge] = useState(true);
+  const [token, setToken] = useState(null);
+  const [graphicType, setGraphicType] = useState("Barras");
 
   const handleOpenConfig = () => {
     setOpenConfig(!openConfig);
@@ -27,10 +45,13 @@ const AnalyticsInfo = () => {
       if (accessToken) {
         const newData = await fetchAnalyticsData(
           accessToken,
-          startDate,
-          endDate
+          config.startDate,
+          config.endDate,
+          metricStatus,
+          dimensionStatus
         );
         setOpenConfig(false);
+        setToken(accessToken);
         setData(newData);
       }
     },
@@ -40,11 +61,19 @@ const AnalyticsInfo = () => {
   });
 
   const getData = async () => {
-    if (googleLogin.tokenResponse?.access_token) {
+    if (token && !firstCharge) {
       const newData = await fetchAnalyticsData(
-        googleLogin.tokenResponse.access_token
+        token,
+        config.startDate,
+        config.endDate,
+        metricStatus,
+        dimensionStatus
       );
       setData(newData);
+      setOpenConfig(false);
+    } else {
+      googleLogin();
+      setFirstCharge(false);
     }
   };
 
@@ -60,12 +89,43 @@ const AnalyticsInfo = () => {
         }
       });
       const labels = filterData?.map((row) => {
-        return row?.dimensionValues[0].value;
+        return row?.dimensionValues.map((data) => {
+          return data.value;
+        });
       });
 
-      const datasets = filterData?.map((row) => {
-        return row?.metricValues[0].value;
+      let metricsValues = filterData?.map((row) => {
+        return row?.metricValues.map((data) => {
+          return data?.value;
+        });
       });
+
+      let maxMetricsElements = 0;
+      for (let i = 0; i < metricsValues.length; i++) {
+        if (metricsValues[i].length > maxMetricsElements) {
+          maxMetricsElements = metricsValues[i].length;
+        }
+      }
+
+      let maxDimensionsElements = 0;
+      for (let i = 0; i < metricsValues.length; i++) {
+        if (metricsValues[i].length > maxDimensionsElements) {
+          maxDimensionsElements = metricsValues[i].length;
+        }
+      }
+
+      const datasets = [];
+
+      for (let i = 0; i < maxMetricsElements; i++) {
+        datasets.push({
+          id: i,
+          backgroundColor: colors[i],
+          label: metricStatus[i],
+          data: metricsValues.map((dataset) => {
+            return dataset[i];
+          }),
+        });
+      }
       setData({ labels, datasets });
     }
   }, [data]);
@@ -73,22 +133,83 @@ const AnalyticsInfo = () => {
   return (
     <Box
       sx={{
-        width: "70%",
         height: "100%",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        gap: "4em",
+        gap: "2em",
         textAlign: "center",
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }}
     >
-      <Typography variant="h4">ESTADISTICAS</Typography>
-      {/* {data && <LinearGraphic data={data} />} */}
-      {data && <BarGraphic labels={data?.labels} datasets={data?.datasets} />}
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h3">ESTADISTICAS</Typography>
+        {config?.startDate?.length > 0 && (
+          <Box>
+            <Typography variant="caption">Fecha inicio</Typography>
+            <Typography variant="body1">{config.startDate}</Typography>
+          </Box>
+        )}
+        {config?.endDate?.length > 0 && (
+          <Box>
+            <Typography variant="caption">Fecha fin</Typography>
+            <Typography variant="body1">{config.endDate}</Typography>
+          </Box>
+        )}
+      </Box>
+      <Box sx={{ maxWidth: "100%", maxHeight: "100vh" }}>
+        {data && graphicType === "Linea" ? (
+          <LinearGraphic
+            labels={data?.labels}
+            datasets={data?.datasets}
+            label={{ metricStatus, dimensionStatus }}
+          />
+        ) : graphicType === "Circular" ? (
+          <Box
+            sx={{
+              height: "70vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <DoughnutGraphics
+              labels={data?.labels}
+              datasets={data?.datasets}
+              label={{ metricStatus, dimensionStatus }}
+            />
+          </Box>
+        ) : (
+          <BarGraphic
+            labels={data?.labels}
+            datasets={data?.datasets}
+            label={{ metricStatus, dimensionStatus }}
+          />
+        )}
+      </Box>
       <Config
         open={openConfig}
         setOpen={handleOpenConfig}
-        getData={googleLogin}
+        getData={getData}
+        config={config}
+        metricStatus={metricStatus}
+        dimensionStatus={dimensionStatus}
+        setConfig={setConfig}
+        setMetricStatus={setMetricStatus}
+        setDimensionStatus={setDimensionStatus}
+        graphicType={graphicType}
+        setGraphicType={setGraphicType}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>

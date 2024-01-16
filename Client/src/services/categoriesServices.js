@@ -15,6 +15,7 @@ export const fetchCategories = async (dispatch) => {
     console.log(error, "Error al obtener las categorias");
   }
 };
+
 export const fetchPostCategories = async (dispatch, name) => {
   try {
     const { data } = await axios.post(`${urlBack}/category/`, name, {
@@ -25,3 +26,4 @@ export const fetchPostCategories = async (dispatch, name) => {
     console.log(error, "al crear la categoria");
   }
 };
+
