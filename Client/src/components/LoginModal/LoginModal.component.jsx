@@ -27,7 +27,7 @@ import { getUserById } from "../../services/userServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
 import { rejectCookies } from "../../redux/slices/cookiesSlice";
-import { fetchProductCartGet } from "../../services/productServices";
+import { fetchProductCartGet } from "../../services/cartServices";
 import { addItem } from "../../redux/slices/cartSlice";
 //FIREBASE
 import { userLogin } from "../../services/firebaseAnayticsServices";

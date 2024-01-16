@@ -29,7 +29,7 @@ import {
   fetchCartMercadoPago,
   fetchCountCartPut,
   fetchDeleteCartProduct,
-} from "../../services/productServices";
+} from "../../services/cartServices";
 
 //FIREBASE
 import {
@@ -73,16 +73,23 @@ export default function ShoppingCart() {
     return (
       <Box
         sx={{
+          // display: "flex",
+          // alignItems: "center",
+          // alignContent: "space-around",
+          // justifyContent: "space-around",
+          width: "100%",
+          height: "100%",
           display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          alignContent: "space-around",
-          justifyContent: "space-around",
+          gap: "2em",
+          textAlign: "center",
+          mt: 31,
+          mb: 31,
         }}
       >
-        <Typography
-          sx={{ m: 10, fontWeight: "bold", fontSize: 28 }}
-          component="h2"
-        >
+        <Typography sx={{ m: 10, fontWeight: "bold" }} variant="h2">
           No hay productos en el carrito
         </Typography>
       </Box>

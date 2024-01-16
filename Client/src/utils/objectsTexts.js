@@ -60,7 +60,7 @@ const questionsService = [
       "- Desde nuestro <a href='https://wa.me/+5491132069043' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>WhatsApp</a> o haciendo click en el botón flotante.",
       "- Desde nuestra página de <a href='https://pf-henry-sepia.vercel.app/support' target='_blank' rel='noopener noreferrer' style='color: #fd611a'>soporte</a>, completando el formulario.",
       "- Desde nuestras redes sociales.",
-      "- Acercandote directamente a nustro local.",
+      "- Acercandote directamente a nuestro local.",
     ],
   },
   {
@@ -79,7 +79,7 @@ const questionsService = [
       "- Tendrás dos botones, uno de ACEPTAR y otro de RECHAZAR.",
       "- Si decides RECHAZAR, nos pondremos en contacto con vos para coordinar día y horario para que pases a retirar el producto.",
       "- Si decides ACEPTAR, se procedera a comenzar con la reparación del mismo y ya no se podrá cancelar el servicio.",
-      "- Si de igual manera decides canclear y quieres retirar tu producto, podrás hacerlo, pero deberás abonar el presupuesto que ha sido aceptado inicialmente.",
+      "- Si de igual manera decides cancelar y quieres retirar tu producto, podrás hacerlo, pero deberás abonar el presupuesto que ha sido aceptado inicialmente.",
     ],
   },
   {
