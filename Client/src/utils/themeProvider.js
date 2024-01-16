@@ -9,6 +9,17 @@ import { createTheme } from "@mui/material";
 // font-family: 'Montserrat', sans-serif;
 
 export const theme = createTheme({
+  breakpoints: {
+    values: {
+      xxs: 0,
+      xs: 480,
+      sm: 600,
+      md: 981,
+      lg: 1200,
+      xl: 1536,
+      xxl: 2048,
+    },
+  },
   typography: {
     h1: {
       fontFamily: "Bebas Neue",

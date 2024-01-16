@@ -6,23 +6,22 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 //MATREIAL UI
 import {
-  Card,
   CardContent,
   Typography,
   Box,
-  CardMedia,
-  useTheme,
+  CardMedia, 
 } from "@mui/material";
 import { Container } from "@mui/system";
 //FIREBASE
 import { viewDetailProduct } from "../../services/firebaseAnayticsServices";
 
 import miVideo from "/carousel/prueba.mp4";
+import DiscountBanner from "./CarouselParts/DiscountBanner";
 
 const CardCarousel = ({ allProducts }) => {
   const [productData, setProductData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const theme = useTheme();
+
 
   useEffect(() => {
     if (Array.isArray(allProducts) && allProducts.length > 0) {
@@ -59,18 +58,20 @@ const CardCarousel = ({ allProducts }) => {
       sx={{
         position: "relative",
         width: "100%",
-        height: "260px",
+        maxHeight: "260px",
         marginTop: "8px",
         overflow: "hidden",
         opacity: "1",
-        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 50%, rgba(26, 253, 148, 0) 96%)`,
+        // background: 'rgb(233,91,69)',
+        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 60%, rgba(26, 253, 148, 0) 96%)`,
+        // background: 'radial-gradient(circle, #FF884E 100%, rgba(255,255,255,0) 100%)',
         visibility: "visible",
         display: "none",
         "@media (min-width: 901px)": {
           display: "block",
         },
       }}
-    >
+      >
       <video
         autoPlay
         loop
@@ -85,17 +86,16 @@ const CardCarousel = ({ allProducts }) => {
         }}
         playbackrate={0.4}
       >
-        <source src={miVideo} type="video/mp4" />
+      <source src={miVideo} type="video/mp4" />
         Tu navegador no soporta el elemento de video.
       </video>
       <Slider {...settings}>
         {productData.map((product) => (
           <Box
-            key={product.id}
-            sx={{
-              marginBottom: "8px",
-              marginRight: "3%",
-            }}
+          key={product.id}
+          sx={{
+            height: "262px",
+          }}
           >
             <Link
               to={`/product/${product.id}`}
@@ -104,110 +104,104 @@ const CardCarousel = ({ allProducts }) => {
             >
               <Box
                 sx={{
+                  
+                  paddingInline: "5rem",
                   display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
+                  justifyContent: "space-between",
                   height: "100%",
-                  textAlign: "center",
+                  overflow: 'hidden',
+                  // border: "3px solid black",
                 }}
-              >
+                >
                 <CardContent
                   sx={{
+                    overflow: 'hidden',
+                    flex: "1",
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                    flex: "1",
+                    justifyContent: "space-evenly",
+                    textAlign: 'center'
                   }}
-                >
-                  <Container
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "auto",
-                      height: "170px",
-                      overflow: "hidden",
-                    }}
                   >
-                    <Typography
-                      variant="h2"
-                      component="div"
-                      fontWeight="bold"
-                      sx={{
-                        fontSize: {
-                          xs: "1.8rem",
-                          sm: "2.8rem",
-                          md: "3.2rem",
-                        },
-                        letterSpacing: "8px",
-                      }}
-                    >
-                      {product.name.toUpperCase()}
-                    </Typography>
-                  </Container>
-                  <Container
+                  <Typography
+                    variant="h2"
+                    component="div"
+                    fontWeight="bold"
                     sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "flex-end",
-                      justifyContent: "flex-end",
-                      alignContent: "flex-end",
+                      textStroke: '.1px black',
+                      // WebkitTextStroke: '.1px black',
+                      minWidth: "280px",
+                      color: "white",
+                      fontSize: {
+                        xs: ".8rem",
+                        sm: "1.8rem",
+                        md: "1.6rem",
+                        lg: "2.4rem",
+                        xl: "3.4rem",
+                      },
+                      letterSpacing: "6px",
                     }}
-                  >
-                    <Typography
-                      variant="h4"
-                      color="#ff5000"
-                      sx={{
-                        textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
-                        p: "5px",
-                        fontSize: {
-                          xs: "1rem",
-                          sm: "1.5rem",
-                          md: "2rem",
-                        },
-                        marginLeft: "auto",
-                        animation: "blink 1s infinite",
-                        fontWeight: "700",
-                        boxShadow: "0px 0px 10px rgb(255 255 255 / 90%)",
-                        padding: "10px",
-                        borderRadius: "5px",
-                      }}
                     >
-                      OFERTA {formatPrice(product.price)}
-                    </Typography>
-                    <style jsx="true">{`
-                      @keyframes blink {
-                        50%,
-                        5%,
-                        100% {
-                          opacity: 1;
-                        }
-                        90%,
-                        100% {
-                          opacity: 0.5;
-                        }
-                      }
-                    `}</style>
-                  </Container>
-                </CardContent>
-                <CardMedia
-                  component="img"
-                  alt={product.name}
-                  image={product.ProductImages[0]?.address}
+                    {product.name.toUpperCase()}
+                  </Typography>
+
+                  <Typography
+                  
+                  variant="h4"
+                  color="#ff5000"
                   sx={{
-                    width: "200px",
-                    height: "auto",
-                    border: "1px solid transparent",
-                    marginTop: "8px",
-                    marginRight: "10%",
-                    boxShadow: "0px 0px 10px rgba(252, 252, 252, 0.5)",
+                    textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
+                    fontSize: {
+                      xs: ".6rem",
+                      sm: "1.4rem",
+                      md: "1.6rem",
+                      lg: "2rem",
+                      xl: "2.5rem",
+                    },
+                    // marginLeft: "auto",
+                    animation: "blink 1s infinite",
+                    fontWeight: "700",
+                    // boxShadow: "0px 0px 10px rgb(255 255 255 / 90%)",
+                    padding: "10px",
                     borderRadius: "5px",
                   }}
-                />
+                >
+                    OFERTA {formatPrice(product.price)}
+                  </Typography>
+                  <style jsx="true">{`
+                    @keyframes blink {
+                      50%,
+                      5%,
+                      100% {
+                        opacity: 1;
+                      }
+                      90%,
+                      100% {
+                        opacity: 0.5;
+                      }
+                    }
+                    `}</style>
+                </CardContent>
+                <Container
+                  sx={{
+                    flex: '1',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    position: 'relative'
+                    
+                  }}
+                  >
+                  <CardMedia
+                    component="img"
+                    alt={product.name}
+                    image={product.ProductImages[0]?.address}
+                    sx={{
+                      maxWidth: "390px",  
+                    }}
+                  />
+                    <DiscountBanner text={'Hasta un 30% de descuento!'} rotate={50} />
+                </Container>
+                    
               </Box>
             </Link>
           </Box>

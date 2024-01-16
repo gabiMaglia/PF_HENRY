@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 //MATERIAL UI
-import { Container, Typography, CircularProgress } from "@mui/material";
+import { Container, Typography, CircularProgress, Box } from "@mui/material";
 //COMPONENTS
 import ProductCard from "../ProductCard/ProductCard.component";
 
@@ -19,7 +19,6 @@ const HomeProducts = ({ allProducts }) => {
     }
     return newArray;
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,48 +87,60 @@ const HomeProducts = ({ allProducts }) => {
   }
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "flex-start",
-        flexDirection: "column",
-      }}
-    >
-      <Typography
-        variant="h5"
-        sx={{
-          color: "#000",
-          fontWeight: "900",
-          margin: "25px auto 0"
-        }}
-      >
-        Productos Destacados
-      </Typography>
+    <>
+          <Box
+            sx={{
+              // backgroundColor: "#000",
+              width: "100%",
+              height: "100px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                color: "#00000",
+                fontWeight: "900",
+              }}
+            >
+              Productos Destacados
+            </Typography>
+          </Box>
       <Container
         sx={{
           display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
           justifyContent: "space-around",
-          marginBottom: 5,
-          marginTop: 5,
-          gap: 2,
-          [`@media (max-width: 1140px)`]: {
-            flexDirection: "column",
-            alignItems: "center",
-          },
+          alignItems: "flex-start",
+          flexDirection: "column",
         }}
       >
-        {homeProducts.map((product, index) => (
-          <ProductCardWithFade
-            key={product.id}
-            product={product}
-            index={index}
-          />
-        ))}
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+            marginBottom: 5,
+            marginTop: 5,
+            gap: 2,
+            [`@media (max-width: 1140px)`]: {
+              flexDirection: "column",
+              alignItems: "center",
+            },
+          }}
+        >
+          {homeProducts.map((product, index) => (
+            <ProductCardWithFade
+              key={product.id}
+              product={product}
+              index={index}
+            />
+          ))}
+        </Container>
       </Container>
-    </Container>
+    </>
   );
 };
 
