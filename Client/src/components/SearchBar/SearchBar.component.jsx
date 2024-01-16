@@ -54,6 +54,7 @@ export default function SearchAppBar() {
     if (typeof historyUser === 'string' || historyUser instanceof String) {
       setPrueba([historyUser])
     } else {
+      console.log('lego')
       setPrueba(historyUser.length && historyUser.map((history) => history.value))
     }
   }, [historyUser]);
