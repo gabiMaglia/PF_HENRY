@@ -63,7 +63,8 @@ const CardCarousel = ({ allProducts }) => {
         overflow: "hidden",
         opacity: "1",
         // background: 'rgb(233,91,69)',
-        background: 'radial-gradient(circle, #FF884E 100%, rgba(255,255,255,0) 100%)',
+        background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 60%, rgba(26, 253, 148, 0) 96%)`,
+        // background: 'radial-gradient(circle, #FF884E 100%, rgba(255,255,255,0) 100%)',
         visibility: "visible",
         display: "none",
         "@media (min-width: 901px)": {
@@ -71,7 +72,7 @@ const CardCarousel = ({ allProducts }) => {
         },
       }}
       >
-      {/* <video
+      <video
         autoPlay
         loop
         muted
@@ -87,15 +88,13 @@ const CardCarousel = ({ allProducts }) => {
       >
       <source src={miVideo} type="video/mp4" />
         Tu navegador no soporta el elemento de video.
-      </video> */}
+      </video>
       <Slider {...settings}>
         {productData.map((product) => (
           <Box
           key={product.id}
           sx={{
             height: "262px",
-            border: "6px solid white",
-            borderInline: '4px solid white'
           }}
           >
             <Link
@@ -111,17 +110,17 @@ const CardCarousel = ({ allProducts }) => {
                   justifyContent: "space-between",
                   height: "100%",
                   overflow: 'hidden',
-                  border: "3px solid black",
+                  // border: "3px solid black",
                 }}
                 >
                 <CardContent
                   sx={{
                     overflow: 'hidden',
                     flex: "1",
-                    
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-evenly",
+                    textAlign: 'center'
                   }}
                   >
                   <Typography
@@ -130,7 +129,7 @@ const CardCarousel = ({ allProducts }) => {
                     fontWeight="bold"
                     sx={{
                       textStroke: '.1px black',
-                      WebkitTextStroke: '.1px black',
+                      // WebkitTextStroke: '.1px black',
                       minWidth: "280px",
                       color: "white",
                       fontSize: {
@@ -149,8 +148,9 @@ const CardCarousel = ({ allProducts }) => {
                   <Typography
                   
                   variant="h4"
-                  color="#2c2626"
+                  color="#ff5000"
                   sx={{
+                    textShadow: "0px 0px 10px rgb(0 0 0 / 80%)",
                     fontSize: {
                       xs: ".6rem",
                       sm: "1.4rem",
@@ -158,10 +158,14 @@ const CardCarousel = ({ allProducts }) => {
                       lg: "2rem",
                       xl: "2.5rem",
                     },
+                    // marginLeft: "auto",
+                    animation: "blink 1s infinite",
                     fontWeight: "700",
-                    textStroke: '1px white',
+                    // boxShadow: "0px 0px 10px rgb(255 255 255 / 90%)",
+                    padding: "10px",
+                    borderRadius: "5px",
                   }}
-                  >
+                >
                     OFERTA {formatPrice(product.price)}
                   </Typography>
                   <style jsx="true">{`
@@ -192,10 +196,10 @@ const CardCarousel = ({ allProducts }) => {
                     alt={product.name}
                     image={product.ProductImages[0]?.address}
                     sx={{
-                      maxWidth: "220px",  
+                      maxWidth: "390px",  
                     }}
                   />
-                    <DiscountBanner text={'Hasta un 30% de descuento!'} rotate={45} />
+                    <DiscountBanner text={'Hasta un 30% de descuento!'} rotate={50} />
                 </Container>
                     
               </Box>
