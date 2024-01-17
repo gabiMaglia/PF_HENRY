@@ -443,6 +443,13 @@ const Detail = () => {
           </Typography>
           <Typography variant="h5">{productById.description}</Typography>
         </Container>
+        <Container sx={{ marginTop: 2 }}>
+          <Divider sx={{ marginY: 2 }} />
+          <Typography variant="h5" fontWeight={"bold"}>
+            Garantia:
+          </Typography>
+          <Typography variant="h6">{productById.warranty}</Typography>
+        </Container>
         <Container>
           <Divider sx={{ marginY: 2 }} />
         </Container>
