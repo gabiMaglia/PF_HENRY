@@ -73,9 +73,9 @@ const UsersTable = () => {
           onChange={(e) => handleRolChange(params.id, e.target.value)}
           sx={{ width: "100%" }}
         >
-          {userRoles.map((rol) => (
-            <MenuItem key={rol.id} value={rol}>
-              {rol.rol_name}
+          {userRoles.map((role) => (
+            <MenuItem key={role.id} value={role.role_name}>
+              {role.role_name}
             </MenuItem>
           ))}
         </Select>
@@ -186,7 +186,7 @@ const UsersTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
-      const response = await getUserRoles(id, { status: newRol }, authData.jwt);
+      const response = await getUserRoles(id, { role: newRol }, authData.jwt);
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
