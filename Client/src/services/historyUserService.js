@@ -38,13 +38,14 @@ export const fetchPostHistoryItem = async (userId, value, dispatch) => {
 
 export const fetchDeleteHistoryItem = async (userId, value, dispatch) => {
   try {
+    console.log(userId,value)
     const { data } = await axios.put(`${urlBack}/history/${userId}`, {
       value: value,
     });
     if (data.value) {
       dispatch(deleteHistoryItem(data.value));
     } else {
-      Swal.fire("Error", "no se pudo eliminar item dell historial.");
+      Swal.fire("Error", data.error.response);
     }
   } catch (error) {
     Swal.fire("Error", error.message, "error");
