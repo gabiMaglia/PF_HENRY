@@ -1,6 +1,19 @@
 export const dimensions = [
   { label: "" },
   { name: "itemBrand", label: "Marca de productos" },
+  { name: "pagePath", label: "Por url" },
+  {
+    name: "date",
+    label: "Por día",
+    orderBys: [
+      {
+        dimension: {
+          dimensionName: "date",
+          orderType: "ALPHANUMERIC",
+        },
+      },
+    ],
+  },
   { name: "itemCategory", label: "Categoria de productos" },
   { name: "itemName", label: "Producto por nombre" },
   { name: "eventName", label: "Total" },
@@ -43,11 +56,26 @@ export const dimensions = [
       },
     },
   },
+  {
+    name: "eventName",
+    label: "Servicios finalizados",
+    dimensionFilter: {
+      filter: {
+        fieldName: "eventName",
+        stringFilter: {
+          value: "finished_service",
+          matchType: "EXACT",
+        },
+      },
+    },
+  },
 ];
 
 export const metrics = [
   { label: "" },
   { name: "itemsAddedToCart", label: "Añadidos al carrito" },
+  { name: "itemsViewed", label: "Vista al detalle" },
+  { name: "screenPageViews", label: "Vistas a la pagina" },
   {
     name: "activeUsers",
     label: "Añadidos lista de deseos",
@@ -56,6 +84,19 @@ export const metrics = [
         fieldName: "eventName",
         stringFilter: {
           value: "add_to_wishlist",
+          matchType: "EXACT",
+        },
+      },
+    },
+  },
+  {
+    name: "activeUsers",
+    label: "Eliminados lista de deseos",
+    dimensionFilter: {
+      filter: {
+        fieldName: "eventName",
+        stringFilter: {
+          value: "remove_from_wishlist",
           matchType: "EXACT",
         },
       },

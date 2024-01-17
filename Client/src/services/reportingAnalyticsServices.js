@@ -24,12 +24,17 @@ export const fetchAnalyticsData = async (
   try {
     const metricsComplete = getObjects(metrics, "metrics");
     const dimensionsComplete = getObjects(dimensions, "dimensions");
-
     let totalDimensionsFilter = [];
+    let orderBys = [];
 
     const reqDimensions = dimensionsComplete.map((dimension) => {
       if (dimension?.dimensionFilter) {
         totalDimensionsFilter.push(dimension?.dimensionFilter);
+      }
+      if (dimension?.orderBys && dimension?.orderBys?.length > 0) {
+        dimension.orderBys.map((order) => {
+          orderBys.push(order);
+        });
       }
       return {
         name: dimension?.name,
@@ -40,6 +45,11 @@ export const fetchAnalyticsData = async (
     const reqMetrics = metricsComplete.map((metric) => {
       if (metric?.dimensionFilter) {
         totalMetricsFilter.push(metric?.dimensionFilter);
+      }
+      if (metric?.orderBys && metric?.orderBys?.length > 0) {
+        metric.orderBys.map((order) => {
+          orderBys.push(order);
+        });
       }
       return {
         name: metric?.name,
@@ -57,6 +67,7 @@ export const fetchAnalyticsData = async (
             dimensions: reqDimensions[index],
           };
           requestBody.dimensionFilter = filter;
+          orderBys?.length > 0 && (requestBody.orderBys = orderBys);
 
           const headers = {
             "Content-Type": "application/json",
@@ -79,7 +90,7 @@ export const fetchAnalyticsData = async (
             dimensions: reqDimensions ? reqDimensions : "",
           };
           requestBody.dimensionFilter = filter;
-
+          orderBys?.length > 0 && (requestBody.orderBys = orderBys);
           const headers = {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
@@ -109,6 +120,9 @@ export const fetchAnalyticsData = async (
         metrics: reqMetrics ? reqMetrics : "",
         dimensions: reqDimensions ? reqDimensions : "",
       };
+      orderBys?.length > 0 && (requestBody.orderBys = orderBys);
+      console.log(requestBody);
+
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,

@@ -120,7 +120,7 @@ const AnalyticsInfo = () => {
       for (let i = 0; i < maxMetricsElements; i++) {
         datasets.push({
           id: i,
-          backgroundColor: colors[i],
+          backgroundColor: colors,
           label: metricStatus[i],
           data: metricsValues.map((dataset) => {
             return dataset[i];
