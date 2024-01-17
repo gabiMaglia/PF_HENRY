@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { User, UserRole, UserAddress } = require("../../db.js");
 const {
   sendConfirmationEmail,
-} = require("../../utils/sendConfirmationEmail.js");
+} = require("../../utils/emailTemplates.js");
 
 const getAllUsers = async () => {
   const user = await User.findAll();

@@ -1,7 +1,7 @@
 require("dotenv").config();
 const {
   sendConfirmationEmail, sendResetPasswordEmail,
-} = require("../../utils/sendConfirmationEmail.js");
+} = require("../../utils/emailTemplates.js");
 const {
   tokenSign,
   refreshToken,
