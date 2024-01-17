@@ -3,9 +3,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //MATERIAL UI
-import { Input, Box, Button, styled, Typography } from "@mui/material";
+import {
+  Input,
+  Box,
+  Button,
+  styled,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -30,7 +38,12 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import img from "/icons/logo.svg";
 //FIREBASE
 import { userSearchEvent } from "../../services/firebaseAnayticsServices";
-import { fetchHistoryUSer } from "../../services/historyUserService";
+import {
+  fetchDeleteHistoryItem,
+  fetchHistoryUSer,
+  fetchPostHistoryItem,
+} from "../../services/historyUserService";
+import Swal from "sweetalert2";
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,20 +60,17 @@ export default function SearchAppBar() {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [prueba, setPrueba] = useState([]);
+  const [aux, setAux] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
   const isHistoryUserItem = (suggestion) => {
-    if (
-      !Array.isArray(historyUser) ||
-      suggestion === "el usuario aun no posee historial."
-    ) {
+    if (suggestion === "el usuario aun no posee historial.") {
       return false;
     }
     return historyUser.some((history) => history.value === suggestion);
   };
-
   useEffect(() => {
+    dispatch(addItem());
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
     }
@@ -71,16 +81,16 @@ export default function SearchAppBar() {
       ? historyUser.map((history) => history.value)
       : ["el usuario no posee historial"];
     setSuggestions(newSuggestions);
-  }, [login, historyUser]);
+  }, [login, historyUser, aux]);
 
   useEffect(() => {
     dispatch(addItem());
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
     } else {
-      setSuggestions(["el usuario debe loguearse para tener historial."]);
+      setAutocompleteSuggestions(["el usuario debe loguearse para tener historial."]);
     }
-  }, [login]);
+  }, [login, aux]);
 
   const Img = styled("img")({
     width: 140,
@@ -96,8 +106,19 @@ export default function SearchAppBar() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
+    login && (await fetchPostHistoryItem(authData.userId, inputName, dispatch));
     await fetchSearch(inputName)(dispatch);
+    setAux(!aux);
+    setInputValue("");
     userSearchEvent(inputName);
+    Swal.close();
     navigate(PATHROUTES.PRODUCTS);
   };
 
@@ -130,15 +151,22 @@ export default function SearchAppBar() {
       setShowAutocomplete(false);
       return;
     }
+    if (!login) {
+      setAutocompleteSuggestions(["Para tener historial por favor regístrese."]);
+      setShowAutocomplete(true);
+      return;
+    }
 
-    const matchingSuggestions = suggestions.filter((suggestion) =>
-      suggestion.toLowerCase().includes(value.toLowerCase())
-    );
+    const matchingSuggestions = historyUser
+      .map((history) => history.value)
+      .filter(
+        (suggestion) =>
+          suggestion && suggestion.toLowerCase().includes(value.toLowerCase())
+      );
 
     setAutocompleteSuggestions(matchingSuggestions);
     setShowAutocomplete(matchingSuggestions.length > 0);
   };
-
   const handleAutocompleteSelect = (selectedSuggestion) => {
     setInputValue(selectedSuggestion);
     dispatch(fetchChage(selectedSuggestion));
@@ -146,15 +174,26 @@ export default function SearchAppBar() {
   };
 
   useEffect(() => {
-    handleAutocomplete(inputName);
-  }, [inputName]);
+    handleAutocomplete(inputValue);
+  }, [inputValue, historyUser, aux]);
 
-const handleDelete=(event)=>{
- fetchDeleteHistoryItem(authData.userId,event.target.id,dispatch)
- console.log("todo ok")
- setAux(!aux)
- console.log(historyUser)
-}
+  const handleDelete = async (event) => {
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
+    const deletedItem = event.target.id;
+    await fetchDeleteHistoryItem(authData.userId, deletedItem, dispatch);
+    setAutocompleteSuggestions((prevSuggestions) =>
+      prevSuggestions.filter((suggestion) => suggestion !== deletedItem)
+    );
+    setShowAutocomplete(false);
+    setAux(!aux);
+    Swal.close();
+  };
 
   return (
     <Box
@@ -216,7 +255,7 @@ const handleDelete=(event)=>{
           }}
           disableUnderline
         />
-        {isInputFocused && showAutocomplete && (
+        {showAutocomplete && (
           <Box
             sx={{
               position: "absolute",
@@ -227,6 +266,7 @@ const handleDelete=(event)=>{
               backgroundColor: "white",
               boxShadow: 3,
               borderRadius: 2,
+              width: "93%",
               maxHeight: 200,
               overflowY: "auto",
             }}
@@ -251,13 +291,25 @@ const handleDelete=(event)=>{
                   {suggestion}
                 </Box>
                 {isHistoryUserItem(suggestion) && (
-                  <DeleteIcon
+                  <Button
                     sx={{
-                      fontSize: "xx-large",
+                      padding: "8px",
+                      backgroundColor: "black",
+                      fontWeight: "bold",
+                      color: "white",
+                      "&:hover": {
+                        backgroundColor: "#fd611a",
+                        color: "black",
+                        cursor: "pointer",
+                      },
                     }}
-                    onClick={(e)=>{handleDelete(e)}}
                     id={suggestion}
-                  />
+                    onClick={(e) => {
+                      handleDelete(e);
+                    }}
+                  >
+                    BORRAR
+                  </Button>
                 )}
               </Box>
             ))}
@@ -304,7 +356,7 @@ const handleDelete=(event)=>{
             }}
           >
             <ShoppingCartIcon
-              sx={{ fontSize: "32px" }}
+              /*src={carrito}*/ sx={{ fontSize: "32px", cursor: "pointer" }}
               onClick={handleCartClick}
             />
             {cartItemCount > -1 && (
@@ -339,7 +391,8 @@ const handleDelete=(event)=>{
             />{" "}
             <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
-        ) : null}
+        ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
+        null}
         {userRole === "customer" && login === true && (
           <Box>
             <Notification />
@@ -387,6 +440,7 @@ const handleDelete=(event)=>{
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
+      {/* <ConnectedProductBox cartItemCount={cartItemCount} */}
     </Box>
   );
 }
