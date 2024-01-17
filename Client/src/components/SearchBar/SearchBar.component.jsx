@@ -26,6 +26,7 @@ import Notification from "../Notifications/Notifications.component";
 //REDUX
 import { logUser } from "../../redux/slices/userSlice";
 import { addItem } from "../../redux/slices/cartSlice";
+import { fetchWishList } from "../../services/wishListServices";
 //SERVICES
 import { fetchSearch, fetchChage } from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
@@ -140,6 +141,12 @@ export default function SearchAppBar() {
     }
   }, [cookieStatus]);
 
+  useEffect(() => {
+    if (authData?.login && authData?.userRole === "customer") {
+      fetchWishList(authData.userId, dispatch, authData.jwt);
+    }
+  }, [authData]);
+
   const handleAutocomplete = (value) => {
     if (!value) {
       setAutocompleteSuggestions([]);
@@ -201,7 +208,7 @@ const handleDelete=(event)=>{
       </Box>
       <Box
         sx={{
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           border: 2,
           borderRadius: 2,
           borderTopRightRadius: 50,
@@ -305,7 +312,7 @@ const handleDelete=(event)=>{
         sx={{
           display: "flex",
           flexDirection: "row",
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           alignItems: "center",
           justifyContent: "space-around",
           gap: "3em",

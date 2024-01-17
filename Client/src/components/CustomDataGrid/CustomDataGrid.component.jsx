@@ -51,13 +51,23 @@ export const CustomToolbar = ({
           justifyContent: "space-around",
         }}
       >
-        <GridToolbarColumnsButton sx={{ color: "black" }} />
+        <GridToolbarColumnsButton
+          sx={{
+            color: "black",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        />
         <GridToolbarFilterButton
           ref={setFilterButtonEl}
-          sx={{ color: "black" }}
+          sx={{ color: "black", display: "flex", flexDirection: "column" }}
         />
-        <GridToolbarDensitySelector sx={{ color: "black" }} />
-        <GridToolbarExport sx={{ color: "black" }} />
+        <GridToolbarDensitySelector
+          sx={{ color: "black", display: "flex", flexDirection: "column" }}
+        />
+        <GridToolbarExport
+          sx={{ color: "black", display: "flex", flexDirection: "column" }}
+        />
       </Box>
     </GridToolbarContainer>
   );

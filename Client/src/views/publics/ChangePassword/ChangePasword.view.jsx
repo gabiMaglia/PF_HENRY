@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  FormHelperText,
+} from "@mui/material";
 import { changeUserPassword } from "../../../services/authServices";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import { userChangePasswordValidate } from "../../../helpers/userValidate";
 
 const ChangePassword = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [passwords, setPasswords] = useState({
     password: "",
     confirmPassword: "",
   });
 
   const [passwordsError, setPasswordsError] = useState({
+    password: [],
     confirmPassword: "",
   });
-  const { token } = useParams()
-  console.log(token)
-
-
-
+  const { token } = useParams();
 
   const boxStyle = {
     width: "50%",
-    height:'42vh',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1em',
+    height: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1em",
     margin: "auto",
     textAlign: "center",
     mt: "5em",
@@ -36,7 +39,7 @@ const ChangePassword = () => {
     borderRadius: 2,
     backgroundColor: "#fd611a",
     minWidth: "100px",
-    marginInline: 'auto',
+    marginInline: "auto",
     width: "30%",
     mb: "1em",
     mt: "2em",
@@ -45,39 +48,67 @@ const ChangePassword = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setPasswords({ ...passwords, [name]: value });
-
     if (name === "confirmPassword") {
-      setPasswordsError({
-        confirmPassword: passwords.password !== value ? "Las contraseñas no coinciden" : "",
-      });
+      userChangePasswordValidate(
+        { ...passwords, [name]: value },
+        setPasswordsError,
+        passwordsError
+      );
+    } else {
+      userChangePasswordValidate(
+        { password: value },
+        setPasswordsError,
+        passwordsError
+      );
     }
   };
+
   const handleSubmit = async () => {
-    if (passwords.password === passwords.confirmPassword && passwords.password !== '' && passwords.confirmPassword !== '') {
-       const password = passwords.password
-       const confirmPassword = passwords.confirmPassword
-        const response = await changeUserPassword(password, confirmPassword, token )
-        if (!response.error){     
-          await Swal.fire({
-            icon: "success",
-            title: "Contrasena actualizada!",
-            text: `${response.data.data}`,
-            confirmButtonText: "Ok",
-          }).then(() => {
-            navigate('/')
-          })
-        }else if(response.error) {
-          await Swal.fire({
-            icon: "error",
-            title: "Error!",
-            text: `${response.error}`,
-            confirmButtonText: "Ok",
-          })
-        }
-    } else {
-      setPasswordsError({
-        confirmPassword: "Error",
+    Swal.fire({
+      icon: "info",
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
+    const actErrors = userChangePasswordValidate(
+      passwords,
+      setPasswordsError,
+      passwordsError
+    );
+    if (
+      actErrors?.password?.length > 0 ||
+      actErrors?.confirmPassword?.length > 0
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Por favor revise los campos del formulario",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ok",
       });
+    } else {
+      const response = await changeUserPassword(
+        passwords.password,
+        passwords.confirmPassword,
+        token
+      );
+      if (!response.error) {
+        await Swal.fire({
+          icon: "success",
+          title: "Contrasena actualizada!",
+          text: `Puede volver a iniciar sesion con la nueva contraseña`,
+          confirmButtonColor: "#fd611a",
+          confirmButtonText: "Ok",
+        }).then(() => {
+          navigate("/");
+        });
+      } else {
+        await Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: `Disculpe, hubo un error durante el proceso. Intentelo denuevo mas tarde`,
+          confirmButtonText: "Ok",
+        });
+      }
     }
   };
 
@@ -90,14 +121,21 @@ const ChangePassword = () => {
         variant="outlined"
         type="password"
         name="password"
+        error={passwordsError.password.length > 0}
         onChange={handleChange}
         value={passwords.password}
       />
+      {passwordsError.password.map((error, key) => {
+        return (
+          <FormHelperText sx={{ fontSize: ".6em" }} key={key} error={true}>
+            {error}
+          </FormHelperText>
+        );
+      })}
       <TextField
         sx={{
           width: "100%",
           mt: "1em",
-          border: passwordsError.confirmPassword ? "1px solid #e57373" : "",
         }}
         label="Confirmar Contraseña"
         variant="outlined"
@@ -106,8 +144,10 @@ const ChangePassword = () => {
         onChange={handleChange}
         value={passwords.confirmPassword}
         error={Boolean(passwordsError.confirmPassword)}
-        helperText={passwordsError.confirmPassword}
       />
+      <FormHelperText sx={{ fontSize: ".6em" }} error={true}>
+        {passwordsError.confirmPassword}
+      </FormHelperText>
       <Box sx={buttonStyle}>
         <Button
           onClick={handleSubmit}
