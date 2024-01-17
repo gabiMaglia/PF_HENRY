@@ -294,7 +294,7 @@ const zipCodeValidate = (zipCode) => {
 
 // Validacion de información de usuario para inicio de sesion
 export const userLoginValidate = (values, setErrors, antErrors) => {
-  const { username, address } = values;
+  const { username, address, email } = values;
 
   const errors = {
     ...antErrors,
@@ -307,6 +307,8 @@ export const userLoginValidate = (values, setErrors, antErrors) => {
       ? (errors.address = "La contraseña es requerida")
       : (errors.address = "");
   }
+
+  email !== undefined ? (errors.email = emailValidate(email)) : "";
 
   setErrors(errors);
 };

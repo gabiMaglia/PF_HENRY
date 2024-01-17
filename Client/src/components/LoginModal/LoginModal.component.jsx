@@ -31,6 +31,9 @@ import { fetchProductCartGet } from "../../services/cartServices";
 import { addItem } from "../../redux/slices/cartSlice";
 //FIREBASE
 import { userLogin } from "../../services/firebaseAnayticsServices";
+// THEMEPROVIDER
+import { theme } from "../../utils/themeProvider";
+import { handleBreakpoints } from "@mui/system";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
@@ -127,13 +130,16 @@ const LoginModal = ({
   const [user, setUser] = useState({
     username: "",
     address: "",
+    email: "",
   });
 
   const [isUsernameVerified, setIsUsernameVerified] = useState(false);
+  const [isRecoverPassword, setIsRecoverPassword] = useState(false);
 
   const [errors, setErrors] = useState({
     username: "",
     address: "",
+    email: "",
   });
 
   // Función para manejar el cambio de estado del formulario
@@ -159,6 +165,10 @@ const LoginModal = ({
         text: errors.username,
       });
     }
+  };
+
+  const handleRecoverPassword = () => {
+    console.log(user.email);
   };
 
   const handleSubmit = async () => {
@@ -202,10 +212,12 @@ const LoginModal = ({
     setUser({
       username: "",
       address: "",
+      email: "",
     });
     setErrors({
       username: "",
       address: "",
+      email: "",
     });
   };
 
@@ -300,7 +312,7 @@ const LoginModal = ({
                 setRegisterModalIsOpen(true);
               })}
             </FormControl>
-          ) : (
+          ) : !isRecoverPassword ? (
             <FormControl
               fullWidth
               sx={{
@@ -353,7 +365,78 @@ const LoginModal = ({
                 onChange={handleChange}
                 margin="normal"
               />
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: ".3em",
+                  mt: "1em",
+                  justifyContent: "center",
+                  [theme.breakpoints.up("md")]: {
+                    flexDirection: "row",
+                  },
+                  flexDirection: "column",
+                }}
+              >
+                <Typography variant="body1">
+                  Olvidaste tu contraseña?
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ cursor: "pointer", color: "#fd611a" }}
+                  onClick={() => setIsRecoverPassword(true)}
+                >
+                  Recuperala.
+                </Typography>
+              </Box>
               {renderButton("Iniciar sesion", handleSubmit)}
+            </FormControl>
+          ) : (
+            <FormControl
+              fullWidth
+              sx={{
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Button
+                sx={{
+                  padding: "0px",
+                  color: "black",
+                  position: "fixed",
+                  width: ".01px",
+                  height: ".01px",
+                  top: "1.8em",
+                  left: ".5em",
+                }}
+                onClick={() => setIsRecoverPassword(false)}
+              >
+                <ArrowBackIosIcon />
+              </Button>
+              <Typography
+                variant="h4"
+                sx={{
+                  flexGrow: 1,
+                  mb: 4,
+                }}
+              >
+                Recuperar contraseña
+              </Typography>
+              <Typography variant="body1" sx={{ color: "#fd611a" }}>
+                Ingresá tu email para enviarte el link de recuperación
+              </Typography>
+              <TextField
+                error={Boolean(errors.email)}
+                name="email"
+                type="email"
+                label="Email"
+                helperText={errors.email}
+                variant="outlined"
+                fullWidth
+                value={user.email}
+                onChange={handleChange}
+                margin="normal"
+              />
+              {renderButton("Enviar correo", handleRecoverPassword)}
             </FormControl>
           )}
         </GoogleReCaptchaProvider>
