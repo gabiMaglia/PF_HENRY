@@ -10,6 +10,7 @@ import {
   CardMedia,
   styled,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Unstable_NumberInput as BaseNumberInput } from "@mui/base/Unstable_NumberInput";
@@ -40,6 +41,7 @@ import {
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
+  const [isWalletLoading, setIsWalletLoading] = useState(false);
 
   const { items, total, id } = useSelector((state) => state.cart);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
@@ -132,6 +134,7 @@ export default function ShoppingCart() {
   };
 
   const handleShop = (e) => {
+    setIsWalletLoading(true);
     const filter = items.filter((item) => item.stock < 1);
     if (filter.length === 0) {
       dispatch(fetchCartMercadoPago(items, cookiesAccepted));
@@ -312,11 +315,31 @@ export default function ShoppingCart() {
         </Box>
       </Box>
       <Box>
+        {console.log(id, isWalletLoading)}
+        {isWalletLoading && (
+          <Box
+            sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <CircularProgress
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mb: 5,
+                color: "#fd611a",
+              }}
+            />
+          </Box>
+        )}
         {id && (
-          <Wallet
-            initialization={{ preferenceId: id }}
-            customization={customization}
-          />
+          <Box sx={{ display: isWalletLoading ? "none" : "block" }}>
+            <Wallet
+              onReady={() => {
+                setIsWalletLoading(false);
+              }}
+              initialization={{ preferenceId: id }}
+              customization={customization}
+            />
+          </Box>
         )}
       </Box>
     </Container>

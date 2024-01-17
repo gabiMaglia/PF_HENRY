@@ -60,7 +60,7 @@ const getHistoryUserController=async(id)=>{
     where:{UserId:id}
   })
     if(!historyUser||historyUser.length===0){
-      return('el usuario aun no posee historial.')
+      return[{value:'el usuario aun no posee historial.'}]
     }
     return historyUser
 }
@@ -69,7 +69,7 @@ const deleteHistoryController=async(id,value)=>{
   const userHistory=await getHistoryUserController(id)
   if(userHistory.error){
     return {
-      error:userHistory.response
+      error:userHistory.error
     }
   }
   const historyValue= await History.findOne({
@@ -95,7 +95,7 @@ const deleteHistoryController=async(id,value)=>{
       response: "Error al traer el historial.",
     }
    }
-   return response
+   return userHistory
 }
 
 module.exports = { PostHistoryController,getHistoryUserController,deleteHistoryController };

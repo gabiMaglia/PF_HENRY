@@ -25,50 +25,110 @@ export const fetchAnalyticsData = async (
     const metricsComplete = getObjects(metrics, "metrics");
     const dimensionsComplete = getObjects(dimensions, "dimensions");
 
+    let totalDimensionsFilter = [];
+
     const reqDimensions = dimensionsComplete.map((dimension) => {
+      if (dimension?.dimensionFilter) {
+        totalDimensionsFilter.push(dimension?.dimensionFilter);
+      }
       return {
         name: dimension?.name,
       };
     });
+
+    let totalMetricsFilter = [];
     const reqMetrics = metricsComplete.map((metric) => {
+      if (metric?.dimensionFilter) {
+        totalMetricsFilter.push(metric?.dimensionFilter);
+      }
       return {
         name: metric?.name,
       };
     });
-    let filters = dimensionsComplete.map((dimension) => {
-      if (dimension?.dimensionFilter) {
-        return dimension?.dimensionFilter;
-      }
-    })[0];
-    if (!filters) {
-      filters = metricsComplete.map((metric) => {
-        if (metric?.dimensionFilter) {
-          return metric?.dimensionFilter;
-        }
-      })[0];
+
+    let responseData;
+
+    if (totalDimensionsFilter.length !== 0 || totalMetricsFilter.length !== 0) {
+      const totalDimensionsData = await Promise.all(
+        totalDimensionsFilter.map(async (filter, index) => {
+          const requestBody = {
+            dateRanges: [{ startDate, endDate }],
+            metrics: reqMetrics ? reqMetrics : "",
+            dimensions: reqDimensions[index],
+          };
+          requestBody.dimensionFilter = filter;
+
+          const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          };
+
+          return axios.post(
+            `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
+            requestBody,
+            { headers }
+          );
+        })
+      );
+
+      const totalMetricsData = await Promise.all(
+        totalMetricsFilter.map(async (filter, index) => {
+          const requestBody = {
+            dateRanges: [{ startDate, endDate }],
+            metrics: reqMetrics[index],
+            dimensions: reqDimensions ? reqDimensions : "",
+          };
+          requestBody.dimensionFilter = filter;
+
+          const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          };
+
+          return axios.post(
+            `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
+            requestBody,
+            { headers }
+          );
+        })
+      );
+
+      let totalData = [...totalDimensionsData, ...totalMetricsData];
+
+      totalData = totalData.map((data) => {
+        return data?.data;
+      });
+      totalData = totalData.filter((data) => {
+        if (data !== undefined) return data;
+      });
+
+      responseData = totalData;
+    } else {
+      const requestBody = {
+        dateRanges: [{ startDate, endDate }],
+        metrics: reqMetrics ? reqMetrics : "",
+        dimensions: reqDimensions ? reqDimensions : "",
+      };
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.post(
+        `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
+        requestBody,
+        { headers }
+      );
+      responseData = [response?.data];
     }
 
-    const requestBody = {
-      dateRanges: [{ startDate, endDate }],
-      metrics: reqMetrics ? reqMetrics : "",
-      dimensions: reqDimensions,
-    };
-    filters && (requestBody.dimensionFilter = filters);
-    console.log(requestBody);
-
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    };
-
-    const apiResponse = await axios.post(
-      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
-      requestBody,
-      { headers }
-    );
-    const responseData = apiResponse.data;
-    console.log("responseData", responseData);
-    return responseData;
+    const rows = [];
+    const finalData = responseData.forEach((data) => {
+      data?.rows?.map((row) => {
+        rows.push(row);
+      });
+    });
+    return rows;
   } catch (error) {
     console.error(error);
   }
