@@ -63,26 +63,23 @@ export default function SearchAppBar() {
   const [aux, setAux] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
-
   const isHistoryUserItem = (suggestion) => {
-    if(suggestion==='el usuario aun no posee historial.'){
-      return false
+    if (
+      !Array.isArray(historyUser) ||
+      suggestion === "el usuario aun no posee historial."
+    ) {
+      return false;
     }
     return historyUser.some((history) => history.value === suggestion);
   };
 
   useEffect(() => {
-    dispatch(addItem());
     if (login) {
-      fetchHistoryUSer(authData.userId, dispatch);
+      const newSuggestions = Array.isArray(historyUser)
+        ? historyUser.map((history) => history.value)
+        : ["el usuario no posee historial"];
+      setSuggestions(newSuggestions);
     }
-  }, [login, aux]);
-
-  useEffect(() => {
-    const newSuggestions = login
-      ? historyUser.map((history) => history.value)
-      : ["el usuario no posee historial"];
-    setSuggestions(newSuggestions);
   }, [login, historyUser]);
 
   useEffect(() => {
@@ -92,7 +89,7 @@ export default function SearchAppBar() {
     } else {
       setSuggestions(["el usuario debe loguearse para tener historial."]);
     }
-  }, [login]);
+  }, [login, aux]);
 
   const Img = styled("img")({
     width: 140,
@@ -145,7 +142,7 @@ export default function SearchAppBar() {
     if (authData?.login && authData?.userRole === "customer") {
       fetchWishList(authData.userId, dispatch, authData.jwt);
     }
-  }, [authData]);
+  }, [authData.userRole]);
 
   const handleAutocomplete = (value) => {
     if (!value) {
@@ -173,12 +170,12 @@ export default function SearchAppBar() {
     handleAutocomplete(inputName);
   }, [inputName]);
 
-const handleDelete=(event)=>{
- fetchDeleteHistoryItem(authData.userId,event.target.id,dispatch)
- console.log("todo ok")
- setAux(!aux)
- console.log(historyUser)
-}
+  const handleDelete = (event) => {
+    fetchDeleteHistoryItem(authData.userId, event.target.id, dispatch);
+    console.log("todo ok");
+    setAux(!aux);
+    console.log(historyUser);
+  };
 
   return (
     <Box
@@ -258,6 +255,7 @@ const handleDelete=(event)=>{
           >
             {autocompleteSuggestions.map((suggestion, index) => (
               <Box
+                key={index}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -280,7 +278,9 @@ const handleDelete=(event)=>{
                     sx={{
                       fontSize: "xx-large",
                     }}
-                    onClick={(e)=>{handleDelete(e)}}
+                    onClick={(e) => {
+                      handleDelete(e);
+                    }}
                     id={suggestion}
                   />
                 )}
@@ -329,7 +329,7 @@ const handleDelete=(event)=>{
             }}
           >
             <ShoppingCartIcon
-              /*src={carrito}*/ sx={{ fontSize: "32px" }}
+              sx={{ fontSize: "32px" }}
               onClick={handleCartClick}
             />
             {cartItemCount > -1 && (
@@ -364,8 +364,7 @@ const handleDelete=(event)=>{
             />{" "}
             <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
-        ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
-        null}
+        ) : null}
         {userRole === "customer" && login === true && (
           <Box>
             <Notification />
@@ -413,7 +412,6 @@ const handleDelete=(event)=>{
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
-      {/* <ConnectedProductBox cartItemCount={cartItemCount} */}
     </Box>
   );
 }
