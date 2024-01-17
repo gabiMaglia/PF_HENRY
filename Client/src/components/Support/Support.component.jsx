@@ -82,12 +82,14 @@ const SupportComponent = () => {
       const error = value.trim() !== "" && !validateName(value);
       return {
         error,
-        message: error ? "El nombre debe tener al menos 3 caracteres y no puede contener números" : "",
+        message: error
+          ? "El nombre debe tener al menos 3 caracteres y no puede contener números"
+          : "",
       };
     });
     updateFormComplete();
   };
-  
+
   const handleChangePhone = (value) => {
     setPhone(value);
     setErrorPhone(() => {
@@ -99,7 +101,7 @@ const SupportComponent = () => {
     });
     updateFormComplete();
   };
-  
+
   const handleChangeEmail = (value) => {
     setEmail(value);
     setErrorEmail(() => {
@@ -201,8 +203,13 @@ const SupportComponent = () => {
         }}
       >
         <Typography
-          variant="h4"
-          sx={{ color: "#fff", textTransform: "uppercase", fontWeight: "900" }}
+          sx={{
+            color: "#fff",
+            textTransform: "uppercase",
+            fontWeight: "800",
+            fontSize: "1.7rem",
+            margin: "10px",
+          }}
         >
           Soporte
         </Typography>
