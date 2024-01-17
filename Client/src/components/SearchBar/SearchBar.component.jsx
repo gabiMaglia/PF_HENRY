@@ -113,7 +113,7 @@ export default function SearchAppBar() {
   }, [cookieStatus]);
 
   useEffect(() => {
-    if (authData?.login) {
+    if (authData?.login && authData?.userRole === "customer") {
       fetchWishList(authData.userId, dispatch, authData.jwt);
     }
   }, [authData]);
