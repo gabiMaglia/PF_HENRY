@@ -95,7 +95,6 @@ export const fetchAnalyticsData = async (
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           };
-
           return axios.post(
             `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
             requestBody,
@@ -103,7 +102,6 @@ export const fetchAnalyticsData = async (
           );
         })
       );
-
       let totalData = [...totalDimensionsData, ...totalMetricsData];
 
       totalData = totalData.map((data) => {
@@ -121,7 +119,6 @@ export const fetchAnalyticsData = async (
         dimensions: reqDimensions ? reqDimensions : "",
       };
       orderBys?.length > 0 && (requestBody.orderBys = orderBys);
-      console.log(requestBody);
 
       const headers = {
         "Content-Type": "application/json",
@@ -135,7 +132,6 @@ export const fetchAnalyticsData = async (
       );
       responseData = [response?.data];
     }
-
     const rows = [];
     const finalData = responseData.forEach((data) => {
       data?.rows?.map((row) => {

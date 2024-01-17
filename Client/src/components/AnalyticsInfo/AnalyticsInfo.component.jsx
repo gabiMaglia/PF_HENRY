@@ -94,7 +94,6 @@ const AnalyticsInfo = () => {
           return data.value;
         });
       });
-
       let metricsValues = filterData?.map((row) => {
         return row?.metricValues.map((data) => {
           return data?.value;
@@ -170,34 +169,37 @@ const AnalyticsInfo = () => {
         )}
       </Box>
       <Box sx={{ maxWidth: "100%", maxHeight: "100vh" }}>
-        {data && graphicType === "Linea" ? (
-          <LinearGraphic
-            labels={data?.labels}
-            datasets={data?.datasets}
-            label={{ metricStatus, dimensionStatus }}
-          />
-        ) : graphicType === "Circular" ? (
-          <Box
-            sx={{
-              height: "70vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <DoughnutGraphics
+        {data &&
+          data.labels &&
+          data.datasets &&
+          (graphicType === "Linea" ? (
+            <LinearGraphic
               labels={data?.labels}
               datasets={data?.datasets}
               label={{ metricStatus, dimensionStatus }}
             />
-          </Box>
-        ) : (
-          <BarGraphic
-            labels={data?.labels}
-            datasets={data?.datasets}
-            label={{ metricStatus, dimensionStatus }}
-          />
-        )}
+          ) : graphicType === "Circular" ? (
+            <Box
+              sx={{
+                height: "70vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <DoughnutGraphics
+                labels={data?.labels}
+                datasets={data?.datasets}
+                label={{ metricStatus, dimensionStatus }}
+              />
+            </Box>
+          ) : (
+            <BarGraphic
+              labels={data?.labels}
+              datasets={data?.datasets}
+              label={{ metricStatus, dimensionStatus }}
+            />
+          ))}
       </Box>
       <Config
         open={openConfig}
