@@ -16,7 +16,8 @@ const historySlice = createSlice({
       state.historyUser = [...state.historyUser, action.payload];
     },
     deleteHistoryItem(state,action){
-      state.historyUser = state.historyUser.filter((history)=>history.value===action.payload)
+      console.log(action.payload)
+      state.historyUser = state.historyUser.filter((history)=>history.value!==action.payload)
     }
   },
 });
