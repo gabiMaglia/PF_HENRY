@@ -311,6 +311,7 @@ export const userLoginValidate = (values, setErrors, antErrors) => {
   email !== undefined ? (errors.email = emailValidate(email)) : "";
 
   setErrors(errors);
+  return errors;
 };
 
 // Validación de información de usuario para registro
@@ -402,6 +403,24 @@ export const userEditValidate = (values, setErrors, antErrors) => {
   street !== undefined ? (errors.street = streetValidate(street)) : "";
   number !== undefined ? (errors.number = numberValidate(number)) : "";
   zipCode !== undefined ? (errors.zipCode = zipCodeValidate(zipCode)) : "";
+
+  setErrors(errors);
+  return errors;
+};
+
+export const userChangePasswordValidate = (passwords, setErrors, antErrors) => {
+  const errors = { ...antErrors };
+
+  const { password, confirmPassword } = passwords;
+
+  password !== undefined ? (errors.password = addressValidate(password)) : "";
+
+  confirmPassword !== undefined
+    ? (errors.confirmPassword = confirmAddressValidate(
+        password,
+        confirmPassword
+      ))
+    : "";
 
   setErrors(errors);
   return errors;

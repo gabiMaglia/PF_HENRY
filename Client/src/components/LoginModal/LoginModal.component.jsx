@@ -22,7 +22,11 @@ import { userLoginValidate } from "../../helpers/userValidate";
 //REDUX
 import { logUser } from "../../redux/slices/userSlice";
 //SERVICES
-import { googleLoginUser, loginUser } from "../../services/authServices";
+import {
+  googleLoginUser,
+  loginUser,
+  senResetPasswordEmail,
+} from "../../services/authServices";
 import { getUserById } from "../../services/userServices";
 //SWEET ALERT
 import Swal from "sweetalert2";
@@ -167,8 +171,50 @@ const LoginModal = ({
     }
   };
 
-  const handleRecoverPassword = () => {
-    console.log(user.email);
+  const handleRecoverPassword = async () => {
+    const actErrors = userLoginValidate(
+      { email: user.email },
+      setErrors,
+      errors
+    );
+    if (errors.email.length === 0 && actErrors.email.length === 0) {
+      const response = await senResetPasswordEmail(user.email);
+      if (response?.status === 200) {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "success",
+          title: "Petición exitosa",
+          text: "Revise su casilla de correo y siga los pasos que se le indican",
+          confirmButtonColor: "#fd611a",
+        }).then(() => {
+          setIsRecoverPassword(false);
+          resetModal();
+        });
+      } else {
+        Swal.fire({
+          allowOutsideClick: false,
+          customClass: {
+            container: "container",
+          },
+          icon: "error",
+          title: "Email invalido",
+          text: "Verifique que su email corresponda a una cuenta de HyperMegaRed",
+        });
+      }
+    } else {
+      Swal.fire({
+        allowOutsideClick: false,
+        customClass: {
+          container: "container",
+        },
+        icon: "error",
+        title: "Email invalido",
+        text: errors.email,
+      });
+    }
   };
 
   const handleSubmit = async () => {

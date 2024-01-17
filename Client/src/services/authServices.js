@@ -77,25 +77,22 @@ export const checkSessionStatus = async (jwt) => {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
-      
     });
-    if (response.error) return {error:true, message: response.error.name}
+    if (response.error) return { error: true, message: response.error.name };
     // console.log(response.data)
-    return response.data
-
+    return response.data;
   } catch ({ response }) {
     return { error: response.data };
   }
 };
 export const refreshSessionToken = async (jwt) => {
   try {
- 
     const response = await axios.get(`${url}/account/refresh`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    return response.data.jwt
+    return response.data.jwt;
   } catch ({ response }) {
     return { error: response.data };
   }
@@ -110,25 +107,26 @@ export const registerUser = async (userObj) => {
     return { error: response.data };
   }
 };
-export const senResetPasswordEmail = async(email) => {
+export const senResetPasswordEmail = async (email) => {
   try {
-    const response = await axios.get(`${url}/send_reset_pass/${email}`);
-    return response
-  } catch ({response}) {
+    const response = await axios.get(`${url}/account/send_reset_pass/${email}`);
+    return response;
+  } catch ({ response }) {
     return { error: response.data };
   }
-} 
-export const changeUserPassword = async(password, password2, token ) => {
+};
+export const changeUserPassword = async (password, password2, token) => {
   try {
-    console.log({services: {password, password2, token}})
     const response = await axios.post(`${url}/account/reset/${token}`, {
-      password, password2, token
+      password,
+      password2,
+      token,
     });
-    return { error: false, data: response  };
-  } catch ({response}) {
+    return { error: false, data: response };
+  } catch ({ response }) {
     return { error: response.data };
   }
-}
+};
 export const logOutUser = async (jwt) => {
   try {
     userLogoutEvent();

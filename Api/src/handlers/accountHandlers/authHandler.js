@@ -70,7 +70,6 @@ const loginHandler = async (req, res) => {
 // PASSWORD RESET
 const forgetPasswordHandler = async (req, res) => {
   try {
-    console.log(req.params.email)
     if (req.params.email) {
       const { email } = req.params;
       const message = `Chekea tu casilla de correo para resetear el password`;
@@ -85,21 +84,23 @@ const changePasswordHandler = async (req, res) => {
   try {
     const { token } = req.params;
     const { password, password2 } = req.body;
-    console.log(password, password2)
-    if (password !== password2){ 
-      return res.status(400).json({error : true, message: "Ambos passwords deben coinidir"});
+    console.log(password, password2);
+    if (password !== password2) {
+      return res
+        .status(400)
+        .json({ error: true, message: "Ambos passwords deben coinidir" });
     }
-    const response = await resetPassword( password, token);
+    const response = await resetPassword(password, token);
     if (response.error) {
-      return res.status(401).json({error: true, message: response.response})
-    }else {
+      return res.status(401).json({ error: true, message: response.response });
+    } else {
       return res.status(200).send(response.response);
     }
   } catch (error) {
     return res.status(500).json(error.message);
   }
 };
-// 
+//
 const confirmAccountHandler = async (req, res) => {
   const { token } = req.params;
   try {
