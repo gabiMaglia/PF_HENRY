@@ -297,7 +297,7 @@ const ServicesTable = () => {
       Swal.fire({
         icon: "error",
         title: "Error Desconocido",
-        text: "Ha ocurrido un error al intentar actualizar la categoría",
+        text: "Ha ocurrido un error al intentar actualizar el estado",
       });
     }
   };
