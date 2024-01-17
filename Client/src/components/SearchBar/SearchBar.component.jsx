@@ -276,6 +276,7 @@ export default function SearchAppBar() {
           >
             {autocompleteSuggestions.map((suggestion, index) => (
               <Box
+                key={suggestion}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -312,7 +313,7 @@ export default function SearchAppBar() {
                     }}
                   >
                     <DeleteIcon
-                    id={suggestion}
+                      id={suggestion}
                       onClick={(e) => {
                         handleDelete(suggestion);
                       }}
