@@ -23,7 +23,7 @@ const Products = () => {
     setValue(value);
     dispatch(selectPage(value));
   };
-  
+
   useEffect(() => {
     inputName !== "" ? fetchSearch(inputName) : dispatch(fetchAllProducts());
   }, [dispatch]);
@@ -31,7 +31,6 @@ const Products = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
-
 
   return (
     <Box

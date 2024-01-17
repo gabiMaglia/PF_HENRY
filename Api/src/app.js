@@ -1,8 +1,6 @@
 require("dotenv").config();
 require("./config/passport.js");
 
-const env = process.env.NODE_ENV;
-
 const express = require("express");
 const routes = require("./routes/mainRoutes.js");
 const morgan = require("morgan");

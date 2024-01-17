@@ -34,56 +34,56 @@ const gridColumns = [
     headerName: "Nombre",
     minWidth: 150,
     headerAlign: "center",
-    editable: "true",
+    editable: false,
   },
   {
     field: "surname",
     headerName: "Apellido",
     minWidth: 150,
     headerAlign: "center",
-    editable: "true",
+    editable: false,
   },
   {
     field: "telephone",
     headerName: "Telefono",
     minWidth: 50,
     headerAlign: "center",
-    editable: "true",
+    editable: false,
   },
   {
     field: "email",
     headerName: "Email",
     minWidth: 300,
     headerAlign: "center",
-    editable: "true",
+    editable: false,
   },
   {
     field: "role",
     headerName: "Rol",
     minWidth: 50,
     headerAlign: "center",
-    editable: "true",
+    editable: false,
   },
   {
     field: "communication_preference",
     headerAlign: "center",
     headerName: "Preferencia de comunicación",
     minWidth: 200,
-    editable: "true",
+    editable: false,
   },
   {
     field: "isActive",
     headerAlign: "center",
     headerName: "Activo",
     minWidth: 25,
-    editable: "true",
+    editable: false,
   },
   {
     field: "isVerified",
     headerAlign: "center",
     headerName: "Verificado",
     minWidth: 25,
-    editable: "true",
+    editable: false,
   },
   {
     field: "isDeleted",
@@ -134,7 +134,6 @@ const UsersTable = () => {
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
-
 
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
@@ -286,13 +285,14 @@ const UsersTable = () => {
   return (
     <Box
       sx={{
-        width: "100%",
+        //width: "100%",
         position: "relative",
-        maxWidth: "70%",
-        height: "95%",
+        maxWidth: "75%",
+        height: { xxs: "70%", xs: "70%", sm: "90%", md: "90%" },
         minHeight: "10vh",
         textAlign: "center",
-        mt: "1em",
+        mt: "2em",
+        mb: "2em",
       }}
     >
       <StyledDataGrid

@@ -5,8 +5,20 @@ import { fetchAnalyticsData } from "../../services/reportingAnalyticsServices";
 import { useEffect } from "react";
 import LinearGraphic from "./Graphics/LinearGraphic.component";
 import BarGraphic from "./Graphics/BarGraphic.component";
+import DoughnutGraphics from "./Graphics/DoughnutGraphics.component";
 import Config from "./Config/Config.component";
 const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
+
+const colors = [
+  `#FD611A`,
+  `#E24802`,
+  `#A53501`,
+  `#912E01`,
+  `#5F1E01`,
+  `#4A1801`,
+  `#2C0E00`,
+  `#040100`,
+];
 
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
@@ -19,6 +31,7 @@ const AnalyticsInfo = () => {
   const [dimensionStatus, setDimensionStatus] = useState([null]);
   const [firstCharge, setFirstCharge] = useState(true);
   const [token, setToken] = useState(null);
+  const [graphicType, setGraphicType] = useState("Barras");
 
   const handleOpenConfig = () => {
     setOpenConfig(!openConfig);
@@ -69,14 +82,17 @@ const AnalyticsInfo = () => {
   }, [googleLogin.tokenResponse]);
 
   useEffect(() => {
-    if (data && data?.rows?.length > 0) {
-      const filterData = data?.rows.filter((row) => {
-        if (row?.dimensionValues[0].value !== "(not set)") {
+    if (data && data?.length > 0) {
+      const filterData = data?.filter((row) => {
+        if (row?.dimensionValues[0]?.value !== "(not set)") {
           return row;
         }
       });
+
       const labels = filterData?.map((row) => {
-        return row?.dimensionValues[0].value;
+        return row?.dimensionValues.map((data) => {
+          return data.value;
+        });
       });
 
       let metricsValues = filterData?.map((row) => {
@@ -85,18 +101,26 @@ const AnalyticsInfo = () => {
         });
       });
 
-      let maxElements = 0;
+      let maxMetricsElements = 0;
       for (let i = 0; i < metricsValues.length; i++) {
-        if (metricsValues[i].length > maxElements) {
-          maxElements = metricsValues[i].length;
+        if (metricsValues[i].length > maxMetricsElements) {
+          maxMetricsElements = metricsValues[i].length;
+        }
+      }
+
+      let maxDimensionsElements = 0;
+      for (let i = 0; i < metricsValues.length; i++) {
+        if (metricsValues[i].length > maxDimensionsElements) {
+          maxDimensionsElements = metricsValues[i].length;
         }
       }
 
       const datasets = [];
 
-      for (let i = 0; i < maxElements; i++) {
+      for (let i = 0; i < maxMetricsElements; i++) {
         datasets.push({
           id: i,
+          backgroundColor: colors[i],
           label: metricStatus[i],
           data: metricsValues.map((dataset) => {
             return dataset[i];
@@ -110,13 +134,17 @@ const AnalyticsInfo = () => {
   return (
     <Box
       sx={{
-        width: "70%",
         height: "100%",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         gap: "2em",
         textAlign: "center",
+        overflow: "scroll",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }}
     >
       <Box
@@ -141,20 +169,36 @@ const AnalyticsInfo = () => {
           </Box>
         )}
       </Box>
-      {/* {data && (
-        <LinearGraphic
-          labels={data?.labels}
-          datasets={data?.datasets}
-          label={{ metricStatus, dimensionStatus }}
-        />
-      )} */}
-      {data && (
-        <BarGraphic
-          labels={data?.labels}
-          datasets={data?.datasets}
-          label={{ metricStatus, dimensionStatus }}
-        />
-      )}
+      <Box sx={{ maxWidth: "100%", maxHeight: "100vh" }}>
+        {data && graphicType === "Linea" ? (
+          <LinearGraphic
+            labels={data?.labels}
+            datasets={data?.datasets}
+            label={{ metricStatus, dimensionStatus }}
+          />
+        ) : graphicType === "Circular" ? (
+          <Box
+            sx={{
+              height: "70vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <DoughnutGraphics
+              labels={data?.labels}
+              datasets={data?.datasets}
+              label={{ metricStatus, dimensionStatus }}
+            />
+          </Box>
+        ) : (
+          <BarGraphic
+            labels={data?.labels}
+            datasets={data?.datasets}
+            label={{ metricStatus, dimensionStatus }}
+          />
+        )}
+      </Box>
       <Config
         open={openConfig}
         setOpen={handleOpenConfig}
@@ -165,6 +209,8 @@ const AnalyticsInfo = () => {
         setConfig={setConfig}
         setMetricStatus={setMetricStatus}
         setDimensionStatus={setDimensionStatus}
+        graphicType={graphicType}
+        setGraphicType={setGraphicType}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>

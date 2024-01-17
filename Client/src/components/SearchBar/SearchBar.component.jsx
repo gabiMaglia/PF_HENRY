@@ -3,9 +3,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //MATERIAL UI
-import { Input, Box, Button, styled, Typography } from "@mui/material";
+import {
+  Input,
+  Box,
+  Button,
+  styled,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -18,6 +26,7 @@ import Notification from "../Notifications/Notifications.component";
 //REDUX
 import { logUser } from "../../redux/slices/userSlice";
 import { addItem } from "../../redux/slices/cartSlice";
+import { fetchWishList } from "../../services/wishListServices";
 //SERVICES
 import { fetchSearch, fetchChage } from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
@@ -29,14 +38,18 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import img from "/icons/logo.svg";
 //FIREBASE
 import { userSearchEvent } from "../../services/firebaseAnayticsServices";
-import { fetchHistoryUSer } from "../../services/historyUserService";
+import {
+  fetchDeleteHistoryItem,
+  fetchHistoryUSer,
+  fetchPostHistoryItem,
+} from "../../services/historyUserService";
+import Swal from "sweetalert2";
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const { login } = useSelector((state) => state.user);
   const { historyUser } = useSelector((state) => state.historyUser);
-  console.log(historyUser)
   const { inputName } = useSelector((state) => state.product);
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
@@ -47,34 +60,36 @@ export default function SearchAppBar() {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [prueba,setPrueba] =useState([]) 
+  const [aux, setAux] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
-  useEffect(() => {
-    if (typeof historyUser === 'string' || historyUser instanceof String) {
-      setPrueba([historyUser])
-    } else {
-      setPrueba(historyUser.length && historyUser.map((history) => history.value))
+  const isHistoryUserItem = (suggestion) => {
+    if (
+      !Array.isArray(historyUser) ||
+      suggestion === "el usuario aun no posee historial."
+    ) {
+      return false;
     }
-  }, [historyUser]);
+    return historyUser.some((history) => history.value === suggestion);
+  };
 
-
+  useEffect(() => {
+    if (login) {
+      const newSuggestions = Array.isArray(historyUser)
+        ? historyUser.map((history) => history.value)
+        : ["el usuario no posee historial"];
+      setSuggestions(newSuggestions);
+    }
+  }, [login, historyUser]);
 
   useEffect(() => {
     dispatch(addItem());
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
+    } else {
+      setSuggestions(["el usuario debe loguearse para tener historial."]);
     }
-  }, [login]);
-
-  useEffect(() => {
-    const newSuggestions = login
-      ? prueba.length
-        ? prueba
-        : ['el usuario no tiene registro de historial']
-      : ["sin historial, debe loguearse para tener historial"];
-    setSuggestions(newSuggestions);
-  }, [login]);
+  }, [login, aux]);
 
   const Img = styled("img")({
     width: 140,
@@ -90,8 +105,19 @@ export default function SearchAppBar() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
+    login && (await fetchPostHistoryItem(authData.userId, inputName, dispatch));
     await fetchSearch(inputName)(dispatch);
+    setAux(!aux);
+    setInputValue("");
     userSearchEvent(inputName);
+    Swal.close();
     navigate(PATHROUTES.PRODUCTS);
   };
 
@@ -100,7 +126,6 @@ export default function SearchAppBar() {
       handleSubmit(event);
     }
   };
-
 
   const handleCartClick = () => {
     navigate(PATHROUTES.SHOPCART);
@@ -113,6 +138,12 @@ export default function SearchAppBar() {
     }
   }, [cookieStatus]);
 
+  useEffect(() => {
+    if (authData?.login && authData?.userRole === "customer") {
+      fetchWishList(authData.userId, dispatch, authData.jwt);
+    }
+  }, [authData?.userRole]);
+
   const handleAutocomplete = (value) => {
     if (!value) {
       setAutocompleteSuggestions([]);
@@ -120,8 +151,9 @@ export default function SearchAppBar() {
       return;
     }
 
-    const matchingSuggestions = suggestions.filter((suggestion) =>
-      suggestion.toLowerCase().includes(value.toLowerCase())
+    const matchingSuggestions = suggestions.filter(
+      (suggestion) =>
+        suggestion && suggestion.toLowerCase().includes(value.toLowerCase())
     );
 
     setAutocompleteSuggestions(matchingSuggestions);
@@ -138,13 +170,20 @@ export default function SearchAppBar() {
     handleAutocomplete(inputName);
   }, [inputName]);
 
+  const handleDelete = (event) => {
+    fetchDeleteHistoryItem(authData.userId, event.target.id, dispatch);
+    console.log("todo ok");
+    setAux(!aux);
+    console.log(historyUser);
+  };
+
   return (
     <Box
       sx={{
         mb: 1,
         flexGrow: 1,
         display: "flex",
-        flexDirection: { xs: "column", lg: "row" },
+        flexDirection: { xxs: "column", xs: "column", lg: "row" },
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -166,7 +205,7 @@ export default function SearchAppBar() {
       </Box>
       <Box
         sx={{
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           border: 2,
           borderRadius: 2,
           borderTopRightRadius: 50,
@@ -198,7 +237,7 @@ export default function SearchAppBar() {
           }}
           disableUnderline
         />
-        {isInputFocused && showAutocomplete && (
+        {showAutocomplete && (
           <Box
             sx={{
               position: "absolute",
@@ -209,22 +248,43 @@ export default function SearchAppBar() {
               backgroundColor: "white",
               boxShadow: 3,
               borderRadius: 2,
+              width: "93%",
               maxHeight: 200,
               overflowY: "auto",
             }}
           >
             {autocompleteSuggestions.map((suggestion, index) => (
-              <div
+              <Box
                 key={index}
-                onMouseDown={() => handleAutocompleteSelect(suggestion)}
-                style={{
-                  padding: "8px",
-                  cursor: "pointer",
-                  borderBottom: "1px solid #ccc",
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
                 }}
               >
-                {suggestion}
-              </div>
+                <Box
+                  key={index}
+                  onMouseDown={() => handleAutocompleteSelect(suggestion)}
+                  style={{
+                    padding: "8px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  {suggestion}
+                </Box>
+                {isHistoryUserItem(suggestion) && (
+                  <DeleteIcon
+                    sx={{
+                      fontSize: "xx-large",
+                    }}
+                    onClick={(e) => {
+                      handleDelete(e);
+                    }}
+                    id={suggestion}
+                  />
+                )}
+              </Box>
             ))}
           </Box>
         )}
@@ -252,7 +312,7 @@ export default function SearchAppBar() {
         sx={{
           display: "flex",
           flexDirection: "row",
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           alignItems: "center",
           justifyContent: "space-around",
           gap: "3em",
@@ -269,7 +329,7 @@ export default function SearchAppBar() {
             }}
           >
             <ShoppingCartIcon
-              /*src={carrito}*/ sx={{ fontSize: "32px" }}
+              sx={{ fontSize: "32px" }}
               onClick={handleCartClick}
             />
             {cartItemCount > -1 && (
@@ -304,8 +364,7 @@ export default function SearchAppBar() {
             />{" "}
             <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
-        ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
-        null}
+        ) : null}
         {userRole === "customer" && login === true && (
           <Box>
             <Notification />
@@ -353,7 +412,6 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
-      {/* <ConnectedProductBox cartItemCount={cartItemCount} */}
     </Box>
   );
 }

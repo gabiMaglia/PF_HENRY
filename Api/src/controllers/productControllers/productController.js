@@ -352,11 +352,11 @@ const searchByName = async (name) => {
               [Op.iLike]: `%${name}%`,
             },
           },
-          {
-            description: {
-              [Op.iLike]: `%${name}%`,
-            },
-          },
+          // {
+          //   description: {
+          //     [Op.iLike]: `%${name}%`,
+          //   },
+          // },
           {
             '$ProductCategories.name$': {
               [Op.iLike]: `%${name}%`,

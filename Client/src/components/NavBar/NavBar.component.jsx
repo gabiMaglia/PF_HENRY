@@ -99,7 +99,7 @@ const NavBar = () => {
         <Box
           sx={{
             flexGrow: 1,
-            display: { xs: "none", md: "flex" },
+            display: { xxs: "none", xs: "none", md: "flex" },
             justifyContent: "space-evenly",
             height: 40,
           }}

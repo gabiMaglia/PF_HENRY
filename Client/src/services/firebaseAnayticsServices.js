@@ -4,7 +4,7 @@ const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const postEvent = (event, params) => {
   //Envio de notificaciónes a FIREBASE
-  // console.log(event, params);
+
 
   const analytics = getAnalytics();
   logEvent(analytics, event, params);
@@ -31,8 +31,8 @@ export const itemToWishlist = async (productId, wishlistProducts, jwt) => {
         {
           item_id: data?.id,
           item_name: data?.name,
-          item_brand: data?.ProductCategories[0]?.name,
-          item_category: data?.ProductBrands[0]?.name,
+          item_brand: data?.ProductBrands[0]?.name,
+          item_category: data?.ProductCategories[0]?.name,
           price: data?.price,
         },
       ],

@@ -58,7 +58,7 @@ export const fetchProductCartPost = (product, cookiesAccepted) => async () => {
         }));
         console.log(products)
         const storedProducts = getProducts();
-  console.log(storedProducts.payload)
+        console.log(storedProducts.payload)
         if (storedProducts.payload === undefined) {
           window.localStorage.setItem("storedProducts", JSON.stringify(products));
         }

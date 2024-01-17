@@ -2,7 +2,8 @@ const bcrypt = require("bcrypt");
 const { User, UserRole, UserAddress } = require("../../db.js");
 const {
   sendConfirmationEmail,
-} = require("../../utils/sendConfirmationEmail.js");
+} = require("../../utils/emailTemplates.js");
+const { tokenSign } = require("../../jwt/tokenGenerator.js");
 
 const getAllUsers = async () => {
   const user = await User.findAll();
@@ -149,11 +150,11 @@ const editUserById = async (
   const isEmailDifferent = email !== user.email;
 
   if (email !== "" && isEmailDifferent) {
+    const confirmationEmailToken = tokenSign(user.id, '2d')
     await sendConfirmationEmail(
       process.env.EMAIL_MAILER,
       email,
-      user.id,
-      process.env.JWT_SECRET_KEY,
+      confirmationEmailToken,
       process.env.API_URL
     );
     await user.update({ isVerified: false });
