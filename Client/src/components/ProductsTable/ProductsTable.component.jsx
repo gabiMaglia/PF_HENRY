@@ -40,7 +40,6 @@ const ProductsTable = () => {
   const [availableModify, setAvailableModify] = useState(false);
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
-
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
@@ -355,6 +354,7 @@ const ProductsTable = () => {
   };
 
   const processRowUpdate = async (newRow) => {
+    console.log(availableModify);
     try {
       if (availableModify) {
         Swal.fire({
@@ -408,6 +408,7 @@ const ProductsTable = () => {
           });
         }
       }
+      return newRow;
     } catch (error) {
       throw new Error("Error al comunicarse con el servidor", error);
     }
