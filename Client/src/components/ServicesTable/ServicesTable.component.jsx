@@ -160,7 +160,7 @@ const ServicesTable = () => {
         <Select
           value={params.value}
           onChange={(e) =>
-            handleStatusChange(params.id, e.target.value, params.row)
+            handleStatusChange(params.id, e.target.value)
           }
           sx={{ width: "100%" }}
         >
@@ -237,12 +237,15 @@ const ServicesTable = () => {
     }
   };
 
-  const handleStatusChange = async (id, newStatus, row) => {
+  const handleStatusChange = async (id, newStatus) => {
     try {
-      const updatedService = services.map((service) => {
-        service.id === id ? { ...service, status: newStatus } : service;
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
       });
-      setServices(updatedService);
+      Swal.showLoading();
       const response = await updateService(
         id,
         { status: newStatus },
@@ -254,12 +257,9 @@ const ServicesTable = () => {
           title: "Actualización exitosa",
           text: "El estado ha sido actualizado correctamente.",
         });
+        getAllServices();
+        return newStatus;
       } else {
-        setServices((prevServices) =>
-          prevServices.map((service) =>
-            service.id === id ? { ...service, status: row.status } : service
-          )
-        );
         Swal.fire({
           icon: "error",
           title: "Error al actualizar el estado",
@@ -267,7 +267,11 @@ const ServicesTable = () => {
         });
       }
     } catch (error) {
-      console.error("Error al actualizar el estado:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error Desconocido",
+        text: "Ha ocurrido un error al intentar actualizar la categoría",
+      });
     }
   };
 
@@ -339,6 +343,7 @@ const ServicesTable = () => {
   };
 
   const processRowUpdate = async (newRow, antRow) => {
+    console.log("Desde process")
     try {
       const notTechnicianChange =
         newRow.technicianName === antRow.technicianName;
@@ -450,17 +455,16 @@ const ServicesTable = () => {
             selectedRows: rowSelected,
           },
         }}
-        // getRowClassName={(params) => {
-        //   return params.row.isDelete
-        //     ? `row--deleted`
-        //     : params.row.confirm_repair === true &&
-        //       params.row.status === "Servicio finalizado"
-        //     ? `row--finalized`
-        //     : params.row.confirm_repair === true
-        //     ? `row--accepted`
-        //     : `row`;
-        // }}
-        checkboxSelection
+        getRowClassName={(params) => {
+          return params.row.isDelete
+            ? `row--deleted`
+            : params.row.confirm_repair === true &&
+              params.row.status === "Servicio finalizado"
+            ? `row--finalized`
+            : params.row.confirm_repair === true
+            ? `row--accepted`
+            : `row`;
+        }}
         disableRowSelectionOnClick
         rows={services}
         columns={columns}
