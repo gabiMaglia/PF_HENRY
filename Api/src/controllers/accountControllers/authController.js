@@ -179,7 +179,7 @@ const sendEmailToResetPassword = async (email) => {
 };
 const resetPassword = async (newPassword, token) => {
   const isValid = await verifyToken(token);
-  console.log(isValid)
+
   if(!isValid) {
     return {
       error: true,

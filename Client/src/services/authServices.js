@@ -79,7 +79,6 @@ export const checkSessionStatus = async (jwt) => {
       },
     });
     if (response.error) return { error: true, message: response.error.name };
-    // console.log(response.data)
     return response.data;
   } catch ({ response }) {
     return { error: response.data };
