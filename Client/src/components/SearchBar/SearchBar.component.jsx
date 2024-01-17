@@ -18,6 +18,7 @@ import Notification from "../Notifications/Notifications.component";
 //REDUX
 import { logUser } from "../../redux/slices/userSlice";
 import { addItem } from "../../redux/slices/cartSlice";
+import { fetchWishList } from "../../services/wishListServices";
 //SERVICES
 import { fetchSearch, fetchChage } from "../../services/productServices";
 import { getUserById } from "../../services/userServices";
@@ -36,7 +37,6 @@ export default function SearchAppBar() {
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const { login } = useSelector((state) => state.user);
   const { historyUser } = useSelector((state) => state.historyUser);
-  console.log(historyUser);
   const { inputName } = useSelector((state) => state.product);
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
@@ -111,6 +111,12 @@ export default function SearchAppBar() {
       getUserInfo(userToken);
     }
   }, [cookieStatus]);
+
+  useEffect(() => {
+    if (authData?.login) {
+      fetchWishList(authData.userId, dispatch, authData.jwt);
+    }
+  }, [authData]);
 
   const handleAutocomplete = (value) => {
     if (!value) {
