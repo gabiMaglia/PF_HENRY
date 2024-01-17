@@ -53,7 +53,7 @@ const LoginModal = ({
   const handledispatch = async (userId, authData) => {
     const user = await getUserById(userId, authData);
     dispatch(logUser({ userObject: user }));
-    dispatch(fetchProductCartGet(cookiesAccepted));
+    await dispatch(fetchProductCartGet(cookiesAccepted));
     dispatch(addItem());
   };
 
