@@ -199,7 +199,7 @@ const UsersTable = () => {
         Swal.fire({
           icon: "error",
           title: "Actualizacion Erronea",
-          text: "Hubo un error al actualizar el rol del servicio",
+          text: "Hubo un error al actualizar el rol del usuario",
         });
       }
     } catch (error) {
