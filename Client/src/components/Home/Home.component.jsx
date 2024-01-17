@@ -9,7 +9,6 @@ import CarouselBottom from "../../components/CarouselBottom/CarouselBottom.compo
 import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
 import GoogleMap from "../../components/GoogleMap/GoogleMap.component";
 
-
 const HomeComponent = () => {
   const { allProducts } = useSelector((state) => state.product);
   return (

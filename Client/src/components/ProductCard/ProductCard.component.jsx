@@ -169,7 +169,16 @@ const CardProduct = ({ product }) => {
                 component="div"
                 color="textPrimary"
                 align="center"
-                sx={{ fontSize: "18px", marginTop: "-20px" }}
+                sx={{
+                  fontSize: "20px",
+                  marginTop: "-20px",
+                  lineHeight: "1.2",
+                  maxHeight: "2.4em",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  "-webkit-line-clamp": 2,
+                }}
               >
                 {name}
               </Typography>

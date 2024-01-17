@@ -663,6 +663,29 @@ const ProductCreateProfileComponent = () => {
                 color="inherit"
                 fullWidth
                 sx={{ color: "white" }}
+                disabled={
+                  !values.name ||
+                  !values.price ||
+                  !values.description ||
+                  !values.warranty ||
+                  !values.stock ||
+                  !values.brandName ||
+                  !values.categoryName ||
+                  !values.images.length ||
+                  errors.e1 ||
+                  errors.e2 ||
+                  errors.e3 ||
+                  errors.e4 ||
+                  errors.e5 ||
+                  errors.e6 ||
+                  errors.e7 ||
+                  errors.e8 ||
+                  errors.e9 ||
+                  errors.e10 ||
+                  errors.e11 ||
+                  errors.e12 ||
+                  errors.e13
+                }
               >
                 Crear Producto
               </Button>

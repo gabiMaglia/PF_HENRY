@@ -122,7 +122,8 @@ const UserPanelComponent = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        height: "97vh",
+        //height: "97vh",
+        mb: "1.2em",
         minHeight: "500px",
         width: "100%",
         mt: "1.2em",
@@ -130,7 +131,7 @@ const UserPanelComponent = () => {
           mt: ".5em",
         },
         [theme.breakpoints.down("xs")]: {
-          mb: "100px",
+          mb: "8em",
         },
       }}
     >

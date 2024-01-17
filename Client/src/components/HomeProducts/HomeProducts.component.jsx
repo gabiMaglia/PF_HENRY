@@ -10,6 +10,7 @@ const HomeProducts = ({ allProducts }) => {
   const dispatch = useDispatch();
   const [homeProducts, setHomeProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const shuffleArray = (array) => {
     const newArray = array.slice();
@@ -24,24 +25,20 @@ const HomeProducts = ({ allProducts }) => {
     const fetchData = async () => {
       let startTime;
       try {
-        // Simular una carga durante 2 segundos (puedes ajustar este tiempo)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
         startTime = Date.now();
 
         const shuffledProducts = shuffleArray(allProducts);
         setHomeProducts(shuffledProducts.slice(0, 9));
       } catch (error) {
         console.error("Error fetching home products:", error);
+        setError(true);
       } finally {
         if (startTime) {
-          const minimumLoadingTime = 1000;
+          const minimumLoadingTime = 3000;
           const remainingTime = Math.max(
             0,
             minimumLoadingTime - (Date.now() - startTime)
           );
-
-          // Simular una carga durante el tiempo especificado (mínimo de 2 segundos)
           await new Promise((resolve) => setTimeout(resolve, remainingTime));
         }
 
@@ -86,28 +83,59 @@ const HomeProducts = ({ allProducts }) => {
     );
   }
 
+  if (error) {
+    return (
+      <Container
+        variant="body1"
+        sx={{
+          display: "grid",
+          gridColumnStart: 1,
+          gridColumnEnd: 4,
+          alignItems: "center",
+          justifyContent: "center",
+          mt: 4,
+          mb: 4,
+          fontSize: 28,
+          fontWeight: 700,
+          color: "red",
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            color: "red",
+          }}
+        >
+          Por el momento no se encuentran productos disponibles.
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
     <>
-          <Box
-            sx={{
-              // backgroundColor: "#000",
-              width: "100%",
-              height: "100px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="h4"
-              sx={{
-                color: "#00000",
-                fontWeight: "900",
-              }}
-            >
-              Productos Destacados
-            </Typography>
-          </Box>
+      <Box
+        sx={{
+          // backgroundColor: "#000",
+          width: "100%",
+          height: "100px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{
+            color: "#00000",
+            fontWeight: "900",
+          }}
+        >
+          Productos Destacados
+        </Typography>
+      </Box>
       <Container
         sx={{
           display: "flex",

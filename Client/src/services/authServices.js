@@ -9,6 +9,7 @@ const dataSorterForApp = (data) => {
   const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
   return { ...data, userRole: decodeToken.userRole };
 };
+
 export const loginUser = async (username, password, cookieStatus) => {
   try {
     const { data } = await axios.post(
@@ -79,7 +80,6 @@ export const checkSessionStatus = async (jwt) => {
       },
     });
     if (response.error) return { error: true, message: response.error.name };
-    // console.log(response.data)
     return response.data;
   } catch ({ response }) {
     return { error: response.data };
@@ -107,7 +107,7 @@ export const registerUser = async (userObj) => {
     return { error: response.data };
   }
 };
-export const senResetPasswordEmail = async (email) => {
+export const sendResetPasswordEmail = async(email) => {
   try {
     const response = await axios.get(`${url}/account/send_reset_pass/${email}`);
     return response;

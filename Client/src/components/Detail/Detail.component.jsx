@@ -57,8 +57,8 @@ const ProductMedia = styled(CardMedia)({
 });
 // Estilo personalizado para el contenedor de las miniaturas de imágenes
 const ThumbnailContainer = styled(Container)({
-  width: "80px",
-  height: "80px",
+  width: "100px",
+  height: "100px",
   margin: "4px",
   cursor: "pointer",
   overflow: "hidden",
@@ -438,10 +438,17 @@ const Detail = () => {
         </Container>
         <Container sx={{ marginTop: 2 }}>
           <Divider sx={{ marginY: 2 }} />
-          <Typography variant="h5" fontWeight={"bold"}>
+          <Typography variant="h4" fontWeight={"bold"}>
             Descripción:
           </Typography>
-          <Typography variant="h6">{productById.description}</Typography>
+          <Typography variant="h5">{productById.description}</Typography>
+        </Container>
+        <Container sx={{ marginTop: 2 }}>
+          <Divider sx={{ marginY: 2 }} />
+          <Typography variant="h5" fontWeight={"bold"}>
+            Garantia:
+          </Typography>
+          <Typography variant="h6">{productById.warranty}</Typography>
         </Container>
         <Container>
           <Divider sx={{ marginY: 2 }} />
