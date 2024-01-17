@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Select, Autocomplete, TextField } from "@mui/material";
+import { Box, Select, MenuItem, Autocomplete, TextField } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
@@ -21,8 +21,10 @@ import {
   updateService,
   logicalDeleteService,
 } from "../../services/serviceServices";
-import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 import { getUsersByRole } from "../../services/userServices";
+//UTILS
+import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
+import { serviceStatuses } from "../../utils/serviceStatuses";
 //SWEET ALERT
 import Swal from "sweetalert2";
 
@@ -36,9 +38,12 @@ const ServicesTable = () => {
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [rowSelected, setRowSelected] = useState([]);
   const [technicians, setTechnicians] = useState([]);
+  const [statusOptions, setStatusOptions] = useState([]);
   const language = esES;
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
+  const statuses = [...serviceStatuses.progress, serviceStatuses.cancel];
 
   function SelectEditInputCell(props) {
     const { id, value, field } = props;
@@ -122,14 +127,14 @@ const ServicesTable = () => {
       field: "technicianName",
       renderEditCell: renderSelectEditInputCell,
       headerName: "Técnico",
-      minWidth: 300,
+      minWidth: 150,
       headerAlign: "center",
       editable: true,
     },
     {
       field: "user_diagnosis",
       headerName: "Falla reportada",
-      minWidth: 250,
+      minWidth: 200,
       headerAlign: "center",
     },
     {
@@ -151,6 +156,21 @@ const ServicesTable = () => {
       minWidth: 200,
       headerAlign: "center",
       editable: true,
+      renderCell: (params) => (
+        <Select
+          value={params.value}
+          onChange={(e) =>
+            handleStatusChange(params.id, e.target.value, params.row)
+          }
+          sx={{ width: "100%" }}
+        >
+          {statuses.map((status) => (
+            <MenuItem key={status} value={status}>
+              {status}
+            </MenuItem>
+          ))}
+        </Select>
+      ),
     },
     {
       field: "technical_diagnosis",
@@ -217,6 +237,40 @@ const ServicesTable = () => {
     }
   };
 
+  const handleStatusChange = async (id, newStatus, row) => {
+    try {
+      const updatedService = services.map((service) => {
+        service.id === id ? { ...service, status: newStatus } : service;
+      });
+      setServices(updatedService);
+      const response = await updateService(
+        id,
+        { status: newStatus },
+        authData.jwt
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Actualización exitosa",
+          text: "El estado ha sido actualizado correctamente.",
+        });
+      } else {
+        setServices((prevServices) =>
+          prevServices.map((service) =>
+            service.id === id ? { ...service, status: row.status } : service
+          )
+        );
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar el estado",
+          text: "Hubo un error al actualizar el estado del servicio.",
+        });
+      }
+    } catch (error) {
+      console.error("Error al actualizar el estado:", error);
+    }
+  };
+
   const getTechnicians = async () => {
     const response = await getUsersByRole("technician", authData.jwt);
     if (response.error) {
@@ -233,6 +287,7 @@ const ServicesTable = () => {
   useEffect(() => {
     getAllServices();
     getTechnicians();
+    setStatusOptions(statuses);
   }, []);
 
   const handleCellEditStart = (params) => {
@@ -395,16 +450,16 @@ const ServicesTable = () => {
             selectedRows: rowSelected,
           },
         }}
-        getRowClassName={(params) => {
-          return params.row.isDelete
-            ? `row--deleted`
-            : params.row.confirm_repair === true &&
-              params.row.status === "Servicio finalizado"
-            ? `row--finalized`
-            : params.row.confirm_repair === true
-            ? `row--accepted`
-            : `row`;
-        }}
+        // getRowClassName={(params) => {
+        //   return params.row.isDelete
+        //     ? `row--deleted`
+        //     : params.row.confirm_repair === true &&
+        //       params.row.status === "Servicio finalizado"
+        //     ? `row--finalized`
+        //     : params.row.confirm_repair === true
+        //     ? `row--accepted`
+        //     : `row`;
+        // }}
         checkboxSelection
         disableRowSelectionOnClick
         rows={services}
