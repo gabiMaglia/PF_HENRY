@@ -217,7 +217,7 @@ const resetPassword = async (newPassword, token) => {
       response: "Credenciales no encontradas",
     };
   } else {
-    await BlackListedTokens
+    await logOutUser(token)
     await userCredentials.update({ password: await bcrypt.hash(newPassword, 8) });
     await userCredentials.save();
     return {

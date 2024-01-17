@@ -3,7 +3,7 @@ const SECRET = process.env.JWT_SECRET_KEY;
 const jwt = require("jsonwebtoken");
 const { checkBlacklistedToken } = require("./tokenUtils");
 
-const tokenSign = (dataForToken, tokenTime = '1h') => {
+const tokenSign = (dataForToken, tokenTime = '1m') => {
   const token = jwt.sign(dataForToken, SECRET, { expiresIn: tokenTime });
   return token;
 };
