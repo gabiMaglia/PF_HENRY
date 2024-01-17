@@ -57,7 +57,8 @@ const getHistoryUserController=async(id)=>{
     };
   }
   const historyUser=await History.findAll({
-    where:{UserId:id}
+    where:{UserId:id,
+    isDelete:false}
   })
     if(!historyUser||historyUser.length===0){
       return[{value:'el usuario aun no posee historial.'}]
@@ -86,16 +87,16 @@ const deleteHistoryController=async(id,value)=>{
   }
     historyValue.isDelete=true
     await historyValue.save()
-   const history=await History.findAll({
-    where:{UserId:id}
-   })
-   if(!history){
-    return {
-      error: true,
-      response: "Error al traer el historial.",
-    }
-   }
-   return userHistory
+  //  const history=await History.findAll({
+  //   where:{UserId:id}
+  //  })
+  //  if(!history){
+  //   return {
+  //     error: true,
+  //     response: "Error al traer el historial.",
+  //   }
+  //  }
+   return historyValue
 }
 
 module.exports = { PostHistoryController,getHistoryUserController,deleteHistoryController };
