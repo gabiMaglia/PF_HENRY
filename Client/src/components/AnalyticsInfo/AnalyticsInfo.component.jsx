@@ -82,12 +82,13 @@ const AnalyticsInfo = () => {
   }, [googleLogin.tokenResponse]);
 
   useEffect(() => {
-    if (data && data?.rows?.length > 0) {
-      const filterData = data?.rows.filter((row) => {
-        if (row?.dimensionValues[0].value !== "(not set)") {
+    if (data && data?.length > 0) {
+      const filterData = data?.filter((row) => {
+        if (row?.dimensionValues[0]?.value !== "(not set)") {
           return row;
         }
       });
+
       const labels = filterData?.map((row) => {
         return row?.dimensionValues.map((data) => {
           return data.value;

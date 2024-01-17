@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   TextField,
@@ -6,6 +6,7 @@ import {
   Typography,
   FormHelperText,
 } from "@mui/material";
+
 import { changeUserPassword } from "../../../services/authServices";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";

@@ -85,15 +85,24 @@ const ProductBox = () => {
     }
   };
 
+  const minimumLoadingTime = 3000;
+  const [showError, setShowError] = useState(false);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationComplete(true);
-    }, 1000);
+    }, minimumLoadingTime); // Cambiado a minimumLoadingTime
 
     return () => {
       clearTimeout(timeout);
     };
   }, []);
+
+  if (isThereAnyProducts) {
+    setTimeout(() => {
+      setShowError(true);
+    }, minimumLoadingTime);
+  }
 
   if (isLoading || !animationComplete) {
     return (
@@ -146,23 +155,25 @@ const ProductBox = () => {
       }}
     >
       {isThereAnyProducts ? (
-        <Typography
-          variant="body1"
-          sx={{
-            display: "grid",
-            gridColumnStart: 1,
-            gridColumnEnd: 4,
-            alignItems: "center",
-            justifyContent: "center",
-            mt: 4,
-            mb: 4,
-            fontSize: 28,
-            fontWeight: 700,
-            color: "red",
-          }}
-        >
-          No se encontró ningún producto relacionado con su búsqueda!
-        </Typography>
+        showError ? (
+          <Typography
+            variant="body1"
+            sx={{
+              display: "grid",
+              gridColumnStart: 1,
+              gridColumnEnd: 4,
+              alignItems: "center",
+              justifyContent: "center",
+              mt: 4,
+              mb: 4,
+              fontSize: 28,
+              fontWeight: 700,
+              color: "red",
+            }}
+          >
+            No se encontró ningún producto relacionado con su búsqueda!
+          </Typography>
+        ) : null
       ) : (
         productsToShow.map((product, index) => (
           <Box

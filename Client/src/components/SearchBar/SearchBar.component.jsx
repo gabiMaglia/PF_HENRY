@@ -50,30 +50,36 @@ export default function SearchAppBar() {
   const [prueba, setPrueba] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
-  useEffect(() => {
-    if (typeof historyUser === "string" || historyUser instanceof String) {
-      setPrueba([historyUser]);
-    } else {
-      setPrueba(
-        historyUser.length && historyUser.map((history) => history.value)
-      );
+  const isHistoryUserItem = (suggestion) => {
+    if (
+      !Array.isArray(historyUser) ||
+      suggestion === "el usuario aun no posee historial."
+    ) {
+      return false;
     }
-  }, [historyUser]);
+    return historyUser.some((history) => history.value === suggestion);
+  };
+
+  useEffect(() => {
+    if (login) {
+      fetchHistoryUSer(authData.userId, dispatch);
+    }
+  }, [login, aux]);
+
+  useEffect(() => {
+    const newSuggestions = login
+      ? historyUser.map((history) => history.value)
+      : ["el usuario no posee historial"];
+    setSuggestions(newSuggestions);
+  }, [login, historyUser]);
 
   useEffect(() => {
     dispatch(addItem());
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
+    } else {
+      setSuggestions(["el usuario debe loguearse para tener historial."]);
     }
-  }, [login]);
-
-  useEffect(() => {
-    const newSuggestions = login
-      ? prueba.length
-        ? prueba
-        : ["el usuario no tiene registro de historial"]
-      : ["sin historial, debe loguearse para tener historial"];
-    setSuggestions(newSuggestions);
   }, [login]);
 
   const Img = styled("img")({
@@ -116,7 +122,7 @@ export default function SearchAppBar() {
     if (authData?.login && authData?.userRole === "customer") {
       fetchWishList(authData.userId, dispatch, authData.jwt);
     }
-  }, [authData]);
+  }, [authData?.userRole]);
 
   const handleAutocomplete = (value) => {
     if (!value) {
@@ -142,6 +148,13 @@ export default function SearchAppBar() {
   useEffect(() => {
     handleAutocomplete(inputName);
   }, [inputName]);
+
+const handleDelete=(event)=>{
+ fetchDeleteHistoryItem(authData.userId,event.target.id,dispatch)
+ console.log("todo ok")
+ setAux(!aux)
+ console.log(historyUser)
+}
 
   return (
     <Box
@@ -219,17 +232,34 @@ export default function SearchAppBar() {
             }}
           >
             {autocompleteSuggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                onMouseDown={() => handleAutocompleteSelect(suggestion)}
-                style={{
-                  padding: "8px",
-                  cursor: "pointer",
-                  borderBottom: "1px solid #ccc",
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
                 }}
               >
-                {suggestion}
-              </div>
+                <Box
+                  key={index}
+                  onMouseDown={() => handleAutocompleteSelect(suggestion)}
+                  style={{
+                    padding: "8px",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #ccc",
+                  }}
+                >
+                  {suggestion}
+                </Box>
+                {isHistoryUserItem(suggestion) && (
+                  <DeleteIcon
+                    sx={{
+                      fontSize: "xx-large",
+                    }}
+                    onClick={(e)=>{handleDelete(e)}}
+                    id={suggestion}
+                  />
+                )}
+              </Box>
             ))}
           </Box>
         )}
@@ -274,7 +304,7 @@ export default function SearchAppBar() {
             }}
           >
             <ShoppingCartIcon
-              /*src={carrito}*/ sx={{ fontSize: "32px" }}
+              sx={{ fontSize: "32px" }}
               onClick={handleCartClick}
             />
             {cartItemCount > -1 && (
@@ -309,8 +339,7 @@ export default function SearchAppBar() {
             />{" "}
             <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
-        ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
-        null}
+        ) : null}
         {userRole === "customer" && login === true && (
           <Box>
             <Notification />
@@ -358,7 +387,6 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
-      {/* <ConnectedProductBox cartItemCount={cartItemCount} */}
     </Box>
   );
 }
