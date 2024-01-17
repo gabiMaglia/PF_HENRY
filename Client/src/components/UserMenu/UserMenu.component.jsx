@@ -97,7 +97,9 @@ const UserMenu = () => {
                 {initialLetersUsers.name + initialLetersUsers.surname}
               </Typography>
             </Avatar>
-            <Typography sx={{ fontWeight:600, maxWidth: "8em", textAlign: "center" }}>
+            <Typography
+              sx={{ fontWeight: 600, maxWidth: "8em", textAlign: "center" }}
+            >
               {name?.split(" ")[0]} <br /> {surname?.split(" ")[0]}
             </Typography>
           </IconButton>
@@ -156,9 +158,7 @@ const UserMenu = () => {
               to={item.path}
               key={item.name}
               style={{ textDecoration: "none", color: "inherit" }}
-              sx= {{
-             
-              }}
+              sx={{}}
             >
               <MenuItem
                 onClick={() => {
