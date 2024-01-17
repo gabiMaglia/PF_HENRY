@@ -122,16 +122,15 @@ const UserPanelComponent = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        //height: "97vh",
-        marginBottom: { xxs: "100px", xs: "100px" },
+        height: "97vh",
         minHeight: "500px",
         width: "100%",
         mt: "1.2em",
         [theme.breakpoints.down("sm")]: {
           mt: ".5em",
         },
-        [theme.breakpoints.down("xxs")]: {
-          mb: "6.25em",
+        [theme.breakpoints.down("xs")]: {
+          mb: "100px",
         },
       }}
     >
@@ -139,7 +138,7 @@ const UserPanelComponent = () => {
       <Box
         sx={{
           width: "15%",
-          //minHeight: "1vh",
+          minHeight: "1vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
