@@ -23,14 +23,16 @@ import {
   addToCarouselProduct,
   fetchUpdateProduct,
 } from "../../services/productServices";
+import { fetchCategories } from "../../services/categoriesServices";
+import { fetchBrands } from "../../services/brandsServices";
 // SWEET ALERT
 import Swal from "sweetalert2";
-import { fetchCategories } from "../../services/categoriesServices";
 
 const ProductsTable = () => {
   const editingRow = useRef(null);
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
+  const brands = useSelector((state) => state.brands.brands); 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -71,38 +73,26 @@ const ProductsTable = () => {
       },
     },
     {
-      field: "warranty",
-      headerName: "Garantía",
-      width: 100,
-      headerAlign: "center",
-      editable: true,
-    },
-    {
-      field: "is_deleted",
-      headerName: "Borrado",
-      type: Boolean,
-      width: 100,
-      headerAlign: "center",
-    },
-    {
-      field: "soldCount",
-      headerName: "Vendidos",
-      width: 100,
-      headerAlign: "center",
-      editable: true,
-    },
-    {
-      field: "carousel",
-      headerName: "Carousel",
-      width: 80,
-      headerAlign: "center",
-    },
-    {
       field: "brand",
       headerName: "Marca",
-      width: 150,
+      width: 200,
       headerAlign: "center",
       editable: true,
+      renderCell: (params) => (
+        <Select
+          value={params.value}
+          onChange={(e) =>
+            handleBrandChange(params.id, e.target.value, params.row)
+          }
+          sx={{ width: "100%" }}
+        >
+          {brands.map((brand) => (
+            <MenuItem key={brand.id} value={brand.name}>
+              {brand.name}
+            </MenuItem>
+          ))}
+        </Select>
+      ),
     },
     {
       field: "category",
@@ -127,11 +117,38 @@ const ProductsTable = () => {
       ),
     },
     {
+      field: "warranty",
+      headerName: "Garantía",
+      width: 100,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
       field: "stock",
       headerName: "Stock",
       width: 80,
       headerAlign: "center",
       editable: true,
+    },
+    {
+      field: "soldCount",
+      headerName: "Vendidos",
+      width: 100,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
+      field: "carousel",
+      headerName: "Carousel",
+      width: 80,
+      headerAlign: "center",
+    },
+    {
+      field: "is_deleted",
+      headerName: "Borrado",
+      type: Boolean,
+      width: 100,
+      headerAlign: "center",
     },
   ];
 
@@ -167,6 +184,7 @@ const ProductsTable = () => {
   useEffect(() => {
     getProducts();
     fetchCategories(dispatch);
+    fetchBrands(dispatch);
   }, []);
 
   const handleCellEditStart = (params) => {
@@ -185,26 +203,83 @@ const ProductsTable = () => {
   };
 
   const handleCategoryChange = async (productId, newCategory, currentRow) => {
-    const response = await fetchUpdateProduct(
-      productId,
-      {
-        categoryName: newCategory,
-      },
-      authData.jwt
-    );
-    if (response.status === 200) {
+    try {
       Swal.fire({
-        icon: "success",
-        title: "Operación Exitosa",
-        text: "Categoria actualizada correctamente",
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
       });
-      getProducts();
-      return newCategory;
-    } else {
+      Swal.showLoading();
+      const response = await fetchUpdateProduct(
+        productId,
+        {
+          price: currentRow.price,
+          categoryName: newCategory,
+        },
+        authData.jwt
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Operación Exitosa",
+          text: "Categoria actualizada correctamente",
+        });
+        getProducts();
+        return newCategory;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Operación fallida",
+          text: "No se pudo actualizar la categoria",
+        });
+      }
+    } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Operación fallida",
-        text: "No se pudo actualizar la categoria",
+        title: "Error Desconocido",
+        text: "Ha ocurrido un error al intentar actualizar la categoría",
+      });
+    }
+  };
+
+  const handleBrandChange = async (productId, newBrand, currentRow) => {
+    try {
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+      });
+      Swal.showLoading();
+      const response = await fetchUpdateProduct(
+        productId,
+        {
+          price: currentRow.price,
+          brandName: newBrand,
+        },
+        authData.jwt
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Operación Exitosa",
+          text: "Categoria actualizada correctamente",
+        });
+        getProducts();
+        return newBrand;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Operación fallida",
+          text: "No se pudo actualizar la categoria",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error Desconocido",
+        text: "Ha ocurrido un error al intentar actualizar la categoría",
       });
     }
   };
@@ -406,7 +481,7 @@ const ProductsTable = () => {
             columnVisibilityModel: {
               id: false,
               warranty: false,
-              is_deleted: false,
+              // is_deleted: false,
             },
           },
         }}

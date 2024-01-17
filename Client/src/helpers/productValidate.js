@@ -85,87 +85,93 @@ export const validationsCreate=(values)=>{
 
 
 export const validateField = async (fieldName, value) => {
-   const error={}
+  const error = {};
 
+  switch (fieldName) {
+    case "name":
+      if (value.length === 0 || value === "") {
+        error.e1 = "El nombre del producto es requerido";
+      } else if (value.length < 8 || value.length > 100) {
+        error.e1 = "El nombre debe tener entre 8 y 100 caracteres";
+      }
+      break;
 
-   switch (fieldName) {
-     case "name":
-       if (value.length === 0 || value === "") {
-         error.e1= "El nombre del producto es requerido";
-       }
-       break;
- 
-     case "price":
-       if (value.length === 0 || value === "") {
-         error.e2= "El precio del producto es requerido";
-       } else if (!/^[0-9]*\.?[0-9]*$/.test(value)) {
-         error.e9 ="El precio debe tener solamente números";
-       }
-       break;
- 
-     case "description":
-       if (value.length === 0 || value === "") {
-         error.e3='la descripcion del producto es requerida'
-       }
-       break;
- 
-     case "images":
-      case"imageUrl":
-       if (value.length === 0) {
-         error.e11='Por Favor ingrese una imagen'
-       }
-       // Validar cada imagen individualmente
-       const invalidImages = await validarFormatoImagen(value);
-       if (!invalidImages) {
-         error.e4 = 'verifique el formato de sus imagenes';
-       }
-       break;
- 
-     case "brandName":
-      case "newBrand":
-       if (
-         value.length === 0 ||
-         value === "" ||
-         value === "Selecciona una marca"
-       ) {
-         error.e5='la marca del producto es requerida'
-       } else if (!esMayuscula(value)) {
-         error.e13='la primer letra debe ser mayuscula'
-       }
-       break;
- 
-     case "categoryName":
-      case "newCategory":
-       if (
-         value.length === 0 ||
-         value[0] === "Selecciona una categoria" ||
-         value[0] === "" ||
-         value === "Selecciona una categoria"
-       ) {
-         error.e6='seleccione la categoria de su producto'
-       } else if (!esMayuscula(value[0])) {
-         error.e12='la primer letra debe ser mayuscula'
-       }
-       break;
- 
-     case "warranty":
-       if (value.length === 0 || value === "") {
-         error.e7='especifique la garantia del producto'
-       }
-       break;
- 
-     case "stock":
-       if (value.length === 0 || value === "" || value === "0") {
-         error.e8='el stock del producto es requerido'
-       } else if (!/^[0-9]*\.?[0-9]*$/.test(value)) {
-         error.e10='el stock debe tener solamente numeros'
-       }
-       break;
- 
- 
-     default:
-       break;
-   }
- 
-   return error; 
- };
+    case "price":
+      if (value.length === 0 || value === "") {
+        error.e2 = "El precio del producto es requerido";
+      } else if (!/^[0-9]*\.?[0-9]*$/.test(value)) {
+        error.e9 = "El precio debe tener solamente números";
+      }
+      break;
+
+      case "description":
+        if (value.length === 0 || value === "") {
+          error.e3 = "La descripción del producto es requerida";
+        } else if (value.length <= 10) {
+          error.e3 = "La descripción debe tener más de 10 caracteres";
+        }
+        break;
+
+    case "images":
+    case "imageUrl":
+      if (value.length === 0) {
+        error.e11 = "Por favor, ingrese una imagen";
+      } else {
+        // Validar cada imagen individualmente
+        const invalidImages = await validarFormatoImagen(value);
+        if (!invalidImages) {
+          error.e4 = "Verifique el formato de sus imágenes";
+        }
+      }
+      break;
+
+    case "brandName":
+    case "newBrand":
+      if (
+        value.length === 0 ||
+        value === "" ||
+        value === "Selecciona una marca"
+      ) {
+        error.e5 = "La marca del producto es requerida";
+      } else if (!esMayuscula(value)) {
+        error.e13 = "La primer letra debe ser mayúscula";
+      }
+      break;
+
+    case "categoryName":
+    case "newCategory":
+      if (
+        value.length === 0 ||
+        value[0] === "Selecciona una categoria" ||
+        value[0] === "" ||
+        value === "Selecciona una categoria"
+      ) {
+        error.e6 = "Seleccione la categoria de su producto";
+      } else if (!esMayuscula(value[0])) {
+        error.e12 = "La primer letra debe ser mayúscula";
+      }
+      break;
+
+      case "warranty":
+        const warrantyRegex = /^(\d+)\s*(meses|años)$/i;
+        if (!warrantyRegex.test(value)) {
+          error.e7 = "Formato de garantía inválido. Use un número seguido de 'meses' o 'años'.";
+        }
+        break;
+      
+
+    case "stock":
+      if (value.length === 0 || value === "" || value === "0") {
+        error.e8 = "El stock del producto es requerido";
+      } else if (!/^[0-9]*\.?[0-9]*$/.test(value)) {
+        error.e10 = "El stock debe tener solamente números";
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return error;
+};
+
