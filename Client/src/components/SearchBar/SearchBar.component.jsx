@@ -3,17 +3,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //MATERIAL UI
-import {
-  Input,
-  Box,
-  Button,
-  styled,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Input, Box, Button, styled, Typography } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -38,12 +30,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import img from "/icons/logo.svg";
 //FIREBASE
 import { userSearchEvent } from "../../services/firebaseAnayticsServices";
-import {
-  fetchDeleteHistoryItem,
-  fetchHistoryUSer,
-  fetchPostHistoryItem,
-} from "../../services/historyUserService";
-import Swal from "sweetalert2";
+import { fetchHistoryUSer } from "../../services/historyUserService";
 export default function SearchAppBar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -60,38 +47,33 @@ export default function SearchAppBar() {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [aux, setAux] = useState(false);
+  const [prueba, setPrueba] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
-
-  const isHistoryUserItem = (suggestion) => {
-    if(suggestion==='el usuario aun no posee historial.'){
-      return false
+  useEffect(() => {
+    if (typeof historyUser === "string" || historyUser instanceof String) {
+      setPrueba([historyUser]);
+    } else {
+      setPrueba(
+        historyUser.length && historyUser.map((history) => history.value)
+      );
     }
-    return historyUser.some((history) => history.value === suggestion);
-  };
+  }, [historyUser]);
 
   useEffect(() => {
     dispatch(addItem());
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
     }
-  }, [login, aux]);
+  }, [login]);
 
   useEffect(() => {
     const newSuggestions = login
-      ? historyUser.map((history) => history.value)
-      : ["el usuario no posee historial"];
+      ? prueba.length
+        ? prueba
+        : ["el usuario no tiene registro de historial"]
+      : ["sin historial, debe loguearse para tener historial"];
     setSuggestions(newSuggestions);
-  }, [login, historyUser]);
-
-  useEffect(() => {
-    dispatch(addItem());
-    if (login) {
-      fetchHistoryUSer(authData.userId, dispatch);
-    } else {
-      setSuggestions(["el usuario debe loguearse para tener historial."]);
-    }
   }, [login]);
 
   const Img = styled("img")({
@@ -108,19 +90,8 @@ export default function SearchAppBar() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    Swal.fire({
-      icon: "info",
-      allowOutsideClick: false,
-      title: "Por favor espere mientras procesamos la información",
-      showConfirmButton: false,
-    });
-    Swal.showLoading();
-    login && (await fetchPostHistoryItem(authData.userId, inputName, dispatch));
     await fetchSearch(inputName)(dispatch);
-    setAux(!aux);
-    setInputValue("");
     userSearchEvent(inputName);
-    Swal.close();
     navigate(PATHROUTES.PRODUCTS);
   };
 
@@ -154,9 +125,8 @@ export default function SearchAppBar() {
       return;
     }
 
-    const matchingSuggestions = suggestions.filter(
-      (suggestion) =>
-        suggestion && suggestion.toLowerCase().includes(value.toLowerCase())
+    const matchingSuggestions = suggestions.filter((suggestion) =>
+      suggestion.toLowerCase().includes(value.toLowerCase())
     );
 
     setAutocompleteSuggestions(matchingSuggestions);
@@ -172,13 +142,6 @@ export default function SearchAppBar() {
   useEffect(() => {
     handleAutocomplete(inputName);
   }, [inputName]);
-
-const handleDelete=(event)=>{
- fetchDeleteHistoryItem(authData.userId,event.target.id,dispatch)
- console.log("todo ok")
- setAux(!aux)
- console.log(historyUser)
-}
 
   return (
     <Box
@@ -240,7 +203,7 @@ const handleDelete=(event)=>{
           }}
           disableUnderline
         />
-        {showAutocomplete && (
+        {isInputFocused && showAutocomplete && (
           <Box
             sx={{
               position: "absolute",
@@ -251,40 +214,22 @@ const handleDelete=(event)=>{
               backgroundColor: "white",
               boxShadow: 3,
               borderRadius: 2,
-              width: "93%",
               maxHeight: 200,
               overflowY: "auto",
             }}
           >
             {autocompleteSuggestions.map((suggestion, index) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
+              <div
+                key={index}
+                onMouseDown={() => handleAutocompleteSelect(suggestion)}
+                style={{
+                  padding: "8px",
+                  cursor: "pointer",
+                  borderBottom: "1px solid #ccc",
                 }}
               >
-                <Box
-                  key={index}
-                  onMouseDown={() => handleAutocompleteSelect(suggestion)}
-                  style={{
-                    padding: "8px",
-                    cursor: "pointer",
-                    borderBottom: "1px solid #ccc",
-                  }}
-                >
-                  {suggestion}
-                </Box>
-                {isHistoryUserItem(suggestion) && (
-                  <DeleteIcon
-                    sx={{
-                      fontSize: "xx-large",
-                    }}
-                    onClick={(e)=>{handleDelete(e)}}
-                    id={suggestion}
-                  />
-                )}
-              </Box>
+                {suggestion}
+              </div>
             ))}
           </Box>
         )}
