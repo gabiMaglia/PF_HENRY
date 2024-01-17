@@ -224,7 +224,7 @@ const UsersTable = () => {
       getUsers();
       let responses = "";
       response.forEach((value) => {
-        responses = responses + "*****" + value.data.response;
+        responses = value.data.response;
       });
       Swal.fire({
         icon: "success",
