@@ -91,12 +91,8 @@ export const validateField = async (fieldName, value) => {
     case "name":
       if (value.length === 0 || value === "") {
         error.e1 = "El nombre del producto es requerido";
-      } else if (value.length < 8 || value.length > 100) {
+      } else if (value.length < 4 || value.length > 100) {
         error.e1 = "El nombre debe tener entre 8 y 100 caracteres";
-      }else if ((value.match(/[a-zA-Z]/g) || []).length < 4) {
-        error.e1 = "El nombre debe contener al menos 4 letra";
-      } else if (/^\d/.test(value)) {
-        error.e1 = "El nombre no puede empezar con números";
       }
       break;
 
