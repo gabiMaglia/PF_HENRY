@@ -93,6 +93,10 @@ export const validateField = async (fieldName, value) => {
         error.e1 = "El nombre del producto es requerido";
       } else if (value.length < 8 || value.length > 100) {
         error.e1 = "El nombre debe tener entre 8 y 100 caracteres";
+      }else if ((value.match(/[a-zA-Z]/g) || []).length < 4) {
+        error.e1 = "El nombre debe contener al menos 4 letra";
+      } else if (/^\d/.test(value)) {
+        error.e1 = "El nombre no puede empezar con números";
       }
       break;
 
@@ -153,9 +157,9 @@ export const validateField = async (fieldName, value) => {
       break;
 
       case "warranty":
-        const warrantyRegex = /^(\d+)\s*(meses|años)$/i;
+        const warrantyRegex = /^(\d+)\s*(mes|meses|años)$/i;
         if (!warrantyRegex.test(value)) {
-          error.e7 = "Formato de garantía inválido. Use un número seguido de 'meses' o 'años'.";
+          error.e7 = "Formato de garantía inválido. Use un número seguido de 'mes' o 'meses' o 'años'.";
         }
         break;
       
