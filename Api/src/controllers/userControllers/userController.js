@@ -150,7 +150,7 @@ const editUserById = async (
   const isEmailDifferent = email !== user.email;
 
   if (email !== "" && isEmailDifferent) {
-    const confirmationEmailToken = tokenSign(user.id, '2d')
+    const confirmationEmailToken = tokenSign({userID : user.id}, '2d')
     await sendConfirmationEmail(
       process.env.EMAIL_MAILER,
       email,
