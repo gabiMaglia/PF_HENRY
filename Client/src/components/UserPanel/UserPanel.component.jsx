@@ -25,7 +25,7 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 import { useTheme } from "@mui/system";
 
 const UserPanelComponent = () => {
-  const theme = useTheme()
+  const theme = useTheme();
   const navigate = useNavigate();
   const actualLocation = useLocation().pathname;
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
@@ -122,7 +122,8 @@ const UserPanelComponent = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        height: "97vh",
+        //height: "97vh",
+        marginBottom: { xxs: "100px", xs: "100px" },
         minHeight: "500px",
         width: "100%",
         mt: "1.2em",
@@ -138,7 +139,7 @@ const UserPanelComponent = () => {
       <Box
         sx={{
           width: "15%",
-          minHeight: "1vh",
+          //minHeight: "1vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -277,7 +278,7 @@ const UserPanelComponent = () => {
       <Box
         sx={{
           width: "15%",
-          minHeight: "1vh",
+          //minHeight: "1vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

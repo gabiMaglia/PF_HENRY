@@ -135,7 +135,6 @@ const UsersTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
-
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
       switch (user.rolId) {
@@ -286,13 +285,14 @@ const UsersTable = () => {
   return (
     <Box
       sx={{
-        width: "100%",
+        //width: "100%",
         position: "relative",
-        maxWidth: "70%",
-        height: "95%",
+        maxWidth: "75%",
+        height: { xxs: "70%", xs: "70%", sm: "90%", md: "90%" },
         minHeight: "10vh",
         textAlign: "center",
-        mt: "1em",
+        mt: "2em",
+        mb: "2em",
       }}
     >
       <StyledDataGrid
