@@ -1,14 +1,12 @@
 const transporter = require("../config/mailer");
-const jwt = require("jsonwebtoken");
 
 const sendConfirmationEmail = async (
   adminEmail,
   userEmail,
-  userID,
-  token,
+  jwtToken,
   gateway
 ) => {
-  let jwtToken = jwt.sign({ userID }, token);
+   console.log({tokenTemplate: jwtToken})
   const confirmationUrl = `${gateway}/account/confirm/${jwtToken}`;
 
 
@@ -146,15 +144,10 @@ const sendConfirmationEmail = async (
 const sendResetPasswordEmail = async (  
   adminEmail,
   userEmail,
-  userId,
-  secret,
+  jwtToken,
   gateway
 ) => {
-  
-  let jwtToken = jwt.sign({ userEmail, userId }, secret);
   const resetPasswordUrl = `${gateway}/change_password/${jwtToken}`;
-  // console.log(confirmationUrl);
-
   await transporter
     .sendMail({
       from: adminEmail,

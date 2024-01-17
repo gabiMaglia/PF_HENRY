@@ -1,6 +1,7 @@
 require("dotenv").config();
 const {
-  sendConfirmationEmail, sendResetPasswordEmail,
+  sendConfirmationEmail,
+  sendResetPasswordEmail,
 } = require("../../utils/emailTemplates.js");
 const {
   tokenSign,
@@ -16,7 +17,6 @@ const {
 } = require("../../db.js");
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const {
   extractJwtToken,
   sessionFlag,
@@ -26,7 +26,8 @@ const {
 let blacklistCounter = 100;
 
 const confirmAccountController = async (token) => {
-  const tokenDecode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const tokenDecode = await verifyToken(token);
+
   if (!tokenDecode.userID) {
     return {
       error: true,
@@ -100,11 +101,13 @@ const registerUser = async (userObj) => {
     include: [UserAddress, { model: UserRole, as: "role" }],
   });
 
-  sendConfirmationEmail(
+  const confirmationEmailToken = tokenSign({userID : newUser.id}, '2d')
+
+
+  await sendConfirmationEmail(
     process.env.EMAIL_MAILER,
-    userObj.email,
-    newUser.id,
-    process.env.JWT_SECRET_KEY,
+    newUser.email,
+    confirmationEmailToken,
     process.env.API_URL
   );
 
@@ -129,8 +132,14 @@ const loginUser = async (user) => {
     };
   }
   const { role_name } = await UserRole.findByPk(user.rolId);
+
   // CON TODA ESTA DATA CREAMOS EL TOKEN DE AUTENTICACION
-  const tokenSession = tokenSign(user.id, user.username, role_name);
+  const dataForToken = {
+    userId: user.id,
+    username: `${user.name} ${user.surname}`,
+    userRole: role_name,
+  };
+  const tokenSession = tokenSign(dataForToken);
   // RETORNAMOS AL FRONTEND EL TOKEN EL USUARIO Y EL ROL Y LA VERIFICACION DE MATCH DE PASSWORDS
   return {
     login: true,
@@ -167,45 +176,57 @@ const logOutUser = async (token) => {
 };
 // PASSWORD RESET
 const sendEmailToResetPassword = async (email) => {
-  const user = await User.findOne({where: {email: email}})
- const response = await sendResetPasswordEmail(
+  const user = await User.findOne({ where: { email: email } });
+  const dataForToken = {
+    email: user.email,
+    id: user.id,
+  };
+  const resetToken = tokenSign(dataForToken);
+  const response = await sendResetPasswordEmail(
     process.env.EMAIL_MAILER,
     email,
-    user.id,
-    process.env.JWT_SECRET_KEY,
+    resetToken,
     process.env.FRONTEND_URL
   );
-  return response
+  console.log(response);
+  return response;
 };
 const resetPassword = async (newPassword, token) => {
-  const isValid = await verifyToken(token);
-
-  if(!isValid) {
+  const userDataFromtoken = await verifyToken(token);
+  if (!userDataFromtoken) {
     return {
       error: true,
-      response: "Token incorrectas",
+      response: "Token incorrecto",
     };
   }
-  const user = await UserCredentials.findOne({
-    where: { UserId: isValid.userId },
+  const user = await User.findByPk(userDataFromtoken.id)
+  const userCredentials = await UserCredentials.findOne({
+    where: { UserId: userDataFromtoken.id },
   });
   
-  if (!user) {
+  if (userDataFromtoken.email !== user.email) {
+   
+    return {
+      error: true,
+      response: "Token incorrecto",
+    };
+  }
+  if (!userCredentials) {
     return {
       error: true,
       response: "Credenciales no encontradas",
     };
-  }else {
-    await user.update({password: await bcrypt.hash(newPassword, 8)})
-    await user.save()
+  } else {
+    await BlackListedTokens
+    await userCredentials.update({ password: await bcrypt.hash(newPassword, 8) });
+    await userCredentials.save();
     return {
       error: false,
-      response: 'Password actualizado'
-    }
+      response: "Password actualizado",
+    };
   }
-
 };
-// 
+//
 const deleteActivateUserById = async (id) => {
   const user = await User.findByPk(id);
   const newState = user.isDeleted;

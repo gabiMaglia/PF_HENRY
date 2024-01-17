@@ -9,6 +9,7 @@ const dataSorterForApp = (data) => {
   const decodeToken = JSON.parse(atob(data.tokenSession.split(".")[1]));
   return { ...data, userRole: decodeToken.userRole };
 };
+
 export const loginUser = async (username, password, cookieStatus) => {
   try {
     const { data } = await axios.post(

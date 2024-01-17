@@ -52,9 +52,8 @@ const LoginModal = ({
 
   const handledispatch = async (userId, authData) => {
     const user = await getUserById(userId, authData);
-
     dispatch(logUser({ userObject: user }));
-    await dispatch(fetchProductCartGet(cookiesAccepted));
+    dispatch(fetchProductCartGet(cookiesAccepted));
     dispatch(addItem());
   };
 
