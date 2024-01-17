@@ -2,13 +2,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Select, MenuItem, Autocomplete, TextField } from "@mui/material";
+import { Box, Select, MenuItem } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
   esES,
 } from "@mui/x-data-grid";
-import { useGridApiContext } from "@mui/x-data-grid";
 //COMPONENT
 import LoadingProgress from "../Loading/Loading.component";
 import {
@@ -44,46 +43,6 @@ const ServicesTable = () => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
   const statuses = [...serviceStatuses.progress, serviceStatuses.cancel];
-
-  function SelectEditInputCell(props) {
-    const { id, value, field } = props;
-    const apiRef = useGridApiContext();
-
-    const handleChange = async (event) => {
-      await apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: event.target.value,
-      });
-      apiRef.current.stopCellEditMode({ id, field });
-    };
-    return (
-      <Select
-        value={value}
-        onChange={handleChange}
-        size="small"
-        sx={{ height: 1 }}
-        native
-        autoFocus
-        fullWidth
-      >
-        {technicians.map((technician) => {
-          return (
-            <option
-              key={technician.id}
-              value={technician?.name + " " + technician?.surname}
-            >
-              {technician?.name + " " + technician?.surname}
-            </option>
-          );
-        })}
-      </Select>
-    );
-  }
-
-  const renderSelectEditInputCell = (params) => {
-    return <SelectEditInputCell {...params} />;
-  };
 
   const columns = [
     {
@@ -125,11 +84,34 @@ const ServicesTable = () => {
     },
     {
       field: "technicianName",
-      renderEditCell: renderSelectEditInputCell,
       headerName: "Técnico",
-      minWidth: 150,
+      minWidth: 250,
       headerAlign: "center",
       editable: true,
+      renderCell: (params) => (
+        <Select
+          value={params.value}
+          onChange={(e) =>
+            handleTechnicianChange(
+              params.id,
+              e.target.value,
+              params.row.technicianId
+            )
+          }
+          sx={{ width: "100%" }}
+        >
+          {technicians.map((technician) => {
+            return (
+              <MenuItem
+                key={technician.id}
+                value={technician?.name + " " + technician?.surname}
+              >
+                {technician?.name + " " + technician?.surname}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      ),
     },
     {
       field: "user_diagnosis",
@@ -153,15 +135,13 @@ const ServicesTable = () => {
     {
       field: "status",
       headerName: "Estado",
-      minWidth: 200,
+      minWidth: 250,
       headerAlign: "center",
       editable: true,
       renderCell: (params) => (
         <Select
           value={params.value}
-          onChange={(e) =>
-            handleStatusChange(params.id, e.target.value)
-          }
+          onChange={(e) => handleStatusChange(params.id, e.target.value)}
           sx={{ width: "100%" }}
         >
           {statuses.map((status) => (
@@ -237,6 +217,53 @@ const ServicesTable = () => {
     }
   };
 
+  const handleTechnicianChange = async (
+    id,
+    newTechnicianName,
+    technicianId
+  ) => {
+    console.log("TECH ID", technicianId);
+    try {
+      const newTechnician = technicians.find(
+        (technician) =>
+          technician.name + " " + technician.surname === newTechnicianName
+      );
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+      });
+      Swal.showLoading();
+      const response = await updateService(
+        id,
+        { technicianId: newTechnician.id, technicianName: newTechnicianName },
+        authData.jwt
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Actualización Exitosa",
+          text: "El técnico ha sido actualizado correctamente",
+        });
+        getAllServices();
+        return newTechnicianName;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Actualización Erronea",
+          text: "Hubo un error al actualizar el técnico del servicio",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error Desconocido",
+        text: "Ha ocurrido un error al intentar actualizar el técnico",
+      });
+    }
+  };
+
   const handleStatusChange = async (id, newStatus) => {
     try {
       Swal.fire({
@@ -254,16 +281,16 @@ const ServicesTable = () => {
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
-          title: "Actualización exitosa",
-          text: "El estado ha sido actualizado correctamente.",
+          title: "Actualización Exitosa",
+          text: "El estado ha sido actualizado correctamente",
         });
         getAllServices();
         return newStatus;
       } else {
         Swal.fire({
           icon: "error",
-          title: "Error al actualizar el estado",
-          text: "Hubo un error al actualizar el estado del servicio.",
+          title: "Actualizacion Erronea",
+          text: "Hubo un error al actualizar el estado del servicio",
         });
       }
     } catch (error) {
@@ -342,13 +369,9 @@ const ServicesTable = () => {
     }
   };
 
-  const processRowUpdate = async (newRow, antRow) => {
-    console.log("Desde process")
+  const processRowUpdate = async (newRow) => {
     try {
-      const notTechnicianChange =
-        newRow.technicianName === antRow.technicianName;
-      const serviceId = newRow.id;
-      if (availableModify || !notTechnicianChange) {
+      if (availableModify) {
         Swal.fire({
           icon: "info",
           allowOutsideClick: false,
@@ -356,48 +379,35 @@ const ServicesTable = () => {
           showConfirmButton: false,
         });
         Swal.showLoading();
-      }
-      let response;
-      if (availableModify && notTechnicianChange) {
-        response = await updateService(serviceId, newRow, authData.jwt);
-      } else if (!notTechnicianChange) {
-        technicians.forEach((technician) => {
-          if (
-            technician.name + " " + technician.surname ===
-            newRow.technicianName
-          ) {
-            newRow.technicianName = technician.name + " " + technician.surname;
-            newRow.technicianId = technician.id;
-          }
-        });
-        response = await updateService(serviceId, newRow, authData.jwt);
-      } else {
-        return antRow;
-      }
-      if (response.status === 200) {
-        setRows((prevRows) =>
-          prevRows.map((row) =>
-            row.id === editingRow.current?.id ? newRow : row
-          )
-        );
-        setServices((prevServices) =>
-          prevServices.map((service) =>
-            service.id === newRow.id ? { ...service, ...newRow } : service
-          )
-        );
-        Swal.fire({
-          icon: "success",
-          title: "Edición exitosa",
-          text: "El servicio ha sido editado correctamente.",
-        });
-        return newRow;
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error al actualizar",
-          text: "Hubo un error al actualizar el servicio.",
-        });
-        return antRow;
+        setAvailableModify(false);
+        const serviceId = newRow.id;
+
+        const response = await updateService(serviceId, newRow, authData.jwt);
+
+        if (response.status === 200) {
+          setRows((prevRows) =>
+            prevRows.map((row) =>
+              row.id === editingRow.current?.id ? newRow : row
+            )
+          );
+          setServices((prevServices) =>
+            prevServices.map((service) =>
+              service.id === newRow.id ? { ...service, ...newRow } : service
+            )
+          );
+          Swal.fire({
+            icon: "success",
+            title: "Edición exitosa",
+            text: "El servicio ha sido editado correctamente.",
+          });
+          return newRow;
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error al actualizar",
+            text: "Hubo un error al actualizar el servicio.",
+          });
+        }
       }
     } catch (error) {
       throw new Error("Error al comunicarse con el servidor", error);
