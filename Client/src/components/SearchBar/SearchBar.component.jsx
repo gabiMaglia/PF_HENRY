@@ -88,7 +88,9 @@ export default function SearchAppBar() {
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
     } else {
-      setAutocompleteSuggestions(["el usuario debe loguearse para tener historial."]);
+      setAutocompleteSuggestions([
+        "el usuario debe loguearse para tener historial.",
+      ]);
     }
   }, [login, aux]);
 
@@ -152,7 +154,9 @@ export default function SearchAppBar() {
       return;
     }
     if (!login) {
-      setAutocompleteSuggestions(["Para tener historial por favor regístrese."]);
+      setAutocompleteSuggestions([
+        "Para tener historial por favor regístrese.",
+      ]);
       setShowAutocomplete(true);
       return;
     }
@@ -177,7 +181,7 @@ export default function SearchAppBar() {
     handleAutocomplete(inputValue);
   }, [inputValue, historyUser, aux]);
 
-  const handleDelete = async (event) => {
+  const handleDelete = async (value) => {
     Swal.fire({
       icon: "info",
       allowOutsideClick: false,
@@ -185,10 +189,9 @@ export default function SearchAppBar() {
       showConfirmButton: false,
     });
     Swal.showLoading();
-    const deletedItem = event.target.id;
-    await fetchDeleteHistoryItem(authData.userId, deletedItem, dispatch);
+    await fetchDeleteHistoryItem(authData.userId, value, dispatch);
     setAutocompleteSuggestions((prevSuggestions) =>
-      prevSuggestions.filter((suggestion) => suggestion !== deletedItem)
+      prevSuggestions.filter((suggestion) => suggestion !== value)
     );
     setShowAutocomplete(false);
     setAux(!aux);
@@ -305,10 +308,15 @@ export default function SearchAppBar() {
                     }}
                     id={suggestion}
                     onClick={(e) => {
-                      handleDelete(e);
+                      handleDelete(e.target.id);
                     }}
                   >
-                    BORRAR
+                    <DeleteIcon
+                    id={suggestion}
+                      onClick={(e) => {
+                        handleDelete(suggestion);
+                      }}
+                    />
                   </Button>
                 )}
               </Box>
