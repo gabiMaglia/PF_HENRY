@@ -25,7 +25,7 @@ import { logUser } from "../../redux/slices/userSlice";
 import {
   googleLoginUser,
   loginUser,
-  senResetPasswordEmail,
+  sendResetPasswordEmail,
 } from "../../services/authServices";
 import { getUserById } from "../../services/userServices";
 //SWEET ALERT
@@ -178,7 +178,7 @@ const LoginModal = ({
       errors
     );
     if (errors.email.length === 0 && actErrors.email.length === 0) {
-      const response = await senResetPasswordEmail(user.email);
+      const response = await sendResetPasswordEmail(user.email);
       if (response?.status === 200) {
         Swal.fire({
           allowOutsideClick: false,
