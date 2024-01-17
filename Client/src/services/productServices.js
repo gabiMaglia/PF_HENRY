@@ -45,7 +45,12 @@ export const fetchSearch = (name) => async (dispatch) => {
     );
 
     if (filteredProducts.length == 0) {
-      Swal.fire("Producto no existente", "", "error");
+     await Swal.fire({
+        icon: "error",
+        title: "No se encontro coincidencias en la busqueda",
+        text: "Error en la busqueda",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ok",})
     } else {
       dispatch(search(filteredProducts));
     }
