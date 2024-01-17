@@ -70,7 +70,7 @@ const UsersTable = () => {
       renderCell: (params) => (
         <Select
           value={params.value}
-          onChange={(e) => handleRolChange(params.id, e.target.value)}
+          onChange={(e) => handleRoleChange(params.id, e.target.value, params.row.rolId)}
           sx={{ width: "100%" }}
         >
           {userRoles.map((role) => (
@@ -177,7 +177,7 @@ const UsersTable = () => {
     addRole(response.data, roles.data);
   };
 
-  const handleRolChange = async (id, newRol) => {
+  const handleRoleChange = async (id, newRole) => {
     try {
       Swal.fire({
         icon: "info",
@@ -186,7 +186,7 @@ const UsersTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
-      const response = await getUserRoles(id, { role: newRol }, authData.jwt);
+      const response = await getUserRoles(id, { role: newRole }, authData.jwt);
       if (response.status === 200) {
         Swal.fire({
           icon: "success",
@@ -194,7 +194,8 @@ const UsersTable = () => {
           text: "El rol ha sido actualizado correctamente",
         });
         getAllUsers();
-        return newRol;
+        console.log("ROLE", newRole);
+        return newRole;
       } else {
         Swal.fire({
           icon: "error",
