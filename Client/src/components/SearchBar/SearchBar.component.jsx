@@ -36,7 +36,7 @@ export default function SearchAppBar() {
   const cartItemCount = useSelector((state) => state.cart.items.length);
   const { login } = useSelector((state) => state.user);
   const { historyUser } = useSelector((state) => state.historyUser);
-  console.log(historyUser)
+  console.log(historyUser);
   const { inputName } = useSelector((state) => state.product);
   const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const [registerModalIsOpen, setRegisterModalIsOpen] = useState(false);
@@ -47,18 +47,18 @@ export default function SearchAppBar() {
   const [showAutocomplete, setShowAutocomplete] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [prueba,setPrueba] =useState([]) 
+  const [prueba, setPrueba] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    if (typeof historyUser === 'string' || historyUser instanceof String) {
-      setPrueba([historyUser])
+    if (typeof historyUser === "string" || historyUser instanceof String) {
+      setPrueba([historyUser]);
     } else {
-      setPrueba(historyUser.length && historyUser.map((history) => history.value))
+      setPrueba(
+        historyUser.length && historyUser.map((history) => history.value)
+      );
     }
   }, [historyUser]);
-
-
 
   useEffect(() => {
     dispatch(addItem());
@@ -71,7 +71,7 @@ export default function SearchAppBar() {
     const newSuggestions = login
       ? prueba.length
         ? prueba
-        : ['el usuario no tiene registro de historial']
+        : ["el usuario no tiene registro de historial"]
       : ["sin historial, debe loguearse para tener historial"];
     setSuggestions(newSuggestions);
   }, [login]);
@@ -100,7 +100,6 @@ export default function SearchAppBar() {
       handleSubmit(event);
     }
   };
-
 
   const handleCartClick = () => {
     navigate(PATHROUTES.SHOPCART);
@@ -144,7 +143,7 @@ export default function SearchAppBar() {
         mb: 1,
         flexGrow: 1,
         display: "flex",
-        flexDirection: { xs: "column", lg: "row" },
+        flexDirection: { xxs: "column", xs: "column", lg: "row" },
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -166,7 +165,7 @@ export default function SearchAppBar() {
       </Box>
       <Box
         sx={{
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           border: 2,
           borderRadius: 2,
           borderTopRightRadius: 50,
@@ -252,7 +251,7 @@ export default function SearchAppBar() {
         sx={{
           display: "flex",
           flexDirection: "row",
-          mt: { xs: 2 },
+          mt: { xxs: 2, xs: 2 },
           alignItems: "center",
           justifyContent: "space-around",
           gap: "3em",

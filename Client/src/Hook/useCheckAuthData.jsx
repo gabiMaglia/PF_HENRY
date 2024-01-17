@@ -31,7 +31,7 @@ const useCheckAuthData = (openLoginModal) => {
             const resultado = await Swal.fire({
               icon: "info",
               title: "Tiempo de sesión expirado",
-              text: "Su sesión a expirado. Desea volver a iniciar sesion?",
+              text: "Su sesión ha expirado. Desea volver a iniciar sesion?",
               showCancelButton: true,
               confirmButtonText: "Si",
               cancelButtonText: "No gracias",

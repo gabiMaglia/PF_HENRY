@@ -123,6 +123,7 @@ const FiltersSorting = () => {
             display: "grid",
             //gridGap: { xs: 0, lg: 0 }, // Ajusta el espacio entre filas según el tamaño de la pantalla
             gridTemplateColumns: {
+              xxs: "repeat(3,1fr)",
               xs: "repeat(3,1fr)",
               sm: "repeat(4,1fr)",
               md: "repeat(6, 1fr)",
@@ -148,8 +149,8 @@ const FiltersSorting = () => {
                     categorie.name === selectedCategory ? "#b54410" : "#fd611a",
                   width: 100,
                   height: 100,
-                  ml: { xs: 1, sm: 1, md: 1, lg: 1 },
-                  mr: { xs: 1, sm: 1, md: 1, lg: 1 },
+                  ml: { xxs: 1, xs: 1, sm: 1, md: 1, lg: 1 },
+                  mr: { xxs: 1, xs: 1, sm: 1, md: 1, lg: 1 },
                   mt: 2,
                   borderColor:
                     categorie.name === selectedCategory ? "white" : undefined,
@@ -179,7 +180,10 @@ const FiltersSorting = () => {
         </Box>
       </Container>
       <Box display="flex" alignItems="center">
-        <Box display="flex" sx={{ flexDirection: { xs: "column", lg: "row" } }}>
+        <Box
+          display="flex"
+          sx={{ flexDirection: { xxs: "column", xs: "column", lg: "row" } }}
+        >
           <FormControl
             sx={{
               mt: 2,
@@ -191,7 +195,7 @@ const FiltersSorting = () => {
             <Selects
               value={selectedBrand}
               onChange={handleSelectBrand}
-              sx={{ width: { xs: 200, lg: 400 } }}
+              sx={{ width: { xxs: 200, xs: 200, lg: 400 } }}
             >
               <Options value="default" disabled>
                 Marca
@@ -217,7 +221,7 @@ const FiltersSorting = () => {
             <Selects
               value={selectedPrice}
               onChange={handleOrderPrice}
-              sx={{ width: { xs: 200, lg: 400 } }}
+              sx={{ width: { xxs: 200, xs: 200, lg: 400 } }}
             >
               <Options value="default" disabled>
                 Precio
@@ -230,8 +234,8 @@ const FiltersSorting = () => {
         <Box
           display="flex"
           sx={{
-            flexDirection: { xs: "column", lg: "row" },
-            mr: { xs: 4 },
+            flexDirection: { xxs: "column", xs: "column", lg: "row" },
+            mr: { xxs: 4, xs: 4 },
             position: "relative",
             left: "30px",
           }}
