@@ -32,7 +32,7 @@ const ProductsTable = () => {
   const editingRow = useRef(null);
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories.categories);
-  const brands = useSelector((state) => state.brands.brands); 
+  const brands = useSelector((state) => state.brands.brands);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,11 +86,13 @@ const ProductsTable = () => {
           }
           sx={{ width: "100%" }}
         >
-          {brands.map((brand) => (
-            <MenuItem key={brand.id} value={brand.name}>
-              {brand.name}
-            </MenuItem>
-          ))}
+          {[...brands]
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((brand) => (
+              <MenuItem key={brand.id} value={brand.name}>
+                {brand.name}
+              </MenuItem>
+            ))}
         </Select>
       ),
     },
@@ -108,11 +110,13 @@ const ProductsTable = () => {
           }
           sx={{ width: "100%" }}
         >
-          {categories.map((category) => (
-            <MenuItem key={category.id} value={category.name}>
-              {category.name}
-            </MenuItem>
-          ))}
+          {[...categories]
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((category) => (
+              <MenuItem key={category.id} value={category.name}>
+                {category.name}
+              </MenuItem>
+            ))}
         </Select>
       ),
     },
