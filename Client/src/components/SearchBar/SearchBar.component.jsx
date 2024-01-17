@@ -142,7 +142,7 @@ export default function SearchAppBar() {
     if (authData?.login && authData?.userRole === "customer") {
       fetchWishList(authData.userId, dispatch, authData.jwt);
     }
-  }, [authData.userRole]);
+  }, [authData?.userRole]);
 
   const handleAutocomplete = (value) => {
     if (!value) {
