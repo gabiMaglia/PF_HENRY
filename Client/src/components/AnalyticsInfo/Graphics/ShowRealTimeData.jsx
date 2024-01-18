@@ -66,6 +66,9 @@ const ShowRealtimeData = ({ data, getData }) => {
             height: "5em",
             border: "1px solid black",
             borderRadius: "10px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
         >
           <Typography variant="caption">Conversiones</Typography>
@@ -87,6 +90,7 @@ const ShowRealtimeData = ({ data, getData }) => {
               height: "100%",
               display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
             }}
           >
             <Typography variant="caption">Eventos totales</Typography>
