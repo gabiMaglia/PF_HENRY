@@ -453,7 +453,6 @@ const ServicesTable = () => {
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setRowSelected(newRowSelectionModel);
         }}
-        rowSelectionModel={rowSelected}
         ignoreDiacritics
         pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
         slots={{
@@ -484,7 +483,9 @@ const ServicesTable = () => {
             ? `row--accepted`
             : `row`;
         }}
+        checkboxSelection
         disableRowSelectionOnClick
+        rowSelectionModel={rowSelected}
         rows={services}
         columns={columns}
         pageSize={5}
