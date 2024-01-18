@@ -29,11 +29,11 @@ const DiscountBanner = ({ text, rotate }) => {
           color: "#fff",
           fontWeight: "800",
           background: "#ff0000",
-          padding: "13px 90px 15px 80px",
+          padding: "13px 90px 15px 115px",
           boxShadow: "0 2px 8px 0 rgba(0, 0, 0, 0.4)",
           fontSize: " .9em",
           textAlign: "center",
-          minWidth: "430px",
+          width: "430px",
         }}
       >
         {text}
