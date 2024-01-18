@@ -29,18 +29,16 @@ import { useEffect } from "react";
 import ChangePasword from "./views/publics/ChangePassword/ChangePasword.view";
 
 const App = () => {
-  // CustomHook que hace el check de token
-  // const checkTokenData = useCheckAuthData();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
+  
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
-
+  
+  // CustomHook que hace el check de token
   const checkAuthData = useCheckAuthData(openLoginModal);
 
   useEffect(() => {
-    // checkTokenData.checkToken()
     checkAuthData.checkToken();
   }, [checkAuthData]);
 
@@ -61,6 +59,7 @@ const App = () => {
         <Route path={PATHROUTES.CHANGEPASS} element={<ChangePasword />} />
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
@@ -68,6 +67,7 @@ const App = () => {
             path={`${PATHROUTES.ADMIN_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
@@ -75,6 +75,7 @@ const App = () => {
             path={`${PATHROUTES.CUSTOMER_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
+            <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["technician"]} />}>
@@ -82,6 +83,7 @@ const App = () => {
             path={`${PATHROUTES.TECHNICIAN_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
+      <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
       <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
       </Routes>

@@ -16,14 +16,19 @@ import {
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCard = styled(Card)({
-  width: 300,
-  height: 350,
+  width: 320,
+  height: 400,
+  transition: "transform 0.3s ease-in-out",
+
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
 });
 
 const ProductMedia = styled(CardMedia)({
-  padding: 24,
-  height: 180,
-  width: 180,
+  padding: 18,
+  height: 200,
+  width: 200,
   objectFit: "cover",
   margin: "auto",
 });
@@ -46,7 +51,6 @@ const CardProduct = ({ product }) => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userId = authData ? authData.userId : null;
   const userRole = authData ? authData.userRole : null;
-  console.log(product.ProductStock);
   const { id, name, price, ProductImages, ProductCategories, ProductStock } =
     product;
 
@@ -108,7 +112,7 @@ const CardProduct = ({ product }) => {
         sx={{
           m: 1,
           padding: 0,
-          margin: 0,
+          marginBottom: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -160,9 +164,6 @@ const CardProduct = ({ product }) => {
               sx={{
                 cursor: "pointer",
                 transition: "transform 0.3s",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                },
               }}
             />
             <CardContent>
@@ -187,19 +188,7 @@ const CardProduct = ({ product }) => {
             </CardContent>
             {ProductStock.amount < 5 && ProductStock.amount > 1 && (
               <Typography
-                variant="body1"
-                sx={{
-                  display: "flex",
-                  color: "red",
-                  fontWeight: 700,
-                }}
-              >
-                Quedan {ProductStock.amount} unidades disponibles!
-              </Typography>
-            )}
-            {ProductStock.amount === 0 && (
-              <Typography
-                variant="body1"
+                variant="body2"
                 sx={{
                   display: "flex",
                   justifyContent: "center",
@@ -207,7 +196,20 @@ const CardProduct = ({ product }) => {
                   fontWeight: 700,
                 }}
               >
-                Producto sin stock!
+                ¡{ProductStock.amount} unidades disponibles!
+              </Typography>
+            )}
+            {ProductStock.amount === 0 && (
+              <Typography
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  color: "red",
+                  fontWeight: 700,
+                }}
+              >
+                !Producto sin stock!
               </Typography>
             )}
             <ProductPrice

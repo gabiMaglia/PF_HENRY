@@ -56,9 +56,7 @@ const CardCarousel = ({ allProducts, discountMessage }) => {
         marginTop: "8px",
         overflow: "hidden",
         opacity: "1",
-        // background: 'rgb(233,91,69)',
         background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 60%, rgba(26, 253, 148, 0) 96%)`,
-        // background: 'radial-gradient(circle, #FF884E 100%, rgba(255,255,255,0) 100%)',
         visibility: "visible",
         display: "none",
         "@media (min-width: 901px)": {
@@ -103,7 +101,6 @@ const CardCarousel = ({ allProducts, discountMessage }) => {
                   justifyContent: "space-between",
                   height: "100%",
                   overflow: "hidden",
-                  // border: "3px solid black",
                 }}
               >
                 <CardContent
@@ -122,7 +119,6 @@ const CardCarousel = ({ allProducts, discountMessage }) => {
                     fontWeight="bold"
                     sx={{
                       textStroke: ".1px black",
-                      // WebkitTextStroke: '.1px black',
                       minWidth: "280px",
                       color: "white",
                       fontSize: {
@@ -150,10 +146,8 @@ const CardCarousel = ({ allProducts, discountMessage }) => {
                         lg: "2rem",
                         xl: "2.5rem",
                       },
-                      // marginLeft: "auto",
                       animation: "blink 1s infinite",
                       fontWeight: "700",
-                      // boxShadow: "0px 0px 10px rgb(255 255 255 / 90%)",
                       padding: "10px",
                       borderRadius: "5px",
                     }}
@@ -187,9 +181,11 @@ const CardCarousel = ({ allProducts, discountMessage }) => {
                     alt={product.name}
                     image={product.ProductImages[0]?.address}
                     sx={{
-                      maxWidth: "250px",
+                      width: "220px",
+                      height: "220px",
                       position: "relative",
-                      right: "-30px",
+                      right: "-60px",
+                      top: "20px"
                     }}
                   />
                   <DiscountBanner text={product.banner} rotate={50} />
