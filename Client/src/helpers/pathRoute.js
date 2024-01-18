@@ -25,6 +25,8 @@ const PATHROUTES = {
   ANALYTICS_INFO: "/analytics",
   //TECHNICIAN
   SERVICE_CREATE: "/serviceCreate",
+  //NOT FOUND
+  ERROR_404: "*"
 };
 
 export default PATHROUTES;

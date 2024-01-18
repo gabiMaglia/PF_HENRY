@@ -18,6 +18,7 @@ import Questions from "./views/publics/Questions/Questions.view";
 import Detail from "./views/publics/Detail/Detail.view";
 import Categories from "./views/publics/Categories/Categories.view";
 import Review from "./views/publics/Reviews/Reviews.view";
+import Error404 from "./views/publics/Error404/Error404.view";
 //PRIVATES VIEWS
 import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
@@ -82,6 +83,7 @@ const App = () => {
             element={<UserPanel />}
           ></Route>
         </Route>
+      <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
       </Routes>
       <LoginModal
         isOpen={isLoginModalOpen}

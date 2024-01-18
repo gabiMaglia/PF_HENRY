@@ -125,6 +125,15 @@ const ServicesTable = () => {
       minWidth: 180,
       headerAlign: "center",
       editable: true,
+      valueFormatter: (params) => {
+        const numericPrice = parseFloat(params.value);
+        if (isNaN(numericPrice)) {
+          return "Formato precio invalido";
+        }
+        return `$${numericPrice
+          .toFixed(0)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+      },
     },
     {
       field: "confirm_repair",
@@ -297,7 +306,7 @@ const ServicesTable = () => {
       Swal.fire({
         icon: "error",
         title: "Error Desconocido",
-        text: "Ha ocurrido un error al intentar actualizar la categoría",
+        text: "Ha ocurrido un error al intentar actualizar el estado",
       });
     }
   };
