@@ -396,6 +396,33 @@ const Detail = () => {
               >
                 {productById.name}
               </Typography>
+              {productById.ProductStock.amount < 5 &&
+                productById.ProductStock.amount > 1 && (
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      color: "red",
+                      fontWeight: 700,
+                    }}
+                  >
+                    ¡{productById.ProductStock.amount} unidades disponibles!
+                  </Typography>
+                )}
+              {productById.ProductStock.amount === 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "red",
+                    fontWeight: 700,
+                  }}
+                >
+                  ¡Producto sin stock!
+                </Typography>
+              )}
               <Typography
                 fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
                 color="#fd611a"
