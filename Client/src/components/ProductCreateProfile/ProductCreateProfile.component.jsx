@@ -45,6 +45,7 @@ const ProductCreateProfileComponent = () => {
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
   const [carouselData, setCarouselData] = useState(false);
+  const [bannerMessage, setBannerMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     name: "",
@@ -57,6 +58,7 @@ const ProductCreateProfileComponent = () => {
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
     carousel: carouselData,
+    banner: "",
   });
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
@@ -275,6 +277,7 @@ const ProductCreateProfileComponent = () => {
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
         carousel: carouselData,
+        banner: "",
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
@@ -508,6 +511,21 @@ const ProductCreateProfileComponent = () => {
             control={<Checkbox />}
             label="Desea añadir el producto al carousel?"
           />
+          {carouselData && (
+            <Box>
+              <TextField
+                name="banner"
+                label="Mensaje del Banner"
+                value={values.banner}
+                onChange={handleChange}
+                variant="outlined"
+                sx={{ mt: 1, mb: 1 }}
+                fullWidth
+                helperText={errors.e14 || errors.e15}
+                error={Boolean(errors.e14) || Boolean(errors.e15)}
+              />
+            </Box>
+          )}
           <Box>
             {!isUrlInput ? (
               <FormControl fullWidth>
@@ -672,6 +690,7 @@ const ProductCreateProfileComponent = () => {
                   !values.brandName ||
                   !values.categoryName ||
                   !values.images.length ||
+                  !values.banner ||
                   errors.e1 ||
                   errors.e2 ||
                   errors.e3 ||
@@ -684,7 +703,9 @@ const ProductCreateProfileComponent = () => {
                   errors.e10 ||
                   errors.e11 ||
                   errors.e12 ||
-                  errors.e13
+                  errors.e13 ||
+                  errors.e14 ||
+                  errors.e15
                 }
               >
                 Crear Producto

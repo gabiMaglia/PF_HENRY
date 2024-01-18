@@ -171,6 +171,14 @@ export const validateField = async (fieldName, value) => {
         error.e10 = "El stock debe tener solamente números";
       }
       break;
+    
+      case "banner":
+        if (value.length === 0 || value.trim() === "") {
+          error.e14 = "El banner de producto es requerido";
+        } else if (value.length < 4 || value.length > 35) {
+          error.e15 = "El banner debe tener entre 4 y 35 caracteres";
+        }
+        break;
 
     default:
       break;
