@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 //MATERIAL UI
-import { Box, Select, MenuItem } from "@mui/material";
+import { Box, Select, MenuItem, Typography } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
@@ -145,12 +145,14 @@ const ProductsTable = () => {
       headerName: "Carousel",
       width: 80,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "is_deleted",
       headerName: "Borrado",
       width: 100,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
   ];
 
@@ -424,75 +426,90 @@ const ProductsTable = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        position: "relative",
-        maxWidth: "70%",
-        height: "95%",
-        minHeight: "10vh",
-        textAlign: "center",
-        mt: "1em",
-      }}
-    >
-      <StyledDataGrid
-        onCellEditStart={handleCellEditStart}
-        onCellEditStop={handleCellEditStop}
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleErrorInput}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setRowSelected(newRowSelectionModel);
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          maxWidth: "70%",
+          height: "100%",
+          minHeight: "10vh",
+          textAlign: "center",
+          mt: "1em",
         }}
-        ignoreDiacritics
-        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-        slots={{
-          toolbar: CustomToolbar,
-        }}
-        slotProps={{
-          filterPanel: {
-            logicOperators: [GridLogicOperator.And],
-          },
-          panel: {
-            anchorEl: filterButtonEl,
-          },
-          toolbar: {
-            setFilterButtonEl,
-            handleDelete,
-            handleCarousel,
-            dataName: "Lista de productos",
-            showQuickFilter: true,
-            selectedRows: rowSelected,
-            showCarouselIcon: true,
-          },
-        }}
-        getRowClassName={(params) => {
-          return params.row.is_deleted
-            ? `row--deleted`
-            : params.row.carousel
-            ? `row--carousel`
-            : `row`;
-        }}
-        checkboxSelection
-        disableRowSelectionOnClick
-        rowSelectionModel={rowSelected}
-        rows={products}
-        columns={columns}
-        pageSize={5}
-        localeText={language.components.MuiDataGrid.defaultProps.localeText}
-        editMode="cell"
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              id: false,
-              // warranty: false,
-              is_deleted: false,
-              carousel: false,
-            },
-          },
-        }}
-      />
-      {loading && <LoadingProgress />}
-    </Box>
+      >
+        <Box sx={{ height: "80%" }}>
+          <StyledDataGrid
+            onCellEditStart={handleCellEditStart}
+            onCellEditStop={handleCellEditStop}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleErrorInput}
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              setRowSelected(newRowSelectionModel);
+            }}
+            ignoreDiacritics
+            pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            slotProps={{
+              filterPanel: {
+                logicOperators: [GridLogicOperator.And],
+              },
+              panel: {
+                anchorEl: filterButtonEl,
+              },
+              toolbar: {
+                setFilterButtonEl,
+                handleDelete,
+                handleCarousel,
+                dataName: "Lista de productos",
+                showQuickFilter: true,
+                selectedRows: rowSelected,
+                showCarouselIcon: true,
+              },
+            }}
+            getRowClassName={(params) => {
+              return params.row.is_deleted
+                ? `row--deleted`
+                : params.row.carousel
+                ? `row--carousel`
+                : `row`;
+            }}
+            checkboxSelection
+            disableRowSelectionOnClick
+            rowSelectionModel={rowSelected}
+            rows={products}
+            columns={columns}
+            pageSize={5}
+            localeText={language.components.MuiDataGrid.defaultProps.localeText}
+            editMode="cell"
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                  is_deleted: false,
+                  carousel: false,
+                },
+              },
+            }}
+          />
+          {loading && <LoadingProgress />}
+        </Box>
+        <Box sx={{ marginTop: "25px" }}>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "25px", fontWeight: "bold" }}
+          >
+            Esato del producto segun color
+          </Typography>
+          <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
+            <Typography sx={{ fontWeight: "600" }}>🟦 Carousel</Typography>
+            <Typography sx={{ fontWeight: "600" }}>🟥 Eliminado</Typography>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 
