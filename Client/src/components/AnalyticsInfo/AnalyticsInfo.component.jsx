@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
-import { fetchAnalyticsData } from "../../services/reportingAnalyticsServices";
+import {
+  fetchAnalyticsData,
+  fetchAnalyticsRealtimeData,
+} from "../../services/reportingAnalyticsServices";
 import { useEffect } from "react";
 import LinearGraphic from "./Graphics/LinearGraphic.component";
+import ShowRealtimeData from "./Graphics/ShowRealTimeData";
 import BarGraphic from "./Graphics/BarGraphic.component";
 import DoughnutGraphics from "./Graphics/DoughnutGraphics.component";
 import Config from "./Config/Config.component";
@@ -23,6 +27,8 @@ const colors = [
 
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
+  const [showRealtime, setShowRealtime] = useState(true);
+  const [realtimeData, setRealtimeData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
   const [dataOrder, setDataOrder] = useState("Descendente");
   const [config, setConfig] = useState({
@@ -39,36 +45,46 @@ const AnalyticsInfo = () => {
     setOpenConfig(!openConfig);
   };
 
+  const getRealtimeData = async (accessToken) => {
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+      customClass: {
+        container: "container",
+      },
+    });
+    Swal.showLoading();
+    const newData = await fetchAnalyticsRealtimeData(
+      token ? token : accessToken
+    );
+    if (newData?.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al obtener los datos",
+        text: `${newData.response}`,
+        customClass: {
+          container: "container",
+        },
+      });
+    } else {
+      Swal.hideLoading();
+      Swal.close();
+      setRealtimeData(newData);
+    }
+  };
+
   const googleLogin = useGoogleLogin({
     clientId: CLIENT_ID,
     responseType: "token",
     onSuccess: async (tokenResponse) => {
       const accessToken = tokenResponse?.access_token;
       if (accessToken) {
-        const newData = await fetchAnalyticsData(
-          accessToken,
-          config.startDate,
-          config.endDate,
-          metricStatus,
-          dimensionStatus
-        );
-        if (newData.error) {
-          Swal.fire({
-            allowOutsideClick: false,
-            icon: "error",
-            title: "Error al obtener los datos",
-            text: `${newData.response}`,
-            customClass: {
-              container: "container",
-            },
-          });
-        } else {
-          Swal.hideLoading();
-          Swal.close();
-          setOpenConfig(false);
-          setToken(accessToken);
-          setData(newData);
-        }
+        setToken(accessToken);
+        setFirstCharge(false);
+        getRealtimeData(accessToken);
       }
     },
     onError: (error) => {
@@ -85,39 +101,30 @@ const AnalyticsInfo = () => {
   });
 
   const getData = async () => {
-    if (token && !firstCharge) {
-      const newData = await fetchAnalyticsData(
-        token,
-        config.startDate,
-        config.endDate,
-        metricStatus,
-        dimensionStatus
-      );
-      if (newData.error) {
-        Swal.fire({
-          allowOutsideClick: false,
-          icon: "error",
-          title: "Error al obtener los datos",
-          text: `${newData.response}`,
-          customClass: {
-            container: "container",
-          },
-        });
-      } else {
-        Swal.hideLoading();
-        Swal.close();
-        setData(newData);
-        setOpenConfig(false);
-      }
+    const newData = await fetchAnalyticsData(
+      token,
+      config.startDate,
+      config.endDate,
+      metricStatus,
+      dimensionStatus
+    );
+    if (newData.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al obtener los datos",
+        text: `${newData.response}`,
+        customClass: {
+          container: "container",
+        },
+      });
     } else {
-      googleLogin();
-      setFirstCharge(false);
+      Swal.hideLoading();
+      Swal.close();
+      setData(newData);
+      setOpenConfig(false);
     }
   };
-
-  useEffect(() => {
-    getData();
-  }, [googleLogin.tokenResponse]);
 
   useEffect(() => {
     if (data && data?.length > 0) {
@@ -159,6 +166,7 @@ const AnalyticsInfo = () => {
         let data = metricsValues.map((dataset) => {
           return dataset[i];
         });
+
         if (dataOrder !== "Descendente") {
           data = data.reverse();
         }
@@ -169,7 +177,7 @@ const AnalyticsInfo = () => {
           data: data,
         });
       }
-      if (dataOrder !== "Descendiente") {
+      if (dataOrder !== "Descendente") {
         labels = labels.reverse();
       }
       setData({ labels, datasets });
@@ -201,13 +209,13 @@ const AnalyticsInfo = () => {
         }}
       >
         <Typography variant="h3">ESTADISTICAS</Typography>
-        {config?.startDate?.length > 0 && (
+        {config?.startDate?.length > 0 && !showRealtime && (
           <Box>
             <Typography variant="caption">Fecha inicio</Typography>
             <Typography variant="body1">{config.startDate}</Typography>
           </Box>
         )}
-        {config?.endDate?.length > 0 && (
+        {config?.endDate?.length > 0 && !showRealtime && (
           <Box>
             <Typography variant="caption">Fecha fin</Typography>
             <Typography variant="body1">{config.endDate}</Typography>
@@ -215,10 +223,8 @@ const AnalyticsInfo = () => {
         )}
       </Box>
       <Box sx={{ maxWidth: "100%", maxHeight: "100vh" }}>
-        {data &&
-          data.labels &&
-          data.datasets &&
-          (graphicType === "Linea" ? (
+        {data && data.labels && data.datasets && !showRealtime ? (
+          graphicType === "Linea" ? (
             <LinearGraphic
               labels={data?.labels}
               datasets={data?.datasets}
@@ -245,7 +251,13 @@ const AnalyticsInfo = () => {
               datasets={data?.datasets}
               label={{ metricStatus, dimensionStatus }}
             />
-          ))}
+          )
+        ) : (
+          realtimeData &&
+          showRealtime && (
+            <ShowRealtimeData data={realtimeData} getData={getRealtimeData} />
+          )
+        )}
       </Box>
       <Config
         open={openConfig}
@@ -261,14 +273,26 @@ const AnalyticsInfo = () => {
         setGraphicType={setGraphicType}
         dataOrder={dataOrder}
         setDataOrder={setDataOrder}
+        showRealtime={showRealtime}
+        setShowRealtime={setShowRealtime}
       />
-      <Box sx={{ backgroundColor: "#fd611a" }}>
-        <Button fullWidth onClick={handleOpenConfig}>
-          <Typography variant="body1" color="white">
-            Configuración
-          </Typography>
-        </Button>
-      </Box>
+      {!firstCharge ? (
+        <Box sx={{ backgroundColor: "#fd611a" }}>
+          <Button fullWidth onClick={handleOpenConfig}>
+            <Typography variant="body1" color="white">
+              Configuración
+            </Typography>
+          </Button>
+        </Box>
+      ) : (
+        <Box sx={{ backgroundColor: "#fd611a" }}>
+          <Button fullWidth onClick={googleLogin}>
+            <Typography variant="body1" color="white">
+              Obtener datos
+            </Typography>
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

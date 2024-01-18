@@ -164,7 +164,6 @@ export const fetchAnalyticsData = async (
     });
     return rows;
   } catch (error) {
-    console.log(error);
     if (error.response?.status === 401 || error.response?.status === 403) {
       return {
         error: true,
@@ -176,6 +175,118 @@ export const fetchAnalyticsData = async (
       error: true,
       response:
         "Error de al obtener los datos, pruebe con otra combinación de metricas y dimensiones",
+    };
+  }
+};
+
+export const fetchAnalyticsRealtimeData = async (accessToken) => {
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    //Usuarios activos
+    let activeUsers = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "activeUsers" } },
+      { headers }
+    );
+
+    activeUsers = activeUsers?.data?.rows[0]?.metricValues[0]?.value;
+
+    //Usuarios activos por plataforma
+
+    const totalPlataformsUsers = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "activeUsers" }, dimensions: { name: "platform" } },
+      { headers }
+    );
+
+    let activeUsersPerPlataform = { dimensions: [], metrics: [] };
+    totalPlataformsUsers?.data?.rows.forEach((row) => {
+      activeUsersPerPlataform.dimensions.push(row?.dimensionValues[0]?.value);
+      activeUsersPerPlataform.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    //Usuarios activos por pais
+
+    const totalCountryUsers = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "activeUsers" }, dimensions: { name: "country" } },
+      { headers }
+    );
+
+    let activeUsersPerCountry = { dimensions: [], metrics: [] };
+
+    totalCountryUsers?.data?.rows.forEach((row) => {
+      activeUsersPerCountry.dimensions.push(row?.dimensionValues[0]?.value);
+      activeUsersPerCountry.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    //Usuarios activos por ciudad
+
+    const totalCityUsers = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "activeUsers" }, dimensions: { name: "city" } },
+      { headers }
+    );
+
+    let activeUsersPerCity = { dimensions: [], metrics: [] };
+
+    totalCityUsers?.data?.rows.forEach((row) => {
+      activeUsersPerCity.dimensions.push(row?.dimensionValues[0]?.value);
+      activeUsersPerCity.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    //Conversiones
+
+    let conversions = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "conversions" } },
+      { headers }
+    );
+    conversions = conversions?.data?.rows
+      ? conversions?.data?.rows[0]?.metricValues[0]?.value
+      : 0;
+
+    //Eventos
+
+    let eventCount = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "eventCount" }, dimensions: { name: "eventName" } },
+      { headers }
+    );
+    eventCount = eventCount?.data?.rows
+      ? eventCount?.data?.rows[0]?.metricValues[0]?.value
+      : 0;
+
+    //Eventos por nombre
+
+    let totalEventCount = await axios.post(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+      { metrics: { name: "eventCount" }, dimensions: { name: "eventName" } },
+      { headers }
+    );
+    const eventCountPerName = { dimensions: [], metrics: [] };
+    totalEventCount?.data?.rows.forEach((row) => {
+      eventCountPerName.dimensions.push(row?.dimensionValues[0]?.value);
+      eventCountPerName.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    return {
+      activeUsers,
+      activeUsersPerCountry,
+      activeUsersPerCity,
+      activeUsersPerPlataform,
+      conversions,
+      eventCount,
+      eventCountPerName,
+    };
+  } catch (error) {
+    return {
+      error: true,
+      respose: "Error al obtener los datos en tiempo real",
     };
   }
 };
