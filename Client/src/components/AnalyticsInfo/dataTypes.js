@@ -3,6 +3,10 @@ export const dimensions = [
   { name: "itemBrand", label: "Marca de productos" },
   { name: "pagePath", label: "Por url" },
   {
+    name: "searchTerm",
+    label: "Por entrada",
+  },
+  {
     name: "date",
     label: "Por día",
     orderBys: [
@@ -15,9 +19,73 @@ export const dimensions = [
       },
     ],
   },
+  {
+    name: "month",
+    label: "Por mes",
+    orderBys: [
+      {
+        desc: true,
+        dimension: {
+          dimensionName: "month",
+          orderType: "ALPHANUMERIC",
+        },
+      },
+    ],
+  },
+  {
+    name: "year",
+    label: "Por año",
+    orderBys: [
+      {
+        desc: true,
+        dimension: {
+          dimensionName: "year",
+          orderType: "ALPHANUMERIC",
+        },
+      },
+    ],
+  },
+  {
+    name: "dayOfWeekName",
+    label: "Por dia de la semana",
+    orderBys: [
+      {
+        desc: true,
+        dimension: {
+          dimensionName: "dayOfWeekName",
+          orderType: "ALPHANUMERIC",
+        },
+      },
+    ],
+  },
+  {
+    name: "city",
+    label: "Por ciudad",
+  },
+  {
+    name: "country",
+    label: "Por pais",
+  },
+  {
+    name: "continent",
+    label: "Por continente",
+  },
+  {
+    name: "deviceCategory",
+    label: "Por dispositivo",
+  },
+  {
+    name: "plataforma",
+    label: "Por plataforma",
+  },
+  {
+    name: "browser",
+    label: "Por navegador",
+  },
   { name: "itemCategory", label: "Categoria de productos" },
   { name: "itemName", label: "Producto por nombre" },
   { name: "eventName", label: "Total" },
+  { name: "method", label: "Metodo" },
   {
     name: "eventName",
     label: "Servicios creados",
@@ -134,6 +202,19 @@ export const metrics = [
   },
   {
     name: "activeUsers",
+    label: "Filtrados y ordenamientos",
+    dimensionFilter: {
+      filter: {
+        fieldName: "eventName",
+        stringFilter: {
+          value: "filters_or_sort",
+          matchType: "EXACT",
+        },
+      },
+    },
+  },
+  {
+    name: "activeUsers",
     label: "Compras iniciadas",
     dimensionFilter: {
       filter: {
@@ -188,7 +269,7 @@ export const metrics = [
   },
   {
     name: "activeUsers",
-    label: "Inicios de sesiön",
+    label: "Inicios de sesión",
     dimensionFilter: {
       filter: {
         fieldName: "eventName",
@@ -241,4 +322,17 @@ export const metrics = [
     },
   },
   { name: "eventCount", label: "Total de eventos" },
+  {
+    name: "eventCount",
+    label: "Busquedas en la app",
+    dimensionFilter: {
+      filter: {
+        fieldName: "eventName",
+        stringFilter: {
+          value: "search",
+          matchType: "EXACT",
+        },
+      },
+    },
+  },
 ];

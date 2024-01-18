@@ -49,6 +49,8 @@ const Config = ({
   setDimensionStatus,
   graphicType,
   setGraphicType,
+  dataOrder,
+  setDataOrder,
 }) => {
   const handleMetricsDimensionChange = (value, name, position) => {
     const newData =
@@ -73,9 +75,11 @@ const Config = ({
         setMetricStatus(newData);
       }
     } else {
-      let newData = [...dimensionStatus];
-      newData.splice(index, 1);
-      setDimensionStatus(newData);
+      if (dimensionStatus.length > 1) {
+        let newData = [...dimensionStatus];
+        newData.splice(index, 1);
+        setDimensionStatus(newData);
+      }
     }
   };
 
@@ -112,15 +116,22 @@ const Config = ({
         <Divider sx={{ color: "#fd611a", fontWeight: "bold" }}>
           <Typography variant="h6">Configuración</Typography>
         </Divider>
-        <Box>
+        <Box sx={{ display: "flex", gap: "3em" }}>
           <Autocomplete
-            sx={{ width: "100%" }}
+            sx={{ flexGrow: "1" }}
             onChange={(e, value) => handleChangeGraphicsType(value)}
             value={graphicType}
             options={["Linea", "Barras", "Circular"]}
             renderInput={(params) => (
               <TextField {...params} label="Tipo de grafico" />
             )}
+          />
+          <Autocomplete
+            sx={{ flexGrow: "1" }}
+            onChange={(e, value) => setDataOrder(value)}
+            value={dataOrder}
+            options={["Descendente", "Ascendente"]}
+            renderInput={(params) => <TextField {...params} label="Orden" />}
           />
         </Box>
 
@@ -234,6 +245,10 @@ const Config = ({
                     gap: "10px",
                   }}
                 >
+                  <DeleteIcon
+                    cursor="pointer"
+                    onClick={() => deleteMetricDimensions(index, "dimensions")}
+                  />
                   <Autocomplete
                     sx={{ width: "100%" }}
                     onChange={(e, value) =>
@@ -246,10 +261,6 @@ const Config = ({
                     renderInput={(params) => (
                       <TextField {...params} label="Dimensiones" />
                     )}
-                  />
-                  <DeleteIcon
-                    cursor="pointer"
-                    onClick={() => deleteMetricDimensions(index, "dimensions")}
                   />
                 </Box>
               );

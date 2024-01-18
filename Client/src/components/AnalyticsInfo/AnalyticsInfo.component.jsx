@@ -23,6 +23,7 @@ const colors = [
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
+  const [dataOrder, setDataOrder] = useState("Descendente");
   const [config, setConfig] = useState({
     startDate: "",
     endDate: "",
@@ -89,11 +90,12 @@ const AnalyticsInfo = () => {
         }
       });
 
-      const labels = filterData?.map((row) => {
+      let labels = filterData?.map((row) => {
         return row?.dimensionValues.map((data) => {
           return data.value;
         });
       });
+
       let metricsValues = filterData?.map((row) => {
         return row?.metricValues.map((data) => {
           return data?.value;
@@ -114,17 +116,24 @@ const AnalyticsInfo = () => {
         }
       }
 
-      const datasets = [];
+      let datasets = [];
 
       for (let i = 0; i < maxMetricsElements; i++) {
+        let data = metricsValues.map((dataset) => {
+          return dataset[i];
+        });
+        if (dataOrder !== "Descendente") {
+          data = data.reverse();
+        }
         datasets.push({
           id: i,
           backgroundColor: colors,
           label: metricStatus[i],
-          data: metricsValues.map((dataset) => {
-            return dataset[i];
-          }),
+          data: data,
         });
+      }
+      if (dataOrder !== "Descendiente") {
+        labels = labels.reverse();
       }
       setData({ labels, datasets });
     }
@@ -213,6 +222,8 @@ const AnalyticsInfo = () => {
         setDimensionStatus={setDimensionStatus}
         graphicType={graphicType}
         setGraphicType={setGraphicType}
+        dataOrder={dataOrder}
+        setDataOrder={setDataOrder}
       />
       <Box sx={{ backgroundColor: "#fd611a" }}>
         <Button fullWidth onClick={handleOpenConfig}>
