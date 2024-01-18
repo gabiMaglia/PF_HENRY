@@ -58,7 +58,7 @@ const ProductsTable = () => {
     {
       field: "price",
       headerName: "Precio",
-      width: 100,
+      width: 150,
       headerAlign: "center",
       editable: true,
       valueFormatter: (params) => {
@@ -129,14 +129,14 @@ const ProductsTable = () => {
     {
       field: "stock",
       headerName: "Stock",
-      width: 80,
+      width: 120,
       headerAlign: "center",
       editable: true,
     },
     {
       field: "soldCount",
       headerName: "Vendidos",
-      width: 100,
+      width: 120,
       headerAlign: "center",
       editable: true,
     },
@@ -149,7 +149,6 @@ const ProductsTable = () => {
     {
       field: "is_deleted",
       headerName: "Borrado",
-      type: Boolean,
       width: 100,
       headerAlign: "center",
     },
@@ -485,8 +484,9 @@ const ProductsTable = () => {
           columns: {
             columnVisibilityModel: {
               id: false,
-              warranty: false,
-              // is_deleted: false,
+              // warranty: false,
+              is_deleted: false,
+              carousel: false,
             },
           },
         }}
