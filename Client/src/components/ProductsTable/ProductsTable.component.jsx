@@ -145,12 +145,14 @@ const ProductsTable = () => {
       headerName: "Carousel",
       width: 80,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "is_deleted",
       headerName: "Borrado",
       width: 100,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
   ];
 

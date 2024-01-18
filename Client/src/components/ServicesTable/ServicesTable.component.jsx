@@ -131,6 +131,7 @@ const ServicesTable = () => {
       headerName: "Confirmado",
       minWidth: 150,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "status",
@@ -163,6 +164,7 @@ const ServicesTable = () => {
       headerName: "Diagnostico final",
       minWidth: 250,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "isDelete",
@@ -170,6 +172,7 @@ const ServicesTable = () => {
       minWidth: 150,
       headerAlign: "center",
       editable: true,
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
   ];
 
