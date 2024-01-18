@@ -64,30 +64,33 @@ export default function SearchAppBar() {
   const [suggestions, setSuggestions] = useState([]);
 
   const isHistoryUserItem = (suggestion) => {
-    if (
-      !Array.isArray(historyUser) ||
-      suggestion === "el usuario aun no posee historial."
-    ) {
+    if (suggestion === "el usuario aun no posee historial.") {
       return false;
     }
     return historyUser.some((history) => history.value === suggestion);
   };
+  useEffect(() => {
+    dispatch(addItem());
+    if (login) {
+      fetchHistoryUSer(authData.userId, dispatch);
+    }
+  }, [login, aux]);
 
   useEffect(() => {
-    if (login) {
-      const newSuggestions = Array.isArray(historyUser)
-        ? historyUser.map((history) => history.value)
-        : ["el usuario no posee historial"];
-      setSuggestions(newSuggestions);
-    }
-  }, [login, historyUser]);
+    const newSuggestions = login
+      ? historyUser.map((history) => history.value)
+      : ["el usuario no posee historial"];
+    setSuggestions(newSuggestions);
+  }, [login, historyUser, aux]);
 
   useEffect(() => {
     dispatch(addItem());
     if (login) {
       fetchHistoryUSer(authData.userId, dispatch);
     } else {
-      setSuggestions(["el usuario debe loguearse para tener historial."]);
+      setAutocompleteSuggestions([
+        "el usuario debe loguearse para tener historial.",
+      ]);
     }
   }, [login, aux]);
 
@@ -150,16 +153,24 @@ export default function SearchAppBar() {
       setShowAutocomplete(false);
       return;
     }
+    if (!login) {
+      setAutocompleteSuggestions([
+        "Para tener historial por favor regístrese.",
+      ]);
+      setShowAutocomplete(true);
+      return;
+    }
 
-    const matchingSuggestions = suggestions.filter(
-      (suggestion) =>
-        suggestion && suggestion.toLowerCase().includes(value.toLowerCase())
-    );
+    const matchingSuggestions = historyUser
+      .map((history) => history.value)
+      .filter(
+        (suggestion) =>
+          suggestion && suggestion.toLowerCase().includes(value.toLowerCase())
+      );
 
     setAutocompleteSuggestions(matchingSuggestions);
     setShowAutocomplete(matchingSuggestions.length > 0);
   };
-
   const handleAutocompleteSelect = (selectedSuggestion) => {
     setInputValue(selectedSuggestion);
     dispatch(fetchChage(selectedSuggestion));
@@ -167,14 +178,24 @@ export default function SearchAppBar() {
   };
 
   useEffect(() => {
-    handleAutocomplete(inputName);
-  }, [inputName]);
+    handleAutocomplete(inputValue);
+  }, [inputValue, historyUser, aux]);
 
-  const handleDelete = (event) => {
-    fetchDeleteHistoryItem(authData.userId, event.target.id, dispatch);
-    console.log("todo ok");
+  const handleDelete = async (value) => {
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+    });
+    Swal.showLoading();
+    await fetchDeleteHistoryItem(authData.userId, value, dispatch);
+    setAutocompleteSuggestions((prevSuggestions) =>
+      prevSuggestions.filter((suggestion) => suggestion !== value)
+    );
+    setShowAutocomplete(false);
     setAux(!aux);
-    console.log(historyUser);
+    Swal.close();
   };
 
   return (
@@ -255,7 +276,6 @@ export default function SearchAppBar() {
           >
             {autocompleteSuggestions.map((suggestion, index) => (
               <Box
-                key={index}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -274,15 +294,30 @@ export default function SearchAppBar() {
                   {suggestion}
                 </Box>
                 {isHistoryUserItem(suggestion) && (
-                  <DeleteIcon
+                  <Button
                     sx={{
-                      fontSize: "xx-large",
-                    }}
-                    onClick={(e) => {
-                      handleDelete(e);
+                      padding: "8px",
+                      backgroundColor: "black",
+                      fontWeight: "bold",
+                      color: "white",
+                      "&:hover": {
+                        backgroundColor: "#fd611a",
+                        color: "black",
+                        cursor: "pointer",
+                      },
                     }}
                     id={suggestion}
-                  />
+                    onClick={(e) => {
+                      handleDelete(e.target.id);
+                    }}
+                  >
+                    <DeleteIcon
+                    id={suggestion}
+                      onClick={(e) => {
+                        handleDelete(suggestion);
+                      }}
+                    />
+                  </Button>
                 )}
               </Box>
             ))}
@@ -329,7 +364,7 @@ export default function SearchAppBar() {
             }}
           >
             <ShoppingCartIcon
-              sx={{ fontSize: "32px" }}
+              /*src={carrito}*/ sx={{ fontSize: "32px", cursor: "pointer" }}
               onClick={handleCartClick}
             />
             {cartItemCount > -1 && (
@@ -364,7 +399,8 @@ export default function SearchAppBar() {
             />{" "}
             <Typography sx={{ fontSize: "14px" }}>Técnico</Typography>
           </Box>
-        ) : null}
+        ) : /*<ShoppingCartIcon sx={{ fontSize: "32px" }} onClick={handleCartClick} />*/
+        null}
         {userRole === "customer" && login === true && (
           <Box>
             <Notification />
@@ -412,6 +448,7 @@ export default function SearchAppBar() {
         isOpen={registerModalIsOpen}
         setRegisterModalIsOpen={setRegisterModalIsOpen}
       />
+      {/* <ConnectedProductBox cartItemCount={cartItemCount} */}
     </Box>
   );
 }
