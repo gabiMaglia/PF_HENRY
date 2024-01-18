@@ -64,20 +64,22 @@ const UsersTable = () => {
     {
       field: "role",
       headerName: "Rol",
-      minWidth: 120,
+      minWidth: 180,
       headerAlign: "center",
       editable: true,
       renderCell: (params) => (
         <Select
           value={params.value}
-          onChange={(e) => handleRoleChange(params.id, e.target.value, params.row.rolId)}
+          onChange={(e) => handleRoleChange(params.id, e.target.value)}
           sx={{ width: "100%" }}
         >
-          {userRoles.map((role) => (
-            <MenuItem key={role.id} value={role.role_name}>
-              {role.role_name}
-            </MenuItem>
-          ))}
+          {[...userRoles]
+            .sort((a, b) => a.role_name.localeCompare(b.role_name))
+            .map((role) => (
+              <MenuItem key={role.id} value={role.role_name}>
+                {role.role_name}
+              </MenuItem>
+            ))}
         </Select>
       ),
     },
@@ -186,15 +188,18 @@ const UsersTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
-      const response = await getUserRoles(id, { role: newRole }, authData.jwt);
+      const response = await putUser(id, newRole);
       if (response.status === 200) {
+        setRows((prevRows) =>
+          prevRows.map((row) =>
+            row.id === id ? { ...row, role: newRole } : row
+          )
+        );
         Swal.fire({
           icon: "success",
           title: "Actualización Exitosa",
           text: "El rol ha sido actualizado correctamente",
         });
-        getAllUsers();
-        console.log("ROLE", newRole);
         return newRole;
       } else {
         Swal.fire({
@@ -239,7 +244,6 @@ const UsersTable = () => {
 
   useEffect(() => {
     getUsers();
-    getUserRoles();
   }, []);
 
   const handleCellEditStart = (params) => {

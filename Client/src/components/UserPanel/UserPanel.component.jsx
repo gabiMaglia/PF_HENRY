@@ -277,7 +277,6 @@ const UserPanelComponent = () => {
       <Box
         sx={{
           width: "15%",
-          //minHeight: "1vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
