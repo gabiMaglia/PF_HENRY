@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Select, MenuItem } from "@mui/material";
+import { Box, Select, MenuItem, Typography } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
@@ -100,27 +100,21 @@ const UsersTable = () => {
       headerAlign: "center",
       headerName: "Verificado",
       minWidth: 25,
-      renderCell: (params) =>(
-        <Box>{params.value ? "Si" : "No"}</Box>
-      )
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "isActive",
       headerAlign: "center",
       headerName: "Activo",
       minWidth: 120,
-      renderCell: (params) =>(
-        <Box>{params.value ? "Si" : "No"}</Box>
-      )
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "isDeleted",
       headerAlign: "center",
       headerName: "Eliminado",
       minWidth: 25,
-      renderCell: (params) =>(
-        <Box>{params.value ? "Si" : "No"}</Box>
-      )
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
   ];
 
@@ -338,74 +332,87 @@ const UsersTable = () => {
   };
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        maxWidth: "75%",
-        height: { xxs: "70%", xs: "70%", sm: "90%", md: "90%" },
-        minHeight: "10vh",
-        textAlign: "center",
-        mt: "2em",
-        mb: "2em",
-      }}
-    >
-      <StyledDataGrid
-        onCellEditStart={handleCellEditStart}
-        onCellEditStop={handleCellEditStop}
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleErrorInput}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setRowSelected(newRowSelectionModel);
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          maxWidth: "70%",
+          height: "100%",
+          minHeight: "10vh",
+          textAlign: "center",
+          mt: "1em",
         }}
-        rowSelectionModel={rowSelected}
-        ignoreDiacritics
-        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-        columnGroupingModel={columnGroupingModel}
-        slots={{
-          toolbar: CustomToolbar,
-        }}
-        slotProps={{
-          filterPanel: {
-            logicOperators: [GridLogicOperator.And],
-          },
-          panel: {
-            anchorEl: filterButtonEl,
-          },
-          toolbar: {
-            setFilterButtonEl,
-            handleDelete,
-            dataName: "Lista de usuarios",
-            showQuickFilter: true,
-          },
-        }}
-        getRowClassName={(params) => {
-          return params.row.isDeleted ? `row--deleted` : `row`;
-        }}
-        disableRowSelectionOnClick
-        rows={rows}
-        columns={gridColumns}
-        pageSize={5}
-        localeText={language.components.MuiDataGrid.defaultProps.localeText}
-        checkboxSelection
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              id: false,
-              isVerified: false,
-              isDeleted: false,
-            },
-          },
-          // filter: {
-          //   filterModel: {
-          //     items: [
-          //       { field: "isDeleted", operator: "equals", value: "false" },
-          //     ],
-          //   },
-          // },
-        }}
-      ></StyledDataGrid>
-      {isLoading && <Loading />}
-    </Box>
+      >
+        <Box sx={{ height: "80%" }}>
+          <StyledDataGrid
+            onCellEditStart={handleCellEditStart}
+            onCellEditStop={handleCellEditStop}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleErrorInput}
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              setRowSelected(newRowSelectionModel);
+            }}
+            rowSelectionModel={rowSelected}
+            ignoreDiacritics
+            pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            columnGroupingModel={columnGroupingModel}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            slotProps={{
+              filterPanel: {
+                logicOperators: [GridLogicOperator.And],
+              },
+              panel: {
+                anchorEl: filterButtonEl,
+              },
+              toolbar: {
+                setFilterButtonEl,
+                handleDelete,
+                dataName: "Lista de usuarios",
+                showQuickFilter: true,
+              },
+            }}
+            getRowClassName={(params) => {
+              return params.row.isDeleted
+                ? `row--deleted`
+                : params.row.isVerified === false
+                ? `row--carousel`
+                : `row`;
+            }}
+            disableRowSelectionOnClick
+            rows={rows}
+            columns={gridColumns}
+            pageSize={5}
+            localeText={language.components.MuiDataGrid.defaultProps.localeText}
+            checkboxSelection
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                  isVerified: false,
+                  isDeleted: false,
+                },
+              },
+            }}
+          ></StyledDataGrid>
+          {isLoading && <Loading />}
+        </Box>
+        <Box sx={{ marginTop: "25px" }}>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "25px", fontWeight: "bold" }}
+          >
+            Esato del usuario segun color
+          </Typography>
+          <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
+            <Typography sx={{ fontWeight: "600" }}>🟦 Sin verificar</Typography>
+            <Typography sx={{ fontWeight: "600" }}>🟥 Eliminado</Typography>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 
