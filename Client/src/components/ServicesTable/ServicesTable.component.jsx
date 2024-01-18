@@ -444,17 +444,7 @@ const ServicesTable = () => {
           mt: "1em",
         }}
       >
-        <Box
-        // sx={{
-        //   width: "100%",
-        //   position: "relative",
-        //   maxWidth: "70%",
-        //   height: "95%",
-        //   minHeight: "10vh",
-        //   textAlign: "center",
-        //   mt: "1em",
-        // }}
-        >
+        <Box sx={{ height: "80%" }}>
           <StyledDataGrid
             onCellEditStart={handleCellEditStart}
             onCellEditStop={handleCellEditStop}
@@ -519,7 +509,12 @@ const ServicesTable = () => {
           {loading && <LoadingProgress />}
         </Box>
         <Box sx={{ marginTop: "25px" }}>
-          <Typography variant="h5" sx={{ marginBottom: "25px", fontWeight: "bold" }}>Esato del servicio segun color</Typography>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "25px", fontWeight: "bold" }}
+          >
+            Esato del servicio segun color
+          </Typography>
           <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
             <Typography sx={{ fontWeight: "600" }}>🟪 Cancelado</Typography>
             <Typography sx={{ fontWeight: "600" }}>🟩 Finalizado</Typography>
