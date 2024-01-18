@@ -122,7 +122,7 @@ const UserPanelComponent = () => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        //height: "97vh",
+        height: "97vh",
         mb: "1.2em",
         minHeight: "500px",
         width: "100%",

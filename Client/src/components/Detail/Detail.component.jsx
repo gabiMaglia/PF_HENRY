@@ -352,7 +352,7 @@ const Detail = () => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                    onClick={() => setSelectedImage(image.address)}
+                    onMouseOver={() => setSelectedImage(image.address)}
                   >
                     <img
                       src={image.address}
