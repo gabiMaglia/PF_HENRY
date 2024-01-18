@@ -46,7 +46,9 @@ const CardProduct = ({ product }) => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userId = authData ? authData.userId : null;
   const userRole = authData ? authData.userRole : null;
-  const { id, name, price, ProductImages, ProductCategories } = product;
+  console.log(product.ProductStock);
+  const { id, name, price, ProductImages, ProductCategories, ProductStock } =
+    product;
 
   const formatPrice = (price) => {
     return "$" + price.toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1.");
@@ -183,6 +185,31 @@ const CardProduct = ({ product }) => {
                 {name}
               </Typography>
             </CardContent>
+            {ProductStock.amount < 5 && ProductStock.amount > 1 && (
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "flex",
+                  color: "red",
+                  fontWeight: 700,
+                }}
+              >
+                Quedan {ProductStock.amount} unidades disponibles!
+              </Typography>
+            )}
+            {ProductStock.amount === 0 && (
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  color: "red",
+                  fontWeight: 700,
+                }}
+              >
+                Producto sin stock!
+              </Typography>
+            )}
             <ProductPrice
               variant="subtitle1"
               align="center"
