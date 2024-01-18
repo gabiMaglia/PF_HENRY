@@ -51,7 +51,6 @@ const CardProduct = ({ product }) => {
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const userId = authData ? authData.userId : null;
   const userRole = authData ? authData.userRole : null;
-  console.log(product.ProductStock);
   const { id, name, price, ProductImages, ProductCategories, ProductStock } =
     product;
 

@@ -22,22 +22,22 @@ const DiscountBanner = ({ text, rotate }) => {
         overflow: "hidden",
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          margin: 0,
-          color: "#fff",
-          fontWeight: "800",
-          background: "#ff0000",
-          padding: "13px 90px 15px 115px",
-          boxShadow: "0 2px 8px 0 rgba(0, 0, 0, 0.4)",
-          fontSize: " .9em",
-          textAlign: "center",
-          width: "430px",
-        }}
-      >
-        {text}
-      </Typography>
+      <Box sx={{ background: "#ff0000", padding: "15px 0px 15px 115px" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#fff",
+            fontWeight: "800",
+            fontSize: " 1em",
+            textAlign: "center",
+            width: "430px",
+            position: "relative",
+            right: "30px"
+          }}
+        >
+          {text}
+        </Typography>
+      </Box>
     </Box>
   );
 };
