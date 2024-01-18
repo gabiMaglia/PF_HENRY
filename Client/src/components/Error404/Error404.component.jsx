@@ -1,4 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Link } from "@mui/material";
+import PATHROUTES from "../../helpers/pathRoute";
 
 const Error404Component = () => {
   return (
@@ -21,12 +22,14 @@ const Error404Component = () => {
           </Typography>
         </Box>
         <Box sx={{ marginTop: "20px" }}>
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "#fd611a", fontSize: "22px" }}
-          >
-            Volver al Inicio
-          </Button>
+          <Link href={PATHROUTES.HOME}>
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: "#fd611a", fontSize: "22px" }}
+            >
+              Volver al Inicio
+            </Button>
+          </Link>
         </Box>
       </Box>
     </>
