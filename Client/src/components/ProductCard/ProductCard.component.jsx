@@ -16,9 +16,9 @@ import {
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCard = styled(Card)({
-  width: 350,
+  width: 320,
   height: 400,
-  transition: "transform 0.3s ease-in-out", // Aplica la transición a la regla principal
+  transition: "transform 0.3s ease-in-out",
 
   "&:hover": {
     transform: "scale(1.05)",
@@ -189,9 +189,10 @@ const CardProduct = ({ product }) => {
             </CardContent>
             {ProductStock.amount < 5 && ProductStock.amount > 1 && (
               <Typography
-                variant="body1"
+                variant="body2"
                 sx={{
                   display: "flex",
+                  justifyContent: "center",
                   color: "red",
                   fontWeight: 700,
                 }}
@@ -201,7 +202,7 @@ const CardProduct = ({ product }) => {
             )}
             {ProductStock.amount === 0 && (
               <Typography
-                variant="body1"
+                variant="body2"
                 sx={{
                   display: "flex",
                   justifyContent: "center",
