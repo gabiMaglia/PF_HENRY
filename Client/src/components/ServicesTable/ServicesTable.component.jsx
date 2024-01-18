@@ -125,15 +125,6 @@ const ServicesTable = () => {
       minWidth: 180,
       headerAlign: "center",
       editable: true,
-      valueFormatter: (params) => {
-        const numericPrice = parseFloat(params.value);
-        if (isNaN(numericPrice)) {
-          return "Formato precio invalido";
-        }
-        return `$${numericPrice
-          .toFixed(0)
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
-      },
     },
     {
       field: "confirm_repair",
@@ -391,6 +382,11 @@ const ServicesTable = () => {
         setAvailableModify(false);
         const serviceId = newRow.id;
 
+        if (newRow.budget) {
+          const numericBudget = parseFloat(newRow.budget.replace(/\D/g, ''));
+          newRow.budget = `$${numericBudget.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+        }
+
         const response = await updateService(serviceId, newRow, authData.jwt);
 
         if (response.status === 200) {
@@ -481,6 +477,8 @@ const ServicesTable = () => {
             ? `row--finalized`
             : params.row.confirm_repair === true
             ? `row--accepted`
+            : params.row.status === "Servicio cancelado"
+            ? `row--canceled`
             : `row`;
         }}
         checkboxSelection
