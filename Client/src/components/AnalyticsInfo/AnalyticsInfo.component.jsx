@@ -7,6 +7,7 @@ import LinearGraphic from "./Graphics/LinearGraphic.component";
 import BarGraphic from "./Graphics/BarGraphic.component";
 import DoughnutGraphics from "./Graphics/DoughnutGraphics.component";
 import Config from "./Config/Config.component";
+import Swal from "sweetalert2";
 const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
 
 const colors = [
@@ -51,13 +52,35 @@ const AnalyticsInfo = () => {
           metricStatus,
           dimensionStatus
         );
-        setOpenConfig(false);
-        setToken(accessToken);
-        setData(newData);
+        if (newData.error) {
+          Swal.fire({
+            allowOutsideClick: false,
+            icon: "error",
+            title: "Error al obtener los datos",
+            text: `${newData.response}`,
+            customClass: {
+              container: "container",
+            },
+          });
+        } else {
+          Swal.hideLoading();
+          Swal.close();
+          setOpenConfig(false);
+          setToken(accessToken);
+          setData(newData);
+        }
       }
     },
     onError: (error) => {
-      console.error(error);
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al autenticar",
+        text: `Verifique que la cuente este verificada`,
+        customClass: {
+          container: "container",
+        },
+      });
     },
   });
 
@@ -70,8 +93,22 @@ const AnalyticsInfo = () => {
         metricStatus,
         dimensionStatus
       );
-      setData(newData);
-      setOpenConfig(false);
+      if (newData.error) {
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: "error",
+          title: "Error al obtener los datos",
+          text: `${newData.response}`,
+          customClass: {
+            container: "container",
+          },
+        });
+      } else {
+        Swal.hideLoading();
+        Swal.close();
+        setData(newData);
+        setOpenConfig(false);
+      }
     } else {
       googleLogin();
       setFirstCharge(false);

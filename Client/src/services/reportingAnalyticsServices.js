@@ -104,9 +104,24 @@ export const fetchAnalyticsData = async (
       );
       let totalData = [...totalDimensionsData, ...totalMetricsData];
 
+      let error = { error: false, response: "" };
+
       totalData = totalData.map((data) => {
+        if (data?.status === 401 || data?.status === 403) {
+          error = {
+            error: true,
+            response:
+              "Error de autenticación, verifique que la cuenta este habilitada",
+          };
+        } else if (data.status !== 200 || data.status !== 201) {
+          error = {
+            error: true,
+            response: "Error al obtener los datos, intentelo denuevo mas tarde",
+          };
+        }
         return data?.data;
       });
+
       totalData = totalData.filter((data) => {
         if (data !== undefined) return data;
       });
@@ -130,39 +145,37 @@ export const fetchAnalyticsData = async (
         requestBody,
         { headers }
       );
+
+      if (response.status === 401 || response.status === 403) {
+        return {
+          error: true,
+          response:
+            "Error de autenticación, verifique que la cuenta este habilitada",
+        };
+      }
+
       responseData = [response?.data];
     }
     const rows = [];
-    const finalData = responseData.forEach((data) => {
+    responseData.forEach((data) => {
       data?.rows?.map((row) => {
         rows.push(row);
       });
     });
     return rows;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      return {
+        error: true,
+        response:
+          "Error de autenticación, verifique que la cuenta este habilitada",
+      };
+    }
+    return {
+      error: true,
+      response:
+        "Error de al obtener los datos, pruebe con otra combinación de metricas y dimensiones",
+    };
   }
 };
-// const dimensions = [{ name: "eventName" }, { name: "date" }];
-// const metrics = [{ name: "eventCount" }];
-// const dimensionFilter = {
-//   filter: {
-//     fieldName: "eventName",
-//     stringFilter: {
-//       value: "create_service", // Filtra por el nombre del evento
-//       matchType: "EXACT",
-//     },
-//   },
-// };);
-
-// const dimensions = [{ name: "eventName" }, { name: "date" }];
-// const metrics = [{ name: "eventCount" }];
-// const dimensionFilter = {
-//   filter: {
-//     fieldName: "eventName",
-//     stringFilter: {
-//       value: "create_service", // Filtra por el nombre del evento
-//       matchType: "EXACT",
-//     },
-//   },
-// };

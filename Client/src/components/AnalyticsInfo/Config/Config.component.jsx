@@ -74,7 +74,6 @@ const Config = ({
       metrics: metricStatus,
       dimensions: dimensionStatus,
     });
-    console.log(actErrors);
     if (
       actErrors?.graph?.length > 0 ||
       actErrors?.order?.length > 0 ||
@@ -121,6 +120,16 @@ const Config = ({
         },
       });
     } else {
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+        customClass: {
+          container: "container",
+        },
+      });
+      Swal.showLoading();
       getData();
     }
   };
