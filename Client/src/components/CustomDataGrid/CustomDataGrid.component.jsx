@@ -99,74 +99,56 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     },
   },
   "& .row--deleted": {
-    backgroundColor: "red",
+    backgroundColor: "#f7a2a2",
     "&:hover": {
-      backgroundColor: "#f19494",
+      backgroundColor: "#f7a2a2",
     },
     "&:active": {
-      backgroundColor: "#f19494",
+      backgroundColor: "#f7a2a2",
     },
     "&:focus-within": {
-      backgroundColor: "#f19494",
+      backgroundColor: "#f7a2a2",
     },
     "&.Mui-selected": {
-      backgroundColor: "#f19494",
+      backgroundColor: "#f7a2a2",
       "&:hover": {
-        backgroundColor: "#f19494",
+        backgroundColor: "#f7a2a2",
       },
     },
   },
   "& .row--carousel": {
-    backgroundColor: "#567fbe",
+    backgroundColor: "#4d92ed",
     "&:hover": {
-      backgroundColor: "#567fbe",
+      backgroundColor: "#4d92ed",
     },
     "&:active": {
-      backgroundColor: "#567fbe",
+      backgroundColor: "#4d92ed",
     },
     "&:focus-within": {
-      backgroundColor: "#567fbe",
+      backgroundColor: "#4d92ed",
     },
     "&.Mui-selected": {
-      backgroundColor: "#567fbe",
+      backgroundColor: "#4d92ed",
       "&:hover": {
-        backgroundColor: "#567fbe",
-      },
-    },
-  },
-  "& .row--accepted": {
-    backgroundColor: "#cccccc",
-    "&:hover": {
-      backgroundColor: "#cccccc",
-    },
-    "&:active": {
-      backgroundColor: "#ccccc",
-    },
-    "&:focus-within": {
-      backgroundColor: "#cccccc",
-    },
-    "&.Mui-selected": {
-      backgroundColor: "#cccccc",
-      "&:hover": {
-        backgroundColor: "#cccccc",
+        backgroundColor: "#4d92ed",
       },
     },
   },
   "& .row--finalized": {
-    backgroundColor: "#7fc09f",
+    backgroundColor: "#a2f7a9",
     "&:hover": {
-      backgroundColor: "#7fc09f",
+      backgroundColor: "#a2f7a9",
     },
     "&:active": {
-      backgroundColor: "#7fc09f",
+      backgroundColor: "#a2f7a9",
     },
     "&:focus-within": {
-      backgroundColor: "#7fc09f",
+      backgroundColor: "#a2f7a9",
     },
     "&.Mui-selected": {
-      backgroundColor: "#7fc09f",
+      backgroundColor: "#a2f7a9",
       "&:hover": {
-        backgroundColor: "#7fc09f"
+        backgroundColor: "#a2f7a9"
       },
     },
   },
