@@ -45,6 +45,7 @@ const ProductCreateProfileComponent = () => {
   const [isUrlInput, setIsUrlInput] = useState(false);
   const [imageURL, setImageURL] = useState("");
   const [carouselData, setCarouselData] = useState(false);
+  const [bannerMessage, setBannerMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     name: "",
@@ -57,6 +58,7 @@ const ProductCreateProfileComponent = () => {
     brandName: isOtherBrand ? newBrand : brand,
     images: [],
     carousel: carouselData,
+    banner: "",
   });
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
@@ -236,6 +238,7 @@ const ProductCreateProfileComponent = () => {
         ...values,
         carousel: carouselData,
         images: array,
+        banner: bannerMessage,
       };
 
       // Muestra una alerta de que la creación está en proceso
@@ -509,6 +512,19 @@ const ProductCreateProfileComponent = () => {
             label="Desea añadir el producto al carousel?"
           />
           <Box>
+            <TextField
+              name="banner"
+              label="Mensaje del Banner"
+              value={bannerMessage}
+              onChange={(e) => setBannerMessage(e.target.value)}
+              variant="outlined"
+              sx={{ mt: 1, mb: 1 }}
+              fullWidth
+              helperText={errors.e14}
+              error={Boolean(errors.e14)}
+            />
+          </Box>
+          <Box>
             {!isUrlInput ? (
               <FormControl fullWidth>
                 <Input
@@ -684,7 +700,8 @@ const ProductCreateProfileComponent = () => {
                   errors.e10 ||
                   errors.e11 ||
                   errors.e12 ||
-                  errors.e13
+                  errors.e13 ||
+                  errors.e14
                 }
               >
                 Crear Producto

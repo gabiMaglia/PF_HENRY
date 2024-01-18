@@ -9,7 +9,8 @@ const {
   getProductById,
   searchByName,
   logicalDelete,
-  addToCarousel
+  addToCarousel,
+  //addToBanner,
 } = require("../../controllers/productControllers/productController");
 
 //Post Product
@@ -26,6 +27,7 @@ const postProductHandler = async (req, res) => {
     brandName,
     soldCount,
     carousel,
+    banner,
   } = req.body;
 
   try {
@@ -53,6 +55,7 @@ const postProductHandler = async (req, res) => {
       brandName,
       soldCount,
       carousel,
+      banner,
     });
 
     res
@@ -144,6 +147,24 @@ const addToCarouselHandler = async (req, res) => {
   }
 };
 
+// ADD TO BANNER
+/*const addToBannerHandler = async (req, res) => {
+  const { id } = req.params;
+  const { banner } = req.body;
+
+  try {
+    const result = await addToBanner(id, banner);
+
+    if (result.error) {
+      return res.status(400).json({ error: result.response });
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};*/
+
 //GET BY ID
 const getProductByIdHandler = async (req, res) => {
   const { id } = req.params;
@@ -202,4 +223,5 @@ module.exports = {
   searchByNameHandler,
   postProductSeveralHandler,
   getProductsCarouselHandler,
+  //addToBannerHandler,
 };

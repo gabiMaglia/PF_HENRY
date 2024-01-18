@@ -40,6 +40,7 @@ const postProduct = async ({
   brandName,
   soldCount,
   carousel,
+  banner,
 }) => {
   const transaction = await conn.transaction();
 
@@ -52,6 +53,7 @@ const postProduct = async ({
         warranty,
         soldCount,
         carousel,
+        banner,
         is_deleted,
       },
       { transaction }
@@ -325,6 +327,25 @@ const addToCarousel = async (id) => {
   } `;
 };
 
+// ADD TO BANNER
+/*const addToBanner = async (id, banner) => {
+  try {
+    const product = await Product.findByPk(id);
+
+    if (!product) {
+      return { error: true, response: "Producto no encontrado" };
+    }
+
+    product.banner = banner;
+    await product.save();
+
+    return product;
+  } catch (error) {
+    console.error("Error al agregar banner al producto:", error);
+    return { error: true, response: "Error interno del servidor" };
+  }
+};*/
+
 const getProductById = async (id) => {
   try {
     const product = await Product.findByPk(id, {
@@ -405,4 +426,5 @@ module.exports = {
   getProductById,
   searchByName,
   productCarousel,
+  //addToBanner
 };

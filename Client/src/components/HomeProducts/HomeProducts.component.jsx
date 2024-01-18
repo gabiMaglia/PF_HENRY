@@ -22,6 +22,7 @@ const HomeProducts = ({ allProducts }) => {
   };
 
   useEffect(() => {
+    console.log("allProducts slice:", allProducts.slice(0, 5));
     const fetchData = async () => {
       let startTime;
       try {
