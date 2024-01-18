@@ -29,18 +29,16 @@ import { useEffect } from "react";
 import ChangePasword from "./views/publics/ChangePassword/ChangePasword.view";
 
 const App = () => {
-  // CustomHook que hace el check de token
-  // const checkTokenData = useCheckAuthData();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
+  
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
-
+  
+  // CustomHook que hace el check de token
   const checkAuthData = useCheckAuthData(openLoginModal);
 
   useEffect(() => {
-    // checkTokenData.checkToken()
     checkAuthData.checkToken();
   }, [checkAuthData]);
 
