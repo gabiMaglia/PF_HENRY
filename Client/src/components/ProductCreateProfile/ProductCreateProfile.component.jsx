@@ -238,7 +238,6 @@ const ProductCreateProfileComponent = () => {
         ...values,
         carousel: carouselData,
         images: array,
-        banner: bannerMessage,
       };
 
       // Muestra una alerta de que la creación está en proceso
@@ -278,6 +277,7 @@ const ProductCreateProfileComponent = () => {
         brandName: isOtherBrand ? newBrand : brand,
         images: [],
         carousel: carouselData,
+        banner: "",
       });
       setBrand("Selecciona una marca");
       setCategoryName("Selecciona una categoria");
@@ -511,19 +511,21 @@ const ProductCreateProfileComponent = () => {
             control={<Checkbox />}
             label="Desea añadir el producto al carousel?"
           />
-          <Box>
-            <TextField
-              name="banner"
-              label="Mensaje del Banner"
-              value={bannerMessage}
-              onChange={(e) => setBannerMessage(e.target.value)}
-              variant="outlined"
-              sx={{ mt: 1, mb: 1 }}
-              fullWidth
-              helperText={errors.e14}
-              error={Boolean(errors.e14)}
-            />
-          </Box>
+          {carouselData && (
+            <Box>
+              <TextField
+                name="banner"
+                label="Mensaje del Banner"
+                value={values.banner}
+                onChange={handleChange}
+                variant="outlined"
+                sx={{ mt: 1, mb: 1 }}
+                fullWidth
+                helperText={errors.e14 || errors.e15}
+                error={Boolean(errors.e14) || Boolean(errors.e15)}
+              />
+            </Box>
+          )}
           <Box>
             {!isUrlInput ? (
               <FormControl fullWidth>
@@ -688,6 +690,7 @@ const ProductCreateProfileComponent = () => {
                   !values.brandName ||
                   !values.categoryName ||
                   !values.images.length ||
+                  !values.banner ||
                   errors.e1 ||
                   errors.e2 ||
                   errors.e3 ||
@@ -701,7 +704,8 @@ const ProductCreateProfileComponent = () => {
                   errors.e11 ||
                   errors.e12 ||
                   errors.e13 ||
-                  errors.e14
+                  errors.e14 ||
+                  errors.e15
                 }
               >
                 Crear Producto

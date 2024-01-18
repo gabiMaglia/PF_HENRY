@@ -38,9 +38,9 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: false,
     },
-    banner: {
+   banner: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   });
 };

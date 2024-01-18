@@ -22,7 +22,6 @@ const HomeProducts = ({ allProducts }) => {
   };
 
   useEffect(() => {
-    console.log("allProducts slice:", allProducts.slice(0, 5));
     const fetchData = async () => {
       let startTime;
       try {
@@ -84,32 +83,22 @@ const HomeProducts = ({ allProducts }) => {
     );
   }
 
-  if (error) {
+  if (!homeProducts.length) {
     return (
-      <Container
-        variant="body1"
-        sx={{
-          display: "grid",
-          gridColumnStart: 1,
-          gridColumnEnd: 4,
-          alignItems: "center",
-          justifyContent: "center",
-          mt: 4,
-          mb: 4,
-          fontSize: 28,
-          fontWeight: 700,
-          color: "red",
-        }}
-      >
+      <Container>
         <Typography
           variant="body1"
           sx={{
             display: "flex",
             justifyContent: "center",
             color: "red",
+            marginTop: "32px",
+            marginBottom: "32px",
+            fontSize: "28px",
+            fontWeight: 700,
           }}
         >
-          Por el momento no se encuentran productos disponibles.
+          Por el momento no hay productos disponibles.
         </Typography>
       </Container>
     );

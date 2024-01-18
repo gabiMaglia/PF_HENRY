@@ -147,6 +147,13 @@ const ProductsTable = () => {
       headerAlign: "center",
     },
     {
+      field: "banner",
+      headerName: "Banner",
+      width: 240,
+      headerAlign: "center",
+      editable: true,
+    },
+    {
       field: "is_deleted",
       headerName: "Borrado",
       width: 100,
@@ -167,6 +174,7 @@ const ProductsTable = () => {
           warranty: product.warranty,
           soldCount: product.soldCount,
           carousel: product.carousel,
+          banner: product.banner,
           is_deleted: product.is_deleted,
           brand: product.ProductBrands[0].name,
           category: product.ProductCategories[0].name,
@@ -372,6 +380,7 @@ const ProductsTable = () => {
           warranty: newRow.warranty,
           soldCount: newRow.soldCount,
           carousel: newRow.carousel,
+          banner: newRow.banner,
           stock: newRow.stock,
           brandName: newRow.brand,
           categoryName: newRow.category,
@@ -487,6 +496,7 @@ const ProductsTable = () => {
               // warranty: false,
               is_deleted: false,
               carousel: false,
+              banner: false,
             },
           },
         }}
