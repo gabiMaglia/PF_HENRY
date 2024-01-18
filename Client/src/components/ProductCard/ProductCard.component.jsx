@@ -16,14 +16,19 @@ import {
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 
 const ProductCard = styled(Card)({
-  width: 300,
-  height: 350,
+  width: 350,
+  height: 400,
+  transition: "transform 0.3s ease-in-out", // Aplica la transición a la regla principal
+
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
 });
 
 const ProductMedia = styled(CardMedia)({
-  padding: 24,
-  height: 180,
-  width: 180,
+  padding: 18,
+  height: 200,
+  width: 200,
   objectFit: "cover",
   margin: "auto",
 });
@@ -108,7 +113,7 @@ const CardProduct = ({ product }) => {
         sx={{
           m: 1,
           padding: 0,
-          margin: 0,
+          marginBottom: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -160,9 +165,6 @@ const CardProduct = ({ product }) => {
               sx={{
                 cursor: "pointer",
                 transition: "transform 0.3s",
-                "&:hover": {
-                  transform: "scale(1.1)",
-                },
               }}
             />
             <CardContent>
@@ -194,7 +196,7 @@ const CardProduct = ({ product }) => {
                   fontWeight: 700,
                 }}
               >
-                Quedan {ProductStock.amount} unidades disponibles!
+                ¡{ProductStock.amount} unidades disponibles!
               </Typography>
             )}
             {ProductStock.amount === 0 && (
@@ -207,7 +209,7 @@ const CardProduct = ({ product }) => {
                   fontWeight: 700,
                 }}
               >
-                Producto sin stock!
+                !Producto sin stock!
               </Typography>
             )}
             <ProductPrice

@@ -407,8 +407,7 @@ const Detail = () => {
                       fontWeight: 700,
                     }}
                   >
-                    Quedan {productById.ProductStock.amount} unidades
-                    disponibles!
+                    ¡{productById.ProductStock.amount} unidades disponibles!
                   </Typography>
                 )}
               {productById.ProductStock.amount === 0 && (
@@ -421,7 +420,7 @@ const Detail = () => {
                     fontWeight: 700,
                   }}
                 >
-                  Producto sin stock!
+                  ¡Producto sin stock!
                 </Typography>
               )}
               <Typography
