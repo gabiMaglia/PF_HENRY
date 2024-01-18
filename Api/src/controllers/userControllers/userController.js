@@ -80,9 +80,7 @@ const postUser = async (
     image,
     isActive: true,
   });
-
   // UserCredentials
-
   let { username, password } = userCredentials;
   const newUserCredentials = await newUser.createUserCredential({
     username,
@@ -90,7 +88,6 @@ const postUser = async (
   });
   newUserCredentials.id = newUser.id;
   await newUserCredentials.save();
-
   // UserAddress
   const {
     country = "",
@@ -113,7 +110,6 @@ const postUser = async (
   await newUserAddress.save();
 
   // UserRoles
-
   const role_name = roles;
   const [userRole] = await UserRole.findOrCreate({
     where: { role_name },
