@@ -9,7 +9,7 @@
     "rewrites": [
         {
             "source": "/product/:id",
-            "destination": "/product"
+            "destination": "/api/product"
         }
     ]
 }
