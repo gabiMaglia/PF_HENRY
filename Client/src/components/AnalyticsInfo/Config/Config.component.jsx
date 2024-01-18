@@ -12,6 +12,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { metrics, dimensions } from "../dataTypes";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { configValidate } from "../../../helpers/configAnalyticsValidate";
+import Swal from "sweetalert2";
 
 const boxModalStyle = {
   height: "auto",
@@ -60,6 +62,66 @@ const Config = ({
       setMetricStatus(newData);
     } else {
       setDimensionStatus(newData);
+    }
+  };
+
+  const handleSubmit = () => {
+    const actErrors = configValidate({
+      graph: graphicType,
+      order: dataOrder,
+      startDate: config.startDate,
+      endDate: config.endDate,
+      metrics: metricStatus,
+      dimensions: dimensionStatus,
+    });
+    console.log(actErrors);
+    if (
+      actErrors?.graph?.length > 0 ||
+      actErrors?.order?.length > 0 ||
+      actErrors?.startDate?.length > 0 ||
+      actErrors?.endDate?.length > 0 ||
+      actErrors?.dates?.length > 0 ||
+      actErrors?.metrics?.length > 0 ||
+      actErrors?.dimensions?.length > 0
+    ) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error en el formulario",
+        text: "Por favor revise los campos del formulario",
+        html: `<div>
+            <ul>
+           ${actErrors?.graph?.length > 0 ? `<li>${actErrors?.graph}</li>` : ""}
+           ${actErrors?.order?.length > 0 ? `<li>${actErrors?.order}</li>` : ""}
+           ${
+             actErrors?.startDate?.length > 0
+               ? `<li>${actErrors?.startDate}</li>`
+               : ""
+           }
+           ${
+             actErrors?.endDate?.length > 0
+               ? `<li>${actErrors?.endDate}</li>`
+               : ""
+           }
+           ${actErrors?.dates?.length > 0 ? `<li>${actErrors?.dates}</li>` : ""}
+           ${
+             actErrors?.metrics?.length > 0
+               ? `<li>${actErrors?.metrics}</li>`
+               : ""
+           }
+           ${
+             actErrors?.dimensions?.length > 0
+               ? `<li>${actErrors?.dimensions}</li>`
+               : ""
+           }
+            </ul>
+          </div>`,
+        customClass: {
+          container: "container",
+        },
+      });
+    } else {
+      getData();
     }
   };
 
@@ -283,12 +345,7 @@ const Config = ({
         </Box>
         <Box>
           <Box sx={{ backgroundColor: "#fd611a" }}>
-            <Button
-              fullWidth
-              onClick={() => {
-                getData();
-              }}
-            >
+            <Button fullWidth onClick={handleSubmit}>
               <Typography variant="body1" color="white">
                 Buscar datos
               </Typography>

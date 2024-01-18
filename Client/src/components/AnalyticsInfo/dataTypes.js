@@ -157,6 +157,7 @@ export const metrics = [
     },
   },
   { name: "totalUsers", label: "Usuarios" },
+  { name: "newUsers", label: "Nuevos usuarios" },
   { name: "transactionsPerPurchaser", label: "Transacciónes por usuarios" },
   { name: "userEngagementDuration", label: "Tiempo" },
   { name: "totalRevenue", label: "Ingresos totales" },
@@ -169,6 +170,19 @@ export const metrics = [
         fieldName: "eventName",
         stringFilter: {
           value: "select_promotion",
+          matchType: "EXACT",
+        },
+      },
+    },
+  },
+  {
+    name: "activeUsers",
+    label: "Formularios de servicio completados",
+    dimensionFilter: {
+      filter: {
+        fieldName: "eventName",
+        stringFilter: {
+          value: "generate_lead",
           matchType: "EXACT",
         },
       },
