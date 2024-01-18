@@ -35,6 +35,12 @@ const UsersTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
 
+  const roleTranslations = {
+    admin: "Admin",
+    customer: "Cliente",
+    technician: "Técnico",
+  };
+
   const gridColumns = [
     {
       field: "id",
@@ -77,7 +83,7 @@ const UsersTable = () => {
             .sort((a, b) => a.role_name.localeCompare(b.role_name))
             .map((role) => (
               <MenuItem key={role.id} value={role.role_name}>
-                {role.role_name}
+                {roleTranslations[role.role_name]}
               </MenuItem>
             ))}
         </Select>
@@ -94,18 +100,27 @@ const UsersTable = () => {
       headerAlign: "center",
       headerName: "Verificado",
       minWidth: 25,
+      renderCell: (params) =>(
+        <Box>{params.value ? "Si" : "No"}</Box>
+      )
     },
     {
       field: "isActive",
       headerAlign: "center",
       headerName: "Activo",
       minWidth: 120,
+      renderCell: (params) =>(
+        <Box>{params.value ? "Si" : "No"}</Box>
+      )
     },
     {
       field: "isDeleted",
       headerAlign: "center",
       headerName: "Eliminado",
       minWidth: 25,
+      renderCell: (params) =>(
+        <Box>{params.value ? "Si" : "No"}</Box>
+      )
     },
   ];
 
