@@ -92,13 +92,13 @@ const ServicesTable = () => {
       renderCell: (params) => (
         <Select
           value={params.value}
-          onChange={(e) =>
+          onChange={(e) => {
             handleTechnicianChange(
               params.id,
               e.target.value,
               params.row.technicianId
-            )
-          }
+            );
+          }}
           sx={{ width: "100%" }}
         >
           {technicians.map((technician) => {
@@ -178,7 +178,7 @@ const ServicesTable = () => {
   ];
   const validateService = async (id) => {
     const service = services.filter((service) => service.id === id);
-    console.log(service[0]);
+
     if (
       service[0].status === "Servicio finalizado" ||
       service[0].status === "Servicio cancelado"
@@ -238,7 +238,6 @@ const ServicesTable = () => {
     newTechnicianName,
     technicianId
   ) => {
-    console.log("TECH ID", technicianId);
     try {
       const newTechnician = technicians.find(
         (technician) =>
@@ -250,9 +249,7 @@ const ServicesTable = () => {
         title: "Por favor espere mientras procesamos la información",
         showConfirmButton: false,
       });
-      Swal.showLoading();
-
-      if (validateService(id)) {
+      if (await validateService(id)) {
         return Swal.fire({
           icon: "error",
           title: "Actualizacion Erronea",
@@ -288,8 +285,26 @@ const ServicesTable = () => {
     }
   };
 
+  const budgetValidate = (budget) => {
+    let newBudget = budget.replace("$", "");
+    newBudget = newBudget.replace(".", "");
+    let validate = /^\d+$/.test(newBudget);
+    let pending = true;
+    if (!validate) {
+      pending = newBudget === "Pendiente";
+      return pending;
+    } else {
+      return validate;
+    }
+  };
+
+  const modelValidate = (model) => {
+    return /^[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*[a-zA-Z]/.test(
+      model
+    );
+  };
+
   const handleStatusChange = async (id, newStatus) => {
-    console.log(id);
     try {
       Swal.fire({
         icon: "info",
@@ -298,7 +313,6 @@ const ServicesTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
-      // const {data}=await getServicesById(id,authData.jwt)
       if (validateService(id)) {
         return Swal.fire({
           icon: "error",
@@ -355,7 +369,6 @@ const ServicesTable = () => {
   }, []);
 
   const handleCellEditStart = (params) => {
-    console.log(params);
     editingRow.current = rows.find((row) => row.id === params.id) || null;
   };
 
@@ -403,9 +416,29 @@ const ServicesTable = () => {
     }
   };
 
-  const processRowUpdate = async (newRow) => {
+  const processRowUpdate = async (newRow, antRow) => {
     try {
       if (availableModify) {
+        if (newRow?.budget !== antRow?.budget) {
+          if (!budgetValidate(newRow?.budget)) {
+            Swal.fire({
+              icon: "error",
+              title: "Actualizacion erronea",
+              text: "El presupuesto solo admite numeros o Pendiente",
+            });
+            return antRow;
+          }
+        }
+        if (newRow?.product_model !== antRow?.model) {
+          if (!modelValidate(newRow?.product_model)) {
+            Swal.fire({
+              icon: "error",
+              title: "Actualizacion erronea",
+              text: "El nombre de modelo ingresado no es valido",
+            });
+            return antRow;
+          }
+        }
         Swal.fire({
           icon: "info",
           allowOutsideClick: false,
@@ -415,7 +448,7 @@ const ServicesTable = () => {
         Swal.showLoading();
         setAvailableModify(false);
         const serviceId = newRow.id;
-        if (newRow.budget) {
+        if (newRow.budget && /^\d+$/.test(newRow.budget)) {
           const numericBudget = parseFloat(newRow.budget.replace(/\D/g, ""));
           newRow.budget = `$${numericBudget
             .toFixed(0)
@@ -449,6 +482,7 @@ const ServicesTable = () => {
           });
         }
       }
+      return newRow;
     } catch (error) {
       throw new Error("Error al comunicarse con el servidor", error);
     }

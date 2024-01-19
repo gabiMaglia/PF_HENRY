@@ -121,7 +121,7 @@ const CardProduct = ({ product }) => {
           position: "relative",
         }}
       >
-        {ProductStock?.amount <= 5 && ProductStock?.amount >= 1 && (
+        {ProductStock?.amount <= 5 && ProductStock?.amount > 1 && (
           <Typography
             variant="body2"
             sx={{
@@ -130,14 +130,16 @@ const CardProduct = ({ product }) => {
               color: "grey",
               fontWeight: 700,
               position: "absolute",
-              top: 110,
-              right: -15,
+              top: 90,
+              right: -10,
               width: "auto",
               transform: "rotate(45deg)",
             }}
           >
             {ProductStock?.amount}
-            {ProductStock?.amount === 1 ? " unidad" : " unidades"} disponibles
+            {ProductStock?.amount === 1
+              ? " unidad disponible"
+              : " unidades disponibles "}
           </Typography>
         )}
         {ProductStock?.amount === 0 && (

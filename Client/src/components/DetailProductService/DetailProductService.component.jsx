@@ -141,7 +141,7 @@ const DetailProductService = ({
         data.statusId,
         updatedArray,
         authData.jwt
-      ); 
+      );
       response?.length > 0 && (response = response[response.length - 1]);
       if (response?.error) {
         Swal.hideLoading();
@@ -159,13 +159,14 @@ const DetailProductService = ({
             ? "Notificar al cliente por Whatsapp"
             : "";
         Swal.hideLoading();
+        const text = response?.data.replace("status", "Estado");
         Swal.fire({
           allowOutsideClick: false,
           icon: "success",
           title: "Servicio actualizado",
           footer: `${preference}`,
           confirmButtonColor: "#fd611a",
-          text: `${response?.data}`,
+          text: `${text}`,
         });
         getService();
         return true;
@@ -201,7 +202,14 @@ const DetailProductService = ({
             if (!value) {
               return "Debe ingresar el presupuesto para continuar";
             } else {
-              newBudget = value;
+              let validateBudget = value.replace("$", "");
+              validateBudget = validateBudget.replace(".", "");
+              let validate = /^\d+$/.test(validateBudget);
+              if (!validate) {
+                return "El presupuesto no es valido";
+              } else {
+                newBudget = value;
+              }
             }
           },
         }).then(async (result) => {

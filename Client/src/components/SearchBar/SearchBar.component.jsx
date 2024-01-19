@@ -72,7 +72,7 @@ export default function SearchAppBar() {
   useEffect(() => {
     dispatch(addItem());
     if (login) {
-      fetchHistoryUSer(authData.userId, dispatch);
+      fetchHistoryUSer(authData?.userId, dispatch);
     }
   }, [login, aux]);
 

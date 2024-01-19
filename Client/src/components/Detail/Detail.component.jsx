@@ -409,9 +409,8 @@ const Detail = () => {
                   >
                     {productById?.ProductStock?.amount}
                     {productById?.ProductStock?.amount === 1
-                      ? " unidad"
-                      : " unidades"}{" "}
-                    disponibles
+                      ? " unidad disponible"
+                      : " unidades disponibles"}{" "}
                   </Typography>
                 )}
               {productById?.ProductStock?.amount === 0 && (
