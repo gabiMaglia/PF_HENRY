@@ -10,8 +10,8 @@ const DiscountBanner = ({ text, rotate }) => {
         top: "85px",
         opacity: "0.7",
         left: {
-          xs: "165px",
-          md: "235px",
+          xs: "110px",
+          md: "150px",
           lg: "285px",
           xl: "405px",
           xxl: "490px",
@@ -30,9 +30,9 @@ const DiscountBanner = ({ text, rotate }) => {
             fontWeight: "800",
             fontSize: " 1em",
             textAlign: "center",
-            width: "430px",
+            width: "330px",
             position: "relative",
-            right: "30px"
+            right: "30px",
           }}
         >
           {text}
