@@ -83,10 +83,86 @@ const addServiceController = async (
           await transporter.sendMail({
             from: `Hyper Mega Red  ${destinationEmail}`,
             to: clientObj.email, // list of receivers
-            subject: "ingreso a servicio ✔",
-            html: `Estimado ${clientName}.<br> Le informamos que su equipo se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br> 
-            <a href="${hypermegared}"><img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/></a>
-            `,
+            subject: `ingreso a servicio ${newService.product_model}`,
+            html: `<div
+            style="
+             background: linear-gradient(to top, #fd611a, white);
+             width: 100%;
+             max-width: 600px;
+             filter: brightness(80%);
+             height: auto;
+             border-radius: 20px;
+            "
+            >
+            <table
+              style="
+              width: 100%;
+              max-width: 500px;
+              height: auto;
+              background: linear-gradient(to bottom, black, white);
+              margin: 2px auto;
+              border: solid 1px white;
+              align-items: center;
+              "
+            >
+              <tr>
+                <td>
+                  <a href="https://pf-henry-sepia.vercel.app/">
+                  <img src="https://res.cloudinary.com/hypermegared/image/upload/v1704925814/jwnogqatk0b1jdmpfrzz.png" alt="logo" style="width: 100px;height: 100px; margin: 0 200px 0 200px ;">
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p
+                    style="
+                      font-size: 15px;
+                      text-align: center;
+                      margin: 15px 50px 0 50px;
+                      color: white;
+                      font-weight: bold;
+                    "
+                  >
+                  Estimado ${clientName}
+                  </p>
+                </td>
+              </tr>
+      
+              <tr>
+                <td>
+                  <p
+                    style="
+                      font-size: 20px;
+                      text-align: center;
+                      color: rgb(255, 255, 255);
+                      font-weight: bolder;
+                      margin: 15px 50px 0px 50px;
+                      text-shadow: 0.5px 0px 0px #fd611a,
+                        0px 0.5px 0px #fd611a, -0.5px 0px 0px #fd611a,
+                        0px -0.5px 0px #fd611a;
+                    "
+                  >
+                  Le informamos que su equipo <b>${newService.product_model}</b> se ingreso a nuestro sistema el dia ${date}.<br> El mismo será evaluado por el técnico asignado para el servicio.<br> Una vez evaluado, recibirá por este medio el diagnóstico del mismo y el presupuesto para su reparación.<br> También podrá seguir el estado del servicio desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ahí podrá ACEPTAR o RECHAZAR el presupuesto.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....
+      
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://pf-henry-sepia.vercel.app/">
+                    <img
+                      src="https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg"
+                      style="
+                        display: block;
+                        max-width: 500px;
+                        margin-top: 5px;
+                      "
+                    />
+                  </a>
+                </td>
+              </tr>
+            </table>
+            </div>`,
           });
         }
         //corta envio
@@ -134,9 +210,107 @@ const updateServiceStatusController = async (id, field, value) => {
       await transporter.sendMail({
         from: `Hyper Mega Red  ${destinationEmail}`, // sender address
         to: clientObj.email,
-        subject: "actualizacion de estado ✔",
-        html: `Estimado ${clientName}<br> Le informamos que se modificó el estado de su equipo ${service.product_model} a ${field}: ${value}.<br> Recuerde que también puede seguir el estado del mismo desde nuestro <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de usuario, productos en servicio.<br> Ante cualquier duda no dude en comunicarse con nuestro sector de soporte técnico. Muchas gracias....<br><br>
-        <a href="${hypermegared}"><img src='https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg'/></a>`,
+        subject: `actualizacion de estado de reparacion ${service.product_model}` ,
+        html: `<div
+        style="
+          background: linear-gradient(to top, #fd611a, white);
+          width: 100%;
+          max-width: 600px;
+          filter: brightness(80%);
+          height: auto;
+          border-radius: 20px;
+        "
+      >
+        <table
+          style="
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            background: linear-gradient(to bottom, black, white);
+            margin: 2px auto;
+            border: solid 1px white;
+            align-items: center;
+          "
+        >
+          <tr>
+            <td>
+              <a href="https://pf-henry-sepia.vercel.app/">
+                <img
+                  src="https://res.cloudinary.com/hypermegared/image/upload/v1704925814/jwnogqatk0b1jdmpfrzz.png"
+                  alt="logo"
+                  style="width: 100px; height: 100px; margin: 0 200px 0 200px"
+                />
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p
+                style="
+                  font-size: 15px;
+                  text-align: center;
+                  margin: 15px 50px 0 50px;
+                  color: white;
+                  font-weight: bold;
+                "
+              >
+                Estimado ${clientName}
+              </p>
+            </td>
+          </tr>
+      
+          <tr>
+            <td>
+              <p
+                style="
+                  font-size: 20px;
+                  text-align: center;
+                  color: rgb(255, 255, 255);
+                  font-weight: bolder;
+                  margin: 15px 50px 0px 50px;
+                  text-shadow: 0.5px 0px 0px #fd611a, 0px 0.5px 0px #fd611a,
+                    -0.5px 0px 0px #fd611a, 0px -0.5px 0px #fd611a;
+                "
+              >
+                Le informamos que se modificó el estado de su equipo
+                ${service.product_model} a ${field}: "${value}".
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p
+                style="
+                  font-size: 20px;
+                  text-align: center;
+                  color: rgb(255, 255, 255);
+                  font-weight: bolder;
+                  margin: 15px 50px 0px 50px;
+                  text-shadow: 0.5px 0px 0px #fd611a, 0px 0.5px 0px #fd611a,
+                    -0.5px 0px 0px #fd611a, 0px -0.5px 0px #fd611a;
+                "
+              >
+                Recuerde que también puede seguir el estado del mismo desde nuestro
+                <a href="${hypermegared}">Sitio Web</a> ingresando a su panel de
+                usuario, productos en servicio.<br />
+                Ante cualquier duda no dude en comunicarse con nuestro sector de
+                soporte técnico. Muchas gracias....
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="https://pf-henry-sepia.vercel.app/">
+                <img
+                  src="https://res.cloudinary.com/hypermegared/image/upload/v1704231317/wsum710gbvcgjo2ktujm.jpg"
+                  style="display: block; max-width: 500px; margin-top: 5px"
+                />
+              </a>
+            </td>
+          </tr>
+        </table>
+      </div>
+      `,
       });
     }
     return `${field} actualizado a ${value}`;

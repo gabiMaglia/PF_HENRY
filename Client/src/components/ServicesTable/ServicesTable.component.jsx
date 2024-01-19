@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Select, MenuItem } from "@mui/material";
+import { Box, Select, MenuItem, Typography } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
@@ -131,6 +131,7 @@ const ServicesTable = () => {
       headerName: "Confirmado",
       minWidth: 150,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "status",
@@ -163,6 +164,7 @@ const ServicesTable = () => {
       headerName: "Diagnostico final",
       minWidth: 250,
       headerAlign: "center",
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
     {
       field: "isDelete",
@@ -170,6 +172,7 @@ const ServicesTable = () => {
       minWidth: 150,
       headerAlign: "center",
       editable: true,
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
   ];
 
@@ -297,7 +300,7 @@ const ServicesTable = () => {
       Swal.fire({
         icon: "error",
         title: "Error Desconocido",
-        text: "Ha ocurrido un error al intentar actualizar la categoría",
+        text: "Ha ocurrido un error al intentar actualizar el estado",
       });
     }
   };
@@ -382,6 +385,13 @@ const ServicesTable = () => {
         setAvailableModify(false);
         const serviceId = newRow.id;
 
+        if (newRow.budget) {
+          const numericBudget = parseFloat(newRow.budget.replace(/\D/g, ""));
+          newRow.budget = `$${numericBudget
+            .toFixed(0)
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+        }
+
         const response = await updateService(serviceId, newRow, authData.jwt);
 
         if (response.status === 200) {
@@ -425,79 +435,97 @@ const ServicesTable = () => {
   };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        position: "relative",
-        maxWidth: "70%",
-        height: "95%",
-        minHeight: "10vh",
-        textAlign: "center",
-        mt: "1em",
-      }}
-    >
-      <StyledDataGrid
-        onCellEditStart={handleCellEditStart}
-        onCellEditStop={handleCellEditStop}
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleErrorInput}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setRowSelected(newRowSelectionModel);
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          maxWidth: "70%",
+          height: "95%",
+          minHeight: "10vh",
+          textAlign: "center",
+          mt: "1em",
         }}
-        rowSelectionModel={rowSelected}
-        ignoreDiacritics
-        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-        slots={{
-          toolbar: CustomToolbar,
-        }}
-        slotProps={{
-          filterPanel: {
-            logicOperators: [GridLogicOperator.And],
-          },
-          panel: {
-            anchorEl: filterButtonEl,
-          },
-          toolbar: {
-            setFilterButtonEl,
-            handleDelete,
-            dataName: "Lista de Servicios",
-            showQuickFilter: true,
-            selectedRows: rowSelected,
-          },
-        }}
-        getRowClassName={(params) => {
-          return params.row.isDelete
-            ? `row--deleted`
-            : params.row.confirm_repair === true &&
-              params.row.status === "Servicio finalizado"
-            ? `row--finalized`
-            : params.row.confirm_repair === true
-            ? `row--accepted`
-            : `row`;
-        }}
-        disableRowSelectionOnClick
-        rows={services}
-        columns={columns}
-        pageSize={5}
-        localeText={language.components.MuiDataGrid.defaultProps.localeText}
-        editMode="cell"
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              id: false,
-              product_income_date: false,
-              technical_diagnosis: false,
-              final_diagnosis: false,
-              isDelete: false,
-              confirm_repair: false,
-              technicianId: false,
-              clientEmail: false,
-            },
-          },
-        }}
-      />
-      {loading && <LoadingProgress />}
-    </Box>
+      >
+        <Box sx={{ height: "80%" }}>
+          <StyledDataGrid
+            onCellEditStart={handleCellEditStart}
+            onCellEditStop={handleCellEditStop}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleErrorInput}
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              setRowSelected(newRowSelectionModel);
+            }}
+            ignoreDiacritics
+            pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            slotProps={{
+              filterPanel: {
+                logicOperators: [GridLogicOperator.And],
+              },
+              panel: {
+                anchorEl: filterButtonEl,
+              },
+              toolbar: {
+                setFilterButtonEl,
+                handleDelete,
+                dataName: "Lista de Servicios",
+                showQuickFilter: true,
+                selectedRows: rowSelected,
+              },
+            }}
+            getRowClassName={(params) => {
+              return params.row.isDelete
+                ? `row--deleted`
+                : params.row.confirm_repair === true &&
+                  params.row.status === "Servicio finalizado"
+                ? `row--finalized`
+                : params.row.status === "Servicio cancelado"
+                ? `row--canceled`
+                : `row`;
+            }}
+            checkboxSelection
+            disableRowSelectionOnClick
+            rowSelectionModel={rowSelected}
+            rows={services}
+            columns={columns}
+            pageSize={5}
+            localeText={language.components.MuiDataGrid.defaultProps.localeText}
+            editMode="cell"
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                  product_income_date: false,
+                  technical_diagnosis: false,
+                  final_diagnosis: false,
+                  isDelete: false,
+                  confirm_repair: false,
+                  technicianId: false,
+                  clientEmail: false,
+                },
+              },
+            }}
+          />
+          {loading && <LoadingProgress />}
+        </Box>
+        <Box sx={{ marginTop: "25px" }}>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "25px", fontWeight: "bold" }}
+          >
+            Esato del servicio segun color
+          </Typography>
+          <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
+            <Typography sx={{ fontWeight: "600" }}>🟪 Cancelado</Typography>
+            <Typography sx={{ fontWeight: "600" }}>🟩 Finalizado</Typography>
+            <Typography sx={{ fontWeight: "600" }}>🟥 Eliminado</Typography>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

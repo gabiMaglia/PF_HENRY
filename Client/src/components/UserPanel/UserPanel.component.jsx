@@ -123,7 +123,6 @@ const UserPanelComponent = () => {
         display: "flex",
         flexDirection: "row",
         height: "97vh",
-        mb: "1.2em",
         minHeight: "500px",
         width: "100%",
         mt: "1.2em",
@@ -278,7 +277,6 @@ const UserPanelComponent = () => {
       <Box
         sx={{
           width: "15%",
-          //minHeight: "1vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

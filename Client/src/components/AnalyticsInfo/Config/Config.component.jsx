@@ -12,6 +12,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { metrics, dimensions } from "../dataTypes";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { configValidate } from "../../../helpers/configAnalyticsValidate";
+import Swal from "sweetalert2";
 
 const boxModalStyle = {
   height: "auto",
@@ -49,6 +51,10 @@ const Config = ({
   setDimensionStatus,
   graphicType,
   setGraphicType,
+  dataOrder,
+  setDataOrder,
+  showRealtime,
+  setShowRealtime,
 }) => {
   const handleMetricsDimensionChange = (value, name, position) => {
     const newData =
@@ -58,6 +64,76 @@ const Config = ({
       setMetricStatus(newData);
     } else {
       setDimensionStatus(newData);
+    }
+  };
+
+  const handleSubmit = () => {
+    const actErrors = configValidate({
+      graph: graphicType,
+      order: dataOrder,
+      startDate: config.startDate,
+      endDate: config.endDate,
+      metrics: metricStatus,
+      dimensions: dimensionStatus,
+    });
+    if (
+      actErrors?.graph?.length > 0 ||
+      actErrors?.order?.length > 0 ||
+      actErrors?.startDate?.length > 0 ||
+      actErrors?.endDate?.length > 0 ||
+      actErrors?.dates?.length > 0 ||
+      actErrors?.metrics?.length > 0 ||
+      actErrors?.dimensions?.length > 0
+    ) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error en el formulario",
+        text: "Por favor revise los campos del formulario",
+        html: `<div>
+            <ul>
+           ${actErrors?.graph?.length > 0 ? `<li>${actErrors?.graph}</li>` : ""}
+           ${actErrors?.order?.length > 0 ? `<li>${actErrors?.order}</li>` : ""}
+           ${
+             actErrors?.startDate?.length > 0
+               ? `<li>${actErrors?.startDate}</li>`
+               : ""
+           }
+           ${
+             actErrors?.endDate?.length > 0
+               ? `<li>${actErrors?.endDate}</li>`
+               : ""
+           }
+           ${actErrors?.dates?.length > 0 ? `<li>${actErrors?.dates}</li>` : ""}
+           ${
+             actErrors?.metrics?.length > 0
+               ? `<li>${actErrors?.metrics}</li>`
+               : ""
+           }
+           ${
+             actErrors?.dimensions?.length > 0
+               ? `<li>${actErrors?.dimensions}</li>`
+               : ""
+           }
+            </ul>
+          </div>`,
+        customClass: {
+          container: "container",
+        },
+      });
+    } else {
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+        customClass: {
+          container: "container",
+        },
+      });
+      Swal.showLoading();
+      setShowRealtime(false);
+      getData();
     }
   };
 
@@ -73,9 +149,11 @@ const Config = ({
         setMetricStatus(newData);
       }
     } else {
-      let newData = [...dimensionStatus];
-      newData.splice(index, 1);
-      setDimensionStatus(newData);
+      if (dimensionStatus.length > 1) {
+        let newData = [...dimensionStatus];
+        newData.splice(index, 1);
+        setDimensionStatus(newData);
+      }
     }
   };
 
@@ -112,15 +190,22 @@ const Config = ({
         <Divider sx={{ color: "#fd611a", fontWeight: "bold" }}>
           <Typography variant="h6">Configuración</Typography>
         </Divider>
-        <Box>
+        <Box sx={{ display: "flex", gap: "3em" }}>
           <Autocomplete
-            sx={{ width: "100%" }}
+            sx={{ flexGrow: "1" }}
             onChange={(e, value) => handleChangeGraphicsType(value)}
             value={graphicType}
             options={["Linea", "Barras", "Circular"]}
             renderInput={(params) => (
               <TextField {...params} label="Tipo de grafico" />
             )}
+          />
+          <Autocomplete
+            sx={{ flexGrow: "1" }}
+            onChange={(e, value) => setDataOrder(value)}
+            value={dataOrder}
+            options={["Descendente", "Ascendente"]}
+            renderInput={(params) => <TextField {...params} label="Orden" />}
           />
         </Box>
 
@@ -234,6 +319,10 @@ const Config = ({
                     gap: "10px",
                   }}
                 >
+                  <DeleteIcon
+                    cursor="pointer"
+                    onClick={() => deleteMetricDimensions(index, "dimensions")}
+                  />
                   <Autocomplete
                     sx={{ width: "100%" }}
                     onChange={(e, value) =>
@@ -246,10 +335,6 @@ const Config = ({
                     renderInput={(params) => (
                       <TextField {...params} label="Dimensiones" />
                     )}
-                  />
-                  <DeleteIcon
-                    cursor="pointer"
-                    onClick={() => deleteMetricDimensions(index, "dimensions")}
                   />
                 </Box>
               );
@@ -270,20 +355,28 @@ const Config = ({
             </Box>
           </Box>
         </Box>
-        <Box>
-          <Box sx={{ backgroundColor: "#fd611a" }}>
+        <Box sx={{ backgroundColor: "#fd611a", borderRadius: "10px" }}>
+          <Button fullWidth onClick={handleSubmit}>
+            <Typography variant="body1" color="white">
+              Buscar datos
+            </Typography>
+          </Button>
+        </Box>
+        {!showRealtime && (
+          <Box sx={{ backgroundColor: "#fd611a", borderRadius: "10px" }}>
             <Button
               fullWidth
               onClick={() => {
-                getData();
+                setShowRealtime(true);
+                setOpen(false);
               }}
             >
               <Typography variant="body1" color="white">
-                Buscar datos
+                Volver a en tiempo real
               </Typography>
             </Button>
           </Box>
-        </Box>
+        )}
       </Box>
     </Modal>
   );

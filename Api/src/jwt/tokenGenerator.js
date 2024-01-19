@@ -7,7 +7,6 @@ const tokenSign = (dataForToken, tokenTime = '1m') => {
   const token = jwt.sign(dataForToken, SECRET, { expiresIn: tokenTime });
   return token;
 };
-
 const verifyToken = async (token) => {
   try {
     const isBlackListed = await checkBlacklistedToken(token);

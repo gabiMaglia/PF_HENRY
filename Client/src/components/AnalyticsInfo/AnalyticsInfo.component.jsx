@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
-import { fetchAnalyticsData } from "../../services/reportingAnalyticsServices";
+import {
+  fetchAnalyticsData,
+  fetchAnalyticsRealtimeData,
+} from "../../services/reportingAnalyticsServices";
 import { useEffect } from "react";
 import LinearGraphic from "./Graphics/LinearGraphic.component";
+import ShowRealtimeData from "./Graphics/ShowRealTimeData";
 import BarGraphic from "./Graphics/BarGraphic.component";
 import DoughnutGraphics from "./Graphics/DoughnutGraphics.component";
 import Config from "./Config/Config.component";
+import Swal from "sweetalert2";
 const CLIENT_ID = import.meta.env.VITE_REPORTING_ANALYTICS_CLIENT_ID;
 
 const colors = [
@@ -22,7 +27,10 @@ const colors = [
 
 const AnalyticsInfo = () => {
   const [data, setData] = useState(false);
+  const [showRealtime, setShowRealtime] = useState(true);
+  const [realtimeData, setRealtimeData] = useState(false);
   const [openConfig, setOpenConfig] = useState(false);
+  const [dataOrder, setDataOrder] = useState("Descendente");
   const [config, setConfig] = useState({
     startDate: "",
     endDate: "",
@@ -37,49 +45,86 @@ const AnalyticsInfo = () => {
     setOpenConfig(!openConfig);
   };
 
+  const getRealtimeData = async (accessToken) => {
+    Swal.fire({
+      icon: "info",
+      allowOutsideClick: false,
+      title: "Por favor espere mientras procesamos la información",
+      showConfirmButton: false,
+      customClass: {
+        container: "container",
+      },
+    });
+    Swal.showLoading();
+    const newData = await fetchAnalyticsRealtimeData(
+      token ? token : accessToken
+    );
+    if (newData?.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al obtener los datos",
+        text: `${newData.response}`,
+        customClass: {
+          container: "container",
+        },
+      });
+    } else {
+      Swal.hideLoading();
+      Swal.close();
+      setRealtimeData(newData);
+    }
+  };
+
   const googleLogin = useGoogleLogin({
     clientId: CLIENT_ID,
     responseType: "token",
     onSuccess: async (tokenResponse) => {
       const accessToken = tokenResponse?.access_token;
       if (accessToken) {
-        const newData = await fetchAnalyticsData(
-          accessToken,
-          config.startDate,
-          config.endDate,
-          metricStatus,
-          dimensionStatus
-        );
-        setOpenConfig(false);
         setToken(accessToken);
-        setData(newData);
+        setFirstCharge(false);
+        getRealtimeData(accessToken);
       }
     },
     onError: (error) => {
-      console.error(error);
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al autenticar",
+        text: `Verifique que la cuente este verificada`,
+        customClass: {
+          container: "container",
+        },
+      });
     },
   });
 
   const getData = async () => {
-    if (token && !firstCharge) {
-      const newData = await fetchAnalyticsData(
-        token,
-        config.startDate,
-        config.endDate,
-        metricStatus,
-        dimensionStatus
-      );
+    const newData = await fetchAnalyticsData(
+      token,
+      config.startDate,
+      config.endDate,
+      metricStatus,
+      dimensionStatus
+    );
+    if (newData.error) {
+      Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Error al obtener los datos",
+        text: `${newData.response}`,
+        customClass: {
+          container: "container",
+        },
+      });
+    } else {
+      Swal.hideLoading();
+      Swal.close();
       setData(newData);
       setOpenConfig(false);
-    } else {
-      googleLogin();
-      setFirstCharge(false);
     }
   };
-
-  useEffect(() => {
-    getData();
-  }, [googleLogin.tokenResponse]);
 
   useEffect(() => {
     if (data && data?.length > 0) {
@@ -89,11 +134,12 @@ const AnalyticsInfo = () => {
         }
       });
 
-      const labels = filterData?.map((row) => {
+      let labels = filterData?.map((row) => {
         return row?.dimensionValues.map((data) => {
           return data.value;
         });
       });
+
       let metricsValues = filterData?.map((row) => {
         return row?.metricValues.map((data) => {
           return data?.value;
@@ -114,17 +160,25 @@ const AnalyticsInfo = () => {
         }
       }
 
-      const datasets = [];
+      let datasets = [];
 
       for (let i = 0; i < maxMetricsElements; i++) {
+        let data = metricsValues.map((dataset) => {
+          return dataset[i];
+        });
+
+        if (dataOrder !== "Descendente") {
+          data = data.reverse();
+        }
         datasets.push({
           id: i,
           backgroundColor: colors,
           label: metricStatus[i],
-          data: metricsValues.map((dataset) => {
-            return dataset[i];
-          }),
+          data: data,
         });
+      }
+      if (dataOrder !== "Descendente") {
+        labels = labels.reverse();
       }
       setData({ labels, datasets });
     }
@@ -155,13 +209,13 @@ const AnalyticsInfo = () => {
         }}
       >
         <Typography variant="h3">ESTADISTICAS</Typography>
-        {config?.startDate?.length > 0 && (
+        {config?.startDate?.length > 0 && !showRealtime && (
           <Box>
             <Typography variant="caption">Fecha inicio</Typography>
             <Typography variant="body1">{config.startDate}</Typography>
           </Box>
         )}
-        {config?.endDate?.length > 0 && (
+        {config?.endDate?.length > 0 && !showRealtime && (
           <Box>
             <Typography variant="caption">Fecha fin</Typography>
             <Typography variant="body1">{config.endDate}</Typography>
@@ -169,10 +223,8 @@ const AnalyticsInfo = () => {
         )}
       </Box>
       <Box sx={{ maxWidth: "100%", maxHeight: "100vh" }}>
-        {data &&
-          data.labels &&
-          data.datasets &&
-          (graphicType === "Linea" ? (
+        {data && data.labels && data.datasets && !showRealtime ? (
+          graphicType === "Linea" ? (
             <LinearGraphic
               labels={data?.labels}
               datasets={data?.datasets}
@@ -199,7 +251,13 @@ const AnalyticsInfo = () => {
               datasets={data?.datasets}
               label={{ metricStatus, dimensionStatus }}
             />
-          ))}
+          )
+        ) : (
+          realtimeData &&
+          showRealtime && (
+            <ShowRealtimeData data={realtimeData} getData={getRealtimeData} />
+          )
+        )}
       </Box>
       <Config
         open={openConfig}
@@ -213,14 +271,28 @@ const AnalyticsInfo = () => {
         setDimensionStatus={setDimensionStatus}
         graphicType={graphicType}
         setGraphicType={setGraphicType}
+        dataOrder={dataOrder}
+        setDataOrder={setDataOrder}
+        showRealtime={showRealtime}
+        setShowRealtime={setShowRealtime}
       />
-      <Box sx={{ backgroundColor: "#fd611a" }}>
-        <Button fullWidth onClick={handleOpenConfig}>
-          <Typography variant="body1" color="white">
-            Configuración
-          </Typography>
-        </Button>
-      </Box>
+      {!firstCharge ? (
+        <Box sx={{ backgroundColor: "#fd611a" }}>
+          <Button fullWidth onClick={handleOpenConfig}>
+            <Typography variant="body1" color="white">
+              Configuración
+            </Typography>
+          </Button>
+        </Box>
+      ) : (
+        <Box sx={{ backgroundColor: "#fd611a" }}>
+          <Button fullWidth onClick={googleLogin}>
+            <Typography variant="body1" color="white">
+              Obtener datos
+            </Typography>
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

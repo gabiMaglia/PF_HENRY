@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 //MATERIAL UI
-import { Box } from "@mui/material";
+import { Box, Select, MenuItem, Typography } from "@mui/material";
 import {
   GridCellEditStopReasons,
   GridLogicOperator,
@@ -22,106 +22,6 @@ import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpli
 //SWEET ALERT
 import Swal from "sweetalert2";
 
-const gridColumns = [
-  {
-    field: "id",
-    headerName: "Id",
-    headerAlign: "center",
-    minWidth: 300,
-  },
-  {
-    field: "name",
-    headerName: "Nombre",
-    minWidth: 150,
-    headerAlign: "center",
-    editable: false,
-  },
-  {
-    field: "surname",
-    headerName: "Apellido",
-    minWidth: 150,
-    headerAlign: "center",
-    editable: false,
-  },
-  {
-    field: "telephone",
-    headerName: "Telefono",
-    minWidth: 50,
-    headerAlign: "center",
-    editable: false,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    minWidth: 300,
-    headerAlign: "center",
-    editable: false,
-  },
-  {
-    field: "role",
-    headerName: "Rol",
-    minWidth: 50,
-    headerAlign: "center",
-    editable: false,
-  },
-  {
-    field: "communication_preference",
-    headerAlign: "center",
-    headerName: "Preferencia de comunicación",
-    minWidth: 200,
-    editable: false,
-  },
-  {
-    field: "isActive",
-    headerAlign: "center",
-    headerName: "Activo",
-    minWidth: 25,
-    editable: false,
-  },
-  {
-    field: "isVerified",
-    headerAlign: "center",
-    headerName: "Verificado",
-    minWidth: 25,
-    editable: false,
-  },
-  {
-    field: "isDeleted",
-    headerAlign: "center",
-    headerName: "Eliminado",
-    minWidth: 25,
-    editable: false,
-  },
-];
-
-const columnGroupingModel = [
-  {
-    groupId: "userData",
-    headerName: "Datos del usuario",
-    headerAlign: "center",
-    description: "Datos personales del usuario",
-    children: [
-      { field: "id" },
-      { field: "name" },
-      { field: "surname" },
-      { field: "email" },
-      { field: "telephone" },
-    ],
-  },
-  {
-    groupId: "privateUserData",
-    headerName: "Estado del usuario",
-    headerAlign: "center",
-    description: "Estado del usuario dentro de la pagina",
-    children: [
-      { field: "role" },
-      { field: "isActive" },
-      { field: "isVerified" },
-      { field: "isDeleted" },
-    ],
-  },
-];
-
 const UsersTable = () => {
   const language = esES;
   const editingRow = useRef(null);
@@ -134,6 +34,117 @@ const UsersTable = () => {
 
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+
+  const roleTranslations = {
+    admin: "Admin",
+    customer: "Cliente",
+    technician: "Técnico",
+  };
+
+  const gridColumns = [
+    {
+      field: "id",
+      headerName: "Id",
+      headerAlign: "center",
+      minWidth: 300,
+    },
+    {
+      field: "fullName",
+      headerName: "Usuario",
+      minWidth: 250,
+      headerAlign: "center",
+      valueGetter: (params) => `${params.row.name} ${params.row.surname}`,
+    },
+    {
+      field: "telephone",
+      headerName: "Teléfono",
+      minWidth: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      minWidth: 300,
+      headerAlign: "center",
+    },
+    {
+      field: "role",
+      headerName: "Rol",
+      minWidth: 180,
+      headerAlign: "center",
+      editable: true,
+      renderCell: (params) => (
+        <Select
+          value={params.value}
+          onChange={(e) => handleRoleChange(params.id, e.target.value)}
+          sx={{ width: "100%" }}
+        >
+          {[...userRoles]
+            .sort((a, b) => a.role_name.localeCompare(b.role_name))
+            .map((role) => (
+              <MenuItem key={role.id} value={role.role_name}>
+                {roleTranslations[role.role_name]}
+              </MenuItem>
+            ))}
+        </Select>
+      ),
+    },
+    {
+      field: "communication_preference",
+      headerAlign: "center",
+      headerName: "Comunicación",
+      minWidth: 200,
+    },
+    {
+      field: "isVerified",
+      headerAlign: "center",
+      headerName: "Verificado",
+      minWidth: 25,
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
+    },
+    {
+      field: "isActive",
+      headerAlign: "center",
+      headerName: "Activo",
+      minWidth: 120,
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
+    },
+    {
+      field: "isDeleted",
+      headerAlign: "center",
+      headerName: "Eliminado",
+      minWidth: 25,
+      renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
+    },
+  ];
+
+  const columnGroupingModel = [
+    {
+      groupId: "userData",
+      headerName: "Datos del usuario",
+      headerAlign: "center",
+      description: "Datos personales del usuario",
+      children: [
+        { field: "id" },
+        { field: "name" },
+        { field: "surname" },
+        { field: "email" },
+        { field: "telephone" },
+      ],
+    },
+    {
+      groupId: "privateUserData",
+      headerName: "Estado del usuario",
+      headerAlign: "center",
+      description: "Estado del usuario dentro de la pagina",
+      children: [
+        { field: "role" },
+        { field: "isActive" },
+        { field: "isVerified" },
+        { field: "isDeleted" },
+      ],
+    },
+  ];
 
   const addRole = (rows, roles) => {
     const newUsers = rows.map((user) => {
@@ -174,12 +185,50 @@ const UsersTable = () => {
         text: `${error}`,
       });
     }
-
     addRole(response.data, roles.data);
+  };
+
+  const handleRoleChange = async (id, newRole) => {
+    try {
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+      });
+      Swal.showLoading();
+      const response = await putUser(id, newRole);
+      if (response.status === 200) {
+        setRows((prevRows) =>
+          prevRows.map((row) =>
+            row.id === id ? { ...row, role: newRole } : row
+          )
+        );
+        Swal.fire({
+          icon: "success",
+          title: "Actualización Exitosa",
+          text: "El rol ha sido actualizado correctamente",
+        });
+        return newRole;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Actualizacion Erronea",
+          text: "Hubo un error al actualizar el rol del usuario",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error Desconocido",
+        text: "Ha ocurrido un error al intentar actualizar el rol",
+      });
+    }
   };
 
   const handleDelete = async () => {
     const response = await isDeleteChange(rowSelected, authData.jwt);
+    console.log("RES", response);
     if (response.error) {
       Swal.fire({
         icon: "error",
@@ -190,7 +239,7 @@ const UsersTable = () => {
       getUsers();
       let responses = "";
       response.forEach((value) => {
-        responses = responses + " ---- " + value.data.response;
+        responses = value.data.response;
       });
       Swal.fire({
         icon: "success",
@@ -283,74 +332,87 @@ const UsersTable = () => {
   };
 
   return (
-    <Box
-      sx={{
-        //width: "100%",
-        position: "relative",
-        maxWidth: "75%",
-        height: { xxs: "70%", xs: "70%", sm: "90%", md: "90%" },
-        minHeight: "10vh",
-        textAlign: "center",
-        mt: "2em",
-        mb: "2em",
-      }}
-    >
-      <StyledDataGrid
-        onCellEditStart={handleCellEditStart}
-        onCellEditStop={handleCellEditStop}
-        ignoreDiacritics
-        pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-        columnGroupingModel={columnGroupingModel}
-        slots={{
-          toolbar: CustomToolbar,
+    <>
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          maxWidth: "70%",
+          height: "100%",
+          minHeight: "10vh",
+          textAlign: "center",
+          mt: "1em",
         }}
-        localeText={language.components.MuiDataGrid.defaultProps.localeText}
-        slotProps={{
-          filterPanel: {
-            logicOperators: [GridLogicOperator.And],
-          },
-          panel: {
-            anchorEl: filterButtonEl,
-          },
-          toolbar: {
-            setFilterButtonEl,
-            handleDelete,
-            dataName: "Lista de usuarios",
-            showQuickFilter: true,
-          },
-        }}
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              id: false,
-              isVerified: false,
-              isDeleted: false,
-            },
-          },
-          filter: {
-            filterModel: {
-              items: [
-                { field: "isDeleted", operator: "equals", value: "false" },
-              ],
-            },
-          },
-        }}
-        getRowClassName={(params) => {
-          return params.row.isDeleted ? `row--deleted` : `row`;
-        }}
-        columns={gridColumns}
-        rows={rows}
-        checkboxSelection
-        disableRowSelectionOnClick
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleErrorInput}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setRowSelected(newRowSelectionModel);
-        }}
-        rowSelectionModel={rowSelected}
-      ></StyledDataGrid>
-      {isLoading && <Loading />}
-    </Box>
+      >
+        <Box sx={{ height: "80%" }}>
+          <StyledDataGrid
+            onCellEditStart={handleCellEditStart}
+            onCellEditStop={handleCellEditStop}
+            processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleErrorInput}
+            onRowSelectionModelChange={(newRowSelectionModel) => {
+              setRowSelected(newRowSelectionModel);
+            }}
+            rowSelectionModel={rowSelected}
+            ignoreDiacritics
+            pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
+            columnGroupingModel={columnGroupingModel}
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            slotProps={{
+              filterPanel: {
+                logicOperators: [GridLogicOperator.And],
+              },
+              panel: {
+                anchorEl: filterButtonEl,
+              },
+              toolbar: {
+                setFilterButtonEl,
+                handleDelete,
+                dataName: "Lista de usuarios",
+                showQuickFilter: true,
+              },
+            }}
+            getRowClassName={(params) => {
+              return params.row.isDeleted
+                ? `row--deleted`
+                : params.row.isVerified === false
+                ? `row--carousel`
+                : `row`;
+            }}
+            disableRowSelectionOnClick
+            rows={rows}
+            columns={gridColumns}
+            pageSize={5}
+            localeText={language.components.MuiDataGrid.defaultProps.localeText}
+            checkboxSelection
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                  isVerified: false,
+                  isDeleted: false,
+                },
+              },
+            }}
+          ></StyledDataGrid>
+          {isLoading && <Loading />}
+        </Box>
+        <Box sx={{ marginTop: "25px" }}>
+          <Typography
+            variant="h5"
+            sx={{ marginBottom: "25px", fontWeight: "bold" }}
+          >
+            Esato del usuario segun color
+          </Typography>
+          <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
+            <Typography sx={{ fontWeight: "600" }}>🟦 Sin verificar</Typography>
+            <Typography sx={{ fontWeight: "600" }}>🟥 Eliminado</Typography>
+          </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

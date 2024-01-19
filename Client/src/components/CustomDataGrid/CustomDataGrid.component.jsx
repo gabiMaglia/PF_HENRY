@@ -86,87 +86,87 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   },
   "& .MuiDataGrid-row": {
     "&:focus-within": {
-      backgroundColor: "#fb773a",
+      backgroundColor: "#f8b597",
     },
     "&.Mui-selected": {
       "& .MuiDataGrid-cell:focus-within": {
         outline: "0px",
       },
-      backgroundColor: "#fd611a",
+      backgroundColor: "#f8b597",
       "&:hover": {
-        backgroundColor: "#fb773a",
+        backgroundColor: "#f8b597",
       },
     },
   },
   "& .row--deleted": {
-    backgroundColor: "red",
+    backgroundColor: "#f7a2a2",
     "&:hover": {
-      backgroundColor: "#ff2b2b",
+      backgroundColor: "#f7a2a2",
     },
     "&:active": {
-      backgroundColor: "#ff2b2b",
+      backgroundColor: "#f7a2a2",
     },
     "&:focus-within": {
-      backgroundColor: "#ff2b2b",
+      backgroundColor: "#f7a2a2",
     },
     "&.Mui-selected": {
-      backgroundColor: "red",
+      backgroundColor: "#f7a2a2",
       "&:hover": {
-        backgroundColor: "#ff2b2b",
+        backgroundColor: "#f7a2a2",
       },
     },
   },
   "& .row--carousel": {
-    backgroundColor: "#567fbe",
+    backgroundColor: "#8dbaf6",
     "&:hover": {
-      backgroundColor: "#567fbee",
+      backgroundColor: "#8dbaf6",
     },
     "&:active": {
-      backgroundColor: "#567fbee",
+      backgroundColor: "#8dbaf6",
     },
     "&:focus-within": {
-      backgroundColor: "#567fbee",
+      backgroundColor: "#8dbaf6",
     },
     "&.Mui-selected": {
-      backgroundColor: "#567fbe",
+      backgroundColor: "#8dbaf6",
       "&:hover": {
-        backgroundColor: "#567fbee",
-      },
-    },
-  },
-  "& .row--accepted": {
-    backgroundColor: "#cccccc",
-    "&:hover": {
-      backgroundColor: "#cccccce",
-    },
-    "&:active": {
-      backgroundColor: "#cccccce",
-    },
-    "&:focus-within": {
-      backgroundColor: "#cccccce",
-    },
-    "&.Mui-selected": {
-      backgroundColor: "#cccccc",
-      "&:hover": {
-        backgroundColor: "#cccccce",
+        backgroundColor: "#8dbaf6",
       },
     },
   },
   "& .row--finalized": {
-    backgroundColor: "#5dbe8c",
+    backgroundColor: "#a2f7a9",
     "&:hover": {
-      backgroundColor: "#cccccce",
+      backgroundColor: "#a2f7a9",
     },
     "&:active": {
-      backgroundColor: "#cccccce",
+      backgroundColor: "#a2f7a9",
     },
     "&:focus-within": {
-      backgroundColor: "#cccccce",
+      backgroundColor: "#a2f7a9",
     },
     "&.Mui-selected": {
-      backgroundColor: "#cccccc",
+      backgroundColor: "#a2f7a9",
       "&:hover": {
-        backgroundColor: "#cccccce",
+        backgroundColor: "#a2f7a9"
+      },
+    },
+  },
+  "& .row--canceled": {
+    backgroundColor: "#c1acf8",
+    "&:hover": {
+      backgroundColor: "#c1acf8",
+    },
+    "&:active": {
+      backgroundColor: "#c1acf8",
+    },
+    "&:focus-within": {
+      backgroundColor: "#c1acf8",
+    },
+    "&.Mui-selected": {
+      backgroundColor: "#c1acf8",
+      "&:hover": {
+        backgroundColor: "#c1acf8",
       },
     },
   },

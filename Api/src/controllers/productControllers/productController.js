@@ -40,6 +40,7 @@ const postProduct = async ({
   brandName,
   soldCount,
   carousel,
+  banner,
 }) => {
   const transaction = await conn.transaction();
 
@@ -52,6 +53,7 @@ const postProduct = async ({
         warranty,
         soldCount,
         carousel,
+        banner,
         is_deleted,
       },
       { transaction }
@@ -324,6 +326,7 @@ const addToCarousel = async (id) => {
     product.carousel ? "Agregado al Carousel" : "Eliminado del Carousel"
   } `;
 };
+
 
 const getProductById = async (id) => {
   try {

@@ -14,8 +14,7 @@ const miAccessToken = process.env.MP_ACCESS_TOKEN;
 const axios = require("axios");
 const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
-const backend_Url = `https://surprising-ashlee-gabimaglia.koyeb.app`;
-
+const backend_Url = process.env.API_URL;
 const conn = require("../../db");
 const { where } = require("sequelize");
 const transporter = require("../../config/mailer");
@@ -108,6 +107,7 @@ const handlePaymentNotification = async (paymentId) => {
           if (order) {
             Promise.all(
               cart.Products.map(async (product) => {
+                console.log(product.ProductCart);
                 const { id, soldCount } = product;
                 const cartProduct = await ProductCart.findOne({
                   where: { ProductId: id, CartId: cart.id },

@@ -18,6 +18,7 @@ import Questions from "./views/publics/Questions/Questions.view";
 import Detail from "./views/publics/Detail/Detail.view";
 import Categories from "./views/publics/Categories/Categories.view";
 import Review from "./views/publics/Reviews/Reviews.view";
+import Error404 from "./views/publics/Error404/Error404.view";
 //PRIVATES VIEWS
 import UserPanel from "./views/privates/UserPanel/UserPanel.view";
 import ShoppingCart from "./views/privates/ShoppingCart/ShoppingCart.view";
@@ -28,18 +29,16 @@ import { useEffect } from "react";
 import ChangePasword from "./views/publics/ChangePassword/ChangePasword.view";
 
 const App = () => {
-  // CustomHook que hace el check de token
-  // const checkTokenData = useCheckAuthData();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
+  
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
-
+  
+  // CustomHook que hace el check de token
   const checkAuthData = useCheckAuthData(openLoginModal);
 
   useEffect(() => {
-    // checkTokenData.checkToken()
     checkAuthData.checkToken();
   }, [checkAuthData]);
 
@@ -60,6 +59,7 @@ const App = () => {
         <Route path={PATHROUTES.CHANGEPASS} element={<ChangePasword />} />
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
@@ -67,6 +67,7 @@ const App = () => {
             path={`${PATHROUTES.ADMIN_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["customer"]} />}>
@@ -74,6 +75,7 @@ const App = () => {
             path={`${PATHROUTES.CUSTOMER_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
+            <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["technician"]} />}>
@@ -81,7 +83,9 @@ const App = () => {
             path={`${PATHROUTES.TECHNICIAN_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
+      <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
+      <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
       </Routes>
       <LoginModal
         isOpen={isLoginModalOpen}
