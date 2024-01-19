@@ -16,7 +16,6 @@ const colors = [
 ];
 
 const ShowRealtimeData = ({ data, getData }) => {
-  console.log(data);
   const [type, setType] = useState("activeUsers");
   const [filter, setFilter] = useState("country");
 

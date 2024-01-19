@@ -132,7 +132,6 @@ const Detail = () => {
   };
 
   const handleDesiredClick = () => {
-    console.log(productById);
     if (login && userRole === "customer") {
       fetchAddItemWish(dispatch, authData.userId, productById.id, authData.jwt);
     } else if (login && userRole !== "customer") {

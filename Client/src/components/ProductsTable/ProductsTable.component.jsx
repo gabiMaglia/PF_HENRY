@@ -43,7 +43,6 @@ const ProductsTable = () => {
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
   const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
   const language = esES;
-  console.log(authData.jwt);
   const urlBack = import.meta.env.VITE_BACKEND_URL;
 
   const columns = [
@@ -365,7 +364,6 @@ const ProductsTable = () => {
   };
 
   const processRowUpdate = async (newRow) => {
-    console.log(availableModify);
     try {
       if (availableModify) {
         Swal.fire({
@@ -501,7 +499,7 @@ const ProductsTable = () => {
                   id: false,
                   is_deleted: false,
                   carousel: false,
-                  banner: false
+                  banner: false,
                 },
               },
             }}

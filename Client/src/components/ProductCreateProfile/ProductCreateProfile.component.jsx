@@ -189,7 +189,6 @@ const ProductCreateProfileComponent = () => {
       const newImagePromises = urls.map(async (url) => {
         try {
           const uploadedImage = await handleImageUpload(url, folderName);
-          console.log("Imagen subida con éxito:", uploadedImage);
           return uploadedImage;
         } catch (error) {
           console.error("Error al subir imagen a Cloudinary:", error.message);

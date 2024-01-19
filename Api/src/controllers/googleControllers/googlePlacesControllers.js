@@ -16,11 +16,9 @@ const getPrecioEnvios = async (destination) => {
     const response = await axios.get(apiUrl);
 
     const data = response.data;
-    console.log(data.routes[0].legs[0].distance.text);
     const distance = data.routes[0].legs[0].distance.text;
     let distanceSinUnidad = distance.replace(" km", "");
     let distanceValue = Number(distanceSinUnidad);
-    console.log(distanceValue);
     let shippingPrice = distanceValue * 100;
     return shippingPrice;
   } catch (error) {

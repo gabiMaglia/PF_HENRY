@@ -70,6 +70,7 @@ const AnalyticsInfo = () => {
         },
       });
     } else {
+      setFirstCharge(false);
       Swal.hideLoading();
       Swal.close();
       setRealtimeData(newData);
@@ -83,7 +84,6 @@ const AnalyticsInfo = () => {
       const accessToken = tokenResponse?.access_token;
       if (accessToken) {
         setToken(accessToken);
-        setFirstCharge(false);
         getRealtimeData(accessToken);
       }
     },

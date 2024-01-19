@@ -8,6 +8,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { googleReviewsServices } from "../../services/googleReviewsServices";
 //UTILS
 import { reviewsUsers } from "../../utils/objectsTexts";
+import Swal from "sweetalert2";
 
 const ReviewsComponent = () => {
   const theme = useTheme();
@@ -20,7 +21,11 @@ const ReviewsComponent = () => {
         const data = await googleReviewsServices();
         setReviews(data);
       } catch (error) {
-        console.log("Error al recibir reseñas:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al obtener las reseñas",
+          text: "Por favor, vuelva mas tarde.",
+        });
       }
     };
     fetchReviews();

@@ -30,7 +30,6 @@ const ProductsCategoriesComponent = () => {
         // setCategoryProducts(data);
         setLoading(false);
       } catch (error) {
-        console.log(error, "Error al obtener los productos de la categoría");
         setLoading(false);
       }
     };
