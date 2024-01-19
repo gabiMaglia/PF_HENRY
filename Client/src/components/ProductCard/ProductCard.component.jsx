@@ -118,8 +118,47 @@ const CardProduct = ({ product }) => {
           alignItems: "center",
           justifyContent: "space-between",
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
+          position: "relative",
         }}
       >
+        {ProductStock?.amount < 5 && ProductStock?.amount > 1 && (
+          <Typography
+            variant="body2"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              color: "grey",
+              fontWeight: 700,
+              position: "absolute",
+              top: 110,
+              right: -15,
+              width: "auto",
+              transform: "rotate(45deg)",
+            }}
+          >
+            {ProductStock?.amount}
+            {ProductStock?.amount === 1 ? " unidad" : " unidades"} disponibles
+          </Typography>
+        )}
+        {ProductStock?.amount === 0 && (
+          <Typography
+            variant="body1"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              color: "white",
+              fontWeight: 700,
+              position: "absolute",
+              top: 90,
+              right: 5,
+              width: "120px",
+              transform: "rotate(45deg)",
+              backgroundColor: "red",
+            }}
+          >
+            !Sin stock!
+          </Typography>
+        )}
         <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
           {categoryName && (
             <Typography
@@ -186,32 +225,6 @@ const CardProduct = ({ product }) => {
                 {name}
               </Typography>
             </CardContent>
-            {ProductStock.amount < 5 && ProductStock.amount > 1 && (
-              <Typography
-                variant="body2"
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  color: "red",
-                  fontWeight: 700,
-                }}
-              >
-                ¡{ProductStock.amount} unidades disponibles!
-              </Typography>
-            )}
-            {ProductStock.amount === 0 && (
-              <Typography
-                variant="body2"
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  color: "red",
-                  fontWeight: 700,
-                }}
-              >
-                !Producto sin stock!
-              </Typography>
-            )}
             <ProductPrice
               variant="subtitle1"
               align="center"

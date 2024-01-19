@@ -396,8 +396,8 @@ const Detail = () => {
               >
                 {productById.name}
               </Typography>
-              {productById.ProductStock.amount < 5 &&
-                productById.ProductStock.amount > 1 && (
+              {productById?.ProductStock?.amount < 5 &&
+                productById?.ProductStock?.amount > 1 && (
                   <Typography
                     variant="body1"
                     sx={{
@@ -407,10 +407,10 @@ const Detail = () => {
                       fontWeight: 700,
                     }}
                   >
-                    ¡{productById.ProductStock.amount} unidades disponibles!
+                    ¡{productById?.ProductStock?.amount} unidades disponibles!
                   </Typography>
                 )}
-              {productById.ProductStock.amount === 0 && (
+              {productById?.ProductStock?.amount === 0 && (
                 <Typography
                   variant="body1"
                   sx={{
