@@ -121,7 +121,7 @@ const CardProduct = ({ product }) => {
           position: "relative",
         }}
       >
-        {ProductStock?.amount < 5 && ProductStock?.amount > 1 && (
+        {ProductStock?.amount <= 5 && ProductStock?.amount >= 1 && (
           <Typography
             variant="body2"
             sx={{
