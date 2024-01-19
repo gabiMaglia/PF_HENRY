@@ -3,7 +3,6 @@ const {
   Product,
   Cart,
   ProductCart,
-  OrderProduct,
   ProductStock,
   ProductImage,
   User,
@@ -12,13 +11,9 @@ const { MercadoPagoConfig, Preference } = require("mercadopago");
 const frontend_Url = process.env.FRONTEND_URL;
 const miAccessToken = process.env.MP_ACCESS_TOKEN;
 const axios = require("axios");
-const mercadopago = require("mercadopago");
 const client = new MercadoPagoConfig({ accessToken: miAccessToken });
 const backend_Url = process.env.API_URL;
-const conn = require("../../db");
-const { where } = require("sequelize");
 const transporter = require("../../config/mailer");
-
 const hyperEmail = process.env.EMAIL_MAILER;
 
 const mercadoPago = async (array, idUser) => {
@@ -33,7 +28,7 @@ const mercadoPago = async (array, idUser) => {
         pending: `${frontend_Url}/shoppingCart?payment=pending`,
       },
     };
-
+    
     const preference = new Preference(client);
     const result = await preference.create({ body });
 
