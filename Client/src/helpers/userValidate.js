@@ -85,19 +85,26 @@ const confirmAddressValidate = (address, confirmAddress) => {
 
 // Validacion de nombre de usuario
 const usernameValidate = (username) => {
-  const { regexContainSpaces, minCantCharUsername, maxCantCharUsername } =
-    constsUserValidations;
+  const {
+    regexContainSpaces,
+    minCantCharUsername,
+    maxCantCharUsername,
+    regexContainNumber, 
+  } = constsUserValidations;
   let usernameError = "";
+
   if (!username) {
     usernameError = "El nombre de usuario es requerido";
   } else if (username.length < minCantCharUsername) {
     usernameError = `El nombre de usuario debe contener al menos ${minCantCharUsername} caracteres`;
   } else if (username.length > maxCantCharUsername) {
     usernameError = `El nombre de usuario debe contener máximo ${maxCantCharUsername} caracteres`;
-  } else {
-    regexContainSpaces.test(username) &&
-      (usernameError = "El nombre de usuario no puede contener espacios");
+  } else if (regexContainSpaces.test(username)) {
+    usernameError = "El nombre de usuario no puede contener espacios";
+  } else if (regexContainNumber.test(username)) {
+    usernameError = "El nombre de usuario no puede contener números";
   }
+
   return usernameError;
 };
 
@@ -149,7 +156,7 @@ const phoneNumberValidate = (phoneNumber) => {
 };
 
 const nameValidate = (name) => {
-  const { minCantCharName, maxCantCharName, regexContainSpecialCharacters } =
+  const { minCantCharName, maxCantCharName, regexContainSpecialCharacters, regexContainNumber,  } =
     constsUserValidations;
   let nameError = "";
   if (!name || name === "") {
@@ -160,12 +167,15 @@ const nameValidate = (name) => {
     nameError = `El nombre debe contener máximo ${maxCantCharName} caracteres`;
   } else if (regexContainSpecialCharacters.test(name)) {
     nameError = "El nombre no puede contener caracteres especiales";
+  }else if (regexContainNumber.test(name)) {
+    nameError = "El nombre de usuario no puede contener números";
   }
+
   return nameError;
 };
 
 const surnameValidate = (surname) => {
-  const { minCantCharName, maxCantCharName, regexContainSpecialCharacters } =
+  const { minCantCharName, maxCantCharName, regexContainSpecialCharacters, regexContainNumber } =
     constsUserValidations;
   let surnameError = "";
   if (!surname || surname === "") {
@@ -176,7 +186,10 @@ const surnameValidate = (surname) => {
     surnameError = `El apellido debe contener máximo ${maxCantCharName} caracteres`;
   } else if (regexContainSpecialCharacters.test(surname)) {
     surnameError = "El apellido no puede contener caracteres especiales";
+  }else if (regexContainNumber.test(surname)) {
+    surnameError = "El nombre de usuario no puede contener números";
   }
+
   return surnameError;
 };
 
