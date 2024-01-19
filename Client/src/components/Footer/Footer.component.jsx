@@ -77,7 +77,15 @@ const FooterComponent = () => {
                           sx={{ color: "#fd611a", marginRight: "10px" }}
                         />
                       )}
-                      <Typography>{item.text}</Typography>
+                      <Link
+                        to={item.link}
+                        target={item.target}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Typography sx={{ color: "#fff" }}>
+                          {item.text}
+                        </Typography>
+                      </Link>
                     </Box>
                   ))}
                 </Box>
@@ -104,7 +112,7 @@ const FooterComponent = () => {
           </Container>
           {/* CIERRE LOGO EMPRESA */}
 
-          {/* SECCION PAGINAS */}
+          {/* SECCION REDES */}
           {sectionSocial.map((section, index) => (
             <Container key={index}>
               <Box
@@ -163,7 +171,7 @@ const FooterComponent = () => {
               </Box>
             </Container>
           ))}
-          {/* CIERRE SECCION PAGINAS */}
+          {/* CIERRE SECCION REDES */}
         </Box>
         {/* CIERRE BOX SECCIONES */}
 
