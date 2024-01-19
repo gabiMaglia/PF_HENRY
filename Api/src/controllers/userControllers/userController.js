@@ -181,6 +181,7 @@ const editUserById = async (
     number: number || _userAddress.number,
     zipCode: zipCode || _userAddress.zipCode,
   });
+
   // ROL Update
   const role_name = role;
 
@@ -197,6 +198,21 @@ const editUserById = async (
   return updatedUser;
 };
 
+//LOGICAL DELETE
+const logicalDelete = async (id) => {
+  if (!id) {
+    return { error: true, response: "El id es requerido" };
+  }
+  const user = await User.findByPk(id);
+  if (!user) {
+    return { error: true, response: "Usuario no encontrado" };
+  }
+  await user.update({ isDeleted: !user.isDeleted });
+  return `Usuario ${user.name} ${
+    user.isDeleted ? "Desactivado" : "Activado"
+  } `;
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -204,4 +220,5 @@ module.exports = {
   getUserByEmail,
   postUser,
   editUserById,
+  logicalDelete
 };

@@ -46,6 +46,23 @@ export const isDeleteChange = async (id, jwt) => {
   }
 };
 
+export const logicalDeleteUser = async (id, jwt) => {
+  try {
+    const response = await axios.put(
+      `${url}/user/logicalDelete/${id}`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};
+
 export const getUserRoles = async (jwt) => {
   try {
     const roles = await axios.get(`${url}/user_role`, {
