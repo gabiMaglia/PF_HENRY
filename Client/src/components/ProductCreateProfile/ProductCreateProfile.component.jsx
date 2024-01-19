@@ -236,7 +236,6 @@ const ProductCreateProfileComponent = () => {
 
       const obj = {
         ...values,
-        carousel: carouselData,
         images: array,
       };
 
@@ -690,7 +689,6 @@ const ProductCreateProfileComponent = () => {
                   !values.brandName ||
                   !values.categoryName ||
                   !values.images.length ||
-                  !values.banner ||
                   errors.e1 ||
                   errors.e2 ||
                   errors.e3 ||
