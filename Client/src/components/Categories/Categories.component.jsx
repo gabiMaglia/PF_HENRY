@@ -69,6 +69,10 @@ const FiltersSorting = () => {
     setSelectedCategory("all");
   };
 
+  const cantlg = Math.ceil(categories.length / 2);
+  const cantmd = Math.ceil(categories.length / 3);
+  const cantsm = Math.ceil(categories.length / 4);
+
   const Selects = styled(Select)({
     height: 40,
     marginRight: 20,
@@ -125,9 +129,14 @@ const FiltersSorting = () => {
             gridTemplateColumns: {
               xxs: "repeat(3,1fr)",
               xs: "repeat(3,1fr)",
-              sm: "repeat(4,1fr)",
-              md: "repeat(6, 1fr)",
-              lg: "repeat(6,1fr)",
+              sm: `repeat(${cantsm}, 1fr)`,
+              md: `repeat(${cantmd}, 1fr)`,
+              lg: `repeat(${cantlg},1fr)`,
+            },
+            gridTemplateRows: {
+              lg: "repeat(2, 1fr)",
+              md: "repeat(3, 1fr)",
+              sm: "repeat(4, 1fr)",
             },
             flexDirection: "row",
             //ml: { xs: 1, lg: 10 },
