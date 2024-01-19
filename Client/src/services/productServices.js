@@ -13,7 +13,6 @@ import {
 //SWEET ALERT
 import Swal from "sweetalert2";
 
-
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllProducts = () => async (dispatch) => {
@@ -45,17 +44,24 @@ export const fetchSearch = (name) => async (dispatch) => {
     );
 
     if (filteredProducts.length == 0) {
-     await Swal.fire({
+      await Swal.fire({
         icon: "error",
         title: "No se encontro coincidencias en la busqueda",
         text: "Error en la busqueda",
         confirmButtonColor: "#fd611a",
-        confirmButtonText: "Ok",})
+        confirmButtonText: "Ok",
+      });
     } else {
       dispatch(search(filteredProducts));
     }
   } catch (error) {
-    console.log("error catch", error);
+    Swal.fire({
+      allowOutsideClick: false,
+      icon: "error",
+      title: "Error al obtener la barra de busqueda",
+      confirmButtonColor: "#fd611a",
+      text: `${error?.message}`,
+    });
   }
 };
 

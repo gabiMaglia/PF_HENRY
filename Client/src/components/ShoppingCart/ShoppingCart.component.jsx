@@ -315,7 +315,6 @@ export default function ShoppingCart() {
         </Box>
       </Box>
       <Box>
-        {console.log(id, isWalletLoading)}
         {isWalletLoading && (
           <Box
             sx={{ width: "100%", display: "flex", justifyContent: "center" }}

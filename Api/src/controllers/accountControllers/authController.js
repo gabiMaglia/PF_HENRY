@@ -101,8 +101,7 @@ const registerUser = async (userObj) => {
     include: [UserAddress, { model: UserRole, as: "role" }],
   });
 
-  const confirmationEmailToken = tokenSign({userID : newUser.id}, '2d')
-
+  const confirmationEmailToken = tokenSign({ userID: newUser.id }, "2d");
 
   await sendConfirmationEmail(
     process.env.EMAIL_MAILER,
@@ -188,7 +187,6 @@ const sendEmailToResetPassword = async (email) => {
     resetToken,
     process.env.FRONTEND_URL
   );
-  console.log(response);
   return response;
 };
 const resetPassword = async (newPassword, token) => {
@@ -199,13 +197,12 @@ const resetPassword = async (newPassword, token) => {
       response: "Token incorrecto",
     };
   }
-  const user = await User.findByPk(userDataFromtoken.id)
+  const user = await User.findByPk(userDataFromtoken.id);
   const userCredentials = await UserCredentials.findOne({
     where: { UserId: userDataFromtoken.id },
   });
-  
+
   if (userDataFromtoken.email !== user.email) {
-   
     return {
       error: true,
       response: "Token incorrecto",
@@ -217,8 +214,10 @@ const resetPassword = async (newPassword, token) => {
       response: "Credenciales no encontradas",
     };
   } else {
-    await logOutUser(token)
-    await userCredentials.update({ password: await bcrypt.hash(newPassword, 8) });
+    await logOutUser(token);
+    await userCredentials.update({
+      password: await bcrypt.hash(newPassword, 8),
+    });
     await userCredentials.save();
     return {
       error: false,
