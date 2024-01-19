@@ -34,6 +34,9 @@ const startDateValidate = (startDate) => {
       const actualDate = new Date();
       if (date > actualDate) {
         error = "La fecha de inicio no puede ser mayor a la fecha actual";
+      } else if (date < new Date("01/01/2021")) {
+        error =
+          "La fecha de inicio no puede ser menor a la fecha de recolección de datos (01/01/2024)";
       }
     }
   }

@@ -104,9 +104,24 @@ export const fetchAnalyticsData = async (
       );
       let totalData = [...totalDimensionsData, ...totalMetricsData];
 
+      let error = { error: false, response: "" };
+
       totalData = totalData.map((data) => {
+        if (data?.status === 401 || data?.status === 403) {
+          error = {
+            error: true,
+            response:
+              "Error de autenticación, verifique que la cuenta este habilitada",
+          };
+        } else if (data.status !== 200 || data.status !== 201) {
+          error = {
+            error: true,
+            response: "Error al obtener los datos, intentelo denuevo mas tarde",
+          };
+        }
         return data?.data;
       });
+
       totalData = totalData.filter((data) => {
         if (data !== undefined) return data;
       });
@@ -130,39 +145,131 @@ export const fetchAnalyticsData = async (
         requestBody,
         { headers }
       );
+
+      if (response.status === 401 || response.status === 403) {
+        return {
+          error: true,
+          response:
+            "Error de autenticación, verifique que la cuenta este habilitada",
+        };
+      }
+
       responseData = [response?.data];
     }
     const rows = [];
-    const finalData = responseData.forEach((data) => {
+    responseData.forEach((data) => {
       data?.rows?.map((row) => {
         rows.push(row);
       });
     });
     return rows;
   } catch (error) {
-    console.error(error);
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      return {
+        error: true,
+        response:
+          "Error de autenticación, verifique que la cuenta este habilitada",
+      };
+    }
+    return {
+      error: true,
+      response:
+        "Error de al obtener los datos, pruebe con otra combinación de metricas y dimensiones",
+    };
   }
 };
-// const dimensions = [{ name: "eventName" }, { name: "date" }];
-// const metrics = [{ name: "eventCount" }];
-// const dimensionFilter = {
-//   filter: {
-//     fieldName: "eventName",
-//     stringFilter: {
-//       value: "create_service", // Filtra por el nombre del evento
-//       matchType: "EXACT",
-//     },
-//   },
-// };);
 
-// const dimensions = [{ name: "eventName" }, { name: "date" }];
-// const metrics = [{ name: "eventCount" }];
-// const dimensionFilter = {
-//   filter: {
-//     fieldName: "eventName",
-//     stringFilter: {
-//       value: "create_service", // Filtra por el nombre del evento
-//       matchType: "EXACT",
-//     },
-//   },
-// };
+export const fetchAnalyticsRealtimeData = async (accessToken) => {
+  const reqParams = [
+    { metrics: { name: "activeUsers" } },
+    { metrics: { name: "activeUsers" }, dimensions: { name: "platform" } },
+    { metrics: { name: "activeUsers" }, dimensions: { name: "country" } },
+    { metrics: { name: "activeUsers" }, dimensions: { name: "city" } },
+    { metrics: { name: "conversions" } },
+    { metrics: { name: "eventCount" }, dimensions: { name: "eventName" } },
+    { metrics: { name: "eventCount" }, dimensions: { name: "eventName" } },
+  ];
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const responses = await Promise.all(
+      reqParams.map((param) => {
+        return axios.post(
+          `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runRealtimeReport`,
+          param,
+          { headers }
+        );
+      })
+    );
+
+    //Usuarios activos
+
+    const activeUsers = responses[0]?.data?.rows
+      ? responses[0]?.data?.rows[0]?.metricValues[0]?.value
+      : 0;
+
+    //Usuarios activos por plataforma
+
+    let activeUsersPerPlataform = { dimensions: [], metrics: [] };
+    responses[1]?.data?.rows.forEach((row) => {
+      activeUsersPerPlataform.dimensions.push(row?.dimensionValues[0]?.value);
+      activeUsersPerPlataform.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    //Usuarios activos por pais
+
+    let activeUsersPerCountry = { dimensions: [], metrics: [] };
+
+    responses[2]?.data?.rows.forEach((row) => {
+      activeUsersPerCountry.dimensions.push(row?.dimensionValues[0]?.value);
+      activeUsersPerCountry.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    //Usuarios activos por ciudad
+
+    let activeUsersPerCity = { dimensions: [], metrics: [] };
+
+    responses[3]?.data?.rows.forEach((row) => {
+      activeUsersPerCity.dimensions.push(row?.dimensionValues[0]?.value);
+      activeUsersPerCity.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    //Conversiones
+
+    const conversions = responses[4]?.data?.rows
+      ? responses[4]?.data?.rows[0]?.metricValues[0]?.value
+      : 0;
+
+    //Eventos
+
+    const eventCount = responses[5]?.data?.rows
+      ? responses[5]?.data?.rows[0]?.metricValues[0]?.value
+      : 0;
+
+    //Eventos por nombre
+
+    const eventCountPerName = { dimensions: [], metrics: [] };
+    responses[6]?.data?.rows.forEach((row) => {
+      eventCountPerName.dimensions.push(row?.dimensionValues[0]?.value);
+      eventCountPerName.metrics.push(row?.metricValues[0]?.value);
+    });
+
+    return {
+      activeUsers,
+      activeUsersPerCountry,
+      activeUsersPerCity,
+      activeUsersPerPlataform,
+      conversions,
+      eventCount,
+      eventCountPerName,
+    };
+  } catch (error) {
+    return {
+      error: true,
+      respose: "Error al obtener los datos en tiempo real",
+    };
+  }
+};

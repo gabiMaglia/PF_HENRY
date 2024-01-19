@@ -53,6 +53,8 @@ const Config = ({
   setGraphicType,
   dataOrder,
   setDataOrder,
+  showRealtime,
+  setShowRealtime,
 }) => {
   const handleMetricsDimensionChange = (value, name, position) => {
     const newData =
@@ -74,7 +76,6 @@ const Config = ({
       metrics: metricStatus,
       dimensions: dimensionStatus,
     });
-    console.log(actErrors);
     if (
       actErrors?.graph?.length > 0 ||
       actErrors?.order?.length > 0 ||
@@ -121,6 +122,17 @@ const Config = ({
         },
       });
     } else {
+      Swal.fire({
+        icon: "info",
+        allowOutsideClick: false,
+        title: "Por favor espere mientras procesamos la información",
+        showConfirmButton: false,
+        customClass: {
+          container: "container",
+        },
+      });
+      Swal.showLoading();
+      setShowRealtime(false);
       getData();
     }
   };
@@ -343,15 +355,28 @@ const Config = ({
             </Box>
           </Box>
         </Box>
-        <Box>
-          <Box sx={{ backgroundColor: "#fd611a" }}>
-            <Button fullWidth onClick={handleSubmit}>
+        <Box sx={{ backgroundColor: "#fd611a", borderRadius: "10px" }}>
+          <Button fullWidth onClick={handleSubmit}>
+            <Typography variant="body1" color="white">
+              Buscar datos
+            </Typography>
+          </Button>
+        </Box>
+        {!showRealtime && (
+          <Box sx={{ backgroundColor: "#fd611a", borderRadius: "10px" }}>
+            <Button
+              fullWidth
+              onClick={() => {
+                setShowRealtime(true);
+                setOpen(false);
+              }}
+            >
               <Typography variant="body1" color="white">
-                Buscar datos
+                Volver a en tiempo real
               </Typography>
             </Button>
           </Box>
-        </Box>
+        )}
       </Box>
     </Modal>
   );
