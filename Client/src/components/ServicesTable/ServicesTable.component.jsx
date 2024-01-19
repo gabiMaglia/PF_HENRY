@@ -399,6 +399,7 @@ const ServicesTable = () => {
           text: msg,
         });
         getAllServices();
+        setRowSelected([]);
         return selectedRows;
       } else {
         Swal.fire({

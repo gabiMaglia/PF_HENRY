@@ -139,9 +139,23 @@ const sectionInformation = [
   {
     title: "INFORMACION",
     items: [
-      { icon: Phone, text: "+549 11 3206-9043" },
-      { icon: Room, text: "Calle Falsa 123 - Buenos Aires" },
-      { icon: Email, text: "hypermegared.it@gmail.com" },
+      {
+        icon: Phone,
+        text: "+549 11 3206-9043",
+        link: "https://wa.me/+5491132069043",
+        target: "_blank",
+      },
+      {
+        icon: Room,
+        text: "Dr. Melo 4284 - R. de Escalada",
+        link: "https://maps.app.goo.gl/rGM9QV8Z8RGH2mYu8",
+        target: "_blank",
+      },
+      {
+        icon: Email,
+        text: "hypermegared.it@gmail.com",
+        link: "https://pf-henry-sepia.vercel.app/support",
+      },
       {
         icon: AccessTimeFilled,
         text: "Lu a Vi: 10 a 14hs y 17 a 20hs | Sa: 10 a 14hs.",
