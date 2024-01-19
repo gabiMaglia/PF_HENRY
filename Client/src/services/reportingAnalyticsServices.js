@@ -269,7 +269,8 @@ export const fetchAnalyticsRealtimeData = async (accessToken) => {
   } catch (error) {
     return {
       error: true,
-      respose: "Error al obtener los datos en tiempo real",
+      response:
+        "Error al obtener los datos en tiempo real, verifique que su cuenta este autorizada",
     };
   }
 };
