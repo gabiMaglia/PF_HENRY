@@ -17,6 +17,7 @@ import CreateService from "../CreateService/CreateService.component";
 import UsersTable from "../UsersTable/UsersTable.component";
 import ProductsTable from "../ProductsTable/ProductsTable.component";
 import ServicesTable from "../ServicesTable/ServicesTable.component";
+import Error404View from "../../views/publics/Error404/Error404.view";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 //HELPERS
 import PATHROUTES from "../../helpers/pathRoute";
@@ -161,6 +162,7 @@ const UserPanelComponent = () => {
           path={userRole === "admin" ? PATHROUTES.PROFILE : PATHROUTES.PROFILE}
           element={<UserProfile />}
         />
+        <Route path={PATHROUTES.ERROR_404} element={<Error404View />} />
         <Route
           path={
             userRole === "admin"

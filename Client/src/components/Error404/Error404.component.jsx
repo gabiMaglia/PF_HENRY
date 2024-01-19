@@ -1,7 +1,17 @@
 import { Box, Button, Typography, Link } from "@mui/material";
 import PATHROUTES from "../../helpers/pathRoute";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Error404Component = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigate(PATHROUTES.HOME);
+    }, 4000);
+  }, []);
+
   return (
     <>
       <Box
