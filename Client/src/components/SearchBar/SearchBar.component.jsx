@@ -95,7 +95,7 @@ export default function SearchAppBar() {
   }, [login, aux]);
 
   const Img = styled("img")({
-    width: 140,
+    width: 200,
     height: 140,
   });
 
