@@ -18,6 +18,8 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue:
+          "https://res.cloudinary.com/hypermegared/image/upload/v1705703306/Recurso_8_tmnnva.png",
       },
     },
     {
