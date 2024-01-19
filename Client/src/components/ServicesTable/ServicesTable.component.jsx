@@ -19,6 +19,7 @@ import {
   getServices,
   updateService,
   logicalDeleteService,
+  getServicesById,
 } from "../../services/serviceServices";
 import { getUsersByRole } from "../../services/userServices";
 //UTILS
@@ -175,6 +176,18 @@ const ServicesTable = () => {
       renderCell: (params) => <Box>{params.value ? "Si" : "No"}</Box>,
     },
   ];
+  const validateService = async (id) => {
+    const service = services.filter((service) => service.id === id);
+    console.log(service[0]);
+    if (
+      service[0].status === "Servicio finalizado" ||
+      service[0].status === "Servicio cancelado"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const getAllServices = async () => {
     try {
@@ -238,6 +251,14 @@ const ServicesTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
+
+      if (validateService(id)) {
+        return Swal.fire({
+          icon: "error",
+          title: "Actualizacion Erronea",
+          text: "No puede actualizarse un servicio finalizado o cancelado",
+        });
+      }
       const response = await updateService(
         id,
         { technicianId: newTechnician.id, technicianName: newTechnicianName },
@@ -268,6 +289,7 @@ const ServicesTable = () => {
   };
 
   const handleStatusChange = async (id, newStatus) => {
+    console.log(id);
     try {
       Swal.fire({
         icon: "info",
@@ -276,6 +298,14 @@ const ServicesTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
+      // const {data}=await getServicesById(id,authData.jwt)
+      if (validateService(id)) {
+        return Swal.fire({
+          icon: "error",
+          title: "Actualizacion Erronea",
+          text: "No puede actualizarse un servicio finalizado o cancelado",
+        });
+      }
       const response = await updateService(
         id,
         { status: newStatus },
@@ -325,6 +355,7 @@ const ServicesTable = () => {
   }, []);
 
   const handleCellEditStart = (params) => {
+    console.log(params);
     editingRow.current = rows.find((row) => row.id === params.id) || null;
   };
 
@@ -384,7 +415,6 @@ const ServicesTable = () => {
         Swal.showLoading();
         setAvailableModify(false);
         const serviceId = newRow.id;
-
         if (newRow.budget) {
           const numericBudget = parseFloat(newRow.budget.replace(/\D/g, ""));
           newRow.budget = `$${numericBudget

@@ -142,7 +142,6 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
       };
       const response = await registerUser(userInfoForRequest);
       const { data, error } = response;
-
       if (error || !data) {
         Swal.fire({
           allowOutsideClick: false,
@@ -151,7 +150,11 @@ const RegisterModal = ({ isOpen, setRegisterModalIsOpen }) => {
           },
           icon: "error",
           title: "Falla en el registro",
-          text: `${response.error}`,
+          text: `${
+            response?.error === "Validation error"
+              ? "El email ingresado esta en uso"
+              : response?.error
+          }`,
         });
       } else {
         Swal.fire({
