@@ -12,7 +12,7 @@ export const fetchCategories = async (dispatch) => {
     });
     dispatch(getCategories(data));
   } catch (error) {
-    console.log(error, "Error al obtener las categorias");
+    return error;
   }
 };
 
@@ -23,7 +23,6 @@ export const fetchPostCategories = async (dispatch, name) => {
     });
     dispatch(postCategory(data));
   } catch (error) {
-    console.log(error, "al crear la categoria");
+    return error;
   }
 };
-

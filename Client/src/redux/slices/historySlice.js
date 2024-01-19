@@ -15,12 +15,14 @@ const historySlice = createSlice({
     postHistoryUser(state, action) {
       state.historyUser = [...state.historyUser, action.payload];
     },
-    deleteHistoryItem(state,action){
-      console.log(action.payload)
-      state.historyUser = state.historyUser.filter((history)=>history.value!==action.payload)
-    }
+    deleteHistoryItem(state, action) {
+      state.historyUser = state.historyUser.filter(
+        (history) => history.value !== action.payload
+      );
+    },
   },
 });
 
-export const { getHistoryUser, postHistoryUser,deleteHistoryItem } = historySlice.actions;
+export const { getHistoryUser, postHistoryUser, deleteHistoryItem } =
+  historySlice.actions;
 export default historySlice.reducer;

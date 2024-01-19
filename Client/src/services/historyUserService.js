@@ -38,7 +38,6 @@ export const fetchPostHistoryItem = async (userId, value, dispatch) => {
 
 export const fetchDeleteHistoryItem = async (userId, value, dispatch) => {
   try {
-    console.log(userId,value)
     const { data } = await axios.put(`${urlBack}/history/${userId}`, {
       value: value,
     });

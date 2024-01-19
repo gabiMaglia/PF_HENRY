@@ -52,8 +52,12 @@ const SupportComponent = () => {
       setPostRequest(data);
       return data;
     } catch (error) {
-      console.log("Error al enviar el formulario", error);
-      throw error;
+      Swal.fire({
+        icon: "error",
+        title: "Error al enviar el formulario",
+        text: `${error}`,
+        confirmButtonColor: "#fd611a",
+      });
     }
   };
 
