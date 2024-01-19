@@ -4,6 +4,7 @@ const {
   postUser,
   editUserById,
   getUserByDni,
+  logicalDelete
 } = require("../../controllers/userControllers/userController");
 
 const getUsersHandler = async (req, res) => {
@@ -116,10 +117,25 @@ const editUserByIdHandler = async (req, res) => {
   }
 };
 
+//LOGICAL DELETE
+const logicalDeleteHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await logicalDelete(id);
+    if (result.error) {
+      res.status(400).json({ error: result.response });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUsersHandler,
   getUserByIdHandler,
   postUserHandler,
   editUserByIdHandler,
   getUserByDniHandler,
+  logicalDeleteHandler
 };

@@ -312,6 +312,7 @@ const ProductsTable = () => {
           text: msg,
         });
         getProducts();
+        setRowSelected([]);
         return selectedRows;
       } else {
         Swal.fire({
@@ -345,6 +346,7 @@ const ProductsTable = () => {
           text: msg,
         });
         getProducts();
+        setRowSelected([]);
         return selectedRows;
       } else {
         Swal.fire({

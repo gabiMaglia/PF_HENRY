@@ -16,7 +16,7 @@ import {
 } from "../CustomDataGrid/CustomDataGrid.component";
 //SERVICES
 import { getAllUsers, getUserRoles } from "../../services/userServices";
-import { putUser, isDeleteChange } from "../../services/userServices";
+import { putUser, logicalDeleteUser, isDeleteChange } from "../../services/userServices";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //SWEET ALERT
@@ -226,30 +226,38 @@ const UsersTable = () => {
     }
   };
 
-  const handleDelete = async () => {
-    const response = await isDeleteChange(rowSelected, authData.jwt);
-    console.log("RES", response);
-    if (response.error) {
+  const handleDelete = async (selectedRows)=>{
+    try {
+      if(selectedRows.length > 0) {
+        const response = await Promise.all(
+          selectedRows.map((id) => {
+            return logicalDeleteUser(id, authData.jwt);
+          })
+        );
+        let msg = response.map((res) => res.data);
+        Swal.fire({
+          icon: "success",
+          title: "Operación Exitosa",
+          text: msg,
+        });
+        getUsers();
+        setRowSelected([]);
+        return selectedRows;
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "No hay usuarios seleccionados",
+          text: "Por favor, selecciona al menos un usuario para eliminar.",
+        });
+      }
+    } catch (error) {
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text: response.error,
-      });
-    } else {
-      getUsers();
-      let responses = "";
-      response.forEach((value) => {
-        responses = value.data.response;
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Usuario/s actualizados exitosamente",
-        confirmButtonText: "Aceptar",
-        confirmButtonColor: "#fd611a",
-        text: responses,
+        title: "Error al realizar el borrado lógico",
+        text: "Ha ocurrido un error al intentar borrar el usuario.",
       });
     }
-  };
+  }
 
   useEffect(() => {
     getUsers();
@@ -353,7 +361,6 @@ const UsersTable = () => {
             onRowSelectionModelChange={(newRowSelectionModel) => {
               setRowSelected(newRowSelectionModel);
             }}
-            rowSelectionModel={rowSelected}
             ignoreDiacritics
             pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
             columnGroupingModel={columnGroupingModel}
@@ -372,6 +379,7 @@ const UsersTable = () => {
                 handleDelete,
                 dataName: "Lista de usuarios",
                 showQuickFilter: true,
+                selectedRows: rowSelected,
               },
             }}
             getRowClassName={(params) => {
@@ -381,12 +389,13 @@ const UsersTable = () => {
                 ? `row--carousel`
                 : `row`;
             }}
+            checkboxSelection
             disableRowSelectionOnClick
+            rowSelectionModel={rowSelected}
             rows={rows}
             columns={gridColumns}
             pageSize={5}
             localeText={language.components.MuiDataGrid.defaultProps.localeText}
-            checkboxSelection
             initialState={{
               columns: {
                 columnVisibilityModel: {
