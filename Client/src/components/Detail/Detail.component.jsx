@@ -396,18 +396,22 @@ const Detail = () => {
               >
                 {productById.name}
               </Typography>
-              {productById?.ProductStock?.amount < 5 &&
-                productById?.ProductStock?.amount > 1 && (
+              {productById?.ProductStock?.amount <= 5 &&
+                productById?.ProductStock?.amount >= 1 && (
                   <Typography
                     variant="body1"
                     sx={{
                       display: "flex",
                       justifyContent: "center",
-                      color: "red",
+                      color: "grey",
                       fontWeight: 700,
                     }}
                   >
-                    ¡{productById?.ProductStock?.amount} unidades disponibles!
+                    {productById?.ProductStock?.amount}
+                    {productById?.ProductStock?.amount === 1
+                      ? " unidad"
+                      : " unidades"}{" "}
+                    disponibles
                   </Typography>
                 )}
               {productById?.ProductStock?.amount === 0 && (
