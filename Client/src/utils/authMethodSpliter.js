@@ -35,7 +35,7 @@ export const updateJwt = (jwt, cookieStatus) => {
 };
 
 export const getDataFromSelectedPersistanceMethod = (cookieStatus) => {
-  console.log(cookieStatus)
+
   if (cookieStatus) {
     return getAuthDataCookie("authData");
   } else
