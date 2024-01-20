@@ -313,7 +313,7 @@ const ServicesTable = () => {
         showConfirmButton: false,
       });
       Swal.showLoading();
-      if (validateService(id)) {
+      if (await validateService(id)) {
         return Swal.fire({
           icon: "error",
           title: "Actualizacion Erronea",
