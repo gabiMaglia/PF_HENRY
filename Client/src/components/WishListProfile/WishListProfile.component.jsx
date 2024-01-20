@@ -122,6 +122,7 @@ const WhishListProfileComponent = () => {
 
   const deleteProduct = (id) => {
     setIsLoading(true);
+
     fetchAddItemWish(dispatch, id, cookieStatus);
   };
 
