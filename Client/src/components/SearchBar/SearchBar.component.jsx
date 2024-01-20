@@ -407,7 +407,8 @@ export default function SearchAppBar() {
             <Notification />
           </Box>
         )}
-        {login === false ? (
+     
+       { login === false ? (
           <Box
             sx={{
               flexGrow: 0,

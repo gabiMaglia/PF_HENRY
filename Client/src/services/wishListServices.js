@@ -33,6 +33,7 @@ export const fetchWishList = async (dispatch, cookieStatus) => {
 };
 
 export const fetchAddItemWish = async (dispatch, productId, cookieStatus) => {
+ console.log(cookieStatus)
   const {jwt, userId} = getDataFromSelectedPersistanceMethod(cookieStatus);
   const request = {
     userID: userId,

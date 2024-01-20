@@ -73,6 +73,7 @@ const CardProduct = ({ product }) => {
 
   const handleDesiredClick = () => {
     if (login && userRole === "customer") {
+      console.log('aca')
       fetchAddItemWish(dispatch, product.id, cookieStatus);
     } else if (login && userRole !== "customer") {
       Swal.fire({

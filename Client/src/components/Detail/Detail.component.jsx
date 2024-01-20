@@ -133,7 +133,8 @@ const Detail = () => {
 
   const handleDesiredClick = () => {
     if (login && userRole === "customer") {
-      fetchAddItemWish(dispatch, authData.userId, productById.id, authData.jwt);
+      
+      fetchAddItemWish(dispatch, productById.id, cookieStatus);
     } else if (login && userRole !== "customer") {
       Swal.fire({
         icon: "info",
@@ -167,7 +168,7 @@ const Detail = () => {
         const isProductInWishlist = wishlistProducts.some((p) => p.id === id);
         setIsDesired(isProductInWishlist);
       } else {
-        fetchWishList(authData.userId, dispatch, authData.jwt);
+        fetchWishList(dispatch, cookieStatus);
       }
     } else {
       setIsDesired(false);

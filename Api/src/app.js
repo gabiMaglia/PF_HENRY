@@ -18,10 +18,10 @@ server.use(express.urlencoded({ extended: true }));
 // Passport
 server.use(passport.initialize());
 // Entryp0nt de la ruta principal
-server.use((req,res,next) => {
-    console.log(req.headers.authorization)
-    next()
-}) 
+// server.use((req,res,next) => {
+//     console.log(req.headers.authorization)
+//     next()
+// }) 
 server.use("/", routes);
 
 
