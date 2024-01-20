@@ -143,7 +143,7 @@ export default function SearchAppBar() {
 
   useEffect(() => {
     if (authData?.login && authData?.userRole === "customer") {
-      fetchWishList(authData.userId, dispatch, authData.jwt);
+      fetchWishList( dispatch, cookieStatus);
     }
   }, [authData?.userRole]);
 

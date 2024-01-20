@@ -45,7 +45,6 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-
       <SearchBar />
       <NavBar />
       <Routes>
@@ -57,10 +56,10 @@ const App = () => {
         <Route path={PATHROUTES.DETAIL} element={<Detail />} />
         <Route path={PATHROUTES.REVIEW} element={<Review />} />
         <Route path={PATHROUTES.CHANGEPASS} element={<ChangePasword />} />
-
+        
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
-          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>

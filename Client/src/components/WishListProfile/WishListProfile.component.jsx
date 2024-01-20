@@ -101,7 +101,7 @@ const WhishListProfileComponent = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetchWishList(userId, dispatch, authData.jwt);
+    fetchWishList(dispatch, cookieStatus);
   }, []);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const WhishListProfileComponent = () => {
     if (wishListCards[0] && wishListCards[0].ProductImages) {
       setIsLoading(false);
     } else {
-      fetchWishList(userId, dispatch, authData.jwt);
+      fetchWishList( dispatch, cookieStatus);
     }
   }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
 
@@ -122,7 +122,7 @@ const WhishListProfileComponent = () => {
 
   const deleteProduct = (id) => {
     setIsLoading(true);
-    fetchAddItemWish(dispatch, userId, id, authData.jwt);
+    fetchAddItemWish(dispatch, id, cookieStatus);
   };
 
   const handleClickDeleteButton = () => {

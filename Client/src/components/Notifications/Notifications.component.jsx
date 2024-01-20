@@ -21,7 +21,7 @@ const Notification = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const wishListCards = useSelector((state) => state.wishlist.products);
   const cookieStatus = useSelector((state) => state.cookies.cookiesAccepted);
-  const authData = getDataFromSelectedPersistanceMethod(cookieStatus);
+ 
 
   const getAllOffers = () => {
     if (wishListCards?.length > 0) {
@@ -36,7 +36,7 @@ const Notification = () => {
 
   const getAllOffersBack = async () => {
     if (wishListCards?.length > 0) {
-      const response = await getOffers(authData.userId, authData.jwt);
+      const response = await getOffers(cookieStatus);
       if (!response?.error) {
         setOffers(response);
       }

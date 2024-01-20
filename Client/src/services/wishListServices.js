@@ -9,12 +9,14 @@ import {
 import Swal from "sweetalert2";
 //FIREBASE
 import { itemToWishlist } from "./firebaseAnayticsServices";
+import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
 const urlFront = import.meta.env.VITE_FRONT_URL;
 
-export const fetchWishList = async (userId, dispatch, jwt) => {
+export const fetchWishList = async (dispatch, cookieStatus) => {
   try {
+    const {jwt, userId} = getDataFromSelectedPersistanceMethod(cookieStatus);
     const response = await axios.get(`${urlBack}/wishlist/${userId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -30,7 +32,8 @@ export const fetchWishList = async (userId, dispatch, jwt) => {
   }
 };
 
-export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
+export const fetchAddItemWish = async (dispatch, productId, cookieStatus) => {
+  const {jwt, userId} = getDataFromSelectedPersistanceMethod(cookieStatus);
   const request = {
     userID: userId,
     productID: productId,
@@ -52,8 +55,9 @@ export const fetchAddItemWish = async (dispatch, userId, productId, jwt) => {
   }
 };
 
-export const getOffers = async (userId, jwt) => {
+export const getOffers = async (cookieStatus) => {
   try {
+    const {jwt, userId} = getDataFromSelectedPersistanceMethod(cookieStatus);
     const response = await axios.get(`${urlBack}/wishList/offer/${userId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
