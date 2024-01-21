@@ -12,6 +12,13 @@ const SafePurchaseComponent = () => {
             display: "flex",
             justifyContent: "space-evenly",
             paddingBottom: "30px",
+            "@media (max-width: 768px)": {
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+              transform: "scale(.9)"
+            }
           }}
         >
           <Box>

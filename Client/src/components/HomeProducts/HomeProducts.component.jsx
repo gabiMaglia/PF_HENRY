@@ -117,12 +117,14 @@ const HomeProducts = ({ allProducts }) => {
       <Box>
         <Box
           sx={{
-            // backgroundColor: "#000",
             width: "100%",
             height: "100px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            "@media (max-width: 480px)": {
+              marginBottom: "-30px"
+            }
           }}
         >
           <Typography
@@ -130,6 +132,9 @@ const HomeProducts = ({ allProducts }) => {
             sx={{
               color: "#00000",
               fontWeight: "900",
+              "@media (max-width: 480px)": {
+                fontSize: "26px",
+              }
             }}
           >
             Productos Destacados
