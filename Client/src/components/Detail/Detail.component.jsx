@@ -88,14 +88,14 @@ const FadeInTransition = ({ children }) => {
   }, [children]);
 
   return (
-    <div
+    <Box
       style={{
         opacity: opacity,
         transition: "opacity 0.5s ease-in",
       }}
     >
       {children}
-    </div>
+    </Box>
   );
 };
 
@@ -133,7 +133,6 @@ const Detail = () => {
 
   const handleDesiredClick = () => {
     if (login && userRole === "customer") {
-      
       fetchAddItemWish(dispatch, productById.id, cookieStatus);
     } else if (login && userRole !== "customer") {
       Swal.fire({
@@ -278,214 +277,225 @@ const Detail = () => {
   // Renderizado condicional según el estado de carga y existencia de datos
   if (isLoadingDetail || loading || isLoading || !productById) {
     return (
-      <FadeInTransition key={fadeInKey}>
-        <Container
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "wrap",
-            alignContent: "space-around",
-            justifyContent: "center",
-            marginTop: 15,
-            marginBottom: 15,
-          }}
-        >
-          <CircularProgress
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              margin: 5,
-              color: "#fd611a",
-            }}
-          />
-          <Typography
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            Cargando...
-          </Typography>
-        </Container>
-      </FadeInTransition>
+      <>
+        <Box sx={{ minHeight: "70vh" }}>
+          <FadeInTransition key={fadeInKey}>
+            <Container
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                flexWrap: "wrap",
+                alignContent: "space-around",
+                justifyContent: "center",
+                marginTop: 15,
+                marginBottom: 15,
+              }}
+            >
+              <CircularProgress
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  margin: 5,
+                  color: "#fd611a",
+                }}
+              />
+              <Typography
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                Cargando...
+              </Typography>
+            </Container>
+          </FadeInTransition>
+        </Box>
+      </>
     );
   }
 
   // Renderizado del componente cuando los datos están disponibles
   return (
-    <FadeInTransition key={fadeInKey}>
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          paddingTop: 5,
-          textAlign: isSmallScreen ? "center" : "left",
-        }}
-      >
-        <Container
-          sx={{
-            display: "flex",
-            flexDirection: isSmallScreen ? "column" : "row",
-            boxShadow: "5px 5px 5px #888888",
-            borderRadius: "8px",
-            overflow: "hidden",
-            margin: isSmallScreen ? "auto" : 0,
-            maxWidth: isSmallScreen ? "100%" : 900,
-            position: "relative",
-          }}
-        >
-          {isLargeScreen &&
-            productById.ProductImages &&
-            productById.ProductImages.length > 1 && (
-              <Container
-                sx={{
-                  width: "100px",
-                  flexDirection: "column",
-                  spacing: 1,
-                }}
-              >
-                {productById.ProductImages.map((image, index) => (
-                  <ThumbnailContainer
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    onMouseOver={() => setSelectedImage(image.address)}
-                  >
-                    <img
-                      src={image.address}
-                      alt={productById.name}
-                      style={{ width: "80px", border: "1px solid transparent" }}
-                    />
-                  </ThumbnailContainer>
-                ))}
-              </Container>
-            )}
-
+    <>
+      <Box>
+        <FadeInTransition key={fadeInKey}>
           <Container
             sx={{
-              width: isSmallScreen ? "100%" : "auto",
               display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              flexDirection: "column",
+              paddingTop: 5,
+              textAlign: isSmallScreen ? "center" : "left",
             }}
           >
-            {selectedImage && (
-              <ProductMedia
-                component="img"
-                alt={productById.name}
-                src={selectedImage}
-                sx={{ height: "200px", maxWidth: "100%" }}
-              />
-            )}
-          </Container>
-
-          <Container
-            sx={{
-              padding: isLargeScreen ? "0 8px" : "8px",
-              width: isSmallScreen ? "100%" : "auto",
-            }}
-          >
-            <Box>
-              <Typography
-                fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
-                fontWeight="bold"
-                paddingTop={isLargeScreen ? 4 : 2}
-              >
-                {productById.name}
-              </Typography>
-              {productById?.ProductStock?.amount <= 5 &&
-                productById?.ProductStock?.amount >= 1 && (
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "grey",
-                      fontWeight: 700,
-                    }}
-                  >
-                    {productById?.ProductStock?.amount}
-                    {productById?.ProductStock?.amount === 1
-                      ? " unidad disponible"
-                      : " unidades disponibles"}{" "}
-                  </Typography>
-                )}
-              {productById?.ProductStock?.amount === 0 && (
-                <Typography
-                  variant="body1"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "red",
-                    fontWeight: 700,
-                  }}
-                >
-                  ¡Producto sin stock!
-                </Typography>
-              )}
-              <Typography
-                fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
-                color="#fd611a"
-                fontWeight="bold"
-                paddingTop={isLargeScreen ? 4 : 2}
-              >
-                Precio: {formatPrice(productById.price)}
-              </Typography>
-            </Box>
-
             <Container
               sx={{
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingBottom: 5,
-                marginTop: 2,
+                flexDirection: isSmallScreen ? "column" : "row",
+                boxShadow: "5px 5px 5px #888888",
+                borderRadius: "8px",
+                overflow: "hidden",
+                margin: isSmallScreen ? "auto" : 0,
+                maxWidth: isSmallScreen ? "100%" : 900,
+                position: "relative",
               }}
             >
-              <CustomButton
-                variant="contained"
-                size={isLargeScreen ? "large" : "small"}
-                onClick={handleAddToCart}
+              {isLargeScreen &&
+                productById.ProductImages &&
+                productById.ProductImages.length > 1 && (
+                  <Container
+                    sx={{
+                      width: "100px",
+                      flexDirection: "column",
+                      spacing: 1,
+                    }}
+                  >
+                    {productById.ProductImages.map((image, index) => (
+                      <ThumbnailContainer
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        onMouseOver={() => setSelectedImage(image.address)}
+                      >
+                        <img
+                          src={image.address}
+                          alt={productById.name}
+                          style={{
+                            width: "80px",
+                            border: "1px solid transparent",
+                          }}
+                        />
+                      </ThumbnailContainer>
+                    ))}
+                  </Container>
+                )}
+
+              <Container
+                sx={{
+                  width: isSmallScreen ? "100%" : "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                Agregar al Carrito
-              </CustomButton>
+                {selectedImage && (
+                  <ProductMedia
+                    component="img"
+                    alt={productById.name}
+                    src={selectedImage}
+                    sx={{ height: "200px", maxWidth: "100%" }}
+                  />
+                )}
+              </Container>
+
+              <Container
+                sx={{
+                  padding: isLargeScreen ? "0 8px" : "8px",
+                  width: isSmallScreen ? "100%" : "auto",
+                }}
+              >
+                <Box>
+                  <Typography
+                    fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
+                    fontWeight="bold"
+                    paddingTop={isLargeScreen ? 4 : 2}
+                  >
+                    {productById.name}
+                  </Typography>
+                  {productById?.ProductStock?.amount <= 5 &&
+                    productById?.ProductStock?.amount >= 1 && (
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          color: "grey",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {productById?.ProductStock?.amount}
+                        {productById?.ProductStock?.amount === 1
+                          ? " unidad disponible"
+                          : " unidades disponibles"}{" "}
+                      </Typography>
+                    )}
+                  {productById?.ProductStock?.amount === 0 && (
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        color: "red",
+                        fontWeight: 700,
+                      }}
+                    >
+                      ¡Producto sin stock!
+                    </Typography>
+                  )}
+                  <Typography
+                    fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
+                    color="#fd611a"
+                    fontWeight="bold"
+                    paddingTop={isLargeScreen ? 4 : 2}
+                  >
+                    Precio: {formatPrice(productById.price)}
+                  </Typography>
+                </Box>
+
+                <Container
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingBottom: 5,
+                    marginTop: 2,
+                  }}
+                >
+                  <CustomButton
+                    variant="contained"
+                    size={isLargeScreen ? "large" : "small"}
+                    onClick={handleAddToCart}
+                  >
+                    Agregar al Carrito
+                  </CustomButton>
+                </Container>
+              </Container>
+              <BookmarkIcon
+                onClick={handleDesiredClick}
+                sx={{
+                  position: "absolute",
+                  top: "30px",
+                  right: "20px",
+                  transform: "translateY(-50%)",
+                  cursor: login ? "pointer" : "not-allowed",
+                  color: isDesired ? "#fd611a" : "gray",
+                }}
+              />
             </Container>
+            <Container sx={{ marginTop: 2 }}>
+              <Divider sx={{ marginY: 2 }} />
+              <Typography variant="h4" fontWeight={"bold"}>
+                Descripción:
+              </Typography>
+              <Typography variant="h5">{productById.description}</Typography>
+            </Container>
+            <Container sx={{ marginTop: 2 }}>
+              <Divider sx={{ marginY: 2 }} />
+              <Typography variant="h5" fontWeight={"bold"}>
+                Garantia:
+              </Typography>
+              <Typography variant="h6">{productById.warranty}</Typography>
+            </Container>
+            <Container>
+              <Divider sx={{ marginY: 2 }} />
+            </Container>
+            <CarouselProducts allProducts={allProducts} />
           </Container>
-          <BookmarkIcon
-            onClick={handleDesiredClick}
-            sx={{
-              position: "absolute",
-              top: "30px",
-              right: "20px",
-              transform: "translateY(-50%)",
-              cursor: login ? "pointer" : "not-allowed",
-              color: isDesired ? "#fd611a" : "gray",
-            }}
-          />
-        </Container>
-        <Container sx={{ marginTop: 2 }}>
-          <Divider sx={{ marginY: 2 }} />
-          <Typography variant="h4" fontWeight={"bold"}>
-            Descripción:
-          </Typography>
-          <Typography variant="h5">{productById.description}</Typography>
-        </Container>
-        <Container sx={{ marginTop: 2 }}>
-          <Divider sx={{ marginY: 2 }} />
-          <Typography variant="h5" fontWeight={"bold"}>
-            Garantia:
-          </Typography>
-          <Typography variant="h6">{productById.warranty}</Typography>
-        </Container>
-        <Container>
-          <Divider sx={{ marginY: 2 }} />
-        </Container>
-        <CarouselProducts allProducts={allProducts} />
-      </Container>
-    </FadeInTransition>
+        </FadeInTransition>
+      </Box>
+    </>
   );
 };
 
