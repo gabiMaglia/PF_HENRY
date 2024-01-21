@@ -8,6 +8,7 @@ import HomeProducts from "../HomeProducts/HomeProducts.component";
 import CarouselBottom from "../../components/CarouselBottom/CarouselBottom.component";
 import CarouselTop from "../../components/CarouselTop/CarouselTop.component";
 import GoogleMap from "../../components/GoogleMap/GoogleMap.component";
+import SafePurchase from "../../components/SafePurchase/SafePurchase.component";
 
 const HomeComponent = () => {
   const { allProducts } = useSelector((state) => state.product);
@@ -16,6 +17,7 @@ const HomeComponent = () => {
       <Box>
         <CarouselTop />
         <HomeProducts allProducts={allProducts} />
+        <SafePurchase />
         <GoogleMap />
         <CarouselBottom />
       </Box>

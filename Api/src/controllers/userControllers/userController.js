@@ -208,7 +208,7 @@ const logicalDelete = async (id) => {
     return { error: true, response: "Usuario no encontrado" };
   }
   await user.update({ isDeleted: !user.isDeleted });
-  return `Usuario ${user.name} ${
+  return `Usuario ${user.name} ${user.surname} ${
     user.isDeleted ? "Desactivado" : "Activado"
   } `;
 };
