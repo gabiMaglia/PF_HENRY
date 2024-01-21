@@ -16,13 +16,13 @@ const SafePurchaseComponent = () => {
         >
           <Box>
             <Typography
-              variant="h6"
+              variant="h7"
               sx={{
                 textTransform: "uppercase",
                 fontWeight: "bold",
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
+                gap: "5px",
               }}
             >
               <LocalShippingIcon /> Enviamos tu compra
@@ -33,13 +33,13 @@ const SafePurchaseComponent = () => {
           </Box>
           <Box>
             <Typography
-              variant="h6"
+              variant="h7"
               sx={{
                 textTransform: "uppercase",
                 fontWeight: "bold",
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
+                gap: "5px",
               }}
             >
               <CreditCardIcon /> Pagá como quieras
@@ -50,13 +50,13 @@ const SafePurchaseComponent = () => {
           </Box>
           <Box>
             <Typography
-              variant="h6"
+              variant="h7"
               sx={{
                 textTransform: "uppercase",
                 fontWeight: "bold",
                 display: "flex",
                 alignItems: "center",
-                gap: "10px",
+                gap: "5px",
               }}
             >
               <LockIcon /> Comprá con seguridad
