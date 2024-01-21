@@ -106,105 +106,113 @@ const ProductBox = () => {
 
   if (isLoading || !animationComplete) {
     return (
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          flexWrap: "wrap",
-          alignContent: "space-around",
-          justifyContent: "center",
-          marginTop: 15,
-          marginBottom: 15,
-        }}
-      >
-        <CircularProgress
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            margin: 5,
-            color: "#fd611a",
-          }}
-        />
-        <Typography
-          variant="body1"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          Cargando...
-        </Typography>
-      </Container>
+      <>
+        <Box sx={{ minHeight: "70vh" }}>
+          <Container
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexWrap: "wrap",
+              alignContent: "space-around",
+              justifyContent: "center",
+              marginTop: 15,
+              marginBottom: 15,
+            }}
+          >
+            <CircularProgress
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                margin: 5,
+                color: "#fd611a",
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              Cargando...
+            </Typography>
+          </Container>
+        </Box>
+      </>
     );
   }
 
   return (
-    <Container
-      sx={{
-        display: "grid",
-        gridTemplateColumns: {
-          sm: "repeat(1,1fr)",
-          md: "repeat(2,1fr)",
-          lg: "repeat(3,1fr)",
-        },
-        flexDirection: "row",
-        gap: 4,
-        mt: 2,
-        p: 2,
-        minHeight: "25vw",
-      }}
-    >
-      {isThereAnyProducts ? (
-        showError ? (
-          <Typography
-            variant="body1"
-            sx={{
-              display: "grid",
-              gridColumnStart: 1,
-              gridColumnEnd: 4,
-              alignItems: "center",
-              justifyContent: "center",
-              mt: 4,
-              mb: 4,
-              fontSize: 28,
-              fontWeight: 700,
-              color: "red",
-            }}
-          >
-            No se encontró ningún producto relacionado con su búsqueda!
-          </Typography>
-        ) : null
-      ) : (
-        productsToShow.map((product, index) => (
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            key={product.id}
-          >
-            <ProductCardWithFade product={product} index={index} />
-            <Button
-              variant="contained"
-              sx={{
-                maxWidth: 270,
-                backgroundColor: "#fd611a",
-                color: "black",
-                transition: "transform 0.3s",
-                marginTop: "10px",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                  backgroundColor: "#fd611a",
-                  color: "white",
-                },
-              }}
-              onClick={() => handleAddToCart(product)}
-            >
-              AGREGAR AL CARRITO
-            </Button>
-          </Box>
-        ))
-      )}
-    </Container>
+    <>
+      <Box>
+        <Container
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              sm: "repeat(1,1fr)",
+              md: "repeat(2,1fr)",
+              lg: "repeat(3,1fr)",
+            },
+            flexDirection: "row",
+            gap: 4,
+            mt: 2,
+            p: 2,
+            minHeight: "25vw",
+          }}
+        >
+          {isThereAnyProducts ? (
+            showError ? (
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "grid",
+                  gridColumnStart: 1,
+                  gridColumnEnd: 4,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mt: 4,
+                  mb: 4,
+                  fontSize: 28,
+                  fontWeight: 700,
+                  color: "red",
+                }}
+              >
+                No se encontró ningún producto relacionado con su búsqueda!
+              </Typography>
+            ) : null
+          ) : (
+            productsToShow.map((product, index) => (
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                key={product.id}
+              >
+                <ProductCardWithFade product={product} index={index} />
+                <Button
+                  variant="contained"
+                  sx={{
+                    maxWidth: 270,
+                    backgroundColor: "#fd611a",
+                    color: "black",
+                    transition: "transform 0.3s",
+                    marginTop: "10px",
+                    "&:hover": {
+                      transform: "scale(1.05)",
+                      backgroundColor: "#fd611a",
+                      color: "white",
+                    },
+                  }}
+                  onClick={() => handleAddToCart(product)}
+                >
+                  AGREGAR AL CARRITO
+                </Button>
+              </Box>
+            ))
+          )}
+        </Container>
+      </Box>
+    </>
   );
 };
 
@@ -222,14 +230,18 @@ const ProductCardWithFade = ({ product, index }) => {
   }, [index]);
 
   return (
-    <Box
-      style={{
-        opacity: opacity,
-        transition: "opacity 0.5s ease-in",
-      }}
-    >
-      <ProductCard product={product} />
-    </Box>
+    <>
+      <Box>
+        <Box
+          style={{
+            opacity: opacity,
+            transition: "opacity 0.5s ease-in",
+          }}
+        >
+          <ProductCard product={product} />
+        </Box>
+      </Box>
+    </>
   );
 };
 

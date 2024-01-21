@@ -33,43 +33,47 @@ const Products = () => {
   }, [currentPage]);
 
   return (
-    <Box
-      sx={{
-        justifyContent: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        mb: 4,
-      }}
-    >
-      <FiltersSorting />
-
-      <ProductBox products={productsToShow} />
-
-      <Stack
-        spacing={2}
-        sx={{
-          mt: { xs: 2, lg: 3 },
-          mb: { xs: 10 },
-        }}
-      >
-        <Pagination
-          variant="outlined"
-          shape="rounded"
-          color="primary"
-          count={totalPages}
-          value={value}
-          page={currentPage + 1}
-          onChange={handlePageChange}
-          showFirstButton
-          showLastButton
+    <>
+      <Box sx={{ marginBottom: "-65px" }}>
+        <Box
           sx={{
-            color: "black",
-            boundaryCount: { xs: 2, md: 4 },
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 4,
           }}
-        />
-      </Stack>
-    </Box>
+        >
+          <FiltersSorting />
+
+          <ProductBox products={productsToShow} />
+
+          <Stack
+            spacing={2}
+            sx={{
+              mt: { xs: 2, lg: 3 },
+              mb: { xs: 10 },
+            }}
+          >
+            <Pagination
+              variant="outlined"
+              shape="rounded"
+              color="primary"
+              count={totalPages}
+              value={value}
+              page={currentPage + 1}
+              onChange={handlePageChange}
+              showFirstButton
+              showLastButton
+              sx={{
+                color: "black",
+                boundaryCount: { xs: 2, md: 4 },
+              }}
+            />
+          </Stack>
+        </Box>
+      </Box>
+    </>
   );
 };
 
