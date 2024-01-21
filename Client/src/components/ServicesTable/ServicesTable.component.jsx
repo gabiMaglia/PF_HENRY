@@ -581,7 +581,7 @@ const ServicesTable = () => {
             variant="h5"
             sx={{ marginBottom: "25px", fontWeight: "bold" }}
           >
-            Esato del servicio segun color
+            Estado del servicio segun color
           </Typography>
           <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
             <Typography sx={{ fontWeight: "600" }}>🟪 Cancelado</Typography>

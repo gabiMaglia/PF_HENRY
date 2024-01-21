@@ -413,7 +413,7 @@ const UsersTable = () => {
             variant="h5"
             sx={{ marginBottom: "25px", fontWeight: "bold" }}
           >
-            Esato del usuario segun color
+            Estado del usuario segun color
           </Typography>
           <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
             <Typography sx={{ fontWeight: "600" }}>🟦 Sin verificar</Typography>

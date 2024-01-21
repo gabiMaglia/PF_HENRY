@@ -511,7 +511,7 @@ const ProductsTable = () => {
             variant="h5"
             sx={{ marginBottom: "25px", fontWeight: "bold" }}
           >
-            Esato del producto segun color
+            Estado del producto segun color
           </Typography>
           <Box sx={{ display: "flex", gap: "50px", justifyContent: "center" }}>
             <Typography sx={{ fontWeight: "600" }}>🟦 Carousel</Typography>
