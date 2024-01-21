@@ -51,113 +51,123 @@ const HomeProducts = ({ allProducts }) => {
 
   if (loading) {
     return (
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          flexWrap: "wrap",
-          alignContent: "space-around",
-          justifyContent: "center",
-          marginTop: 15,
-          marginBottom: 15,
-        }}
-      >
-        <CircularProgress
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            margin: 5,
-            color: "#fd611a",
-          }}
-        />
-        <Typography
-          variant="body1"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          Cargando...
-        </Typography>
-      </Container>
+      <>
+        <Box sx={{ minHeight: "70vh" }}>
+          <Container
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexWrap: "wrap",
+              alignContent: "space-around",
+              justifyContent: "center",
+              marginTop: 15,
+              marginBottom: 15,
+            }}
+          >
+            <CircularProgress
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                margin: 5,
+                color: "#fd611a",
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              Cargando...
+            </Typography>
+          </Container>
+        </Box>
+      </>
     );
   }
 
   if (!homeProducts.length) {
     return (
-      <Container>
-        <Typography
-          variant="body1"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            color: "red",
-            marginTop: "32px",
-            marginBottom: "32px",
-            fontSize: "28px",
-            fontWeight: 700,
-          }}
-        >
-          Por el momento no hay productos disponibles.
-        </Typography>
-      </Container>
+      <>
+        <Box>
+          <Container>
+            <Typography
+              variant="body1"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                color: "red",
+                marginTop: "32px",
+                marginBottom: "32px",
+                fontSize: "28px",
+                fontWeight: 700,
+              }}
+            >
+              Por el momento no hay productos disponibles.
+            </Typography>
+          </Container>
+        </Box>
+      </>
     );
   }
 
   return (
     <>
-      <Box
-        sx={{
-          // backgroundColor: "#000",
-          width: "100%",
-          height: "100px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Typography
-          variant="h4"
+      <Box>
+        <Box
           sx={{
-            color: "#00000",
-            fontWeight: "900",
+            // backgroundColor: "#000",
+            width: "100%",
+            height: "100px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          Productos Destacados
-        </Typography>
-      </Box>
-      <Container
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "flex-start",
-          flexDirection: "column",
-        }}
-      >
+          <Typography
+            variant="h4"
+            sx={{
+              color: "#00000",
+              fontWeight: "900",
+            }}
+          >
+            Productos Destacados
+          </Typography>
+        </Box>
         <Container
           sx={{
             display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
             justifyContent: "space-around",
-            marginBottom: 5,
-            marginTop: 5,
-            gap: 2,
-            [`@media (max-width: 1140px)`]: {
-              flexDirection: "column",
-              alignItems: "center",
-            },
+            alignItems: "flex-start",
+            flexDirection: "column",
           }}
         >
-          {homeProducts.map((product, index) => (
-            <ProductCardWithFade
-              key={product.id}
-              product={product}
-              index={index}
-            />
-          ))}
+          <Container
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-around",
+              marginBottom: 5,
+              marginTop: 5,
+              gap: 2,
+              [`@media (max-width: 1140px)`]: {
+                flexDirection: "column",
+                alignItems: "center",
+              },
+            }}
+          >
+            {homeProducts.map((product, index) => (
+              <ProductCardWithFade
+                key={product.id}
+                product={product}
+                index={index}
+              />
+            ))}
+          </Container>
         </Container>
-      </Container>
+      </Box>
     </>
   );
 };
