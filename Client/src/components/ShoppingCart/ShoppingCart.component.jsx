@@ -38,10 +38,12 @@ import {
   removeProductFromCart,
   generatePurchaseOrderEvent,
 } from "../../services/firebaseAnayticsServices";
+import { useNavigate } from "react-router-dom";
 
 export default function ShoppingCart() {
   const dispatch = useDispatch();
   const [isWalletLoading, setIsWalletLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { items, total, id } = useSelector((state) => state.cart);
   const { cookiesAccepted } = useSelector((state) => state.cookies);
@@ -58,6 +60,11 @@ export default function ShoppingCart() {
   useEffect(() => {
     dispatch(totalItem());
   }, [items]);
+
+  const handleClickShop = async (item) => {
+    const { id } = item;
+    navigate(`/product/${id}`);
+  };
 
   const ProductMedia = styled(CardMedia)({
     padding: 5,
@@ -177,7 +184,8 @@ export default function ShoppingCart() {
             justifyContent="space-evenly"
             boxShadow="5px 5px 5px #888888"
             borderRadius="8px"
-            sx={{ mb: 4 }}
+            sx={{ mb: 4, cursor: "pointer" }}
+            onClick={() => handleClickShop(item)}
           >
             <ProductMedia
               component="img"

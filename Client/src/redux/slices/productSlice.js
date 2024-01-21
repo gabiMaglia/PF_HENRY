@@ -102,6 +102,7 @@ const productSlice = createSlice({
       }
     },
     resetState: (state, action) => {
+      state.searchProducts = []
       state.allProducts = state.allProductsTotal;
       state.allProductsBackup = state.allProductsTotal;
       state.productsToShow = state.allProductsTotal.slice(0, PRODUCT_PER_PAGE);
