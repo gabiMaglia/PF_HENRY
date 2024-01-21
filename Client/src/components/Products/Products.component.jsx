@@ -6,6 +6,7 @@ import { Box, Pagination, Stack } from "@mui/material";
 //COMPONENTS
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
+import SafePurchase from "../SafePurchase/SafePurchase.component";
 //REDUX
 import { selectPage } from "../../redux/slices/productSlice";
 //SERVICES
@@ -73,6 +74,7 @@ const Products = () => {
           </Stack>
         </Box>
       </Box>
+      <SafePurchase />
     </>
   );
 };
