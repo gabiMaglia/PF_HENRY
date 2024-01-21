@@ -38,6 +38,16 @@ export const fetchProductById = (id) => async (dispatch) => {
 
 export const fetchSearch = (name) => async (dispatch) => {
   try {
+    console.log(name)
+    if(name.trim() === ''){
+     await Swal.fire({
+        allowOutsideClick: false,
+        icon: "error",
+        title: "Debes escribir algo para realizar la busqueda",
+        confirmButtonColor: "#fd611a",
+        confirmButtonText: "Ok",
+      });
+    }else{
     const response = await axios.get(`${urlBack}/search?name=${name}`);
     const filteredProducts = response.data.filter(
       (product) => product.is_deleted === false
@@ -54,6 +64,7 @@ export const fetchSearch = (name) => async (dispatch) => {
     } else {
       dispatch(search(filteredProducts));
     }
+  }
   } catch (error) {
     Swal.fire({
       allowOutsideClick: false,
