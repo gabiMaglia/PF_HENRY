@@ -50,7 +50,7 @@ const CarouselProducts = ({ allProducts }) => {
   };
 
   return (
-    <Container sx={{ marginBottom: 20 }}>
+    <Container>
       <Typography
         variant="h4"
         fontWeight="bold"

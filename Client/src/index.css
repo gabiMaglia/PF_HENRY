@@ -3,16 +3,13 @@
   padding: 0;
   box-sizing: border-box;
 }
-html {
+html,body {
   width: 100%;
+  height: 100%;  
   overflow-x: hidden;
+  min-width: 320px;
 }
-body {
-  width: 100%;
-  min-width: 425px;
-  overflow-x: hidden;
-  padding-right: 0 !important;
-}
+
 
 
 

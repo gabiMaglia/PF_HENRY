@@ -10,6 +10,7 @@ import {
   styled,
   Typography,
   CircularProgress,
+  Avatar,
 } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import SearchIcon from "@mui/icons-material/Search";
@@ -200,44 +201,31 @@ export default function SearchAppBar() {
 
   return (
     <Box
-      sx={{
-        mb: 1,
-        flexGrow: 1,
+    sx={{
         display: "flex",
-        flexDirection: { xxs: "column", xs: "column", lg: "row" },
+        gap:'1.2rem',
+        flexDirection: {xxs : "column", sm:'row'} ,
+        justifyContent: "space-between",
+        paddingBlock: 1,
         alignItems: "center",
-        justifyContent: "center",
+        minHeight: 80,
+        paddingInline:'3rem',
+        background: '#FFFFFF',
+        zIndex: '9991',
       }}
     >
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-      >
-        <Img
-          src={img}
-          alt="Logotipo"
-          onClick={() => {
-            navigate(PATHROUTES.HOME);
-          }}
-        />
-      </Box>
-      <Box
-        sx={{
-          mt: { xxs: 2, xs: 2 },
-          border: 2,
+          minWidth: '220px',
+          border:'0.1px solid black',
           borderRadius: 2,
           borderTopRightRadius: 50,
           borderBottomRightRadius: 50,
-          display: "flex",
-          alignItems: "center",
-          ml: 5,
-          mr: 5,
-          position: "relative",
+          
         }}
       >
+        <Avatar src={img} alt="HIPERMEGARED" />
         <Input
           type="text"
           value={inputValue}
@@ -251,6 +239,7 @@ export default function SearchAppBar() {
           onBlur={() => setIsInputFocused(false)}
           onKeyPress={handleKeyPress}
           sx={{
+            position: "relative",
             width: { xs: 300, sm: 500, xl: 800 },
             fontSize: 20,
             color: "black",
@@ -262,14 +251,13 @@ export default function SearchAppBar() {
           <Box
             sx={{
               position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
+              top: "100px",
               zIndex: 1,
               backgroundColor: "white",
-              boxShadow: 3,
+              boxShadow: 5,
               borderRadius: 2,
-              width: "93%",
+              width: '40%',
+              minWidth: '220px',
               maxHeight: 200,
               overflowY: "auto",
             }}
@@ -347,11 +335,12 @@ export default function SearchAppBar() {
       <Box
         sx={{
           display: "flex",
+          
           flexDirection: "row",
-          mt: { xxs: 2, xs: 2 },
           alignItems: "center",
-          justifyContent: "space-around",
-          gap: "3em",
+          justifyContent: {xxs:"space-around", lg: "flex-end"},
+          gap: "2em",
+          color: "black",
           [`@media (max-width:1200px)`]: {
             width: "50%",
           },
@@ -411,26 +400,25 @@ export default function SearchAppBar() {
        { login === false ? (
           <Box
             sx={{
-              flexGrow: 0,
-              maxWidth: "xl",
-              ml: "4em",
+             
+              mb: 1,
+    
               borderRadius: 2,
               backgroundColor: "#fd611a",
-              [`@media (max-width:1200px)`]: {
-                ml: 0,
-              },
-            }}
+   
+              }}
           >
             <Button
               startIcon={<AccountBoxIcon />}
               color="inherit"
               sx={{
+                height: '100%',
                 color: "white",
               }}
               onClick={() => {
                 setLoginModalIsOpen(true);
               }}
-            >
+              >
               INICIAR SESIÓN
             </Button>
           </Box>

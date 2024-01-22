@@ -70,12 +70,10 @@ const UserMenu = () => {
             size="small"
             sx={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: "row-reverse",
               alignContent: "center",
-              [`@media (max-width:1200px)`]: {
-                flexDirection: "row-reverse",
-                gap: "10px",
-              },
+              gap: "10px",
+         
             }}
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"

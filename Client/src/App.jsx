@@ -27,14 +27,15 @@ import PATHROUTES from "./helpers/pathRoute";
 import useCheckAuthData from "./Hook/useCheckAuthData";
 import { useEffect } from "react";
 import ChangePasword from "./views/publics/ChangePassword/ChangePasword.view";
-
+// Mat
+import { Box } from "@mui/system";
 const App = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  
+
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
   };
-  
+
   // CustomHook que hace el check de token
   const checkAuthData = useCheckAuthData(openLoginModal);
 
@@ -45,8 +46,10 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-      <SearchBar />
-      <NavBar />
+    
+       
+        <NavBar />
+
       <Routes>
         <Route path={PATHROUTES.HOME} element={<Home />} />
         <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
@@ -56,7 +59,7 @@ const App = () => {
         <Route path={PATHROUTES.DETAIL} element={<Detail />} />
         <Route path={PATHROUTES.REVIEW} element={<Review />} />
         <Route path={PATHROUTES.CHANGEPASS} element={<ChangePasword />} />
-        
+
         <Route element={<ProtectedRoutes allowedRoles={"customer"} />}>
           <Route path={PATHROUTES.SHOPCART} element={<ShoppingCart />} />
           <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
@@ -75,7 +78,7 @@ const App = () => {
             path={`${PATHROUTES.CUSTOMER_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
-            <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
 
         <Route element={<ProtectedRoutes allowedRoles={["technician"]} />}>
@@ -83,9 +86,9 @@ const App = () => {
             path={`${PATHROUTES.TECHNICIAN_USER_PANEL}/*`}
             element={<UserPanel />}
           ></Route>
-      <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
+          <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
         </Route>
-      <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
+        <Route path={PATHROUTES.ERROR_404} element={<Error404 />} />
       </Routes>
       <LoginModal
         isOpen={isLoginModalOpen}
