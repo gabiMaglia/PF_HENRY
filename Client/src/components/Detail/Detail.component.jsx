@@ -416,6 +416,7 @@ const Detail = () => {
                     <Typography
                       variant="body1"
                       paddingTop={isLargeScreen ? 2 : 1}
+                      paddingBottom={isLargeScreen ? 3 : 1}
                       sx={{
                         color: "grey",
                         fontWeight: 700,
@@ -430,6 +431,8 @@ const Detail = () => {
                   {productById?.ProductStock?.amount === 0 && (
                     <Typography
                       variant="body1"
+                      paddingTop={isLargeScreen ? 2 : 1}
+                      paddingBottom={isLargeScreen ? 3 : 1}
                       sx={{
                         color: "red",
                         fontWeight: 700,
@@ -438,17 +441,6 @@ const Detail = () => {
                       ¡Producto sin stock!
                     </Typography>
                   )}
-                </Box>
-
-                <Container
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingBottom: 5,
-                    marginTop: 2,
-                  }}
-                >
                   <CustomButton
                     variant="contained"
                     size={isLargeScreen ? "large" : "small"}
@@ -456,7 +448,7 @@ const Detail = () => {
                   >
                     Agregar al Carrito
                   </CustomButton>
-                </Container>
+                </Box>
               </Container>
               <BookmarkIcon
                 onClick={handleDesiredClick}
