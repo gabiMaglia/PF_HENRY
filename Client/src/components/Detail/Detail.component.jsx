@@ -404,36 +404,6 @@ const Detail = () => {
                   >
                     {productById.name}
                   </Typography>
-                  {productById?.ProductStock?.amount <= 5 &&
-                    productById?.ProductStock?.amount >= 1 && (
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          color: "grey",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {productById?.ProductStock?.amount}
-                        {productById?.ProductStock?.amount === 1
-                          ? " unidad disponible"
-                          : " unidades disponibles"}{" "}
-                      </Typography>
-                    )}
-                  {productById?.ProductStock?.amount === 0 && (
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        color: "red",
-                        fontWeight: 700,
-                      }}
-                    >
-                      ¡Producto sin stock!
-                    </Typography>
-                  )}
                   <Typography
                     fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
                     color="#fd611a"
@@ -442,17 +412,35 @@ const Detail = () => {
                   >
                     Precio: {formatPrice(productById.price)}
                   </Typography>
-                </Box>
-
-                <Container
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingBottom: 5,
-                    marginTop: 2,
-                  }}
-                >
+                  {productById?.ProductStock?.amount > 0 && (
+                    <Typography
+                      variant="body1"
+                      paddingTop={isLargeScreen ? 2 : 1}
+                      paddingBottom={isLargeScreen ? 3 : 1}
+                      sx={{
+                        color: "grey",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {productById?.ProductStock?.amount}
+                      {productById?.ProductStock?.amount === 1
+                        ? " unidad disponible"
+                        : " unidades disponibles"}{" "}
+                    </Typography>
+                  )}
+                  {productById?.ProductStock?.amount === 0 && (
+                    <Typography
+                      variant="body1"
+                      paddingTop={isLargeScreen ? 2 : 1}
+                      paddingBottom={isLargeScreen ? 3 : 1}
+                      sx={{
+                        color: "red",
+                        fontWeight: 700,
+                      }}
+                    >
+                      ¡Producto sin stock!
+                    </Typography>
+                  )}
                   <CustomButton
                     variant="contained"
                     size={isLargeScreen ? "large" : "small"}
@@ -460,7 +448,7 @@ const Detail = () => {
                   >
                     Agregar al Carrito
                   </CustomButton>
-                </Container>
+                </Box>
               </Container>
               <BookmarkIcon
                 onClick={handleDesiredClick}

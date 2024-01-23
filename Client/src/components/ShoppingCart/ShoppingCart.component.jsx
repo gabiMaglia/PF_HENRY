@@ -184,15 +184,15 @@ export default function ShoppingCart() {
             justifyContent="space-evenly"
             boxShadow="5px 5px 5px #888888"
             borderRadius="8px"
-            sx={{ mb: 4, cursor: "pointer" }}
-            onClick={() => handleClickShop(item)}
+            sx={{ mb: 4 }}
           >
             <ProductMedia
               component="img"
+              onClick={() => handleClickShop(item)}
               alt={item.name}
               src={item.ProductImages.address}
               sx={{
-                width: { xs: "70px", sm: "140px" }, // Establece el ancho de la imagen
+                width: { xs: "70px", sm: "140px", cursor: "pointer" }, // Establece el ancho de la imagen
               }}
             />
             <Typography
@@ -205,70 +205,97 @@ export default function ShoppingCart() {
             >
               {item.name}
             </Typography>
-
-            <BaseNumberInput
-              min={1}
-              max={item.stock}
-              id={item.id}
-              value={item.count}
-              onChange={(event, value) => handleChange(item.id, value)}
-              slots={{
-                root: StyledInputRoot,
-                input: StyledInput,
-                incrementButton: StyledButton,
-                decrementButton: StyledButton,
-              }}
-              slotProps={{
-                incrementButton: {
-                  children: (
-                    <AddIcon
-                      fontSize="small"
-                      onClick={() => handleIncrement(item.id)}
-                    />
-                  ),
-                  className: "increment",
-                },
-                decrementButton: {
-                  children: (
-                    <RemoveIcon
-                      fontSize="small"
-                      onClick={() => handleDecrement(item.id)}
-                    />
-                  ),
-                  className: "decrement",
-                },
-              }}
-              sx={{
-                width: {
-                  xs: "100px",
-                  sm: "150px",
-                },
-                "& .increment, & .decrement": {
-                  backgroundColor: "#fd611a",
-                  borderColor: "#fd611a",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#e04d17",
-                    borderColor: "#e04d17",
-                    color: "white",
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <BaseNumberInput
+                min={1}
+                max={item.stock}
+                id={item.id}
+                value={item.count}
+                onChange={(event, value) => handleChange(item.id, value)}
+                slots={{
+                  root: StyledInputRoot,
+                  input: StyledInput,
+                  incrementButton: StyledButton,
+                  decrementButton: StyledButton,
+                }}
+                slotProps={{
+                  incrementButton: {
+                    children: (
+                      <AddIcon
+                        fontSize="small"
+                        onClick={() => handleIncrement(item.id)}
+                      />
+                    ),
+                    className: "increment",
                   },
-                },
-                "& input": {
-                  "&:hover": {
-                    borderColor: "#e04d17", // Ajusta el color del borde al pasar el ratón sobre el input
+                  decrementButton: {
+                    children: (
+                      <RemoveIcon
+                        fontSize="small"
+                        onClick={() => handleDecrement(item.id)}
+                      />
+                    ),
+                    className: "decrement",
                   },
-                  "&:focus": {
+                }}
+                sx={{
+                  width: {
+                    xs: "100px",
+                    sm: "150px",
+                  },
+                  "& .increment, & .decrement": {
+                    backgroundColor: "#fd611a",
                     borderColor: "#fd611a",
-                    boxShadow: "0 0 0 3px #fd611a",
-                    "&.focused": {
-                      borderColor: "#fd611a",
-                      boxShadow: "0 0 0 3px #fd611a",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "#e04d17",
+                      borderColor: "#e04d17",
+                      color: "white",
                     },
                   },
-                },
-              }}
-            />
-
+                  "& input": {
+                    "&:hover": {
+                      borderColor: "#e04d17", // Ajusta el color del borde al pasar el ratón sobre el input
+                    },
+                    "&:focus": {
+                      borderColor: "#fd611a",
+                      boxShadow: "0 0 0 3px #fd611a",
+                      "&.focused": {
+                        borderColor: "#fd611a",
+                        boxShadow: "0 0 0 3px #fd611a",
+                      },
+                    },
+                  },
+                }}
+              />
+              {item.stock > 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    paddingTop: { xs: 1, lg: 2 },
+                    color: "grey",
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.stock}
+                  {item.stock === 1
+                    ? " unidad disponible"
+                    : " unidades disponibles"}{" "}
+                </Typography>
+              )}
+              {item.stock === 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    paddingTop: { xs: 1, lg: 2 },
+                    color: "red",
+                    fontWeight: 700,
+                  }}
+                >
+                  ¡Producto sin stock!
+                </Typography>
+              )}
+            </Box>
             <Typography>
               Precio: {formatPrice(item.price * item.count)}
             </Typography>

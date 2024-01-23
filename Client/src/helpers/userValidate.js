@@ -89,7 +89,7 @@ const usernameValidate = (username) => {
     regexContainSpaces,
     minCantCharUsername,
     maxCantCharUsername,
-    regexContainNumber, 
+    // regexContainNumber, 
   } = constsUserValidations;
   let usernameError = "";
 
@@ -101,9 +101,10 @@ const usernameValidate = (username) => {
     usernameError = `El nombre de usuario debe contener máximo ${maxCantCharUsername} caracteres`;
   } else if (regexContainSpaces.test(username)) {
     usernameError = "El nombre de usuario no puede contener espacios";
-  } else if (regexContainNumber.test(username)) {
-    usernameError = "El nombre de usuario no puede contener números";
-  }
+   } 
+  //  else if (regexContainNumber.test(username)) {
+  //   usernameError = "El nombre de usuario no puede contener números";
+  // }
 
   return usernameError;
 };
