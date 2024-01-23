@@ -36,7 +36,7 @@ import PATHROUTES from "../../helpers/pathRoute";
 //UTILS
 import { getDataFromSelectedPersistanceMethod } from "../../utils/authMethodSpliter";
 //IMAGES - ICONS
-import img from "/icons/logo.svg";
+import img from "../../../public/favicon.ico";
 //FIREBASE
 import { userSearchEvent } from "../../services/firebaseAnayticsServices";
 import {
@@ -144,7 +144,7 @@ export default function SearchAppBar() {
 
   useEffect(() => {
     if (authData?.login && authData?.userRole === "customer") {
-      fetchWishList( dispatch, cookieStatus);
+      fetchWishList(dispatch, cookieStatus);
     }
   }, [authData?.userRole]);
 
@@ -201,28 +201,27 @@ export default function SearchAppBar() {
 
   return (
     <Box
-    sx={{
+      sx={{
         display: "flex",
-        gap:'1.2rem',
-        flexDirection: {xxs : "column", sm:'row'} ,
+        gap: "1.2rem",
+        flexDirection: { xxs: "column", sm: "row" },
         justifyContent: "space-between",
         paddingBlock: 1,
         alignItems: "center",
         minHeight: 80,
-        paddingInline:'3rem',
-        background: '#FFFFFF',
-        zIndex: '9991',
+        paddingInline: "3rem",
+        background: "#FFFFFF",
+        zIndex: "9991",
       }}
     >
       <Box
         sx={{
           display: "flex",
-          minWidth: '220px',
-          border:'0.1px solid black',
+          minWidth: "220px",
+          border: "0.1px solid black",
           borderRadius: 2,
           borderTopRightRadius: 50,
           borderBottomRightRadius: 50,
-          
         }}
       >
         <Avatar src={img} alt="HIPERMEGARED" />
@@ -256,8 +255,8 @@ export default function SearchAppBar() {
               backgroundColor: "white",
               boxShadow: 5,
               borderRadius: 2,
-              width: '40%',
-              minWidth: '220px',
+              width: "40%",
+              minWidth: "220px",
               maxHeight: 200,
               overflowY: "auto",
             }}
@@ -335,10 +334,10 @@ export default function SearchAppBar() {
       <Box
         sx={{
           display: "flex",
-          
+
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: {xxs:"space-around", lg: "flex-end"},
+          justifyContent: { xxs: "space-around", lg: "flex-end" },
           gap: "2em",
           color: "black",
           [`@media (max-width:1200px)`]: {
@@ -396,29 +395,27 @@ export default function SearchAppBar() {
             <Notification />
           </Box>
         )}
-     
-       { login === false ? (
+
+        {login === false ? (
           <Box
             sx={{
-             
-              mb: 1,
-    
               borderRadius: 2,
               backgroundColor: "#fd611a",
-   
-              }}
+            }}
           >
             <Button
               startIcon={<AccountBoxIcon />}
               color="inherit"
               sx={{
-                height: '100%',
+                height: "100%",
                 color: "white",
+                flexWrap: 'nowrap',
+                minWidth: '180px',
               }}
               onClick={() => {
                 setLoginModalIsOpen(true);
               }}
-              >
+            >
               INICIAR SESIÓN
             </Button>
           </Box>

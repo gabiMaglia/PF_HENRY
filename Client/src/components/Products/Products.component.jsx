@@ -35,46 +35,51 @@ const Products = () => {
 
   return (
     <>
-      <Box sx={{ marginBottom: "-65px" }}>
-        <Box
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+          flexWrap: "nowrap",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <FiltersSorting />
+
+        <ProductBox products={productsToShow} />
+
+        <Stack
+          spacing={2}
           sx={{
-            justifyContent: "center",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            mb: 4,
+            paddingTop: 10,
+            paddingBottom: 10,
           }}
         >
-          <FiltersSorting />
+          <Pagination
+            variant="outlined"
+            shape="rounded"
+            color="primary"
+            count={totalPages}
+            value={value}
+            page={currentPage + 1}
+            onChange={handlePageChange}
+            // showFirstButton
+            // showLastButton
 
-          <ProductBox products={productsToShow} />
-
-          <Stack
-            spacing={2}
             sx={{
-              mt: { xs: 2, lg: 3 },
-              mb: { xs: 10 },
+              color: "black",
+              boundaryCount: { xs: 1, md: 4 },
             }}
-          >
-            <Pagination
-              variant="outlined"
-              shape="rounded"
-              color="primary"
-              count={totalPages}
-              value={value}
-              page={currentPage + 1}
-              onChange={handlePageChange}
-              showFirstButton
-              showLastButton
-              sx={{
-                color: "black",
-                boundaryCount: { xs: 2, md: 4 },
-              }}
-            />
-          </Stack>
-        </Box>
+          />
+        </Stack>
       </Box>
-      <SafePurchase />
+      <Box
+        sx={{
+          marginBottom: {xxs:15, xs:5},
+        }}
+      >
+        <SafePurchase />
+      </Box>
     </>
   );
 };
