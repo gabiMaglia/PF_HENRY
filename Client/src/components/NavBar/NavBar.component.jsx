@@ -38,7 +38,6 @@ const NavBar = () => {
   return (
     <AppBar
     position="sticky"
-    
     >
       <SearchBar />
       <Toolbar disableGutters sx={{ backgroundColor: "#fd611a" }}>

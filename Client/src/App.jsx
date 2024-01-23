@@ -46,10 +46,7 @@ const App = () => {
   return (
     <>
       <CookiesPopup />
-    
-       
         <NavBar />
-
       <Routes>
         <Route path={PATHROUTES.HOME} element={<Home />} />
         <Route path={PATHROUTES.PRODUCTS} element={<Products />} />
