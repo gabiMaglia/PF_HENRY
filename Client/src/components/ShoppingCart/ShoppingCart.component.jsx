@@ -196,7 +196,7 @@ export default function ShoppingCart() {
               alt={item.name}
               src={item.ProductImages.address}
               sx={{
-                width: { xxs: "170px", sm: "180px"}, // Establece el ancho de la imagen
+                width: { xxs: "140px", sm: "150px"}, // Establece el ancho de la imagen
                 cursor: "pointer" 
               }}
             />
