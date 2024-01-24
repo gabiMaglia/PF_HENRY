@@ -165,13 +165,15 @@ export default function ShoppingCart() {
   return (
     <Container
       display="flex"
+      gap={1}
       sx={{
         flexDirection: "column",
         mt: 10,
+
         marginBottom: "100px",
       }}
     >
-      <Typography display="flex" component="h2" sx={{ fontSize: 30, mb: 5 }}>
+      <Typography component="h2" sx={{ textAlign:{xxs:'center', sm:'left'}, fontSize: 30, mb: 5 }}>
         Mi Compra
       </Typography>
       <Box display="flex" flexDirection="column">
@@ -179,33 +181,36 @@ export default function ShoppingCart() {
           <Box
             key={item.id}
             display="flex"
-            flexDirection="row"
             alignItems="center"
             justifyContent="space-evenly"
             boxShadow="5px 5px 5px #888888"
             borderRadius="8px"
-            sx={{ mb: 4 }}
-          >
+            sx={{ mb: 4 ,
+              flexDirection:{xxs:"column",sm:"row"},
+              gap:'1em'
+            }}
+            >
             <ProductMedia
               component="img"
               onClick={() => handleClickShop(item)}
               alt={item.name}
               src={item.ProductImages.address}
               sx={{
-                width: { xs: "70px", sm: "140px", cursor: "pointer" }, // Establece el ancho de la imagen
+                width: { xxs: "170px", sm: "180px"}, // Establece el ancho de la imagen
+                cursor: "pointer" 
               }}
             />
             <Typography
               sx={{
                 fontSize: "1rem",
-                maxWidth: "150px",
+                maxWidth: {xxs:'none', sm:"150px"},
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
             >
               {item.name}
             </Typography>
-            <Box display="flex" flexDirection="column" alignItems="center">
+            <Box display="flex" gap={1} flexDirection="column" alignItems="center">
               <BaseNumberInput
                 min={1}
                 max={item.stock}
