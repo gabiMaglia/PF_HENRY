@@ -27,7 +27,6 @@ import useCheckAuthData from "./Hook/useCheckAuthData";
 import { useEffect } from "react";
 import ChangePasword from "./views/publics/ChangePassword/ChangePasword.view";
 // Mat
-import { Box } from "@mui/system";
 const App = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 

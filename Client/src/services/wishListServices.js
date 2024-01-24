@@ -28,7 +28,7 @@ export const fetchWishList = async (dispatch, cookieStatus) => {
       throw new Error("No se pudo obtener la lista de deseos");
     }
   } catch (error) {
-    Swal.fire("Error", error.message, "error");
+    // Swal.fire("Error", error.message, "error");
   }
 };
 

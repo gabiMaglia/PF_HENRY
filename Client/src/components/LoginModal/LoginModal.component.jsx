@@ -53,7 +53,7 @@ const LoginModal = ({
     const user = await getUserById(userId, authData);
     dispatch(logUser({ userObject: user }));
     await dispatch(fetchProductCartGet(cookiesAccepted));
-    dispatch(addItem());
+    // dispatch(addItem());
   };
 
   const loginManagement = async (username, address, cookieStatus) => {
