@@ -12,7 +12,7 @@ import { itemToWishlist } from "./firebaseAnayticsServices";
 import { getDataFromSelectedPersistanceMethod } from "../utils/authMethodSpliter";
 
 const urlBack = import.meta.env.VITE_BACKEND_URL;
-const urlFront = import.meta.env.VITE_FRONT_URL;
+
 
 export const fetchWishList = async (dispatch, cookieStatus) => {
   try {
@@ -22,18 +22,18 @@ export const fetchWishList = async (dispatch, cookieStatus) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    if (response.data) {
+    console.log(response)
+    if (response.data.Products) {
       dispatch(getWishlist(response.data.Products));
-    } else {
-      throw new Error("No se pudo obtener la lista de deseos");
-    }
+    } 
   } catch (error) {
-    // Swal.fire("Error", error.message, "error");
+    Swal.fire("Error", error.message, "error");
+
   }
 };
 
 export const fetchAddItemWish = async (dispatch, productId, cookieStatus) => {
- console.log(cookieStatus)
+
   const {jwt, userId} = getDataFromSelectedPersistanceMethod(cookieStatus);
   const request = {
     userID: userId,

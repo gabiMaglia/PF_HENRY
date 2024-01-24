@@ -102,17 +102,18 @@ const WhishListProfileComponent = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchWishList(dispatch, cookieStatus);
-  }, []);
-
+  }, [dispatch]);
+  
   useEffect(() => {
+ 
     resetSelection();
     if (wishListCards[0] && wishListCards[0].ProductImages) {
       setIsLoading(false);
     } else {
-      fetchWishList( dispatch, cookieStatus);
+      fetchWishList(dispatch, cookieStatus);
     }
-  }, [wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
-
+  }, [dispatch, wishListCards && wishListCards[0] && wishListCards[0].ProductImages]);
+  
   useEffect(() => {
     setFirstCharge(true);
     if (wishListCards?.length === 0 && firstCharge) {
@@ -122,7 +123,6 @@ const WhishListProfileComponent = () => {
 
   const deleteProduct = (id) => {
     setIsLoading(true);
-
     fetchAddItemWish(dispatch, id, cookieStatus);
   };
 

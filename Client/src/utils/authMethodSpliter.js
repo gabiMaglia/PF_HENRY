@@ -7,7 +7,6 @@ import { rejectCookies } from "../redux/slices/cookiesSlice";
 //
 export const createPersistency = (sortedData, cookieStatus) => {
   if (cookieStatus) {
-    
     setAuthDataCookie("authData", {
       login: sortedData.login,
       jwt: sortedData.tokenSession,
