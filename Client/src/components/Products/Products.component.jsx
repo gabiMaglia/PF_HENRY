@@ -75,7 +75,7 @@ const Products = () => {
       </Box>
       <Box
         sx={{
-          marginBottom: {xxs:5, xs:0},
+          marginBottom: {xxs:15, xs:0},
         }}
       >
         <SafePurchase />
