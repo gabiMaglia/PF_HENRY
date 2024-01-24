@@ -44,7 +44,10 @@ const Products = () => {
           alignItems: "center",
         }}
       >
-        <FiltersSorting />
+      
+          
+          <FiltersSorting />
+      
 
         <ProductBox products={productsToShow} />
 
