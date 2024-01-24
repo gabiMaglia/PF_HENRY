@@ -3,22 +3,17 @@
   padding: 0; 
   box-sizing: border-box;
 }
-html,body {
+body {
   width: 100%;
   height: 100svh;  
   min-width: 320px;
   overflow-x: hidden;
 }
-
-
-
-
 .hover-underline-animation-dark {
   display: inline-block;
   position: relative;
   color: #040404;
 }
-
 .hover-underline-animation-dark:after {
   content: "";
   position: absolute;
@@ -31,7 +26,6 @@ html,body {
   transform-origin: bottom right;
   transition: transform 0.25s ease-out;
 }
-
 .hover-underline-animation-dark:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
