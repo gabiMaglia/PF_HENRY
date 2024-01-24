@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //MATERIAL UI
-import { Box, Pagination, Stack } from "@mui/material";
+import { Box, Pagination, Stack, useMediaQuery } from "@mui/material";
 //COMPONENTS
 import FiltersSorting from "../Categories/Categories.component";
 import ProductBox from "../ProductsBox/ProductsBox.component";
@@ -33,6 +33,8 @@ const Products = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
   return (
     <>
       <Box
@@ -44,10 +46,7 @@ const Products = () => {
           alignItems: "center",
         }}
       >
-      
-          
-          <FiltersSorting />
-      
+        <FiltersSorting />
 
         <ProductBox products={productsToShow} />
 
@@ -68,17 +67,16 @@ const Products = () => {
             onChange={handlePageChange}
             showFirstButton
             showLastButton
-
+            boundaryCount={isSmallScreen ? 0 : 2}
             sx={{
               color: "black",
-              boundaryCount: { xs: 1, md: 4 },
             }}
           />
         </Stack>
       </Box>
       <Box
         sx={{
-          marginBottom: {xxs:15, xs:0},
+          marginBottom: { xxs: 15, xs: 0 },
         }}
       >
         <SafePurchase />
