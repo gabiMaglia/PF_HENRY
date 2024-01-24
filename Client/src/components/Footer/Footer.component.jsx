@@ -44,9 +44,9 @@ const FooterComponent = () => {
             <Container key={index}>
               <Box
                 sx={{
-                  display: 'flex',
-              
-                  flexDirection: 'column',
+                  display: "flex",
+
+                  flexDirection: "column",
                   paddingTop: "25px",
                   color: "#fff",
                   "@media (max-width: 768px)": {
@@ -55,9 +55,8 @@ const FooterComponent = () => {
                   "@media (max-width: 480px)": {
                     transform: "scale(.8)",
                   },
-                  marginInline: {xs:'auto', sm: 'none' },
-                  maxWidth: '100%',
-                  
+                  marginInline: { xs: "auto", sm: "none" },
+                  maxWidth: "100%",
                 }}
               >
                 <Typography
@@ -65,19 +64,28 @@ const FooterComponent = () => {
                   sx={{
                     fontWeight: "800",
                     marginBottom: "25px",
-                    textAlign: {xxs: 'center', sm:'left'}
+                    textAlign: "left" ,
                   }}
                 >
                   {section.title}
                 </Typography>
-                <Box sx={{ display: "flex", gap: '.7rem', flexDirection: "column"}}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: ".7rem",
+                    flexDirection: "column",
+                  }}
+                >
                   {section.items.map((item, i) => (
                     <Box
                       key={i}
                       sx={{
                         display: "flex",
-                        justifyContent: {xxs:'space-between', sm: 'flex-start' },
-                        alignItems: 'center',
+                        justifyContent: 
+                        
+                          "flex-start",
+                       
+                        alignItems: "center",
                         marginBottom: "10px",
                       }}
                     >
@@ -91,7 +99,7 @@ const FooterComponent = () => {
                         target={item.target}
                         style={{ textDecoration: "none" }}
                       >
-                        <Typography sx={{ color: "#fff" }}>
+                        <Typography sx={{ color: "#fff" }} variant="body1">
                           {item.text}
                         </Typography>
                       </Link>
@@ -126,10 +134,10 @@ const FooterComponent = () => {
             <Container key={index}>
               <Box
                 sx={{
-                  marginInline: {xs:'auto', sm: 'none' },
-                  maxWidth: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
+                  marginInline: { xs: "auto", sm: "none" },
+                  maxWidth: "100%",
+                  display: "flex",
+                  flexDirection: "column",
                   paddingTop: "25px",
                   color: "#fff",
                   "@media (max-width: 768px)": {
@@ -142,11 +150,9 @@ const FooterComponent = () => {
                   sx={{
                     fontWeight: "800",
                     marginBottom: "25px",
-            
-                    textAlign: {xxs: 'center', sm:'end'},
-                    // "@media (max-width: 768px)": {
-                    //   textAlign: "start",
-                    // },
+
+                    textAlign: { xxs: "start", sm: "end" },
+                  
                   }}
                 >
                   {section.title}
@@ -155,10 +161,12 @@ const FooterComponent = () => {
                   <Box
                     key={i}
                     sx={{
+                      display: "flex",
+
+                      justifyContent: 
+                       
+                        "flex-start",
                       
-                      display: 'flex',
-                      
-                      justifyContent: {xxs:'space-between', sm: 'flex-start' },
                       marginBottom: "10px",
                       flexDirection: "row-reverse",
                       "@media (max-width: 768px)": {
@@ -169,6 +177,7 @@ const FooterComponent = () => {
                     {item.icon && <item.icon sx={{ color: "#fd611a" }} />}
                     <Link to={item.link} style={{ textDecoration: "none" }}>
                       <Typography
+                        variant="body1"
                         sx={{
                           marginRight: "10px",
                           color: "#fff",
@@ -194,8 +203,8 @@ const FooterComponent = () => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
-              gap:'.3rem',
+              flexDirection: {xxs:"column" , sm: 'row'},
+              gap: ".3rem",
               justifyContent: "center",
               textAlign: "center",
               padding: "25px",
@@ -203,14 +212,16 @@ const FooterComponent = () => {
           >
             <Copyright
               sx={{
-                alignSelf:'center',
+                alignSelf: "center",
                 color: "#fd611a",
                 marginRight: "10px",
                 "@media(max-width: 480px)": { margin: "0 -10px 0 25px" },
               }}
             />
             <Typography
+              variant="body2"
               sx={{
+                minWidth:'600px',
                 color: "#787373",
                 fontWeight: "500",
                 "@media (max-width: 480px)": { fontSize: "12px" },

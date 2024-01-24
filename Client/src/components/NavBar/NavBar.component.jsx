@@ -1,5 +1,5 @@
 //HOOKS
-import * as React from "react";
+import {useState} from "react";
 import { Link, useLocation } from "react-router-dom";
 //MATERIAL UI
 import {
@@ -27,7 +27,7 @@ const NavBar = () => {
   ];
 
   const { pathname } = useLocation();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
