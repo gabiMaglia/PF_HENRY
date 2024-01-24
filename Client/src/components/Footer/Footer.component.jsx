@@ -52,7 +52,6 @@ const FooterComponent = () => {
                     transform: "scale(.9)",
                   },
                   maxWidth: "100%",
-           
                 }}
               >
                 <Typography
@@ -213,7 +212,7 @@ const FooterComponent = () => {
               sx={{
                 color: "#787373",
                 fontWeight: "500",
-          
+
                 "@media (max-width: 480px)": { fontSize: "12px" },
               }}
             >
