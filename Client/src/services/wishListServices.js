@@ -22,7 +22,6 @@ export const fetchWishList = async (dispatch, cookieStatus) => {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    console.log(response)
     if (response.data.Products) {
       dispatch(getWishlist(response.data.Products));
     } 
