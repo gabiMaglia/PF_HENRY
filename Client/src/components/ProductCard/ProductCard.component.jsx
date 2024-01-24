@@ -225,7 +225,7 @@ const CardProduct = ({ product }) => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
-                  "-webkit-line-clamp": 2,
+                  webkitLineClamp :'2'
                 }}
               >
                 {name}
