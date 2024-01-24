@@ -1,5 +1,5 @@
 //HOKKS
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 //MATERIAL UI
@@ -37,7 +37,6 @@ import { addItem } from "../../redux/slices/cartSlice";
 import { userLogin } from "../../services/firebaseAnayticsServices";
 // THEMEPROVIDER
 import { theme } from "../../utils/themeProvider";
-import { handleBreakpoints } from "@mui/system";
 
 const reCaptchaKey = import.meta.env.VITE_RECAPTCHA_V3;
 
