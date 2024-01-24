@@ -243,6 +243,7 @@ const WhishListProfileComponent = () => {
                       width: "100%",
                       display: "flex",
                       flexDirection: "row",
+                      
                       height: "100%",
                       pt: "1em",
                       pb: "1em",
@@ -255,11 +256,14 @@ const WhishListProfileComponent = () => {
                         onChange={handleChange}
                       />
                     )}
-                    <Box sx={{ flexGrow: "1" }}>
+                    <Box sx={{ flexGrow: "1",
+             
+                  }}>
                       <UserPanelProductCard
                         setIsLoading={setIsLoading}
                         handleCardClick={handleCardClick}
                         actionParam={card}
+            
                         product={{
                           id: card.id,
                           name: card.name,
