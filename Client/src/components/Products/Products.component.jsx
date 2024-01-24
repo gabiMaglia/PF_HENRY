@@ -63,8 +63,8 @@ const Products = () => {
             value={value}
             page={currentPage + 1}
             onChange={handlePageChange}
-            // showFirstButton
-            // showLastButton
+            showFirstButton
+            showLastButton
 
             sx={{
               color: "black",
