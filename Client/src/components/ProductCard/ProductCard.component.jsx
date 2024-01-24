@@ -117,6 +117,7 @@ const CardProduct = ({ product }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          width: {xxs :'300px', md :'320px'  },
           justifyContent: "space-between",
           boxShadow: "0 0 10px rgba(0, 0, 0, 0.5)",
           position: "relative",
@@ -129,11 +130,13 @@ const CardProduct = ({ product }) => {
               display: "flex",
               justifyContent: "center",
               color: "grey",
+              fontSize: 'small',
               fontWeight: 700,
               position: "absolute",
               top: 90,
               right: -10,
               width: "auto",
+              
               transform: "rotate(45deg)",
             }}
           >

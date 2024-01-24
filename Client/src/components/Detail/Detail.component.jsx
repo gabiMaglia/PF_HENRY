@@ -271,14 +271,14 @@ const Detail = () => {
   };
 
   // Verificación del tamaño de pantalla
-  const isLargeScreen = useMediaQuery("(min-width:900px)");
-  const isSmallScreen = useMediaQuery("(max-width:500px)");
+  const isLargeScreen = useMediaQuery("(min-width:980px)");
+  const isSmallScreen = useMediaQuery("(max-width:768px)");
 
   // Renderizado condicional según el estado de carga y existencia de datos
   if (isLoadingDetail || loading || isLoading || !productById) {
     return (
       <>
-        <Box sx={{ minHeight: "70vh" }}>
+        <Box sx={{ height:'100%'}}>
           <FadeInTransition key={fadeInKey}>
             <Container
               sx={{
@@ -321,10 +321,12 @@ const Detail = () => {
         <FadeInTransition key={fadeInKey}>
           <Container
             sx={{
+              marginBottom:'10rem',
               display: "flex",
               flexDirection: "column",
               paddingTop: 5,
               textAlign: isSmallScreen ? "center" : "left",
+              minHeight: '100%'
             }}
           >
             <Container
@@ -335,7 +337,7 @@ const Detail = () => {
                 borderRadius: "8px",
                 overflow: "hidden",
                 margin: isSmallScreen ? "auto" : 0,
-                maxWidth: isSmallScreen ? "100%" : 900,
+              
                 position: "relative",
               }}
             >
@@ -404,36 +406,6 @@ const Detail = () => {
                   >
                     {productById.name}
                   </Typography>
-                  {productById?.ProductStock?.amount <= 5 &&
-                    productById?.ProductStock?.amount >= 1 && (
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          color: "grey",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {productById?.ProductStock?.amount}
-                        {productById?.ProductStock?.amount === 1
-                          ? " unidad disponible"
-                          : " unidades disponibles"}{" "}
-                      </Typography>
-                    )}
-                  {productById?.ProductStock?.amount === 0 && (
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        color: "red",
-                        fontWeight: 700,
-                      }}
-                    >
-                      ¡Producto sin stock!
-                    </Typography>
-                  )}
                   <Typography
                     fontSize={isSmallScreen ? 24 : isLargeScreen ? 24 : 21}
                     color="#fd611a"
@@ -442,17 +414,35 @@ const Detail = () => {
                   >
                     Precio: {formatPrice(productById.price)}
                   </Typography>
-                </Box>
-
-                <Container
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingBottom: 5,
-                    marginTop: 2,
-                  }}
-                >
+                  {productById?.ProductStock?.amount > 0 && (
+                    <Typography
+                      variant="body1"
+                      paddingTop={isLargeScreen ? 2 : 1}
+                      paddingBottom={isLargeScreen ? 3 : 1}
+                      sx={{
+                        color: "grey",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {productById?.ProductStock?.amount}
+                      {productById?.ProductStock?.amount === 1
+                        ? " unidad disponible"
+                        : " unidades disponibles"}{" "}
+                    </Typography>
+                  )}
+                  {productById?.ProductStock?.amount === 0 && (
+                    <Typography
+                      variant="body1"
+                      paddingTop={isLargeScreen ? 2 : 1}
+                      paddingBottom={isLargeScreen ? 3 : 1}
+                      sx={{
+                        color: "red",
+                        fontWeight: 700,
+                      }}
+                    >
+                      ¡Producto sin stock!
+                    </Typography>
+                  )}
                   <CustomButton
                     variant="contained"
                     size={isLargeScreen ? "large" : "small"}
@@ -460,7 +450,7 @@ const Detail = () => {
                   >
                     Agregar al Carrito
                   </CustomButton>
-                </Container>
+                </Box>
               </Container>
               <BookmarkIcon
                 onClick={handleDesiredClick}
@@ -489,7 +479,7 @@ const Detail = () => {
               <Typography variant="h6">{productById.warranty}</Typography>
             </Container>
             <Container>
-              <Divider sx={{ marginY: 2 }} />
+              <Divider sx={{ marginY: 2, marginBottom:'2rem' }} />
             </Container>
             <CarouselProducts allProducts={allProducts} />
           </Container>

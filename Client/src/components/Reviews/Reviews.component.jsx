@@ -33,12 +33,12 @@ const ReviewsComponent = () => {
 
   return (
     <>
-      <Box sx={{ minHeight: "70vh", marginBottom: "-80px" }}>
+      <Box sx={{ minHeight: "70vh" }}>
         <Box
           sx={{
             backgroundColor: "#000",
             width: "100%",
-
+            
             height: "120px",
             display: "flex",
             justifyContent: "center",
@@ -175,6 +175,8 @@ const ReviewsComponent = () => {
             <Typography
               variant="h4"
               sx={{
+                paddingTop: 10,
+                paddingBottom: {xxs:10, xs:0},
                 fontSize: "1.2em",
                 fontWeight: "500",
                 textAlign: "justify",

@@ -50,11 +50,11 @@ const CarouselProducts = ({ allProducts }) => {
   };
 
   return (
-    <Container sx={{ marginBottom: 20 }}>
+    <Container>
       <Typography
         variant="h4"
         fontWeight="bold"
-        sx={{ textTransform: "uppercase" }}
+        sx={{ textTransform: "uppercase" , marginBottom: '2rem' }}
       >
         MAS PRODUCTOS
       </Typography>

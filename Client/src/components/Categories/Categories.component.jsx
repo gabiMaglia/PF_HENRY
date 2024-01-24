@@ -75,14 +75,14 @@ const FiltersSorting = () => {
 
   const Selects = styled(Select)({
     height: 40,
-    marginRight: 20,
+    marginInline: 1,
     borderRadius: 10,
     fontSize: 20,
     fontWeight: 700,
   });
 
   const Buttons = styled(Button)({
-    marginLeft: 20,
+    marginInline: 20,
     width: 100,
 
     ml: { xs: 1, lg: -2.1 },
@@ -188,7 +188,7 @@ const FiltersSorting = () => {
             ))}
         </Box>
       </Container>
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" >
         <Box
           display="flex"
           sx={{ flexDirection: { xxs: "column", xs: "column", lg: "row" } }}
@@ -204,7 +204,7 @@ const FiltersSorting = () => {
             <Selects
               value={selectedBrand}
               onChange={handleSelectBrand}
-              sx={{ width: { xxs: 200, xs: 200, lg: 400 } }}
+              sx={{ width: { xxs: 170, xs: 200, lg: 400 } }}
             >
               <Options value="default" disabled>
                 Marca
@@ -230,7 +230,7 @@ const FiltersSorting = () => {
             <Selects
               value={selectedPrice}
               onChange={handleOrderPrice}
-              sx={{ width: { xxs: 200, xs: 200, lg: 400 } }}
+              sx={{ width: { xxs: 170, xs: 200, lg: 400 } }}
             >
               <Options value="default" disabled>
                 Precio

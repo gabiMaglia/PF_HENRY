@@ -1,5 +1,5 @@
 //HOOKS
-import * as React from "react";
+import {useState} from "react";
 import { Link, useLocation } from "react-router-dom";
 //MATERIAL UI
 import {
@@ -15,6 +15,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 //HELPERS
 import PATHROUTE from "../../helpers/pathRoute";
+import SearchBar from "../SearchBar/SearchBar.component";
 
 const NavBar = () => {
   const navPages = [
@@ -26,28 +27,22 @@ const NavBar = () => {
   ];
 
   const { pathname } = useLocation();
-
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-
+  const [anchorElNav, setAnchorElNav] = useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   return (
     <AppBar
-      position="static"
-      sx={{
-        height: 45,
-      }}
+    position="sticky"
     >
+      <SearchBar />
       <Toolbar disableGutters sx={{ backgroundColor: "#fd611a" }}>
         <Box
           sx={{
-            flexGrow: 1,
             display: { sm: "flex", md: "none" },
           }}
         >
@@ -124,6 +119,7 @@ const NavBar = () => {
           ))}
         </Box>
       </Toolbar>
+
     </AppBar>
   );
 };

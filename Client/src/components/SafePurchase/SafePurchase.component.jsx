@@ -11,7 +11,7 @@ const SafePurchaseComponent = () => {
           sx={{
             display: "flex",
             justifyContent: "space-evenly",
-            paddingBottom: "30px",
+            marginBottom: 5,
             "@media (max-width: 768px)": {
               flexDirection: "column",
               justifyContent: "center",

@@ -14,13 +14,11 @@ const HomeComponent = () => {
   const { allProducts } = useSelector((state) => state.product);
   return (
     <>
-      <Box>
         <CarouselTop />
         <HomeProducts allProducts={allProducts} />
         <SafePurchase />
         <GoogleMap />
         <CarouselBottom />
-      </Box>
     </>
   );
 };

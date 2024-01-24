@@ -165,13 +165,15 @@ export default function ShoppingCart() {
   return (
     <Container
       display="flex"
+      gap={1}
       sx={{
         flexDirection: "column",
         mt: 10,
+
         marginBottom: "100px",
       }}
     >
-      <Typography display="flex" component="h2" sx={{ fontSize: 30, mb: 5 }}>
+      <Typography component="h2" sx={{ textAlign:{xxs:'center', sm:'left'}, fontSize: 30, mb: 5 }}>
         Mi Compra
       </Typography>
       <Box display="flex" flexDirection="column">
@@ -179,96 +181,126 @@ export default function ShoppingCart() {
           <Box
             key={item.id}
             display="flex"
-            flexDirection="row"
             alignItems="center"
             justifyContent="space-evenly"
             boxShadow="5px 5px 5px #888888"
             borderRadius="8px"
-            sx={{ mb: 4, cursor: "pointer" }}
-            onClick={() => handleClickShop(item)}
-          >
+            sx={{ mb: 4 ,
+              flexDirection:{xxs:"column",sm:"row"},
+              gap:'1em'
+            }}
+            >
             <ProductMedia
               component="img"
+              onClick={() => handleClickShop(item)}
               alt={item.name}
               src={item.ProductImages.address}
               sx={{
-                width: { xs: "70px", sm: "140px" }, // Establece el ancho de la imagen
+                width: { xxs: "170px", sm: "180px"}, // Establece el ancho de la imagen
+                cursor: "pointer" 
               }}
             />
             <Typography
               sx={{
                 fontSize: "1rem",
-                maxWidth: "150px",
+                maxWidth: {xxs:'none', sm:"150px"},
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
             >
               {item.name}
             </Typography>
-
-            <BaseNumberInput
-              min={1}
-              max={item.stock}
-              id={item.id}
-              value={item.count}
-              onChange={(event, value) => handleChange(item.id, value)}
-              slots={{
-                root: StyledInputRoot,
-                input: StyledInput,
-                incrementButton: StyledButton,
-                decrementButton: StyledButton,
-              }}
-              slotProps={{
-                incrementButton: {
-                  children: (
-                    <AddIcon
-                      fontSize="small"
-                      onClick={() => handleIncrement(item.id)}
-                    />
-                  ),
-                  className: "increment",
-                },
-                decrementButton: {
-                  children: (
-                    <RemoveIcon
-                      fontSize="small"
-                      onClick={() => handleDecrement(item.id)}
-                    />
-                  ),
-                  className: "decrement",
-                },
-              }}
-              sx={{
-                width: {
-                  xs: "100px",
-                  sm: "150px",
-                },
-                "& .increment, & .decrement": {
-                  backgroundColor: "#fd611a",
-                  borderColor: "#fd611a",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "#e04d17",
-                    borderColor: "#e04d17",
-                    color: "white",
+            <Box display="flex" gap={1} flexDirection="column" alignItems="center">
+              <BaseNumberInput
+                min={1}
+                max={item.stock}
+                id={item.id}
+                value={item.count}
+                onChange={(event, value) => handleChange(item.id, value)}
+                slots={{
+                  root: StyledInputRoot,
+                  input: StyledInput,
+                  incrementButton: StyledButton,
+                  decrementButton: StyledButton,
+                }}
+                slotProps={{
+                  incrementButton: {
+                    children: (
+                      <AddIcon
+                        fontSize="small"
+                        onClick={() => handleIncrement(item.id)}
+                      />
+                    ),
+                    className: "increment",
                   },
-                },
-                "& input": {
-                  "&:hover": {
-                    borderColor: "#e04d17", // Ajusta el color del borde al pasar el ratón sobre el input
+                  decrementButton: {
+                    children: (
+                      <RemoveIcon
+                        fontSize="small"
+                        onClick={() => handleDecrement(item.id)}
+                      />
+                    ),
+                    className: "decrement",
                   },
-                  "&:focus": {
+                }}
+                sx={{
+                  width: {
+                    xs: "100px",
+                    sm: "150px",
+                  },
+                  "& .increment, & .decrement": {
+                    backgroundColor: "#fd611a",
                     borderColor: "#fd611a",
-                    boxShadow: "0 0 0 3px #fd611a",
-                    "&.focused": {
-                      borderColor: "#fd611a",
-                      boxShadow: "0 0 0 3px #fd611a",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "#e04d17",
+                      borderColor: "#e04d17",
+                      color: "white",
                     },
                   },
-                },
-              }}
-            />
-
+                  "& input": {
+                    "&:hover": {
+                      borderColor: "#e04d17", // Ajusta el color del borde al pasar el ratón sobre el input
+                    },
+                    "&:focus": {
+                      borderColor: "#fd611a",
+                      boxShadow: "0 0 0 3px #fd611a",
+                      "&.focused": {
+                        borderColor: "#fd611a",
+                        boxShadow: "0 0 0 3px #fd611a",
+                      },
+                    },
+                  },
+                }}
+              />
+              {item.stock > 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    paddingTop: { xs: 1, lg: 2 },
+                    color: "grey",
+                    fontWeight: 700,
+                  }}
+                >
+                  {item.stock}
+                  {item.stock === 1
+                    ? " unidad disponible"
+                    : " unidades disponibles"}{" "}
+                </Typography>
+              )}
+              {item.stock === 0 && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    paddingTop: { xs: 1, lg: 2 },
+                    color: "red",
+                    fontWeight: 700,
+                  }}
+                >
+                  ¡Producto sin stock!
+                </Typography>
+              )}
+            </Box>
             <Typography>
               Precio: {formatPrice(item.price * item.count)}
             </Typography>

@@ -53,13 +53,12 @@ const CardCarousel = ({ allProducts, discountMessage }) => {
         position: "relative",
         width: "100%",
         maxHeight: "260px",
-        marginTop: "8px",
         overflow: "hidden",
         opacity: "1",
         background: `linear-gradient(to bottom left, rgba(0, 0, 0, 1) 60%, rgba(26, 253, 148, 0) 96%)`,
         visibility: "visible",
         display: "none",
-        "@media (min-width: 901px)": {
+        "@media (min-width: 861px)": {
           display: "block",
         },
       }}

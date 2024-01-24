@@ -13,7 +13,7 @@ const CarouselTopComponent = () => {
   }, [dispatch]);
 
   return (
-    <Box sx={{ paddingTop: "10px", cursor: "pointer" }}>
+    <Box sx={{cursor: "pointer" }}>
       <CardCarousel allProducts={allProducts} />
     </Box>
   );
