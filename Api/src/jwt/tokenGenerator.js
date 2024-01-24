@@ -3,7 +3,7 @@ const SECRET = process.env.JWT_SECRET_KEY;
 const jwt = require("jsonwebtoken");
 const { checkBlacklistedToken } = require("./tokenUtils");
 
-const tokenSign = (dataForToken, tokenTime = '1m') => {
+const tokenSign = (dataForToken, tokenTime = '1h') => {
   const token = jwt.sign(dataForToken, SECRET, { expiresIn: tokenTime });
   return token;
 };
@@ -24,7 +24,7 @@ const refreshToken = async (token) => {
     const decodedToken = await verifyToken(token.split(" ").pop());
     if (decodedToken.error) return { error: true, message: decodedToken.name };
     
-    const tokenRefreshTime = '2h'
+    const tokenRefreshTime = '3h'
     const dataForToken = {
      userId  : decodedToken.userId,
      username: decodedToken.username,
