@@ -1,6 +1,5 @@
 import { getAuthDataCookie, setAuthDataCookie } from "./cookiesFunctions";
 import { rejectCookies } from "../redux/slices/cookiesSlice";
-import axios from "axios";
 //
 // ESTE ARCHIVO SE ENCARGA DE DETERMINAR SEGUN LA ELECCION DE USAR COOKIES O NO
 // DE DONDE SE SACARA LA INFORMACION DE PERSISTENCIA
@@ -48,7 +47,7 @@ export const getDataFromSelectedPersistanceMethod = (cookieStatus) => {
 };
 
 export const clearPersistanceData = (cookieStatus, bool) => {
-  if (cookieStatus) rejectCookies(bool);
+  if (cookieStatus) rejectCookies();
   else {
       window.localStorage.removeItem("jwt"),
       window.localStorage.removeItem("login"),

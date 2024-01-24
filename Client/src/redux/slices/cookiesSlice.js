@@ -22,7 +22,7 @@ const cookiesSlice = createSlice({
   },
 });
 
-export const rejectCookies = (bool) => {
+export const rejectCookies = () => {
   const allCookies = Cookies.get();
   const allCookiesKeys = Object.keys(allCookies);
 
