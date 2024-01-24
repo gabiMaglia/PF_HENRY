@@ -54,7 +54,7 @@ const CarouselProducts = ({ allProducts }) => {
       <Typography
         variant="h4"
         fontWeight="bold"
-        sx={{ textTransform: "uppercase" }}
+        sx={{ textTransform: "uppercase" , marginBottom: '2rem' }}
       >
         MAS PRODUCTOS
       </Typography>
