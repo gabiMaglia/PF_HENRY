@@ -337,7 +337,7 @@ const Detail = () => {
                 borderRadius: "8px",
                 overflow: "hidden",
                 margin: isSmallScreen ? "auto" : 0,
-                maxWidth: isSmallScreen ? "100%" : 900,
+              
                 position: "relative",
               }}
             >
