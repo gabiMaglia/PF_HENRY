@@ -250,7 +250,8 @@ export default function SearchAppBar() {
           <Box
             sx={{
               position: "absolute",
-              top: "100px",
+              top: "65px",
+              border:"solid 1px black",
               zIndex: 1,
               backgroundColor: "white",
               boxShadow: 5,
@@ -268,6 +269,7 @@ export default function SearchAppBar() {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
+                  border:"solid black 0.5px"
                 }}
               >
                 <Box
@@ -276,6 +278,7 @@ export default function SearchAppBar() {
                   style={{
                     padding: "8px",
                     cursor: "pointer",
+                    color:"black",
                     borderBottom: "1px solid #ccc",
                   }}
                 >
